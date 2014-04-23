@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>8</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>48</x>
+      <y>456</y>
+      <w>88</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Kontakt
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>256</x>
+      <y>512</y>
+      <w>240</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Benutzer
+--
+-generelleVerfügbarkeit : List&lt;Zeitraum&gt;
+-abonnement : List&lt;Einladung&gt;
+-adressbuch: Adressbuch</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>608</x>
+      <y>464</y>
+      <w>88</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Termin
+--
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>224</x>
+      <y>8</y>
+      <w>120</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Zeitraum
+--
+-datum : Datum
+-dauer : long
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>304</x>
+      <y>248</y>
+      <w>192</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Gastgeber
+--
+-benutzer : Benutzer
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>368</x>
+      <y>136</y>
+      <w>192</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>176;24;24;112</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>776</x>
+      <y>80</y>
+      <w>144</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>«enumeration»
+Umfragentyp
+--
+-einmalig
+-fest, regelmäßig
+-regelmäßig dynamisch
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>672</x>
+      <y>72</y>
+      <w>120</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>104;24;24;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>400</x>
+      <y>16</y>
+      <w>80</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>Ignorebox</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>544</x>
+      <y>24</y>
+      <w>80</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>Filter</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>328</x>
+      <y>312</y>
+      <w>94</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=*
+m2=*
+lädt ein&gt;</panel_attributes>
+    <additional_attributes>48;200;48;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>648</x>
+      <y>136</y>
+      <w>40</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>24;24;24;192</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>576</x>
+      <y>328</y>
+      <w>240</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Teilnehmer
+
+--
+-benutzer : Benutzer
+-Interesse : boolean
+-spezielleVerfügbarkeit : List&lt;Zeitraum&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>480</x>
+      <y>72</y>
+      <w>216</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Terminumfrage
+--
+-deadline : Datum
+-frequenz : int
+-name : String
+-möglicheZeiträume : List&lt;Zeitraum&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>352</x>
+      <y>392</y>
+      <w>240</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>24;24;224;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>104</x>
+      <y>128</y>
+      <w>128</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Adressbuch
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>88</x>
+      <y>24</y>
+      <w>128</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Nachricht
+--
+inhalt : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>96</x>
+      <y>280</y>
+      <w>88</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Composite
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>144</x>
+      <y>360</y>
+      <w>40</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>24;24;24;96</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>72</x>
+      <y>360</y>
+      <w>72</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>56;24;24;96</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>320</y>
+      <w>64</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>24;24;48;136</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>112</x>
+      <y>176</y>
+      <w>56</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>40;24;24;104</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>152</x>
+      <y>456</y>
+      <w>88</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Gruppe
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
