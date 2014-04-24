@@ -4,19 +4,6 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>32</x>
-      <y>184</y>
-      <w>88</w>
-      <h>104</h>
-    </coordinates>
-    <panel_attributes>Kontakt
---
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
       <x>264</x>
       <y>496</y>
       <w>240</w>
@@ -47,10 +34,10 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>32</x>
-      <y>424</y>
+      <x>56</x>
+      <y>64</y>
       <w>120</w>
-      <h>96</h>
+      <h>64</h>
     </coordinates>
     <panel_attributes>Zeitraum
 --
@@ -194,31 +181,6 @@ m2=*</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>32</x>
-      <y>104</y>
-      <w>128</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>Adressbuch
---</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>32</x>
-      <y>296</y>
-      <w>88</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>Gruppe
---
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
       <x>672</x>
       <y>600</y>
       <w>80</w>
@@ -289,5 +251,17 @@ ermittelt&gt;</panel_attributes>
 -spezielleVerfügbarkeit : List&lt;Zeitraum&gt;
 -ermittelterTermin: Termin</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>480</x>
+      <y>408</y>
+      <w>168</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=.
+&lt;benachrichtigt</panel_attributes>
+    <additional_attributes>24;112;152;24</additional_attributes>
   </element>
 </diagram>
