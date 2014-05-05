@@ -1,0 +1,7 @@
+/* region to display an error */
+#error { 
+    color:white; 
+    font-weight:bold; 
+    background-color:red; 
+    display:none; 
+}
