@@ -36,7 +36,7 @@ _kalenderAnzeigen()_</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>288</x>
-      <y>36</y>
+      <y>144</y>
       <w>228</w>
       <h>120</h>
     </coordinates>
@@ -58,10 +58,8 @@ einheit : Zeiteinheit</panel_attributes>
     <panel_attributes>«enumeration»
 Umfragetyp
 --
-einmalig
-wiederholt
-
-</panel_attributes>
+_einmalig_
+_wiederholt_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -158,7 +156,7 @@ r1=Teilnehmer</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>288</x>
-      <y>348</y>
+      <y>456</y>
       <w>228</w>
       <h>96</h>
     </coordinates>
@@ -174,16 +172,16 @@ dauerInMinuten : int
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>288</x>
-      <y>180</y>
+      <y>288</y>
       <w>228</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
 Zeiteinheit
 --
-Tag
-Woche
-Monat</panel_attributes>
+_Tag_
+_Woche_
+_Monat_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -204,7 +202,7 @@ hat in Adressbuch &gt;</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>288</x>
-      <y>552</y>
+      <y>660</y>
       <w>240</w>
       <h>72</h>
     </coordinates>
@@ -217,7 +215,7 @@ name : String</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>492</x>
-      <y>564</y>
+      <y>672</y>
       <w>168</w>
       <h>60</h>
     </coordinates>
@@ -225,5 +223,18 @@ name : String</panel_attributes>
 m1=1
 m2=0..*</panel_attributes>
     <additional_attributes>144;36;36;36</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>204</x>
+      <y>12</y>
+      <w>396</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Analyse-Fachklassendiagramm mit Operationen
+Terminfindungs-App "Plan The Jam"
+Team: Comanche, 08.05.2014</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
