@@ -23,11 +23,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>planthejam</artifactId>
-        <groupId>de.bht.apache</groupId>
+        <groupId>de.bht.comanche</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
   
-    <groupId>de.bht.apache</groupId>
+    <groupId>de.bht.comanche</groupId>
     <artifactId>planthejam-flex</artifactId>
     <packaging>swf</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -73,7 +73,7 @@
         </dependency>
 
         <dependency>
-            <groupId>de.bht.apache</groupId>
+            <groupId>de.bht.comanche</groupId>
             <artifactId>planthejam-java</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
@@ -115,7 +115,7 @@
                                 <outputEnumToBaseOutputDirectory>false</outputEnumToBaseOutputDirectory>
                             </extraOptions>
                             <includeJavaClasses>
-                                <include>de.bht.apache.entities.**</include>
+                                <include>de.bht.comanche.entities.**</include>
                             </includeJavaClasses>
                         </configuration>
                     </execution>
