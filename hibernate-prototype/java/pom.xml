@@ -49,53 +49,18 @@
     </build>
 
     <dependencies>
-<!--
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>${spring.security.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>${spring.security.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>${spring.security.version}</version>
-        </dependency>
- -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
+            <!--
             <exclusions>
                 <exclusion>
                     <groupId>javax.transaction</groupId>
                     <artifactId>jta</artifactId>
                 </exclusion>
             </exclusions>
+            -->
         </dependency>
 
         <dependency>
@@ -116,7 +81,6 @@
             <version>1.0.1.Final</version>
         </dependency>
 
-<!--
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -133,37 +97,13 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.5.6</version>
         </dependency>
-
+        <!--
         <dependency>
-            <groupId>org.graniteds</groupId>
-            <artifactId>granite-core</artifactId>
-            <version>${graniteds.version}</version>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.graniteds</groupId>
-            <artifactId>granite-hibernate</artifactId>
-            <version>${graniteds.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.graniteds</groupId>
-            <artifactId>granite-beanvalidation</artifactId>
-            <version>${graniteds.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.graniteds</groupId>
-            <artifactId>granite-spring</artifactId>
-            <version>${graniteds.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>1.8.0.10</version>
-        </dependency>
-
--->
+        -->
+        <!--
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -174,6 +114,7 @@
             <artifactId>log4j-core</artifactId>
             <version>2.0-rc1</version>
         </dependency>
+        -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
