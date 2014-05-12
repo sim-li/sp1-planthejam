@@ -4,22 +4,6 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="url">jdbc:postgresql://localhost:5432/postgres</property>
-        <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.username">postgres</property>
-        <property name="connection.password">postgres</property>
-        <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
-        <!-- Drop and recreate database schema on startup -->
-        <property name="hbm2ddl.auto">create</property>
-        <!-- SQL dialect - generate SQL for a particular database -->
-        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-        <!-- Echo all executed SQL statements -->
-        <property name="show_sql">true</property>
-        <!-- Enable Hibernate's automatic session context management -->
-        <property name="current_session_context_class">thread</property>
-        <!-- Mapping resource configuration files -->
-        <!--
-        <mapping resource="/home/archetype/planthejam/hibernate-prototype/de.bht.comanche/src/main/java/de/bht/comanche/User.hbm.xml"/> -->
         <mapping resource="de/bht/comanche/User.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
