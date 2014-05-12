@@ -18,6 +18,8 @@
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
         <!-- Mapping resource configuration files -->
-        <mapping resource="src/main/java/de/bht/comanche/User.hbm.xml"/>
+        <!--
+        <mapping resource="/home/archetype/planthejam/hibernate-prototype/de.bht.comanche/src/main/java/de/bht/comanche/User.hbm.xml"/> -->
+        <mapping resource="de/bht/comanche/User.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
