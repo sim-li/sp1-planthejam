@@ -11,31 +11,93 @@
     
     <title>SP1 Technik-Prototyp, Team: Comanche</title>
     
-    <!-- import main module using RequireJS -->
-    <script data-main="./js/main.js" src="./lib/require.js"></script>
-    
     <!-- import style sheet -->
-    <link rel="stylesheet" type="text/css" media="screen" href="style.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
     
 </head>
-<body>
+<body ng-app="myApp" ng-controller="Ctrl">
     
     <!-- display errors here -->
     <pre id="error"></pre>
-    
-    <h1>Hallo Welt</h1>
-    
-    <div id="test_div">Hallo Welt</div>
-    
-    <br />
-    
-    <form>
-        <input type="button" id="test_button" value="Test">
-    </form>
-    
-    <br />
-    
-    <div id="output">...</div>
 
+    
+    <div class="input_area">
+
+        <div>
+            <label for="inputName">Wie hei&szlig;t du?</label>
+            <input id="inputName" type="text" ng-model="name" placeholder="Dein Name ..." />
+        </div>
+        <br />
+
+        <div ng-show="name">
+            <label for="inputSecrets">Hallo {{ name || "Unbekannte(r)" }}! Erz&auml;hl mir all deine Geheimnisse:</label>
+            <input id="inputSecrets" type="textarea" ng-model="secrets" placeholder="Deine Geheimnisse ..." />
+        </div>
+        <br />
+
+        <form name="myForm" ng_show="name && secrets" class="my-form">
+            <label for="inputPIN">Wie ist deine f&uuml;nfstellige PIN?</label>
+            <input id="inputPIN" name="inputPIN" type="text" ng-model="inputPIN" ng-pattern="allowedPIN" placeholder="Deine PIN ..." required />
+            <span class="error" ng-show="myForm.inputPIN.$error.required"> &larr; Pflichtfeld!</span>
+            <div class="error" ng-show="myForm.inputPIN.$error.pattern">Falsches Format! Bitte gib 5 Ziffern ein!</div>
+            
+            <span ng-show="inputPIN">
+                Deine PIN ist: <span class="output"> {{ inputPIN }} </span>
+            </span>
+        </form>
+        <br />
+        
+    </div>
+
+
+    <div ng-show="name" class="output_area">
+        <br />
+
+        <div>
+            {{ name }}{{ secrets && ", ich kenne alle deine Geheimnisse: " }}{{ secrets || ", ich wei&szlig; noch gar nichts von dir ..." }}
+        </div>
+        <br />
+
+
+        <div ng-show="inputPIN">
+            <hr />
+            <br />
+            Deine Geheimnisse r&uuml;ckw&auml;rts: {{ reverseName() }}
+        </div>
+    </div>
+
+
+    <div ng-show="inputPIN" class="playground">
+        <hr /><br />
+
+        <div>
+            <input type="button" value="Neue Karte ziehen" ng-click="update();" />
+            <span class="output"> {{ test.suit }} {{ test.card }} </span> aufgedeckt um <span class="output"> {{ test.date }} </span> Uhr.
+
+        </div>
+        <br /><hr /><br />
+
+        <div class="calc">
+            <label>Rechnen: </label>
+            <input id="a" type="text" ng-model="a" ng-change=" add(a,b)" />
+             + 
+            <input type="text" ng-model="b" ng-change="add(a,b)"  />
+             = 
+            <input type="text" ng-model="sum" />
+        </div>
+
+    </div>
+
+
+    <!-- import javascript -->
+
+    <!-- for production -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script> -->
+    
+    <!-- for development -->
+    <script src="lib/angular.js"></script>
+
+    <script src="js/Ctrl.js"></script>
+ 
 </body>
 </html>
