@@ -30,7 +30,7 @@
         <br />
 
         <div ng-show="name">
-            <label for="inputSecrets">Hallo {{ name || "Unbekannte(r)" }}! Erz&auml;hl mir all deine Geheimnisse:</label>
+            <label for="inputSecrets">Hallo {{ name }}! Erz&auml;hl mir all deine Geheimnisse:</label>
             <input id="inputSecrets" type="textarea" ng-model="secrets" placeholder="Deine Geheimnisse ..." />
         </div>
         <br />
@@ -54,7 +54,7 @@
         <br />
 
         <div>
-            {{ name }}{{ secrets && ", ich kenne alle deine Geheimnisse: " }}{{ secrets || ", ich wei&szlig; noch gar nichts von dir ..." }}
+            {{ name.toUpperCase() }}{{ secrets && ", ich kenne alle deine Geheimnisse: " }}{{ secrets || ", ich wei&szlig; noch gar nichts von dir ..." }}
         </div>
         <br />
 
@@ -68,13 +68,33 @@
 
 
     <div ng-show="inputPIN" class="playground">
+    <!-- <div class="playground"> -->
         <hr /><br />
 
         <div>
             <input type="button" value="Neue Karte ziehen" ng-click="update();" />
             <span class="output"> {{ test.suit }} {{ test.card }} </span> aufgedeckt um <span class="output"> {{ test.date }} </span> Uhr.
+            
+            <br />
+            <!-- <input type="button" value="m&ouml;gliche Farben zeigen" ng-click="update();" /> -->
+            <!-- <input type="button" value="m&ouml;gliche Karte zeigen" ng-click="update();" /> -->
+            m&ouml;gliche Karte zeigen: <input type="text" ng-model="cardSelection" />
+            <br />
+            m&ouml;gliche Farben zeigen: <input type="text" ng-model="suitSelection" />
+            
+            <table ng-show="cardSelection">
+                <tr ng-repeat="selection in cards.card">
+                    <td>{{ selection }}</td>
+                </tr>
+            </table>
 
+            <table ng-show="suitSelection">
+                <tr ng-repeat="selection in cards.suit">
+                    <td>{{ selection }}</td>
+                </tr>
+            </table>
         </div>
+
         <br /><hr /><br />
 
         <div class="calc">
