@@ -11,7 +11,9 @@ public class SaveUserDemo {
 
     public static void main(String[] args) {
         SaveUserDemo saveUserDemo = new SaveUserDemo();
-        saveUserDemo.createAndStoreUser("Ralf", "Zakoni", "bertaisthuebsch", new Date());
+        //saveUserDemo.createAndStoreUser("Ralf", "Zakoni", "bertaisthuebsch", new Date());
+        //saveUserDemo.printUsers();
+        saveUserDemo.promptForInput();
         saveUserDemo.printUsers();
         if (args[0].equals("store")) {
            // saveUserDemo.createAndStoreUser("Ralf", "Zakoni", "bertaisthuebsch", new Date());
@@ -21,42 +23,57 @@ public class SaveUserDemo {
         }
         HibernateUtil.getSessionFactory().close();
     }
- /*
+
     private void promptForInput() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanIn = new Scanner(System.in);
         String input = "empty";
         while (true) {
+           User user = new User();
            log("E N T E R   N E W   U S E R   D A T A");
            line();
-           System.print(pre + "First Name > ");
+           System.out.print(pre + "First Name > ");
            input = scanIn.nextLine();
+           if (input.equals("")) {
+               break;
+           }
+           System.out.println();
+           user.setFirstName(input);
            line();
-           System.print(pre + "Last Name > ");
+           System.out.print(pre + "Last Name > ");
            input = scanIn.nextLine();
+           if (input.equals("")) {
+               break;
+           }
+           System.out.println();
+           user.setLastName(input);
            line();
-           System.print(pre + "Password > ");
+           System.out.print(pre + "Password > ");
            input = scanIn.nextLine();
+           if (input.equals("")) {
+               break;
+           }
+           System.out.println();
+           user.setPassword(input);
            line();
+           log("Saving user to DB: " + user.getFirstName() + " | " + user.getLastName() + " | " + user.getPassword() + " | ");
+           createAndStoreUser(user);
         }
     }
-*/
+
     private void createAndStoreUser(String firstName, String lastName, String password, Date birthdate) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
         User sampleUser = new User();
         sampleUser.setFirstName(firstName);
         sampleUser.setLastName(lastName);
         sampleUser.setPassword(password);
         sampleUser.setBirthdate(birthdate);
-        session.save(sampleUser);
-        session.getTransaction().commit();
-        /*
-        Session session2 = HibernateUtil.getSessionFactory().getCurrentSession();
-        session2.beginTransaction();
-        User storedUser = (User) session2.load(User.class, 1L);
-        session2.getTransaction().commit();
+        createAndStoreUser(sampleUser);
+    }
 
-        */
+    private void createAndStoreUser(User user) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        session.save(user);
+        session.getTransaction().commit();
     }
 
     private void printUsers() {
@@ -65,7 +82,7 @@ public class SaveUserDemo {
             List result = session.createQuery("from User").list();
             session.getTransaction().commit();
             System.out.println();
-            System.out.println("Retrieving U S E R S from Database (Starting to Rol)  >>");
+            System.out.println("Retrieving U S E R S from Database (Rock and Roll)  >>");
             for (Object obj: result) {
                 User user = (User) obj;
                 space();
