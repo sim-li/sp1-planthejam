@@ -1,2 +1,4 @@
 hibernate-prototype/java/target/classes/
 *.swp
+server-prototype/eclipse_jetty_jersea/WebContent/WEB-INF/lib
+*.jar
