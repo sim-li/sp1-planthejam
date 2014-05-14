@@ -19,7 +19,7 @@ public class User {
          this.id = id;
     }
 
-    private String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
