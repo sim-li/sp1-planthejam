@@ -35,14 +35,14 @@
         </div>
         <br />
 
-        <form name="myForm" ng_show="name && secrets" class="my-form">
+        <form name="myForm" ng-show="name && secrets" class="my-form">
             <label for="inputPIN">Wie ist deine f&uuml;nfstellige PIN?</label>
             <input id="inputPIN" name="inputPIN" type="text" ng-model="inputPIN" ng-pattern="allowedPIN" placeholder="Deine PIN ..." required />
             <span class="error" ng-show="myForm.inputPIN.$error.required"> &larr; Pflichtfeld!</span>
             <div class="error" ng-show="myForm.inputPIN.$error.pattern">Falsches Format! Bitte gib 5 Ziffern ein!</div>
             
             <span ng-show="inputPIN">
-                Deine PIN ist: <span class="output"> {{ inputPIN }} </span>
+                &rarr; Deine PIN ist: <span class="output"> {{ inputPIN }} </span>
             </span>
         </form>
         <br />
@@ -68,42 +68,48 @@
 
 
     <div ng-show="inputPIN" class="playground">
-    <!-- <div class="playground"> -->
         <hr /><br />
 
-        <div>
-            <input type="button" value="Neue Karte ziehen" ng-click="update();" />
+        <input type="button" value="Kartenspiel" ng-disabled="show.cardGame" ng-click="togglePlayground('CARD_GAME')" />
+        <input type="button" value="Taschenrechner" ng-disabled="show.calculator" ng-click="togglePlayground('CALCULATOR')" />
+        <input type="button" value="Etwas anderes" ng-disabled="show.somethingElse" ng-click="togglePlayground('SOMETHING_ELSE')" />
+        
+        <br/ ><br/ ><hr /><br />
+
+        <div ng-show="show.cardGame">
+            
+
             <span class="output"> {{ test.suit }} {{ test.card }} </span> aufgedeckt um <span class="output"> {{ test.date }} </span> Uhr.
             
-            <br />
-            <!-- <input type="button" value="m&ouml;gliche Farben zeigen" ng-click="update();" /> -->
-            <!-- <input type="button" value="m&ouml;gliche Karte zeigen" ng-click="update();" /> -->
-            m&ouml;gliche Karte zeigen: <input type="text" ng-model="cardSelection" />
-            <br />
-            m&ouml;gliche Farben zeigen: <input type="text" ng-model="suitSelection" />
-            
-            <table ng-show="cardSelection">
-                <tr ng-repeat="selection in cards.card">
+            <br /><br />
+            <input type="button" value="Neue Karte ziehen" ng-click="test.update()" />
+            <input type="button" value="Farbenauswahl {{ show.suitSelection ? 'verbergen' : 'zeigen' }}" ng-click="toggleSelection('SUIT_SELECTION')" />
+            <input type="button" value="Kartenauswahl {{ show.cardSelection ? 'verbergen' : 'zeigen' }}" ng-click="toggleSelection('CARD_SELECTION')" />
+
+            <table ng-show="show.suitSelection">
+                <tr ng-repeat="selection in cards.suit">
                     <td>{{ selection }}</td>
                 </tr>
             </table>
-
-            <table ng-show="suitSelection">
-                <tr ng-repeat="selection in cards.suit">
+            
+            <table ng-show="show.cardSelection">
+                <tr ng-repeat="selection in cards.card">
                     <td>{{ selection }}</td>
                 </tr>
             </table>
         </div>
 
-        <br /><hr /><br />
-
-        <div class="calc">
+        <div ng-show="show.calculator" class="calc">
             <label>Rechnen: </label>
-            <input id="a" type="text" ng-model="a" ng-change=" add(a,b)" />
+            <input id="a" type="text" ng-model="a" ng-change="add(a,b)" />
              + 
             <input type="text" ng-model="b" ng-change="add(a,b)"  />
              = 
-            <input type="text" ng-model="sum" />
+            <input type="text" ng-model="sum" disabled />
+        </div>
+
+        <div ng-show="show.somethingElse">
+            Etwas anderes.
         </div>
 
     </div>
