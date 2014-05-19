@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1400518322152
+Bnd-LastModified: 1400520527092
 Build-Jdk: 1.7.0_25
 Built-By: archetype
 Bundle-Description: Libs for spring context, hibernate, querydsl and tes
@@ -12,15 +12,9 @@ Bundle-Version: 1.0.0.SNAPSHOT
 Created-By: Apache Maven Bundle Plugin
 Export-Package: de.bht.comanche;uses:="org.hibernate,org.hibernate.cfg,o
  rg.hibernate.service,org.hibernate.boot.registry";version="1.0.0.SNAPSH
- OT",de.jetty_jearsey.rest_v1;uses:="javax.xml.bind.annotation,javax.ws.
- rs";version="1.0.0.SNAPSHOT",server;uses:="org.eclipse.jetty.server,jav
- ax.servlet,org.eclipse.jetty.server.handler,javax.servlet.http";version
- ="1.0.0.SNAPSHOT"
-Import-Package: javax.servlet;version="[3.1,4)",javax.servlet.http;versi
- on="[3.1,4)",javax.ws.rs;version="[2.0,3)",javax.xml.bind.annotation,or
- g.eclipse.jetty.server;version="[9.1,10)",org.eclipse.jetty.server.hand
- ler;version="[9.1,10)",org.hibernate;version="[4.3,5)",org.hibernate.bo
- ot.registry;version="[4.3,5)",org.hibernate.cfg;version="[4.3,5)",org.h
- ibernate.service;version="[4.3,5)"
+ OT",de.bht.comanche.server;uses:="javax.ws.rs";version="1.0.0.SNAPSHOT"
+Import-Package: javax.ws.rs;version="[2.0,3)",org.hibernate;version="[4.
+ 3,5)",org.hibernate.boot.registry;version="[4.3,5)",org.hibernate.cfg;v
+ ersion="[4.3,5)",org.hibernate.service;version="[4.3,5)"
 Originally-Created-By: Apache Maven Bundle Plugin
 Tool: Bnd-1.50.0
