@@ -5,7 +5,7 @@
 
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
         <mapping resource="de/bht/comanche/User.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
