@@ -1,4 +1,5 @@
-package de.bht.comanche.jetty;
+package de.bht.comanche.server;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
