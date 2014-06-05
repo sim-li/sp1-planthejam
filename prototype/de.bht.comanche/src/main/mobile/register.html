@@ -1,0 +1,61 @@
+<!-- Copyright (c) 2012 Mobile Developer Solutions -->
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+    <title>Register</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.1.0.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
+
+    <script src="lib/jquery.mobile/jquery-1.7.2.min"></script>
+    <script src="lib/jquery.mobile/main.js"></script>
+    <script src="lib/jquery.mobile/jquery.mobile-1.1.0.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="lib/phonegap-1.4.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/index.js"></script>
+
+
+    <!-- CDN Respositories: For production, replace lines above with these uncommented minified versions -->
+    <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />-->
+    <!-- <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>-->
+    <!-- <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>-->
+    </head>
+
+  <body onload="init();">
+        <div id="loginPage" data-role="page">
+
+            <div data-role="header">
+                <h1>Register</h1>
+            </div>
+
+            <div data-role="content">
+
+                <form id="loginForm">
+                    <div data-role="fieldcontain" class="ui-hide-label">
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" id="email" value="" placeholder="Email" />
+                    </div>
+
+                    <div data-role="fieldcontain" class="ui-hide-label">
+                        <label for="mobile">Mobile:</label>
+                        <input type="number" name="mobile" id="mobile" value="" placeholder="mobile" />
+                    </div>
+
+                    <div data-role="fieldcontain" class="ui-hide-label">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="username" value="" placeholder="Username" />
+                    </div>
+
+                    <div data-role="fieldcontain" class="ui-hide-label">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="password" value="" placeholder="Password" />
+                    </div>
+
+                    <input type="submit" value="Register" id="submitButton" onclick="nextSite();">
+                </form>
+
+            </div>
+
+        </div>
+  </body>
+</html>
