@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- 
+     * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
+     * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+     *
+    -->
+    
+    <title>SP1 Ojektverwaltung-UI, Team: Comanche</title>
+    
+    <!-- import style sheet -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+    
+</head>
+<body ng-app="myApp" ng-controller="Ctrl">
+    
+    <!-- display errors here -->
+    <pre id="error"></pre>
+
+    
+
+    <div id="login_area" ng-hide="user.loggedIn" class="input_area">
+
+        <!-- <label for="inputPassword">Test</label>
+        <input id="test" name="test" type="text" ng-model="test2" ng-minlength="2" ng-maxlength="8" ng-pattern="allowedPassword" />
+        <span ng-show="myForm.test2.$error.minlength || myForm.test2.$error.maxlength || myForm.test2.$error.pattern">The value must be in range 2 to 8!</span> -->
+
+        <form name="myForm" ng-submit="login()" class="my_form">
+            <span class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="user.name" placeholder="Dein Benutzername ..." required />
+                <!-- <span class="error" ng-show="myForm.inputName.$dirty && myForm.inputName.$error.required"> &larr; Pflichtfeld!</span> -->
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="user.password" 
+                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required />
+                <!-- ng-pattern="allowedPassword"  -->
+                <!-- <span class="error" ng-show="myForm.inputPassword.$error.required"> &larr; Pflichtfeld!</span> -->
+
+                <!-- <input id="inputPassword2" name="inputPassword2" ng-show="showPassword" type="text" ng-model="user.password" 
+                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required /> -->
+                
+                <div class="error">{{ warning }}</div>
+                
+                <!-- ng-pattern="allowedPassword"  -->
+                <!-- <div class="error" ng-show="myForm.inputPassword.$error.pattern">Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!</div> -->
+            </span>
+            
+            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+            
+            <span class="full_width_input">
+                <input id="login" type="submit" value="Login" />
+            </span>
+        </form>
+        
+    </div>
+
+
+
+    <div id="logged_in_area" ng-show="user.loggedIn" class="input_area">
+    <!-- <div id="logged_in_area" class="input_area"> -->
+        <!-- <div>
+            Hallo {{ user.name.toUpperCase() }}, du bist eingeloggt.
+        </div>
+        
+        <br /> -->
+
+        <!-- -- M E N U E --<br/><br />
+        - Neue Terminumfrage<br/>
+        - Terminumfragenliste >> bei Auswahl >> aendern / loeschen<br/>
+        - Terminumfrage suchen >> Auswahl filtern<br/><br /> -->
+
+        <div id="survey_selection_area" ng-hide="user.inEditMode">
+
+            <span class="full_width_input">
+                <input id="newSurvey" type="button" value="Neue Terminumfrage erstellen" onclick="console.log('Neue Terminumfrage erstellen')" />
+                <select ng-model="user.selectedSurvey" ng-options="survey.name for survey in filteredSurveys | filter:user.searchString" size="5%"></select>
+                <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="user.searchString" ng-keyup="$log.log(user)" />
+                <!-- <input id="editSurvey" type="button" value="Terminumfrage bearbeiten" onclick="console.log('Terminumfrage bearbeiten')" /> -->
+                <input id="editSurvey" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="user.inEditMode=true" />
+                <input id="deleteSurvey" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedSurvey()" />
+
+
+            </span>
+
+            <textarea rows="5" readonly>{{ user.selectedSurvey.description }}</textarea>
+
+            <!-- <table>
+                <tr ng-repeat="survey in user.surveys | filter:user.searchString">
+                    <td>
+                        <button id="survey" ng-click="selectSurvey()" >{{ survey.name }}</button>
+                        <label for="survey">{{ survey.description }}</label>
+                    </td>
+                </tr>
+            </table> -->
+
+
+
+            
+            <!-- <form class="myForm"> -->
+
+            <!-- <select size="5%">
+                <option ng-repeat="survey in user.surveys | filter:user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }}</option>
+            </select> -->
+
+
+            <!-- </form> -->
+        </div>
+
+
+
+        <div id="survey_selection_area" ng-show="user.inEditMode">
+            <span class="full_width_input">
+
+                <label for="editSurveyName">Name</label>
+                <input id="editSurveyName" type="text" ng-model="user.selectedSurvey.name" ng-change="$log.log(user.selectedSurvey.name);"/>
+
+                <label for="editSurveyDescription">Beschreibung</label>
+                <input id="editSurveyDescription" type="text" ng-model="user.selectedSurvey.description" ng-change="$log.log(user.selectedSurvey.description);"/>
+                
+                <label for="editSurveyType">Typ</label>
+                <select id="editSurveyType" ng-model="user.selectedSurvey.type" ng-options="type for type in typeOptions" ng-change="$log.log(user.selectedSurvey.type);"></select>
+                <!-- <select id="editSurveyType" ng-model="user.selectedSurvey.type" ng-change="$log.log(user.selectedSurvey);">
+                    <option ng-repeat="(value, key) in Type" value="key" ng-selected="$log.log(user.selectedSurvey.type);">{{key}}</option>
+                </select> -->
+                
+                <label for="editSurveyDeadline">Deadline</label>
+                <input id="editSurveyDeadline" type="text" ng-model="user.selectedSurvey.deadline" ng-change="$log.log(user.selectedSurvey.deadline);"/>
+
+                <label for="editSurveyFrequencyDistance">Frequenz - Abstand</label>
+                <input id="editSurveyFrequencyDistance" type="number" ng-model="user.selectedSurvey.frequency.distance" ng-change="$log.log(user.selectedSurvey.frequency);"/>
+                
+                <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
+                <select id="editSurveyFrequencyTimeUnit" ng-model="user.selectedSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in timeUnitOptions" ng-change="$log.log(user.selectedSurvey.frequency);"></select>
+
+
+                <!-- <select id="editSurveyType" ng-model="user.selectedSurvey.type" ng-options="type for type in Type" ng-change="$log.log(user.selectedSurvey.type);"></select> -->
+
+
+                <label for="editSurveypossibleTimeslots">M&ouml;gliche Zeitr&auml;ume</label>
+                <select id="editSurveypossibleTimeslots" type="text" ng-model="user.selectedSurvey.possibleTimeslots" ng-options="timeslot for timeslot in possibleTimeslots" ng-change="$log.log(user.selectedSurvey.possibleTimeslots);"></select>
+
+                <label for="editSurveydeterminedTimeslotStart">Ermittelter Zeitraum - Startzeitpunkt</label>
+                <input id="editSurveydeterminedTimeslotStart" type="text" ng-model="user.selectedSurvey.determinedTimeslot.startTime" ng-change="$log.log(user.selectedSurvey.determinedTimeslot);"/>
+
+                <label for="editSurveydeterminedTimeslotDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
+                <input id="editSurveydeterminedTimeslotDuration" type="number" ng-model="user.selectedSurvey.determinedTimeslot.durationInMins" ng-change="$log.log(user.selectedSurvey.determinedTimeslot);"/>
+
+
+                <input id="cancelSurveyEdit" type="button" value="Abbrechen" ng-click="user.inEditMode=false" />
+                <input id="saveSurveyEdit" type="button" value="Speichern" ng-click="user.inEditMode=false" />
+                <!-- <input id="saveSurveyEdit" type="button" value="Speichern" ng-click="$log.log(user.selectedSurvey);" /> -->
+            </span>
+        </div>
+
+
+
+        <!-- erfassen von Terminumfragen -->
+        <div id="logged_in_area" ng-show="user.loggedIn" class="input_area"></div>
+
+        
+        <!-- ändern von Terminumfragen -->
+        <div id="logged_in_area" ng-show="user.loggedIn" class="input_area"></div>
+
+        
+        <!-- löschen von Terminumfragen -->
+        <div id="logged_in_area" ng-show="user.loggedIn" class="input_area"></div>
+
+        
+        <!-- suchen von Terminumfragen -->
+        <div id="logged_in_area" ng-show="user.loggedIn" class="input_area"></div>
+
+
+        <br />
+
+        <span class="full_width_input">
+            <input id="logout" type="button" value="Logout" ng-click="logout()" />
+        </span>
+
+    </div>
+
+
+
+    <!-- import javascript -->
+
+    <!-- for production -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script> -->
+    
+    <!-- for development -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script> -->
+    
+    
+    <!-- for production -->
+    <!-- <script src="lib/angular.min.js"></script> -->
+    
+    <!-- for development -->
+    <script src="lib/mobile-angular-ui"></script>
+    
+    
+    <!-- maven for production -->
+    <!-- <script type="text/javascript" src="webjars/angularjs/1.2.16-2/angular.min.js"></script> -->
+    
+    <!-- maven for development -->
+    <!-- <script type="text/javascript" src="webjars/angularjs/1.2.16-2/angular.js"></script> -->
+
+    
+    <script src="js/Ctrl.js"></script>
+ 
+</body>
+</html>
