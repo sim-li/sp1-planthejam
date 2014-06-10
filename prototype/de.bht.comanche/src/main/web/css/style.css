@@ -40,7 +40,15 @@ label {
     border-color: red;
 }
 
-.output_area {
+select {
+    width: 98%;
+}
+
+textarea {
+    width: 97%;
+}
+
+/*.output_area {
     float: left;
     width: 40%;
-}
+}*/

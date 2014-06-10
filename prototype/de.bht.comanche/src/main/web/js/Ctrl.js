@@ -14,7 +14,30 @@ var Ctrl = (function() {
     "use strict";
 
     var myApp = angular.module("myApp", []);
-    myApp.controller("Ctrl", function($scope) {
+    myApp.controller("Ctrl", function($scope, $log) {
+
+        $scope.$log = $log;
+
+        $scope.Type = {
+            UNIQUE: "einmalig", 
+            RECURRING: "wiederholt"
+        };
+        $scope.typeOptions = [
+            $scope.Type.UNIQUE, 
+            $scope.Type.RECURRING
+        ];
+        
+        $scope.TimeUnit = {
+            DAY: "Tag", 
+            WEEK: "Woche", 
+            MONTH: "Monat"
+        };
+        $scope.timeUnitOptions = [
+            $scope.TimeUnit.DAY, 
+            $scope.TimeUnit.WEEK, 
+            $scope.TimeUnit.MONTH
+        ];
+
 
         // $scope.allowedPassword = /^\d{5}$/;
         $scope.allowedPassword = /^[^\s]{8,20}$/; // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
@@ -28,22 +51,26 @@ var Ctrl = (function() {
             var dummyList = [
                 { "name": "Bandprobe", 
                   "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
-                  "type": "UNIQUE", // or "RECURRING" <<enumeration>> = einmalig oder wiederkehrend
-                  "deadline": "04.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-                  "frequency": { "distance": 0, "timeUnit": "WEEK" }, // <<datatype>> iteration = Wiederholung
+                  "type": $scope.Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
+                  // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
+                  "deadline": new Date(2014, 4, 10, 23, 55), // <<datatype>> date = Zeipunkt
+                  "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
                   "possibleTimeslots": [ // <<datatype>> List<timeslot> = List<Zeitraum>
-                        { "startTime": "11.07.2014, 19:00", "durationInMins": 120 }, 
-                        { "startTime": "12.07.2014, 20:00", "durationInMins": 120 }, 
-                        { "startTime": "18.07.2014, 19:30", "durationInMins": 120 } ], 
-                  "determinedTimeslot": { "startTime": "12.07.2014, 20:00", "durationInMins": 120 } }, // <<datatype>> timeslot = Zeitraum
-                { "name": "Chorprobe" }, 
-                { "name": "Meeting" }];
+                        { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, 
+                        { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
+                        { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } ], 
+                  "determinedTimeslot": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } }, // <<datatype>> timeslot = Zeitraum
+                { "name": "Chorprobe", 
+                  "description": "foo"}, 
+                { "name": "Meeting", 
+                  "description": "bar"}];
 
             return {
                 "name": "", 
                 "password": "", 
                 "loggedIn": false, 
                 "surveys": dummyList // *** replace list of dummy surveys by real data from server ***
+                // "surveys": [{}] // empty list for debugging
             };
         };
         
@@ -73,6 +100,10 @@ var Ctrl = (function() {
                 $scope.user.loggedIn = true;
                 console.log("Login erfolgreich. Benutzer:");
                 console.log($scope.user);
+
+                // TODO: checken, ob so sinnvoll:
+                $scope.filteredSurveys = $scope.user.surveys;
+                $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
             }
         };
 
@@ -87,23 +118,22 @@ var Ctrl = (function() {
 
         $scope.turnOffWarning = function() {
             $scope.warning = "";
-        }
+        };
 
-        $scope.filteredSurveys = [];
-        $scope.filter = function() {
-            // return true if survey name or description contain searchString
-            // for (var survey in $scope.user.surveys) {
-            //     console.log(survey.name);
-            // }
-            // console.log($scope.user.surveys);
-            console.log(">>>" + $scope.searchString);
-            angular.forEach($scope.user.surveys, function(survey, index) {
-                // if (($scope.searchString !== undefined) && (survey.name.indexOf($scope.searchString) != -1)) {
-                    $scope.filteredSurveys.push(survey);
-                // }
-            })
-            console.log($scope.filteredSurveys);
-        }
+        
+
+        // $scope.searchString = "";
+
+        // $scope.filter = function() {
+        //     console.log("searchString: '" + $scope.searchString + "'");
+        //     $scope.filteredSurveys = [];
+        //     angular.forEach($scope.user.surveys, function(survey, index) {
+        //         var re = new RegExp($scope.searchString, "i");
+        //         if (survey.name.match(re) || survey.description.match(re)) {
+        //             $scope.filteredSurveys.push(survey);
+        //         }
+        //     });
+        // };
 
     });
 

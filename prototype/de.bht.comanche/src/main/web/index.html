@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -40,8 +40,8 @@
                 <!-- ng-pattern="allowedPassword"  -->
                 <!-- <span class="error" ng-show="myForm.inputPassword.$error.required"> &larr; Pflichtfeld!</span> -->
 
-                <input id="inputPassword2" name="inputPassword2" ng-show="showPassword" type="text" ng-model="user.password" 
-                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required />
+                <!-- <input id="inputPassword2" name="inputPassword2" ng-show="showPassword" type="text" ng-model="user.password" 
+                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required /> -->
                 
                 <div class="error">{{ warning }}</div>
                 
@@ -62,30 +62,100 @@
 
 
     <div id="logged_in_area" ng-show="user.loggedIn" class="input_area">
-        <div>
+    <!-- <div id="logged_in_area" class="input_area"> -->
+        <!-- <div>
             Hallo {{ user.name.toUpperCase() }}, du bist eingeloggt.
         </div>
         
-        <br />
+        <br /> -->
 
-        -- M E N U E --<br/><br />
+        <!-- -- M E N U E --<br/><br />
         - Neue Terminumfrage<br/>
-        - Terminumfragenliste --> bei Auswahl --> aendern / loeschen<br/>
-        - Terminumfrage suchen --> Auswahl filtern<br/><br />
+        - Terminumfragenliste >> bei Auswahl >> aendern / loeschen<br/>
+        - Terminumfrage suchen >> Auswahl filtern<br/><br /> -->
 
-        <span class="full_width_input">
-            <input id="" type="button" value="Neue Terminumfrage erstellen" onclick="console.log('Neue Terminumfrage erstellen')" />
-            <!-- <input id="" type="text" placeholder="Terminumfragen durchsuchen ..." ng-model="searchString" onkeyup="console.log('Suche nach: \'' + this.value + '\'')" /> -->
-            <input id="" type="text" placeholder="Terminumfragen durchsuchen ..." ng-model="searchString" ng-keyup="filter()" />
-        </span>
+        <div id="survey_selection_area" ng-hide="user.inEditMode">
 
-        <table>
-            <tr ng-repeat="survey in user.surveys">
-                <td>
-                    <button>{{ filteredSurveys.name }}</button>
-                </td>
-            </tr>
-        </table>
+            <span class="full_width_input">
+                <input id="newSurvey" type="button" value="Neue Terminumfrage erstellen" onclick="console.log('Neue Terminumfrage erstellen')" />
+                <select ng-model="user.selectedSurvey" ng-options="survey.name for survey in filteredSurveys | filter:user.searchString" size="5%"></select>
+                <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="user.searchString" ng-keyup="$log.log(user)" />
+                <!-- <input id="editSurvey" type="button" value="Terminumfrage bearbeiten" onclick="console.log('Terminumfrage bearbeiten')" /> -->
+                <input id="editSurvey" type="button" value="Terminumfrage bearbeiten" ng-click="user.inEditMode=true" />
+
+
+            </span>
+
+            <textarea rows="5" readonly>{{ user.selectedSurvey.description }}</textarea>
+
+            <!-- <table>
+                <tr ng-repeat="survey in user.surveys | filter:user.searchString">
+                    <td>
+                        <button id="survey" ng-click="selectSurvey()" >{{ survey.name }}</button>
+                        <label for="survey">{{ survey.description }}</label>
+                    </td>
+                </tr>
+            </table> -->
+
+
+
+            
+            <!-- <form class="myForm"> -->
+
+            <!-- <select size="5%">
+                <option ng-repeat="survey in user.surveys | filter:user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }}</option>
+            </select> -->
+
+
+            <!-- </form> -->
+        </div>
+
+
+
+        <div id="survey_selection_area" ng-show="user.inEditMode">
+            <span class="full_width_input">
+
+                <label for="editSurveyName">Name</label>
+                <input id="editSurveyName" type="text" ng-model="user.selectedSurvey.name" ng-change="$log.log(user.selectedSurvey.name);"/>
+
+                <label for="editSurveyDescription">Beschreibung</label>
+                <input id="editSurveyDescription" type="text" ng-model="user.selectedSurvey.description" ng-change="$log.log(user.selectedSurvey.description);"/>
+                
+                <label for="editSurveyType">Typ</label>
+                <select id="editSurveyType" ng-model="user.selectedSurvey.type" ng-options="type for type in typeOptions" ng-change="$log.log(user.selectedSurvey.type);"></select>
+                <!-- <select id="editSurveyType" ng-model="user.selectedSurvey.type" ng-change="$log.log(user.selectedSurvey);">
+                    <option ng-repeat="(value, key) in Type" value="key" ng-selected="$log.log(user.selectedSurvey.type);">{{key}}</option>
+                </select> -->
+                
+                <label for="editSurveyDeadline">Deadline</label>
+                <input id="editSurveyDeadline" type="text" ng-model="user.selectedSurvey.deadline" ng-change="$log.log(user.selectedSurvey.deadline);"/>
+
+                <label for="editSurveyFrequencyDistance">Frequenz - Abstand</label>
+                <input id="editSurveyFrequencyDistance" type="number" ng-model="user.selectedSurvey.frequency.distance" ng-change="$log.log(user.selectedSurvey.frequency);"/>
+                
+                <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
+                <select id="editSurveyFrequencyTimeUnit" ng-model="user.selectedSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in timeUnitOptions" ng-change="$log.log(user.selectedSurvey.frequency);"></select>
+
+
+                <!-- <select id="editSurveyType" ng-model="user.selectedSurvey.type" ng-options="type for type in Type" ng-change="$log.log(user.selectedSurvey.type);"></select> -->
+
+
+                <label for="editSurveypossibleTimeslots">M&ouml;gliche Zeitr&auml;ume</label>
+                <select id="editSurveypossibleTimeslots" type="text" ng-model="user.selectedSurvey.possibleTimeslots" ng-options="timeslot for timeslot in possibleTimeslots" ng-change="$log.log(user.selectedSurvey.possibleTimeslots);"></select>
+
+                <label for="editSurveydeterminedTimeslotStart">Ermittelter Zeitraum - Startzeitpunkt</label>
+                <input id="editSurveydeterminedTimeslotStart" type="text" ng-model="user.selectedSurvey.determinedTimeslot.startTime" ng-change="$log.log(user.selectedSurvey.determinedTimeslot);"/>
+
+                <label for="editSurveydeterminedTimeslotDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
+                <input id="editSurveydeterminedTimeslotDuration" type="number" ng-model="user.selectedSurvey.determinedTimeslot.durationInMins" ng-change="$log.log(user.selectedSurvey.determinedTimeslot);"/>
+
+
+                <input id="cancelSurveyEdit" type="button" value="Abbrechen" ng-click="user.inEditMode=false" />
+                <input id="saveSurveyEdit" type="button" value="Speichern" ng-click="user.inEditMode=false" />
+                <!-- <input id="saveSurveyEdit" type="button" value="Speichern" ng-click="$log.log(user.selectedSurvey);" /> -->
+            </span>
+        </div>
+
 
 
         <!-- erfassen von Terminumfragen -->
