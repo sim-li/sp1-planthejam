@@ -81,7 +81,8 @@
                 <select ng-model="user.selectedSurvey" ng-options="survey.name for survey in filteredSurveys | filter:user.searchString" size="5%"></select>
                 <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="user.searchString" ng-keyup="$log.log(user)" />
                 <!-- <input id="editSurvey" type="button" value="Terminumfrage bearbeiten" onclick="console.log('Terminumfrage bearbeiten')" /> -->
-                <input id="editSurvey" type="button" value="Terminumfrage bearbeiten" ng-click="user.inEditMode=true" />
+                <input id="editSurvey" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="user.inEditMode=true" />
+                <input id="deleteSurvey" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedSurvey()" />
 
 
             </span>

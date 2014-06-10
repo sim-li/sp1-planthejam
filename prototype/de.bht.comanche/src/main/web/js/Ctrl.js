@@ -120,6 +120,18 @@ var Ctrl = (function() {
             $scope.warning = "";
         };
 
+
+        $scope.remove = function(item) {
+            var index = $scope.user.surveys.indexOf(item);
+            $scope.user.surveys.splice(index, 1);
+        };
+
+        $scope.deleteSelectedSurvey = function() {
+            $scope.remove($scope.user.selectedSurvey);
+            $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+            console.log($scope.user);
+        };
+
         
 
         // $scope.searchString = "";
