@@ -10,27 +10,32 @@
 .error { 
     color: red; 
     font-weight: bold; 
+    font-size: 0.6em; 
 }
 
 .input_area {
     float: left;
-    width: 40%;
+    width: 75%;
+    min-width: 150px;
+    max-width: 450px;
 }
 
 label {
-    font-size: 13px;
-    display: inline-block;
+    font-size: 0.75em;
+    /*display: inline-block;*/
 }
 
-.input_area input {
-    width: 200px;
+.full_width_input input {
+    width: 98%;
 }
 
-.input_area label {
-    width: 80%;
+.my_form {
+    width: 98%;
+    padding: 2%;
 }
 
-.my-form.ng-invalid {
+.my_form.ng-invalid {
+    width: 98%;
     border-style: solid;
     border-color: red;
 }
@@ -38,18 +43,4 @@ label {
 .output_area {
     float: left;
     width: 40%;
-}
-
-.playground {
-    float: left;
-    width: 80%;
-}
-
-.output {
-    border-style: dotted;
-    border-color: #eeeeee;
-}
-
-.calc input {
-    width: 5em;
 }

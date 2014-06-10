@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     
     <!-- 
-     * Technik-Prototyp, SP1 SoSe 2014, Team: Comanche
+     * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
      * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
      *
     -->
     
-    <title>SP1 Technik-Prototyp, Team: Comanche</title>
+    <title>SP1 Ojektverwaltung-UI, Team: Comanche</title>
     
     <!-- import style sheet -->
     <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
@@ -21,98 +21,96 @@
     <pre id="error"></pre>
 
     
-    <div class="input_area">
 
-        <div>
-            <label for="inputName">Wie hei&szlig;t du?</label>
-            <input id="inputName" type="text" ng-model="name" placeholder="Dein Name ..." />
-        </div>
-        <br />
+    <div id="login_area" ng-hide="user.loggedIn" class="input_area">
 
-        <div ng-show="name">
-            <label for="inputSecrets">Hallo {{ name }}! Erz&auml;hl mir all deine Geheimnisse:</label>
-            <input id="inputSecrets" type="textarea" ng-model="secrets" placeholder="Deine Geheimnisse ..." />
-        </div>
-        <br />
+        <!-- <label for="inputPassword">Test</label>
+        <input id="test" name="test" type="text" ng-model="test2" ng-minlength="2" ng-maxlength="8" ng-pattern="allowedPassword" />
+        <span ng-show="myForm.test2.$error.minlength || myForm.test2.$error.maxlength || myForm.test2.$error.pattern">The value must be in range 2 to 8!</span> -->
 
-        <form name="myForm" ng-show="name && secrets" class="my-form">
-            <label for="inputPIN">Wie ist deine f&uuml;nfstellige PIN?</label>
-            <input id="inputPIN" name="inputPIN" type="text" ng-model="inputPIN" ng-pattern="allowedPIN" placeholder="Deine PIN ..." required />
-            <span class="error" ng-show="myForm.inputPIN.$error.required"> &larr; Pflichtfeld!</span>
-            <div class="error" ng-show="myForm.inputPIN.$error.pattern">Falsches Format! Bitte gib 5 Ziffern ein!</div>
+        <form name="myForm" ng-submit="login()" class="my_form">
+            <span class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="user.name" placeholder="Dein Benutzername ..." required />
+                <!-- <span class="error" ng-show="myForm.inputName.$dirty && myForm.inputName.$error.required"> &larr; Pflichtfeld!</span> -->
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="user.password" 
+                placeholder="8-20 Buchstaben" ng-change="test_()" required />
+                <!-- ng-pattern="allowedPassword"  -->
+                <!-- <span class="error" ng-show="myForm.inputPassword.$error.required"> &larr; Pflichtfeld!</span> -->
+
+                <input id="inputPassword2" name="inputPassword2" ng-show="showPassword" type="text" ng-model="user.password" 
+                placeholder="8-20 Buchstaben" ng-change="test_()" required />
+                
+                <div class="error">{{ warning }}</div>
+                
+                <!-- ng-pattern="allowedPassword"  -->
+                <!-- <div class="error" ng-show="myForm.inputPassword.$error.pattern">Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!</div> -->
+            </span>
             
-            <span ng-show="inputPIN">
-                &rarr; Deine PIN ist: <span class="output"> {{ inputPIN }} </span>
+            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+            
+            <span class="full_width_input">
+                <input id="login" type="submit" value="Login" />
             </span>
         </form>
-        <br />
         
     </div>
 
 
-    <div ng-show="name" class="output_area">
-        <br />
 
+    <div id="logged_in_area" ng-show="user.loggedIn" class="input_area">
         <div>
-            {{ name.toUpperCase() }}{{ secrets && ", ich kenne alle deine Geheimnisse: " }}{{ secrets || ", ich wei&szlig; noch gar nichts von dir ..." }}
+            Hallo {{ user.name.toUpperCase() }}, du bist eingeloggt.
         </div>
+        
         <br />
 
+        -- M E N U E --<br/><br />
+        - Neue Terminumfrage<br/>
+        - Terminumfragenliste --> bei Auswahl --> aendern / loeschen<br/>
+        - Terminumfrage suchen --> Auswahl filtern<br/><br />
 
-        <div ng-show="inputPIN">
-            <hr />
-            <br />
-            Deine Geheimnisse r&uuml;ckw&auml;rts: {{ reverseName() }}
-        </div>
-    </div>
+        <span class="full_width_input">
+            <input id="" type="button" value="Neue Terminumfrage erstellen" onclick="console.log('Neue Terminumfrage erstellen')" />
+            <input id="" type="text" placeholder="Terminumfragen durchsuchen ..." onkeyup="console.log('Suche nach: \'' + this.value + '\'')" />
+        </span>
+
+        <table>
+            <tr ng-repeat="survey in user.surveys">
+                <td>
+                    <button>{{ survey.name }}</button>
+                </td>
+            </tr>
+        </table>
 
 
-    <div ng-show="inputPIN" class="playground">
-        <hr /><br />
+        <!-- erfassen von Terminumfragen -->
+        <div id="logged_in_area" ng-show="user.loggedIn" class="input_area"></div>
 
-        <input type="button" value="Kartenspiel" ng-disabled="show.cardGame" ng-click="togglePlayground('CARD_GAME')" />
-        <input type="button" value="Taschenrechner" ng-disabled="show.calculator" ng-click="togglePlayground('CALCULATOR')" />
-        <input type="button" value="Etwas anderes" ng-disabled="show.somethingElse" ng-click="togglePlayground('SOMETHING_ELSE')" />
         
-        <br/ ><br/ ><hr /><br />
+        <!-- ändern von Terminumfragen -->
+        <div id="logged_in_area" ng-show="user.loggedIn" class="input_area"></div>
 
-        <div ng-show="show.cardGame">
-            
+        
+        <!-- löschen von Terminumfragen -->
+        <div id="logged_in_area" ng-show="user.loggedIn" class="input_area"></div>
 
-            <span class="output"> {{ test.suit }} {{ test.card }} </span> aufgedeckt um <span class="output"> {{ test.date }} </span> Uhr.
-            
-            <br /><br />
-            <input type="button" value="Neue Karte ziehen" ng-click="test.update()" />
-            <input type="button" value="Farbenauswahl {{ show.suitSelection ? 'verbergen' : 'zeigen' }}" ng-click="toggleSelection('SUIT_SELECTION')" />
-            <input type="button" value="Kartenauswahl {{ show.cardSelection ? 'verbergen' : 'zeigen' }}" ng-click="toggleSelection('CARD_SELECTION')" />
+        
+        <!-- suchen von Terminumfragen -->
+        <div id="logged_in_area" ng-show="user.loggedIn" class="input_area"></div>
 
-            <table ng-show="show.suitSelection">
-                <tr ng-repeat="selection in cards.suit">
-                    <td>{{ selection }}</td>
-                </tr>
-            </table>
-            
-            <table ng-show="show.cardSelection">
-                <tr ng-repeat="selection in cards.card">
-                    <td>{{ selection }}</td>
-                </tr>
-            </table>
-        </div>
 
-        <div ng-show="show.calculator" class="calc">
-            <label>Rechnen: </label>
-            <input id="a" type="text" ng-model="a" ng-change="add(a,b)" />
-             + 
-            <input type="text" ng-model="b" ng-change="add(a,b)"  />
-             = 
-            <input type="text" ng-model="sum" disabled />
-        </div>
+        <br />
 
-        <div ng-show="show.somethingElse">
-            Etwas anderes.
-        </div>
+        <span class="full_width_input">
+            <input id="logout" type="button" value="Logout" ng-click="logout()" />
+        </span>
 
     </div>
+
 
 
     <!-- import javascript -->
