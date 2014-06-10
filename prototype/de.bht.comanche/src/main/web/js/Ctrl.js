@@ -75,19 +75,6 @@ var Ctrl = (function() {
                 console.log($scope.user);
             }
         };
-        
-        // $scope.test_ = function() {
-        //     if (!$scope.allowedPassword.test($scope.user.password)) {
-        //         $scope.warning = "Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!";
-        //         console.log($scope.warning);
-        //     } else {
-        //         $scope.warning = "";
-        //     }
-        // }
-
-        $scope.test_ = function() {
-            $scope.warning = "";
-        }
 
         $scope.logout = function() {
 
@@ -97,6 +84,26 @@ var Ctrl = (function() {
             console.log("Logout erfolgreich.");
             console.log($scope.user);
         };
+
+        $scope.turnOffWarning = function() {
+            $scope.warning = "";
+        }
+
+        $scope.filteredSurveys = [];
+        $scope.filter = function() {
+            // return true if survey name or description contain searchString
+            // for (var survey in $scope.user.surveys) {
+            //     console.log(survey.name);
+            // }
+            // console.log($scope.user.surveys);
+            console.log(">>>" + $scope.searchString);
+            angular.forEach($scope.user.surveys, function(survey, index) {
+                // if (($scope.searchString !== undefined) && (survey.name.indexOf($scope.searchString) != -1)) {
+                    $scope.filteredSurveys.push(survey);
+                // }
+            })
+            console.log($scope.filteredSurveys);
+        }
 
     });
 

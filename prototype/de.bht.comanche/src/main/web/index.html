@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -36,12 +36,12 @@
 
                 <label for="inputPassword">Passwort</label>
                 <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="user.password" 
-                placeholder="8-20 Buchstaben" ng-change="test_()" required />
+                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required />
                 <!-- ng-pattern="allowedPassword"  -->
                 <!-- <span class="error" ng-show="myForm.inputPassword.$error.required"> &larr; Pflichtfeld!</span> -->
 
                 <input id="inputPassword2" name="inputPassword2" ng-show="showPassword" type="text" ng-model="user.password" 
-                placeholder="8-20 Buchstaben" ng-change="test_()" required />
+                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required />
                 
                 <div class="error">{{ warning }}</div>
                 
@@ -75,13 +75,14 @@
 
         <span class="full_width_input">
             <input id="" type="button" value="Neue Terminumfrage erstellen" onclick="console.log('Neue Terminumfrage erstellen')" />
-            <input id="" type="text" placeholder="Terminumfragen durchsuchen ..." onkeyup="console.log('Suche nach: \'' + this.value + '\'')" />
+            <!-- <input id="" type="text" placeholder="Terminumfragen durchsuchen ..." ng-model="searchString" onkeyup="console.log('Suche nach: \'' + this.value + '\'')" /> -->
+            <input id="" type="text" placeholder="Terminumfragen durchsuchen ..." ng-model="searchString" ng-keyup="filter()" />
         </span>
 
         <table>
             <tr ng-repeat="survey in user.surveys">
                 <td>
-                    <button>{{ survey.name }}</button>
+                    <button>{{ filteredSurveys.name }}</button>
                 </td>
             </tr>
         </table>
