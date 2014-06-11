@@ -47,34 +47,75 @@
             <version>7.0</version>
         </dependency>
         
-        <!-- old dependency for jetty / jersey - caused trouble with "mvn site", but let's keep it for a while, just in case ... -->
-        <!-- <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-jetty-servlet</artifactId>
-            <version>2.8</version>
-        </dependency> -->
+        <!-- Java DSL (domain-specific language) for easy testing of REST services -->
         
+        <dependency>
+      		<groupId>com.jayway.restassured</groupId>
+      		<artifactId>rest-assured</artifactId>
+      		<version>2.3.1</version>
+      		<scope>test</scope>
+		</dependency>
+		
+		 <!-- Add JSON Support for testing -->
+		
+		<dependency>
+  			<groupId>com.owlike</groupId>
+  			<artifactId>genson</artifactId>
+ 			<version>0.99</version>
+		</dependency>
+	     
+        <!-- Add JSON Support for testing -->
+        
+        <dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.9</version>
+		</dependency>
+        
+        <dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>2.17</version>
+		</dependency>
+		
+	    <!-- other dependency for jetty / jersey - caused trouble with "mvn site", but let's keep it for a while, just in case ... 
+		  -->
+		 
+        <dependency>
+    		<groupId>org.glassfish.jersey.containers</groupId>
+    		<artifactId>jersey-container-servlet</artifactId>
+    		<version>2.9</version>
+   			<scope>provided</scope>
+		</dependency>
+		
+	    <!-- Old jersey -->
+	   	
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
             <version>1.18.1</version>
-        </dependency>
+        </dependency> 
         
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.1.5.v20140505</version>
+            <!--  <version>9.2.0.v20140526</version> --> 
+          	<version>8.1.2.v20120308</version> 
         </dependency>
-        <!-- <dependency>
+        
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>9.1.5.v20140505</version>
+            <!--  <version>9.2.0.v20140526</version> --> 
+          	<version>8.1.2.v20120308</version> 
         </dependency>
+        
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlets</artifactId>
-            <version>9.1.5.v20140505</version>
-        </dependency> -->
+          	<!--  <version>9.2.0.v20140526</version> --> 
+          	<version>8.1.2.v20120308</version> 
+        </dependency>
         
         <dependency>
             <groupId>junit</groupId>
@@ -99,11 +140,34 @@
         </resources>
         
         <plugins>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>8.1.15.v20140411</version>
-            </plugin>
+      <plugin>
+        	 <groupId>org.mortbay.jetty</groupId>
+              <artifactId>jetty-maven-plugin</artifactId>
+              <version>8.1.15.v20140411</version>
+       	 <configuration>
+           	  <webAppConfig>
+ <!--            	  
+o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}
+o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}
+o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}           	  
+-->      			
+      		<!--<contextPath>/${project.artifactId}</contextPath> -->	
+      			<contextPath>/</contextPath>
+      			<descriptor>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/WEB-INF/web.xml</descriptor>
+  			  </webAppConfig>
+  			  <resourceBases>
+  			    <!--<resourceBase>${project.basedir}/src/main/webapp</resourceBase>-->
+       			<resourceBase>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/</resourceBase>
+       			<!--<resourceBase>${project.basedir}/src/test/webapp</resourceBase>-->
+       			<resourceBase>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/test/webapp/</resourceBase>
+       			
+      </resourceBases>
+                <scanIntervalSeconds>100</scanIntervalSeconds>
+                <stopKey>STOP</stopKey>
+                <stopPort>9999</stopPort>
+        </configuration>
+	</plugin>
+            
             
             <plugin>
                 <groupId>com.github.searls</groupId>
@@ -278,13 +342,32 @@
                                 </reportSet>
                             </reportSets>
                         </plugin>
-
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-report-plugin</artifactId>
-                            <version>2.6</version>
-                        </plugin>
-                        
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+         <version>2.6</version>
+      </plugin>
+      
+       <!-- Generate a report for tests-->                  
+     <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.6</version>
+        <reportSets>
+          <reportSet>
+            <id>integration-tests</id>
+            <reports>
+              <report>failsafe-report-only</report>
+            </reports>
+            </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+      
                     </reportPlugins>
                 </configuration>
             </plugin>            
