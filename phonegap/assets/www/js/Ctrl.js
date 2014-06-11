@@ -49,40 +49,21 @@ var Ctrl = (function() {
             // *** get user data from server ***
 
             var dummyList = [
-                {   
-                    "name": "Bandprobe", 
-                    "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
-                    "type": $scope.Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
-                    // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-                    "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
-                    "possibleTimeslots": [
-                            { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeslot> = List<Zeitraum>
-                            { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
-                            { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
-                        ], 
-                    "determinedTimeslot": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeslot = Zeitraum
-                }, 
-                {   "name": "Chorprobe", 
-                    "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
-                    "type": $scope.Type.RECURRING, 
-                    "deadline": new Date(2014, 7, 21, 12, 0),
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.DAY },
-                    "possibleTimeslots": [
-                            { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
-                            { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
-                        ], 
-                    "determinedTimeslot": {}
-                }, 
-                {   "name": "Meeting", 
-                    "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
-                    "type": $scope.Type.RECURRING, 
-                    "deadline": new Date(2014, 7, 31, 8, 0),
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.MONTH },
-                    "possibleTimeslots": [], 
-                    "determinedTimeslot": {}
-                }
-            ];
+                { "name": "Bandprobe", 
+                  "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
+                  "type": $scope.Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
+                  // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
+                  "deadline": new Date(2014, 4, 10, 23, 55), // <<datatype>> date = Zeipunkt
+                  "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
+                  "possibleTimeslots": [ // <<datatype>> List<timeslot> = List<Zeitraum>
+                        { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, 
+                        { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
+                        { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } ], 
+                  "determinedTimeslot": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } }, // <<datatype>> timeslot = Zeitraum
+                { "name": "Chorprobe", 
+                  "description": "foo"}, 
+                { "name": "Meeting", 
+                  "description": "bar"}];
 
             return {
                 "name": "", 
@@ -120,7 +101,7 @@ var Ctrl = (function() {
                 console.log("Login erfolgreich. Benutzer:");
                 console.log($scope.user);
 
-                // TODO: Baustelle -- checken, ob so sinnvoll:
+                // TODO: checken, ob so sinnvoll:
                 $scope.filteredSurveys = $scope.user.surveys;
                 $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
             }
@@ -139,11 +120,6 @@ var Ctrl = (function() {
             $scope.warning = "";
         };
 
-        // TODO: Baustelle
-        $scope.updateSelection = function() {
-            $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
-        };
-
 
         $scope.remove = function(item) {
             var index = $scope.user.surveys.indexOf(item);
@@ -151,10 +127,6 @@ var Ctrl = (function() {
         };
 
         $scope.deleteSelectedSurvey = function() {
-
-            // *** ask: are you sure you want to delete? ***
-            // *** try to delete from server ***
-
             $scope.remove($scope.user.selectedSurvey);
             $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
             console.log($scope.user);
