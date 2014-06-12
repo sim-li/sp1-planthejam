@@ -16,9 +16,9 @@ public class PersistenceTest {
 	
     @Before 
     public void setUp() {
-    	EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
-    	entityManager = entityManagerFactory.createEntityManager();
-    	entityManager.getTransaction().begin();
+    		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
+    		entityManager = entityManagerFactory.createEntityManager();
+        	entityManager.getTransaction().begin();
     }
     
     @Test public void sayHelloWorldsaysHelloWorld() {
