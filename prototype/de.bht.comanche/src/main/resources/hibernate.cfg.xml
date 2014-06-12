@@ -6,6 +6,6 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.hbm2ddl.auto">update</property>
-        <mapping resource="de/bht/comanche/User.hbm.xml"/>
+<!--         <mapping resource="de/bht/comanche/User.hbm.xml"/> -->
     </session-factory>
 </hibernate-configuration>
