@@ -4,12 +4,13 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 @Entity
-@Table (name = "users")
+@Table (name = "\"users\"")
 public class User {
     private Long id;
     private String firstName;
@@ -20,8 +21,8 @@ public class User {
     public User() {}
 
     @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+   
     public Long getId() {
         return id;
     }
