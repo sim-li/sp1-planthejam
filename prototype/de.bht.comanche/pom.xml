@@ -182,7 +182,9 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                 </executions>
                 <configuration>
                     <jsSrcDir>src/main/web/js</jsSrcDir>
+                    <jsSrcDir>src/main/webapp/js</jsSrcDir>
                     <jsTestSrcDir>src/test/web/js</jsTestSrcDir>
+                    <jsTestSrcDir>src/test/webapp/js</jsTestSrcDir>
                     
                     <preloadSources>
                         <!-- <source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source> -->

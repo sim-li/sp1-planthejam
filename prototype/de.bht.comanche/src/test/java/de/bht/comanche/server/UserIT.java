@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.Test;
 
 
-public class UserTest {
+public class UserIT {
 	
 	@Test
 	public void testGetSingleUser() {
