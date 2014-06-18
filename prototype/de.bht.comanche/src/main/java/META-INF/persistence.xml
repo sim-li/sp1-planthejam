@@ -26,7 +26,8 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
   version="1.0">
 
- <persistence-unit name="planthejam-jpa">
- </persistence-unit>
+	 <persistence-unit name="planthejam.jpa">
+	 	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+ 	 </persistence-unit>
 
 </persistence>

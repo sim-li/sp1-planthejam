@@ -13,8 +13,10 @@ var Ctrl = (function() {
 
     "use strict";
 
+    // var myApp = angular.module("myApp", ["testModule"]); // <<==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ====
+
     var myApp = angular.module("myApp", []);
-    myApp.controller("Ctrl", function($scope, $log) {
+    myApp.controller("Ctrl", function($scope, $log, $filter) {
 
         $scope.$log = $log;
 
@@ -43,57 +45,153 @@ var Ctrl = (function() {
         $scope.allowedPassword = /^[^\s]{8,20}$/; // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
         // $scope.allowedPassword = /^[^\s]+$/; // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
 
+        
+        /*
+         *
+         */
+        var initDate = function(config) {
+            var date = $filter('date')(config, "yyyy-MM-dd");
+            var time = $filter('date')(config, "HH:mm");
+            return {
+                "date": date, 
+                "time": time, 
+                "toDate": function() {
+                    // var self = this;
+                    // return new Date(self.date + " " + self.time);
+                    return new Date(this.date + " " + this.time);
+                }
+            };
+        };
 
-        var initUser = function() {
-
-            // *** get user data from server ***
-
-            var dummyList = [
+        /*
+         *
+         */
+        var getDummySurveyList = function() {
+            return [
                 {   
                     "name": "Bandprobe", 
                     "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
                     "type": $scope.Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
                     // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-                    "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
+                    "deadline": initDate(new Date(2014, 7, 10, 23, 55)), // <<datatype>> date = Zeipunkt
                     "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
                     "possibleTimeslots": [
-                            { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeslot> = List<Zeitraum>
-                            { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
-                            { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
+                            { "startTime": initDate(new Date(2014, 7, 11, 19, 0)), "durationInMins": 120 }, // <<datatype>> <timeslot> = List<Zeitraum>
+                            { "startTime": initDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 }, 
+                            { "startTime": initDate(new Date(2014, 7, 18, 19, 30)), "durationInMins": 120 } 
                         ], 
-                    "determinedTimeslot": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeslot = Zeitraum
+                    "determinedTimeslot": { "startTime": initDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 } // <<datatype>> timeslot = Zeitraum
                 }, 
                 {   "name": "Chorprobe", 
                     "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
                     "type": $scope.Type.RECURRING, 
-                    "deadline": new Date(2014, 7, 21, 12, 0),
+                    "deadline": initDate(new Date(2014, 7, 21, 12, 0)),
                     "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.DAY },
                     "possibleTimeslots": [
-                            { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
-                            { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
+                            { "startTime": initDate(new Date(2014, 8, 1, 18, 30)), "durationInMins": 150 },
+                            { "startTime": initDate(new Date(2014, 8, 2, 18, 30)), "durationInMins": 150 } 
                         ], 
-                    "determinedTimeslot": {}
+                    "determinedTimeslot": { "startTime": initDate(), "durationInMins": 0 }
                 }, 
                 {   "name": "Meeting", 
                     "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
                     "type": $scope.Type.RECURRING, 
-                    "deadline": new Date(2014, 7, 31, 8, 0),
+                    "deadline": initDate(new Date(2014, 7, 31, 8, 0)),
                     "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.MONTH },
                     "possibleTimeslots": [], 
-                    "determinedTimeslot": {}
+                    "determinedTimeslot": { "startTime": initDate(), "durationInMins": 0 }
                 }
             ];
+        };
 
+        /*
+         *
+         */
+        var initUser = function() {
+
+            // *** get user data from server ***
+            
             return {
                 "name": "", 
                 "password": "", 
-                "loggedIn": false, 
-                "surveys": dummyList // *** replace list of dummy surveys by real data from server ***
+                "loggedIn": false
+                // , 
+                // "surveys": getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
                 // "surveys": [{}] // empty list for debugging
             };
         };
         
         $scope.user = initUser();
+
+        /**
+         *
+         */
+        var fetchUserData = function() {
+            $scope.user.surveys = getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
+            // $scope.user.surveys = [{}] // empty list for debugging
+        }
+        
+
+
+        
+
+        // $scope.test = new Date();
+        // var myDate = function(date) {
+        //     this.date = $filter('date')(date, "yyyy-mm-dd");
+        //     this.time = $filter('date')(date, "hh:mm");
+            
+        // };
+        
+        // var initDate = function(otherDate) {
+        //     otherDate = otherDate || new Date();
+        //     // var xxx = function() {
+        //     //         var self = this;
+        //     //         return new Date(self.date + " " + self.time);
+        //     return {
+        //         "date": $filter('date')(otherDate, "yyyy-MM-dd"), 
+        //         "time": $filter('date')(otherDate, "HH:mm"), 
+        //         "toDate": function() {
+        //             var self = this;
+        //             // console.log("d " + self.date);
+        //             // console.log("t " + self.time);
+        //             return new Date(self.date + " " + self.time);
+        //         }
+        //     };
+        // };
+        // initDate();
+
+        // var initDate = function(date_) {
+        //     date_ = date_ || new Date();
+        //     return {
+        //         "date": $filter('date')(date_, "yyyy-MM-dd"), 
+        //         "time": $filter('date')(date_, "HH:mm"), 
+        //         "toDate": function() {
+        //             var self = this;
+        //             return new Date(self.date + " " + self.time);
+        //         }
+        //     };
+        // };
+
+        
+        // var getDate = function() {
+        //     return $scope.user.tempDate.toDate();
+        // };
+        
+        // $scope.getDate = function(from, to) {
+        //     // console.log(from); // TODO
+        //     console.log(from.date + "#" + from.time);
+        //     to = new Date(from.date + "#" + from.time);
+
+        //     // $scope.convertToDate(from.date, from.time);
+        // }
+
+        // $scope.convertToDate = function(datetime) {
+        //     return new Date(datetime.date + " " + datetime.time);
+        // }
+
+
+
+
 
 
         $scope.login = function() {
@@ -115,14 +213,17 @@ var Ctrl = (function() {
             } else {
                 
                 // *** try to login at server ***
+
+                // $scope.user = initUser();
+                fetchUserData();
                 
                 $scope.user.loggedIn = true;
                 console.log("Login erfolgreich. Benutzer:");
                 console.log($scope.user);
 
                 // TODO: Baustelle -- checken, ob so sinnvoll:
-                $scope.filteredSurveys = $scope.user.surveys;
-                $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+                // $scope.filteredSurveys = $scope.user.surveys;
+                // $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
             }
         };
 
@@ -139,25 +240,87 @@ var Ctrl = (function() {
             $scope.warning = "";
         };
 
-        // TODO: Baustelle
-        $scope.updateSelection = function() {
-            $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+
+        var Survey = function(config) {
+            config = config || {};
+            this.name = config.name || "";
+            this.description = config.description || "";
+            this.type = config.type || $scope.Type.UNIQUE;
+            this.deadline = config.deadline || initDate(new Date());
+            this.frequency = config.frequency || { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK };
+            this.possibleTimeslots = config.possibleTimeslots || [], 
+            this.determinedTimeslot = config.determinedTimeslot || { "startTime": initDate(), "durationInMins": 0 }
+        };
+
+        $scope.editSurvey = function() {
+            $scope.user.tempSurvey = new Survey($scope.user.selectedSurvey);
+            $scope.user.inEditMode = true;
+            console.log($scope.user);
+        };
+
+        $scope.addSurvey = function() {
+            $scope.user.tempSurvey = new Survey();
+            $scope.user.adding = true;
+            $scope.user.inEditMode = true;
+        };
+
+        $scope.cancelEditSurvey = function() {
+            $scope.user.tempSurvey = "";
+            $scope.user.adding = false;
+            $scope.user.inEditMode = false;
+            console.log($scope.user.selectedSurvey);
+            console.log($scope.user);
+        };
+
+        $scope.saveSurvey = function() {
+            
+            // *** try to synchronize with server ***
+            
+            if (!$scope.user.adding) {
+                removeSelectedSurvey();
+            }
+            $scope.user.surveys.push($scope.user.tempSurvey);
+            $scope.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
+
+            $scope.user.selectedSurvey = $scope.user.tempSurvey;
+            $scope.user.tempSurvey = "";
+            $scope.user.adding = false;
+            $scope.user.inEditMode = false;
+            console.log($scope.user.selectedSurvey);
+            console.log($scope.user);
         };
 
 
-        $scope.remove = function(item) {
-            var index = $scope.user.surveys.indexOf(item);
-            $scope.user.surveys.splice(index, 1);
+        var removeElementFrom = function(element, array) {
+            var index = array.indexOf(element);
+            if (index > -1) {
+                array.splice(index, 1);
+            }
+        };
+
+        var removeSelectedSurvey = function() {
+            removeElementFrom($scope.user.selectedSurvey, $scope.user.surveys);
+            $scope.user.selectedSurvey = "";
         };
 
         $scope.deleteSelectedSurvey = function() {
 
             // *** ask: are you sure you want to delete? ***
             // *** try to delete from server ***
+            // *** refresh local model ***
 
-            $scope.remove($scope.user.selectedSurvey);
-            $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+            removeSelectedSurvey();
+            // $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+            console.log($scope.user.selectedSurvey);
             console.log($scope.user);
+        };
+
+        $scope.removeTimeSlotFromTempSurvey = function(timeslot) {
+            removeElementFrom(timeslot, $scope.user.tempSurvey.possibleTimeslots);
+        };
+
+        $scope.addTimeSlotToTempSurvey = function() {
+            $scope.user.tempSurvey.possibleTimeslots.push({ "startTime": initDate(new Date()), "durationInMins": 60 });
         };
 
         
@@ -176,5 +339,29 @@ var Ctrl = (function() {
         // };
 
     });
+
+    
+    //==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ====
+    //
+    // myApp.controller("Test", function($scope) {
+    //     $scope.testing = "Testing";
+    // });
+
+    // var testModule = angular.module("testModule", []);
+    // myApp.controller("testCtrl", function($scope, $log, $filter) {
+
+    // });
+    // testModule.controller("Test2", function($scope) {
+    //     $scope.testing2 = "Testing again";
+    // });
+    //======================================================
+
+
+    // Ctrl.prototype.remove = function(first_argument) {
+    //     // body...
+    //     console.log($scope.user.name);
+    // };
+
+    // return Ctrl;
 
 }());
