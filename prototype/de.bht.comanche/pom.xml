@@ -157,6 +157,7 @@
               <version>8.1.15.v20140411</version>
          <configuration>
               <webAppConfig>
+<!-- Caution: Avoid absolute paths, try changing those to absolute ones -->
  <!--
 o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}
 o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}
