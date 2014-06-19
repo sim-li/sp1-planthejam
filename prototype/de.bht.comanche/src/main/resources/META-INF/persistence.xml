@@ -28,8 +28,9 @@
 
 	 <persistence-unit name="planthejam.jpa">
 	 	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+	 	<class>de.bht.comanche.User</class>
 	 	<properties>
-	 		<property name="hibernate.hbm2ddl.auto" value="create"/>
+	 		<property name="hibernate.hbm2ddl.auto" value="update"/>
 	 	</properties>
  	 </persistence-unit>
 
