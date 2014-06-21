@@ -6,7 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/helloworld") //root path
-public class HelloWorld {
+public class HelloWorldService {
       public static final String CLICHED_MESSAGE = "Hello World!";
 
       @GET

@@ -1,4 +1,4 @@
-package de.bht.comanche;
+package de.bht.comanche.model;
 
 import java.util.Date;
 

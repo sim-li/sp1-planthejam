@@ -1,17 +1,17 @@
 package de.bht.comanche.server;
 
-public class CreateUser {
+public class ServerTestUser {
 
 	private String email;
 	private String firstName;
 	private String lastName;
 	private int id;
 
-	public CreateUser() {
+	public ServerTestUser() {
 
 	}
 
-	public CreateUser(String email, String fname, String lname, int id) {
+	public ServerTestUser(String email, String fname, String lname, int id) {
 		this.email = email;
 		this.firstName = fname;
 		this.lastName = lname;

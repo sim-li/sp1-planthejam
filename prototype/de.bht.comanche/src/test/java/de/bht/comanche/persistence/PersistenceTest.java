@@ -1,10 +1,12 @@
-package de.bht.comanche;
+package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
+
 
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -13,6 +15,8 @@ import javax.persistence.Query;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.bht.comanche.model.User;
 
 public class PersistenceTest {
 	private EntityManagerFactory entityManagerFactory;

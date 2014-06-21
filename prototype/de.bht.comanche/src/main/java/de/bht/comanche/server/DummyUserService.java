@@ -4,20 +4,16 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import de.bht.comanche.server.CreateUser;
+import de.bht.comanche.server.ServerTestUser;
 
 @Path("/service")
-public class User { 
+public class DummyUserService { 
 	
     @GET
     @Path("/single-user")
 	@Produces(MediaType.APPLICATION_JSON)
-	public CreateUser produceJSON() {
-	
-	CreateUser ur = new CreateUser("test@hascode.com", "Tim","Testerman", 1);
-	 
-	return ur;
-		 
+	public ServerTestUser produceJSON() {
+    	return new ServerTestUser("test@hascode.com", "Tim","Testerman", 1);
 	}
 }
 
