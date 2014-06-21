@@ -1,30 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>de.bht.comanche</groupId>
     <artifactId>plan-the-jam</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>plan-the-jam</name>
-    
+
     <!-- let's keep the old parent we started with for a while, just in case ... -->
     <!-- <parent>
         <groupId>com.github.akiraly.reusable-poms</groupId>
         <artifactId>pom-parent-with-spring-hibernate-querydsl</artifactId>
         <version>4</version>
     </parent> -->
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.3-1100-jdbc41</version>
+            <version>9.2-1004-jdbc4</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -40,143 +40,147 @@
 <!--             <artifactId>hibernate-jpa-2.1-api</artifactId> -->
 <!--             <version>1.0.0.Final</version> -->
 <!--         </dependency> -->
-        
+
 <!--         <dependency> -->
 <!--             <groupId>javax</groupId> -->
 <!--             <artifactId>javaee-api</artifactId> -->
 <!--             <version>7.0</version> -->
 <!--         </dependency> -->
-        
+
         <!-- Java DSL (domain-specific language) for easy testing of REST services -->
-        
+
         <dependency>
-      		<groupId>com.jayway.restassured</groupId>
-      		<artifactId>rest-assured</artifactId>
-      		<version>2.3.1</version>
-      		<scope>test</scope>
-		</dependency>
-		
-		 <!-- Add JSON Support for testing -->
-		
-		<dependency>
-  			<groupId>com.owlike</groupId>
-  			<artifactId>genson</artifactId>
- 			<version>0.99</version>
-		</dependency>
-	     
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>2.3.1</version>
+            <scope>test</scope>
+        </dependency>
+
+         <!-- Add JSON Support for testing -->
+
+        <dependency>
+            <groupId>com.owlike</groupId>
+            <artifactId>genson</artifactId>
+            <version>0.99</version>
+        </dependency>
+
         <!-- Add JSON Support for testing -->
-        
+
         <dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>2.9</version>
-		</dependency>
-        
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.9</version>
+        </dependency>
+
         <dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-plugin</artifactId>
-			<version>2.17</version>
-		</dependency>
-		
-	    <!-- other dependency for jetty / jersey - caused trouble with "mvn site", but let's keep it for a while, just in case ... 
-		  -->
-		 
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.17</version>
+        </dependency>
+
+        <!-- other dependency for jetty / jersey - caused trouble with "mvn site", but let's keep it for a while, just in case ...
+          -->
+
         <dependency>
-    		<groupId>org.glassfish.jersey.containers</groupId>
-    		<artifactId>jersey-container-servlet</artifactId>
-    		<version>2.9</version>
-   			<scope>provided</scope>
-		</dependency>
-		
-	    <!-- Old jersey -->
-	   	
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>2.9</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Old jersey -->
+
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
             <version>1.18.1</version>
-        </dependency> 
-        
+        </dependency>
+
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <!--  <version>9.2.0.v20140526</version> --> 
-          	<version>8.1.2.v20120308</version> 
+            <!--  <version>9.2.0.v20140526</version> -->
+            <version>8.1.2.v20120308</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <!--  <version>9.2.0.v20140526</version> --> 
-          	<version>8.1.2.v20120308</version> 
+            <!--  <version>9.2.0.v20140526</version> -->
+            <version>8.1.2.v20120308</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlets</artifactId>
-          	<!--  <version>9.2.0.v20140526</version> --> 
-          	<version>8.1.2.v20120308</version> 
+            <!--  <version>9.2.0.v20140526</version> -->
+            <version>8.1.2.v20120308</version>
         </dependency>
-        
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        
+
         <!-- <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>angularjs</artifactId>
             <version>1.2.16-2</version>
         </dependency> -->
     </dependencies>
-    
+
     <build>
         <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
             <resource>
                 <directory>src/main/web/js</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
-        
+
       <plugins>
       <plugin>
-      		<artifactId>maven-compiler-plugin</artifactId>
-      		<version>2.3.2</version>
-      		<configuration>
-	      		<source>1.6</source>
-	      		<target>1.6</target>
-      		</configuration>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <source>1.6</source>
+                <target>1.6</target>
+            </configuration>
       </plugin>
       <plugin>
-        	 <groupId>org.mortbay.jetty</groupId>
+             <groupId>org.mortbay.jetty</groupId>
               <artifactId>jetty-maven-plugin</artifactId>
               <version>8.1.15.v20140411</version>
-       	 <configuration>
-           	  <webAppConfig>
- <!--            	  
+         <configuration>
+              <webAppConfig>
+<!-- Caution: Avoid absolute paths, try changing those to absolute ones -->
+ <!--
 o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}
 o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}
-o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}           	  
--->      			
-      		<!--<contextPath>/${project.artifactId}</contextPath> -->	
-      			<contextPath>/</contextPath>
-      			<descriptor>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/WEB-INF/web.xml</descriptor>
-  			  </webAppConfig>
-  			  <resourceBases>
-  			    <!--<resourceBase>${project.basedir}/src/main/webapp</resourceBase>-->
-       			<resourceBase>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/</resourceBase>
-       			<!--<resourceBase>${project.basedir}/src/test/webapp</resourceBase>-->
-       			<resourceBase>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/test/webapp/</resourceBase>
-       			
+o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]}
+-->
+            <!--<contextPath>/${project.artifactId}</contextPath> -->
+                <contextPath>/</contextPath>
+                <descriptor>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/WEB-INF/web.xml</descriptor>
+              </webAppConfig>
+              <resourceBases>
+                <!--<resourceBase>${project.basedir}/src/main/webapp</resourceBase>-->
+                <resourceBase>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/</resourceBase>
+                <!--<resourceBase>${project.basedir}/src/test/webapp</resourceBase>-->
+                <resourceBase>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/test/webapp/</resourceBase>
+
       </resourceBases>
                 <scanIntervalSeconds>100</scanIntervalSeconds>
                 <stopKey>STOP</stopKey>
                 <stopPort>9999</stopPort>
         </configuration>
-	</plugin>
-            
-            
+    </plugin>
+
+
             <plugin>
                 <groupId>com.github.searls</groupId>
                 <artifactId>jasmine-maven-plugin</artifactId>
@@ -190,8 +194,10 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                 </executions>
                 <configuration>
                     <jsSrcDir>src/main/web/js</jsSrcDir>
+                    <jsSrcDir>src/main/webapp/js</jsSrcDir>
                     <jsTestSrcDir>src/test/web/js</jsTestSrcDir>
-                    
+                    <jsTestSrcDir>src/test/webapp/js</jsTestSrcDir>
+
                     <preloadSources>
                         <!-- <source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source> -->
                         <source>${project.basedir}/src/main/web/lib/angular.js</source>
@@ -199,7 +205,7 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                     </preloadSources>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -213,7 +219,7 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                     </execution>
                 </executions>
             </plugin>
-            
+
             <!-- <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -227,7 +233,7 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                     </execution>
                 </executions>
             </plugin> -->
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -250,7 +256,7 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -319,7 +325,7 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                                 <configLocation>src/site/checkstyle/config.xml</configLocation>
                             </configuration> -->
                         </plugin>
-                        
+
                         <plugin>
                             <groupId>gr.abiss.mvn.plugins</groupId>
                             <artifactId>maven-jstools-plugin</artifactId>
@@ -328,7 +334,7 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                                 <jsDir>src/main/web/js</jsDir>
                                 <includePrivate>true</includePrivate>
                                 <includeUndocumented>true</includeUndocumented>
-                                
+
                                 <preloadSources>
                                     <source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source>
                                     <source>${project.basedir}/src/main/web/lib/angular.js</source>
@@ -339,7 +345,7 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                                 <!-- <specIncludes>
                                     <include>*Spec.js</include>
                                 </specIncludes> -->
-                                
+
                             </configuration>
                             <reportSets>
                                 <reportSet>
@@ -350,14 +356,14 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                                 </reportSet>
                             </reportSets>
                         </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
          <version>2.6</version>
       </plugin>
-      
-       <!-- Generate a report for tests-->                  
+
+       <!-- Generate a report for tests-->
      <reporting>
     <plugins>
       <plugin>
@@ -375,12 +381,12 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
       </plugin>
     </plugins>
   </reporting>
-      
+
                     </reportPlugins>
                 </configuration>
-            </plugin>            
+            </plugin>
         </plugins>
     </build>
-    
-    
+
+
 </project>
