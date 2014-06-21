@@ -7,18 +7,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table (name = "\"users\"")
-public class User {
+public class DmUser {
     private Long id;
     private String firstName;
     private String lastName;
     private String password;
     private Date birthdate;
 
-    public User() {}
+    public DmUser() {}
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

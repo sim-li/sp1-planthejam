@@ -16,7 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.bht.comanche.model.User;
+import de.bht.comanche.model.DmUser;
 
 public class PersistenceTest {
 	private EntityManagerFactory entityManagerFactory;
@@ -34,7 +34,7 @@ public class PersistenceTest {
     }
     
     @Test public void saveUser() {
-    	User user = new User();
+    	DmUser user = new DmUser();
     	final Date testDate = new Date(581140800L);
     	final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
     	final String testDateAsString = dateFormatter.format(testDate);
@@ -45,8 +45,8 @@ public class PersistenceTest {
         entityManager.persist(user);
         entityManager.getTransaction().commit();
     	entityManager.getTransaction().begin();
-    	List<User> result = entityManager.createQuery("from User", User.class).getResultList();
-    	for (User userFromQuery: result) {
+    	List<DmUser> result = entityManager.createQuery("from User", DmUser.class).getResultList();
+    	for (DmUser userFromQuery: result) {
     		assertEquals(userFromQuery.getFirstName(), "Vorname");
     		assertEquals(userFromQuery.getLastName(), "Nachname");
     		assertEquals(userFromQuery.getPassword(), "Password");
