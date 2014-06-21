@@ -346,11 +346,11 @@ var Ctrl = (function() {
     // myApp.controller("Test", function($scope) {
     //     $scope.testing = "Testing";
     // });
-
-    // var testModule = angular.module("testModule", []);
     // myApp.controller("testCtrl", function($scope, $log, $filter) {
 
     // });
+
+    // var testModule = angular.module("testModule", []);
     // testModule.controller("Test2", function($scope) {
     //     $scope.testing2 = "Testing again";
     // });
