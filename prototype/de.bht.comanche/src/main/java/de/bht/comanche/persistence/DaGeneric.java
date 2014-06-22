@@ -4,10 +4,10 @@ import java.util.Collection;
 
 import javassist.NotFoundException;
 
-public interface DaGeneric<E> extends DbObject {
-	
-	// Must have constructor(Class<E> type)
-	
+/**
+ * Must have constructor(Class&lt;E&gt; type)
+ */
+public interface DaGeneric<E> extends DbObject {	
 	void save(E entity);
     void delete(E entity);
     E find(long id) throws NotFoundException;
