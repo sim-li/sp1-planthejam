@@ -22,11 +22,11 @@ public class DmUser extends DbObject {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
+    public Long getId() {
     	return id;
     }
     
-    public long setId() {
+    public Long setId() {
     	return id;
     }
    
