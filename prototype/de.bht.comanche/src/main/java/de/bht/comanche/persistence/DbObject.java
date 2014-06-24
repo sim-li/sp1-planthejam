@@ -2,8 +2,6 @@ package de.bht.comanche.persistence;
 
 import java.util.List;
 
-import de.bht.comanche.logic.Pool;
-
 public abstract class DbObject {
 	
 	private Pool pool;

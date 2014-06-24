@@ -7,8 +7,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
-import de.bht.comanche.logic.Pool;
-
 public class PoolImpl implements Pool {
 	private static PoolImpl POOL = new PoolImpl();
 	private EntityManagerFactory entityManagerFactory;

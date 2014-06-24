@@ -1,26 +1,28 @@
 package de.bht.comanche.persistence;
 
 import static org.junit.Assert.assertEquals;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import org.junit.Test;
-import de.bht.comanche.model.DmUser;
+
+import de.bht.comanche.logic.LgSession;
+import de.bht.comanche.logic.LgUser;
 
 public class PersistenceTest {
 	
    
     @Test public void saveUser() {
     	final Date testDate = new Date(581140800L);
-    	final DmUser user = new DmUser(
+    	final LgUser user = new LgUser(
     			"Vorname", 
     	    	"Nachname", 
     	    	"Password", 
     	    	testDate);
-    	PoolImpl pool = PoolImpl.getInstance();
-    	pool.save(user);
-    	DmUser result;
+    	user.save();
     	try {
-			result = (DmUser) pool.find(DmUser.class, user.getId());
+    		LgUser result = (LgUser) new LgSession().find(LgUser.class, user.getId());
 			assertEquals("Vorname", result.getFirstName());
     		assertEquals("Nachname", result.getLastName());
     		assertEquals("Password", result.getPassword());
