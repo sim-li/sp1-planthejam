@@ -16,7 +16,6 @@ public class DmUser extends DbObject {
     private String lastName;
     private String password;
     private Date birthdate;
-    private long id;
 
     public DmUser() {}
     
@@ -30,11 +29,11 @@ public class DmUser extends DbObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
-    	return id;
+    	return super.getId();
     }
     
     public void setId(Long id) {
-    	this.id = id;
+    	super.setId(id);
     }
    
     public String getFirstName() {
