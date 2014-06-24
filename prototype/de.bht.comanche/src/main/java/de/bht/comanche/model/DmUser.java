@@ -33,8 +33,8 @@ public class DmUser extends DbObject {
     	return id;
     }
     
-    public long setId() {
-    	return id;
+    public void setId(Long id) {
+    	this.id = id;
     }
    
     public String getFirstName() {
