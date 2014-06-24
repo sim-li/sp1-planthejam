@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 
 public class PoolImpl implements Pool {
 	private static PoolImpl POOL = new PoolImpl();
@@ -56,7 +57,7 @@ public class PoolImpl implements Pool {
 	}
 
 	@Override
-	public DbObject find(Class<? extends DbObject> i_persistentClass, Integer i_oid)
+	public DbObject find(Class<DbObject> i_persistentClass, Integer i_oid)
 		throws NoPersistentClassExc, OidNotFoundExc {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		DbObject result = entityManager.find(i_persistentClass, i_oid);
@@ -65,22 +66,25 @@ public class PoolImpl implements Pool {
 	}
 
 	@Override
-	public List<DbObject> findAll(Class<?> i_persistentClass)
+	public List<DbObject> findAll(Class<DbObject> i_persistentClass)
 			throws NoPersistentClassExc {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		final String qlString = "SELECT e FROM " + i_persistentClass.getSimpleName() + "e";
-		List <DbObject> results = entityManager.createQuery(qlString, DbObject.class).getResultList();
+		List<DbObject> results = entityManager.createQuery(qlString, i_persistentClass).getResultList();
 		entityManager.close();
 		return results;
 	}
 
 	@Override
-	public List<DbObject> findManyByQuery(Class<?> i_resultClass,
-			Class<?> i_queryClass, Object[] i_args)
+	public List<DbObject> findManyByQuery(Class<DbObject> i_resultClass,
+			String i_queryString, Object[] i_args)
 			throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc,
 			ArgumentTypeExc {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		String qlString = String.format(i_queryString, i_args);
+		List<DbObject> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
+		entityManager.close();
+		return results;
 	}
 
 }
