@@ -2,8 +2,6 @@ package de.bht.comanche.persistence;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-
 public abstract class DbObject {
 	
 	private Pool pool;
@@ -16,12 +14,12 @@ public abstract class DbObject {
     	return pool.save(this);
     }
     
-	public boolean delete(DbObject io_object) {
+	public boolean delete() {
 		return pool.delete(this);
 	}
 	
-	public DbObject find(Class<DbObject> i_persistentClass, Long i_oid) throws NoPersistentClassExc, OidNotFoundExc {
-		return pool.find(i_persistentClass, i_oid);
+	public DbObject find(long i_oid) throws NoPersistentClassExc, OidNotFoundExc {
+		return pool.find(this.getClass(), i_oid);
 	}
 	
 	public List<? extends DbObject> findAll(Class<DbObject> i_persistentClass) throws NoPersistentClassExc {
