@@ -2,16 +2,16 @@ package de.bht.comanche.persistence;
 
 import java.util.Collection;
 
-import de.bht.comanche.model.DmUser;
+import de.bht.comanche.logic.LgUser;
 
-public class DaUserImpl extends DaGenericImpl<DmUser> implements DaUser {
+public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 
 	public DaUserImpl() {
-		super(DmUser.class);
+		super(LgUser.class);
 	}
 
 	@Override
-	public Collection<DmUser> findByName(String name) {
+	public Collection<LgUser> findByName(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}

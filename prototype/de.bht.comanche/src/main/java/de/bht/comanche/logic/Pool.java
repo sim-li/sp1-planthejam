@@ -1,6 +1,13 @@
-package de.bht.comanche.persistence;
+package de.bht.comanche.logic;
 
 import java.util.List;
+
+import de.bht.comanche.persistence.ArgumentCountExc;
+import de.bht.comanche.persistence.ArgumentTypeExc;
+import de.bht.comanche.persistence.DbObject;
+import de.bht.comanche.persistence.NoPersistentClassExc;
+import de.bht.comanche.persistence.NoQueryClassExc;
+import de.bht.comanche.persistence.OidNotFoundExc;
 
 public interface Pool {
 	public boolean save(DbObject io_object);

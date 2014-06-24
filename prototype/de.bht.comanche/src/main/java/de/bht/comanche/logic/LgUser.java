@@ -1,4 +1,4 @@
-package de.bht.comanche.model;
+package de.bht.comanche.logic;
 
 import java.util.Date;
 
@@ -11,15 +11,15 @@ import javax.persistence.Table;
 import de.bht.comanche.persistence.DbObject;
 @Entity
 @Table (name = "\"users\"")
-public class DmUser extends DbObject {
+public class LgUser extends DbObject {
     private String firstName;
     private String lastName;
     private String password;
     private Date birthdate;
 
-    public DmUser() {}
+    public LgUser() {}
     
-    public DmUser(String firstName, String lastName, String password, Date birthdate) {
+    public LgUser(String firstName, String lastName, String password, Date birthdate) {
     	this.firstName = firstName;
     	this.lastName = lastName;
     	this.password = password;

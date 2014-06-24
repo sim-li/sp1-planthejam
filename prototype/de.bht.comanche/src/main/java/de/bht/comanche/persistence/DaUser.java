@@ -2,13 +2,13 @@ package de.bht.comanche.persistence;
 
 import java.util.Collection;
 
-import de.bht.comanche.model.DmUser;
+import de.bht.comanche.logic.LgUser;
 import javassist.NotFoundException;
 
 public interface DaUser {
-	void save(DmUser user); // insert or update
-    void delete(DmUser user);
-    DmUser find(long id) throws NotFoundException;
-    Collection<DmUser> findAll();
-    Collection<DmUser> findByName(String name);
+	void save(LgUser user); // insert or update
+    void delete(LgUser user);
+    LgUser find(long id) throws NotFoundException;
+    Collection<LgUser> findAll();
+    Collection<LgUser> findByName(String name);
 }

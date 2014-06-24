@@ -2,10 +2,12 @@ package de.bht.comanche.persistence;
 
 import java.util.List;
 
-public abstract class DbSession {
+import de.bht.comanche.logic.Pool;
+
+public abstract class LgSession {
 	private Pool pool;
 	
-	public DbSession() {
+	public LgSession() {
 		this.pool = PoolImpl.getInstance();
 	}
 	
