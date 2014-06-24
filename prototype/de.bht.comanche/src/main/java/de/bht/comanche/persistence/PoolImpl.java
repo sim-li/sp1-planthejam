@@ -39,15 +39,29 @@ public class PoolImpl implements Pool {
 
 	@Override
 	public boolean delete(DbObject io_object) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			entityManager.remove(io_object);
+			entityManager.getTransaction().commit();
+		}
+		catch (PersistenceException e) {
+			entityManager.getTransaction().rollback();
+			return false;
+		}
+		finally {
+			entityManager.close();
+		}
+		return true;
 	}
 
 	@Override
-	public DbObject find(Class<?> i_persistentClass, Integer i_oid)
-			throws NoPersistentClassExc, OidNotFoundExc {
-		// TODO Auto-generated method stub
-		return null;
+	public DbObject find(Class<? extends DbObject> i_persistentClass, Integer i_oid)
+		throws NoPersistentClassExc, OidNotFoundExc {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		DbObject result = entityManager.find(i_persistentClass, i_oid);
+		entityManager.close();
+		return result;
 	}
 
 	@Override
