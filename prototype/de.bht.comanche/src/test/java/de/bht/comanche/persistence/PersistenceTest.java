@@ -26,33 +26,31 @@ public class PersistenceTest {
 	
    
     @Test public void saveUser() {
-    	DmUser user = new DmUser();
     	final Date testDate = new Date(581140800L);
-    	final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-    	final String testDateAsString = dateFormatter.format(testDate);
-    	user.setFirstName("Vorname");
-    	user.setLastName("Nachname");
-    	user.setPassword("Password");
-    	user.setBirthdate(testDate);
+    	final DmUser user = new DmUser(
+    			"Vorname", 
+    	    	"Nachname", 
+    	    	"Password", 
+    	    	testDate);
     	
     	PoolImpl pool = PoolImpl.getInstance();
     	pool.save(user);
     	DmUser result;
-    	
     	try {
 			result = (DmUser) pool.find(DmUser.class, user.getId());
-			assertEquals(result.getFirstName(), "Vorname");
-    		assertEquals(result.getLastName(), "Nachname");
-    		assertEquals(result.getPassword(), "Password");
-    		String resultingDateAsString = dateFormatter.format(result.getBirthdate());
+			assertEquals("Vorname", result.getFirstName());
+    		assertEquals("Nachname", result.getLastName());
+    		assertEquals("Password", result.getPassword());
+    		
+    		final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+    		final String testDateAsString = dateFormatter.format(testDate);
+    		final String resultingDateAsString = dateFormatter.format(result.getBirthdate());
+    		assertEquals(testDateAsString, resultingDateAsString);
 		} catch (NoPersistentClassExc e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (OidNotFoundExc e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
     		
 	}
     

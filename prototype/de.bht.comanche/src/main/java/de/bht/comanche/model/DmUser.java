@@ -20,6 +20,13 @@ public class DmUser extends DbObject {
 
     public DmUser() {}
     
+    public DmUser(String firstName, String lastName, String password, Date birthdate) {
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.password = password;
+    	this.birthdate = birthdate;
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
