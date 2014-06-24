@@ -9,16 +9,26 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import de.bht.comanche.persistence.DbObject;
-
+@Entity
 @Table (name = "\"users\"")
 public class DmUser extends DbObject {
     private String firstName;
     private String lastName;
     private String password;
     private Date birthdate;
+    private long id;
 
     public DmUser() {}
-
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+    	return id;
+    }
+    
+    public long setId() {
+    	return id;
+    }
    
     public String getFirstName() {
         return firstName;

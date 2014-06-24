@@ -56,7 +56,7 @@ public class PoolImpl implements Pool {
 	}
 
 	@Override
-	public DbObject find(Class<DbObject> i_persistentClass, Integer i_oid)
+	public DbObject find(Class<? extends DbObject> i_persistentClass, Long i_oid)
 		throws NoPersistentClassExc, OidNotFoundExc {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		DbObject result = entityManager.find(i_persistentClass, i_oid);
@@ -65,24 +65,24 @@ public class PoolImpl implements Pool {
 	}
 
 	@Override
-	public List<DbObject> findAll(Class<DbObject> i_persistentClass)
+	public List<DbObject> findAll(Class<? extends DbObject> i_persistentClass)
 			throws NoPersistentClassExc {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		final String qlString = "SELECT e FROM " + i_persistentClass.getSimpleName() + "e";
 		List<DbObject> results = entityManager.createQuery(qlString, i_persistentClass).getResultList();
 		entityManager.close();
-		return results;
+		return (List<DbObject>) results;
 	}
 
 	@Override
-	public List<DbObject> findManyByQuery(Class<DbObject> i_resultClass,
+	public List<DbObject> findManyByQuery(Class<? extends DbObject> i_resultClass,
 			String i_queryString, Object[] i_args)
 			throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc,
 			ArgumentTypeExc {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		String qlString = String.format(i_queryString, i_args);
-		List<DbObject> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
+		List<? extends DbObject> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
 		entityManager.close();
-		return results;
+		return (List<DbObject>) results;
 	}
 }

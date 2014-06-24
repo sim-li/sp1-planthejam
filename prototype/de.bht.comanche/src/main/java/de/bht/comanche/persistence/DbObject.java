@@ -3,30 +3,15 @@ package de.bht.comanche.persistence;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-@Entity
 public abstract class DbObject {
 	
 	private Pool pool;
-	private Long id;
 	
 	public DbObject() {
 		this.pool = PoolImpl.getInstance();
 	}
 	
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    public Long getId() {
-    	return id;
-    }
-
-    private void setId(Long id) {
-    	this.id = id;
-    }
-    
     public boolean save() {
     	return pool.save(this);
     }
@@ -35,7 +20,7 @@ public abstract class DbObject {
 		return pool.delete(this);
 	}
 	
-	public DbObject find(Class<DbObject> i_persistentClass, Integer i_oid) throws NoPersistentClassExc, OidNotFoundExc {
+	public DbObject find(Class<DbObject> i_persistentClass, Long i_oid) throws NoPersistentClassExc, OidNotFoundExc {
 		return pool.find(i_persistentClass, i_oid);
 	}
 	
