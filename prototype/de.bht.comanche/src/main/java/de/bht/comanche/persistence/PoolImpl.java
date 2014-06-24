@@ -3,12 +3,17 @@ package de.bht.comanche.persistence;
 import java.util.List;
 
 public class PoolImpl implements Pool {
-
+	private static PoolImpl POOL = new PoolImpl();
+	
+	private PoolImpl() {
+	}
+	
+	public static PoolImpl getInstance() {
+		return POOL;
+	}
+	
 	@Override
 	public boolean save(DbObject io_object) {
-		// TODO Auto-generated method stub
-		// TODO: Frage: DbObject wieder ersetzen durch DaGeneric<E>, dann folgendes (?):
-		// io_object.save();
 		return false;
 	}
 

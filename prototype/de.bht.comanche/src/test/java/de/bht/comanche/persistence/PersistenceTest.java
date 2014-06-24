@@ -42,7 +42,9 @@ public class PersistenceTest {
     	user.setLastName("Nachname");
     	user.setPassword("Password");
     	user.setBirthdate(testDate);
+    	
         entityManager.persist(user);
+        
         entityManager.getTransaction().commit();
     	entityManager.getTransaction().begin();
     	List<DmUser> result = entityManager.createQuery("from User", DmUser.class).getResultList();

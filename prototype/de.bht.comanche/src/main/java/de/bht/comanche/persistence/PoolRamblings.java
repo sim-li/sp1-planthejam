@@ -7,12 +7,10 @@ import javax.persistence.Persistence;
 public class PoolRamblings {
 	
 	public static void main (String[] args) {
-		
-	}
+		PoolImpl impl = PoolImpl.getInstance();
+		PoolImpl impl2 = PoolImpl.getInstance();
+		impl.test();
+		impl2.test();
 	
-    public void save(DbObject dbobject) {
-    	EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-    	entityManager.persist(dbobject);
-    }
+	}
 }
