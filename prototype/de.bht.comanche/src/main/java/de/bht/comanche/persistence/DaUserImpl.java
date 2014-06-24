@@ -6,9 +6,8 @@ import de.bht.comanche.model.DmUser;
 
 public class DaUserImpl extends DaGenericImpl<DmUser> implements DaUser {
 
-	public DaUserImpl(Class<DmUser> type) {
-		super(type);
-		// TODO Auto-generated constructor stub
+	public DaUserImpl() {
+		super(DmUser.class);
 	}
 
 	@Override

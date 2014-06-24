@@ -6,10 +6,10 @@ import javassist.NotFoundException;
 
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
-//	private Class<E> type;
+	private Class<E> type;
 	
 	public DaGenericImpl(Class<E> type) {
-//		this.type = type;
+		this.type = type;
 	}
 
 	@Override
