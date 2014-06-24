@@ -37,9 +37,14 @@ public class PersistenceTest {
     	
     	PoolImpl pool = PoolImpl.getInstance();
     	pool.save(user);
+    	DmUser result;
     	
     	try {
-			DbObject result = pool.find(DmUser.class, user.getId());
+			result = (DmUser) pool.find(DmUser.class, user.getId());
+			assertEquals(result.getFirstName(), "Vorname");
+    		assertEquals(result.getLastName(), "Nachname");
+    		assertEquals(result.getPassword(), "Password");
+    		String resultingDateAsString = dateFormatter.format(result.getBirthdate());
 		} catch (NoPersistentClassExc e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,13 +53,7 @@ public class PersistenceTest {
 			e.printStackTrace();
 		}
     	
-//    	for (DmUser userFromQuery: result) {
-//    		assertEquals(userFromQuery.getFirstName(), "Vorname");
-//    		assertEquals(userFromQuery.getLastName(), "Nachname");
-//    		assertEquals(userFromQuery.getPassword(), "Password");
-//    		String resultingDateAsString = dateFormatter.format(userFromQuery.getBirthdate());
-//    		assertEquals(testDateAsString, resultingDateAsString);
-//    	}
+    		
 	}
     
 }

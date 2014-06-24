@@ -65,17 +65,17 @@ public class PoolImpl implements Pool {
 	}
 
 	@Override
-	public List<DbObject> findAll(Class<? extends DbObject> i_persistentClass)
+	public List<? extends DbObject> findAll(Class<? extends DbObject> i_persistentClass)
 			throws NoPersistentClassExc {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		final String qlString = "SELECT e FROM " + i_persistentClass.getSimpleName() + "e";
-		List<DbObject> results = entityManager.createQuery(qlString, i_persistentClass).getResultList();
+		List<? extends DbObject> results = entityManager.createQuery(qlString, i_persistentClass).getResultList();
 		entityManager.close();
-		return (List<DbObject>) results;
+		return results;
 	}
 
 	@Override
-	public List<DbObject> findManyByQuery(Class<? extends DbObject> i_resultClass,
+	public List<? extends DbObject> findManyByQuery(Class<? extends DbObject> i_resultClass,
 			String i_queryString, Object[] i_args)
 			throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc,
 			ArgumentTypeExc {
@@ -83,6 +83,6 @@ public class PoolImpl implements Pool {
 		String qlString = String.format(i_queryString, i_args);
 		List<? extends DbObject> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
 		entityManager.close();
-		return (List<DbObject>) results;
+		return results;
 	}
 }
