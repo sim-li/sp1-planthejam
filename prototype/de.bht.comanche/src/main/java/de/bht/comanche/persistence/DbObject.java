@@ -24,11 +24,11 @@ public abstract class DbObject {
 		return pool.find(i_persistentClass, i_oid);
 	}
 	
-	public List<DbObject> findAll(Class<DbObject> i_persistentClass) throws NoPersistentClassExc {
+	public List<? extends DbObject> findAll(Class<DbObject> i_persistentClass) throws NoPersistentClassExc {
 		return pool.findAll(i_persistentClass);
 	}
 	
-	public List<DbObject> findManyByQuery(Class<DbObject> i_resultClass, String i_queryString, Object[] i_args) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc {
+	public List<? extends DbObject> findManyByQuery(Class<DbObject> i_resultClass, String i_queryString, Object[] i_args) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc {
 		return pool.findManyByQuery(i_resultClass, i_queryString, i_args);
 	}
 }
