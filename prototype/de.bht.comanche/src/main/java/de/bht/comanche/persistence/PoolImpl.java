@@ -67,8 +67,11 @@ public class PoolImpl implements Pool {
 	@Override
 	public List<DbObject> findAll(Class<?> i_persistentClass)
 			throws NoPersistentClassExc {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		final String qlString = "SELECT e FROM " + i_persistentClass.getSimpleName() + "e";
+		List <DbObject> results = entityManager.createQuery(qlString, DbObject.class).getResultList();
+		entityManager.close();
+		return results;
 	}
 
 	@Override
