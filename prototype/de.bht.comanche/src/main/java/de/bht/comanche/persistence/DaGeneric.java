@@ -7,7 +7,7 @@ import javassist.NotFoundException;
 /**
  * Must have constructor(Class&lt;E&gt; type)
  */
-public interface DaGeneric<E> extends DbObject {	
+public interface DaGeneric<E> {	
 	void save(E entity);
     void delete(E entity);
     E find(long id) throws NotFoundException;

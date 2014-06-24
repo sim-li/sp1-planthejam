@@ -7,10 +7,8 @@ public class PoolImpl implements Pool {
 	@Override
 	public boolean save(DbObject io_object) {
 		// TODO Auto-generated method stub
-		
 		// TODO: Frage: DbObject wieder ersetzen durch DaGeneric<E>, dann folgendes (?):
 		// io_object.save();
-		
 		return false;
 	}
 

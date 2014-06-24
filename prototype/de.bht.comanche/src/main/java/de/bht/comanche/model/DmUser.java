@@ -7,10 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-@Entity
+
+import de.bht.comanche.persistence.DbObject;
+
 @Table (name = "\"users\"")
-public class DmUser {
-    private Long id;
+public class DmUser extends DbObject {
     private String firstName;
     private String lastName;
     private String password;
@@ -18,18 +19,7 @@ public class DmUser {
 
     public DmUser() {}
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
    
-    public Long getId() {
-        return id;
-    }
-
-    
-    private void setId(Long id) {
-         this.id = id;
-    }
-
     public String getFirstName() {
         return firstName;
     }
