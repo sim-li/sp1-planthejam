@@ -1,13 +1,10 @@
 package de.bht.comanche.logic;
 
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 import de.bht.comanche.persistence.DbObject;
 @Entity
@@ -16,18 +13,15 @@ public class LgUser extends DbObject {
     private String telephone;
     private String email;
     private String password;
-    private List<DtTimeperiod> availability; 
     
     public LgUser() {}
     
-    public LgUser(String name, String telephone, String email, String password,
-			List<DtTimeperiod> availability) {
+    public LgUser(String name, String telephone, String email, String password) {
 		super();
 		this.name = name;
 		this.telephone = telephone;
 		this.email = email;
 		this.password = password;
-		this.availability = availability;
 	}
 
 	@Id
@@ -70,14 +64,5 @@ public class LgUser extends DbObject {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	@OneToMany
-	public List<DtTimeperiod> getAvailability() {
-		return availability;
-	}
-
-	public void setAvailability(List<DtTimeperiod> availability) {
-		this.availability = availability;
 	}
 }
