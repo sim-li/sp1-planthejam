@@ -10,7 +10,6 @@ import javax.persistence.Table;
 
 import de.bht.comanche.persistence.DbObject;
 @Entity
-//@Table (name = "\"users\"")
 public class LgUser extends DbObject {
     private String firstName;
     private String lastName;
