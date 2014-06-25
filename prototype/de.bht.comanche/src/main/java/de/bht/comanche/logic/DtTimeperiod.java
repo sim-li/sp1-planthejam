@@ -8,13 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
+//@Entity
 //@Table (name = "\"users\"") ??
 public class DtTimeperiod {
 	private Date startTime;
 	private int durationInMinutes;
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
     	return getId();
     }
