@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 
@@ -26,6 +27,8 @@ public class DtTimeperiod {
     	return getId();
     }
     
+	@OneToOne(mappedBy = "availability")
+	
     public void setId(Long id) {
     	setId(id);
     }
