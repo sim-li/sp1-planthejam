@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
@@ -22,13 +23,14 @@ public class PoolImpl implements Pool {
 	@Override
 	public boolean save(DbObject io_object) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction tr = entityManager.getTransaction();
 		try {
-			entityManager.getTransaction().begin();
+			tr.begin();
 			entityManager.persist(io_object);
-			entityManager.getTransaction().commit();
+			tr.commit();
 		}
 		catch (PersistenceException e) {
-			entityManager.getTransaction().rollback();
+			tr.rollback();
 			return false;
 		}
 		finally {
