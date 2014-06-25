@@ -1,6 +1,8 @@
 package de.bht.comanche.logic;
 
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,12 +16,12 @@ public class LgUser extends DbObject {
     private String telephone;
     private String email;
     private String password;
-    private DtTimeperiod availability; 
+    private List<DtTimeperiod> availability; 
     
     public LgUser() {}
     
     public LgUser(String name, String telephone, String email, String password,
-			DtTimeperiod availability) {
+			List<DtTimeperiod> availability) {
 		super();
 		this.name = name;
 		this.telephone = telephone;
@@ -71,11 +73,11 @@ public class LgUser extends DbObject {
 	}
 
 	@OneToMany
-	public DtTimeperiod getAvailability() {
+	public List<DtTimeperiod> getAvailability() {
 		return availability;
 	}
 
-	public void setAvailability(DtTimeperiod availability) {
+	public void setAvailability(List<DtTimeperiod> availability) {
 		this.availability = availability;
 	}
 }
