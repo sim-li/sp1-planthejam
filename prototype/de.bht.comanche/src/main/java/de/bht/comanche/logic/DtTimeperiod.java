@@ -11,6 +11,7 @@ import javax.persistence.Id;
 public class DtTimeperiod {
 	private Date startTime;
 	private int durationInMinutes;
+	private Long id;
 	
 	public DtTimeperiod() {}
 	
@@ -22,11 +23,11 @@ public class DtTimeperiod {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
-    	return getId();
+    	return this.id;
     }
 	
 	public void setId(Long id) {
-    	setId(id);
+    	this.id = id;
     }
 
 	public Date getStartTime() {
