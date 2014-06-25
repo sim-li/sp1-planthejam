@@ -1,11 +1,11 @@
 package de.bht.comanche.logic;
 
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import de.bht.comanche.persistence.DbObject;
 @Entity
@@ -14,7 +14,7 @@ public class LgUser extends DbObject {
     private String telephone;
     private String email;
     private String password;
-    @OneToOne(optional = false)
+    @Embedded
     private DtTimeperiod availability; 
     
     public LgUser() {}

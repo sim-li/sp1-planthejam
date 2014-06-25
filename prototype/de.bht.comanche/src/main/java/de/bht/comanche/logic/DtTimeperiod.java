@@ -2,19 +2,14 @@ package de.bht.comanche.logic;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-@Entity
-
+@Embeddable
 public class DtTimeperiod {
 	private Date startTime;
 	private int durationInMinutes;
-	@OneToOne(mappedBy = "availability")
-	private LgUser user;
 	
 	public DtTimeperiod() {}
 	
@@ -29,15 +24,6 @@ public class DtTimeperiod {
     	return getId();
     }
 	
-	
-    public LgUser getUser() {
-		return user;
-	}
-
-	public void setUser(LgUser user) {
-		this.user = user;
-	}
-
 	public void setId(Long id) {
     	setId(id);
     }
