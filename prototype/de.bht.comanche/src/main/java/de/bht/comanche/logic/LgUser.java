@@ -1,31 +1,33 @@
 package de.bht.comanche.logic;
 
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import de.bht.comanche.persistence.DbObject;
 @Entity
 public class LgUser extends DbObject {
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String telephone;
+    private String email;
     private String password;
-    private Date birthdate;
-
+    private DtTimeperiod availability; 
+    
     public LgUser() {}
     
-    public LgUser(String firstName, String lastName, String password, Date birthdate) {
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    	this.password = password;
-    	this.birthdate = birthdate;
-    }
-    
-    @Id
+    public LgUser(String name, String telephone, String email, String password,
+			DtTimeperiod availability) {
+		super();
+		this.name = name;
+		this.telephone = telephone;
+		this.email = email;
+		this.password = password;
+		this.availability = availability;
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
     	return super.getId();
@@ -34,36 +36,44 @@ public class LgUser extends DbObject {
     public void setId(Long id) {
     	super.setId(id);
     }
-   
-    public String getFirstName() {
-        return firstName;
-    }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public String getTelephone() {
+		return telephone;
+	}
 
-    public String getPassword(){
-        return password;
-    }
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public Date getBirthdate() {
-        return birthdate;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
-    }
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public DtTimeperiod getAvailability() {
+		return availability;
+	}
+
+	public void setAvailability(DtTimeperiod availability) {
+		this.availability = availability;
+	}
 }
