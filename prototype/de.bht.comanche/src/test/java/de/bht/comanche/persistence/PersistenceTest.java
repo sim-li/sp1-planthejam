@@ -23,7 +23,7 @@ public class PersistenceTest {
     		LgUser result = (LgUser) new LgSession().find(LgUser.class, user.getId());
 			assertEquals("Herbert", result.getName());
     		assertEquals("1234", result.getTelephone());
-    		assertEquals("Password", result.getPassword());
+    		assertEquals("passwort", result.getPassword());
     		assertEquals("hallo@test.de", result.getEmail());
 		} catch (NoPersistentClassExc e) {
 			e.printStackTrace();
