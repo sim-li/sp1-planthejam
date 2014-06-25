@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 public class DtTimeperiod {
 	private Date startTime;
 	private int durationInMinutes;
+	@OneToOne(mappedBy = "availability")
+	private LgUser user;
 	
 	public DtTimeperiod() {}
 	
@@ -26,10 +28,17 @@ public class DtTimeperiod {
 	public Long getId() {
     	return getId();
     }
-    
-	@OneToOne(mappedBy = "availability")
 	
-    public void setId(Long id) {
+	
+    public LgUser getUser() {
+		return user;
+	}
+
+	public void setUser(LgUser user) {
+		this.user = user;
+	}
+
+	public void setId(Long id) {
     	setId(id);
     }
 

@@ -14,6 +14,7 @@ public class LgUser extends DbObject {
     private String telephone;
     private String email;
     private String password;
+    @OneToOne(optional = false)
     private DtTimeperiod availability; 
     
     public LgUser() {}
@@ -30,7 +31,6 @@ public class LgUser extends DbObject {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@OneToOne(optional = false)
     public Long getId() {
     	return super.getId();
     }
@@ -38,7 +38,7 @@ public class LgUser extends DbObject {
     public void setId(Long id) {
     	super.setId(id);
     }
-
+    
 	public String getName() {
 		return name;
 	}
