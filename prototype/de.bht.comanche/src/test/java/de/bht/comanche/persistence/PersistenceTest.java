@@ -30,7 +30,10 @@ public class PersistenceTest {
 			"passwort",
 			timeperiods
 		);
+    	
+    	
     	user.save();
+    	
     	try {
     		LgUser result = (LgUser) new LgSession().find(LgUser.class, user.getId());
 			assertEquals("Herbert", result.getName());
