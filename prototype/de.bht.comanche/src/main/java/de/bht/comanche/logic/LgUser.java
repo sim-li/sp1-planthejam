@@ -4,10 +4,7 @@ package de.bht.comanche.logic;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 import de.bht.comanche.persistence.DbObject;
 @Entity
@@ -22,7 +19,6 @@ public class LgUser extends DbObject {
     
     public LgUser(String name, String telephone, String email, String password,
 			List<DtTimeperiod> availability) {
-		super();
 		this.name = name;
 		this.telephone = telephone;
 		this.email = email;
@@ -30,16 +26,6 @@ public class LgUser extends DbObject {
 		this.availability = availability;
 	}
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    public Long getId() {
-    	return super.getId();
-    }
-    
-    public void setId(Long id) {
-    	super.setId(id);
-    }
-    
 	public String getName() {
 		return name;
 	}
@@ -72,7 +58,6 @@ public class LgUser extends DbObject {
 		this.password = password;
 	}
 
-	@OneToMany
 	public List<DtTimeperiod> getAvailability() {
 		return availability;
 	}

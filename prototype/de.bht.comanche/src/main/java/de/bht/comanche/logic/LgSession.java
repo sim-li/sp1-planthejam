@@ -23,10 +23,11 @@ public class LgSession {
 	}
 	
 	/*
-	 * TODO: Solve problem with generics.
+	 * TODO: Solve problem with generics:
+	 * Remove Cast, change return type in pool.
 	 */
-	public List<? extends DbObject> findAll(Class<DbObject> i_persistentClass) throws NoPersistentClassExc {
-		return pool.findAll(i_persistentClass);
+	public <T extends DbObject> List<T> findAll (Class<T> i_persistentClass) throws NoPersistentClassExc {
+		return (List<T>) pool.findAll(i_persistentClass);
 	}
 	
 	public List<? extends DbObject> findManyByQuery(Class<DbObject> i_resultClass, String i_queryString, Object[] i_args) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc {

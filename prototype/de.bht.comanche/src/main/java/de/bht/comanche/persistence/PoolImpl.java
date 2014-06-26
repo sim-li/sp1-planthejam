@@ -22,6 +22,11 @@ public class PoolImpl implements Pool {
 	
 	@Override
 	public boolean save(DbObject io_object) {
+		// TODO:
+		// BeginTransaction/EndTransaction als getrennte Methoden
+		// ALT:
+		// Eigenes Interface und Implementierung für BeginTransaction/EndTransaction
+		//
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction tr = entityManager.getTransaction();
 		try {
