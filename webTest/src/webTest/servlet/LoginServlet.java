@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import webTest.dataConnection.DBconnecter;
+import webTest.dataConnection.UserDAO;
 import webTest.entity.User;
 
 import com.google.gson.Gson;
@@ -21,29 +21,24 @@ import com.google.gson.Gson;
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
-	private final static Logger LOGGER = Logger.getLogger(HelloServlet.class
-			.getName());
 	
-	private final DBconnecter db;
-	private final Gson gson;
+	private static final long serialVersionUID = 1L;
+	private final UserDAO db;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public LoginServlet() {
 		super();
-		db = new DBconnecter();
-		gson = new Gson();
+		db = new UserDAO();
 	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
 
 		String err = request.getParameter("error");
 		String msg = request.getParameter("logout");
@@ -64,9 +59,6 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		LOGGER.info("username = " + request.getParameter("username"));
-		LOGGER.info("password = " + request.getParameter("password"));
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
@@ -75,9 +67,6 @@ public class LoginServlet extends HttpServlet {
 		
 		if(user == null || !password.equals(user.getPassword()) ) {
 			response.sendRedirect("login?error");
-		} else {
-			 PrintWriter out = response.getWriter(); 
-			 out.print(gson.toJson(user));
 		}
 	}
 

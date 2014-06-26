@@ -3,7 +3,7 @@
 	pageEncoding="UTF-8"%>
 <html>
 <head>
-<title>Login Page</title>
+<title>Register Page</title>
 <style>
 .error {
 	padding: 15px;
@@ -25,7 +25,7 @@
 	border-color: #bce8f1;
 }
 
-#login-box {
+#register-box {
 	width: 350px;
 	padding: 20px;
 	margin: 100px auto;
@@ -36,13 +36,13 @@
 }
 </style>
 </head>
-<body onload='document.loginForm.username.focus();'>
+<body onload='document.registerForm.username.focus();'>
 
-	<h1>Custom Login</h1>
+	<h1>Custom register</h1>
 
-	<div id="login-box">
+	<div id="register-box">
 
-		<h3>Login Form</h3>
+		<h3>register Form</h3>
 
 		<c:if test="${not empty error}">
 			<div class="error">${error}</div>
@@ -51,7 +51,7 @@
 			<div class="msg">${msg}</div>
 		</c:if>
 
-		<form name='loginForm' action="login" method='POST'>
+		<form name='registerForm' action="register" method='POST'>
 
 			<table>
 				<tr>
@@ -62,6 +62,11 @@
 				<tr>
 					<td>Password:</td>
 					<td><input type='password' name='password' required min="6"
+						max="20" /></td>
+				</tr>
+				<tr>
+					<td>retype Password:</td>
+					<td><input type='password' name='repassword' required min="6"
 						max="20" /></td>
 				</tr>
 				<tr>

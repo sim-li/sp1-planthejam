@@ -1,35 +1,29 @@
 package webTest.entity;
 
-import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "user")
-public class User implements Serializable{
+public class User extends BaseEntity{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
 	private String username;
 	private String password;
+	private String email;
+	private long telephone;
+	private int age;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name="user_group")			  
+	private List<Group> groups;
+	
 	public String getUsername() {
 		return username;
 	}
@@ -42,4 +36,29 @@ public class User implements Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public List<Group> getGroups() {
+		return groups;
+	}
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public long getTelephone() {
+		return telephone;
+	}
+	public void setTelephone(long telephone) {
+		this.telephone = telephone;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
 }

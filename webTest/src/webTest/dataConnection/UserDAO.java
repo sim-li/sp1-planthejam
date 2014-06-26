@@ -10,15 +10,10 @@ import javax.persistence.Query;
 
 import webTest.entity.User;
 
-public class DBconnecter {
+public class UserDAO extends BaseDAO{
 
-	@PersistenceUnit(unitName = "login")
-	private EntityManagerFactory emf;
-	public EntityManager em;
-
-	public DBconnecter() {
-		emf = Persistence.createEntityManagerFactory("login");
-		em = emf.createEntityManager();
+	public UserDAO() {
+		super();
 	}
 
 	public void createUser(User user) {
