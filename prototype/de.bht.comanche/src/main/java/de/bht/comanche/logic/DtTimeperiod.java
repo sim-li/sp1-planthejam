@@ -3,11 +3,11 @@ package de.bht.comanche.logic;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-@Entity
+
+@Embeddable
 public class DtTimeperiod {
 	private Date startTime;
 	private int durationInMinutes;
