@@ -23,24 +23,13 @@ public abstract class DbObject {
     	return id;
     }
     
-    public boolean save() {
+    public void save() throws EntityExistsException, TransactionRequiredException, IllegalArgumentException {
     	// Save wird in REST Schnittstelle von neuen Begin/EndTransaction 
     	// aus Pool gekapselt
-    	try {
-			pool.save(this);
-			return true;
-		} catch (EntityExistsException | TransactionRequiredException
-				| IllegalArgumentException e) {
-			return false;
-		}
+		pool.save(this);
     }
     
-	public boolean delete() {
-		try {
-			pool.delete(this);
-			return true;
-		} catch (TransactionRequiredException | IllegalArgumentException e) {
-			return false;
-		}
+	public void delete() throws TransactionRequiredException, IllegalArgumentException {
+		pool.delete(this);
 	}
 }
