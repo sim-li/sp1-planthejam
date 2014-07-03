@@ -4,16 +4,20 @@ package de.bht.comanche.logic;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import de.bht.comanche.persistence.DbObject;
+
 @Entity
 public class LgUser extends DbObject {
     private String name;
     private String telephone;
     private String email;
     private String password;
-    private List<DtTimeperiod> availability; 
+    
+    @OneToMany(mappedBy="")
+    private List<DtTimeperiod> availability;
+    private List<LgUser> contacts;
     
     public LgUser() {}
     
@@ -64,5 +68,13 @@ public class LgUser extends DbObject {
 
 	public void setAvailability(List<DtTimeperiod> availability) {
 		this.availability = availability;
+	}
+	
+	public List<LgUser> getContacts() {
+		return contacts;
+	}
+	
+	public void setContacts(List<LgUser> contacts) {
+		this.contacts = contacts;
 	}
 }
