@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.Test;
 
 
-public class UserIT {
+public class UserTest {
 	
 	@Test
 	public void testGetSingleUser() {
@@ -16,6 +16,6 @@ public class UserIT {
 	      "lastName", equalTo("Testerman"),
 	      "id", equalTo(1)).
 	    when().
-	    get("service/single-user");
+	    get("/plan-the-jam/rest/service/single-user");
 	}
 }

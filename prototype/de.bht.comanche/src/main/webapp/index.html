@@ -1,19 +1,23 @@
 <!doctype html>
 <html ng-app>
 	<head>
-		<title>Hello AngularJS</title>
+		<title>Hello_AngularJS</title>
 		<script src="lib/angular.min.js"></script>
     	<script src="js/json_hello.js"></script>
+    	<script src="lib/angular-mocks.js"></script>
 	</head>
 
 	<body>
 	
 	<h1>Jetty is live!!!!</h1>
 	
-		<div ng-controller="Hello">
-			<p>The email is {{greeting.email}}</p>
-			<p>The firstName is {{greeting.firstName}}</p>
-			<p>The firstName is {{testurl}}</p>
+		<div ng-controller="HelloJson">
+		
+		<button ng-click='loadJson()'>Load Data</button>
+			<p>The email is {{data.email}}</p>
+			<p>The firstName is {{data.firstName}}</p>
+			<p>The lastName is {{data.lastName}}</p>
+			<p>The id is {{data.id}}</p>
 		</div>
 	</body>
 </html>

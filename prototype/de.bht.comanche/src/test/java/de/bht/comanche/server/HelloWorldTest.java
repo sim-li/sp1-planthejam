@@ -6,11 +6,11 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-public class HelloWorldIT {
+public class HelloWorldTest {
 	
 	@Test
 	public void testHelloWorld() throws Exception{
-		final String body = get("/helloworld").asString();
+		final String body = get("/plan-the-jam/rest/helloworld").asString();
 		assertThat(body, equalTo("Hello World!"));
 	}
 
