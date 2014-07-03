@@ -2,6 +2,7 @@ package de.bht.comanche.persistence;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -24,31 +25,32 @@ public class PoolImpl implements Pool {
 	}
 	
 	@Override
-	public boolean beginTransaction() {
+	public void beginTransaction() {
 		entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction tr = entityManager.getTransaction();
 		tr.begin();
-		return false;
 	}
 
 	@Override
-	public boolean endTransaction(boolean success) {
+	public void endTransaction(boolean success) {
 		EntityTransaction tr = entityManager.getTransaction();
 		try {
-			tr.commit();
+			if (success) {
+				tr.commit();
+			} else {
+				tr.rollback();
+			}
 		}
 		catch (RollbackException e) {
 			tr.rollback();
-			return false;
 		}
 		finally {
 			entityManager.close();
 		}
-		return true;
 	}
 	
 	@Override
-	public void save(DbObject io_object) throws EntityExistsException {
+	public void save(DbObject io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException {
 		entityManager.persist(io_object);
 	}
 
@@ -58,8 +60,7 @@ public class PoolImpl implements Pool {
 	}
 
 	@Override
-	public DbObject find(Class<? extends DbObject> i_persistentClass, Long i_oid)
-		throws NoPersistentClassExc, OidNotFoundExc {
+	public DbObject find(Class<? extends DbObject> i_persistentClass, Long i_oid) throws NoPersistentClassExc, OidNotFoundExc {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		DbObject result = entityManager.find(i_persistentClass, i_oid);
 		entityManager.close();
@@ -67,12 +68,10 @@ public class PoolImpl implements Pool {
 	}
 
 	@Override
-	public List<? extends DbObject> findAll(Class<? extends DbObject> i_persistentClass)
-			throws NoPersistentClassExc {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+	public List<? extends DbObject> findAll(Class<? extends DbObject> i_persistentClass) throws
+			NoPersistentClassExc {
 		final String qlString = "SELECT e FROM " + i_persistentClass.getSimpleName() + "e";
 		List<? extends DbObject> results = entityManager.createQuery(qlString, i_persistentClass).getResultList();
-		entityManager.close();
 		return results;
 	}
 
@@ -81,10 +80,8 @@ public class PoolImpl implements Pool {
 			String i_queryString, Object[] i_args)
 			throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc,
 			ArgumentTypeExc {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		String qlString = String.format(i_queryString, i_args);
 		List<? extends DbObject> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
-		entityManager.close();
 		return results;
 	}
 }
