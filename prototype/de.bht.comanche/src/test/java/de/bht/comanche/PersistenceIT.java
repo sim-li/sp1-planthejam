@@ -1,14 +1,19 @@
 package de.bht.comanche;
+
 import static org.junit.Assert.assertEquals;
 
-
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import org.eclipse.jetty.server.Authentication.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.bht.comanche.logic.LgUser;
 
 public class PersistenceIT {
 	private EntityManagerFactory entityManagerFactory;
@@ -22,9 +27,8 @@ public class PersistenceIT {
     @Test public void saveAndReadUser() {
     	EntityManager entityManager = entityManagerFactory.createEntityManager();
     	entityManager.getTransaction().begin();
-    	User user = new User();
-    	user.setFirstName("Vorname");
-    	user.setLastName("Nachname");
+    	LgUser user = new LgUser();
+    	user.setName("Name");
     	user.setPassword("Password");
     	//user.setBirthdate(new Date());
         entityManager.persist(user);
@@ -32,10 +36,9 @@ public class PersistenceIT {
     	entityManager.close();
     	entityManager = entityManagerFactory.createEntityManager();
     	entityManager.getTransaction().begin();
-    	List<User> result = entityManager.createQuery("from User", User.class).getResultList();
-    	for (User userFromQuery: result) {
-    		assertEquals(userFromQuery.getFirstName(), "Vorname");
-    		assertEquals(userFromQuery.getLastName(), "Nachname");
+    	List<LgUser> result = entityManager.createQuery("from User", LgUser.class).getResultList();
+    	for (LgUser userFromQuery: result) {
+    		assertEquals(userFromQuery.getName(), "Name");
     		assertEquals(userFromQuery.getPassword(), "Password");
     	}
         entityManager.getTransaction().commit();
