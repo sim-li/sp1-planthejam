@@ -6,10 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
+import javax.persistence.RollbackException;
+import javax.transaction.TransactionRequiredException;
+
 
 public class PoolImpl implements Pool {
 	private static PoolImpl POOL = new PoolImpl();
+	private EntityManager entityManager;
 	private EntityManagerFactory entityManagerFactory;
 	
 	private PoolImpl() {
@@ -21,20 +24,20 @@ public class PoolImpl implements Pool {
 	}
 	
 	@Override
-	public boolean save(DbObject io_object) {
-		// TODO:
-		// BeginTransaction/EndTransaction als getrennte Methoden
-		// ALT:
-		// Eigenes Interface und Implementierung für BeginTransaction/EndTransaction
-		//
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+	public boolean beginTransaction() {
+		entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction tr = entityManager.getTransaction();
+		tr.begin();
+		return false;
+	}
+
+	@Override
+	public boolean endTransaction(boolean success) {
 		EntityTransaction tr = entityManager.getTransaction();
 		try {
-			tr.begin();
-			entityManager.persist(io_object);
 			tr.commit();
 		}
-		catch (PersistenceException e) {
+		catch (RollbackException e) {
 			tr.rollback();
 			return false;
 		}
@@ -43,23 +46,15 @@ public class PoolImpl implements Pool {
 		}
 		return true;
 	}
+	
+	@Override
+	public void save(DbObject io_object) throws EntityExistsException {
+		entityManager.persist(io_object);
+	}
 
 	@Override
-	public boolean delete(DbObject io_object) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		try {
-			entityManager.getTransaction().begin();
-			entityManager.remove(io_object);
-			entityManager.getTransaction().commit();
-		}
-		catch (PersistenceException e) {
-			entityManager.getTransaction().rollback();
-			return false;
-		}
-		finally {
-			entityManager.close();
-		}
-		return true;
+	public void delete(DbObject io_object) throws IllegalArgumentException, TransactionRequiredException {
+		entityManager.remove(io_object);
 	}
 
 	@Override
