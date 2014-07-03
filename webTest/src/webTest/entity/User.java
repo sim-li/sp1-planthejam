@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +16,12 @@ public class User extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 
 	private String username;
+	public List<Poll> getUser_polls() {
+		return user_polls;
+	}
+	public void setUser_polls(List<Poll> user_polls) {
+		this.user_polls = user_polls;
+	}
 	private String password;
 	private String email;
 	private long telephone;
@@ -23,6 +30,13 @@ public class User extends BaseEntity{
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name="user_group")			  
 	private List<Group> groups;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name="user_poll")		
+	private List<Poll> user_polls;
+	
+	@OneToMany(fetch = FetchType.LAZY,  mappedBy="user")
+	private List<Zeitraum> zeitraums;
 	
 	public String getUsername() {
 		return username;
@@ -60,5 +74,16 @@ public class User extends BaseEntity{
 	public void setAge(int age) {
 		this.age = age;
 	}
-	
+	public List<Poll> getPolls() {
+		return user_polls;
+	}
+	public void setPolls(List<Poll> polls) {
+		this.user_polls = polls;
+	}
+	public List<Zeitraum> getZeitraums() {
+		return zeitraums;
+	}
+	public void setZeitraums(List<Zeitraum> zeitraums) {
+		this.zeitraums = zeitraums;
+	}
 }

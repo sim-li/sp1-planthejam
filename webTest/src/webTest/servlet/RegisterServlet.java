@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import webTest.dataConnection.GroupDAO;
-import webTest.dataConnection.UserDAO;
+import webTest.dataConnection.DBManagementDAO;
 import webTest.entity.Group;
 import webTest.entity.User;
+import webTest.exception.DatabaseException;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -22,15 +22,13 @@ import webTest.entity.User;
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final UserDAO userDao;
-	private final GroupDAO groupDao;
+	private final DBManagementDAO db;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public RegisterServlet() {
 		super();
-		userDao = new UserDAO();
-		groupDao = new GroupDAO();
+		db = new DBManagementDAO();
 	}
 
 	/**
@@ -65,23 +63,32 @@ public class RegisterServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String repassword = request.getParameter("repassword");
-		User user = userDao.getUserByUsername(username);
+		
 
 		if (!password.equals(repassword)) {
 			response.sendRedirect("register?info=password");
-		} else if (user != null) {
-			response.sendRedirect("register?info=username");
 		} else {
-			Group g = new Group();
-			g.setName("comanche");
-			groupDao.createGroup(g);
-			
 			User newUser = new User();
 			newUser.setUsername(username);
 			newUser.setPassword(password);
-			newUser.setGroups(new ArrayList<Group>(Arrays.asList(g)));
-			userDao.createUser(newUser);
+
+			newUser.setGroups(new ArrayList<Group>(Arrays.asList(new Group())));
+			
+			try {
+				db.getUserDAO().createUser(newUser);
+				response.sendRedirect("register?info=success");
+			} catch (DatabaseException e) {
+				response.sendRedirect("register?info=username");
+				e.printStackTrace();
+			}
+			
+			try {
+				db.getUserDAO().createUser(newUser);
+			} catch (DatabaseException e) {
+				e.printStackTrace();
+			}
 			response.sendRedirect("register?info=success");
+
 		}
 	}
 

@@ -5,22 +5,24 @@
 	<artifactId>webTest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	
+
 	<pluginRepositories>
 		<pluginRepository>
-			<id>maven.java.net</id>
-			<name>Java.net Repository for Maven</name>
-			<url>https://maven.java.net/content/groups/promoted/</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>maven2-repository.dev.java.net</id>
-			<name>Java.net Repository for Maven</name>
-			<url>http://download.java.net/maven/glassfish/</url>
+			<id>ocean</id>
+			<url>http://maven.ocean.net.au/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+		<finalName>${project.groupId}</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -38,28 +40,30 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
-				<groupId>org.glassfish.embedded</groupId>
-				<artifactId>maven-embedded-glassfish-plugin</artifactId>
-				<version>3.1.2.2</version>
+				<groupId>org.glassfish.maven.plugin</groupId>
+				<artifactId>maven-glassfish-plugin</artifactId>
+				<version>2.1</version>
 				<configuration>
-					<app>target/${project.artifactId}-${project.version}</app>
-					<port>8282</port>
-					<contextRoot>${project.artifactId}</contextRoot>
+					<glassfishDirectory>/Applications/glassfish-4.0/glassfish</glassfishDirectory>
+					<user>admin</user>
+					<passwordFile>/Applications/glassfish-4.0/glassfish/domains/domain1/config/domain-passwords</passwordFile>
+					<domain>
+						<name>domain1</name>
+						<httpPort>8080</httpPort>
+						<adminPort>4848</adminPort>
+					</domain>
+					<components>
+						<component>
+							<name>${project.artifactId}</name>
+							<artifact>target/${project.groupId}.war</artifact>
+						</component>
+					</components>
+					<debug>true</debug>
+					<terse>false</terse>
+					<echo>true</echo>
 				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.glassfish.main</groupId>
-						<artifactId>simple-glassfish-api</artifactId>
-						<version>4.0-b79</version>
-					</dependency>
-					<dependency>
-						<groupId>org.glassfish.main.extras</groupId>
-						<artifactId>glassfish-embedded-all</artifactId>
-						<version>4.0-b83</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

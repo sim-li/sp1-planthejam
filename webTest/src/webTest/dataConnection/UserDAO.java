@@ -2,26 +2,73 @@ package webTest.dataConnection;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import javax.persistence.TransactionRequiredException;
 
 import webTest.entity.User;
+import webTest.exception.DatabaseException;
 
 public class UserDAO extends BaseDAO{
-
-	public UserDAO() {
-		super();
+	
+	public UserDAO(EntityManager em) {
+		super(em);
 	}
 
-	public void createUser(User user) {
+	public void createUser(User user) throws DatabaseException {
 		em.getTransaction().begin();
-		em.persist(user);
-		em.getTransaction().commit();
+		boolean ok = false;
+		try{
+			em.persist(user);
+			em.getTransaction().commit();
+			ok = true;
+		}catch(EntityExistsException e){
+			throw new DatabaseException("User existed!");
+		}catch(TransactionRequiredException t){
+			throw new DatabaseException("can not connect with database! cased :"+ t.getMessage());
+		}catch(IllegalArgumentException i){
+			throw new DatabaseException("uncompatible Type. can not add object to database!");
+		}finally{
+			if(ok)
+				em.close();
+		}
 	}
-
+	
+	public void deleteUser(User user) throws DatabaseException{
+		em.getTransaction().begin();
+		boolean ok = false;
+		try{
+		em.remove(user);
+		em.getTransaction().commit();
+		ok = true;
+		} catch (IllegalArgumentException i){
+			throw new DatabaseException("can not delete this user from database");
+		} catch(TransactionRequiredException t){
+			throw new DatabaseException(" there is no transaction");
+		}finally{
+			if(ok)
+				em.close();
+		}
+	}
+	
+	public void updateUser(User user) throws DatabaseException{
+		em.getTransaction().begin();
+		boolean ok = false;
+		try {
+			em.merge(user);
+			em.getTransaction().commit();
+			ok = true;
+		} catch (IllegalArgumentException i) {
+			throw new DatabaseException("can not update this user to database");
+		} catch (TransactionRequiredException t ){
+			throw new DatabaseException("there is no transaction");
+		} finally {
+			if(ok)
+					em.close();
+		}			
+	}
+	
 	public User getUserByID(long id) {
 		em.getTransaction().begin();
 		User user = em.find(User.class, id);

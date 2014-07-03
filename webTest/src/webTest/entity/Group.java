@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -17,6 +18,10 @@ public class Group extends BaseEntity{
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy="groups")
 	private List<User> users;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name="group_poll")		
+	private List<Poll> group_polls;
 	
 	public String getName() {
 		return name;
