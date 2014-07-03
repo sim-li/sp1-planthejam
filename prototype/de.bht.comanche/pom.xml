@@ -201,7 +201,9 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                     <preloadSources>
                         <!-- <source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source> -->
                         <source>${project.basedir}/src/main/web/lib/angular.js</source>
-                        <!-- <source>${project.basedir}/src/main/web/lib/angular-mocks.js</source> -->
+						 <source>${project.basedir}/src/main/web/lib/angular-mocks.js</source>
+                         <source>${project.basedir}/src/main/web/lib/angular-scenario.js</source>
+                 <!-- <source>${project.basedir}/src/main/web/lib/angular-mocks.js</source> -->
                     </preloadSources>
                 </configuration>
             </plugin>
@@ -338,7 +340,8 @@ o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/
                                 <preloadSources>
                                     <source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source>
                                     <source>${project.basedir}/src/main/web/lib/angular.js</source>
-                                    <!-- <source>${project.basedir}/src/main/web/lib/angular-mocks.js</source> -->
+                                    <source>${project.basedir}/src/main/web/lib/angular-mocks.js</source>
+                                    <source>${project.basedir}/src/main/web/lib/angular-scenario.js</source>
                                 </preloadSources>
                                 <!-- <jsSrcDir>src/main/web/js</jsSrcDir>
                                 <jsTestSrcDir>src/test/web/js</jsTestSrcDir> -->
