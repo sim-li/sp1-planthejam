@@ -16,6 +16,7 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 
 	@Override
 	public void save(E entity) {
+		System.out.println("I got called.");
 		// TODO Auto-generated method stub
 		
 	}
@@ -54,6 +55,16 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	public Collection<E> findByExample(E example) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void beginTransaction() {
+		pool.beginTransaction();
+	}
+
+	@Override
+	public void endTransaction(boolean success) {
+		pool.endTransaction(success);
 	}
 
 }
