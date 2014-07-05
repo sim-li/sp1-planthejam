@@ -13,6 +13,6 @@ public interface DaGeneric<E> {
     E find(long id) throws NotFoundException;
     Collection<E> findAll();
     Collection<E> findByField(String fieldName, Object fieldValue);
-    Collection<E> findByWhere(String whereClause, Object... args); // ???
+    Collection<E> findByWhere(String whereClause, Object... args);
     Collection<E> findByExample(E example);
 }

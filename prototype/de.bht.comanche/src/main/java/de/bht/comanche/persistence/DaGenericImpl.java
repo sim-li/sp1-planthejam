@@ -7,9 +7,11 @@ import javassist.NotFoundException;
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
 	private Class<E> type;
+	private Pool pool;
 	
-	public DaGenericImpl(Class<E> type) {
+	public DaGenericImpl(Class<E> type, Pool pool) {
 		this.type = type;
+		this.pool = pool;
 	}
 
 	@Override
