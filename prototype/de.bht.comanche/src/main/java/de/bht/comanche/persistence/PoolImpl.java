@@ -20,7 +20,7 @@ public class PoolImpl implements Pool {
 		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
 	}
 	
-	public static PoolImpl getInstance() {
+	public static PoolImpl getInstance() { 
 		return POOL;
 	}
 	
