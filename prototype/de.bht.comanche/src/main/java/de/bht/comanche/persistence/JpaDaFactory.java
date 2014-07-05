@@ -6,5 +6,9 @@ public class JpaDaFactory implements DaFactory {
 	public DaUser getDaUser() {
 		return new DaUserImpl();
 	}
-
+	
+	@Override
+	public DaSurvey getDaSurvey() {
+		return new DaSurveyImpl();
+	}
 }
