@@ -1,7 +1,8 @@
-
+---------------------------------------------------------------------------------------
 -- Objektverwaltungsmethoden (CRUD) - Kommunikation zwischen GUI und Server mit REST --
+---------------------------------------------------------------------------------------
 
-- User -
+-- User --
     Login
         login(name: String , password: String)
                 returns: { "id": long, 
@@ -24,7 +25,7 @@
                            "serverMessage": String }
     (später: andere User finden)
 
-- Survey -
+-- Survey --
     erstellen / ändern
         /**
           * - auf Server: an Survey-Liste anhängen oder Survey finden und updaten 
@@ -41,4 +42,3 @@
     finden
         --> Filterungen in der UI
 
-    

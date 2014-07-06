@@ -5,6 +5,19 @@
  * Module: controller
  */
 
+    var myInjection = angular.module("myInjection", []);
+    myInjection.factory("myService", function() {
+
+        var someValues = [1, 2, 3, 4, 5, 6, 7, 8, 9], 
+            addTwoVals = function(a, b) {
+                return a * b;
+            };
+
+        return {
+            someValues: someValues,
+            addTwoVals: addTwoVals
+        };
+    });
 /**
  * The controller for the angular app
  * @namespace
@@ -15,8 +28,25 @@ var Ctrl = (function() {
 
     // var myApp = angular.module("myApp", ["testModule"]); // <<==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ====
 
-    var myApp = angular.module("myApp", []);
-    myApp.controller("Ctrl", function($scope, $log, $filter) {
+    // var myInjection = angular.module("myInjection", []);
+    // myInjection.factory("myService", function() {
+
+    //     var someValues = [1, 2, 3, 4, 5, 6, 7, 8, 9], 
+    //         addTwoVals = function(a, b) {
+    //             return a + b;
+    //         };
+
+    //     return {
+    //         someValues: someValues,
+    //         addTwoVals: addTwoVals
+    //     };
+    // });
+
+    var myApp = angular.module("myApp", ["myInjection"]);
+    myApp.controller("Ctrl", function($scope, $log, $filter, myService) {
+
+        $scope.test123 = myService.someValues;
+        $scope.test123 = myService.addTwoVals(1000, 11);
 
         $scope.$log = $log;
 
