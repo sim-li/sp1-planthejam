@@ -5,12 +5,16 @@
  * Module: controller
  */
 
-    var myInjection = angular.module("myInjection", []);
-    myInjection.factory("myService", function() {
+
+"use strict";
+
+//-- for testing -- TODO remove later <<==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ====
+angular.module("myInjection", [])
+    .factory("myTestService", function() {
 
         var someValues = [1, 2, 3, 4, 5, 6, 7, 8, 9], 
             addTwoVals = function(a, b) {
-                return a * b;
+                return a + b;
             };
 
         return {
@@ -18,43 +22,140 @@
             addTwoVals: addTwoVals
         };
     });
-/**
- * The controller for the angular app
- * @namespace
- */
-var Ctrl = (function() {
 
-    "use strict";
 
-    // var myApp = angular.module("myApp", ["testModule"]); // <<==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ====
 
-    // var myInjection = angular.module("myInjection", []);
-    // myInjection.factory("myService", function() {
+angular.module("restModule", [])
+    .factory("restService", ["$http", "$log", function($http, $log) {
 
-    //     var someValues = [1, 2, 3, 4, 5, 6, 7, 8, 9], 
-    //         addTwoVals = function(a, b) {
-    //             return a + b;
-    //         };
+        var login = function(name, password) {
+            $log.warn("login() not implemented");
+            // TODO retrieve data from rest service
 
-    //     return {
-    //         someValues: someValues,
-    //         addTwoVals: addTwoVals
-    //     };
-    // });
+            var dummyReturn = { "id": new Date().getTime(), 
+                                "success": true, 
+                                "serverMessage": "HI FROM LOGIN" };
+            return dummyReturn;
+        };
 
-    var myApp = angular.module("myApp", ["myInjection"]);
-    myApp.controller("Ctrl", function($scope, $log, $filter, myService) {
+        var getUser = function(id) {
+            $log.warn("getUser() not implemented");
+            // TODO retrieve data from rest service
 
-        $scope.test123 = myService.someValues;
-        $scope.test123 = myService.addTwoVals(1000, 11);
+            var dummyReturn = { "user": { "name": "THE USER" }, 
+                                "success": true, 
+                                "serverMessage": "HI FROM GET_USER" };
+            return dummyReturn;
+        };
 
+        var register = function(name, password, email, tel) {
+            $log.warn("register() not implemented");
+            // TODO retrieve data from rest service
+
+            var dummyReturn = { "id": new Date().getTime(), 
+                                "success": true, 
+                                "serverMessage": "HI FROM REGISTER" };
+            return dummyReturn;
+        };
+
+        var deleteUser = function(id) {
+            $log.warn("deleteUser() not implemented");
+            // TODO retrieve data from rest service
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM DELETE_USER" };
+            return dummyReturn;
+        };
+        var updateUser = function(user) {
+            $log.warn("updateUser() not implemented");
+            // TODO retrieve data from rest service
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM UPDATE_USER" };
+            return dummyReturn;
+        };
+
+        /*
+         * Update or insert a survey.
+         * - @param survey optional. If not specified, a new survey will be created on the server and inserted into the database.
+         */
+        var saveSurvey = function(survey) {
+            $log.warn("saveSurvey() not implemented");
+            // TODO retrieve data from rest service
+
+            var dummyReturn = { "survey": { "name": "THE SURVEY" }, // for new survey: survey incl. id of the newly generated Survey from the database
+                                "success": true, 
+                                "serverMessage": "HI FROM SAVE_SURVEY" };
+            return dummyReturn;
+        };
+        var deleteSurvey = function(id) {
+            $log.warn("deleteSurvey() not implemented");
+            // TODO retrieve data from rest service
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM DELETE_SURVEY" };
+            return dummyReturn;
+        };
+
+        return {
+            login: login, 
+            getUser: getUser, 
+            register: register, 
+            deleteUser: deleteUser, 
+            editUser: editUser, 
+            saveSurvey: saveSurvey, 
+            deleteSurvey: deleteSurvey
+        };
+    }]);
+
+angular.module("myApp", ["myInjection", "restModule"])
+    
+    //-- TEST START --
+    .controller("Ctrl2", ["$scope", "$log", "$filter", "myTestService", function($scope, $log, $filter, myTestService) {
+        $scope.testFct = function() {
+            $scope.test123 += 1;
+        };
+    }]) //-- TEST END --
+
+    .controller("Ctrl", ["$scope", "$log", "$filter", "myTestService", "restService", function($scope, $log, $filter, myTestService, restService) {
+
+        // make $log service available for the use in html
         $scope.$log = $log;
+
+
+
+        //-- TEST START --
+        // $scope.test123 = myTestService.someValues;
+        // $scope.test123 = myTestService.addTwoVals(1000, 11);
+
+        // $scope.testDateOutput;
+        // $scope.testDate = function() {
+        //     var d1 = new Date();
+        //     var d2 = new DatePickerDate(d1);
+        //     $log.log(d1);
+        //     $log.log(d2);
+        //     $scope.testDateOutput = d1 + " " + d2;
+        // };
+
+        $scope.doLogin = function() {
+            var result = restService.login();
+            $log.log("logged in with id = " + result.id + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
+        };
+        $scope.doRegister = function() {
+            var result = restService.register();
+            $log.log("registered with id = " + result.id + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
+        };
+        
+        $log.log("DONE TESTING");
+        //-- TEST END--
+
+
 
         $scope.Type = {
             UNIQUE: "einmalig", 
             RECURRING: "wiederholt"
         };
-        $scope.typeOptions = [
+        $scope.Type.options_ = [
             $scope.Type.UNIQUE, 
             $scope.Type.RECURRING
         ];
@@ -64,34 +165,29 @@ var Ctrl = (function() {
             WEEK: "Woche", 
             MONTH: "Monat"
         };
-        $scope.timeUnitOptions = [
+        $scope.TimeUnit.options_ = [
             $scope.TimeUnit.DAY, 
             $scope.TimeUnit.WEEK, 
             $scope.TimeUnit.MONTH
         ];
 
-
-        // $scope.allowedPassword = /^\d{5}$/;
         $scope.allowedPassword = /^[^\s]{8,20}$/; // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
-        // $scope.allowedPassword = /^[^\s]+$/; // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
 
         
         /*
-         *
+         * Converts a JavaScript Date to a date format the angular datepicker understands. 
+         * - toDate() converts the date back to JavaScript Date
          */
-        var initDate = function(config) {
-            var date = $filter('date')(config, "yyyy-MM-dd");
-            var time = $filter('date')(config, "HH:mm");
-            return {
-                "date": date, 
-                "time": time, 
-                "toDate": function() {
-                    // var self = this;
-                    // return new Date(self.date + " " + self.time);
-                    return new Date(this.date + " " + this.time);
-                }
-            };
+        var DatePickerDate = function(jsDate) {
+            this.date = $filter('date')(jsDate, "yyyy-MM-dd");
+            this.time = $filter('date')(jsDate, "HH:mm");
         };
+
+        DatePickerDate.prototype.toDate = function() {
+            // console.log(new Date(this.date + " " + this.time));
+            return new Date(this.date + " " + this.time);
+        };
+
 
         /*
          *
@@ -103,45 +199,43 @@ var Ctrl = (function() {
                     "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
                     "type": $scope.Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
                     // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-                    "deadline": initDate(new Date(2014, 7, 10, 23, 55)), // <<datatype>> date = Zeipunkt
+                    "deadline": new DatePickerDate(new Date(2014, 7, 10, 23, 55)), // <<datatype>> date = Zeipunkt
                     "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
                     "possibleTimeslots": [
-                            { "startTime": initDate(new Date(2014, 7, 11, 19, 0)), "durationInMins": 120 }, // <<datatype>> <timeslot> = List<Zeitraum>
-                            { "startTime": initDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 }, 
-                            { "startTime": initDate(new Date(2014, 7, 18, 19, 30)), "durationInMins": 120 } 
+                            { "startTime": new DatePickerDate(new Date(2014, 7, 11, 19, 0)), "durationInMins": 120 }, // <<datatype>> <timeslot> = List<Zeitraum>
+                            { "startTime": new DatePickerDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 }, 
+                            { "startTime": new DatePickerDate(new Date(2014, 7, 18, 19, 30)), "durationInMins": 120 } 
                         ], 
-                    "determinedTimeslot": { "startTime": initDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 } // <<datatype>> timeslot = Zeitraum
+                    "determinedTimeslot": { "startTime": new DatePickerDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 } // <<datatype>> timeslot = Zeitraum
                 }, 
                 {   "name": "Chorprobe", 
                     "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
                     "type": $scope.Type.RECURRING, 
-                    "deadline": initDate(new Date(2014, 7, 21, 12, 0)),
+                    "deadline": new DatePickerDate(new Date(2014, 7, 21, 12, 0)),
                     "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.DAY },
                     "possibleTimeslots": [
-                            { "startTime": initDate(new Date(2014, 8, 1, 18, 30)), "durationInMins": 150 },
-                            { "startTime": initDate(new Date(2014, 8, 2, 18, 30)), "durationInMins": 150 } 
+                            { "startTime": new DatePickerDate(new Date(2014, 8, 1, 18, 30)), "durationInMins": 150 },
+                            { "startTime": new DatePickerDate(new Date(2014, 8, 2, 18, 30)), "durationInMins": 150 } 
                         ], 
-                    "determinedTimeslot": { "startTime": initDate(), "durationInMins": 0 }
+                    "determinedTimeslot": { "startTime": new DatePickerDate(), "durationInMins": 0 }
                 }, 
                 {   "name": "Meeting", 
                     "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
                     "type": $scope.Type.RECURRING, 
-                    "deadline": initDate(new Date(2014, 7, 31, 8, 0)),
+                    "deadline": new DatePickerDate(new Date(2014, 7, 31, 8, 0)),
                     "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.MONTH },
                     "possibleTimeslots": [], 
-                    "determinedTimeslot": { "startTime": initDate(), "durationInMins": 0 }
+                    "determinedTimeslot": { "startTime": new DatePickerDate(), "durationInMins": 0 }
                 }
             ];
         };
 
         /*
-         *
+         * returns an initialized "empty" user
          */
         var initUser = function() {
-
-            // *** get user data from server ***
-            
             return {
+                "id": "", 
                 "name": "", 
                 "password": "", 
                 "loggedIn": false
@@ -154,9 +248,12 @@ var Ctrl = (function() {
         $scope.user = initUser();
 
         /**
-         *
+         * 
          */
-        var fetchUserData = function() {
+        var fetchUserData = function(id) {
+
+            // *** get all user data from server ***
+
             $scope.user.surveys = getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
             // $scope.user.surveys = [{}] // empty list for debugging
         }
@@ -172,7 +269,7 @@ var Ctrl = (function() {
             
         // };
         
-        // var initDate = function(otherDate) {
+        // var new DatePickerDate = function(otherDate) {
         //     otherDate = otherDate || new Date();
         //     // var xxx = function() {
         //     //         var self = this;
@@ -188,9 +285,9 @@ var Ctrl = (function() {
         //         }
         //     };
         // };
-        // initDate();
+        // new DatePickerDate();
 
-        // var initDate = function(date_) {
+        // var new DatePickerDate = function(date_) {
         //     date_ = date_ || new Date();
         //     return {
         //         "date": $filter('date')(date_, "yyyy-MM-dd"), 
@@ -276,10 +373,10 @@ var Ctrl = (function() {
             this.name = config.name || "";
             this.description = config.description || "";
             this.type = config.type || $scope.Type.UNIQUE;
-            this.deadline = config.deadline || initDate(new Date());
+            this.deadline = config.deadline || new DatePickerDate(new Date());
             this.frequency = config.frequency || { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK };
             this.possibleTimeslots = config.possibleTimeslots || [], 
-            this.determinedTimeslot = config.determinedTimeslot || { "startTime": initDate(), "durationInMins": 0 }
+            this.determinedTimeslot = config.determinedTimeslot || { "startTime": new DatePickerDate(), "durationInMins": 0 }
         };
 
         $scope.editSurvey = function() {
@@ -350,7 +447,7 @@ var Ctrl = (function() {
         };
 
         $scope.addTimeSlotToTempSurvey = function() {
-            $scope.user.tempSurvey.possibleTimeslots.push({ "startTime": initDate(new Date()), "durationInMins": 60 });
+            $scope.user.tempSurvey.possibleTimeslots.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
         };
 
         
@@ -368,30 +465,5 @@ var Ctrl = (function() {
         //     });
         // };
 
-    });
+    }]);
 
-    
-    //==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ====
-    //
-    // myApp.controller("Test", function($scope) {
-    //     $scope.testing = "Testing";
-    // });
-    // myApp.controller("testCtrl", function($scope, $log, $filter) {
-
-    // });
-
-    // var testModule = angular.module("testModule", []);
-    // testModule.controller("Test2", function($scope) {
-    //     $scope.testing2 = "Testing again";
-    // });
-    //======================================================
-
-
-    // Ctrl.prototype.remove = function(first_argument) {
-    //     // body...
-    //     console.log($scope.user.name);
-    // };
-
-    // return Ctrl;
-
-}());

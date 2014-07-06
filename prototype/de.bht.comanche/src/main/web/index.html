@@ -47,17 +47,19 @@
     <pre id="error"></pre>
 
 
-    <div id="injectionTest">
+    <!-- ==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ==== -->
+    <!-- <div id="injectionTest" ng-controller="Ctrl2">
+        <input value="TEST" type="button" ng-click="testFct()" >
         TEST: {{ test123 }}
     </div>
+    <br> -->
+    <div>
+        <!-- <input value="TEST DATE" type="button" ng-click="testDate()" >
+        TEST: {{ testDateOutput }} -->
 
-    <!-- ==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ==== -->
-    <!-- <div ng-controller="Test">
-        {{testing}}
+        <input value="TEST LOGIN" type="button" ng-click="doLogin()" >
+        <input value="TEST REGISTER" type="button" ng-click="doRegister()" >
     </div>
-    <div ng-controller="Test2">
-        {{testing2}}
-    </div> -->
     <!-- ====================================================== -->
     
 
@@ -102,6 +104,13 @@
 
     <div id="logged_in_area" ng-show="user.loggedIn" class="input_area">
 
+        <!-- <div id="menu_area" ng-show="user.loggedIn" class="full_width_input"> -->
+        <div id="menu_area" ng-show="user.loggedIn">
+                <input id="editUser" type="button" value="Konto" ng-click="editUser()" />
+                <input id="editContacts" type="button" value="Kontakte" ng-click="editContacts()" />
+                <input id="logout" type="button" value="Logout" ng-click="logout()" />
+        </div><br /><!-- menu_area -->
+
         <div id="survey_selection_area" ng-hide="user.inEditMode">
             <span class="full_width_input">
                 
@@ -135,7 +144,7 @@
                 <textarea id="editSurveyDescription" rows="5" ng-model="user.tempSurvey.description" ng-change="$log.log(user.tempSurvey.description);"></textarea>
                 
                 <label for="editSurveyType">Typ</label>
-                <select id="editSurveyType" ng-model="user.tempSurvey.type" ng-options="type for type in typeOptions" ng-change="$log.log(user.tempSurvey.type);"></select>
+                <select id="editSurveyType" ng-model="user.tempSurvey.type" ng-options="type for type in Type.options_" ng-change="$log.log(user.tempSurvey.type);"></select>
                 
                 <label for="editSurveyDeadlineDate">Deadline</label>
                 <input id="editSurveyDeadlineDate" type="date" ng-model="user.tempSurvey.deadline.date" ng-change="$log.log(user.tempSurvey.deadline.toDate())" required />
@@ -146,7 +155,7 @@
                 <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="user.tempSurvey.frequency.distance" ng-change="$log.log(user.tempSurvey.frequency);"/>
                 
                 <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
-                <select id="editSurveyFrequencyTimeUnit" ng-model="user.tempSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in timeUnitOptions" ng-change="$log.log(user.tempSurvey.frequency);"></select>
+                <select id="editSurveyFrequencyTimeUnit" ng-model="user.tempSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(user.tempSurvey.frequency);"></select>
 
 
                 <label for="editSurveyPossibleTimeslots">M&ouml;gliche Zeitr&auml;ume</label>
@@ -158,7 +167,7 @@
                             <input id="timeslotStartTime" type="time" ng-model="timeslot.startTime.time" ng-change="$log.log(timeslot.startTime.toDate())" required />
 
                             <label id="timeslotDuration" for="editSurveyDeterminedTimeslotDuration">Dauer in Minuten</label>
-                            <input type="number" min="0" ng-model="timeslot.durationInMins" ng-change="$log.log(timeslot.startTime.durationInMins)" required />
+                            <input type="number" min="0" ng-model="timeslot.durationInMins" ng-change="$log.log(timeslot.durationInMins)" required />
                             [ <a href="" ng-click="removeTimeSlotFromTempSurvey(timeslot)">L&ouml;schen</a> ]
                         </li>
                         <li>[ <a href="" ng-click="addTimeSlotToTempSurvey()">Hinzuf&uuml;gen</a> ]</li>
@@ -179,12 +188,6 @@
             </span>
         </div><!-- survey_edit_area -->
 
-
-
-        <br />
-        <div class="full_width_input">
-            <input id="logout" type="button" value="Logout" ng-click="logout()" />
-        </div>
 
     </div><!-- logged_in_area -->
 
