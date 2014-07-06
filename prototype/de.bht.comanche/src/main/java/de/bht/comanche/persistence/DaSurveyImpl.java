@@ -5,8 +5,8 @@ import java.util.Collection;
 import de.bht.comanche.logic.LgSurvey;
 
 public class DaSurveyImpl extends DaGenericImpl<LgSurvey> implements DaSurvey {
-	public  DaSurveyImpl() {
-		super(LgSurvey.class);
+	public  DaSurveyImpl(Pool pool) {
+		super(LgSurvey.class, pool);
 	}
 
 	@Override

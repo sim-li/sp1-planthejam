@@ -4,11 +4,11 @@ public class JpaDaFactory implements DaFactory {
 
 	@Override
 	public DaUser getDaUser() {
-		return new DaUserImpl();
+		return new DaUserImpl(PoolImpl.getInstance());
 	}
 	
 	@Override
 	public DaSurvey getDaSurvey() {
-		return new DaSurveyImpl();
+		return new DaSurveyImpl(PoolImpl.getInstance());
 	}
 }
