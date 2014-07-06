@@ -63,105 +63,133 @@
     <!-- ====================================================== -->
     
 
-    <div id="login_area" ng-hide="user.loggedIn" class="input_area">
+    <div id="login_area" ng-hide="session.isLoggedIn" class="input_area">
 
-        <form name="myForm" ng-submit="login()" class="my_form">
+        <form name="loginForm" ng-hide="showRegisterDialog" ng-submit="login()" class="my_form">
             <span class="full_width_input">
                 <label for="inputName">Benutzername</label>
-                <input id="inputName" name="inputName" type="text" ng-model="user.name" placeholder="Dein Benutzername ..." required />
-                <!-- <span class="error" ng-show="myForm.inputName.$dirty && myForm.inputName.$error.required"> &larr; Pflichtfeld!</span> -->
+                <input id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
 
                 <label for="inputPassword">Passwort</label>
-                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="user.password" 
-                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required />
+                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
 
-                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="user.password" 
-                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required />
-
-                <!-- ng-pattern="allowedPassword"  -->
-                <!-- <span class="error" ng-show="myForm.inputPassword.$error.required"> &larr; Pflichtfeld!</span> -->
-
-                <!-- <input id="inputPassword2" name="inputPassword2" ng-show="showPassword" type="text" ng-model="user.password" 
-                placeholder="8-20 Buchstaben" ng-change="turnOffWarning()" required /> -->
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
                 
-                <div class="error">{{ warning }}</div>
-                
-                <!-- ng-pattern="allowedPassword"  -->
-                <!-- <div class="error" ng-show="myForm.inputPassword.$error.pattern">Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!</div> -->
+                <div class="error">{{ warnings.password }}</div>
             </span>
             
             <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
             <label for="toggleShowPassword">Klartext</label>
             
+            <div>
+                <a id="registerLink" href="" ng-click="showRegisterDialog = true">Registrieren</a>
+            </div>
+
             <span class="full_width_input">
-                <input id="login" type="submit" value="Login" />
+                <input id="loginBtn" type="submit" value="Login" />
             </span>
-        </form><!-- myForm -->
+        </form><!-- loginForm -->
+
+
+        <form name="registerForm" ng-show="showRegisterDialog" ng-submit="register()" class="my_form">
+            <span class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+                
+                <div class="error">{{ warnings.password }}</div>
+
+                <label for="inputEmail">E-Mail</label>
+                <input id="inputEmail" name="inputEmail" type="text" ng-model="session.user.email" placeholder="Deine E-Mail-Adresse ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.email }}</div>
+                
+                <label for="inputTel">Telefon</label>
+                <input id="inputTel" name="inputTel" type="text" ng-model="session.user.tel" placeholder="Deine Telefonnummer ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.tel }}</div>
+            </span>
+            
+            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+
+            <a id="cancelRegisterLink" href="" ng-click="showRegisterDialog = false">Registrieren abbrechen</a>
+
+            <span class="full_width_input">
+                <input id="registerBtn" type="submit" value="Registrieren" />
+            </span>
+        </form><!-- registerForm -->
         
     </div><!-- login_area -->
 
 
 
-    <div id="logged_in_area" ng-show="user.loggedIn" class="input_area">
+    <div id="logged_in_area" ng-show="session.isLoggedIn" class="input_area">
 
-        <!-- <div id="menu_area" ng-show="user.loggedIn" class="full_width_input"> -->
-        <div id="menu_area" ng-show="user.loggedIn">
+        <!-- <div id="menu_area" ng-show="session.isLoggedIn" class="full_width_input"> -->
+        <div id="menu_area" ng-show="session.isLoggedIn">
                 <input id="editUser" type="button" value="Konto" ng-click="editUser()" />
                 <input id="editContacts" type="button" value="Kontakte" ng-click="editContacts()" />
                 <input id="logout" type="button" value="Logout" ng-click="logout()" />
         </div><br /><!-- menu_area -->
 
-        <div id="survey_selection_area" ng-hide="user.inEditMode">
+        <div id="survey_selection_area" ng-hide="session.user.inEditMode">
             <span class="full_width_input">
                 
                 <input id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addSurvey()" />
                 
                 <!--++++ TODO: Baustelle ++++++++++++++++++++-->
-                <select id="surveyList" ng-model="user.selectedSurvey" ng-options="survey.name for survey in user.surveys | filter:user.searchString" size="5%"></select>
+                <select id="surveyList" ng-model="session.user.selectedSurvey" ng-options="survey.name for survey in session.user.surveys | filter:session.user.searchString" size="5%"></select>
                 
-                <!-- <select id="surveyList" ng-model="user.selectedSurvey" size="5%">
-                    <option ng-repeat="survey in user.surveys | filter:user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
+                <!-- <select id="surveyList" ng-model="session.user.selectedSurvey" size="5%">
+                    <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
                 </select> -->
 
-                <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="user.searchString" ng-keyup="$log.log('searchString: \'' + user.searchString + '\'')" ng-change="updateSelection()"/>
+                <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="session.user.searchString" ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-change="updateSelection()"/>
 
                 <input id="editSurvey" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="editSurvey()" />
                 <input id="deleteSurvey" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedSurvey()" />
             </span>
 
-            <textarea rows="5" readonly>{{ user.selectedSurvey.description }}</textarea>
+            <textarea rows="5" readonly>{{ session.user.selectedSurvey.description }}</textarea>
         </div><!-- survey_selection_area -->
 
 
 
-        <div id="survey_edit_area" ng-show="user.inEditMode">
+        <div id="survey_edit_area" ng-show="session.user.inEditMode">
             <span class="full_width_input">
 
                 <label for="editSurveyName">Name</label>
-                <input id="editSurveyName" type="text" ng-model="user.tempSurvey.name" ng-change="$log.log(user.tempSurvey.name);"/>
+                <input id="editSurveyName" type="text" ng-model="session.user.tempSurvey.name" ng-change="$log.log(session.user.tempSurvey.name);"/>
 
                 <label for="editSurveyDescription">Beschreibung</label>
-                <textarea id="editSurveyDescription" rows="5" ng-model="user.tempSurvey.description" ng-change="$log.log(user.tempSurvey.description);"></textarea>
+                <textarea id="editSurveyDescription" rows="5" ng-model="session.user.tempSurvey.description" ng-change="$log.log(session.user.tempSurvey.description);"></textarea>
                 
                 <label for="editSurveyType">Typ</label>
-                <select id="editSurveyType" ng-model="user.tempSurvey.type" ng-options="type for type in Type.options_" ng-change="$log.log(user.tempSurvey.type);"></select>
+                <select id="editSurveyType" ng-model="session.user.tempSurvey.type" ng-options="type for type in Type.options_" ng-change="$log.log(session.user.tempSurvey.type);"></select>
                 
                 <label for="editSurveyDeadlineDate">Deadline</label>
-                <input id="editSurveyDeadlineDate" type="date" ng-model="user.tempSurvey.deadline.date" ng-change="$log.log(user.tempSurvey.deadline.toDate())" required />
-                <input id="editSurveyDeadlineTime" type="time" ng-model="user.tempSurvey.deadline.time" ng-change="$log.log(user.tempSurvey.deadline.toDate())" required />
+                <input id="editSurveyDeadlineDate" type="date" ng-model="session.user.tempSurvey.deadline.date" ng-change="$log.log(session.user.tempSurvey.deadline.toDate())" required />
+                <input id="editSurveyDeadlineTime" type="time" ng-model="session.user.tempSurvey.deadline.time" ng-change="$log.log(session.user.tempSurvey.deadline.toDate())" required />
 
 
                 <label for="editSurveyFrequencyDistance">Frequenz - Abstand</label>
-                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="user.tempSurvey.frequency.distance" ng-change="$log.log(user.tempSurvey.frequency);"/>
+                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="session.user.tempSurvey.frequency.distance" ng-change="$log.log(session.user.tempSurvey.frequency);"/>
                 
                 <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
-                <select id="editSurveyFrequencyTimeUnit" ng-model="user.tempSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(user.tempSurvey.frequency);"></select>
+                <select id="editSurveyFrequencyTimeUnit" ng-model="session.user.tempSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.user.tempSurvey.frequency);"></select>
 
 
                 <label for="editSurveyPossibleTimeslots">M&ouml;gliche Zeitr&auml;ume</label>
                 <div id="editSurveyPossibleTimeslots">
                     <ul>
-                        <li ng-repeat="timeslot in user.tempSurvey.possibleTimeslots">
+                        <li ng-repeat="timeslot in session.user.tempSurvey.possibleTimeslots">
                             <label for="editSurveyDeterminedTimeslotDuration">Startzeitpunkt</label>
                             <input id="timeslotStartDate" type="date" ng-model="timeslot.startTime.date" ng-change="$log.log(timeslot.startTime.toDate())" required />
                             <input id="timeslotStartTime" type="time" ng-model="timeslot.startTime.time" ng-change="$log.log(timeslot.startTime.toDate())" required />
@@ -176,11 +204,11 @@
 
 
                 <label for="editSurveyDeterminedTimeslotStartDate">Ermittelter Zeitraum - Startzeitpunkt</label>
-                <input id="editSurveyDeterminedTimeslotStartDate" type="date" ng-model="user.tempSurvey.determinedTimeslot.startTime.date" ng-change="$log.log(user.tempSurvey.determinedTimeslot.startTime.toDate())" />
-                <input id="editSurveyDeterminedTimeslotStartTime" type="time" ng-model="user.tempSurvey.determinedTimeslot.startTime.time" ng-change="$log.log(user.tempSurvey.determinedTimeslot.startTime.toDate())" />
+                <input id="editSurveyDeterminedTimeslotStartDate" type="date" ng-model="session.user.tempSurvey.determinedTimeslot.startTime.date" ng-change="$log.log(session.user.tempSurvey.determinedTimeslot.startTime.toDate())" />
+                <input id="editSurveyDeterminedTimeslotStartTime" type="time" ng-model="session.user.tempSurvey.determinedTimeslot.startTime.time" ng-change="$log.log(session.user.tempSurvey.determinedTimeslot.startTime.toDate())" />
 
                 <label for="editSurveyDeterminedTimeslotDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
-                <input id="editSurveyDeterminedTimeslotDuration" type="number" min="0" ng-model="user.tempSurvey.determinedTimeslot.durationInMins" ng-change="$log.log(user.tempSurvey.determinedTimeslot.durationInMins);"/>
+                <input id="editSurveyDeterminedTimeslotDuration" type="number" min="0" ng-model="session.user.tempSurvey.determinedTimeslot.durationInMins" ng-change="$log.log(session.user.tempSurvey.determinedTimeslot.durationInMins);"/>
 
 
                 <input id="cancelSurveyEdit" type="button" value="Abbrechen" ng-click="cancelEditSurvey()" />

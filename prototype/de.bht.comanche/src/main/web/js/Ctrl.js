@@ -28,21 +28,33 @@ angular.module("myInjection", [])
 angular.module("restModule", [])
     .factory("restService", ["$http", "$log", function($http, $log) {
 
+        var getDummyUser = function() {
+            return {
+                "oid": "", 
+                "name": "THE USER", 
+                "email": "dummy@test.net", 
+                "password": "supersafe123", 
+                "surveys": [] // empty list for debugging
+            };
+        };
+
+
         var login = function(name, password) {
             $log.warn("login() not implemented");
             // TODO retrieve data from rest service
 
-            var dummyReturn = { "id": new Date().getTime(), 
+            var dummyReturn = { "oid": new Date().getTime(), 
                                 "success": true, 
                                 "serverMessage": "HI FROM LOGIN" };
             return dummyReturn;
         };
 
-        var getUser = function(id) {
+        var getUser = function(oid) {
             $log.warn("getUser() not implemented");
             // TODO retrieve data from rest service
 
-            var dummyReturn = { "user": { "name": "THE USER" }, 
+
+            var dummyReturn = { "user": getDummyUser(), 
                                 "success": true, 
                                 "serverMessage": "HI FROM GET_USER" };
             return dummyReturn;
@@ -52,13 +64,13 @@ angular.module("restModule", [])
             $log.warn("register() not implemented");
             // TODO retrieve data from rest service
 
-            var dummyReturn = { "id": new Date().getTime(), 
+            var dummyReturn = { "oid": new Date().getTime(), 
                                 "success": true, 
                                 "serverMessage": "HI FROM REGISTER" };
             return dummyReturn;
         };
 
-        var deleteUser = function(id) {
+        var deleteUser = function(oid) {
             $log.warn("deleteUser() not implemented");
             // TODO retrieve data from rest service
 
@@ -66,6 +78,7 @@ angular.module("restModule", [])
                                 "serverMessage": "HI FROM DELETE_USER" };
             return dummyReturn;
         };
+
         var updateUser = function(user) {
             $log.warn("updateUser() not implemented");
             // TODO retrieve data from rest service
@@ -83,12 +96,13 @@ angular.module("restModule", [])
             $log.warn("saveSurvey() not implemented");
             // TODO retrieve data from rest service
 
-            var dummyReturn = { "survey": { "name": "THE SURVEY" }, // for new survey: survey incl. id of the newly generated Survey from the database
+            var dummyReturn = { "survey": { "name": "THE SURVEY" }, // for new survey: survey incl. oid of the newly generated Survey from the database
                                 "success": true, 
                                 "serverMessage": "HI FROM SAVE_SURVEY" };
             return dummyReturn;
         };
-        var deleteSurvey = function(id) {
+
+        var deleteSurvey = function(oid) {
             $log.warn("deleteSurvey() not implemented");
             // TODO retrieve data from rest service
 
@@ -139,11 +153,11 @@ angular.module("myApp", ["myInjection", "restModule"])
 
         $scope.doLogin = function() {
             var result = restService.login();
-            $log.log("logged in with id = " + result.id + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
+            $log.log("logged in with oid = " + result.oid + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
         };
         $scope.doRegister = function() {
             var result = restService.register();
-            $log.log("registered with id = " + result.id + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
+            $log.log("registered with oid = " + result.oid + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
         };
         
         $log.log("DONE TESTING");
@@ -171,7 +185,46 @@ angular.module("myApp", ["myInjection", "restModule"])
             $scope.TimeUnit.MONTH
         ];
 
-        $scope.allowedPassword = /^[^\s]{8,20}$/; // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
+        $scope.patterns = {
+            password: /^[\S]{8,20}$/, // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
+            email: /^[a-zA-Z][\w]*@[a-zA-Z]+\.[a-zA-Z]{2,3}$/, // TODO
+            tel: /^[0-9]{4,12}$/ // TODO
+        }
+
+        
+        $scope.session = {};
+
+        /*
+         * returns an initialized user
+         */
+        var getInitUser = function() {
+            var user = {
+                "oid": "", 
+                "name": "", 
+                "password": ""
+                , 
+                // "surveys": getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
+                "surveys": [{}] // empty list for debugging
+            };
+            $log.log("user initialized");
+            return user;
+        };
+
+        /*
+         * initializes the session
+         */
+        var initSession = function() {
+            $scope.session = {
+                "user": getInitUser(), 
+                "isLoggedIn": false
+            }
+            $log.log("session initialized");
+        };
+        initSession();
+
+
+
+
 
         
         /*
@@ -230,32 +283,22 @@ angular.module("myApp", ["myInjection", "restModule"])
             ];
         };
 
-        /*
-         * returns an initialized "empty" user
-         */
-        var initUser = function() {
-            return {
-                "id": "", 
-                "name": "", 
-                "password": "", 
-                "loggedIn": false
-                // , 
-                // "surveys": getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
-                // "surveys": [{}] // empty list for debugging
-            };
-        };
-        
-        $scope.user = initUser();
-
         /**
          * 
          */
-        var fetchUserData = function(id) {
-
+        var fetchUserData = function(oid) {
+            var _fromGetUser = restService.getUser(oid);
+            if (!_fromGetUser.success) {
+                $log.log("Benutzerdaten konnten nicht vom Server geholt werden.");
+                $log.warn(_fromGetUser.serverMessage);
+                return;
+            }
             // *** get all user data from server ***
 
-            $scope.user.surveys = getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
-            // $scope.user.surveys = [{}] // empty list for debugging
+            return _fromGetUser.user;
+
+            // $scope.session.user.surveys = getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
+            // $scope.session.user.surveys = [{}] // empty list for debugging
         }
         
 
@@ -301,7 +344,7 @@ angular.module("myApp", ["myInjection", "restModule"])
 
         
         // var getDate = function() {
-        //     return $scope.user.tempDate.toDate();
+        //     return $scope.session.user.tempDate.toDate();
         // };
         
         // $scope.getDate = function(from, to) {
@@ -319,52 +362,117 @@ angular.module("myApp", ["myInjection", "restModule"])
 
 
 
+        var loginIsValid = function() {
+            if (!$scope.session.user.name) {
+                $log.log("Benutzername fehlt.");
+                return false;
+            }
+            if (!$scope.session.user.password) {
+                $log.log("Passwort fehlt.");
+                return false;
+            }
+            if (!$scope.patterns.password.test($scope.session.user.password)) {
+                $scope.warnings.password = "Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!";
+                $log.log($scope.warnings.password);
+                return false;
+            }
+            return true;
+        };
 
+        var registerIsValid = function() {
+            if (!loginIsValid()) {
+                return false;
+            }
+            if (!$scope.session.user.email) {
+                $log.log("E-Mail-Adresse fehlt.");
+                return false;
+            }
+            if (!$scope.patterns.email.test($scope.session.user.email)) {
+                $scope.warnings.email = "Bitte gib eine gueltige E-Mail-Adresse ein!";
+                $log.log($scope.warnings.email);
+                return false;
+            }
+            if (!$scope.session.user.tel) {
+                $log.log("Telefonnummer fehlt.");
+                return false;
+            }
+            if (!$scope.patterns.tel.test($scope.session.user.tel)) {
+                $scope.warnings.tel = "Bitte gib eine gueltige Telefonnummer ein!";
+                $log.log($scope.warnings.tel);
+                return false;
+            }
+            return true;
+        };
 
         $scope.login = function() {
-            $scope.warning = "";
-
-            if (!$scope.user.name || !$scope.user.password) {
-                console.log("Login fehlgeschlagen.");
-                console.log($scope.user);
-
-                if (!$scope.user.name) {
-                    console.log("Benutzername fehlt.");
-                }
-                if (!$scope.user.password) {
-                    console.log("Passwort fehlt.");
-                }
-            } else if (!$scope.allowedPassword.test($scope.user.password)) {
-                $scope.warning = "Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!";
-                console.log($scope.warning);
-            } else {
-                
-                // *** try to login at server ***
-
-                // $scope.user = initUser();
-                fetchUserData();
-                
-                $scope.user.loggedIn = true;
-                console.log("Login erfolgreich. Benutzer:");
-                console.log($scope.user);
-
-                // TODO: Baustelle -- checken, ob so sinnvoll:
-                // $scope.filteredSurveys = $scope.user.surveys;
-                // $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+            // $scope.warnings = {};
+            if (!loginIsValid()) {
+                $log.log("Login fehlgeschlagen.");
+                $log.log($scope.session.user);
+                return;
             }
+            
+            // *** try to login at server ***
+
+            // initSession();
+            $scope.session.user = fetchUserData();
+            
+            $scope.session.isLoggedIn = true;
+            $log.log("Login erfolgreich.");
+            $log.log($scope.session);
+
+            // TODO: Baustelle -- checken, ob so sinnvoll:
+            // $scope.filteredSurveys = $scope.session.user.surveys;
+            // $scope.session.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+        };
+
+        // $scope.showRegisterDialog = false;
+
+        $scope.register = function() {
+            if (!registerIsValid()) {
+                $log.log("Registrierung fehlgeschlagen.");
+                $log.log($scope.session.user);
+                return;
+            }
+            
+            // *** try to register at server ***
+
+            var _user = $scope.session.user;
+            var _fromRegister = restService.register(_user.name, _user.password, _user.email, _user.tel);
+            if (!_fromRegister.success) {
+                $log.log("Registrierung auf dem Server fehlgeschlagen.");
+                $log.warn(_fromRegister.serverMessage);
+                return;
+            }
+            
+            // initSession();
+
+            $scope.session.user = fetchUserData(_fromRegister.oid);
+            // var _oid = _fromRegister.oid;
+            // var _fromGetUser = restService.getUser(_oid);
+            // if (!_fromGetUser.success) {
+            //     $log.log("Benutzerdaten konnten nicht vom Server geholt werden.");
+            //     $log.warn(_fromGetUser.serverMessage);
+            //     return;
+            // }
+
+            
+            $scope.session.isLoggedIn = true;
+            $log.log("Registrierung erfolgreich.");
+            $log.log($scope.session);
         };
 
         $scope.logout = function() {
 
             // *** try to logout at server ***
 
-            $scope.user = initUser();
+            initSession();
             console.log("Logout erfolgreich.");
-            console.log($scope.user);
+            console.log($scope.session);
         };
 
-        $scope.turnOffWarning = function() {
-            $scope.warning = "";
+        $scope.discardWarnings = function() {
+            $scope.warnings = {};
         };
 
 
@@ -380,41 +488,41 @@ angular.module("myApp", ["myInjection", "restModule"])
         };
 
         $scope.editSurvey = function() {
-            $scope.user.tempSurvey = new Survey($scope.user.selectedSurvey);
-            $scope.user.inEditMode = true;
-            console.log($scope.user);
+            $scope.session.user.tempSurvey = new Survey($scope.session.user.selectedSurvey);
+            $scope.session.user.inEditMode = true;
+            console.log($scope.session.user);
         };
 
         $scope.addSurvey = function() {
-            $scope.user.tempSurvey = new Survey();
-            $scope.user.adding = true;
-            $scope.user.inEditMode = true;
+            $scope.session.user.tempSurvey = new Survey();
+            $scope.session.user.adding = true;
+            $scope.session.user.inEditMode = true;
         };
 
         $scope.cancelEditSurvey = function() {
-            $scope.user.tempSurvey = "";
-            $scope.user.adding = false;
-            $scope.user.inEditMode = false;
-            console.log($scope.user.selectedSurvey);
-            console.log($scope.user);
+            $scope.session.user.tempSurvey = "";
+            $scope.session.user.adding = false;
+            $scope.session.user.inEditMode = false;
+            console.log($scope.session.user.selectedSurvey);
+            console.log($scope.session.user);
         };
 
         $scope.saveSurvey = function() {
             
             // *** try to synchronize with server ***
             
-            if (!$scope.user.adding) {
+            if (!$scope.session.user.adding) {
                 removeSelectedSurvey();
             }
-            $scope.user.surveys.push($scope.user.tempSurvey);
-            $scope.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
+            $scope.session.user.surveys.push($scope.session.user.tempSurvey);
+            $scope.session.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
 
-            $scope.user.selectedSurvey = $scope.user.tempSurvey;
-            $scope.user.tempSurvey = "";
-            $scope.user.adding = false;
-            $scope.user.inEditMode = false;
-            console.log($scope.user.selectedSurvey);
-            console.log($scope.user);
+            $scope.session.user.selectedSurvey = $scope.session.user.tempSurvey;
+            $scope.session.user.tempSurvey = "";
+            $scope.session.user.adding = false;
+            $scope.session.user.inEditMode = false;
+            console.log($scope.session.user.selectedSurvey);
+            console.log($scope.session.user);
         };
 
 
@@ -426,8 +534,8 @@ angular.module("myApp", ["myInjection", "restModule"])
         };
 
         var removeSelectedSurvey = function() {
-            removeElementFrom($scope.user.selectedSurvey, $scope.user.surveys);
-            $scope.user.selectedSurvey = "";
+            removeElementFrom($scope.session.user.selectedSurvey, $scope.session.user.surveys);
+            $scope.session.user.selectedSurvey = "";
         };
 
         $scope.deleteSelectedSurvey = function() {
@@ -437,17 +545,17 @@ angular.module("myApp", ["myInjection", "restModule"])
             // *** refresh local model ***
 
             removeSelectedSurvey();
-            // $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
-            console.log($scope.user.selectedSurvey);
-            console.log($scope.user);
+            // $scope.session.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+            console.log($scope.session.user.selectedSurvey);
+            console.log($scope.session.user);
         };
 
         $scope.removeTimeSlotFromTempSurvey = function(timeslot) {
-            removeElementFrom(timeslot, $scope.user.tempSurvey.possibleTimeslots);
+            removeElementFrom(timeslot, $scope.session.user.tempSurvey.possibleTimeslots);
         };
 
         $scope.addTimeSlotToTempSurvey = function() {
-            $scope.user.tempSurvey.possibleTimeslots.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
+            $scope.session.user.tempSurvey.possibleTimeslots.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
         };
 
         
@@ -457,7 +565,7 @@ angular.module("myApp", ["myInjection", "restModule"])
         // $scope.filter = function() {
         //     console.log("searchString: '" + $scope.searchString + "'");
         //     $scope.filteredSurveys = [];
-        //     angular.forEach($scope.user.surveys, function(survey, index) {
+        //     angular.forEach($scope.session.user.surveys, function(survey, index) {
         //         var re = new RegExp($scope.searchString, "i");
         //         if (survey.name.match(re) || survey.description.match(re)) {
         //             $scope.filteredSurveys.push(survey);
