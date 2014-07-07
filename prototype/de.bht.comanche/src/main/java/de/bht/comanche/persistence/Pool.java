@@ -7,6 +7,9 @@ import javax.transaction.TransactionRequiredException;
 
 public interface Pool {
 	public void beginTransaction();
+	/**
+	 * Should end the transaction with a commit if success was <code>true</code>, otherwise with a rollback.
+	 */
 	public void endTransaction(boolean success);
 	public void save(DbObject io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException;
 	public void delete(DbObject io_object) throws IllegalArgumentException, TransactionRequiredException;
