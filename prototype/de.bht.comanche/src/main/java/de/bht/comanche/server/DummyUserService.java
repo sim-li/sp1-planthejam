@@ -1,6 +1,7 @@
 package de.bht.comanche.server;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -18,19 +19,28 @@ public class DummyUserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ServerTestUser produceJSON() {
     	
-    	LgUser resultingLgUser = new Transaction<LgUser>() {
-			@Override
-			public LgUser executeWithThrows() throws Exception {
-				LgUser lgUser1 = new LgUser();
-				lgUser1.setEmail("not a valid email"); // will throw NoValidEmailExc 
-				DaFactory jpaDaFactory = new JpaDaFactory();
-				DaUser daUser = jpaDaFactory.getDaUser();
-				daUser.save(lgUser1);
-				return lgUser1;
-			}
-		}.execute();
+//    	LgUser resultingLgUser = new Transaction<LgUser>() {
+//			@Override
+//			@Produces(MediaType.APPLICATION_JSON)
+//			public LgUser executeWithThrows() throws Exception {
+//				LgUser lgUser1 = new LgUser();
+//				lgUser1.setEmail("not a valid email"); // will throw NoValidEmailExc 
+//				DaFactory jpaDaFactory = new JpaDaFactory();
+//				DaUser daUser = jpaDaFactory.getDaUser();
+//				daUser.save(lgUser1);
+//				return lgUser1;
+//			}
+//		}.execute();
+		
 		return new ServerTestUser("test@hascode.com", "Tim","Testerman", 1);
 	}
+    
+    @Path("/accounts")
+    @Produces("plain/text")
+    public ServerTestUser getItem() {
+       // An unauthorized user tries to enter
+       throw new NotAuthorizedException("You Don't Have Permission");
+    }
     
     // 
     //  > Template-Method-Pattern
