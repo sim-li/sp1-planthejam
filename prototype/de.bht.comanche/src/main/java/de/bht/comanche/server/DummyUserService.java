@@ -16,9 +16,8 @@ public class DummyUserService {
     @GET
     @Path("/single-user")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ServerTestUser produceJSON() {
-    	
-    	LgUser resultingLgUser = new Transaction<LgUser>() {
+	public TransactionObject produceJSON() {
+    	TransactionObject result = new Transaction() {
 			@Override
 			public LgUser executeWithThrows() throws Exception {
 				LgUser lgUser1 = new LgUser();
@@ -29,7 +28,8 @@ public class DummyUserService {
 				return lgUser1;
 			}
 		}.execute();
-		return new ServerTestUser("test@hascode.com", "Tim","Testerman", 1);
+		
+		return result;
 	}
     
     // 
