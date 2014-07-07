@@ -26,7 +26,6 @@ import de.bht.comanche.persistence.JpaDaFactory;
 @Path("/user/")
 @Produces({"text/xml", "application/json"})
 public class UserService {
-	private DaUser dao;
 	
      
      @Path("/login")
@@ -43,11 +42,20 @@ public class UserService {
     			 DaFactory jpaDaFactory = new JpaDaFactory();
     			 DaUser daUser = jpaDaFactory.getDaUser();
     			 daUser.save(lgUser1);
+    			 
+    			 lgUser1 = daUser.findByName(name);
+    			 lgUser1.validatePassword(password);
+    			 
     			 return lgUser1;
     		 }
     	 }.execute();
-
-    	 return dao.create(name, telephone, email, password);
+    	 
+    	 if (lgUser1.passwordCorrect) {
+    		 // Build Sucess JSON
+    		 
+    	 } else {
+    		 // Build Error JSON
+    	 }
      }
 	
      @Path("/create")
