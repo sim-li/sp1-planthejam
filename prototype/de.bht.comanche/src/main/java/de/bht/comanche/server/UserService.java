@@ -43,12 +43,22 @@ public class UserService {
     			 DaFactory jpaDaFactory = new JpaDaFactory();
     			 DaUser daUser = jpaDaFactory.getDaUser();
     			 daUser.save(lgUser1);
+    			 
+    			 lgUser1 = daUser.findByName(name);
+    			 lgUser1.validatePassword(password);
+    			 
     			 return lgUser1;
     		 }
     	 }.execute();
     	 
-    	 return lgUser1;
 
+    	 if (lgUser1.passwordCorrect) {
+    		 // Build Sucess JSON
+    		 
+    	 } else {
+    		 // Build Error JSON
+    	 }
+    	 
      }
 	
      @Path("/create")
