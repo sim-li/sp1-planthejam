@@ -1,8 +1,11 @@
 package de.bht.comanche.logic;
 
-
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,68 +17,73 @@ public class LgUser extends DbObject {
     private String telephone;
     private String email;
     private String password;
-    
-    @ManyToOne
-    private LgContact contact_users;
    
-	@ManyToOne
-    private LgInvite invite_users;
-	
-	@ManyToOne
-	private LgTimePeriod timePeriod_users;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name="contact", joinColumns = {
+    		@JoinColumn(name="user_Id", referencedColumnName="id")}, inverseJoinColumns = {
+    		@JoinColumn(name="friend_Id", referencedColumnName="id")})
+    private List<LgUser> hatFriends;
+
+    @ManyToMany(mappedBy="hatFriends")
+    private List<LgUser> beFriendFromUsers;
     
-    public LgUser(String name, String telephone, String email, String password) {
-		this.name = name;
-		this.telephone = telephone;
-		this.email = email;
-		this.password = password;
-	}
+    @ManyToMany
+	@JoinTable(name="user_group")			  
+	private List<LgGroup> groups;
 
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getTelephone() {
 		return telephone;
 	}
-	
+
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-    public LgContact getContact_users() {
-		return contact_users;
+
+	public List<LgUser> getHatFriends() {
+		return hatFriends;
 	}
-    
-	public void setContact_users(LgContact contact_users) {
-		this.contact_users = contact_users;
+
+	public void setHatFriends(List<LgUser> hatFriends) {
+		this.hatFriends = hatFriends;
 	}
-	
-	public LgInvite getInvite_users() {
-		return invite_users;
+
+	public List<LgUser> getBeFriendFromUsers() {
+		return beFriendFromUsers;
 	}
-	
-	public void setInvite_users(LgInvite invite_users) {
-		this.invite_users = invite_users;
+
+	public void setBeFriendFromUsers(List<LgUser> beFriendFromUsers) {
+		this.beFriendFromUsers = beFriendFromUsers;
+	}
+
+	public List<LgGroup> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<LgGroup> groups) {
+		this.groups = groups;
 	}
 }

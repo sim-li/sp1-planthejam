@@ -1,9 +1,8 @@
 package de.bht.comanche.persistence;
 
 import java.util.Collection;
-import javassist.NotFoundException;
 
-import de.bht.comanche.logic.LgSurvey;
+import javassist.NotFoundException;
 
 public interface DaSurvey {
 	void save(LgSurvey survey); // insert or update

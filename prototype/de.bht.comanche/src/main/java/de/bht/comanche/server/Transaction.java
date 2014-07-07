@@ -21,3 +21,4 @@ public abstract class Transaction <E> {
 	
 	public abstract E executeWithThrows() throws Exception;
 }
+
