@@ -3,29 +3,32 @@ package de.bht.comanche.logic;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="gruppe")
+@Table(name="LgGroup")
 public class LgGroup extends DbObject {
 
 	private static final long serialVersionUID = 1L;
 	private String name;
 	
-	@OneToMany(mappedBy="group")
-	private List<LgContact> contacts;
-	
+	@ManyToMany(mappedBy="groups")
+	private List<LgUser> users;
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<LgContact> getContacts() {
-		return contacts;
+
+	public List<LgUser> getUsers() {
+		return users;
 	}
-	public void setContacts(List<LgContact> contacts) {
-		this.contacts = contacts;
+
+	public void setUsers(List<LgUser> users) {
+		this.users = users;
 	}
 }
