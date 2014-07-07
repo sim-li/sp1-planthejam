@@ -13,7 +13,7 @@
                            "serverMessage": String, 
                            "data": { "user": User } }                // User inkl. Survey-Liste
     Register
-        register(name: String , password: String, email: String, tel: String)
+        register(name: String, password: String, email: String, tel: String)
                 returns: { "success": boolean, 
                            "serverMessage": String, 
                            "data": { "id": long } }
