@@ -5,26 +5,74 @@
  * Module: controller
  */
 
-/**
- * The controller for the angular app
- * @namespace
- */
-var Ctrl = (function() {
 
-    "use strict";
+"use strict";
 
-    // var myApp = angular.module("myApp", ["testModule"]); // <<==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ====
+//-- TEST START --
+angular.module("myInjection", [])
+    .factory("myTestService", function() {
 
-    var myApp = angular.module("myApp", []);
-    myApp.controller("Ctrl", function($scope, $log, $filter) {
+        var someValues = [1, 2, 3, 4, 5, 6, 7, 8, 9], 
+            addTwoVals = function(a, b) {
+                return a + b;
+            };
 
+        return {
+            someValues: someValues,
+            addTwoVals: addTwoVals
+        };
+    });//-- TEST END --
+
+
+angular.module("myApp", ["myInjection", "restModule"])
+    
+    //-- TEST START --
+    .controller("Ctrl2", ["$scope", "$log", "myTestService", function($scope, $log, myTestService) {
+        $scope.testFct = function() {
+            $scope.test123 += 1;
+        };
+    }]) //-- TEST END --
+
+
+    .controller("Ctrl", ["$scope", "$log", "$filter", "myTestService", "restService", function($scope, $log, $filter, myTestService, restService) {
+
+        // make $log service available for the use in html
         $scope.$log = $log;
+
+
+
+        //-- TEST START --
+        // $scope.test123 = myTestService.someValues;
+        // $scope.test123 = myTestService.addTwoVals(1000, 11);
+
+        // $scope.testDateOutput;
+        // $scope.testDate = function() {
+        //     var d1 = new Date();
+        //     var d2 = new DatePickerDate(d1);
+        //     $log.log(d1);
+        //     $log.log(d2);
+        //     $scope.testDateOutput = d1 + " " + d2;
+        // };
+        //
+        // $scope.doLogin = function() {
+        //     var result = restService.login();
+        //     $log.log("logged in with oid = " + result.oid + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
+        // };
+        // $scope.doRegister = function() {
+        //     var result = restService.register();
+        //     $log.log("registered with oid = " + result.oid + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
+        // };
+        
+        // $log.log("DONE TESTING");
+        //-- TEST END--
+
+
 
         $scope.Type = {
             UNIQUE: "einmalig", 
             RECURRING: "wiederholt"
         };
-        $scope.typeOptions = [
+        $scope.Type.options_ = [
             $scope.Type.UNIQUE, 
             $scope.Type.RECURRING
         ];
@@ -34,211 +82,261 @@ var Ctrl = (function() {
             WEEK: "Woche", 
             MONTH: "Monat"
         };
-        $scope.timeUnitOptions = [
+        $scope.TimeUnit.options_ = [
             $scope.TimeUnit.DAY, 
             $scope.TimeUnit.WEEK, 
             $scope.TimeUnit.MONTH
         ];
 
-
-        // $scope.allowedPassword = /^\d{5}$/;
-        $scope.allowedPassword = /^[^\s]{8,20}$/; // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
-        // $scope.allowedPassword = /^[^\s]+$/; // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
+        $scope.patterns = {
+            password: /^[\S]{8,20}$/, // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
+            email: /^[a-zA-Z][\w]*@[a-zA-Z]+\.[a-zA-Z]{2,3}$/, // TODO
+            tel: /^[0-9]{4,12}$/ // TODO
+        }
 
         
-        /*
-         *
-         */
-        var initDate = function(config) {
-            var date = $filter('date')(config, "yyyy-MM-dd");
-            var time = $filter('date')(config, "HH:mm");
-            return {
-                "date": date, 
-                "time": time, 
-                "toDate": function() {
-                    // var self = this;
-                    // return new Date(self.date + " " + self.time);
-                    return new Date(this.date + " " + this.time);
-                }
-            };
-        };
+        $scope.session = {};
 
         /*
-         *
+         * returns an initialized user
          */
-        var getDummySurveyList = function() {
-            return [
-                {   
-                    "name": "Bandprobe", 
-                    "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
-                    "type": $scope.Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
-                    // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-                    "deadline": initDate(new Date(2014, 7, 10, 23, 55)), // <<datatype>> date = Zeipunkt
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
-                    "possibleTimeslots": [
-                            { "startTime": initDate(new Date(2014, 7, 11, 19, 0)), "durationInMins": 120 }, // <<datatype>> <timeslot> = List<Zeitraum>
-                            { "startTime": initDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 }, 
-                            { "startTime": initDate(new Date(2014, 7, 18, 19, 30)), "durationInMins": 120 } 
-                        ], 
-                    "determinedTimeslot": { "startTime": initDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 } // <<datatype>> timeslot = Zeitraum
-                }, 
-                {   "name": "Chorprobe", 
-                    "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
-                    "type": $scope.Type.RECURRING, 
-                    "deadline": initDate(new Date(2014, 7, 21, 12, 0)),
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.DAY },
-                    "possibleTimeslots": [
-                            { "startTime": initDate(new Date(2014, 8, 1, 18, 30)), "durationInMins": 150 },
-                            { "startTime": initDate(new Date(2014, 8, 2, 18, 30)), "durationInMins": 150 } 
-                        ], 
-                    "determinedTimeslot": { "startTime": initDate(), "durationInMins": 0 }
-                }, 
-                {   "name": "Meeting", 
-                    "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
-                    "type": $scope.Type.RECURRING, 
-                    "deadline": initDate(new Date(2014, 7, 31, 8, 0)),
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.MONTH },
-                    "possibleTimeslots": [], 
-                    "determinedTimeslot": { "startTime": initDate(), "durationInMins": 0 }
-                }
-            ];
-        };
-
-        /*
-         *
-         */
-        var initUser = function() {
-
-            // *** get user data from server ***
-            
-            return {
+        var getInitUser = function() {
+            var user = {
+                "oid": "", 
                 "name": "", 
                 "password": "", 
-                "loggedIn": false
-                // , 
+                "email": "", 
+                "tel": "", 
                 // "surveys": getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
-                // "surveys": [{}] // empty list for debugging
+                "surveys": [{}] // empty list for debugging
             };
+            $log.log("user initialized");
+            return user;
         };
-        
-        $scope.user = initUser();
+
+        /*
+         * initializes the session
+         */
+        var initSession = function() {
+            $scope.session = {
+                "user": getInitUser(), 
+                "isLoggedIn": false
+            }
+            $log.log("session initialized");
+        };
+        initSession();
+
+
+        /*
+         * Converts a JavaScript Date to a date format the angular datepicker understands. 
+         * - toDate() converts the date back to JavaScript Date
+         */
+        var DatePickerDate = function(jsDate) {
+            this.date = $filter('date')(jsDate, "yyyy-MM-dd");
+            this.time = $filter('date')(jsDate, "HH:mm");
+        };
+
+        DatePickerDate.prototype.toDate = function() {
+            return new Date(this.date + " " + this.time);
+        };
+
+
 
         /**
-         *
+         * tries to get the specified user from the server
          */
-        var fetchUserData = function() {
-            $scope.user.surveys = getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
-            // $scope.user.surveys = [{}] // empty list for debugging
+        var fetchUserData = function(oid) {
+            var _fromGetUser = restService.getUser(oid);
+            if (!_fromGetUser.success) {
+                $log.error("Benutzerdaten konnten nicht vom Server geholt werden.");
+                $log.error(_fromGetUser.serverMessage);
+                return;
+            }
+            // *** get all user data from server ***
+
+            return _fromGetUser.user;
+
+            // $scope.session.user.surveys = getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
+            // $scope.session.user.surveys = [{}] // empty list for debugging
         }
         
 
-
-        
-
-        // $scope.test = new Date();
-        // var myDate = function(date) {
-        //     this.date = $filter('date')(date, "yyyy-mm-dd");
-        //     this.time = $filter('date')(date, "hh:mm");
-            
-        // };
-        
-        // var initDate = function(otherDate) {
-        //     otherDate = otherDate || new Date();
-        //     // var xxx = function() {
-        //     //         var self = this;
-        //     //         return new Date(self.date + " " + self.time);
-        //     return {
-        //         "date": $filter('date')(otherDate, "yyyy-MM-dd"), 
-        //         "time": $filter('date')(otherDate, "HH:mm"), 
-        //         "toDate": function() {
-        //             var self = this;
-        //             // console.log("d " + self.date);
-        //             // console.log("t " + self.time);
-        //             return new Date(self.date + " " + self.time);
-        //         }
-        //     };
-        // };
-        // initDate();
-
-        // var initDate = function(date_) {
-        //     date_ = date_ || new Date();
-        //     return {
-        //         "date": $filter('date')(date_, "yyyy-MM-dd"), 
-        //         "time": $filter('date')(date_, "HH:mm"), 
-        //         "toDate": function() {
-        //             var self = this;
-        //             return new Date(self.date + " " + self.time);
-        //         }
-        //     };
-        // };
-
-        
-        // var getDate = function() {
-        //     return $scope.user.tempDate.toDate();
-        // };
-        
-        // $scope.getDate = function(from, to) {
-        //     // console.log(from); // TODO
-        //     console.log(from.date + "#" + from.time);
-        //     to = new Date(from.date + "#" + from.time);
-
-        //     // $scope.convertToDate(from.date, from.time);
-        // }
-
-        // $scope.convertToDate = function(datetime) {
-        //     return new Date(datetime.date + " " + datetime.time);
-        // }
+        $scope.toggleLoginDialog = function() {
+            $scope.showRegisterDialog = !$scope.showRegisterDialog;
+            initSession();
+        };
 
 
+        var loginIsValidFor = function(user) {
+            if (!user.name) {
+                $log.log("Benutzername fehlt.");
+                return false;
+            }
+            if (!user.password) {
+                $log.log("Passwort fehlt.");
+                return false;
+            }
+            if (!$scope.patterns.password.test(user.password)) {
+                $scope.warnings.password = "Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!";
+                $log.log($scope.warnings.password);
+                return false;
+            }
+            return true;
+        };
 
-
-
+        var registerIsValidFor = function(user) {
+            if (!loginIsValidFor(user)) {
+                return false;
+            }
+            if (!user.email || !$scope.patterns.email.test(user.email)) {
+                $scope.warnings.email = "Bitte gib eine gueltige E-Mail-Adresse ein!";
+                $log.log($scope.warnings.email);
+                return false;
+            }
+            if (!user.tel || !$scope.patterns.tel.test(user.tel)) {
+                $scope.warnings.tel = "Bitte gib eine gueltige Telefonnummer ein!";
+                $log.log($scope.warnings.tel);
+                return false;
+            }
+            return true;
+        };
 
         $scope.login = function() {
-            $scope.warning = "";
+            // $scope.warnings = {};
+            var _user = $scope.session.user;
 
-            if (!$scope.user.name || !$scope.user.password) {
-                console.log("Login fehlgeschlagen.");
-                console.log($scope.user);
-
-                if (!$scope.user.name) {
-                    console.log("Benutzername fehlt.");
-                }
-                if (!$scope.user.password) {
-                    console.log("Passwort fehlt.");
-                }
-            } else if (!$scope.allowedPassword.test($scope.user.password)) {
-                $scope.warning = "Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!";
-                console.log($scope.warning);
-            } else {
-                
-                // *** try to login at server ***
-
-                // $scope.user = initUser();
-                fetchUserData();
-                
-                $scope.user.loggedIn = true;
-                console.log("Login erfolgreich. Benutzer:");
-                console.log($scope.user);
-
-                // TODO: Baustelle -- checken, ob so sinnvoll:
-                // $scope.filteredSurveys = $scope.user.surveys;
-                // $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
+            if (!loginIsValidFor(_user)) {
+                $log.log("Login ungueltig.");
+                $log.log(_user);
+                return;
             }
+
+            var _fromLogin = restService.login(_user.name, _user.password);
+            if (!_fromLogin.success) {
+                $log.error("Login auf dem Server fehlgeschlagen.");
+                $log.error(_fromLogin.serverMessage);
+                initSession();
+                return;
+            }
+
+            _user = fetchUserData(_fromLogin.oid);
+            if (!_user) {
+                $log.error("Login fehlgeschlagen.");
+                initSession();
+                return;
+            }
+            $scope.session.user = _user;
+            
+            $scope.session.isLoggedIn = true;
+            $log.log("Login erfolgreich.");
+            $log.log($scope.session);
+
+            // TODO: Baustelle -- checken, ob so sinnvoll:
+            // $scope.filteredSurveys = $scope.session.user.surveys;
+            // $scope.session.selectedSurvey = $scope.filteredSurveys[0] || "";
+        };
+
+        // $scope.showRegisterDialog = false;
+
+        $scope.register = function() {
+            var _user = $scope.session.user;
+
+            if (!registerIsValidFor(_user)) {
+                $log.log("Registrierung ungueltig.");
+                $log.log(_user);
+                return;
+            }
+
+            var _fromRegister = restService.register(_user.name, _user.password, _user.email, _user.tel);
+            if (!_fromRegister.success) {
+                $log.error("Registrierung auf dem Server fehlgeschlagen.");
+                $log.error(_fromRegister.serverMessage);
+                initSession();
+                return;
+            }
+
+            _user = fetchUserData(_fromRegister.oid);
+            if (!_user) {
+                $log.error("Login fehlgeschlagen.");
+                initSession();
+                return;
+            }
+            $scope.session.user = _user;
+            
+            $scope.session.isLoggedIn = true;
+            $log.log("Registrierung erfolgreich.");
+            $log.log($scope.session);
         };
 
         $scope.logout = function() {
 
-            // *** try to logout at server ***
+            // *** try to logout at server ***  -- TODO: not necessary?
 
-            $scope.user = initUser();
-            console.log("Logout erfolgreich.");
-            console.log($scope.user);
+            initSession();
+            $scope.showRegisterDialog = false;
+            $log.log("Logout erfolgreich.");
+            $log.log($scope.session);
         };
 
-        $scope.turnOffWarning = function() {
-            $scope.warning = "";
+        $scope.discardWarnings = function() {
+            $scope.warnings = {};
         };
+
+
+
+        $scope.editUser = function() {
+            $scope.session.tempUser = $scope.session.user;
+            $scope.session.inEditMode = true;
+            $scope.session.showEditUserDialog = true;
+        };
+
+        $scope.saveEditedUser = function() {
+            var _user = $scope.session.tempUser;
+            var _fromUpdateUser = restService.updateUser(_user);
+
+            if (!_fromUpdateUser.success) {
+                $log.error("Update der Kontodaten auf dem Server fehlgeschlagen.");
+                $log.error(_fromUpdateUser.serverMessage);
+
+                cancelEditUser();
+                return;
+            }
+            $scope.session.user = _user;
+
+            $scope.session.inEditMode = false;
+            $scope.session.showEditUserDialog = false;
+        };
+
+        $scope.cancelEditUser = function() {
+            $scope.session.inEditMode = false;
+            $scope.session.showEditUserDialog = false;
+        };
+
+        $scope.deleteUser = function() {
+            
+            // *** ask: are you sure you want to delete? ***
+
+            var _user = $scope.session.user;
+            var _fromDeleteUser = restService.deleteUser(_user.oid);
+
+            if (!_fromDeleteUser.success) {
+                $log.error("Loeschen des Kontos auf dem Server fehlgeschlagen.");
+                $log.error(_fromDeleteUser.serverMessage);
+                return;
+            }
+
+            initSession();
+            $scope.showRegisterDialog = false;
+            $log.log("Das Konto wurde erfolgreich geloescht.");
+            $log.log($scope.session);
+        };
+
+
+
+        $scope.editContacts = function() {
+            $log.warn("editContacts() not implemented");
+        };
+
 
 
         var Survey = function(config) {
@@ -246,48 +344,67 @@ var Ctrl = (function() {
             this.name = config.name || "";
             this.description = config.description || "";
             this.type = config.type || $scope.Type.UNIQUE;
-            this.deadline = config.deadline || initDate(new Date());
+            this.deadline = config.deadline || new DatePickerDate(new Date());
             this.frequency = config.frequency || { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK };
             this.possibleTimeslots = config.possibleTimeslots || [], 
-            this.determinedTimeslot = config.determinedTimeslot || { "startTime": initDate(), "durationInMins": 0 }
+            this.determinedTimeslot = config.determinedTimeslot || { "startTime": new DatePickerDate(), "durationInMins": 0 }
         };
 
         $scope.editSurvey = function() {
-            $scope.user.tempSurvey = new Survey($scope.user.selectedSurvey);
-            $scope.user.inEditMode = true;
-            console.log($scope.user);
+            $scope.session.tempSurvey = new Survey($scope.session.selectedSurvey);
+            $scope.session.inEditMode = true;
+            $scope.session.showEditSurveysDialog = true;
+            $log.log($scope.session.user);
         };
 
         $scope.addSurvey = function() {
-            $scope.user.tempSurvey = new Survey();
-            $scope.user.adding = true;
-            $scope.user.inEditMode = true;
+            var _fromSaveSurvey = restService.saveSurvey();
+            if (!_fromSaveSurvey.success) {
+                $log.error("Erstellen einer leeren Terminumfrage auf dem Server fehlgeschlagen.");
+                $log.error(_fromSaveSurvey.serverMessage);
+                return;
+            }
+            $scope.session.tempSurvey = _fromSaveSurvey.survey;
+            // $scope.session.tempSurvey = new Survey();
+
+            $scope.session.addingSurvey = true;
+            $scope.session.inEditMode = true;
+            $scope.session.showEditSurveysDialog = true;
         };
 
         $scope.cancelEditSurvey = function() {
-            $scope.user.tempSurvey = "";
-            $scope.user.adding = false;
-            $scope.user.inEditMode = false;
-            console.log($scope.user.selectedSurvey);
-            console.log($scope.user);
+            $scope.session.tempSurvey = "";
+            $scope.session.addingSurvey = false;
+            $scope.session.inEditMode = false;
+            $scope.session.showEditSurveysDialog = false;
+            $log.log($scope.session.selectedSurvey);
+            $log.log($scope.session.user);
         };
 
         $scope.saveSurvey = function() {
-            
-            // *** try to synchronize with server ***
-            
-            if (!$scope.user.adding) {
-                removeSelectedSurvey();
-            }
-            $scope.user.surveys.push($scope.user.tempSurvey);
-            $scope.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
+            var _survey = $scope.session.tempSurvey;
+            var _fromSaveSurvey = restService.saveSurvey(_survey);
 
-            $scope.user.selectedSurvey = $scope.user.tempSurvey;
-            $scope.user.tempSurvey = "";
-            $scope.user.adding = false;
-            $scope.user.inEditMode = false;
-            console.log($scope.user.selectedSurvey);
-            console.log($scope.user);
+            if (!_fromSaveSurvey.success) {
+                $log.error("Speichern der Terminumfrage auf dem Server fehlgeschlagen.");
+                $log.error(_fromSaveSurvey.serverMessage);
+                return;
+            }
+            _survey = _fromSaveSurvey.survey;
+
+            if (!$scope.session.addingSurvey) {
+                removeElementFrom(_survey, $scope.session.user.surveys);
+            }
+            $scope.session.user.surveys.push(_survey);
+            $scope.session.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
+
+            $scope.session.selectedSurvey = _survey;
+            $scope.session.tempSurvey = "";
+            $scope.session.addingSurvey = false;
+            $scope.session.inEditMode = false;
+            $scope.session.showEditSurveysDialog = false;
+            console.log($scope.session.selectedSurvey);
+            console.log($scope.session.user);
         };
 
 
@@ -298,70 +415,40 @@ var Ctrl = (function() {
             }
         };
 
-        var removeSelectedSurvey = function() {
-            removeElementFrom($scope.user.selectedSurvey, $scope.user.surveys);
-            $scope.user.selectedSurvey = "";
-        };
+        // var removeSelectedSurvey = function() {
+        //     removeElementFrom($scope.session.selectedSurvey, $scope.session.user.surveys);
+        //     $scope.session.selectedSurvey = "";
+        // };
 
         $scope.deleteSelectedSurvey = function() {
 
             // *** ask: are you sure you want to delete? ***
-            // *** try to delete from server ***
-            // *** refresh local model ***
 
-            removeSelectedSurvey();
-            // $scope.user.selectedSurvey = $scope.filteredSurveys[0] || "";
-            console.log($scope.user.selectedSurvey);
-            console.log($scope.user);
+            var _survey = $scope.session.selectedSurvey;
+            var _fromDeleteSurvey = restService.deleteSurvey(_survey.oid);
+
+            if (!_fromDeleteSurvey.success) {
+                $log.error("Loeschen der Terminumfrage auf dem Server fehlgeschlagen.");
+                $log.error(_fromDeleteSurvey.serverMessage);
+                return;
+            }
+
+            removeElementFrom($scope.session.selectedSurvey, $scope.session.user.surveys);
+            // $scope.session.selectedSurvey = "";
+            $scope.session.selectedSurvey = $scope.session.user.surveys[0] || "";
+
+            // $scope.session.selectedSurvey = $scope.filteredSurveys[0] || "";
+            console.log($scope.session.selectedSurvey);
+            console.log($scope.session.user);
         };
 
         $scope.removeTimeSlotFromTempSurvey = function(timeslot) {
-            removeElementFrom(timeslot, $scope.user.tempSurvey.possibleTimeslots);
+            removeElementFrom(timeslot, $scope.session.tempSurvey.possibleTimeslots);
         };
 
         $scope.addTimeSlotToTempSurvey = function() {
-            $scope.user.tempSurvey.possibleTimeslots.push({ "startTime": initDate(new Date()), "durationInMins": 60 });
+            $scope.session.tempSurvey.possibleTimeslots.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
         };
 
-        
+    }]);
 
-        // $scope.searchString = "";
-
-        // $scope.filter = function() {
-        //     console.log("searchString: '" + $scope.searchString + "'");
-        //     $scope.filteredSurveys = [];
-        //     angular.forEach($scope.user.surveys, function(survey, index) {
-        //         var re = new RegExp($scope.searchString, "i");
-        //         if (survey.name.match(re) || survey.description.match(re)) {
-        //             $scope.filteredSurveys.push(survey);
-        //         }
-        //     });
-        // };
-
-    });
-
-    
-    //==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ====
-    //
-    // myApp.controller("Test", function($scope) {
-    //     $scope.testing = "Testing";
-    // });
-    // myApp.controller("testCtrl", function($scope, $log, $filter) {
-
-    // });
-
-    // var testModule = angular.module("testModule", []);
-    // testModule.controller("Test2", function($scope) {
-    //     $scope.testing2 = "Testing again";
-    // });
-    //======================================================
-
-
-    // Ctrl.prototype.remove = function(first_argument) {
-    //     // body...
-    //     console.log($scope.user.name);
-    // };
-
-    // return Ctrl;
-
-}());
