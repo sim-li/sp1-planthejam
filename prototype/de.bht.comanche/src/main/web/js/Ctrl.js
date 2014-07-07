@@ -2,98 +2,21 @@
  * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
  * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
  * 
- * Module: controller
+ * Module: main controller
  */
 
 
 "use strict";
 
-//-- TEST START --
-angular.module("myInjection", [])
-    .factory("myTestService", function() {
+angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
+    .controller("Ctrl", ["$scope", "$log", "$filter", "DatePickerDate", "Survey", "TimeUnit", "Type", "patterns", "restService", 
+        function($scope, $log, $filter, DatePickerDate, Survey, TimeUnit, Type, patterns, restService) {
 
-        var someValues = [1, 2, 3, 4, 5, 6, 7, 8, 9], 
-            addTwoVals = function(a, b) {
-                return a + b;
-            };
-
-        return {
-            someValues: someValues,
-            addTwoVals: addTwoVals
-        };
-    });//-- TEST END --
-
-
-angular.module("myApp", ["myInjection", "restModule"])
-    
-    //-- TEST START --
-    .controller("Ctrl2", ["$scope", "$log", "myTestService", function($scope, $log, myTestService) {
-        $scope.testFct = function() {
-            $scope.test123 += 1;
-        };
-    }]) //-- TEST END --
-
-
-    .controller("Ctrl", ["$scope", "$log", "$filter", "myTestService", "restService", function($scope, $log, $filter, myTestService, restService) {
-
-        // make $log service available for the use in html
+        // make services available for the use in html
         $scope.$log = $log;
-
-
-
-        //-- TEST START --
-        // $scope.test123 = myTestService.someValues;
-        // $scope.test123 = myTestService.addTwoVals(1000, 11);
-
-        // $scope.testDateOutput;
-        // $scope.testDate = function() {
-        //     var d1 = new Date();
-        //     var d2 = new DatePickerDate(d1);
-        //     $log.log(d1);
-        //     $log.log(d2);
-        //     $scope.testDateOutput = d1 + " " + d2;
-        // };
-        //
-        // $scope.doLogin = function() {
-        //     var result = restService.login();
-        //     $log.log("logged in with oid = " + result.oid + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
-        // };
-        // $scope.doRegister = function() {
-        //     var result = restService.register();
-        //     $log.log("registered with oid = " + result.oid + ", success = " + result.success + ", serverMessage = '" + result.serverMessage + "'");
-        // };
-        
-        // $log.log("DONE TESTING");
-        //-- TEST END--
-
-
-
-        $scope.Type = {
-            UNIQUE: "einmalig", 
-            RECURRING: "wiederholt"
-        };
-        $scope.Type.options_ = [
-            $scope.Type.UNIQUE, 
-            $scope.Type.RECURRING
-        ];
-        
-        $scope.TimeUnit = {
-            DAY: "Tag", 
-            WEEK: "Woche", 
-            MONTH: "Monat"
-        };
-        $scope.TimeUnit.options_ = [
-            $scope.TimeUnit.DAY, 
-            $scope.TimeUnit.WEEK, 
-            $scope.TimeUnit.MONTH
-        ];
-
-        $scope.patterns = {
-            password: /^[\S]{8,20}$/, // no whitespace allowed -- TODO: at this point whitespace is still allowed at the beginning and end
-            email: /^[a-zA-Z][\w]*@[a-zA-Z]+\.[a-zA-Z]{2,3}$/, // TODO
-            tel: /^[0-9]{4,12}$/ // TODO
-        }
-
+        $scope.TimeUnit = TimeUnit;
+        $scope.Type = Type;
+        $scope.patterns = patterns;
         
         $scope.session = {};
 
@@ -126,22 +49,7 @@ angular.module("myApp", ["myInjection", "restModule"])
         };
         initSession();
 
-
-        /*
-         * Converts a JavaScript Date to a date format the angular datepicker understands. 
-         * - toDate() converts the date back to JavaScript Date
-         */
-        var DatePickerDate = function(jsDate) {
-            this.date = $filter('date')(jsDate, "yyyy-MM-dd");
-            this.time = $filter('date')(jsDate, "HH:mm");
-        };
-
-        DatePickerDate.prototype.toDate = function() {
-            return new Date(this.date + " " + this.time);
-        };
-
-
-
+        
         /**
          * tries to get the specified user from the server
          */
@@ -338,19 +246,11 @@ angular.module("myApp", ["myInjection", "restModule"])
         };
 
 
-
-        var Survey = function(config) {
-            config = config || {};
-            this.name = config.name || "";
-            this.description = config.description || "";
-            this.type = config.type || $scope.Type.UNIQUE;
-            this.deadline = config.deadline || new DatePickerDate(new Date());
-            this.frequency = config.frequency || { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK };
-            this.possibleTimeslots = config.possibleTimeslots || [], 
-            this.determinedTimeslot = config.determinedTimeslot || { "startTime": new DatePickerDate(), "durationInMins": 0 }
-        };
-
         $scope.editSurvey = function() {
+            if (!$scope.session.selectedSurvey) {
+                $log.log("Keine Terminumfrage ausgewaehlt.");
+                return;
+            }
             $scope.session.tempSurvey = new Survey($scope.session.selectedSurvey);
             $scope.session.inEditMode = true;
             $scope.session.showEditSurveysDialog = true;
@@ -425,6 +325,10 @@ angular.module("myApp", ["myInjection", "restModule"])
             // *** ask: are you sure you want to delete? ***
 
             var _survey = $scope.session.selectedSurvey;
+            if (!_survey) {
+                $log.log("Keine Terminumfrage ausgewaehlt.");
+                return;
+            }
             var _fromDeleteSurvey = restService.deleteSurvey(_survey.oid);
 
             if (!_fromDeleteSurvey.success) {
@@ -433,21 +337,20 @@ angular.module("myApp", ["myInjection", "restModule"])
                 return;
             }
 
-            removeElementFrom($scope.session.selectedSurvey, $scope.session.user.surveys);
-            // $scope.session.selectedSurvey = "";
+            removeElementFrom(_survey, $scope.session.user.surveys);
             $scope.session.selectedSurvey = $scope.session.user.surveys[0] || "";
+            $scope.session.tempSurvey = "";
 
-            // $scope.session.selectedSurvey = $scope.filteredSurveys[0] || "";
             console.log($scope.session.selectedSurvey);
             console.log($scope.session.user);
         };
 
-        $scope.removeTimeSlotFromTempSurvey = function(timeslot) {
-            removeElementFrom(timeslot, $scope.session.tempSurvey.possibleTimeslots);
+        $scope.removeTimeperiodFromTempSurvey = function(timeperiod) {
+            removeElementFrom(timeperiod, $scope.session.tempSurvey.possibleTimeperiods);
         };
 
-        $scope.addTimeSlotToTempSurvey = function() {
-            $scope.session.tempSurvey.possibleTimeslots.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
+        $scope.addTimeperiodToTempSurvey = function() {
+            $scope.session.tempSurvey.possibleTimeperiods.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
         };
 
     }]);

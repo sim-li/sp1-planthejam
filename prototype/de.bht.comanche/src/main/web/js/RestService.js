@@ -2,17 +2,18 @@
  * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
  * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
  * 
- * Module: rest service
+ * Module: REST service
  */
 
 
 "use strict";
 
-angular.module("restModule", [])
-    .factory("restService", ["$http", "$log", "$filter", function($http, $log, $filter) {
+angular.module("restModule", ["datePickerDate", "constants", "survey"])
+    .factory("restService", ["$http", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", 
+        function($http, $log, $filter, DatePickerDate, TimeUnit, Type, Survey) {
 
 
-        // TODO refactor User, Survey, DatePickerDate ...
+        // TODO refactor User, ...
 
         var getDummyUser = function() {
             return {
@@ -26,54 +27,6 @@ angular.module("restModule", [])
                 
             };
         };
-
-        var Survey = function(config) {
-            config = config || {};
-            this.name = config.name || "";
-            this.description = config.description || "";
-            this.type = config.type || $scope.Type.UNIQUE;
-            this.deadline = config.deadline || new DatePickerDate(new Date());
-            this.frequency = config.frequency || { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK };
-            this.possibleTimeslots = config.possibleTimeslots || [], 
-            this.determinedTimeslot = config.determinedTimeslot || { "startTime": new DatePickerDate(), "durationInMins": 0 }
-        };
-
-        /*
-         * Converts a JavaScript Date to a date format the angular datepicker understands. 
-         * - toDate() converts the date back to JavaScript Date
-         */
-        var DatePickerDate = function(jsDate) {
-            this.date = $filter('date')(jsDate, "yyyy-MM-dd");
-            this.time = $filter('date')(jsDate, "HH:mm");
-        };
-
-        DatePickerDate.prototype.toDate = function() {
-            return new Date(this.date + " " + this.time);
-        };
-
-
-        //--- FIXME dangerous temporary hack - refactor!!!!
-        var $scope = {};
-        $scope.Type = {
-            UNIQUE: "einmalig", 
-            RECURRING: "wiederholt"
-        };
-        $scope.Type.options_ = [
-            $scope.Type.UNIQUE, 
-            $scope.Type.RECURRING
-        ];
-        
-        $scope.TimeUnit = {
-            DAY: "Tag", 
-            WEEK: "Woche", 
-            MONTH: "Monat"
-        };
-        $scope.TimeUnit.options_ = [
-            $scope.TimeUnit.DAY, 
-            $scope.TimeUnit.WEEK, 
-            $scope.TimeUnit.MONTH
-        ];
-        //----
         
 
         /*
@@ -84,48 +37,89 @@ angular.module("restModule", [])
                 {   
                     "name": "Bandprobe", 
                     "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
-                    "type": $scope.Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
+                    "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
                     // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
                     "deadline": new DatePickerDate(new Date(2014, 7, 10, 23, 55)), // <<datatype>> date = Zeipunkt
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
-                    "possibleTimeslots": [
-                            { "startTime": new DatePickerDate(new Date(2014, 7, 11, 19, 0)), "durationInMins": 120 }, // <<datatype>> <timeslot> = List<Zeitraum>
+                    "frequency": { "distance": 0, "timeUnit": TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
+                    "possibleTimeperiods": [
+                            { "startTime": new DatePickerDate(new Date(2014, 7, 11, 19, 0)), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
                             { "startTime": new DatePickerDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 }, 
                             { "startTime": new DatePickerDate(new Date(2014, 7, 18, 19, 30)), "durationInMins": 120 } 
                         ], 
-                    "determinedTimeslot": { "startTime": new DatePickerDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 } // <<datatype>> timeslot = Zeitraum
+                    "determinedTimeperiod": { "startTime": new DatePickerDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
                 }, 
                 {   "name": "Chorprobe", 
                     "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
-                    "type": $scope.Type.RECURRING, 
+                    "type": Type.RECURRING, 
                     "deadline": new DatePickerDate(new Date(2014, 7, 21, 12, 0)),
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.DAY },
-                    "possibleTimeslots": [
+                    "frequency": { "distance": 0, "timeUnit": TimeUnit.DAY },
+                    "possibleTimeperiods": [
                             { "startTime": new DatePickerDate(new Date(2014, 8, 1, 18, 30)), "durationInMins": 150 },
                             { "startTime": new DatePickerDate(new Date(2014, 8, 2, 18, 30)), "durationInMins": 150 } 
                         ], 
-                    "determinedTimeslot": { "startTime": new DatePickerDate(), "durationInMins": 0 }
+                    "determinedTimeperiod": { "startTime": new DatePickerDate(), "durationInMins": 0 }
                 }, 
                 {   "name": "Meeting", 
                     "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
-                    "type": $scope.Type.RECURRING, 
+                    "type": Type.RECURRING, 
                     "deadline": new DatePickerDate(new Date(2014, 7, 31, 8, 0)),
-                    "frequency": { "distance": 0, "timeUnit": $scope.TimeUnit.MONTH },
-                    "possibleTimeslots": [], 
-                    "determinedTimeslot": { "startTime": new DatePickerDate(), "durationInMins": 0 }
+                    "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
+                    "possibleTimeperiods": [], 
+                    "determinedTimeperiod": { "startTime": new DatePickerDate(), "durationInMins": 0 }
                 }
             ];
         };
 
+        var USER_PATH = "plan-the-jam/rest/service/user/";
 
         var login = function(name, password) {
             $log.warn("login() not implemented");
-            // TODO retrieve data from rest service
 
-            var dummyReturn = { "oid": new Date().getTime(), 
-                                "success": true, 
-                                "serverMessage": "HI FROM LOGIN" };
-            return dummyReturn;
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM LOGIN", 
+                                "oid": new Date().getTime() };
+            var _fromGet = dummyReturn;
+
+            // TODO retrieve data from rest service
+            
+            /* 
+                TODO
+                - test REST access with GET
+                - change to PUT
+            */
+
+            // $http.get({ method: "GET", url: USER_PATH + "login" })
+            //     .success(function(data, status, header, config) {
+            //         //
+            //     })
+            //     .error(function(data, status, header, config) {
+            //         //
+            //     });
+            
+            return _fromGet;
+        };
+
+        var _convertDateForSurvey = function(survey) {
+            survey.deadline = survey.deadline && new DatePickerDate(survey.deadline);
+
+            DatePickerDate.convertDates();
+
+            for (var i = 0; i < survey.possibleTimeperiods.length; i++) {
+                var _p =  survey.possibleTimeperiods[i];
+                _p.startTime = new DatePickerDate(_p.startTime);
+            }
+            survey.determinedTimeperiod = new DatePickerDate(survey.determinedTimeperiod);
+        };
+
+        var _convertDateForUser = function(user) {
+            if (!user) {
+                return null;
+            }
+            var _surveys = user.surveys;
+            for (var i = 0; i < _surveys.length; i++) {
+                _surveys[i] = convertDateForSurvey(_surveys[i]);
+            }
+
         };
 
         var getUser = function(oid) {
@@ -133,9 +127,10 @@ angular.module("restModule", [])
             // TODO retrieve data from rest service
 
 
-            var dummyReturn = { "user": getDummyUser(), 
-                                "success": true, 
-                                "serverMessage": "HI FROM GET_USER" };
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM GET_USER",  
+                                "user": getDummyUser() };
+            var _user = dummyReturn
             return dummyReturn;
         };
 
@@ -143,9 +138,9 @@ angular.module("restModule", [])
             $log.warn("register() not implemented");
             // TODO retrieve data from rest service
 
-            var dummyReturn = { "oid": new Date().getTime(), 
-                                "success": true, 
-                                "serverMessage": "HI FROM REGISTER" };
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM REGISTER", 
+                                "oid": new Date().getTime() };
             return dummyReturn;
         };
 
@@ -175,9 +170,9 @@ angular.module("restModule", [])
             $log.warn("saveSurvey() not implemented");
             // TODO retrieve data from rest service
 
-            var dummyReturn = { "survey": { "name": "THE SURVEY" }, // for new survey: survey incl. oid of the newly generated Survey from the database
-                                "success": true, 
-                                "serverMessage": "HI FROM SAVE_SURVEY" };
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM SAVE_SURVEY", 
+                                "survey": new Survey({name: "THE SURVEY" }) }; // for new survey: survey incl. oid of the newly generated Survey from the database
             return dummyReturn;
         };
 
