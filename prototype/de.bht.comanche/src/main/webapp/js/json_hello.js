@@ -9,7 +9,6 @@ function HelloJson($scope, $http) {
 			console.log(data);
 		});
 		
-		
 		getDataJson.error(function(data) {
 			//TODO die richtige Behandlung von Fehler, ggf. Benutzer informieren 
 			throw new Error('No data found');
@@ -39,50 +38,6 @@ function HelloJson($scope, $http) {
         });
 		
 	};
-	
-$scope.PutJson1 = function(){
-		
-		$http({
-		    url: '/plan-the-jam/rest/user/create1',
-		    method: 'POST',
-		    headers: { 'Content-Type': 'application/json' },
-		    data: {name: name, email: email, password: password}
-		}).success(function (data, status, headers, config) {
-            $scope.persons = data; // assign  $scope.persons here as promise is resolved here 
-            console.log("sended");
-        }).error(function (data, status, headers, config) {
-            $scope.status = status;
-            console.log("status");
-        });
-		
-		
-		
-	};
-	
 }
 
-
-
-
-
-
-
-
-
-
-
-//		return {"email":"test@hascode.com","firstName":"Tim","lastName":"Testerman","id":1};
-
-//var HelloJson = {
-//		
-//sayHelloJson: function($scope, $http) {
-////    $http.get('http://localhost:8080/plan-the-jam/rest/service/single-user').
-//    $http.get('http://localhost/plan-the-jam/rest/service/single-user').
-//        success(function(data) {
-//            $scope.greeting = data;
-//            return data;
-//        });
-//		}
-//
-//};
 
