@@ -5,12 +5,12 @@ import java.util.List;
 
 import de.bht.comanche.logic.DbObject;
 
-public class TransactionObject {
+public class ResponseObject {
 	protected List<DbObject> data;
 	protected boolean success;
 	protected List<String> serverMessages;
 	
-	public TransactionObject() {
+	public ResponseObject() {
 		serverMessages = new ArrayList<String>();
 		data = new ArrayList<DbObject>();
 	}

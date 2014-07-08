@@ -15,11 +15,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.eclipse.jetty.server.Authentication.User;
 import org.eclipse.jetty.util.ajax.JSON;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.JSONP;
 
+import com.jayway.restassured.internal.mapping.Jackson1Mapper;
 import com.owlike.genson.stream.JsonType;
 
 import de.bht.comanche.logic.DtTimeperiod;
@@ -70,35 +73,19 @@ public class UserService {
      @Path("/create")
      @POST
      @Consumes("application/json")
-     public void create(LgUser obj){
+     @Produces({"application/json"})
+     public ResponseObject create(LgUser obj){
     	 System.out.println(obj.toString());
-//    	 System.out.println(obj.getPassword());
-    	 
-//    	 new Transaction<LgUser>() {
-// 			public LgUser executeWithThrows() throws Exception {
-// 				LgUser lgUser1 = new LgUser();
-// 				Validation.validateName(name);
-// 				lgUser1.setName(name);
-// 				lgUser1.setPassword(password);
-// 				lgUser1.setTelephone(telephone);
-// 				lgUser1.setEmail(email); // will throw NoValidEmailExc 
-// 				DaFactory jpaDaFactory = new JpaDaFactory();
-// 				DaUser daUser = jpaDaFactory.getDaUser();
-// 				daUser.save(lgUser1);
-// 				return lgUser1;
-// 			}
-//			
-// 		}.execute();
-    	 
+    	DemoFactory dm = new DemoFactory();
+ 		return dm.getTransactionObject();
      }
+
      
      @Path("/create1")
      @POST
 //     @Consumes("application/json")
-     public void create1(JSON obj){
+     public void create1(Jackson1Mapper obj){
     	 System.out.println(obj.toString());
-//    	 System.out.println(obj.
-//    	 System.out.println(obj.getPassword());	
      
      }
      

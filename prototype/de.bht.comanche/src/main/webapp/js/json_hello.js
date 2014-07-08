@@ -6,6 +6,7 @@ function HelloJson($scope, $http) {
 		
 		getDataJson.success(function(data) {
 			$scope.data = data;
+			console.log(data);
 		});
 		
 		
@@ -27,9 +28,16 @@ function HelloJson($scope, $http) {
 		    method: 'POST',
 		    headers: { 'Content-Type': 'application/json' },
 		    data: {name: name, email: email, password: password}
-		});	
+		}).success(function (data, status, headers, config) {
+            $scope.persons = data; // assign  $scope.persons here as promise is resolved here 
+            console.log("SUCCESS");
+            console.log(data);
+        }).error(function (data, status, headers, config) {
+            $scope.status = status;
+            console.log("ERROR");
+            console.log(data);
+        });
 		
-		console.log("sended");
 	};
 	
 $scope.PutJson1 = function(){
@@ -39,9 +47,16 @@ $scope.PutJson1 = function(){
 		    method: 'POST',
 		    headers: { 'Content-Type': 'application/json' },
 		    data: {name: name, email: email, password: password}
-		});	
+		}).success(function (data, status, headers, config) {
+            $scope.persons = data; // assign  $scope.persons here as promise is resolved here 
+            console.log("sended");
+        }).error(function (data, status, headers, config) {
+            $scope.status = status;
+            console.log("status");
+        });
 		
-		console.log("sended");
+		
+		
 	};
 	
 }

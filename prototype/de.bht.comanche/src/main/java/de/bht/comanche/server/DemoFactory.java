@@ -3,8 +3,8 @@ package de.bht.comanche.server;
 import de.bht.comanche.logic.LgUser;
 
 public class DemoFactory {
-	public TransactionObject getTransactionObject() {
-		TransactionObject to = new TransactionObject();
+	public ResponseObject getTransactionObject() {
+		ResponseObject to = new ResponseObject();
 		to.setSuccess(true);
 		to.addServerMessage("Server msg 1: ERROR CODE 3");
 		to.addServerMessage("Server msg 2: ERROR CODE 13");

@@ -5,12 +5,12 @@ import de.bht.comanche.persistence.PoolImpl;
 
 public abstract class Transaction<E> {
 	
-	public TransactionObject execute () {
+	public ResponseObject execute () {
 		Pool pool = PoolImpl.getInstance();
-		TransactionObject result = null;
+		ResponseObject result = null;
 		boolean success = false;
 		try {
-			result = new TransactionObject();
+			result = new ResponseObject();
 			executeWithThrows();
 			success = true;
 		} catch (Exception e) {
