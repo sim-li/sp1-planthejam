@@ -38,8 +38,11 @@
     <!-- <script type="text/javascript" src="webjars/angularjs/1.2.16-2/angular.js"></script> -->
 
     
-    <script src="js/Ctrl.js"></script>
-    <script src="js/RestService.js"></script>
+    <script src="js/ctrl.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/survey.js"></script>
+    <script src="js/datePickerDate.js"></script>
+    <script src="js/restService.js"></script>
     
 </head>
 <body ng-app="myApp" ng-controller="Ctrl">
@@ -47,23 +50,6 @@
     <!-- display errors here -->
     <pre id="error"></pre>
 
-
-    <!-- ==== TRYING TO UNDERSTAND MODULES AND CONTROLLERS ==== -->
-    <!-- <div id="injectionTest" ng-controller="Ctrl2">
-        <input value="TEST" type="button" ng-click="testFct()" >
-        TEST: {{ test123 }}
-    </div>
-    <br> -->
-    <!-- <div>
-        <input value="TEST DATE" type="button" ng-click="testDate()" >
-        TEST: {{ testDateOutput }}
-    </div> -->
-    <!-- <div>
-        <input value="TEST LOGIN" type="button" ng-click="doLogin()" >
-        <input value="TEST REGISTER" type="button" ng-click="doRegister()" >
-    </div> -->
-    <!-- ====================================================== -->
-    
 
     <div id="login_area" ng-hide="session.isLoggedIn" class="input_area">
 
@@ -229,29 +215,29 @@
                 <select id="editSurveyFrequencyTimeUnit" ng-model="session.tempSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.tempSurvey.frequency);"></select>
 
 
-                <label for="editSurveyPossibleTimeslots">M&ouml;gliche Zeitr&auml;ume</label>
-                <div id="editSurveyPossibleTimeslots">
+                <label for="editSurveyPossibleTimeperiods">M&ouml;gliche Zeitr&auml;ume</label>
+                <div id="editSurveyPossibleTimeperiods">
                     <ul>
-                        <li ng-repeat="timeslot in session.tempSurvey.possibleTimeslots">
-                            <label for="editSurveyDeterminedTimeslotDuration">Startzeitpunkt</label>
-                            <input id="timeslotStartDate" type="date" ng-model="timeslot.startTime.date" ng-change="$log.log(timeslot.startTime.toDate())" required />
-                            <input id="timeslotStartTime" type="time" ng-model="timeslot.startTime.time" ng-change="$log.log(timeslot.startTime.toDate())" required />
+                        <li ng-repeat="timeperiod in session.tempSurvey.possibleTimeperiods">
+                            <label for="editSurveyDeterminedTimeperiodDuration">Startzeitpunkt</label>
+                            <input id="timeperiodStartDate" type="date" ng-model="timeperiod.startTime.date" ng-change="$log.log(timeperiod.startTime.toDate())" required />
+                            <input id="timeperiodStartTime" type="time" ng-model="timeperiod.startTime.time" ng-change="$log.log(timeperiod.startTime.toDate())" required />
 
-                            <label id="timeslotDuration" for="editSurveyDeterminedTimeslotDuration">Dauer in Minuten</label>
-                            <input type="number" min="0" ng-model="timeslot.durationInMins" ng-change="$log.log(timeslot.durationInMins)" required />
-                            [ <a href="" ng-click="removeTimeSlotFromTempSurvey(timeslot)">L&ouml;schen</a> ]
+                            <label id="timeperiodDuration" for="editSurveyDeterminedTimeperiodDuration">Dauer in Minuten</label>
+                            <input type="number" min="0" ng-model="timeperiod.durationInMins" ng-change="$log.log(timeperiod.durationInMins)" required />
+                            [ <a href="" ng-click="removeTimeperiodFromTempSurvey(timeperiod)">L&ouml;schen</a> ]
                         </li>
-                        <li>[ <a href="" ng-click="addTimeSlotToTempSurvey()">Hinzuf&uuml;gen</a> ]</li>
+                        <li>[ <a href="" ng-click="addTimeperiodToTempSurvey()">Hinzuf&uuml;gen</a> ]</li>
                     </ul>
                 </div>
 
 
-                <label for="editSurveyDeterminedTimeslotStartDate">Ermittelter Zeitraum - Startzeitpunkt</label>
-                <input id="editSurveyDeterminedTimeslotStartDate" type="date" ng-model="session.tempSurvey.determinedTimeslot.startTime.date" ng-change="$log.log(session.tempSurvey.determinedTimeslot.startTime.toDate())" />
-                <input id="editSurveyDeterminedTimeslotStartTime" type="time" ng-model="session.tempSurvey.determinedTimeslot.startTime.time" ng-change="$log.log(session.tempSurvey.determinedTimeslot.startTime.toDate())" />
+                <label for="editSurveyDeterminedTimeperiodStartDate">Ermittelter Zeitraum - Startzeitpunkt</label>
+                <input id="editSurveyDeterminedTimeperiodStartDate" type="date" ng-model="session.tempSurvey.determinedTimeperiod.startTime.date" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.startTime.toDate())" />
+                <input id="editSurveyDeterminedTimeperiodStartTime" type="time" ng-model="session.tempSurvey.determinedTimeperiod.startTime.time" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.startTime.toDate())" />
 
-                <label for="editSurveyDeterminedTimeslotDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
-                <input id="editSurveyDeterminedTimeslotDuration" type="number" min="0" ng-model="session.tempSurvey.determinedTimeslot.durationInMins" ng-change="$log.log(session.tempSurvey.determinedTimeslot.durationInMins);"/>
+                <label for="editSurveyDeterminedTimeperiodDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
+                <input id="editSurveyDeterminedTimeperiodDuration" type="number" min="0" ng-model="session.tempSurvey.determinedTimeperiod.durationInMins" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.durationInMins);"/>
 
 
                 <input id="cancelSurveyEdit" type="button" value="Abbrechen" ng-click="cancelEditSurvey()" />
