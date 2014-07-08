@@ -1,6 +1,7 @@
 package de.bht.comanche.server;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -31,6 +32,13 @@ public class DummyUserService {
 		
 		return result;
 	}
+    
+    @Path("/accounts")
+    @Produces("plain/text")
+    public ServerTestUser getItem() {
+       // An unauthorized user tries to enter
+       throw new NotAuthorizedException("You Don't Have Permission");
+    }
     
     // 
     //  > Template-Method-Pattern
