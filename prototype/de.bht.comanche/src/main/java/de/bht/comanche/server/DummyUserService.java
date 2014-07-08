@@ -35,12 +35,7 @@ public class DummyUserService {
 		return new ServerTestUser("test@hascode.com", "Tim","Testerman", 1);
 	}
     
-    @Path("/accounts")
-    @Produces("plain/text")
-    public ServerTestUser getItem() {
-       // An unauthorized user tries to enter
-       throw new NotAuthorizedException("You Don't Have Permission");
-    }
+    
     
     // 
     //  > Template-Method-Pattern
