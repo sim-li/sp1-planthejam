@@ -91,13 +91,28 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 - change to PUT
             */
 
-            // $http.get({ method: "GET", url: USER_PATH + "login" })
-            //     .success(function(data, status, header, config) {
-            //         //
-            //     })
-            //     .error(function(data, status, header, config) {
-            //         //
-            //     });
+            $http({ 
+                method: "POST", 
+                url: USER_PATH + "login", 
+                data: { "oid": "",            // <----- FIXME refactor on Server
+                        "name": name, 
+                        "password": password, 
+                        "email": "", 
+                        "tel": "", 
+                        "surveys": [] }
+            })
+            .success(function(data, status, header, config) {
+                $log.log(data);
+                $log.log(status);
+                $log.log(header);
+                $log.log(config);
+            })
+            .error(function(data, status, header, config) {
+                $log.error(data);
+                $log.error(status);
+                $log.error(header);
+                $log.error(config);
+            });
             
             return _fromGet;
         };

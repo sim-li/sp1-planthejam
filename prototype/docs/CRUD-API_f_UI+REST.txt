@@ -7,7 +7,7 @@
         login(name: String, password: String)
                 returns: { "success": boolean, 
                            "serverMessages": String, 
-                           "data": { "id": long } }
+                           "data": { "user": User } }  --> interessant nur: "id": long
         getUser(id: long)
                 returns: { "success": boolean, 
                            "serverMessages": String, 
@@ -16,7 +16,7 @@
         register(name: String, password: String, email: String, tel: String)
                 returns: { "success": boolean, 
                            "serverMessages": String, 
-                           "data": { "id": long } }
+                           "data": { "user": User } }  --> interessant nur: "id": long
     Konto auflösen/löschen
         delete(id: long)
                 returns: { "success": boolean, 

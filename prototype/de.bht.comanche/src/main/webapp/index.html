@@ -1,31 +1,253 @@
-<!doctype html>
-<html ng-app>
-	<head>
-		<title>Hello_AngularJS</title>
-		<script src="lib/angular.min.js"></script>
-    	<script src="js/json_hello.js"></script>
-    	<script src="lib/angular-mocks.js"></script>
-	</head>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- 
+     * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
+     * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+     *
+    -->
+    
+    <title>SP1 Ojektverwaltung-UI, Team: Comanche</title>
+    
+    <!-- import style sheet -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
 
-	<body>
-	
-	<h1>Jetty is live!!!!</h1>
-	
-		<div ng-controller="HelloJson">
-		
-		<button ng-click='loadJson()'>Load Data</button>
-			<p>The email is {{data.email}}</p>
-			<p>The firstName is {{data.firstName}}</p>
-			<p>The lastName is {{data.lastName}}</p>
-			<p>The id is {{data.id}}</p>
-		
-		<br>
-		<br>
 
-		<!-- SUBMIT BUTTON -->
-		<button ng-click='PutJson()'>Submit</button>	
-	</form>
-       
-		</div>
-	</body>
+    <!-- import javascript -->
+
+    <!-- for production -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script> -->
+    
+    <!-- for development -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script> -->
+    
+    
+    <!-- for production -->
+    <!-- <script src="lib/angular.min.js"></script> -->
+    
+    <!-- for development -->
+    <script src="lib/angular.js"></script>
+    
+    
+    <!-- maven for production -->
+    <!-- <script type="text/javascript" src="webjars/angularjs/1.2.16-2/angular.min.js"></script> -->
+    
+    <!-- maven for development -->
+    <!-- <script type="text/javascript" src="webjars/angularjs/1.2.16-2/angular.js"></script> -->
+
+    
+    <script src="js/ctrl.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/survey.js"></script>
+    <script src="js/datePickerDate.js"></script>
+    <script src="js/restService.js"></script>
+    
+</head>
+<body ng-app="myApp" ng-controller="Ctrl">
+    
+    <!-- display errors here -->
+    <pre id="error"></pre>
+
+
+    <div id="login_area" ng-hide="session.isLoggedIn" class="input_area">
+
+        <form name="loginForm" ng-hide="showRegisterDialog" ng-submit="login()" class="my_form">
+            <div class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+                
+                <div class="error">{{ warnings.password }}</div>
+            </div>
+            
+            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+            
+            <div>
+                <a id="registerLink" href="" ng-click="toggleLoginDialog()">Registrieren</a>
+            </div>
+
+            <span class="full_width_input">
+                <input id="loginBtn" type="submit" value="Login" />
+            </span>
+        </form><!-- loginForm -->
+
+
+        <form name="registerForm" ng-show="showRegisterDialog" ng-submit="register()" class="my_form">
+            <div class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+                
+                <div class="error">{{ warnings.password }}</div>
+            </div>
+
+            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+
+            <div class="full_width_input">
+                <label for="inputEmail">E-Mail</label>
+                <input id="inputEmail" name="inputEmail" type="text" ng-model="session.user.email" placeholder="Deine E-Mail-Adresse ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.email }}</div>
+                
+                <label for="inputTel">Telefon</label>
+                <input id="inputTel" name="inputTel" type="text" ng-model="session.user.tel" placeholder="Deine Telefonnummer ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.tel }}</div>
+            </div>
+
+            <div>
+                <a id="cancelRegisterLink" href="" ng-click="toggleLoginDialog()">Registrieren abbrechen</a>
+            </div>
+
+            <span class="full_width_input">
+                <input id="registerBtn" type="submit" value="Registrieren" />
+            </span>
+        </form><!-- registerForm -->
+        
+    </div><!-- login_area -->
+
+
+
+    <div id="logged_in_area" ng-show="session.isLoggedIn" class="input_area">
+
+        <!-- <div id="menu_area" ng-show="session.isLoggedIn" class="full_width_input"> -->
+        <div id="menu_area" ng-show="session.isLoggedIn">
+                <input id="editUser" type="button" value="Konto" ng-click="editUser()" />
+                <input id="editContacts" type="button" value="Kontakte" ng-click="editContacts()" />
+                <input id="logout" type="button" value="Logout" ng-click="logout()" />
+        </div><br /><!-- menu_area -->
+
+
+        <form name="editUserForm" ng-show="session.showEditUserDialog" class="my_form">
+            <div class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="session.tempUser.name" placeholder="Dein Benutzername ..." required />
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="session.tempUser.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="session.tempUser.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+                
+                <div class="error">{{ warnings.password }}</div>
+            </div>
+
+            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+
+            <div class="full_width_input">
+                <label for="inputEmail">E-Mail</label>
+                <input id="inputEmail" name="inputEmail" type="text" ng-model="session.tempUser.email" placeholder="Deine E-Mail-Adresse ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.email }}</div>
+                
+                <label for="inputTel">Telefon</label>
+                <input id="inputTel" name="inputTel" type="text" ng-model="session.tempUser.tel" placeholder="Deine Telefonnummer ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.tel }}</div>
+            </div>
+
+            <span class="full_width_input">
+                <input id="cancelUserEditBtn" type="button" value="Abbrechen" ng-click="cancelEditUser()" />
+                <input id="saveUserEditBtn" type="submit" value="Speichern" ng-click="saveEditedUser()" />
+                <input id="deleteUserBtn" type="button" value="L&ouml;schen" ng-click="deleteUser()" />
+            </span>
+        </form><!-- editUserForm -->
+
+
+        <div id="survey_selection_area" ng-hide="session.inEditMode">
+            <span class="full_width_input">
+                
+                <input id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addSurvey()" />
+                
+                <!--++++ TODO: Baustelle ++++++++++++++++++++-->
+                <select id="surveyList" ng-model="session.selectedSurvey" ng-options="survey.name for survey in session.user.surveys | filter:session.user.searchString" size="5%"></select>
+                
+                <!-- <select id="surveyList" ng-model="session.selectedSurvey" size="5%">
+                    <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
+                </select> -->
+
+                <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="session.user.searchString" ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-change="updateSelection()"/>
+
+                <input id="editSurvey" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="editSurvey()" />
+                <input id="deleteSurvey" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedSurvey()" />
+            </span>
+
+            <textarea rows="5" readonly>{{ session.selectedSurvey.description }}</textarea>
+        </div><!-- survey_selection_area -->
+
+
+
+        <div id="survey_edit_area" ng-show="session.showEditSurveysDialog">
+            <span class="full_width_input">
+
+                <label for="editSurveyName">Name</label>
+                <input id="editSurveyName" type="text" ng-model="session.tempSurvey.name" ng-change="$log.log(session.tempSurvey.name);"/>
+
+                <label for="editSurveyDescription">Beschreibung</label>
+                <textarea id="editSurveyDescription" rows="5" ng-model="session.tempSurvey.description" ng-change="$log.log(session.tempSurvey.description);"></textarea>
+                
+                <label for="editSurveyType">Typ</label>
+                <select id="editSurveyType" ng-model="session.tempSurvey.type" ng-options="type for type in Type.options_" ng-change="$log.log(session.tempSurvey.type);"></select>
+                
+                <label for="editSurveyDeadlineDate">Deadline</label>
+                <input id="editSurveyDeadlineDate" type="date" ng-model="session.tempSurvey.deadline.date" ng-change="$log.log(session.tempSurvey.deadline.toDate())" required />
+                <input id="editSurveyDeadlineTime" type="time" ng-model="session.tempSurvey.deadline.time" ng-change="$log.log(session.tempSurvey.deadline.toDate())" required />
+
+
+                <label for="editSurveyFrequencyDistance">Frequenz - Abstand</label>
+                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="session.tempSurvey.frequency.distance" ng-change="$log.log(session.tempSurvey.frequency);"/>
+                
+                <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
+                <select id="editSurveyFrequencyTimeUnit" ng-model="session.tempSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.tempSurvey.frequency);"></select>
+
+
+                <label for="editSurveyPossibleTimeperiods">M&ouml;gliche Zeitr&auml;ume</label>
+                <div id="editSurveyPossibleTimeperiods">
+                    <ul>
+                        <li ng-repeat="timeperiod in session.tempSurvey.possibleTimeperiods">
+                            <label for="editSurveyDeterminedTimeperiodDuration">Startzeitpunkt</label>
+                            <input id="timeperiodStartDate" type="date" ng-model="timeperiod.startTime.date" ng-change="$log.log(timeperiod.startTime.toDate())" required />
+                            <input id="timeperiodStartTime" type="time" ng-model="timeperiod.startTime.time" ng-change="$log.log(timeperiod.startTime.toDate())" required />
+
+                            <label id="timeperiodDuration" for="editSurveyDeterminedTimeperiodDuration">Dauer in Minuten</label>
+                            <input type="number" min="0" ng-model="timeperiod.durationInMins" ng-change="$log.log(timeperiod.durationInMins)" required />
+                            [ <a href="" ng-click="removeTimeperiodFromTempSurvey(timeperiod)">L&ouml;schen</a> ]
+                        </li>
+                        <li>[ <a href="" ng-click="addTimeperiodToTempSurvey()">Hinzuf&uuml;gen</a> ]</li>
+                    </ul>
+                </div>
+
+
+                <label for="editSurveyDeterminedTimeperiodStartDate">Ermittelter Zeitraum - Startzeitpunkt</label>
+                <input id="editSurveyDeterminedTimeperiodStartDate" type="date" ng-model="session.tempSurvey.determinedTimeperiod.startTime.date" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.startTime.toDate())" />
+                <input id="editSurveyDeterminedTimeperiodStartTime" type="time" ng-model="session.tempSurvey.determinedTimeperiod.startTime.time" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.startTime.toDate())" />
+
+                <label for="editSurveyDeterminedTimeperiodDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
+                <input id="editSurveyDeterminedTimeperiodDuration" type="number" min="0" ng-model="session.tempSurvey.determinedTimeperiod.durationInMins" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.durationInMins);"/>
+
+
+                <input id="cancelSurveyEdit" type="button" value="Abbrechen" ng-click="cancelEditSurvey()" />
+                <input id="saveSurveyEdit" type="button" value="Speichern" ng-click="saveSurvey()" />
+            </span>
+        </div><!-- survey_edit_area -->
+
+
+    </div><!-- logged_in_area -->
+
+ 
+</body>
 </html>
