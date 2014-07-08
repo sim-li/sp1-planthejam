@@ -14,6 +14,36 @@ function HelloJson($scope, $http) {
 			throw new Error('No data found');
 		});
 	};
+	
+	var name = 'qweqwe';
+	var telephone = 112312;
+	var email = "test@test.com";
+	var password = "sdsadasd";
+	
+	$scope.PutJson = function(){
+		
+		$http({
+		    url: '/plan-the-jam/rest/user/create',
+		    method: 'POST',
+		    headers: { 'Content-Type': 'application/json' },
+		    data: {name: name, email: email, password: password}
+		});	
+		
+		console.log("sended");
+	};
+	
+$scope.PutJson1 = function(){
+		
+		$http({
+		    url: '/plan-the-jam/rest/user/create1',
+		    method: 'POST',
+		    headers: { 'Content-Type': 'application/json' },
+		    data: {name: name, email: email, password: password}
+		});	
+		
+		console.log("sended");
+	};
+	
 }
 
 

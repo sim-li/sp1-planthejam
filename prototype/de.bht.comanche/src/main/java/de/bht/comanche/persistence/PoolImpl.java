@@ -6,10 +6,10 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.logic.DbObject;
 
 public class PoolImpl implements Pool {
 	private static PoolImpl POOL = new PoolImpl();
