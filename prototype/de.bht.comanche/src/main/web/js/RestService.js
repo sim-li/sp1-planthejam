@@ -39,33 +39,33 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                     "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
                     "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
                     // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-                    "deadline": new DatePickerDate(new Date(2014, 7, 10, 23, 55)), // <<datatype>> date = Zeipunkt
+                    "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
                     "frequency": { "distance": 0, "timeUnit": TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
                     "possibleTimeperiods": [
-                            { "startTime": new DatePickerDate(new Date(2014, 7, 11, 19, 0)), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
-                            { "startTime": new DatePickerDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 }, 
-                            { "startTime": new DatePickerDate(new Date(2014, 7, 18, 19, 30)), "durationInMins": 120 } 
+                            { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
+                            { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
+                            { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
                         ], 
-                    "determinedTimeperiod": { "startTime": new DatePickerDate(new Date(2014, 7, 12, 20, 0)), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
+                    "determinedTimeperiod": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
                 }, 
                 {   "name": "Chorprobe", 
                     "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
                     "type": Type.RECURRING, 
-                    "deadline": new DatePickerDate(new Date(2014, 7, 21, 12, 0)),
+                    "deadline": new Date(2014, 7, 21, 12, 0),
                     "frequency": { "distance": 0, "timeUnit": TimeUnit.DAY },
                     "possibleTimeperiods": [
-                            { "startTime": new DatePickerDate(new Date(2014, 8, 1, 18, 30)), "durationInMins": 150 },
-                            { "startTime": new DatePickerDate(new Date(2014, 8, 2, 18, 30)), "durationInMins": 150 } 
+                            { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
+                            { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
                         ], 
                     "determinedTimeperiod": { "startTime": new DatePickerDate(), "durationInMins": 0 }
                 }, 
                 {   "name": "Meeting", 
                     "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
                     "type": Type.RECURRING, 
-                    "deadline": new DatePickerDate(new Date(2014, 7, 31, 8, 0)),
+                    "deadline": new Date(2014, 7, 31, 8, 0),
                     "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
                     "possibleTimeperiods": [], 
-                    "determinedTimeperiod": { "startTime": new DatePickerDate(), "durationInMins": 0 }
+                    "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
                 }
             ];
         };
@@ -99,29 +99,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             return _fromGet;
         };
 
-        var _convertDateForSurvey = function(survey) {
-            survey.deadline = survey.deadline && new DatePickerDate(survey.deadline);
-
-            DatePickerDate.convertDates();
-
-            for (var i = 0; i < survey.possibleTimeperiods.length; i++) {
-                var _p =  survey.possibleTimeperiods[i];
-                _p.startTime = new DatePickerDate(_p.startTime);
-            }
-            survey.determinedTimeperiod = new DatePickerDate(survey.determinedTimeperiod);
-        };
-
-        var _convertDateForUser = function(user) {
-            if (!user) {
-                return null;
-            }
-            var _surveys = user.surveys;
-            for (var i = 0; i < _surveys.length; i++) {
-                _surveys[i] = convertDateForSurvey(_surveys[i]);
-            }
-
-        };
-
         var getUser = function(oid) {
             $log.warn("getUser() not implemented");
             // TODO retrieve data from rest service
@@ -130,7 +107,19 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             var dummyReturn = { "success": true, 
                                 "serverMessage": "HI FROM GET_USER",  
                                 "user": getDummyUser() };
-            var _user = dummyReturn
+            var _user = dummyReturn.user;
+
+
+            // if (!_user) {
+            //     return null;
+            // }
+            
+            // convert all dates to our date format
+            for (var i = 0; i < _user.surveys.length; i++) {
+                _user.surveys[i] = new Survey(_user.surveys[i]);
+            }
+            Survey.forSurveysConvertDatesToDatePickerDate(_user.surveys);
+            
             return dummyReturn;
         };
 
@@ -157,6 +146,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             $log.warn("updateUser() not implemented");
             // TODO retrieve data from rest service
 
+            // convert all dates to the native date format
+            // var _user = ...;
+            // Survey.forSurveysConvertDatesToJsDate(_user.surveys);
+
             var dummyReturn = { "success": true, 
                                 "serverMessage": "HI FROM UPDATE_USER" };
             return dummyReturn;
@@ -169,6 +162,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         var saveSurvey = function(survey) {
             $log.warn("saveSurvey() not implemented");
             // TODO retrieve data from rest service
+
+            // convert all dates to the native date format
+            // var _survey = ...;
+            // _survey.convertDatesToJsDate();
 
             var dummyReturn = { "success": true, 
                                 "serverMessage": "HI FROM SAVE_SURVEY", 

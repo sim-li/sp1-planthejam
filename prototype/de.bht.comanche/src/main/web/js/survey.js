@@ -22,5 +22,48 @@ angular.module("survey", ["datePickerDate", "constants"])
             this.determinedTimeperiod = config.determinedTimeperiod || { "startTime": new DatePickerDate(), "durationInMins": 0 }
         };
 
+        Survey.prototype.convertDatesToDatePickerDate = function() {
+            this.deadline = new DatePickerDate(this.deadline);
+            var _possibleTimeperiods = [];
+            for (var i = 0; i < this.possibleTimeperiods.length; i++) {
+                var p = this.possibleTimeperiods[i];
+                p.startTime = new DatePickerDate(p.startTime);
+                _possibleTimeperiods.push(p);
+            }
+            this.possibleTimeperiods = _possibleTimeperiods;
+            this.determinedTimeperiod.startTime = new DatePickerDate(this.determinedTimeperiod.startTime);
+        }
+
+        Survey.prototype.convertDatesToJsDate = function() {
+            this.deadline = this.deadline.toDate;
+            var _possibleTimeperiods = [];
+            for (var i = 0; i < this.possibleTimeperiods.length; i++) {
+                var p = this.possibleTimeperiods[i];
+                p.startTime = p.startTime.toDate();
+                _possibleTimeperiods.push(_p);
+            }
+            this.possibleTimeperiods = _possibleTimeperiods;
+            this.determinedTimeperiod.startTime = this.determinedTimeperiod.toDate();
+        }
+
+        Survey.forSurveysConvertDatesToDatePickerDate = function(surveys) {
+            if (!surveys) {
+                return surveys;
+            }
+            for (var i = 0; i < surveys.length; i++) {
+                surveys[i].convertDatesToDatePickerDate();
+            }
+            return surveys;
+        }
+        Survey.forSurveysConvertDatesToJsDate = function(surveys) {
+            if (!surveys) {
+                return surveys;
+            }
+            for (var i = 0; i < surveys.length; i++) {
+                surveys[i].convertDatesToJsDate();
+            }
+            return surveys;
+        }
+
         return (Survey);
     }]);
