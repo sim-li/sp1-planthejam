@@ -15,6 +15,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         // TODO refactor User, ...
 
+
+        var USER_PATH = "plan-the-jam/rest/service/user/";
+
+
         var getDummyUser = function() {
             return {
                 "oid": new Date().getTime(), 
@@ -57,7 +61,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                             { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
                             { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
                         ], 
-                    "determinedTimeperiod": { "startTime": new DatePickerDate(), "durationInMins": 0 }
+                    "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
                 }, 
                 {   "name": "Meeting", 
                     "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
@@ -70,8 +74,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             ];
         };
 
-        var USER_PATH = "plan-the-jam/rest/service/user/";
-
+        
         var login = function(name, password) {
             $log.warn("login() not implemented");
 
