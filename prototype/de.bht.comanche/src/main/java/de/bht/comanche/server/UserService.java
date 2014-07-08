@@ -17,6 +17,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.jetty.server.Authentication.User;
+import org.eclipse.jetty.util.ajax.JSON;
+import org.glassfish.jersey.server.JSONP;
+
+import com.owlike.genson.stream.JsonType;
 
 import de.bht.comanche.logic.DtTimeperiod;
 import de.bht.comanche.logic.LgUser;
@@ -26,64 +30,77 @@ import de.bht.comanche.persistence.JpaDaFactory;
 
 @Path("/user/")
 @Produces({"text/xml", "application/json"})
+@Consumes({"text/xml", "application/json"})
 public class UserService {
 	
      
-     @Path("/login")
-     @GET
+//     @Path("/login")
+//     @GET
 //     @Consumes(MediaType.APPLICATION_JSON) ????
-     public User login(@QueryParam("name") final String name,
-    		 		   @QueryParam("password") final String password) {
-    	 new Transaction<LgUser>() {
-    		 public LgUser executeWithThrows() throws Exception {
-    			 LgUser lgUser1 = new LgUser();
-    			 Validation.validateName(name);
-    			 Validation.validatePassword(password);
-    			 DaFactory jpaDaFactory = new JpaDaFactory();
-    			 DaUser daUser = jpaDaFactory.getDaUser();
-    			 daUser.save(lgUser1);
+//     public User login(@QueryParam("name") final String name,
+//    		 		   @QueryParam("password") final String password) {
+//
+//    	 new Transaction<LgUser>() {
+//    		 public LgUser executeWithThrows() throws Exception {
+//    			 LgUser lgUser1 = new LgUser();
+//    			 Validation.validateName(name);
+//    			 Validation.validatePassword(password);
+//    			 DaFactory jpaDaFactory = new JpaDaFactory();
+//    			 DaUser daUser = jpaDaFactory.getDaUser();
+//    			 daUser.save(lgUser1);
+//    			 
 //    			 lgUser1 = daUser.findByName(name);
 //    			 lgUser1.validatePassword(password);
-    			 return lgUser1;
-    		 }
-    	 }.execute();
-    	 
-    	 return null;
+//    			 
+//    			 return lgUser1;
+//    		 }
+//    	 }.execute();
+//    	 
+//
 //    	 if (lgUser1.passwordCorrect) {
 //    		 // Build Sucess JSON
 //    		 
 //    	 } else {
 //    		 // Build Error JSON
 //    	 }
-     } 
+    	 
+    	 
+//     }
 	
      @Path("/create")
-     @PUT
-     public void create(@QueryParam("name") final String name,
-    		 			@QueryParam("telephone") final String telephone,
-    		 			@QueryParam("email") final String email,
-    		 			@QueryParam("password") final String password) {
+     @POST
+     @Consumes("application/json")
+     public void create(LgUser obj){
+    	 System.out.println(obj.toString());
+//    	 System.out.println(obj.getPassword());
     	 
-    	 new Transaction<LgUser>() {
- 			public LgUser executeWithThrows() throws Exception {
- 				LgUser lgUser1 = new LgUser();
- 				Validation.validateName(name);
- 				lgUser1.setName(name);
- 				lgUser1.setPassword(password);
- 				lgUser1.setTelephone(telephone);
- 				lgUser1.setEmail(email); // will throw NoValidEmailExc 
- 				DaFactory jpaDaFactory = new JpaDaFactory();
- 				DaUser daUser = jpaDaFactory.getDaUser();
- 				daUser.save(lgUser1);
- 				return lgUser1;
- 			}
-			
- 		}.execute();
+//    	 new Transaction<LgUser>() {
+// 			public LgUser executeWithThrows() throws Exception {
+// 				LgUser lgUser1 = new LgUser();
+// 				Validation.validateName(name);
+// 				lgUser1.setName(name);
+// 				lgUser1.setPassword(password);
+// 				lgUser1.setTelephone(telephone);
+// 				lgUser1.setEmail(email); // will throw NoValidEmailExc 
+// 				DaFactory jpaDaFactory = new JpaDaFactory();
+// 				DaUser daUser = jpaDaFactory.getDaUser();
+// 				daUser.save(lgUser1);
+// 				return lgUser1;
+// 			}
+//			
+// 		}.execute();
     	 
      }
      
+     @Path("/create1")
+     @POST
+//     @Consumes("application/json")
+     public void create1(JSON obj){
+    	 System.out.println(obj.toString());
+//    	 System.out.println(obj.
+//    	 System.out.println(obj.getPassword());	
      
-     
+     }
      
 //     @Path("/list")
 //     @GET

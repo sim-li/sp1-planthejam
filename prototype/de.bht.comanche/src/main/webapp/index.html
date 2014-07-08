@@ -18,6 +18,32 @@
 			<p>The firstName is {{data.firstName}}</p>
 			<p>The lastName is {{data.lastName}}</p>
 			<p>The id is {{data.id}}</p>
+			
+		
+		<button ng-click='PutJson()'>Send Data</button>	
+
+        <td>PUT /api/user/create?name=NAME&pwd=PASSWORD&mail=EMAIL</td>
+        
+        <form>
+		<!-- NAME -->
+		<div id="name-group" class="form-group">
+			<label>Name</label>
+			<input type="text" name="name" placeholder="Bruce Wayne">
+			<span class="help-block"></span>
+		</div>
+
+		<!-- SUPERHERO NAME -->
+		<div id="superhero-group" class="form-group">
+			<label>Superhero Alias</label>
+			<input type="text" name="superheroAlias" placeholder="Caped Crusader">
+			<span class="help-block"></span>
+		</div>
+
+		<!-- SUBMIT BUTTON -->
+		<button ng-click='PutJson()'>Submit</button>	
+		<button ng-click='PutJson1()'>Submit1</button>	
+	</form>
+       
 		</div>
 	</body>
 </html>
