@@ -1,0 +1,213 @@
+/*
+ * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
+ * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+ * 
+ * Module: REST service
+ */
+
+
+"use strict";
+
+angular.module("restModule", ["datePickerDate", "constants", "survey"])
+    .factory("restService", ["$http", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", 
+        function($http, $log, $filter, DatePickerDate, TimeUnit, Type, Survey) {
+
+
+        // TODO refactor User, ...
+
+
+        var USER_PATH = "plan-the-jam/rest/service/user/";
+
+
+        var getDummyUser = function() {
+            return {
+                "oid": new Date().getTime(), 
+                "name": "THE USER", 
+                "password": "supersafe123", 
+                "email": "dummy@test.net", 
+                "tel": "+49-30-1234567", 
+                // "surveys": [] // empty list for debugging
+                "surveys": getDummySurveyList() // dummy list for debugging
+                
+            };
+        };
+        
+
+        /*
+         *
+         */
+        var getDummySurveyList = function() {
+            return [
+                {   
+                    "name": "Bandprobe", 
+                    "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
+                    "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
+                    // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
+                    "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
+                    "frequency": { "distance": 0, "timeUnit": TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
+                    "possibleTimeperiods": [
+                            { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
+                            { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
+                            { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
+                        ], 
+                    "determinedTimeperiod": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
+                }, 
+                {   "name": "Chorprobe", 
+                    "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
+                    "type": Type.RECURRING, 
+                    "deadline": new Date(2014, 7, 21, 12, 0),
+                    "frequency": { "distance": 0, "timeUnit": TimeUnit.DAY },
+                    "possibleTimeperiods": [
+                            { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
+                            { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
+                        ], 
+                    "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
+                }, 
+                {   "name": "Meeting", 
+                    "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
+                    "type": Type.RECURRING, 
+                    "deadline": new Date(2014, 7, 31, 8, 0),
+                    "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
+                    "possibleTimeperiods": [], 
+                    "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
+                }
+            ];
+        };
+
+        
+        var login = function(name, password) {
+            $log.warn("login() not implemented");
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM LOGIN", 
+                                "oid": new Date().getTime() };
+            var _fromGet = dummyReturn;
+
+            // TODO retrieve data from rest service
+            
+            /* 
+                TODO
+                - test REST access with GET
+                - change to PUT
+            */
+
+            $http({ 
+                method: "POST", 
+                url: USER_PATH + "login", 
+                data: { "oid": "",            // <----- FIXME refactor on Server
+                        "name": name, 
+                        "password": password, 
+                        "email": "", 
+                        "tel": "", 
+                        "surveys": [] }
+            })
+            .success(function(data, status, header, config) {
+                $log.log(data);
+                $log.log(status);
+                $log.log(header);
+                $log.log(config);
+            })
+            .error(function(data, status, header, config) {
+                $log.error(data);
+                $log.error(status);
+                $log.error(header);
+                $log.error(config);
+            });
+            
+            return _fromGet;
+        };
+
+        var getUser = function(oid) {
+            $log.warn("getUser() not implemented");
+            // TODO retrieve data from rest service
+
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM GET_USER",  
+                                "user": getDummyUser() };
+            var _user = dummyReturn.user;
+
+
+            // if (!_user) {
+            //     return null;
+            // }
+            
+            // convert all dates to our date format
+            for (var i = 0; i < _user.surveys.length; i++) {
+                _user.surveys[i] = new Survey(_user.surveys[i]);
+            }
+            Survey.forSurveysConvertDatesToDatePickerDate(_user.surveys);
+            
+            return dummyReturn;
+        };
+
+        var register = function(name, password, email, tel) {
+            $log.warn("register() not implemented");
+            // TODO retrieve data from rest service
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM REGISTER", 
+                                "oid": new Date().getTime() };
+            return dummyReturn;
+        };
+
+        var deleteUser = function(oid) {
+            $log.warn("deleteUser() not implemented");
+            // TODO retrieve data from rest service
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM DELETE_USER" };
+            return dummyReturn;
+        };
+
+        var updateUser = function(user) {
+            $log.warn("updateUser() not implemented");
+            // TODO retrieve data from rest service
+
+            // convert all dates to the native date format
+            // var _user = ...;
+            // Survey.forSurveysConvertDatesToJsDate(_user.surveys);
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM UPDATE_USER" };
+            return dummyReturn;
+        };
+
+        /*
+         * Update or insert a survey.
+         * - @param survey optional. If not specified, a new survey will be created on the server and inserted into the database.
+         */
+        var saveSurvey = function(survey) {
+            $log.warn("saveSurvey() not implemented");
+            // TODO retrieve data from rest service
+
+            // convert all dates to the native date format
+            // var _survey = ...;
+            // _survey.convertDatesToJsDate();
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM SAVE_SURVEY", 
+                                "survey": new Survey({name: "THE SURVEY" }) }; // for new survey: survey incl. oid of the newly generated Survey from the database
+            return dummyReturn;
+        };
+
+        var deleteSurvey = function(oid) {
+            $log.warn("deleteSurvey() not implemented");
+            // TODO retrieve data from rest service
+
+            var dummyReturn = { "success": true, 
+                                "serverMessage": "HI FROM DELETE_SURVEY" };
+            return dummyReturn;
+        };
+
+        return {
+            login: login, 
+            getUser: getUser, 
+            register: register, 
+            deleteUser: deleteUser, 
+            updateUser: updateUser, 
+            saveSurvey: saveSurvey, 
+            deleteSurvey: deleteSurvey
+        };
+    }]);
+
