@@ -2,6 +2,7 @@ package de.bht.comanche.persistence;
 
 import java.util.Collection;
 
+import de.bht.comanche.logic.LgSurvey;
 import javassist.NotFoundException;
 
 public interface DaSurvey {

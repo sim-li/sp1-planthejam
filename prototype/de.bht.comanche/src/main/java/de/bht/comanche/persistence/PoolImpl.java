@@ -11,7 +11,6 @@ import javax.transaction.TransactionRequiredException;
 
 import de.bht.comanche.logic.DbObject;
 
-
 public class PoolImpl implements Pool {
 	private static PoolImpl POOL = new PoolImpl();
 	private EntityManager entityManager;
