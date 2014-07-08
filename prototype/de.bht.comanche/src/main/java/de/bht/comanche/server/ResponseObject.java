@@ -10,6 +10,7 @@ public class ResponseObject {
 	protected boolean success;
 	protected List<String> serverMessages;
 	
+	
 	public ResponseObject() {
 		serverMessages = new ArrayList<String>();
 		data = new ArrayList<DbObject>();

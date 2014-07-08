@@ -23,10 +23,10 @@ function HelloJson($scope, $http) {
 	$scope.PutJson = function(){
 		
 		$http({
-		    url: '/plan-the-jam/rest/user/create',
+		    url: '/plan-the-jam/rest/user/login',
 		    method: 'POST',
 		    headers: { 'Content-Type': 'application/json' },
-		    data: {name: name, email: email, password: password}
+		    data: {name: name, password: password}
 		}).success(function (data, status, headers, config) {
             $scope.persons = data; // assign  $scope.persons here as promise is resolved here 
             console.log("SUCCESS");

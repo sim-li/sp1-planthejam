@@ -29,7 +29,7 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 
 	@Override
 	public E find(long id) throws NotFoundException {
-		// TODO Auto-generated method stub
+		//return pool.find(i_persistentClass, i_oid)
 		return null;
 	}
 
