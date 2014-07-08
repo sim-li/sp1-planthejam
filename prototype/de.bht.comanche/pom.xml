@@ -47,6 +47,14 @@
 <!--             <version>7.0</version> -->
 <!--         </dependency> -->
 
+		<!-- JSON Support vor Java -->
+		
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+
         <!-- Java DSL (domain-specific language) for easy testing of REST services -->
 
         <dependency>

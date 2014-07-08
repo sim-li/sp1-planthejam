@@ -12,6 +12,10 @@ import javax.persistence.Table;
 @Table(name="UserAccount")
 public class LgUser extends DbObject {
     
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+
 	private static final long serialVersionUID = 1L;
 	private String name;
     private String telephone;
@@ -85,5 +89,13 @@ public class LgUser extends DbObject {
 
 	public void setGroups(List<LgGroup> groups) {
 		this.groups = groups;
+	}
+	
+	@Override
+	public String toString() {
+		return "LgUser [name=" + name + ", telephone=" + telephone + ", email="
+				+ email + ", password=" + password + ", hatFriends="
+				+ hatFriends + ", beFriendFromUsers=" + beFriendFromUsers
+				+ ", groups=" + groups + "]";
 	}
 }

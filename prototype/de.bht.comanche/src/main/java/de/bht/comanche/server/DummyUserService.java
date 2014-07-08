@@ -5,7 +5,6 @@ import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaFactory;
 import de.bht.comanche.persistence.DaUser;
@@ -17,20 +16,25 @@ public class DummyUserService {
     @GET
     @Path("/single-user")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TransactionObject produceJSON() {
-    	TransactionObject result = new Transaction() {
-			@Override
-			public LgUser executeWithThrows() throws Exception {
-				LgUser lgUser1 = new LgUser();
-				lgUser1.setEmail("not a valid email"); // will throw NoValidEmailExc 
-				DaFactory jpaDaFactory = new JpaDaFactory();
-				DaUser daUser = jpaDaFactory.getDaUser();
-				daUser.save(lgUser1);
-				return lgUser1;
-			}
-		}.execute();
+	public ResponseObject produceJSON() {
+//    	LgUser lgUser1 = new LgUser();
+//    	lgUser1.setName("asdasdcas");
+//		lgUser1.setEmail("not a valid email");
 		
-		return result;
+//    	ResponseObject result = new Transaction() {
+//			@Override
+//			public LgUser executeWithThrows() throws Exception {
+//				LgUser lgUser1 = new LgUser();
+//				lgUser1.setEmail("not a valid email"); // will throw NoValidEmailExc 
+//				DaFactory jpaDaFactory = new JpaDaFactory();
+//				DaUser daUser = jpaDaFactory.getDaUser();
+//				daUser.save(lgUser1);
+//				return lgUser1;
+//			}
+//		}.execute();
+    	
+		DemoFactory dm = new DemoFactory();
+		return dm.getTransactionObject();
 	}
     
     
