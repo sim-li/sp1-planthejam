@@ -9,13 +9,20 @@
 "use strict";
 
 angular.module("datePickerDate", [])
-    .factory("DatePickerDate", function($filter) {
+    .factory("DatePickerDate", function($filter, $log) {
         /*
          * Converts a JavaScript Date to a date format the angular datepicker understands. 
          * - toDate() converts and returns the date back to JavaScript Date
          * - convertDates() converts and returns the given JavaScript Date array to a DatePickerDate array
          */
         var DatePickerDate = function(jsDate) {
+            //-- safe copying of another DatePickerDate --
+            // if (jsDate instanceof DatePickerDate && !(jsDate.date && jsDate.time)) {
+            //         this.date = "";
+            //         this.time = "";
+            //     }
+            //     return this;
+            // }
             this.date = $filter('date')(jsDate, "yyyy-MM-dd");
             this.time = $filter('date')(jsDate, "HH:mm");
         };

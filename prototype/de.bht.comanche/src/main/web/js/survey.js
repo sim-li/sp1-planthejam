@@ -55,6 +55,7 @@ angular.module("survey", ["datePickerDate", "constants"])
             }
             return surveys;
         }
+        
         Survey.forSurveysConvertDatesToJsDate = function(surveys) {
             if (!surveys) {
                 return surveys;
