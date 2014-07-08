@@ -1,39 +1,42 @@
-package de.bht.comanche.logic;
+package webTest.entity;
 
 import java.util.List;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="UserAccount")
+@Table(name = "user")
 public class LgUser extends DbObject {
-    
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 
 	private static final long serialVersionUID = 1L;
+	
+	@Column(length = 125)
 	private String name;
-    private String telephone;
-    private String email;
-    private String password;
-   
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name="contact", joinColumns = {
-    		@JoinColumn(name="user_Id", referencedColumnName="id")}, inverseJoinColumns = {
-    		@JoinColumn(name="friend_Id", referencedColumnName="id")})
-    private List<LgUser> hatFriends;
+	@Column(length = 25)
+	private String telephone;
+	@Column(length = 125)
+	private String email;
+	@Column(length = 125)
+	private String password;
 
-    @ManyToMany(mappedBy="hatFriends")
-    private List<LgUser> beFriendFromUsers;
-    
-    @ManyToMany
-	@JoinTable(name="user_group")			  
-	private List<LgGroup> groups;
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "contact", joinColumns = { 
+			@JoinColumn(name = "user_Id", referencedColumnName = "id") }, inverseJoinColumns = { 
+			@JoinColumn(name = "friend_Id", referencedColumnName = "id") })
+	private List<LgUser> hatFriends;
+
+	@ManyToMany(mappedBy = "hatFriends")
+	private List<LgUser> beFriendFromUsers;
+
+	@OneToMany(mappedBy = "usi.user")
+	private List<LgInvite> invites;
 
 	public String getName() {
 		return name;
@@ -83,25 +86,12 @@ public class LgUser extends DbObject {
 		this.beFriendFromUsers = beFriendFromUsers;
 	}
 
-	public List<LgGroup> getGroups() {
-		return groups;
+	public List<LgInvite> getInvites() {
+		return invites;
 	}
 
-	public void setGroups(List<LgGroup> groups) {
-		this.groups = groups;
+	public void setInvites(List<LgInvite> invites) {
+		this.invites = invites;
 	}
 	
-	public boolean validatePassword(String password) {
-		if (password == null) {
-			return false;
-		}
-		return this.password.equals(password);
-	}
-	@Override
-	public String toString() {
-		return "LgUser [name=" + name + ", telephone=" + telephone + ", email="
-				+ email + ", password=" + password + ", hatFriends="
-				+ hatFriends + ", beFriendFromUsers=" + beFriendFromUsers
-				+ ", groups=" + groups + "]";
-	}
 }
