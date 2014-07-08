@@ -16,7 +16,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         // TODO refactor User, ...
 
 
-        var USER_PATH = "plan-the-jam/rest/service/user/";
+        var USER_PATH = "rest/user/";
 
 
         var getDummyUser = function() {
@@ -91,29 +91,45 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 - change to PUT
             */
 
+            var _data;
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                data: { "oid": "",            // <----- FIXME refactor on Server
+                data: { "oid": "",            // TODO change id -> oid   <----- FIXME refactor on Server
                         "name": name, 
                         "password": password, 
                         "email": "", 
-                        "tel": "", 
-                        "surveys": [] }
+                        "tel": "",            // TODO change telephone -> tel   <----- FIXME refactor on Server 
+                        // "surveys": [] 
+                    }
             })
             .success(function(data, status, header, config) {
+                $log.warn("SUCCESS ----------------------------------------------------------");
                 $log.log(data);
                 $log.log(status);
-                $log.log(header);
+                // $log.log(header);
                 $log.log(config);
+                _data = data;
+
+                _fromGet = _data; 
+                return _data;
             })
             .error(function(data, status, header, config) {
+                $log.warn("ERROR ----------------------------------------------------------");
                 $log.error(data);
                 $log.error(status);
-                $log.error(header);
+                // $log.error(header);
                 $log.error(config);
+
+                // return _fromGet; // returns dummy
             });
+
+            $log.warn("POST DONE =========================================================");
             
+            // _fromGet = data;
+            $log.log("_fromGet:");
+            $log.log(_fromGet);
+
             return _fromGet;
         };
 

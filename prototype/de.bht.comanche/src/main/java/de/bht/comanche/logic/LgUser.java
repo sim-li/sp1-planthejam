@@ -18,7 +18,7 @@ public class LgUser extends DbObject {
 
 	private static final long serialVersionUID = 1L;
 	private String name;
-    private String telephone;
+    private String tel;
     private String email;
     private String password;
    
@@ -43,12 +43,12 @@ public class LgUser extends DbObject {
 		this.name = name;
 	}
 
-	public String getTelephone() {
-		return telephone;
+	public String getTel() {
+		return tel;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setTel(String telephone) {
+		this.tel = telephone;
 	}
 
 	public String getEmail() {
@@ -92,14 +92,14 @@ public class LgUser extends DbObject {
 	}
 	
 	public boolean validatePassword(String password) {
-		if (password == null) {
+		if (this.password == null) {
 			return false;
 		}
 		return this.password.equals(password);
 	}
 	@Override
 	public String toString() {
-		return "LgUser [name=" + name + ", telephone=" + telephone + ", email="
+		return "LgUser [name=" + name + ", telephone=" + tel + ", email="
 				+ email + ", password=" + password + ", hatFriends="
 				+ hatFriends + ", beFriendFromUsers=" + beFriendFromUsers
 				+ ", groups=" + groups + "]";

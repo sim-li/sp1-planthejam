@@ -16,11 +16,11 @@ public abstract class DbObject implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
 	
-	//Alert: Change to private immediately
-	public long id;
+	// FIXME Alert: Change to private immediately
+	public long oid;
 
-	public long getId() {
-		return id;
+	public long getOid() {
+		return oid;
 	}
 	
     /**
@@ -28,7 +28,7 @@ public abstract class DbObject implements Serializable{
      * @param dbObject
      */
 	public void setIdFrom(DbObject dbObject) {
-		this.id = dbObject.getId();
+		this.oid = dbObject.getOid();
 	}
 	
 }
