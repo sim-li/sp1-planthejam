@@ -6,9 +6,9 @@ import java.util.List;
 import de.bht.comanche.logic.DbObject;
 
 public class TransactionObject {
+	protected List<DbObject> data;
 	protected boolean success;
 	protected List<String> serverMessages;
-	protected List<DbObject> data;
 	
 	public TransactionObject() {
 		serverMessages = new ArrayList<String>();
@@ -17,6 +17,10 @@ public class TransactionObject {
 
 	public void addServerMessage(String m) {
 		serverMessages.add(m);
+	}
+	
+	public void addData(DbObject d) {
+		data.add(d);
 	}
 	
 	public boolean isSuccess() {
