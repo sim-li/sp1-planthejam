@@ -1,25 +1,28 @@
 package de.bht.comanche.logic;
 
 import java.util.List;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="UserAccount")
+@Table(name = "user")
 public class LgUser extends DbObject {
-    
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 
 	private static final long serialVersionUID = 1L;
+	
+	@Column(length = 125)
 	private String name;
+	@Column(length = 25)
     private String tel;
     private String email;
+	@Column(length = 125)
     private String password;
    
     @ManyToMany(cascade = {CascadeType.ALL})
@@ -34,6 +37,9 @@ public class LgUser extends DbObject {
     @ManyToMany
 	@JoinTable(name="user_group")			  
 	private List<LgGroup> groups;
+
+	@OneToMany(mappedBy = "usi.user")
+	private List<LgInvite> invites;
 
 	public String getName() {
 		return name;
@@ -83,12 +89,12 @@ public class LgUser extends DbObject {
 		this.beFriendFromUsers = beFriendFromUsers;
 	}
 
-	public List<LgGroup> getGroups() {
-		return groups;
+	public List<LgInvite> getInvites() {
+		return invites;
 	}
 
-	public void setGroups(List<LgGroup> groups) {
-		this.groups = groups;
+	public void setInvites(List<LgInvite> invites) {
+		this.invites = invites;
 	}
 	
 	public boolean validatePassword(String password) {

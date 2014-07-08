@@ -23,16 +23,17 @@ public class PersistenceTest {
 				20
 	    ));
     	
-    	final LgUser user = new LgUser(
-			"Herbert",
-			"1234",
-			"hallo@test.de",
-			"passwort",
-			timeperiods
-		);
+    	// FIXME !!!!! <<<<<<<<<<<<<<<<<<<<<<<
     	
+//    	final LgUser user = new LgUser(
+//			"Herbert",
+//			"1234",
+//			"hallo@test.de",
+//			"passwort",
+//			timeperiods
+//		);
     	
-    	user.save();
+//    	user.save();
     	
     	try {
     		LgUser result = (LgUser) new LgSession().find(LgUser.class, user.getOid());
