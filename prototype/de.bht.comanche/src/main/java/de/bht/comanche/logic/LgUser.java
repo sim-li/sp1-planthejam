@@ -91,6 +91,12 @@ public class LgUser extends DbObject {
 		this.groups = groups;
 	}
 	
+	public boolean validatePassword(String password) {
+		if (password == null) {
+			return false;
+		}
+		return this.password.equals(password);
+	}
 	@Override
 	public String toString() {
 		return "LgUser [name=" + name + ", telephone=" + telephone + ", email="

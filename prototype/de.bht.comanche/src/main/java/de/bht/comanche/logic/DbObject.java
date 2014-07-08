@@ -15,9 +15,20 @@ public abstract class DbObject implements Serializable{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
-	private long id;
+	
+	//Alert: Change to private immediately
+	public long id;
 
 	public long getId() {
 		return id;
 	}
+	
+    /**
+     * Attention!	
+     * @param dbObject
+     */
+	public void setIdFrom(DbObject dbObject) {
+		this.id = dbObject.getId();
+	}
+	
 }

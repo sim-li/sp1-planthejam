@@ -4,7 +4,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.persistence.DaFactory;
+import de.bht.comanche.persistence.DaUser;
+import de.bht.comanche.persistence.JpaDaFactory;
 
 @Path("/user/")
 @Produces({"text/xml", "application/json"})
@@ -44,6 +48,29 @@ public class UserService {
     	 
     	 
 //     }
+	
+	
+	@Path("/login")
+    @POST
+    @Consumes("application/json")
+    @Produces({"application/json"})
+    public ResponseObject login(final LgUser userFromClient) {
+		
+		return new Transaction<LgUser>() {
+			public LgUser executeWithThrows() throws Exception {
+				DaFactory jpaDaFactory = new JpaDaFactory();
+				DaUser daUser = jpaDaFactory.getDaUser();
+				LgUser userFromDb = daUser.findByName(userFromClient.getName()).iterator().next();
+				if (!userFromDb.validatePassword(userFromClient.getPassword())) {
+					throw new WrongPasswordExc();
+				}
+				LgUser userWithId = new LgUser();
+				userWithId.setIdFrom(userWithId);
+				return userWithId;
+			}
+   	 }.execute();
+   	 
+    }
 	
      @Path("/create")
      @POST
