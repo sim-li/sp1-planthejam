@@ -27,8 +27,8 @@ public class LgUser extends DbObject {
    
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name="contact", joinColumns = {
-    		@JoinColumn(name="user_Id", referencedColumnName="id")}, inverseJoinColumns = {
-    		@JoinColumn(name="friend_Id", referencedColumnName="id")})
+    		@JoinColumn(name="user_Id", referencedColumnName="oid")}, inverseJoinColumns = {
+    		@JoinColumn(name="friend_Id", referencedColumnName="oid")})
     private List<LgUser> hatFriends;
 
     @ManyToMany(mappedBy="hatFriends")

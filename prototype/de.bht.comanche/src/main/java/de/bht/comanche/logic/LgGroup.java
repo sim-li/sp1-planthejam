@@ -6,8 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name="LgGroup")
+@Entity
+@Table(name="LgGroup")
 public class LgGroup extends DbObject {
 
 	private static final long serialVersionUID = 1L;
