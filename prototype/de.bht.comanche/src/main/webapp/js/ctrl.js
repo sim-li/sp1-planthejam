@@ -111,33 +111,41 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
         $scope.login = function() {
             // $scope.warnings = {};
-            var _user = $scope.session.user;
 
-            if (!loginIsValidFor(_user)) {
-                $log.log("Login ungueltig.");
-                $log.log(_user);
-                return;
-            }
+            $scope.restService.testing($scope.testHallo);
 
-            var _fromLogin = restService.login(_user.name, _user.password);
-            if (!_fromLogin.success) {
-                $log.error("Login auf dem Server fehlgeschlagen.");
-                $log.error(_fromLogin.serverMessage);
-                initSession();
-                return;
-            }
+            //----------------------------------------------------
+            // var _user = $scope.session.user;
 
-            _user = fetchUserData(_fromLogin.oid);
-            if (!_user) {
-                $log.error("Login fehlgeschlagen.");
-                initSession();
-                return;
-            }
-            $scope.session.user = _user;
+            // if (!loginIsValidFor(_user)) {
+            //     $log.log("Login ungueltig.");
+            //     $log.log(_user);
+            //     return;
+            // }
+
+            // var _fromLogin = restService.login(_user.name, _user.password);
+            // $log.log("---");
+            // $log.log(_user); // FIXME test
+            // $log.log("---");
+            // if (!_fromLogin.success) {
+            //     $log.error("Login auf dem Server fehlgeschlagen.");
+            //     $log.error(_fromLogin.serverMessage);
+            //     initSession();
+            //     return;
+            // }
+
+            // _user = fetchUserData(_fromLogin.oid);
+            // if (!_user) {
+            //     $log.error("Login fehlgeschlagen.");
+            //     initSession();
+            //     return;
+            // }
+            // $scope.session.user = _user;
             
-            $scope.session.isLoggedIn = true;
-            $log.log("Login erfolgreich.");
-            $log.log($scope.session);
+            // $scope.session.isLoggedIn = true;
+            // $log.log("Login erfolgreich.");
+            // $log.log($scope.session);
+            //----------------------------------------------------
 
             // TODO: Baustelle -- checken, ob so sinnvoll:
             // $scope.filteredSurveys = $scope.session.user.surveys;

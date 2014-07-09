@@ -18,6 +18,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         var USER_PATH = "rest/user/";
 
+        var SUCCESS = "SUCCESS ----------------------------------------------------------", 
+            ERROR   = "ERROR ------------------------------------------------------------", 
+            DONE    = "DONE =============================================================";
+
 
         var getDummyUser = function() {
             return {
@@ -74,7 +78,11 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             ];
         };
 
-        
+        //----------------------------------------------------
+        var testing = function(s) {
+            s = "HALLO";
+        };
+
         var login = function(name, password) {
             $log.warn("login() not implemented");
 
@@ -83,48 +91,45 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                                 "oid": new Date().getTime() };
             var _fromGet = dummyReturn;
 
-            // TODO retrieve data from rest service
-            
-            /* 
-                TODO
-                - test REST access with GET
-                - change to PUT
-            */
-
+            // retrieve data from rest service
             var _data;
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                data: { "oid": "",            // TODO change id -> oid   <----- FIXME refactor on Server
+                data: { "oid": "", 
                         "name": name, 
                         "password": password, 
                         "email": "", 
-                        "tel": "",            // TODO change telephone -> tel   <----- FIXME refactor on Server 
-                        // "surveys": [] 
+                        "tel": "", 
+                        // "surveys": [] // FIXME missing on server in LgUser ?? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< !!!!! FIXME
                     }
             })
             .success(function(data, status, header, config) {
-                $log.warn("SUCCESS ----------------------------------------------------------");
+                $log.warn(SUCCESS);
                 $log.log(data);
                 $log.log(status);
                 // $log.log(header);
                 $log.log(config);
-                _data = data;
+                // _data = data;
 
-                _fromGet = _data; 
-                return _data;
+                // _fromGet = _data; 
+                // return _data;
+                
+                return data;
             })
             .error(function(data, status, header, config) {
-                $log.warn("ERROR ----------------------------------------------------------");
+                $log.warn(ERROR);
                 $log.error(data);
                 $log.error(status);
                 // $log.error(header);
                 $log.error(config);
 
                 // return _fromGet; // returns dummy
-            });
 
-            $log.warn("POST DONE =========================================================");
+                return data;
+            });
+            
+            $log.warn(DONE);
             
             // _fromGet = data;
             $log.log("_fromGet:");
@@ -217,6 +222,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         return {
+            testing: testing, 
             login: login, 
             getUser: getUser, 
             register: register, 
