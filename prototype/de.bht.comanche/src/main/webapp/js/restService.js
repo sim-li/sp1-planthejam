@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("restModule", ["datePickerDate", "constants", "survey"])
-    .factory("restService", ["$http", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", 
-        function($http, $log, $filter, DatePickerDate, TimeUnit, Type, Survey) {
+    .factory("restService", ["$http", "$q", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", 
+        function($http, $q, $log, $filter, DatePickerDate, TimeUnit, Type, Survey) {
 
 
         // TODO refactor User, ...
@@ -79,20 +79,25 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         //----------------------------------------------------
-        var testing = function(s) {
-            s = "HALLO";
+        var testing = function() {
+            $log.log("HALLO1");
+            // $scope.testHallo = "HALLO";
+            // var s = "HALLO";
+            // $scope.testHallo = s;
+            // return s;
         };
 
         var login = function(name, password) {
             $log.warn("login() not implemented");
 
-            var dummyReturn = { "success": true, 
-                                "serverMessage": "HI FROM LOGIN", 
-                                "oid": new Date().getTime() };
-            var _fromGet = dummyReturn;
+            // var dummyReturn = { "success": true, 
+            //                     "serverMessage": "HI FROM LOGIN", 
+            //                     "oid": new Date().getTime() };
+            // var _fromGet = dummyReturn;
+            // var _data;
 
-            // retrieve data from rest service
-            var _data;
+
+            var deferred = $q.defer();
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
@@ -105,37 +110,21 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                     }
             })
             .success(function(data, status, header, config) {
-                $log.warn(SUCCESS);
-                $log.log(data);
-                $log.log(status);
-                // $log.log(header);
-                $log.log(config);
-                // _data = data;
-
-                // _fromGet = _data; 
-                // return _data;
-                
-                return data;
+                var _user = null;
+                if (!data.success) {
+                    $log.error("Login auf dem Server fehlgeschlagen.");
+                    for (var i = 0; i < data.serverMessages.length; i++) {
+                        $log.error(data.serverMessages[i]);
+                    }
+                } else {
+                    _user = data.data[0];
+                }
+                deferred.resolve(_user);
             })
             .error(function(data, status, header, config) {
-                $log.warn(ERROR);
-                $log.error(data);
-                $log.error(status);
-                // $log.error(header);
-                $log.error(config);
-
-                // return _fromGet; // returns dummy
-
-                return data;
+                deferred.reject("Login auf dem Server fehlgeschlagen. (status " + status + ")"); // not used so far? for future use
             });
-            
-            $log.warn(DONE);
-            
-            // _fromGet = data;
-            $log.log("_fromGet:");
-            $log.log(_fromGet);
-
-            return _fromGet;
+            return deferred.promise;
         };
 
         var getUser = function(oid) {

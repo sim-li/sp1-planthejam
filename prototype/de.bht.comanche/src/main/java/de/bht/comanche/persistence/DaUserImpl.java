@@ -6,14 +6,12 @@ import java.util.Collection;
 import de.bht.comanche.logic.LgUser;
 
 public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
-	public DaUserImpl(Pool pool) {
+	public DaUserImpl(Pool<LgUser> pool) {
 		super(LgUser.class, pool);
 	}
-
 	
-	/* (non-Javadoc)
-	 * @see de.bht.comanche.persistence.DaUser#findByName(java.lang.String)
-	 * Attention: Returns Dummy user. Change id declaration in DbObject
+	/** 
+	 * FIXME Attention: Returns Dummy user. Change id declaration in DbObject
 	 */
 	@Override
 	public Collection<LgUser> findByName(String name) {

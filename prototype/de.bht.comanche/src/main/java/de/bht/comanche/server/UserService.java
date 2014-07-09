@@ -4,6 +4,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaFactory;
@@ -67,12 +68,17 @@ public class UserService {
 					System.out.println(userFromDb.getPassword());
 					
 					throw new WrongPasswordExc();
+					
 				}
 				LgUser userWithId = new LgUser();
 				userWithId.setIdFrom(userFromDb);
 				return userWithId;
 			}
-   	 }.execute();
+		}.execute();
+		
+//---- TODO for the future: try to send Exceptions via REST to client like this:  
+//		throw new WebApplicationException("Wrong password", 500) {
+//		};
    	 
     }
 	
