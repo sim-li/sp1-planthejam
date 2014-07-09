@@ -118,10 +118,11 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
             var promise = restService.login(_user.name, _user.password);
             promise.then(function(success) {
-                if (!success) {
-                    initSession();
-                    return;
-                }
+                // if (!success) {
+                //     initSession();
+                //     return;
+                // }
+                
 
                 // var _oid = success.oid;
 
@@ -139,6 +140,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
             }, function(error) {
                 $log.error(error);
+                initSession();
             }, function(notification) {
                 // $log.log(notification); // for future use
             });

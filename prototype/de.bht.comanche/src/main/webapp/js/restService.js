@@ -110,16 +110,18 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                     }
             })
             .success(function(data, status, header, config) {
-                var _user = null;
-                if (!data.success) {
-                    $log.error("Login auf dem Server fehlgeschlagen.");
-                    for (var i = 0; i < data.serverMessages.length; i++) {
-                        $log.error(data.serverMessages[i]);
-                    }
-                } else {
-                    _user = data.data[0];
-                }
-                deferred.resolve(_user);
+                // var _user = null;
+                // if (!data.success) {
+                //     $log.error("Login auf dem Server fehlgeschlagen.");
+                //     for (var i = 0; i < data.serverMessages.length; i++) {
+                //         $log.error(data.serverMessages[i]);
+                //     }
+                // } else {
+                    // _user = data.data[0];
+                // }
+                // deferred.resolve(_user);
+                
+                deferred.resolve(data.data[0]);
             })
             .error(function(data, status, header, config) {
                 deferred.reject("Login auf dem Server fehlgeschlagen. (status " + status + ")"); // not used so far? for future use
