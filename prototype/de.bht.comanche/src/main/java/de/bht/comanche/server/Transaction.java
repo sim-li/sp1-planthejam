@@ -1,8 +1,8 @@
 package de.bht.comanche.server;
 
+import javax.ws.rs.WebApplicationException;
+
 import de.bht.comanche.logic.DbObject;
-import de.bht.comanche.persistence.Pool;
-import de.bht.comanche.persistence.PoolImpl;
 
 public abstract class Transaction<E> {
 	
@@ -16,12 +16,13 @@ public abstract class Transaction<E> {
 			serverResponse.addData(objectFromDb);
 			serverResponse.setSuccess(true);
 			System.out.println("TRY DONE");
+		} catch (WrongPasswordExc e) {
+			serverResponse.addServerMessage("Wrong Password");
+			System.out.println("Wrong Password");
 		} catch (Exception e) {
 			e.printStackTrace();
 			serverResponse.setSuccess(false);
-			if (e instanceof WrongPasswordExc) {
-				serverResponse.addServerMessage("Wrong Password");
-			}
+			
 			System.out.println("CATCH DONE");
 		} finally {
 			System.out.println("FINALLY DONE");

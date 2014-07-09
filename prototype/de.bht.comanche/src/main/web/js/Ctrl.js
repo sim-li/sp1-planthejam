@@ -120,6 +120,9 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             }
 
             var _fromLogin = restService.login(_user.name, _user.password);
+            $log.log("---");
+            $log.log(_user); // FIXME test
+            $log.log("---");
             if (!_fromLogin.success) {
                 $log.error("Login auf dem Server fehlgeschlagen.");
                 $log.error(_fromLogin.serverMessage);

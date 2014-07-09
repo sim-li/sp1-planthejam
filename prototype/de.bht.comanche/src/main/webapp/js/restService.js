@@ -9,14 +9,18 @@
 "use strict";
 
 angular.module("restModule", ["datePickerDate", "constants", "survey"])
-    .factory("restService", ["$http", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", 
-        function($http, $log, $filter, DatePickerDate, TimeUnit, Type, Survey) {
+    .factory("restService", ["$http", "$q", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", 
+        function($http, $q, $log, $filter, DatePickerDate, TimeUnit, Type, Survey) {
 
 
         // TODO refactor User, ...
 
 
         var USER_PATH = "rest/user/";
+
+        var SUCCESS = "SUCCESS ----------------------------------------------------------", 
+            ERROR   = "ERROR ------------------------------------------------------------", 
+            DONE    = "DONE =============================================================";
 
 
         var getDummyUser = function() {
@@ -74,63 +78,53 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             ];
         };
 
-        
+        //----------------------------------------------------
+        var testing = function() {
+            $log.log("HALLO1");
+            // $scope.testHallo = "HALLO";
+            // var s = "HALLO";
+            // $scope.testHallo = s;
+            // return s;
+        };
+
         var login = function(name, password) {
             $log.warn("login() not implemented");
 
-            var dummyReturn = { "success": true, 
-                                "serverMessage": "HI FROM LOGIN", 
-                                "oid": new Date().getTime() };
-            var _fromGet = dummyReturn;
+            // var dummyReturn = { "success": true, 
+            //                     "serverMessage": "HI FROM LOGIN", 
+            //                     "oid": new Date().getTime() };
+            // var _fromGet = dummyReturn;
+            // var _data;
 
-            // TODO retrieve data from rest service
-            
-            /* 
-                TODO
-                - test REST access with GET
-                - change to PUT
-            */
 
-            var _data;
+            var deferred = $q.defer();
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                data: { "oid": "",            // TODO change id -> oid   <----- FIXME refactor on Server
+                data: { "oid": "", 
                         "name": name, 
                         "password": password, 
                         "email": "", 
-                        "tel": "",            // TODO change telephone -> tel   <----- FIXME refactor on Server 
-                        // "surveys": [] 
+                        "tel": "", 
+                        // "surveys": [] // FIXME missing on server in LgUser ?? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< !!!!! FIXME
                     }
             })
             .success(function(data, status, header, config) {
-                $log.warn("SUCCESS ----------------------------------------------------------");
-                $log.log(data);
-                $log.log(status);
-                // $log.log(header);
-                $log.log(config);
-                _data = data;
-
-                _fromGet = _data; 
-                return _data;
+                var _user = null;
+                if (!data.success) {
+                    $log.error("Login auf dem Server fehlgeschlagen.");
+                    for (var i = 0; i < data.serverMessages.length; i++) {
+                        $log.error(data.serverMessages[i]);
+                    }
+                } else {
+                    _user = data.data[0];
+                }
+                deferred.resolve(_user);
             })
             .error(function(data, status, header, config) {
-                $log.warn("ERROR ----------------------------------------------------------");
-                $log.error(data);
-                $log.error(status);
-                // $log.error(header);
-                $log.error(config);
-
-                // return _fromGet; // returns dummy
+                deferred.reject("Login auf dem Server fehlgeschlagen. (status " + status + ")"); // not used so far? for future use
             });
-
-            $log.warn("POST DONE =========================================================");
-            
-            // _fromGet = data;
-            $log.log("_fromGet:");
-            $log.log(_fromGet);
-
-            return _fromGet;
+            return deferred.promise;
         };
 
         var getUser = function(oid) {
@@ -217,6 +211,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         return {
+            testing: testing, 
             login: login, 
             getUser: getUser, 
             register: register, 
