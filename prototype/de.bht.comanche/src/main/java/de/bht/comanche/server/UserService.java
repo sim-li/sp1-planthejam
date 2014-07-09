@@ -64,10 +64,14 @@ public class UserService {
 				DaUser daUser = jpaDaFactory.getDaUser();
 				LgUser userFromDb = daUser.findByName(userFromClient.getName()).iterator().next();
 				if (!userFromDb.validatePassword(userFromClient.getPassword())) {
+					
+					System.out.println(userFromClient.getPassword());
+					System.out.println(userFromDb.getPassword());
+					
 					throw new WrongPasswordExc();
 				}
 				LgUser userWithId = new LgUser();
-				userWithId.setIdFrom(userWithId);
+				userWithId.setIdFrom(userFromDb);
 				return userWithId;
 			}
    	 }.execute();

@@ -13,12 +13,12 @@ public class DemoFactory {
 		user1.setEmail("ralf@ralf.de");
 		user1.setName("Ralf Zakoni");
 		user1.setPassword("TheWPWAS");
-		user1.setTelephone("030/8828282");
+		user1.setTel("030/8828282");
 		LgUser user2 = new LgUser();
 		user2.setEmail("ralf@ralf.de");
 		user2.setName("Ralf Zakoni");
 		user2.setPassword("TheWPWAS");
-		user2.setTelephone("030/8828282");
+		user2.setTel("030/8828282");
 		to.addData(user1);
 		to.addData(user2);
 		return to;

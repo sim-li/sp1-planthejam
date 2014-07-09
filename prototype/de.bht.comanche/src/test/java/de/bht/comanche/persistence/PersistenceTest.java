@@ -23,21 +23,22 @@ public class PersistenceTest {
 				20
 	    ));
     	
-    	final LgUser user = new LgUser(
-			"Herbert",
-			"1234",
-			"hallo@test.de",
-			"passwort",
-			timeperiods
-		);
+    	// FIXME !!!!! <<<<<<<<<<<<<<<<<<<<<<<
     	
+//    	final LgUser user = new LgUser(
+//			"Herbert",
+//			"1234",
+//			"hallo@test.de",
+//			"passwort",
+//			timeperiods
+//		);
     	
-    	user.save();
+//    	user.save();
     	
     	try {
-    		LgUser result = (LgUser) new LgSession().find(LgUser.class, user.getId());
+    		LgUser result = (LgUser) new LgSession().find(LgUser.class, user.getOid());
 			assertEquals("Herbert", result.getName());
-    		assertEquals("1234", result.getTelephone());
+    		assertEquals("1234", result.getTel());
     		assertEquals("Password", result.getPassword());
     		assertEquals("hallo@test.de", result.getEmail());
     		final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");

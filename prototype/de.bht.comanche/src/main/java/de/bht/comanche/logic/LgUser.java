@@ -1,25 +1,28 @@
 package de.bht.comanche.logic;
 
 import java.util.List;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="UserAccount")
+@Table(name = "user")
 public class LgUser extends DbObject {
-    
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 
 	private static final long serialVersionUID = 1L;
+	
+	@Column(length = 125)
 	private String name;
-    private String telephone;
+	@Column(length = 25)
+    private String tel;
     private String email;
+	@Column(length = 125)
     private String password;
    
     @ManyToMany(cascade = {CascadeType.ALL})
@@ -35,6 +38,9 @@ public class LgUser extends DbObject {
 	@JoinTable(name="user_group")			  
 	private List<LgGroup> groups;
 
+	@OneToMany(mappedBy = "usi.user")
+	private List<LgInvite> invites;
+
 	public String getName() {
 		return name;
 	}
@@ -43,12 +49,12 @@ public class LgUser extends DbObject {
 		this.name = name;
 	}
 
-	public String getTelephone() {
-		return telephone;
+	public String getTel() {
+		return tel;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setTel(String telephone) {
+		this.tel = telephone;
 	}
 
 	public String getEmail() {
@@ -83,23 +89,23 @@ public class LgUser extends DbObject {
 		this.beFriendFromUsers = beFriendFromUsers;
 	}
 
-	public List<LgGroup> getGroups() {
-		return groups;
+	public List<LgInvite> getInvites() {
+		return invites;
 	}
 
-	public void setGroups(List<LgGroup> groups) {
-		this.groups = groups;
+	public void setInvites(List<LgInvite> invites) {
+		this.invites = invites;
 	}
 	
 	public boolean validatePassword(String password) {
-		if (password == null) {
+		if (this.password == null) {
 			return false;
 		}
 		return this.password.equals(password);
 	}
 	@Override
 	public String toString() {
-		return "LgUser [name=" + name + ", telephone=" + telephone + ", email="
+		return "LgUser [name=" + name + ", telephone=" + tel + ", email="
 				+ email + ", password=" + password + ", hatFriends="
 				+ hatFriends + ", beFriendFromUsers=" + beFriendFromUsers
 				+ ", groups=" + groups + "]";
