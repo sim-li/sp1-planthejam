@@ -60,17 +60,20 @@ public class UserService {
    	 }.execute();
 	}
    	 
-     @Path("/create")
+     @Path("/register")
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject createUser(final LgUser newUserFromClient){
+     public ResponseObject registerUser(final LgUser newUserFromClient){
     	 return new Transaction<LgUser>() {
  			public LgUser executeWithThrows() throws Exception {
  				DaFactory jpaDaFactory = new JpaDaFactory();
  				DaUser daUser = jpaDaFactory.getDaUser();
- 				//throws Exc if name not exist
+ 				//throws Exc if name not exist - need boolin
  				LgUser userFromDb = daUser.findByName(newUserFromClient.getName()).iterator().next(); 
+// 				if(userFromDb){
+// 					if not exist -> save
+// 				}
  				
  				//save new User to DbUser or LgUser?
  				LgUser newUserSaveToDb = new LgUser(); 
@@ -82,7 +85,6 @@ public class UserService {
     	 }.execute();
  	}
      
-     
      @Path("/delete")
      @DELETE
      @Consumes("application/json")
@@ -92,21 +94,37 @@ public class UserService {
  			public LgUser executeWithThrows() throws Exception {
  				DaFactory jpaDaFactory = new JpaDaFactory();
  				DaUser daUser = jpaDaFactory.getDaUser();
- 				//throws Exc if Id exist
+ 				//throws Exc if Id not exist
  				LgUser userFromDb = daUser.find(oldUserFromClient.getOid()); 
- 				
- 				//save new User to DbUser or LgUser?
- 				LgUser newUserSaveToDb = new LgUser(); 
- 				newUserSaveToDb.setName(oldUserFromClient.getName());
-				newUserSaveToDb.setEmail(oldUserFromClient.getEmail());
-				newUserSaveToDb.setPassword(oldUserFromClient.getPassword());
- 				return newUserSaveToDb;
+ 				daUser.delete(userFromDb);
+ 				//if deleted set ID to -1? 
+ 				return null;
  			}
     	 }.execute();
  	} 
      
-     
-  
+//     update
+     @Path("/update")
+     @POST
+     @Consumes("application/json")
+     @Produces({"application/json"})
+     public ResponseObject updateUser(final LgUser updateUserFromClient){
+    	 return new Transaction<LgUser>() {
+ 			public LgUser executeWithThrows() throws Exception {
+ 				DaFactory jpaDaFactory = new JpaDaFactory();
+ 				DaUser daUser = jpaDaFactory.getDaUser();
+ 				//throws Exc if name not exist
+ 				LgUser userFromDb = daUser.find(updateUserFromClient.getOid());  
+ 				
+ 				//update new User to DbUser or LgUser?
+ 				userFromDb.setName(updateUserFromClient.getName());
+ 				userFromDb.setEmail(updateUserFromClient.getEmail());
+ 				userFromDb.setPassword(updateUserFromClient.getPassword());
+				//add other fields for update too
+ 				return null;
+ 			}
+    	 }.execute();
+ 	}
 }
 
 
