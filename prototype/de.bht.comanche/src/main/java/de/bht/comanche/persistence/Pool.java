@@ -4,9 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
-import de.bht.comanche.logic.DbObject;
-
-import de.bht.comanche.logic.DbObject;
 
 public interface Pool<E> {
 	public void beginTransaction();

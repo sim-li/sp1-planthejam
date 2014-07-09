@@ -72,5 +72,6 @@ public class PoolImpl<E> implements Pool<E> {
 		String qlString = String.format(i_queryString, i_args);
 		List<E> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
 		return results;
+
 	}
 }

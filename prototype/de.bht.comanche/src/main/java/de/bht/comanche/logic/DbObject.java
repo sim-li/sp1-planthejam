@@ -15,7 +15,7 @@ public abstract class DbObject implements Serializable{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
-	public long oid; // FIXME Alert: Change to private immediately
+	private long oid; // FIXME Alert: Change to private immediately
 
 	public long getOid() {
 		return oid;
