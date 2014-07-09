@@ -14,7 +14,7 @@ public interface Pool {
 	 * Should end the transaction with a commit if success was <code>true</code>, otherwise with a rollback.
 	 */
 	public void endTransaction(boolean success);
-	public void save(DbObject io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException;
+	public void save(DbObject entity) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException;
 	public void delete(DbObject io_object) throws IllegalArgumentException, TransactionRequiredException;
 	public DbObject find(Class<? extends DbObject> i_persistentClass, Long i_oid) throws NoPersistentClassExc, OidNotFoundExc;
 	public List<? extends DbObject> findAll(Class<? extends DbObject> i_persistentClass) throws NoPersistentClassExc;

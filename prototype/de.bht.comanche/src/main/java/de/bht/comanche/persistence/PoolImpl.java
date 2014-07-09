@@ -6,6 +6,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 import javax.transaction.TransactionRequiredException;
 
@@ -17,7 +18,7 @@ public class PoolImpl implements Pool {
 	private EntityManagerFactory entityManagerFactory;
 	
 	private PoolImpl() {
-		//entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
+		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
 	}
 	
 	public static PoolImpl getInstance() { 
@@ -83,5 +84,6 @@ public class PoolImpl implements Pool {
 		String qlString = String.format(i_queryString, i_args);
 		List<? extends DbObject> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
 		return results;
+
 	}
 }

@@ -2,6 +2,11 @@ package de.bht.comanche.persistence;
 
 import java.util.Collection;
 
+import javax.persistence.EntityExistsException;
+import javax.transaction.TransactionRequiredException;
+
+import de.bht.comanche.logic.DbObject;
+
 import javassist.NotFoundException;
 
 public class DaGenericImpl<E> implements DaGeneric<E> {
@@ -15,9 +20,8 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public void save(E entity) {
-		System.out.println("I got called.");
-		// TODO Auto-generated method stub
+	public void save(E entity) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException {
+		pool.save((DbObject) entity);
 		
 	}
 
