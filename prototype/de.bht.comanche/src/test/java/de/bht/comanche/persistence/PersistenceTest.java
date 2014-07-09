@@ -8,7 +8,6 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import de.bht.comanche.logic.DtTimeperiod;
 import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgUser;
 
