@@ -1,8 +1,11 @@
 package de.bht.comanche.server;
 
+import javax.persistence.Column;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import de.bht.comanche.logic.LgUser;
@@ -11,8 +14,8 @@ import de.bht.comanche.persistence.DaUser;
 import de.bht.comanche.persistence.JpaDaFactory;
 
 @Path("/user/")
-@Produces({"text/xml", "application/json"})
-@Consumes({"text/xml", "application/json"})
+//@Produces({"text/xml", "application/json"})
+//@Consumes({"text/xml", "application/json"})
 public class UserService {
 	
      
@@ -55,8 +58,7 @@ public class UserService {
     @Consumes("application/json")
     @Produces({"application/json"})
     public ResponseObject login(final LgUser userFromClient) {
-		
-		return new Transaction<LgUser>() {
+		 return new Transaction<LgUser>() {
 			public LgUser executeWithThrows() throws Exception {
 				DaFactory jpaDaFactory = new JpaDaFactory();
 				DaUser daUser = jpaDaFactory.getDaUser();
@@ -73,9 +75,24 @@ public class UserService {
 				return userWithId;
 			}
    	 }.execute();
-   	 
     }
 	
+	
+	@POST
+	@Path("getuser/")
+	@Consumes("application/json")
+	@Produces({"application/json"})
+	public ResponseObject get(final LgUser userIdFromClient){
+		return new Transaction<LgUser>() {
+			public LgUser executeWithThrows() throws Exception {
+				DaFactory jpaDaFactory = new JpaDaFactory();
+				DaUser daUser = jpaDaFactory.getDaUser();
+				LgUser userFromDb = daUser.find(userIdFromClient.getOid()); //throws Exc
+				return userFromDb;
+			}
+   	 }.execute();
+	}
+   	 
      @Path("/create")
      @POST
      @Consumes("application/json")
