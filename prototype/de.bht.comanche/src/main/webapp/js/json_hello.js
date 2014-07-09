@@ -4,8 +4,7 @@ function HelloJson($scope, $http) {
 	
 		var id = 123;
 		
-		var getDataJson = $http.get('/plan-the-jam/rest/getuser/{' + id + '}');
-		console.log(getDataJson);
+		var getDataJson = $http.get('/plan-the-jam/rest/getuser/');
 		
 		getDataJson.success(function(data) {
 			$scope.data = data;

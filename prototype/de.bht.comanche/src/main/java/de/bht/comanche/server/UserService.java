@@ -1,5 +1,6 @@
 package de.bht.comanche.server;
 
+import javax.persistence.Column;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -57,8 +58,7 @@ public class UserService {
     @Consumes("application/json")
     @Produces({"application/json"})
     public ResponseObject login(final LgUser userFromClient) {
-		
-		return new Transaction<LgUser>() {
+		 return new Transaction<LgUser>() {
 			public LgUser executeWithThrows() throws Exception {
 				DaFactory jpaDaFactory = new JpaDaFactory();
 				DaUser daUser = jpaDaFactory.getDaUser();
@@ -75,43 +75,24 @@ public class UserService {
 				return userWithId;
 			}
    	 }.execute();
-   	 
     }
 	
 	
-	@GET
-	@Path("getuser/{id}")
-	@Produces("application/xml")
-	public Object getData(@PathParam("id") final long id)
-	{
-	  System.out.println("zrssIds = " + id);
-	  //Here you need to use String tokenizer to make the array from the string.
-	return null;
-	}
-	
-	
-	@Path("/getuser1")
-    @GET
-//    @Consumes("application/json")
-//    @Produces({"application/json"})
-    public ResponseObject getUser(final long id) {
-		
+	@POST
+	@Path("getuser/")
+	@Consumes("application/json")
+	@Produces({"application/json"})
+	public ResponseObject get(final LgUser userIdFromClient){
 		return new Transaction<LgUser>() {
 			public LgUser executeWithThrows() throws Exception {
 				DaFactory jpaDaFactory = new JpaDaFactory();
 				DaUser daUser = jpaDaFactory.getDaUser();
-//				LgUser userFromDb = daUser.findById(id);
-//				if (!userFromDb.validatePassword(userFromClient.getPassword())) {
-//					throw new WrongPasswordExc();
-//				}
-				LgUser userWithId = new LgUser();
-				userWithId.setIdFrom(userWithId);
-				return userWithId;
+				LgUser userFromDb = daUser.find(userIdFromClient.getOid()); //throws Exc
+				return userFromDb;
 			}
    	 }.execute();
+	}
    	 
-    }
-	
      @Path("/create")
      @POST
      @Consumes("application/json")
