@@ -118,11 +118,14 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
             var promise = restService.login(_user.name, _user.password);
             promise.then(function(success) {
+
+                $log.debug("oid = " + success.oid)
+                
                 // if (!success) {
                 //     initSession();
                 //     return;
                 // }
-                
+
 
                 // var _oid = success.oid;
 

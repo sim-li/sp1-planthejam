@@ -16,7 +16,7 @@ public interface DaGeneric<E> {
     void delete(E entity) throws TransactionRequiredException, IllegalArgumentException;
     void beginTransaction();
     void endTransaction(boolean success);
-    DbObject find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc;
+    E find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc;
     Collection<E> findAll();
     Collection<E> findByField(String fieldName, Object fieldValue);
     Collection<E> findByWhere(String whereClause, Object... args);

@@ -22,9 +22,13 @@ public abstract class Transaction<E> {
 //			success = true;
 			System.out.println("TRY DONE");
 		} catch (WrongPasswordExc e) {
-			serverResponse.addServerMessage("Wrong Password");
+			serverResponse.addServerMessage("Wrong password");
 			serverResponse.setSuccess(false);
-			System.out.println("Wrong Password");
+			System.out.println("Wrong password");
+		} catch (NoUserWithThisNameExc e) {	
+			serverResponse.addServerMessage("Wrong name");
+			serverResponse.setSuccess(false);
+			System.out.println("Wrong name");
 		} catch (Exception e) {
 			e.printStackTrace();
 			serverResponse.setSuccess(false);
