@@ -120,32 +120,29 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
             var promise = restService.login(_user.name, _user.password);
             promise.then(function(success) {
-                $log.debug("Benutzer gefunden. (oid: " + success.oid + ")");
+                // $log.debug("Benutzer gefunden. (oid: " + success.oid + ")");
 
-                var promise = restService.getUser(success.oid);
-                promise.then(function(success) {
-                    $scope.session.user = success;
-                    $scope.session.isLoggedIn = true;
-                    $log.log("Login erfolgreich.");
-                    $log.log($scope.session);
-                }, function(error) {
-                    //-- do something
-                    // $log.error(error);
+                // var promise = restService.getUser(success.oid);
+                // promise.then(function(success) {
+                //     $scope.session.user = success;
+                //     $scope.session.isLoggedIn = true;
+                //     $log.log("Login erfolgreich.");
+                //     $log.log($scope.session);
+                // }, function(error) {
+                //     //-- do something
+                //     $log.error("OHO ---------------");
+                //     $log.error(error);
+                // }, function(notification) {
+                //     // $log.log(notification); // for future use
+                // });
 
-                    //-- TEST --                                 FIXME
-                    $log.info("hack");
-                    $log.info(error);
-                    $scope.session.user = success;
-                    $scope.session.isLoggedIn = true;
-                    $log.log("Hack-Login erfolgreich.");
-                    $log.log($scope.session);
-                    //-- TEST --
-
-                }, function(notification) {
-                    // $log.log(notification); // for future use
-                });
+                $scope.session.user = success;
+                $scope.session.isLoggedIn = true;
+                $log.log("Login erfolgreich.");
+                $log.log($scope.session);
 
             }, function(error) {
+                $log.error("AHA ---------------");
                 $log.error(error);
                 initSession();
             }, function(notification) {
