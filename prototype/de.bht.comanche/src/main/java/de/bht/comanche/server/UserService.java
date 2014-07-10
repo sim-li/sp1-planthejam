@@ -69,7 +69,6 @@ public class UserService {
 			//---------------------
 			
 			throw new WebApplicationException("Wrong name or password", 500) {
-				private static final long serialVersionUID = -1427317534342289811L;
 			};
 		}
 		return response;
