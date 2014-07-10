@@ -14,31 +14,14 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 	}
 	
 	/** 
-	 * FIXME Attention: Returns Dummy user. Change id declaration in DbObject
+	 * FIXME Attention: Change id declaration in DbObject
+	 * @throws ArgumentTypeExc 
+	 * @throws ArgumentCountExc 
+	 * @throws NoQueryClassExc 
+	 * @throws NoPersistentClassExc 
 	 */
 	@Override
-	public Collection<LgUser> findByName(String name) {
-//		return new ArrayList<LgUser>();
-		return createDummyList();
+	public Collection<LgUser> findByName(String name) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc {
+		return findByField("name", name);
 	}
-	
-	public Collection<LgUser> createDummyList() {
-		List<LgUser> list = new ArrayList<LgUser>();
-		LgUser user1 = new LgUser();
-		user1.setOid(123456789);
-		user1.setName("Tom Sawyer");
-		user1.setPassword("letmeinplease");
-		user1.setEmail("tom@sawyer.com");
-		user1.setTel("00123456");
-//		LgUser user2 = new LgUser();
-//		user2.setOid(987654321);
-//		user2.setName("Huckleberry Finn");
-//		user2.setPassword("opensesame");
-//		user2.setEmail("huck@finn.net");
-//		user2.setTel("0309876543");
-		list.add(user1);
-//		list.add(user2);
-		return list;
-	}
-
 }

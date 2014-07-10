@@ -12,7 +12,7 @@ public interface DaUser {
 	void save(LgUser user) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException ;
 	void delete(LgUser user)  throws TransactionRequiredException, IllegalArgumentException;
 	LgUser find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc;
-    Collection<LgUser> findByName(String name) throws NotFoundException;
+    Collection<LgUser> findByName(String name) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc;
     void beginTransaction();
     void endTransaction(boolean success);
 }
