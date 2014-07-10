@@ -88,15 +88,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         var login = function(name, password) {
-            $log.warn("login() not implemented");
-
-            // var dummyReturn = { "success": true, 
-            //                     "serverMessage": "HI FROM LOGIN", 
-            //                     "oid": new Date().getTime() };
-            // var _fromGet = dummyReturn;
-            // var _data;
-
-
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
@@ -124,7 +115,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 deferred.resolve(data.data[0]);
             })
             .error(function(data, status, header, config) {
-                deferred.reject("Login auf dem Server fehlgeschlagen. (status " + status + ")"); // not used so far? for future use
+                deferred.reject("Login auf dem Server fehlgeschlagen. (status " + status + ")");
             });
             return deferred.promise;
         };
@@ -143,14 +134,37 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             // if (!_user) {
             //     return null;
             // }
-            
-            // convert all dates to our date format
-            for (var i = 0; i < _user.surveys.length; i++) {
-                _user.surveys[i] = new Survey(_user.surveys[i]);
-            }
-            Survey.forSurveysConvertDatesToDatePickerDate(_user.surveys);
-            
-            return dummyReturn;
+
+
+            var deferred = $q.defer();
+            $http({ 
+                method: "POST", 
+                url: USER_PATH + "login", 
+                data: { "oid": oid, 
+                        "name": "", 
+                        "password": "", 
+                        "email": "", 
+                        "tel": "", 
+                        // "surveys": [] // FIXME missing on server in LgUser ?? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< !!!!! FIXME
+                    }
+            })
+            .success(function(data, status, header, config) {
+                var _user = data.data[0];
+
+                // convert all dates to our date format
+                for (var i = 0; i < _user.surveys.length; i++) {
+                    _user.surveys[i] = new Survey(_user.surveys[i]);
+                }
+                Survey.forSurveysConvertDatesToDatePickerDate(_user.surveys);
+                
+                deferred.resolve(_user);
+            })
+            .error(function(data, status, header, config) {
+                // $log.debug(data);
+                // $log.debug(config);
+                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. (status " + status + ")");
+            });
+            return deferred.promise;
         };
 
         var register = function(name, password, email, tel) {

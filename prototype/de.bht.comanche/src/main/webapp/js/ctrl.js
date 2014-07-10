@@ -96,12 +96,14 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             if (!loginIsValidFor(user)) {
                 return false;
             }
-            if (!user.email || !$scope.patterns.email.test(user.email)) {
+            // if (!user.email || !$scope.patterns.email.test(user.email)) {
+            if (!$scope.patterns.email.test(user.email)) {
                 $scope.warnings.email = "Bitte gib eine gueltige E-Mail-Adresse ein!";
                 $log.log($scope.warnings.email);
                 return false;
             }
-            if (!user.tel || !$scope.patterns.tel.test(user.tel)) {
+            // if (!user.tel || !$scope.patterns.tel.test(user.tel)) {
+            if (!$scope.patterns.tel.test(user.tel)) {
                 $scope.warnings.tel = "Bitte gib eine gueltige Telefonnummer ein!";
                 $log.log($scope.warnings.tel);
                 return false;
@@ -120,26 +122,19 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             promise.then(function(success) {
 
                 $log.debug("oid = " + success.oid)
-                
-                // if (!success) {
-                //     initSession();
-                //     return;
-                // }
 
-
-                // var _oid = success.oid;
-
-                // _user = fetchUserData(_fromLogin.oid);
-                // if (!_user) {
-                //     $log.error("Login fehlgeschlagen.");
-                //     initSession();
-                //     return;
-                // }
-                // $scope.session.user = _user;
-                
-                $scope.session.isLoggedIn = true;
-                $log.log("Login erfolgreich.");
-                $log.log($scope.session);                
+                var promise = restService.getUser(success.oid);
+                promise.then(function(success) {
+                    $scope.session.user = success;
+                    $scope.session.isLoggedIn = true;
+                    $log.log("Login erfolgreich.");
+                    $log.log($scope.session);
+                }, function(error) {
+                    // do something
+                    $log.error(error);
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
 
             }, function(error) {
                 $log.error(error);
