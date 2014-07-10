@@ -113,10 +113,10 @@ public class UserService {
  			public LgUser executeWithThrows() throws Exception {
  				DaFactory jpaDaFactory = new JpaDaFactory();
  				DaUser daUser = jpaDaFactory.getDaUser();
- 				//throws Exc if name not exist
+ 				//throws Exc if id not exist
  				LgUser userFromDb = daUser.find(updateUserFromClient.getOid());  
  				
- 				//update new User to DbUser or LgUser?
+ 				//update old User to DbUser or LgUser?
  				userFromDb.setName(updateUserFromClient.getName());
  				userFromDb.setEmail(updateUserFromClient.getEmail());
  				userFromDb.setPassword(updateUserFromClient.getPassword());
