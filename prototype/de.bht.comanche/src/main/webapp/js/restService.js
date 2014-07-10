@@ -78,14 +78,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             ];
         };
 
-        //----------------------------------------------------
-        var testing = function() {
-            $log.log("HALLO1");
-            // $scope.testHallo = "HALLO";
-            // var s = "HALLO";
-            // $scope.testHallo = s;
-            // return s;
-        };
 
         var login = function(name, password) {
             var deferred = $q.defer();
@@ -101,21 +93,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                     }
             })
             .success(function(data, status, header, config) {
-                // var _user = null;
-                // if (!data.success) {
-                //     $log.error("Login auf dem Server fehlgeschlagen.");
-                //     for (var i = 0; i < data.serverMessages.length; i++) {
-                //         $log.error(data.serverMessages[i]);
-                //     }
-                // } else {
-                    // _user = data.data[0];
-                // }
-                // deferred.resolve(_user);
-                
                 deferred.resolve(data.data[0]);
             })
             .error(function(data, status, header, config) {
-                deferred.reject("Login auf dem Server fehlgeschlagen. (status " + status + ")");
+                deferred.reject("Login auf dem Server fehlgeschlagen. (status: " + status + ")");
             });
             return deferred.promise;
         };
@@ -125,10 +106,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             // TODO retrieve data from rest service
 
 
-            var dummyReturn = { "success": true, 
-                                "serverMessage": "HI FROM GET_USER",  
-                                "user": getDummyUser() };
-            var _user = dummyReturn.user;
+            // var dummyReturn = { "success": true, 
+            //                     "serverMessage": "HI FROM GET_USER",  
+            //                     "user": getDummyUser() };
+            // var _user = dummyReturn.user;
 
 
             // if (!_user) {
@@ -151,7 +132,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             .success(function(data, status, header, config) {
                 var _user = data.data[0];
 
-                // convert all dates to our date format
+                // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
                 for (var i = 0; i < _user.surveys.length; i++) {
                     _user.surveys[i] = new Survey(_user.surveys[i]);
                 }
@@ -162,7 +143,12 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             .error(function(data, status, header, config) {
                 // $log.debug(data);
                 // $log.debug(config);
-                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. (status " + status + ")");
+                // deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. (status " + status + ")");
+
+                //-- TEST --                                   FIXME
+                $log.info("hack");
+                deferred.resolve(getDummyUser());
+                //-- TEST --
             });
             return deferred.promise;
         };
@@ -227,7 +213,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         return {
-            testing: testing, 
             login: login, 
             getUser: getUser, 
             register: register, 
