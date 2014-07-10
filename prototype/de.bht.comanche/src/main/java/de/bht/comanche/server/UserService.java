@@ -56,7 +56,7 @@ public class UserService {
 		
 		if (!response.isSuccess()) { // user with specified name not found or wrong password
 			printDebug(response);
-			throw new WebApplicationException("Wrong name or password", 500);
+//			throw new WebApplicationException("Wrong name or password", 500);
 		}
 		return response;
 		
@@ -87,7 +87,7 @@ public class UserService {
 
 		if (!response.isSuccess()) {
 			printDebug(response);
-			throw new WebApplicationException("[get] Something went wrong", 500); // TODO message
+//			throw new WebApplicationException("[get] Something went wrong", 500); // TODO message
 		}
 		return response;
 	}
@@ -162,7 +162,7 @@ public class UserService {
 
     	 if (!response.isSuccess()) {
     		 printDebug(response);
-    		 throw new WebApplicationException("Illegal update failed", 500);
+//    		 throw new WebApplicationException("Illegal update failed", 500);
     	 }
     	 return response;
      }

@@ -10,8 +10,59 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+		<!-- Begin abgekupftere Versions -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
 
+		<scala.repoURL>http://scala-tools.org/repo-releases</scala.repoURL>
+
+		<!-- Dependency versions -->
+
+		<!-- Zur verwenden mit Eclipse 3.6 (Scala compiler/library 2.8.1) -->
+		<lift.version>2.2</lift.version>
+		<scala.version>2.8.1</scala.version>
+		<scalatest.version>1.5.1</scalatest.version>
+		<scalacheck.version>1.8</scalacheck.version>
+		<specs.version>1.6.8</specs.version>
+
+		<!-- Zur verwenden mit Eclipse 3.7 (Scala compiler/library 2.9.x) -->
+		<!-- <lift.version>2.4</lift.version> -->
+		<!-- <scala.version>2.9.1</scala.version> -->
+		<!-- <scalatest.version>1.6.1</scalatest.version> -->
+		<!-- <scalacheck.version>1.9</scalacheck.version> -->
+		<!-- <specs.version>1.6.9</specs.version> -->
+
+		<!-- Indicate version as m.n-SNAPSHOT during development, and finally before 
+			release as m.n! -->
+		<fb6util.version>3.0-SNAPSHOT</fb6util.version>
+
+		<!-- Tomcat 5.5 auf fb6test und fb6 kann nur Servlet 2.4. -->
+		<!-- Daher hier vorerst auch so. -->
+		<servlet.api.version>2.4</servlet.api.version>
+		<multex.version>8.3</multex.version>
+		<selenium.webdriver.version>2.24.1</selenium.webdriver.version>
+		<junit.version>4.9</junit.version>
+		<testng.version>6.2</testng.version>
+		<jetty.version>6.1.22</jetty.version>
+		<slf4j.api.version>1.6.1</slf4j.api.version>
+		<slf4j.log4j12.version>1.6.1</slf4j.log4j12.version>
+		<log4j.version>1.2.16</log4j.version>
+		<jetty.plugin.version>${jetty.version}</jetty.plugin.version>
+		<!-- Jetty configuration -->
+		<jetty.scanInterval>60</jetty.scanInterval>
+		<!-- Enable access to this application from other computers, not only from 
+			localhost. -->
+		<jetty.host>0.0.0.0</jetty.host>
+		<!-- Enable access to this application only from localhost <jetty.host>127.0.0.1</jetty.host> -->
+		<jetty.http.port>9288</jetty.http.port>
+		<jetty.https.port>9243</jetty.https.port>
+		<jetty.maxIdleMilliseconds>60000</jetty.maxIdleMilliseconds>
+		<jetty.context.path>/</jetty.context.path>
+		<jetty.stop.port>9266</jetty.stop.port>
+		<jetty.stop.key>stop</jetty.stop.key>
+		<!-- <jetty.login.properties>src/test/jetty-login.properties</jetty.login.properties> -->
+		<!-- End abgekupferte Versions -->
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -35,7 +86,7 @@
 			<version>1.0.0.Final</version>
 		</dependency>
 
-		<!-- JSON Support vor Java -->
+		<!-- JSON Support for Java -->
 
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -54,56 +105,18 @@
 
 		<!-- Add JSON Support for testing -->
 
-		<dependency>
-			<groupId>com.owlike</groupId>
-			<artifactId>genson</artifactId>
-			<version>0.99</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.owlike</groupId> -->
+		<!-- <artifactId>genson</artifactId> -->
+		<!-- <version>0.99</version> -->
+		<!-- </dependency> -->
 
 		<!-- Add JSON Support for testing -->
-
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>2.9</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-surefire-plugin</artifactId>
 			<version>2.17</version>
-		</dependency>
-
-		<!-- other dependency for jetty / jersey - caused trouble with "mvn site", 
-			but let's keep it for a while, just in case ... -->
-
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.9</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- Old jersey -->
-
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>1.18.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-			<!-- <version>9.2.0.v20140526</version> -->
-			<version>8.1.2.v20120308</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet</artifactId>
-			<!-- <version>9.2.0.v20140526</version> -->
-			<version>8.1.2.v20120308</version>
 		</dependency>
 
 		<dependency>
@@ -112,221 +125,214 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-jetty-servlet</artifactId>
+			<version>2.10.1</version>
+		</dependency>
+</dependencies>
+		<build>
+			<resources>
+				<resource>
+					<directory>src/main/resources</directory>
+				</resource>
+				<resource>
+					<directory>src/main/web/js</directory>
+					<filtering>true</filtering>
+				</resource>
+			</resources>
 
-		<!-- <dependency> <groupId>org.webjars</groupId> <artifactId>angularjs</artifactId> 
-			<version>1.2.16-2</version> </dependency> -->
-	</dependencies>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.2</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>src/main/web/js</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+				<!-- Abkupfer Begin -->
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>maven-jetty-plugin</artifactId>
+					<version>${jetty.plugin.version}</version>
+					<configuration>
+						<webAppConfig>
+							<contextPath>/</contextPath>
+							<descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
+						</webAppConfig>
+						<contextPath>${jetty.context.path}</contextPath>
+						<scanIntervalSeconds>${jetty.scanInterval}</scanIntervalSeconds>
+						<stopPort>${jetty.stop.port}</stopPort>
+					</configuration>
+				</plugin>
+				<!-- Abkupfer End -->
 
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.1.15.v20140411</version>
-				<configuration>
-					<webAppConfig>
-						<!-- Caution: Avoid absolute paths, try changing those to absolute 
-							ones e.g. ${project.basedir} -->
-						<!-- o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]} 
-							o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]} 
-							o.e.j.w.WebAppContext{/,[file:/F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/]} -->
-						<!--<contextPath>/${project.artifactId}</contextPath> -->
-						<contextPath>/</contextPath>
-						<descriptor>F:/Different/For_study/Medieninformatik/FS4/SWP1/sp1-plan-the-jam/prototype/de.bht.comanche/src/main/webapp/WEB-INF/web.xml</descriptor>
-					</webAppConfig>
-					<resourceBases>
-						<resourceBase>${project.basedir}/src/main/webapp/</resourceBase>
-						<resourceBase>${project.basedir}/src/test/webapp/</resourceBase>
-					</resourceBases>
-					<scanIntervalSeconds>100</scanIntervalSeconds>
-					<stopKey>STOP</stopKey>
-					<stopPort>9999</stopPort>
-				</configuration>
-			</plugin>
+				<plugin>
+					<groupId>com.github.searls</groupId>
+					<artifactId>jasmine-maven-plugin</artifactId>
+					<version>1.3.1.5</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<jsSrcDir>src/main/web/js</jsSrcDir>
+						<jsSrcDir>src/main/webapp/js</jsSrcDir>
+						<jsTestSrcDir>src/test/web/js</jsTestSrcDir>
+						<jsTestSrcDir>src/test/webapp/js</jsTestSrcDir>
 
+						<preloadSources>
+							<!-- <source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source> -->
+							<source>${project.basedir}/src/main/web/lib/angular.js</source>
+							<source>${project.basedir}/src/main/web/lib/angular-mocks.js</source>
+							<source>${project.basedir}/src/main/web/lib/angular-scenario.js</source>
+							<!-- <source>${project.basedir}/src/main/web/lib/angular-mocks.js</source> -->
+						</preloadSources>
+					</configuration>
+				</plugin>
 
-			<plugin>
-				<groupId>com.github.searls</groupId>
-				<artifactId>jasmine-maven-plugin</artifactId>
-				<version>1.3.1.5</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<jsSrcDir>src/main/web/js</jsSrcDir>
-					<jsSrcDir>src/main/webapp/js</jsSrcDir>
-					<jsTestSrcDir>src/test/web/js</jsTestSrcDir>
-					<jsTestSrcDir>src/test/webapp/js</jsTestSrcDir>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.2.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 
-					<preloadSources>
-						<!-- <source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source> -->
-						<source>${project.basedir}/src/main/web/lib/angular.js</source>
-						<source>${project.basedir}/src/main/web/lib/angular-mocks.js</source>
-						<source>${project.basedir}/src/main/web/lib/angular-scenario.js</source>
-						<!-- <source>${project.basedir}/src/main/web/lib/angular-mocks.js</source> -->
-					</preloadSources>
-				</configuration>
-			</plugin>
+				<!-- <plugin> <groupId>net.alchim31.maven</groupId> <artifactId>yuicompressor-maven-plugin</artifactId> 
+					<version>1.4.0</version> <executions> <execution> <id>compress-js</id> <goals> 
+					<goal>compress</goal> </goals> </execution> </executions> </plugin> -->
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.9.1</version>
+					<configuration>
+						<aggregate>true</aggregate>
+						<detectOfflineLinks>false</detectOfflineLinks>
+						<notimestamp>true</notimestamp>
+						<quiet>true</quiet>
+						<links>
+							<link>http://docs.oracle.com/javase/8/docs/api</link>
+						</links>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadoc</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 
-			<!-- <plugin> <groupId>net.alchim31.maven</groupId> <artifactId>yuicompressor-maven-plugin</artifactId> 
-				<version>1.4.0</version> <executions> <execution> <id>compress-js</id> <goals> 
-				<goal>compress</goal> </goals> </execution> </executions> </plugin> -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<generateReports>true</generateReports>
+						<generateSitemap>true</generateSitemap>
+						<reportPlugins>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-project-info-reports-plugin</artifactId>
+								<version>2.7</version>
+							</plugin>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-javadoc-plugin</artifactId>
+								<version>2.9.1</version>
+								<configuration>
+									<aggregate>true</aggregate>
+									<notimestamp>true</notimestamp>
+									<quiet>true</quiet>
+									<links>
+										<link>http://docs.oracle.com/javase/8/docs/api</link>
+									</links>
+								</configuration>
+								<reports>
+									<report>javadoc</report>
+								</reports>
+							</plugin>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-checkstyle-plugin</artifactId>
+								<version>2.12.1</version>
+								<!-- <configuration> <configLocation>src/site/checkstyle/config.xml</configLocation> 
+									</configuration> -->
+							</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<configuration>
-					<aggregate>true</aggregate>
-					<detectOfflineLinks>false</detectOfflineLinks>
-					<notimestamp>true</notimestamp>
-					<quiet>true</quiet>
-					<links>
-						<link>http://docs.oracle.com/javase/8/docs/api</link>
-					</links>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadoc</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+							<plugin>
+								<groupId>gr.abiss.mvn.plugins</groupId>
+								<artifactId>maven-jstools-plugin</artifactId>
+								<version>0.7</version>
+								<configuration>
+									<jsDir>src/main/web/js</jsDir>
+									<includePrivate>true</includePrivate>
+									<includeUndocumented>true</includeUndocumented>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<generateReports>true</generateReports>
-					<generateSitemap>true</generateSitemap>
-					<reportPlugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-project-info-reports-plugin</artifactId>
-							<version>2.7</version>
-						</plugin>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-javadoc-plugin</artifactId>
-							<version>2.9.1</version>
-							<configuration>
-								<aggregate>true</aggregate>
-								<notimestamp>true</notimestamp>
-								<quiet>true</quiet>
-								<links>
-									<link>http://docs.oracle.com/javase/8/docs/api</link>
-								</links>
-							</configuration>
-							<reports>
-								<report>javadoc</report>
-							</reports>
-						</plugin>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-checkstyle-plugin</artifactId>
-							<version>2.12.1</version>
-							<!-- <configuration> <configLocation>src/site/checkstyle/config.xml</configLocation> 
-								</configuration> -->
-						</plugin>
+									<preloadSources>
+										<source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source>
+										<source>${project.basedir}/src/main/web/lib/angular.js</source>
+										<source>${project.basedir}/src/main/web/lib/angular-mocks.js</source>
+										<source>${project.basedir}/src/main/web/lib/angular-scenario.js</source>
+									</preloadSources>
+									<!-- <jsSrcDir>src/main/web/js</jsSrcDir> <jsTestSrcDir>src/test/web/js</jsTestSrcDir> -->
+									<!-- <specIncludes> <include>*Spec.js</include> </specIncludes> -->
 
-						<plugin>
-							<groupId>gr.abiss.mvn.plugins</groupId>
-							<artifactId>maven-jstools-plugin</artifactId>
-							<version>0.7</version>
-							<configuration>
-								<jsDir>src/main/web/js</jsDir>
-								<includePrivate>true</includePrivate>
-								<includeUndocumented>true</includeUndocumented>
+								</configuration>
+								<reportSets>
+									<reportSet>
+										<reports>
+											<report>jslint</report>
+											<report>jsdoc</report>
+										</reports>
+									</reportSet>
+								</reportSets>
+							</plugin>
 
-								<preloadSources>
-									<source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source>
-									<source>${project.basedir}/src/main/web/lib/angular.js</source>
-									<source>${project.basedir}/src/main/web/lib/angular-mocks.js</source>
-									<source>${project.basedir}/src/main/web/lib/angular-scenario.js</source>
-								</preloadSources>
-								<!-- <jsSrcDir>src/main/web/js</jsSrcDir> <jsTestSrcDir>src/test/web/js</jsTestSrcDir> -->
-								<!-- <specIncludes> <include>*Spec.js</include> </specIncludes> -->
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-surefire-report-plugin</artifactId>
+								<version>2.6</version>
+							</plugin>
 
-							</configuration>
-							<reportSets>
-								<reportSet>
-									<reports>
-										<report>jslint</report>
-										<report>jsdoc</report>
-									</reports>
-								</reportSet>
-							</reportSets>
-						</plugin>
+							<!-- Generate a report for tests -->
 
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-surefire-report-plugin</artifactId>
-							<version>2.6</version>
-						</plugin>
-
-						<!-- Generate a report for tests -->
-
-						<reporting>
-							<plugins>
-								<plugin>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-surefire-report-plugin</artifactId>
-									<version>2.6</version>
-									<reportSets>
-										<reportSet>
-											<id>integration-tests</id>
-											<reports>
-												<report>failsafe-report-only</report>
-											</reports>
-										</reportSet>
-									</reportSets>
-								</plugin>
-							</plugins>
-						</reporting>
-					</reportPlugins>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+							<reporting>
+								<plugins>
+									<plugin>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-surefire-report-plugin</artifactId>
+										<version>2.6</version>
+										<reportSets>
+											<reportSet>
+												<id>integration-tests</id>
+												<reports>
+													<report>failsafe-report-only</report>
+												</reports>
+											</reportSet>
+										</reportSets>
+									</plugin>
+								</plugins>
+							</reporting>
+						</reportPlugins>
+					</configuration>
+				</plugin>
+			</plugins>
+		</build>
 
 
 </project>
