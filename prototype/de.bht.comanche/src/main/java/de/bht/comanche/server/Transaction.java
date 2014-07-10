@@ -6,9 +6,11 @@ import de.bht.comanche.persistence.Pool;
 import de.bht.comanche.persistence.PoolImpl;
 
 public abstract class Transaction<E> {
-	
+	/*
+	 * TODO: Think about structure
+	 */
 	public ResponseObject execute () {
-//		Pool pool = PoolImpl.getInstance();  // FIXME
+//		Pool pool = PoolImpl.getInstance();  // TRANSACTION SHOULD BEGIN HERE
 		ResponseObject serverResponse = new ResponseObject();
 		boolean success = false;
 		try {
@@ -33,7 +35,7 @@ public abstract class Transaction<E> {
 			System.out.println("CATCH DONE");
 		} finally {
 			System.out.println("FINALLY DONE");
-//			pool.endTransaction(success);
+//			pool.endTransaction(success); // TRANSACTION SHUOLD END HERE!
 		}
 		return serverResponse;
 	}

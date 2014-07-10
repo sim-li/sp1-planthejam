@@ -20,7 +20,9 @@ import de.bht.comanche.persistence.JpaDaFactory;
 //@Produces({"text/xml", "application/json"})
 //@Consumes({"text/xml", "application/json"})
 public class UserService {
-	
+/*
+ * TODO: TRANSACTION NACH AUSSEN WIEDER
+ */
 	@Path("login")
     @POST
     @Consumes("application/json")
@@ -30,7 +32,7 @@ public class UserService {
 			 public LgUser executeWithThrows() throws Exception {
 				 DaFactory jpaDaFactory = new JpaDaFactory();
 				 DaUser daUser = jpaDaFactory.getDaUser();
-				 //DIRTY HACK
+				 //DIRTY HACK --> COME NACH AUSSEN!
 				 daUser.beginTransaction();
 				 System.out.println("############## userFromClient.getName()" + userFromClient.getName());
 //				   <--  the real thing --> 
