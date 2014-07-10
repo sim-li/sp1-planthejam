@@ -18,7 +18,7 @@
                            "serverMessages": String, 
                            "data": { "user": User } }  --> interessant nur: "id": long
     Konto auflösen/löschen
-        delete(id: long) 	
+        delete(id: long)
                 returns: { "success": boolean, 
                            "serverMessages": String }
     Kontoinformationen ändern

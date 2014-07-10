@@ -96,12 +96,14 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             if (!loginIsValidFor(user)) {
                 return false;
             }
-            if (!user.email || !$scope.patterns.email.test(user.email)) {
+            // if (!user.email || !$scope.patterns.email.test(user.email)) {
+            if (!$scope.patterns.email.test(user.email)) {
                 $scope.warnings.email = "Bitte gib eine gueltige E-Mail-Adresse ein!";
                 $log.log($scope.warnings.email);
                 return false;
             }
-            if (!user.tel || !$scope.patterns.tel.test(user.tel)) {
+            // if (!user.tel || !$scope.patterns.tel.test(user.tel)) {
+            if (!$scope.patterns.tel.test(user.tel)) {
                 $scope.warnings.tel = "Bitte gib eine gueltige Telefonnummer ein!";
                 $log.log($scope.warnings.tel);
                 return false;
@@ -110,41 +112,47 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
 
         $scope.login = function() {
-            // $scope.warnings = {};
             var _user = $scope.session.user;
-
             if (!loginIsValidFor(_user)) {
                 $log.log("Login ungueltig.");
-                $log.log(_user);
                 return;
             }
 
-            var _fromLogin = restService.login(_user.name, _user.password);
-            if (!_fromLogin.success) {
-                $log.error("Login auf dem Server fehlgeschlagen.");
-                $log.error(_fromLogin.serverMessage);
+            var promise = restService.login(_user.name, _user.password);
+            promise.then(function(success) {
+                $log.debug("Benutzer gefunden. (oid: " + success.oid + ")");
+
+                var promise = restService.getUser(success.oid);
+                promise.then(function(success) {
+                    $scope.session.user = success;
+                    $scope.session.isLoggedIn = true;
+                    $log.log("Login erfolgreich.");
+                    $log.log($scope.session);
+                }, function(error) {
+                    //-- do something
+                    // $log.error(error);
+
+                    //-- TEST --                                 FIXME
+                    $log.info("hack");
+                    $log.info(error);
+                    $scope.session.user = success;
+                    $scope.session.isLoggedIn = true;
+                    $log.log("Hack-Login erfolgreich.");
+                    $log.log($scope.session);
+                    //-- TEST --
+
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
+
+            }, function(error) {
+                $log.error(error);
                 initSession();
-                return;
-            }
+            }, function(notification) {
+                // $log.log(notification); // for future use
+            });
 
-            _user = fetchUserData(_fromLogin.oid);
-            if (!_user) {
-                $log.error("Login fehlgeschlagen.");
-                initSession();
-                return;
-            }
-            $scope.session.user = _user;
-            
-            $scope.session.isLoggedIn = true;
-            $log.log("Login erfolgreich.");
-            $log.log($scope.session);
-
-            // TODO: Baustelle -- checken, ob so sinnvoll:
-            // $scope.filteredSurveys = $scope.session.user.surveys;
-            // $scope.session.selectedSurvey = $scope.filteredSurveys[0] || "";
         };
-
-        // $scope.showRegisterDialog = false;
 
         $scope.register = function() {
             var _user = $scope.session.user;

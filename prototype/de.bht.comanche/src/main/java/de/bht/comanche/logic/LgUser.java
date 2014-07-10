@@ -103,9 +103,10 @@ public class LgUser extends DbObject {
 		}
 		return this.password.equals(password);
 	}
+	
 	@Override
 	public String toString() {
-		return "LgUser [name=" + name + ", telephone=" + tel + ", email="
+		return "LgUser [oid=" + getOid() + ", name=" + name + ", telephone=" + tel + ", email="
 				+ email + ", password=" + password + ", hatFriends="
 				+ hatFriends + ", beFriendFromUsers=" + beFriendFromUsers
 				+ ", groups=" + groups + "]";

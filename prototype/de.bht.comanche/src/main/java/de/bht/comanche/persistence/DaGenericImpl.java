@@ -2,39 +2,36 @@ package de.bht.comanche.persistence;
 
 import java.util.Collection;
 
+import javassist.NotFoundException;
+
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
-
-import de.bht.comanche.logic.DbObject;
-
-import javassist.NotFoundException;
 
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
 	private Class<E> type;
-	private Pool pool;
+	private Pool<E> pool;
 	
-	public DaGenericImpl(Class<E> type, Pool pool) {
+	public DaGenericImpl(Class<E> type, Pool<E> pool) {
 		this.type = type;
 		this.pool = pool;
 	}
 
 	@Override
 	public void save(E entity) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException {
-		pool.save((DbObject) entity);
+		pool.save(entity);
 		
 	}
 
 	@Override
-	public void delete(E entity) {
-		// TODO Auto-generated method stub
-		
+	public void delete(E entity) throws TransactionRequiredException, IllegalArgumentException {
+		pool.delete(entity);
 	}
 
 	@Override
-	public E find(long id) throws NotFoundException {
-		//return pool.find(i_persistentClass, i_oid)
-		return null;
+	public E find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc {
+		return pool.find(type, id);
+		
 	}
 
 	@Override

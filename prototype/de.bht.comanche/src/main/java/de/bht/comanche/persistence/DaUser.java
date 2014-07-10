@@ -10,8 +10,8 @@ import de.bht.comanche.logic.LgUser;
 
 public interface DaUser {
 	void save(LgUser user) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException ;
-	void delete(LgUser user);
-	LgUser find(long id) throws NotFoundException;
+	void delete(LgUser user)  throws TransactionRequiredException, IllegalArgumentException;
+	LgUser find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc;
     Collection<LgUser> findByName(String name) throws NotFoundException;
     void beginTransaction();
     void endTransaction(boolean success);

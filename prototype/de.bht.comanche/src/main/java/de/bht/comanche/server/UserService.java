@@ -1,14 +1,20 @@
 package de.bht.comanche.server;
 
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 
+import jersey.repackaged.com.google.common.collect.Lists;
+import de.bht.comanche.logic.DbObject;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaFactory;
 import de.bht.comanche.persistence.DaUser;
@@ -24,23 +30,54 @@ public class UserService {
     @Consumes("application/json")
     @Produces({"application/json"})
     public ResponseObject loginUser(final LgUser userFromClient) {
-		 return new Transaction<LgUser>() {
-			public LgUser executeWithThrows() throws Exception {
-				DaFactory jpaDaFactory = new JpaDaFactory();
-				DaUser daUser = jpaDaFactory.getDaUser();
-				LgUser userFromDb = daUser.findByName(userFromClient.getName()).iterator().next();
-				if (!userFromDb.validatePassword(userFromClient.getPassword())) {
-					
-					System.out.println(userFromClient.getPassword());
-					System.out.println(userFromDb.getPassword());
-					
-					throw new WrongPasswordExc();
-				}
-				LgUser userWithId = new LgUser();
-				userWithId.setIdFrom(userFromDb);
-				return userWithId;
+		 ResponseObject response = new Transaction<LgUser>() {
+			 public LgUser executeWithThrows() throws Exception {
+				 DaFactory jpaDaFactory = new JpaDaFactory();
+				 DaUser daUser = jpaDaFactory.getDaUser();
+				 
+				 Iterator<LgUser> it = daUser.findByName(userFromClient.getName()).iterator();
+				 if (!it.hasNext()) {
+					 throw new NoUserWithThisNameExc();
+				 }
+				 LgUser userFromDb = it.next();
+				 if (!userFromDb.validatePassword(userFromClient.getPassword())) {
+
+					 System.out.println(userFromClient.getPassword());
+					 System.out.println(userFromDb.getPassword());
+
+					 throw new WrongPasswordExc();
+				 }
+				 LgUser userWithId = new LgUser();
+				 userWithId.setIdFrom(userFromDb);
+				 System.out.println(userFromClient);
+				 System.out.println(userFromDb);
+				 System.out.println(userWithId);
+				 return userWithId;
+			 }
+		 }.execute();
+		
+		if (!response.isSuccess()) { // user with specified name not found or wrong password
+			
+			//-- for debugging ----
+			System.out.println(response.isSuccess());
+			for (DbObject o: response.getData()) {
+				System.out.println(o.getOid());
 			}
-   	 }.execute();
+			for (String s: response.getServerMessages()) {
+				System.out.println(s);
+			}
+			//---------------------
+			
+			throw new WebApplicationException("Wrong name or password", 500) {
+				private static final long serialVersionUID = -1427317534342289811L;
+			};
+		}
+		return response;
+		
+//---- TODO for the future: try to send Exceptions via REST to client like this:  
+//		throw new WebApplicationException("Wrong password", 500) {
+//		};
+   	 
     }
 	
 	//get full User by Id
