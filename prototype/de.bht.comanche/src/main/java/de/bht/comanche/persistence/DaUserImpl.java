@@ -13,9 +13,6 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 		super(LgUser.class, pool);
 	}
 	
-	public LgUser find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc {
-		return null;
-	}
 	/** 
 	 * FIXME Attention: Returns Dummy user. Change id declaration in DbObject
 	 */

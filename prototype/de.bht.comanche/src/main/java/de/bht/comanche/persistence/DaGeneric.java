@@ -17,8 +17,8 @@ public interface DaGeneric<E> {
     void beginTransaction();
     void endTransaction(boolean success);
     E find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc;
-    Collection<E> findAll();
-    Collection<E> findByField(String fieldName, Object fieldValue);
+    Collection<E> findAll() throws NoPersistentClassExc ;
+    Collection<E> findByField(String fieldName, Object fieldValue)  throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc;
     Collection<E> findByWhere(String whereClause, Object... args);
     Collection<E> findByExample(E example);
 }
