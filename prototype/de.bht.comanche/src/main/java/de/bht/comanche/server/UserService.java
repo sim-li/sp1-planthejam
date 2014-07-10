@@ -1,5 +1,6 @@
 package de.bht.comanche.server;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import javax.ws.rs.Consumes;
@@ -8,6 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+
 import de.bht.comanche.logic.DbObject;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaFactory;
@@ -28,20 +30,24 @@ public class UserService {
 			 public LgUser executeWithThrows() throws Exception {
 				 DaFactory jpaDaFactory = new JpaDaFactory();
 				 DaUser daUser = jpaDaFactory.getDaUser();
-				 
-				 //  <--  the real thing --> 
-//				 Iterator<LgUser> it = daUser.findByName(userFromClient.getName()).iterator();
-//				 if (!it.hasNext()) {
-//					 throw new NoUserWithThisNameExc();
-//				 }
+				 //DIRTY HACK
+				 daUser.beginTransaction();
+				 System.out.println("############## userFromClient.getName()" + userFromClient.getName());
+//				   <--  the real thing --> 
+				 daUser.findByName(userFromClient.getName());
+				 System.out.println("########## aM I NOT ERRONOIS");
+				 Iterator<LgUser> it = daUser.findByName(userFromClient.getName()).iterator();
+				 System.out.println("HUHU");
+				 if (!it.hasNext()) {
+					 throw new NoUserWithThisNameExc();
+				 }
 //				 
-//				 LgUser userFromDb = it.next(); // <--
-				 LgUser userFromDb = daUser.getDummy(); //  <-- test
+				 LgUser userFromDb = it.next(); 
+				 
+//				 LgUser userFromDb = daUser.getDummy(); //  <-- test
 				 System.out.println("from client: " + userFromClient);
 				 System.out.println("from server: " + userFromDb);
 				 if (!userFromDb.passwordMatchWith(userFromClient.getPassword())) {
-				 
-//				 if (!userFromDb.validatePassword(userFromClient.getPassword())) { //  <-- the real thing
 
 					 System.out.println("client-pw: '" + userFromClient.getPassword() + "'" + 
 							 			"server-pw: '" + userFromDb.getPassword() + "'");
@@ -50,6 +56,8 @@ public class UserService {
 				 }
 				 LgUser userWithId = new LgUser();
 				 userWithId.setIdFrom(userFromDb);
+				 //DIRTY HACK
+				 daUser.endTransaction(true);
 				 return userWithId;
 			 }
 		 }.execute();

@@ -9,10 +9,9 @@ public abstract class Transaction<E> {
 	
 	public ResponseObject execute () {
 //		Pool pool = PoolImpl.getInstance();  // FIXME
-		ResponseObject serverResponse = null;
+		ResponseObject serverResponse = new ResponseObject();
 		boolean success = false;
 		try {
-			serverResponse = new ResponseObject();
 			DbObject objectFromDb = executeWithThrows();
 			serverResponse.addData(objectFromDb);
 			serverResponse.setSuccess(true);
