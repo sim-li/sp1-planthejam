@@ -49,28 +49,13 @@ public class UserService {
 				 }
 				 LgUser userWithId = new LgUser();
 				 userWithId.setIdFrom(userFromDb);
-				 System.out.println(userFromClient);
-				 System.out.println(userFromDb);
-				 System.out.println(userWithId);
 				 return userWithId;
 			 }
 		 }.execute();
 		
 		if (!response.isSuccess()) { // user with specified name not found or wrong password
-			
-			//-- for debugging ----
-			System.out.println(response.isSuccess());
-			for (DbObject o: response.getData()) {
-				System.out.println(o.getOid());
-			}
-			for (String s: response.getServerMessages()) {
-				System.out.println(s);
-			}
-			//---------------------
-			
-			throw new WebApplicationException("Wrong name or password", 500) {
-				private static final long serialVersionUID = -1427317534342289811L;
-			};
+			printDebug(response);
+			throw new WebApplicationException("Wrong name or password", 500);
 		}
 		return response;
 		
@@ -86,7 +71,7 @@ public class UserService {
 	@Consumes("application/json")
 	@Produces({"application/json"})
 	public ResponseObject getUser(final LgUser userIdFromClient){
-		return new Transaction<LgUser>() {
+		ResponseObject response = new Transaction<LgUser>() {
 			public LgUser executeWithThrows() throws Exception {
 				DaFactory jpaDaFactory = new JpaDaFactory();
 				DaUser daUser = jpaDaFactory.getDaUser();
@@ -94,7 +79,13 @@ public class UserService {
 				LgUser userFromDb = daUser.find(userIdFromClient.getOid());
 				return userFromDb;
 			}
-   	 }.execute();
+		}.execute();
+		
+		if (!response.isSuccess()) {
+			printDebug(response);
+			throw new WebApplicationException("[get] Something went wrong", 500); // TODO message
+		}
+		return response;
 	}
    	 
      @Path("/register")
@@ -102,24 +93,34 @@ public class UserService {
      @Consumes("application/json")
      @Produces({"application/json"})
      public ResponseObject registerUser(final LgUser newUserFromClient){
-    	 return new Transaction<LgUser>() {
- 			public LgUser executeWithThrows() throws Exception {
- 				DaFactory jpaDaFactory = new JpaDaFactory();
- 				DaUser daUser = jpaDaFactory.getDaUser();
- 				//throws Exc if name not exist - need boolin
- 				LgUser userFromDb = daUser.findByName(newUserFromClient.getName()).iterator().next(); 
-// 				if(userFromDb){
-// 					if not exist -> save
-// 				}
- 				
- 				//save new User to DbUser or LgUser?
- 				LgUser newUserSaveToDb = new LgUser(); 
- 				newUserSaveToDb.setName(newUserFromClient.getName());
-				newUserSaveToDb.setEmail(newUserFromClient.getEmail());
-				newUserSaveToDb.setPassword(newUserFromClient.getPassword());
- 				return newUserSaveToDb;
- 			}
+    	 ResponseObject response = new Transaction<LgUser>() {
+    		 public LgUser executeWithThrows() throws Exception {
+    			 DaFactory jpaDaFactory = new JpaDaFactory();
+    			 DaUser daUser = jpaDaFactory.getDaUser();
+    			 //throws Exc if name not exist - need boolin
+
+    			 if (daUser.findByName(newUserFromClient.getName()).iterator().hasNext()) {
+    				 throw new UserWithThisNameExistsExc();
+    			 }
+
+    			 LgUser user = new LgUser();
+    			 String name = newUserFromClient.getName();
+    			 user.setName(name);
+    			 user.setPassword(newUserFromClient.getPassword());
+    			 user.setEmail(newUserFromClient.getEmail());
+    			 user.setTel(newUserFromClient.getTel());
+    			 
+    			 daUser.save(user);
+    			 daUser.findByName(name);
+    			 return user;
+    		 }
     	 }.execute();
+    	 
+    	 if (!response.isSuccess()) {
+    		 printDebug(response);
+    		 throw new WebApplicationException("User with this name exists", 500);
+    	 }
+    	 return response;
  	}
      
      @Path("/delete")
@@ -128,15 +129,15 @@ public class UserService {
      @Produces({"application/json"})
      public ResponseObject deleteUser(final LgUser oldUserFromClient){
     	 return new Transaction<LgUser>() {
- 			public LgUser executeWithThrows() throws Exception {
- 				DaFactory jpaDaFactory = new JpaDaFactory();
- 				DaUser daUser = jpaDaFactory.getDaUser();
- 				//throws Exc if Id not exist
- 				LgUser userFromDb = daUser.find(oldUserFromClient.getOid()); 
- 				daUser.delete(userFromDb);
- 				//if deleted set ID to -1? 
- 				return null;
- 			}
+    		 public LgUser executeWithThrows() throws Exception {
+    			 DaFactory jpaDaFactory = new JpaDaFactory();
+    			 DaUser daUser = jpaDaFactory.getDaUser();
+    			 //throws Exc if Id not exist
+    			 LgUser userFromDb = daUser.find(oldUserFromClient.getOid()); 
+    			 daUser.delete(userFromDb);
+    			 //if deleted set ID to -1? 
+    			 return null;
+    		 }
     	 }.execute();
  	} 
      
@@ -146,56 +147,33 @@ public class UserService {
      @Consumes("application/json")
      @Produces({"application/json"})
      public ResponseObject updateUser(final LgUser updateUserFromClient){
-    	 return new Transaction<LgUser>() {
- 			public LgUser executeWithThrows() throws Exception {
- 				DaFactory jpaDaFactory = new JpaDaFactory();
- 				DaUser daUser = jpaDaFactory.getDaUser();
- 				//throws Exc if name not exist
- 				LgUser userFromDb = daUser.find(updateUserFromClient.getOid());  
- 				
- 				//update new User to DbUser or LgUser?
- 				userFromDb.setName(updateUserFromClient.getName());
- 				userFromDb.setEmail(updateUserFromClient.getEmail());
- 				userFromDb.setPassword(updateUserFromClient.getPassword());
-				//add other fields for update too
- 				return null;
- 			}
+    	 ResponseObject response = new Transaction<LgUser>() {
+    		 public LgUser executeWithThrows() throws Exception {
+    			 DaFactory jpaDaFactory = new JpaDaFactory();
+    			 DaUser daUser = jpaDaFactory.getDaUser();
+    			 LgUser userFromDb = daUser.find(updateUserFromClient.getOid());
+    			 userFromDb.updateWith(updateUserFromClient);
+    			 daUser.save(userFromDb);
+    			 return userFromDb;
+    		 }
     	 }.execute();
+
+    	 if (!response.isSuccess()) {
+    		 printDebug(response);
+    		 throw new WebApplicationException("Illegal update failed", 500);
+    	 }
+    	 return response;
+     }
+     
+     
+     private void printDebug(ResponseObject response) {
+ 		System.out.println(response.isSuccess());
+ 		for (DbObject o: response.getData()) {
+ 			System.out.println(o.getOid());
+ 		}
+ 		for (String s: response.getServerMessages()) {
+ 			System.out.println(s);
+ 		}
  	}
 }
 
-
-
-
-//@Path("/login")
-//@GET
-//@Consumes(MediaType.APPLICATION_JSON) ????
-//public User login(@QueryParam("name") final String name,
-//		 		   @QueryParam("password") final String password) {
-//
-//	 new Transaction<LgUser>() {
-//		 public LgUser executeWithThrows() throws Exception {
-//			 LgUser lgUser1 = new LgUser();
-//			 Validation.validateName(name);
-//			 Validation.validatePassword(password);
-//			 DaFactory jpaDaFactory = new JpaDaFactory();
-//			 DaUser daUser = jpaDaFactory.getDaUser();
-//			 daUser.save(lgUser1);
-//			 
-//			 lgUser1 = daUser.findByName(name);
-//			 lgUser1.validatePassword(password);
-//			 
-//			 return lgUser1;
-//		 }
-//	 }.execute();
-//	 
-//
-//	 if (lgUser1.passwordCorrect) {
-//		 // Build Sucess JSON
-//		 
-//	 } else {
-//		 // Build Error JSON
-//	 }
-	 
-	 
-//}
