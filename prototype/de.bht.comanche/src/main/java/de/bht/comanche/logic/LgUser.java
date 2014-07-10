@@ -40,7 +40,29 @@ public class LgUser extends DbObject {
 
 	@OneToMany(mappedBy = "usi.user")
 	private List<LgInvite> invites;
-
+	
+	
+	public LgUser() {}
+	
+	public LgUser(String name, String tel, String email, String password,
+			List<LgUser> hatFriends, List<LgUser> beFriendFromUsers,
+			List<LgGroup> groups, List<LgInvite> invites) {
+		super();
+		this.name = name;
+		this.tel = tel;
+		this.email = email;
+		this.password = password;
+		this.hatFriends = hatFriends;
+		this.beFriendFromUsers = beFriendFromUsers;
+		this.groups = groups;
+		this.invites = invites;
+	}
+	
+	public LgUser(LgUser other) {
+		this(other.name, other.tel, other.email, other.password, other.hatFriends, 
+				other.beFriendFromUsers, other.groups, other.invites);
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -110,5 +132,20 @@ public class LgUser extends DbObject {
 				+ email + ", password=" + password + ", hatFriends="
 				+ hatFriends + ", beFriendFromUsers=" + beFriendFromUsers
 				+ ", groups=" + groups + "]";
+	}
+
+	/**
+	 * Copies all attributes from the other user except(!) the oid.
+	 * @param other	the other user
+	 */
+	public void updateWith(LgUser other) {
+		this.name = other.name;
+		this.tel = other.tel;
+		this.email = other.email;
+		this.password = other.password;
+		this.hatFriends = other.hatFriends;
+		this.beFriendFromUsers = other.beFriendFromUsers;
+		this.groups = other.groups;
+		this.invites = other.invites;
 	}
 }

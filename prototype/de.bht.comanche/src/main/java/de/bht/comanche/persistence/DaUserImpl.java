@@ -23,5 +23,6 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 	@Override
 	public Collection<LgUser> findByName(String name) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc {
 		return findByField("name", name);
+
 	}
 }
