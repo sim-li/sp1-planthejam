@@ -19,15 +19,13 @@ import de.bht.comanche.persistence.JpaDaFactory;
 //@Consumes({"text/xml", "application/json"})
 public class UserService {
 	
-	@Path("/login")
+	@Path("login")
     @POST
     @Consumes("application/json")
     @Produces({"application/json"})
     public ResponseObject loginUser(final LgUser userFromClient) {
 		 ResponseObject response = new Transaction<LgUser>() {
 			 public LgUser executeWithThrows() throws Exception {
-				 System.out.println("---------------");
-				 System.out.println(userFromClient);
 				 DaFactory jpaDaFactory = new JpaDaFactory();
 				 DaUser daUser = jpaDaFactory.getDaUser();
 				 
@@ -39,12 +37,14 @@ public class UserService {
 //				 
 //				 LgUser userFromDb = it.next(); // <--
 				 LgUser userFromDb = daUser.getDummy(); //  <-- test
+				 System.out.println("from client: " + userFromClient);
+				 System.out.println("from server: " + userFromDb);
 				 if (!userFromDb.passwordMatchWith(userFromClient.getPassword())) {
 				 
 //				 if (!userFromDb.validatePassword(userFromClient.getPassword())) { //  <-- the real thing
 
-					 System.out.println("c: " + userFromClient.getPassword());
-					 System.out.println("d: " + userFromDb.getPassword());
+					 System.out.println("client-pw: '" + userFromClient.getPassword() + "'" + 
+							 			"server-pw: '" + userFromDb.getPassword() + "'");
 
 					 throw new WrongPasswordExc();
 				 }
@@ -68,18 +68,19 @@ public class UserService {
 	
 	//return complete User by Id
 	@POST
-	@Path("get/")
+	@Path("get")
 	@Consumes("application/json")
 	@Produces({"application/json"})
-	public ResponseObject getUser(final LgUser userIdFromClient){
+	public ResponseObject getUser(final LgUser userFromClient){
 		ResponseObject response = new Transaction<LgUser>() {
 			public LgUser executeWithThrows() throws Exception {
-				System.out.println("HI FROM GET");
 				DaFactory jpaDaFactory = new JpaDaFactory();
 				DaUser daUser = jpaDaFactory.getDaUser();
-//				LgUser userFromDb = daUser.find(userIdFromClient.getOid()); //  <--  the real thing
+				
+//				LgUser userFromDb = daUser.find(userFromClient.getOid()); //  <--  the real thing
 				LgUser userFromDb = daUser.getDummy(); //  <-- test
-				System.out.println("TRYING TO RETURN GET");
+				System.out.println("from client: " + userFromClient);
+				System.out.println("from server: " + userFromDb);
 				return userFromDb;
 			}
 		}.execute();
