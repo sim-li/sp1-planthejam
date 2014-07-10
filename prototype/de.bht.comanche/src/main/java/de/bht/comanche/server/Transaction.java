@@ -8,19 +8,14 @@ import de.bht.comanche.persistence.PoolImpl;
 public abstract class Transaction<E> {
 	
 	public ResponseObject execute () {
-//		Pool pool = new PoolImpl<E>();  // FIXME
-//		pool.beginTransaction();
-		
-		ResponseObject serverResponse = new ResponseObject();
-		serverResponse.setSuccess(false);
-		
-//		boolean success = false; // determines how to end the transaction
+//		Pool pool = PoolImpl.getInstance();  // FIXME
+		ResponseObject serverResponse = null;
+		boolean success = false;
 		try {
+			serverResponse = new ResponseObject();
 			DbObject objectFromDb = executeWithThrows();
 			serverResponse.addData(objectFromDb);
-			
 			serverResponse.setSuccess(true);
-//			success = true;
 			System.out.println("TRY DONE");
 		} catch (WrongPasswordExc e) {
 			serverResponse.addServerMessage("Wrong password");
@@ -36,7 +31,6 @@ public abstract class Transaction<E> {
 			System.out.println("Oid not found");
 		} catch (Exception e) {
 			e.printStackTrace();
-			
 			System.out.println("CATCH DONE");
 		} finally {
 			System.out.println("FINALLY DONE");
