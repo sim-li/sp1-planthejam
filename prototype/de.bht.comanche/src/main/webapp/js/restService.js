@@ -80,6 +80,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
 
         var login = function(name, password) {
+            $log.debug(">>>>>>>>>>>>>>> " + password);
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
@@ -93,30 +94,34 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                     }
             })
             .success(function(data, status, header, config) {
-                deferred.resolve(data.data[0]);
+                // deferred.resolve(data.data[0]);
+
+                var _user = data.data[0];
+                var promise = getUser(_user.oid);
+                promise.then(function(success) {
+                    
+                    deferred.resolve(success);
+                }, function(error) {
+                    //-- do something
+                    $log.error("OHO ---------------");
+                    $log.error(error);
+                    deferred.reject(error);
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
+
+
+                // deferred.resolve(data.data[0]);
             })
             .error(function(data, status, header, config) {
+                $log.debug(config);
                 deferred.reject("Login auf dem Server fehlgeschlagen. (status: " + status + ")");
             });
             return deferred.promise;
         };
 
         var getUser = function(oid) {
-            $log.warn("getUser() not implemented");
-            // TODO retrieve data from rest service
-
-
-            // var dummyReturn = { "success": true, 
-            //                     "serverMessage": "HI FROM GET_USER",  
-            //                     "user": getDummyUser() };
-            // var _user = dummyReturn.user;
-
-
-            // if (!_user) {
-            //     return null;
-            // }
-
-
+            $log.debug(">>>>>>>>>>>>>>> " + oid);
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
@@ -131,6 +136,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             })
             .success(function(data, status, header, config) {
                 var _user = data.data[0];
+                $log.debug(">>>>>>>>>>>>>>> " + _user);
 
                 // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
                 for (var i = 0; i < _user.surveys.length; i++) {
@@ -142,12 +148,12 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             })
             .error(function(data, status, header, config) {
                 // $log.debug(data);
-                // $log.debug(config);
-                // deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. (status " + status + ")");
+                $log.debug(config);
+                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. (status " + status + ")");
 
                 //-- TEST --                                   FIXME
                 $log.info("hack");
-                deferred.resolve(getDummyUser());
+                // deferred.resolve(getDummyUser());
                 //-- TEST --
             });
             return deferred.promise;

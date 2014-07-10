@@ -33,7 +33,10 @@ public class UserService {
 				 if (!it.hasNext()) {
 					 throw new NoUserWithThisNameExc();
 				 }
-				 LgUser userFromDb = it.next();
+				 
+				 LgUser userFromDb = it.next(); //  <--  the real thing
+//				 LgUser userFromDb = daUser.getDummy(); //  <-- test
+				 
 				 if (!userFromDb.validatePassword(userFromClient.getPassword())) {
 
 					 System.out.println(userFromClient.getPassword());
@@ -69,12 +72,12 @@ public class UserService {
 			public LgUser executeWithThrows() throws Exception {
 				DaFactory jpaDaFactory = new JpaDaFactory();
 				DaUser daUser = jpaDaFactory.getDaUser();
-				//throws Exc if Id not exist
-				LgUser userFromDb = daUser.find(userIdFromClient.getOid());
+				LgUser userFromDb = daUser.find(userIdFromClient.getOid()); //  <--  the real thing
+//				LgUser userFromDb = daUser.getDummy(); //  <-- test
 				return userFromDb;
 			}
 		}.execute();
-		
+
 		if (!response.isSuccess()) {
 			printDebug(response);
 			throw new WebApplicationException("[get] Something went wrong", 500); // TODO message
