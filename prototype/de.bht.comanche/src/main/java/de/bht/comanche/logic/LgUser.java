@@ -37,9 +37,9 @@ public class LgUser extends DbObject {
     @ManyToMany
 	@JoinTable(name="user_group")			  
 	private List<LgGroup> groups;
-
-	@OneToMany(mappedBy = "usi.user")
-	private List<LgInvite> invites;
+//
+//	@OneToMany(mappedBy = "usi.user")
+//	private List<LgInvite> invites;
 	
 	
 	public LgUser() {}
@@ -55,14 +55,14 @@ public class LgUser extends DbObject {
 		this.hatFriends = hatFriends;
 		this.beFriendFromUsers = beFriendFromUsers;
 		this.groups = groups;
-		this.invites = invites;
+//		this.invites = invites;
 	}
-	
-	public LgUser(LgUser other) {
-		this(other.name, other.tel, other.email, other.password, other.hatFriends, 
-				other.beFriendFromUsers, other.groups, other.invites);
-	}
-	
+//	
+//	public LgUser(LgUser other) {
+//		this(other.name, other.tel, other.email, other.password, other.hatFriends, 
+//				other.beFriendFromUsers, other.groups, other.invites);
+//	}
+//	
 	public String getName() {
 		return name;
 	}
@@ -111,13 +111,13 @@ public class LgUser extends DbObject {
 		this.beFriendFromUsers = beFriendFromUsers;
 	}
 
-	public List<LgInvite> getInvites() {
-		return invites;
-	}
-
-	public void setInvites(List<LgInvite> invites) {
-		this.invites = invites;
-	}
+//	public List<LgInvite> getInvites() {
+//		return invites;
+//	}
+//
+//	public void setInvites(List<LgInvite> invites) {
+//		this.invites = invites;
+//	}
 	
 	public boolean passwordMatchWith(String password) {
 		if (this.password == null) {
@@ -146,6 +146,6 @@ public class LgUser extends DbObject {
 		this.hatFriends = other.hatFriends;
 		this.beFriendFromUsers = other.beFriendFromUsers;
 		this.groups = other.groups;
-		this.invites = other.invites;
+//		this.invites = other.invites;
 	}
 }

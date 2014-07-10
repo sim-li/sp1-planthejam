@@ -31,9 +31,9 @@ public class LgSurvey extends DbObject {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private TimeUnit frequencyTimeUnit;
-
-	@OneToMany(mappedBy = "usi.survey")
-	private List<LgInvite> invites;
+//
+//	@OneToMany(mappedBy = "usi.survey")
+//	private List<LgInvite> invites;
 
 	@OneToMany(mappedBy="survey")
 	private List<LgTimePeriod> possibleTimePeriods;
@@ -86,13 +86,13 @@ public class LgSurvey extends DbObject {
 		this.frequencyTimeUnit = frequencyTimeUnit;
 	}
 
-	public List<LgInvite> getInvites() {
-		return invites;
-	}
-
-	public void setInvites(List<LgInvite> invites) {
-		this.invites = invites;
-	}
+//	public List<LgInvite> getInvites() {
+//		return invites;
+//	}
+//
+//	public void setInvites(List<LgInvite> invites) {
+//		this.invites = invites;
+//	}
 
 	public List<LgTimePeriod> getPossibleTimePeriods() {
 		return possibleTimePeriods;
