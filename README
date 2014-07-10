@@ -1,5 +1,60 @@
-New Line
+
+-- Linux-Umgebung --
+
+username:   ptj
+pass:       ptj
+
+
+-- Fernzugriff --
+
+ssh ptj@192.168.56.102
+pass: ptj
+
+vorher ssh-Zugriff mounten mit sshfs
+
+
+-- Postgres-Tool: pgAdmin-III --
+
+Name:           <name>
+Host:           'localhost'
+Service:        ''
+Wartungs-DB:    'ptjdb'
+Benutzername:   'postgres'
+Passwort:       'postgres'
+
+
+
+-- Datenbankadministration mit allen Rechten --
+
+su postgres
+pass: postgres
+
+
+-- Einrichten der Linux-Umgebung nach erstmaligem Starten vom Image --
+
+apt-get install openjdk-7-jdk
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+-- Spezialwissen --
+
+    ssh-Shortcuts anlegen:
+    
+    vi .ssh/config
+    
+    Host:       <shortcut>
+    Hostname:   <ip-adresse>
+    User:       <username>    
+
+-----------------------------------------------------------------------------------------------------------------------
+
+
+-- Links --
+
+REST
 
 https://github.com/apache/tomee/blob/trunk/examples/rest-example/src/main/java/org/superbiz/rest/service/UserService.java
-
 http://stackoverflow.com/questions/16808379/angularjs-restful-json-requests-with-ngresource-and-restangular
+
+
