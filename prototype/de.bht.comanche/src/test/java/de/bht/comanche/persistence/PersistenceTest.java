@@ -19,8 +19,8 @@ public class PersistenceTest {
 		daUser.beginTransaction();
 		LgUser lgUser = new LgUser();
 		lgUser.setName("Ralf");
-		lgUser.setEmail("simon@a-studios.forg");
-		lgUser.setPassword("myPw");
+		lgUser.setEmail("simon@a-studios.org");
+		lgUser.setPassword("myPwIsEasy");
 		lgUser.setTel("030-3223939");
 		boolean ok = false;
 		try {
