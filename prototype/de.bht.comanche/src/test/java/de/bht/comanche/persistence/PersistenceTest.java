@@ -2,16 +2,13 @@ package de.bht.comanche.persistence;
 
 import static org.junit.Assert.assertEquals;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collection;
 
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
 import org.junit.Test;
 
-import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgUser;
 
 public class PersistenceTest {
@@ -41,4 +38,30 @@ public class PersistenceTest {
 		daUser.endTransaction(ok);
 		assertEquals(ok, true);
     }
+	
+	@Test public void getByNameTest() {
+		JpaDaFactory factory = new JpaDaFactory();
+		DaUser daUser = factory.getDaUser();
+		daUser.beginTransaction();
+		Collection<LgUser> foundUsers;
+		boolean ok = false;
+		try {
+			foundUsers = daUser.findByName("Ralf");
+			ok = true;
+		} catch (NoPersistentClassExc e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoQueryClassExc e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ArgumentCountExc e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ArgumentTypeExc e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		daUser.endTransaction(ok);
+		assertEquals(ok, true);
+	}
 }

@@ -7,6 +7,8 @@ import javassist.NotFoundException;
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.logic.LgUser;
+
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
 	private Class<E> type;
@@ -17,6 +19,11 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 		this.pool = pool;
 	}
 
+	public static void main (String[] args) {
+//		DaGenericImpl<LgUser> da = new DaGenericImpl<LgUser>(LgUser.class, null);
+//		System.out.println(da.type.getSimpleName());
+	}
+	
 	@Override
 	public void save(E entity) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException {
 		pool.save(entity);
@@ -35,20 +42,24 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public Collection<E> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<E> findAll() throws NoPersistentClassExc {
+		return pool.findAll(type);
 	}
 
 	@Override
-	public Collection<E> findByField(String fieldName, Object fieldValue) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<E> findByField(String fieldName, Object fieldValue) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc { 
+		//SELECT c.capital.name FROM Country AS c WHERE c.name = :name
+		final String OBJECT_NAME = type.getSimpleName();
+		String [] args = {
+				fieldName,
+				OBJECT_NAME
+		};
+		return pool.findManyByQuery(type, "SELECT c.%1$s FROM %2$s WHERE c.%1$s = :%1$s", args);
 	}
 
 	@Override
 	public Collection<E> findByWhere(String whereClause, Object... args) {
-		// TODO Auto-generated method stub
+//		pool.findManyByQuery(type, "SELECT c.", i_args)
 		return null;
 	}
 
