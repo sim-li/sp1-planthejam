@@ -52,9 +52,10 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 		final String OBJECT_NAME = type.getSimpleName();
 		String [] args = {
 				fieldName,
-				OBJECT_NAME
+				OBJECT_NAME,
+				(String) fieldValue
 		};
-		return pool.findManyByQuery(type, "SELECT c.%1$s FROM %2$s WHERE c.%1$s = :%1$s", args);
+		return pool.findManyByQuery(type, "SELECT c FROM %2$s AS c WHERE c.%1$s LIKE '%3$s'", args);
 	}
 
 	@Override

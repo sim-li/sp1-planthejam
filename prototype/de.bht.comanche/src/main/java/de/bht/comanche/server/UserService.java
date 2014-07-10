@@ -1,10 +1,6 @@
 package de.bht.comanche.server;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -12,8 +8,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-
-import jersey.repackaged.com.google.common.collect.Lists;
 import de.bht.comanche.logic.DbObject;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaFactory;
@@ -68,7 +62,7 @@ public class UserService {
    	 
     }
 	
-	//get full User by Id
+	//return complete User by Id
 	@POST
 	@Path("get/")
 	@Consumes("application/json")
@@ -138,13 +132,11 @@ public class UserService {
     			 //throws Exc if Id not exist
     			 LgUser userFromDb = daUser.find(oldUserFromClient.getOid()); 
     			 daUser.delete(userFromDb);
-    			 //if deleted set ID to -1? 
     			 return null;
     		 }
     	 }.execute();
  	} 
      
-//     update
      @Path("/update")
      @POST
      @Consumes("application/json")

@@ -6,6 +6,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 import javax.transaction.TransactionRequiredException;
 
@@ -15,6 +16,7 @@ public class PoolImpl<E> implements Pool<E> {
 	
 	@Override
 	public void beginTransaction() {
+		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
 		entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction tr = entityManager.getTransaction();
 		tr.begin();
