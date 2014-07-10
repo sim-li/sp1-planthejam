@@ -80,43 +80,28 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
 
         var login = function(name, password) {
-            $log.debug(">>>>>>>>>>>>>>> " + password);
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                data: { "oid": "", 
-                        "name": name, 
-                        "password": password, 
-                        "email": "", 
-                        "tel": "", 
-                        // "surveys": [] // FIXME missing on server in LgUser ?? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< !!!!! FIXME
-                    }
-            })
-            .success(function(data, status, header, config) {
-                // deferred.resolve(data.data[0]);
+                data: { "name": name, "password": password }
+            }).success(function(data, status, header, config) {
 
-                var _user = data.data[0];
-                $log.debug(_user);
-                $log.debug(">>>>>>>>>>>>>>> trying to get user");
-                var promise = getUser(_user.oid);
-                promise.then(function(success) {
-                    
-                    deferred.resolve(success);
-                }, function(error) {
-                    //-- do something
-                    $log.error("OHO ---------------");
-                    $log.error(error);
-                    deferred.reject(error);
-                }, function(notification) {
-                    // $log.log(notification); // for future use
-                });
+                getUser(data.data[0].oid)
+                    .then(function(success) {    
+                        deferred.resolve(success);
+                    }, function(error) {
+                        //-- do something
+                        $log.error("error (from getUser:");
+                        $log.error(error);
+                        deferred.reject(error);
+                    }, function(notification) {
+                        // $log.log(notification); // for future use
+                    });
+            }).error(function(data, status, header, config) {
+                $log.error("error (from login:");
+                // $log.error(data);
 
-
-                // deferred.resolve(data.data[0]);
-            })
-            .error(function(data, status, header, config) {
-                $log.debug(config);
                 deferred.reject("Login auf dem Server fehlgeschlagen. (status: " + status + ")");
             });
             return deferred.promise;
@@ -129,10 +114,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 method: "POST", 
                 url: USER_PATH + "get", 
                 data: { "oid": oid, 
-                        "name": "", 
-                        "password": "", 
-                        "email": "", 
-                        "tel": "", 
+                        // "name": "", 
+                        // "password": "", 
+                        // "email": "", 
+                        // "tel": "", 
                         // "surveys": [] // FIXME missing on server in LgUser ?? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< !!!!! FIXME
                     }
             })
@@ -150,6 +135,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 _user.surveys = Survey.forSurveysConvertDatesToDatePickerDate(_surveys);
                 
                 deferred.resolve(_user);
+                // deferred.reject(_user); // FIXME -- Test -------------------------------------------------#############################
             })
             .error(function(data, status, header, config) {
                 // $log.debug(data);

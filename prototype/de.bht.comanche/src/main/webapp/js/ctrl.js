@@ -117,38 +117,18 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 $log.log("Login ungueltig.");
                 return;
             }
-
-            var promise = restService.login(_user.name, _user.password);
-            promise.then(function(success) {
-                // $log.debug("Benutzer gefunden. (oid: " + success.oid + ")");
-
-                // var promise = restService.getUser(success.oid);
-                // promise.then(function(success) {
-                //     $scope.session.user = success;
-                //     $scope.session.isLoggedIn = true;
-                //     $log.log("Login erfolgreich.");
-                //     $log.log($scope.session);
-                // }, function(error) {
-                //     //-- do something
-                //     $log.error("OHO ---------------");
-                //     $log.error(error);
-                // }, function(notification) {
-                //     // $log.log(notification); // for future use
-                // });
-
-                $scope.session.user = success;
-                $scope.session.isLoggedIn = true;
-                $log.log("Login erfolgreich.");
-                $log.log($scope.session);
-
-            }, function(error) {
-                $log.error("AHA ---------------");
-                $log.error(error);
-                initSession();
-            }, function(notification) {
-                // $log.log(notification); // for future use
-            });
-
+            restService.login(_user.name, _user.password)
+                .then(function(success) {
+                    $scope.session.user = success;
+                    $scope.session.isLoggedIn = true;
+                    $log.log("Login erfolgreich.");
+                    $log.log($scope.session);
+                }, function(error) {
+                    $log.error(error);
+                    initSession();
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
         };
 
         $scope.register = function() {
@@ -197,7 +177,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
 
         $scope.editUser = function() {
-            angular.copy($scope.session.user, $scope.session.tempUser);
+            $scope.session.tempUser = angular.copy($scope.session.user);
             $scope.session.inEditMode = true;
             $scope.session.showEditUserDialog = true;
         };
@@ -214,7 +194,6 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 return;
             }
             $scope.session.user = _user;
-            $log.log(_user.name);
 
             $scope.session.inEditMode = false;
             $scope.session.showEditUserDialog = false;
@@ -224,8 +203,6 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             $scope.session.tempUser = undefined;
             $scope.session.inEditMode = false;
             $scope.session.showEditUserDialog = false;
-
-            $log.debug($scope.session.tempUser);
         };
 
         $scope.deleteUser = function() {
