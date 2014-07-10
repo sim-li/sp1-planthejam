@@ -43,10 +43,13 @@ public class PersistenceTest {
 		JpaDaFactory factory = new JpaDaFactory();
 		DaUser daUser = factory.getDaUser();
 		daUser.beginTransaction();
-		Collection<LgUser> foundUsers;
+		String nameField = "";
 		boolean ok = false;
 		try {
-			foundUsers = daUser.findByName("Ralf");
+			Collection<LgUser> foundUsers = daUser.findByName("Ralf");
+			if (foundUsers.size() > 0) {
+				nameField = foundUsers.iterator().next().getName();
+			}
 			ok = true;
 		} catch (NoPersistentClassExc e) {
 			// TODO Auto-generated catch block
@@ -62,6 +65,6 @@ public class PersistenceTest {
 			e.printStackTrace();
 		}
 		daUser.endTransaction(ok);
-		assertEquals(ok, true);
+		assertEquals("Ralf", nameField);
 	}
 }
