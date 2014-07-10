@@ -97,6 +97,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 // deferred.resolve(data.data[0]);
 
                 var _user = data.data[0];
+                $log.debug(_user);
+                $log.debug(">>>>>>>>>>>>>>> trying to get user");
                 var promise = getUser(_user.oid);
                 promise.then(function(success) {
                     
@@ -125,7 +127,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
-                url: USER_PATH + "login", 
+                url: USER_PATH + "get", 
                 data: { "oid": oid, 
                         "name": "", 
                         "password": "", 
@@ -136,13 +138,16 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             })
             .success(function(data, status, header, config) {
                 var _user = data.data[0];
-                $log.debug(">>>>>>>>>>>>>>> " + _user);
+
+
+                $log.debug(_user);
 
                 // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
-                for (var i = 0; i < _user.surveys.length; i++) {
-                    _user.surveys[i] = new Survey(_user.surveys[i]);
+                var _surveys =  _user.surveys || [];
+                for (var i = 0; i < _surveys.length; i++) {
+                    _surveys.push(new Survey(_user.surveys[i]));
                 }
-                Survey.forSurveysConvertDatesToDatePickerDate(_user.surveys);
+                _user.surveys = Survey.forSurveysConvertDatesToDatePickerDate(_surveys);
                 
                 deferred.resolve(_user);
             })

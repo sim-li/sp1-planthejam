@@ -196,9 +196,8 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
 
 
-
         $scope.editUser = function() {
-            $scope.session.tempUser = $scope.session.user;
+            angular.copy($scope.session.user, $scope.session.tempUser);
             $scope.session.inEditMode = true;
             $scope.session.showEditUserDialog = true;
         };
@@ -215,14 +214,18 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 return;
             }
             $scope.session.user = _user;
+            $log.log(_user.name);
 
             $scope.session.inEditMode = false;
             $scope.session.showEditUserDialog = false;
         };
 
         $scope.cancelEditUser = function() {
+            $scope.session.tempUser = undefined;
             $scope.session.inEditMode = false;
             $scope.session.showEditUserDialog = false;
+
+            $log.debug($scope.session.tempUser);
         };
 
         $scope.deleteUser = function() {

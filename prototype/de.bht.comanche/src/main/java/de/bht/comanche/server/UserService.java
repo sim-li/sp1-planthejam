@@ -26,21 +26,25 @@ public class UserService {
     public ResponseObject loginUser(final LgUser userFromClient) {
 		 ResponseObject response = new Transaction<LgUser>() {
 			 public LgUser executeWithThrows() throws Exception {
+				 System.out.println("---------------");
+				 System.out.println(userFromClient);
 				 DaFactory jpaDaFactory = new JpaDaFactory();
 				 DaUser daUser = jpaDaFactory.getDaUser();
 				 
-				 Iterator<LgUser> it = daUser.findByName(userFromClient.getName()).iterator();
-				 if (!it.hasNext()) {
-					 throw new NoUserWithThisNameExc();
-				 }
+				 //  <--  the real thing --> 
+//				 Iterator<LgUser> it = daUser.findByName(userFromClient.getName()).iterator();
+//				 if (!it.hasNext()) {
+//					 throw new NoUserWithThisNameExc();
+//				 }
+//				 
+//				 LgUser userFromDb = it.next(); // <--
+				 LgUser userFromDb = daUser.getDummy(); //  <-- test
+				 if (!userFromDb.passwordMatchWith(userFromClient.getPassword())) {
 				 
-				 LgUser userFromDb = it.next(); //  <--  the real thing
-//				 LgUser userFromDb = daUser.getDummy(); //  <-- test
-				 
-				 if (!userFromDb.validatePassword(userFromClient.getPassword())) {
+//				 if (!userFromDb.validatePassword(userFromClient.getPassword())) { //  <-- the real thing
 
-					 System.out.println(userFromClient.getPassword());
-					 System.out.println(userFromDb.getPassword());
+					 System.out.println("c: " + userFromClient.getPassword());
+					 System.out.println("d: " + userFromDb.getPassword());
 
 					 throw new WrongPasswordExc();
 				 }
@@ -70,10 +74,12 @@ public class UserService {
 	public ResponseObject getUser(final LgUser userIdFromClient){
 		ResponseObject response = new Transaction<LgUser>() {
 			public LgUser executeWithThrows() throws Exception {
+				System.out.println("HI FROM GET");
 				DaFactory jpaDaFactory = new JpaDaFactory();
 				DaUser daUser = jpaDaFactory.getDaUser();
-				LgUser userFromDb = daUser.find(userIdFromClient.getOid()); //  <--  the real thing
-//				LgUser userFromDb = daUser.getDummy(); //  <-- test
+//				LgUser userFromDb = daUser.find(userIdFromClient.getOid()); //  <--  the real thing
+				LgUser userFromDb = daUser.getDummy(); //  <-- test
+				System.out.println("TRYING TO RETURN GET");
 				return userFromDb;
 			}
 		}.execute();

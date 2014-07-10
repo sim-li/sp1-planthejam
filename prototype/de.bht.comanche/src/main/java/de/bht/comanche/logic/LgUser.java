@@ -119,7 +119,7 @@ public class LgUser extends DbObject {
 		this.invites = invites;
 	}
 	
-	public boolean validatePassword(String password) {
+	public boolean passwordMatchWith(String password) {
 		if (this.password == null) {
 			return false;
 		}
