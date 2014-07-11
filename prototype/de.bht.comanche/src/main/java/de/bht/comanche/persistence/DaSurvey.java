@@ -7,8 +7,8 @@ import javax.transaction.TransactionRequiredException;
 
 import javassist.NotFoundException;
 import de.bht.comanche.logic.LgSurvey;
-import de.bht.comanche.server.exceptions.NoPersistentClassException;
-import de.bht.comanche.server.exceptions.OidNotFoundException;
+import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public interface DaSurvey {
 	void save(LgSurvey survey) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException;

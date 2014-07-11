@@ -123,8 +123,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             })
             .success(function(data, status, header, config) {
                 var _user = data.data[0];
-
-
                 $log.debug(_user);
 
                 // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input

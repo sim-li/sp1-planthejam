@@ -18,11 +18,10 @@ public abstract class Transaction<E> {
 		try {
 			DbObject objectFromDb = executeWithThrows();
 			response.addData(objectFromDb);
+			success = true;
 		} catch (PtjException ptjE) {
-			success = false;
 			response.setResponseCode(ptjE.getResponseCode());
 		} catch (Exception e) {
-			success = false;
 			e.printStackTrace();
 		} finally {
 			pool.endTransaction(success); 

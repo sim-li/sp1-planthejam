@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,12 +28,33 @@ public class LgUser extends DbObject {
 			@JoinColumn(name = "friend_Id") })
 	private List<LgUser> hasContacts;
 
-	@ManyToMany(mappedBy = "hasContacts")
-	private List<LgUser> isContacts;
+//	@ManyToMany(mappedBy = "hasContacts")
+	
+//	@OneToMany(mappedBy = "user")
+//	private List<LgContact> contacts;
 
 	@OneToMany(mappedBy="user")
 	private List<LgInvite> invites;
 
+	public LgUser() {
+		this.hasContacts = new LinkedList<LgUser>();
+//		this.contacts = new LinkedList<LgContact>();
+		this.invites = new LinkedList<LgInvite>();
+	}
+	
+	public LgUser(String name, String tel, String email, String password,
+			List<LgUser> hasContacts, /*List<LgContact> contacts,*/
+			List<LgInvite> invites) {
+		super();
+		this.name = name;
+		this.tel = tel;
+		this.email = email;
+		this.password = password;
+		this.hasContacts = hasContacts == null ? new LinkedList<LgUser>() : hasContacts;
+//		this.contacts = contacts;
+		this.invites = invites;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -72,14 +94,30 @@ public class LgUser extends DbObject {
 	public void setHasContacts(List<LgUser> hasContacts) {
 		this.hasContacts = hasContacts;
 	}
-
-	public List<LgUser> getIsContacts() {
-		return isContacts;
+	
+	public boolean addHasContact(LgUser hasContact) {
+		return this.hasContacts.add(hasContact);
+	}
+	
+	public boolean removeHasContact(LgUser hasContact) {
+		return this.hasContacts.remove(hasContact);
 	}
 
-	public void setIsContacts(List<LgUser> isContacts) {
-		this.isContacts = isContacts;
-	}
+//	public List<LgContact> getContacts() {
+//		return contacts;
+//	}
+//
+//	public void setContacts(List<LgContact> contacts) {
+//		this.contacts = contacts;
+//	}
+//	
+//	public boolean addContact(LgContact contact) {
+//		return this.contacts.add(contact);
+//	}
+//	
+//	public boolean removeContact(LgUser contact) {
+//		return this.contacts.remove(contact);
+//	}
 
 	public List<LgInvite> getInvites() {
 		return invites;
@@ -89,6 +127,24 @@ public class LgUser extends DbObject {
 		this.invites = invites;
 	}
 	
+	public boolean addInvites(LgInvite invite) {
+		return this.invites.add(invite);
+	}
+	
+	public boolean removeInvites(LgInvite invite) {
+		return this.invites.remove(invite);
+	}
+
+	public void updateWith(LgUser other) {
+		this.name = other.name;
+		this.tel = other.tel;
+		this.email = other.email;
+		this.password = other.password;
+//		this.hasContacts = other.hasContacts;
+//		this.contacts = other.contacts;
+		this.invites = other.invites;
+	}
+
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
 		if (this.password == null) {

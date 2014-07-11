@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.exceptions.ArgumentCountException;
-import de.bht.comanche.server.exceptions.ArgumentTypeException;
-import de.bht.comanche.server.exceptions.NoPersistentClassException;
-import de.bht.comanche.server.exceptions.NoQueryClassException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 
 public class PersistenceTest {
 	
@@ -25,7 +25,6 @@ public class PersistenceTest {
 	}
 	
 	@Test public void saveUserTest() {
-		JpaDaFactory factory = new JpaDaFactory();
 		DaUser daUser = factory.getDaUser();
 		daUser.beginTransaction();
 		LgUser lgUser = new LgUser();
@@ -45,36 +44,46 @@ public class PersistenceTest {
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {			
+			daUser.endTransaction(ok);
 		}
-		daUser.endTransaction(ok);
 		assertEquals(ok, true);
     }
 	
-	@Test public void saveUser2() {
+	@Test public void saveUserMoreComplete() {
 		DaUser daUser = factory.getDaUser();
 		
-		daUser.beginTransaction(); // FIXME
+		daUser.beginTransaction(); // FIXME --> Transaction
 		
-		LgUser lgUser = new LgUser();
-		lgUser.setName("Ralf");
-		lgUser.setEmail("test@user.tst");
-		lgUser.setPassword("nosafepwd");
-		lgUser.setTelephone("0301234567");
-		lgUser.setOid(111111111);
-//		lgUser.set
+		LgUser alice = new LgUser();
+		alice.setName("Alice");
+		alice.setEmail("alice@user.tst");
+		alice.setPassword("nosafepwd");
+		alice.setTel("0301234567");
+		
+		LgUser bob = new LgUser();
+		bob.setName("Bob");
+		bob.setEmail("bob@test.usr");
+		bob.setPassword("hiiambob");
+		bob.setTel("0309876543");
+//		bob.addHasContact(bob);
 		
 		boolean ok = false;
 		
 		try {
-			daUser.save(lgUser);
+			daUser.save(alice);
+			daUser.save(bob);
 			ok = true;
 		} catch (Exception  e) {
 			e.printStackTrace();
+//			ok = true;
+		} finally {			
+			daUser.endTransaction(ok); // FIXME --> Transaction
 		}
 		
-		daUser.endTransaction(ok); // FIXME
 		
 		assertEquals(ok, true);
+//		assertEquals(ok, false);
     }
 	
 	@Test public void getByNameTest() {
@@ -105,4 +114,9 @@ public class PersistenceTest {
 		daUser.endTransaction(ok);
 		assertEquals("Ralf", nameField);
 	}
+	
+//	@After public void tearDown() {
+//		// TODO clean up the database when the tests are done 
+//	}
+	
 }
