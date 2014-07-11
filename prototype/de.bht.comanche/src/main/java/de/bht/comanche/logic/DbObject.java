@@ -1,5 +1,3 @@
-
-
 package de.bht.comanche.logic;
 
 import java.io.Serializable;
