@@ -1,3 +1,5 @@
+
+
 package de.bht.comanche.logic;
 
 import java.io.Serializable;
@@ -37,3 +39,5 @@ public abstract class DbObject implements Serializable{
 		this.oid = oid;
 	}
 }
+
+

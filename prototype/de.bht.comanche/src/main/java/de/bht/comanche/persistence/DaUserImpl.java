@@ -28,7 +28,7 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 		user.setName("Tom Sawyer");
 		user.setPassword("letmeinplease");
 		user.setEmail("tom@sawyer.com");
-		user.setTel("00123456");
+		user.setTelephone("00123456");
 		return user;
 	}
 }

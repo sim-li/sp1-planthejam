@@ -15,12 +15,8 @@ import javax.persistence.Table;
 public class LgSurvey extends DbObject {
 	private static final long serialVersionUID = 1L;
 	
-	@Column(length=125)
 	private String name;
-	
-	@Column(length=255)
 	private String description;
-	
 	private int frequencyDist;
 	private Date deadline;
 
@@ -32,12 +28,12 @@ public class LgSurvey extends DbObject {
 	@Enumerated(EnumType.STRING)
 	private TimeUnit frequencyTimeUnit;
 
-	@OneToMany(mappedBy = "usi.survey")
+	@OneToMany(mappedBy="invite_survey")
 	private List<LgInvite> invites;
-
+	
 	@OneToMany(mappedBy="survey")
 	private List<LgTimePeriod> possibleTimePeriods;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -101,5 +97,4 @@ public class LgSurvey extends DbObject {
 	public void setPossibleTimePeriods(List<LgTimePeriod> possibleTimePeriods) {
 		this.possibleTimePeriods = possibleTimePeriods;
 	}
-	
 }
