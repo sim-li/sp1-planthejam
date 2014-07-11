@@ -86,9 +86,11 @@ public class UserService {
 			public LgUser executeWithThrows() throws Exception {
 				DaFactory jpaDaFactory = new JpaDaFactory();
 				DaUser daUser = jpaDaFactory.getDaUser();
-				
-//				LgUser userFromDb = daUser.find(userFromClient.getOid()); //  <--  the real thing
-				LgUser userFromDb = daUser.getDummy(); //  <-- test
+				daUser.beginTransaction();
+				System.out.println("OID ---------------------->" + userFromClient.getOid());
+				LgUser userFromDb = daUser.find(userFromClient.getOid()); //  <--  the real thing
+//				LgUser userFromDb = daUser.getDummy(); //  <-- test
+				daUser.endTransaction(true);
 				System.out.println("from client: " + userFromClient);
 				System.out.println("from server: " + userFromDb);
 				return userFromDb;
