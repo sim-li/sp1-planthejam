@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -14,11 +13,9 @@ public class LgInvite extends DbObject{
 	private boolean isHost;
 	private boolean isIgnored;
 	
-	@Column(nullable=false)
 	@ManyToOne
 	private LgUser user;
 	
-	@Column(nullable=false)
 	@ManyToOne
 	private LgSurvey invite_survey;
 

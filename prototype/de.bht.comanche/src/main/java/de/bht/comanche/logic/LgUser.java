@@ -3,7 +3,6 @@ package de.bht.comanche.logic;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -18,20 +17,19 @@ public class LgUser extends DbObject {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
-	private String telephone;
+	private String tel;
 	private String email;
 	private String password;
 
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "contact", joinColumns = { 
-			@JoinColumn(name = "user_Id", referencedColumnName = "id") }, inverseJoinColumns = { 
-			@JoinColumn(name = "friend_Id", referencedColumnName = "id") })
+			@JoinColumn(name = "user_Id") }, inverseJoinColumns = { 
+			@JoinColumn(name = "friend_Id") })
 	private List<LgUser> hasContacts;
 
 	@ManyToMany(mappedBy = "hasContacts")
 	private List<LgUser> isContacts;
 
-	@Column(nullable=true)
 	@OneToMany(mappedBy="user")
 	private List<LgInvite> invites;
 
@@ -43,12 +41,12 @@ public class LgUser extends DbObject {
 		this.name = name;
 	}
 
-	public String getTelephone() {
-		return telephone;
+	public String getTel() {
+		return tel;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 
 	public String getEmail() {
