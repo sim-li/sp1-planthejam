@@ -21,7 +21,7 @@ public class PersistenceTest {
 		lgUser.setName("Ralf");
 		lgUser.setEmail("simon@a-studios.org");
 		lgUser.setPassword("myPwIsEasy");
-		lgUser.setTelephone("030-3223939");
+		lgUser.setTel("030-3223939");
 		boolean ok = false;
 		try {
 			daUser.save(lgUser);
