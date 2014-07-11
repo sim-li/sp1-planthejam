@@ -3,16 +3,11 @@ package de.bht.comanche.logic;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "user")
 public class LgUser extends DbObject {
 
 	private static final long serialVersionUID = 1L;
@@ -22,37 +17,14 @@ public class LgUser extends DbObject {
 	private String email;
 	private String password;
 
-	@ManyToMany(cascade = { CascadeType.ALL })
-	@JoinTable(name = "contact", joinColumns = { 
-			@JoinColumn(name = "user_Id") }, inverseJoinColumns = { 
-			@JoinColumn(name = "friend_Id") })
-	private List<LgUser> hasContacts;
+	@Id
+	private long oid;
 
-//	@ManyToMany(mappedBy = "hasContacts")
-	
-//	@OneToMany(mappedBy = "user")
-//	private List<LgContact> contacts;
-
-	@OneToMany(mappedBy="user")
+	@OneToMany
 	private List<LgInvite> invites;
 
 	public LgUser() {
-		this.hasContacts = new LinkedList<LgUser>();
-//		this.contacts = new LinkedList<LgContact>();
 		this.invites = new LinkedList<LgInvite>();
-	}
-	
-	public LgUser(String name, String tel, String email, String password,
-			List<LgUser> hasContacts, /*List<LgContact> contacts,*/
-			List<LgInvite> invites) {
-		super();
-		this.name = name;
-		this.tel = tel;
-		this.email = email;
-		this.password = password;
-		this.hasContacts = hasContacts == null ? new LinkedList<LgUser>() : hasContacts;
-//		this.contacts = contacts;
-		this.invites = invites;
 	}
 	
 	public String getName() {
@@ -87,38 +59,6 @@ public class LgUser extends DbObject {
 		this.password = password;
 	}
 
-	public List<LgUser> getHasContacts() {
-		return hasContacts;
-	}
-
-	public void setHasContacts(List<LgUser> hasContacts) {
-		this.hasContacts = hasContacts;
-	}
-	
-	public boolean addHasContact(LgUser hasContact) {
-		return this.hasContacts.add(hasContact);
-	}
-	
-	public boolean removeHasContact(LgUser hasContact) {
-		return this.hasContacts.remove(hasContact);
-	}
-
-//	public List<LgContact> getContacts() {
-//		return contacts;
-//	}
-//
-//	public void setContacts(List<LgContact> contacts) {
-//		this.contacts = contacts;
-//	}
-//	
-//	public boolean addContact(LgContact contact) {
-//		return this.contacts.add(contact);
-//	}
-//	
-//	public boolean removeContact(LgUser contact) {
-//		return this.contacts.remove(contact);
-//	}
-
 	public List<LgInvite> getInvites() {
 		return invites;
 	}
@@ -140,8 +80,6 @@ public class LgUser extends DbObject {
 		this.tel = other.tel;
 		this.email = other.email;
 		this.password = other.password;
-//		this.hasContacts = other.hasContacts;
-//		this.contacts = other.contacts;
 		this.invites = other.invites;
 	}
 

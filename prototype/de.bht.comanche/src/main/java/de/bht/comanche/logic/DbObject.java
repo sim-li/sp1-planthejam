@@ -12,9 +12,9 @@ import javax.persistence.MappedSuperclass;
 public abstract class DbObject implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(unique = true, nullable = false)
+//	@Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Column(unique = true, nullable = false)
 	private long oid; // FIXME ("public" for testing) Alert: Change to private immediately
 
 	public long getOid() {

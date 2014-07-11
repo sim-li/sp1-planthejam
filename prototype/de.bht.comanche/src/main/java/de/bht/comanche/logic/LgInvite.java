@@ -1,23 +1,21 @@
 package de.bht.comanche.logic;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 @Entity
 //@Table(name = "Lg_Invite")
 public class LgInvite extends DbObject{
 	
 	private static final long serialVersionUID = 1L;
-	
 	private boolean isHost;
 	private boolean isIgnored;
 	
 	@ManyToOne
 	private LgUser user;
-	
-	@ManyToOne
-	private LgSurvey invite_survey;
+	@Id
+	private long oid;
 
 	public boolean isHost() {
 		return isHost;
@@ -42,12 +40,4 @@ public class LgInvite extends DbObject{
 	public void setUser(LgUser user) {
 		this.user = user;
 	}
-
-	public LgSurvey getSurvey() {
-		return invite_survey;
-	}
-
-	public void setSurvey(LgSurvey survey) {
-		this.invite_survey = survey;
-	}	
 }
