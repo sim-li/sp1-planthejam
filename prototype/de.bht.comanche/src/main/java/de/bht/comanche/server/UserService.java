@@ -7,7 +7,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
 import de.bht.comanche.server.exceptions.NoUserWithThisNameException;
@@ -24,10 +23,8 @@ public class UserService extends Service {
     @Consumes("application/json")
     @Produces({"application/json"})
     public ResponseObject loginUser(final LgUser userFromClient) {
-		
 		 final DaUser daUser = factory.getDaUser();
 		 ResponseObject response = new Transaction<LgUser> (daUser.getPool()) {
-			 
 			 public LgUser executeWithThrows() throws Exception {
 				 List<LgUser> users = daUser.findByName(userFromClient.getName());
 				 if (users.isEmpty()) {
