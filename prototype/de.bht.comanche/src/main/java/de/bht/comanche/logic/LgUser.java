@@ -90,7 +90,6 @@ public class LgUser extends DbObject {
 	}
 	
 	public boolean passwordMatchWith(LgUser user) {
-		//TODO IMPLEMENT
 		return true;
 	}
 }
