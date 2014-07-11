@@ -3,6 +3,7 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
@@ -11,10 +12,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.ResponseObject;
+import de.bht.comanche.server.Transaction;
 import de.bht.comanche.server.exceptions.ArgumentCountException;
 import de.bht.comanche.server.exceptions.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.NoPersistentClassException;
 import de.bht.comanche.server.exceptions.NoQueryClassException;
+import de.bht.comanche.server.exceptions.NoUserWithThisNameException;
+import de.bht.comanche.server.exceptions.WrongPasswordException;
 
 public class PersistenceTest {
 	
@@ -59,9 +64,8 @@ public class PersistenceTest {
 		lgUser.setName("Ralf");
 		lgUser.setEmail("test@user.tst");
 		lgUser.setPassword("nosafepwd");
-		lgUser.setTelephone("0301234567");
+		lgUser.setTel("0301234567");
 		lgUser.setOid(111111111);
-//		lgUser.set
 		
 		boolean ok = false;
 		

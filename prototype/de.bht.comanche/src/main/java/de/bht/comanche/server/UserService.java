@@ -37,7 +37,6 @@ public class UserService extends Service {
 				}
 				LgUser userWithId = new LgUser();
 				userWithId.setIdFrom(userFromDb);
-				daUser.endTransaction(true);
 				return userWithId;
 			}
 		}.execute();
