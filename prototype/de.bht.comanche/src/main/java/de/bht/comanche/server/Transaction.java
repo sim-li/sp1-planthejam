@@ -26,7 +26,7 @@ public abstract class Transaction<E> {
 		} catch (WrongPasswordException e) {
 			serverResponse.addServerMessage("Wrong password");
 			System.out.println("Wrong password");
-		} catch (NoUserWithThisNameExc e) {	
+//		} catch (NoUserWithThisNameExc e) {	
 			serverResponse.addServerMessage("Wrong name");
 			System.out.println("Wrong name");
 		} catch (UserWithThisNameExistsException e) {

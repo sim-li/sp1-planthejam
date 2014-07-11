@@ -28,6 +28,7 @@
 
 	<persistence-unit name="planthejam.jpa">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		
 	 	<properties>
 	 		<property name="hibernate.hbm2ddl.auto" value="update"/>
 	 	</properties>

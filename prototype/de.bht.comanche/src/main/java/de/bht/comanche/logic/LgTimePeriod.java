@@ -13,6 +13,7 @@ public class LgTimePeriod extends DbObject {
 	private static final long serialVersionUID = 1L;
 	private Date startTime;
 	private int durationMinutes;
+
 	@ManyToOne
 	private LgSurvey survey;
 
