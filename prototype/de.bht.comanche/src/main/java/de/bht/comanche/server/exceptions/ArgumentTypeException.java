@@ -4,6 +4,6 @@ public class ArgumentTypeException extends PersistenceException {
 	private static final long serialVersionUID = -758575384394400801L;
 	
 	public ArgumentTypeException() {
-		super(error);
+		super(PersistenceErrorMessage.WRONG_ARGUMENT_TYPE);
 	}
 }
