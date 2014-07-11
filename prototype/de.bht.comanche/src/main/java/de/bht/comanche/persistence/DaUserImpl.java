@@ -1,8 +1,12 @@
 package de.bht.comanche.persistence;
 
-import java.util.Collection;
+import java.util.List;
 
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.exceptions.ArgumentCountException;
+import de.bht.comanche.server.exceptions.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.NoQueryClassException;
 
 public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 	public DaUserImpl(Pool<LgUser> pool) {
@@ -11,13 +15,13 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 	
 	/** 
 	 * FIXME Attention: Change id declaration in DbObject
-	 * @throws ArgumentTypeExc 
-	 * @throws ArgumentCountExc 
-	 * @throws NoQueryClassExc 
-	 * @throws NoPersistentClassExc 
+	 * @throws ArgumentTypeException 
+	 * @throws ArgumentCountException 
+	 * @throws NoQueryClassException 
+	 * @throws NoPersistentClassException 
 	 */
 	@Override
-	public Collection<LgUser> findByName(String name) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc {
+	public List<LgUser> findByName(String name) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException {
 		return findByField("name", name);
 
 	}

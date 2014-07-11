@@ -12,6 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.exceptions.ArgumentCountException;
+import de.bht.comanche.server.exceptions.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.NoQueryClassException;
 
 public class PersistenceTest {
 	
@@ -96,16 +100,16 @@ public class PersistenceTest {
 				nameField = foundUsers.iterator().next().getName();
 			}
 			ok = true;
-		} catch (NoPersistentClassExc e) {
+		} catch (NoPersistentClassException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoQueryClassExc e) {
+		} catch (NoQueryClassException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ArgumentCountExc e) {
+		} catch (ArgumentCountException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ArgumentTypeExc e) {
+		} catch (ArgumentTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

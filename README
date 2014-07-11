@@ -17,6 +17,7 @@ vorher ssh-Zugriff mounten mit sshfs
 
 Name:           <name>
 Host:           'localhost'
+Port:           '5432'
 Service:        ''
 Wartungs-DB:    'ptjdb'
 Benutzername:   'postgres'
@@ -33,6 +34,9 @@ pass: postgres
 -- Einrichten der Linux-Umgebung nach erstmaligem Starten vom Image --
 
 apt-get install openjdk-7-jdk
+
+git config --global user.name ""
+git config --global user.email ""
 
 
 -----------------------------------------------------------------------------------------------------------------------

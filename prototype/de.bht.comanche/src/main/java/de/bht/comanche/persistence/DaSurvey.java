@@ -1,14 +1,19 @@
 package de.bht.comanche.persistence;
 
-import java.util.Collection;
+import java.util.List;
 
-import de.bht.comanche.logic.LgSurvey;
+import javax.persistence.EntityExistsException;
+import javax.transaction.TransactionRequiredException;
+
 import javassist.NotFoundException;
+import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.server.exceptions.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.OidNotFoundException;
 
 public interface DaSurvey {
-	void save(LgSurvey survey); // insert or update
-	void delete(LgSurvey survey);
-	LgSurvey find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc;
-	Collection<LgSurvey> findAll() throws NoPersistentClassExc ;
-    Collection<LgSurvey> findByName(String name);
+	void save(LgSurvey survey) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException;
+	void delete(LgSurvey survey) throws TransactionRequiredException, IllegalArgumentException;
+	LgSurvey find(long id) throws NotFoundException, NoPersistentClassException, OidNotFoundException;
+	List<LgSurvey> findAll() throws NoPersistentClassException ;
+    List<LgSurvey> findByName(String name);
 }

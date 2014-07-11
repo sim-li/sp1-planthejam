@@ -143,7 +143,8 @@ public class LgUser extends DbObject {
 		this.invites = other.invites;
 	}
 
-	public boolean passwordMatchWith(String password) {
+	public boolean passwordMatchWith(LgUser user) {
+		final String password = user.getPassword();
 		if (this.password == null) {
 			return false;
 		}

@@ -1,6 +1,7 @@
 package de.bht.comanche.persistence;
 
 import java.util.Collection;
+import java.util.List;
 
 import javassist.NotFoundException;
 
@@ -8,6 +9,11 @@ import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.exceptions.ArgumentCountException;
+import de.bht.comanche.server.exceptions.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.NoQueryClassException;
+import de.bht.comanche.server.exceptions.OidNotFoundException;
 
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
@@ -36,18 +42,18 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public E find(long id) throws NotFoundException, NoPersistentClassExc, OidNotFoundExc {
+	public E find(long id) throws NotFoundException, NoPersistentClassException, OidNotFoundException {
 		return pool.find(type, id);
 		
 	}
 
 	@Override
-	public Collection<E> findAll() throws NoPersistentClassExc {
+	public List<E> findAll() throws NoPersistentClassException {
 		return pool.findAll(type);
 	}
 
 	@Override
-	public Collection<E> findByField(String fieldName, Object fieldValue) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc { 
+	public List<E> findByField(String fieldName, Object fieldValue) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException { 
 		//SELECT c.capital.name FROM Country AS c WHERE c.name = :name
 		final String OBJECT_NAME = type.getSimpleName();
 		String [] args = {
@@ -59,13 +65,13 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public Collection<E> findByWhere(String whereClause, Object... args) {
+	public List<E> findByWhere(String whereClause, Object... args) {
 //		pool.findManyByQuery(type, "SELECT c.", i_args)
 		return null;
 	}
 
 	@Override
-	public Collection<E> findByExample(E example) {
+	public List<E> findByExample(E example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -78,6 +84,10 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	@Override
 	public void endTransaction(boolean success) {
 		pool.endTransaction(success);
+	}
+	
+	public Pool<E> getPool() {
+		return this.pool;
 	}
 
 }
