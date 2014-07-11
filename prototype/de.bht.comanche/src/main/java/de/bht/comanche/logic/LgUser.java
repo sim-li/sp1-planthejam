@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,6 +34,25 @@ public class LgUser extends DbObject {
 	@OneToMany(mappedBy="user")
 	private List<LgInvite> invites;
 
+	public LgUser() {
+		this.hasContacts = new LinkedList<LgUser>();
+		this.isContacts = new LinkedList<LgUser>();
+		this.invites = new LinkedList<LgInvite>();
+	}
+	
+	public LgUser(String name, String tel, String email, String password,
+			List<LgUser> hasContacts, List<LgUser> isContacts,
+			List<LgInvite> invites) {
+		super();
+		this.name = name;
+		this.tel = tel;
+		this.email = email;
+		this.password = password;
+		this.hasContacts = hasContacts == null ? new LinkedList<LgUser>() : hasContacts;
+		this.isContacts = isContacts;
+		this.invites = invites;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -72,6 +92,14 @@ public class LgUser extends DbObject {
 	public void setHasContacts(List<LgUser> hasContacts) {
 		this.hasContacts = hasContacts;
 	}
+	
+	public boolean addHasContact(LgUser hasContact) {
+		return this.hasContacts.add(hasContact);
+	}
+	
+	public boolean removeHasContact(LgUser hasContact) {
+		return this.hasContacts.remove(hasContact);
+	}
 
 	public List<LgUser> getIsContacts() {
 		return isContacts;
@@ -80,6 +108,14 @@ public class LgUser extends DbObject {
 	public void setIsContacts(List<LgUser> isContacts) {
 		this.isContacts = isContacts;
 	}
+	
+	public boolean addIsContact(LgUser hasContact) {
+		return this.isContacts.add(hasContact);
+	}
+	
+	public boolean removeIsContact(LgUser isContact) {
+		return this.isContacts.remove(isContact);
+	}
 
 	public List<LgInvite> getInvites() {
 		return invites;
@@ -87,5 +123,30 @@ public class LgUser extends DbObject {
 
 	public void setInvites(List<LgInvite> invites) {
 		this.invites = invites;
+	}
+	
+	public boolean addInvites(LgInvite invite) {
+		return this.invites.add(invite);
+	}
+	
+	public boolean removeInvites(LgInvite invite) {
+		return this.invites.remove(invite);
+	}
+
+	public void updateWith(LgUser other) {
+		this.name = other.name;
+		this.tel = other.tel;
+		this.email = other.email;
+		this.password = other.password;
+		this.hasContacts = other.hasContacts;
+		this.isContacts = other.isContacts;
+		this.invites = other.invites;
+	}
+
+	public boolean passwordMatchWith(String password) {
+		if (this.password == null) {
+			return false;
+		}
+		return this.password.equals(password);
 	}
 }
