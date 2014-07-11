@@ -88,4 +88,9 @@ public class LgUser extends DbObject {
 	public void setInvites(List<LgInvite> invites) {
 		this.invites = invites;
 	}
+	
+	public boolean passwordMatchWith(LgUser user) {
+		//TODO IMPLEMENT
+		return true;
+	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.ArgumentCountException;
 import de.bht.comanche.server.exceptions.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.NoPersistentClassException;

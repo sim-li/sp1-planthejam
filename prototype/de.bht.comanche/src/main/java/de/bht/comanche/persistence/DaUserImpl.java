@@ -1,6 +1,6 @@
 package de.bht.comanche.persistence;
 
-import java.util.Collection;
+import java.util.List;
 
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.ArgumentCountException;
@@ -21,7 +21,7 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 	 * @throws NoPersistentClassException 
 	 */
 	@Override
-	public Collection<LgUser> findByName(String name) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException {
+	public List<LgUser> findByName(String name) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException {
 		return findByField("name", name);
 
 	}

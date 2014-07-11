@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.ArgumentCountException;
 import de.bht.comanche.server.exceptions.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.NoPersistentClassException;

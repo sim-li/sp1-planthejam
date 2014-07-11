@@ -1,6 +1,6 @@
 package de.bht.comanche.server;
 
-import java.util.Iterator;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -10,7 +10,7 @@ import javax.ws.rs.WebApplicationException;
 
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
-import de.bht.comanche.server.exceptions.OidNotFoundException;
+import de.bht.comanche.server.exceptions.NoUserWithThisNameException;
 import de.bht.comanche.server.exceptions.WrongPasswordException;
 
 @Path("/user/")
@@ -29,14 +29,14 @@ public class UserService extends Service {
 		 ResponseObject response = new Transaction<LgUser> (daUser.getPool()) {
 			 
 			 public LgUser executeWithThrows() throws Exception {
-				 Iterator<LgUser> it = daUser.findByName(userFromClient.getName()).iterator();
-				 if (!it.hasNext()) {
-//					 throw new NoUserWithThisNameExc();
+				 List<LgUser> users = daUser.findByName(userFromClient.getName());
+				 if (users.isEmpty()) {
+					 throw new NoUserWithThisNameException();
 				 }
-				 LgUser userFromDb = it.next(); 
-//				 if (!userFromDb.passwordMatchWith(userFromClient.getPassword())) {
-//					 throw new WrongPasswordException();
-//				 }
+				 LgUser userFromDb = users.get(0);
+				 if (!userFromDb.passwordMatchWith(userFromClient)) {
+					 throw new WrongPasswordException();
+				 }
 				 LgUser userWithId = new LgUser();
 				 userWithId.setIdFrom(userFromDb);
 				 daUser.endTransaction(true);
