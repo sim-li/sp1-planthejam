@@ -7,10 +7,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
-import de.bht.comanche.server.exceptions.NoUserWithThisNameException;
-import de.bht.comanche.server.exceptions.WrongPasswordException;
+import de.bht.comanche.server.exceptions.logic.NoUserWithThisNameException;
+import de.bht.comanche.server.exceptions.logic.WrongPasswordException;
 
 @Path("/user/")
 public class UserService extends Service {

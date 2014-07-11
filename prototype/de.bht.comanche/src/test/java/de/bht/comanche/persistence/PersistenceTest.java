@@ -12,10 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.exceptions.ArgumentCountException;
-import de.bht.comanche.server.exceptions.ArgumentTypeException;
-import de.bht.comanche.server.exceptions.NoPersistentClassException;
-import de.bht.comanche.server.exceptions.NoQueryClassException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 
 public class PersistenceTest {
 	
@@ -26,7 +26,6 @@ public class PersistenceTest {
 	}
 	
 	@Test public void saveUserTest() {
-//		JpaDaFactory factory = new JpaDaFactory();
 		DaUser daUser = factory.getDaUser();
 		daUser.beginTransaction();
 		LgUser lgUser = new LgUser();
