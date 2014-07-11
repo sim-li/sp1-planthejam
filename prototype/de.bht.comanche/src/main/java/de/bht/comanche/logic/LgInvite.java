@@ -1,8 +1,12 @@
 package de.bht.comanche.logic;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 //@Table(name = "Lg_Invite")
@@ -13,9 +17,12 @@ public class LgInvite extends DbObject{
 	private boolean isIgnored;
 	
 	@ManyToOne
+	@JoinColumn(name="USER_ID")
 	private LgUser user;
 	@Id
-	private long oid;
+	@SequenceGenerator(name = "idGeneratorSeq", sequenceName = "idSequence")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "idGeneratorSeq")
+	private long invite_id;
 
 	public boolean isHost() {
 		return isHost;

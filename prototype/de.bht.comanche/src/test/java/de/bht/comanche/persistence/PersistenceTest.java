@@ -3,6 +3,10 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.transaction.TransactionRequiredException;
 
 import org.junit.Before;
@@ -10,6 +14,10 @@ import org.junit.Test;
 
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 
 public class PersistenceTest {
 	
@@ -17,34 +25,6 @@ public class PersistenceTest {
 	
 	@Before public void setUp(){
 		factory = new JpaDaFactory();
-	}
-	
-	
-	@Test public void saveInviteTest() {
-		DaInvite daInvite = factory.getDaInvite();
-		LgUser lgUser = new LgUser();
-		lgUser.setName("Ralf");
-		lgUser.setEmail("simon@a-studios.org");
-		lgUser.setPassword("myPwIsEasy");
-		lgUser.setTel("030-3223939");
-		LgInvite lgInvite = new LgInvite();
-		lgInvite.setUser(lgUser);
-		boolean ok = false;
-		try {
-			daInvite.save(lgInvite);
-			ok = true;
-		} catch (EntityExistsException e) {
-			e.printStackTrace();
-		} catch (TransactionRequiredException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {			
-			daInvite.endTransaction(ok);
-		}
-		assertEquals(ok, true);
 	}
 	
 //	@Test public void saveUserTest() {
@@ -74,6 +54,31 @@ public class PersistenceTest {
 //		}
 //		assertEquals(ok, true);
 //    }
+	
+	@Test public void saveInviteTest() throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException, EntityExistsException, TransactionRequiredException, IllegalArgumentException {
+		EntityManager entityManager;
+		EntityManagerFactory entityManagerFactory;
+		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
+		entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction tr = entityManager.getTransaction();
+		tr.begin();
+		LgUser lgUser = new LgUser();
+		lgUser.setName("Ralf");
+		lgUser.setEmail("simon@a-studios.org");
+		lgUser.setPassword("myPwIsEasy");
+		lgUser.setTel("030-3223939");
+		LgInvite lgInvite = new LgInvite();
+		LgInvite lgInvite2 = new LgInvite();
+		lgUser.addInvite(lgInvite);
+		lgUser.addInvite(lgInvite2);
+		entityManager.persist(lgInvite);
+		entityManager.persist(lgInvite2);
+		entityManager.persist(lgUser);
+		tr.commit();
+		entityManager.close();
+		
+		assertEquals(true,true);
+	}
 //	
 //	@Test public void saveUserMoreComplete() {
 //		DaUser daUser = factory.getDaUser();
