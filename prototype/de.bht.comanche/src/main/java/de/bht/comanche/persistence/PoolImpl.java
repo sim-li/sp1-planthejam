@@ -11,11 +11,11 @@ import javax.persistence.RollbackException;
 import javax.transaction.TransactionRequiredException;
 
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.exceptions.ArgumentCountException;
-import de.bht.comanche.server.exceptions.ArgumentTypeException;
-import de.bht.comanche.server.exceptions.NoPersistentClassException;
-import de.bht.comanche.server.exceptions.NoQueryClassException;
-import de.bht.comanche.server.exceptions.OidNotFoundException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
+import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public class PoolImpl<E> implements Pool<E> {
 	private EntityManager entityManager;

@@ -1,4 +1,7 @@
-package de.bht.comanche.server.exceptions;
+package de.bht.comanche.server.exceptions.persistence;
+
+import de.bht.comanche.server.exceptions.PersistenceErrorMessage;
+import de.bht.comanche.server.exceptions.PersistenceException;
 
 public class OidNotFoundException extends PersistenceException {
 	private static final long serialVersionUID = 2505210142705654274L;
