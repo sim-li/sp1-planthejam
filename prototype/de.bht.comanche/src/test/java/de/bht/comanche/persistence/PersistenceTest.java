@@ -1,6 +1,7 @@
 package de.bht.comanche.persistence;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
@@ -54,7 +55,8 @@ public class PersistenceTest {
 	@Test public void saveUserMoreComplete() {
 		DaUser daUser = factory.getDaUser();
 		
-		daUser.beginTransaction(); // FIXME --> Transaction
+		Pool<LgUser> pool = daUser.getPool();
+		pool.beginTransaction(); // FIXME --> Transaction
 		
 		LgUser alice = new LgUser();
 		alice.setName("Alice");
@@ -67,7 +69,7 @@ public class PersistenceTest {
 		bob.setEmail("bob@test.usr");
 		bob.setPassword("hiiambob");
 		bob.setTel("0309876543");
-//		bob.addHasContact(bob);
+		bob.addHasContact(bob);
 		
 		boolean ok = false;
 		
@@ -79,12 +81,11 @@ public class PersistenceTest {
 			e.printStackTrace();
 //			ok = true;
 		} finally {			
-			daUser.endTransaction(ok); // FIXME --> Transaction
+			pool.endTransaction(ok); // FIXME --> Transaction
 		}
 		
-		
 		assertEquals(ok, true);
-//		assertEquals(ok, false);
+		assertTrue(bob.getContacts().contains(alice));
     }
 	
 	@Test public void getByNameTest() {
