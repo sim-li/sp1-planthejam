@@ -21,4 +21,5 @@ public interface DaGeneric<E> {
     Collection<E> findByField(String fieldName, Object fieldValue)  throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc;
     Collection<E> findByWhere(String whereClause, Object... args);
     Collection<E> findByExample(E example);
+    Pool<E> getPool();
 }

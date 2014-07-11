@@ -6,12 +6,12 @@ import de.bht.comanche.logic.LgUser;
 public class JpaDaFactory implements DaFactory {
 
 	@Override
-	public DaUser getDaUser() {
+	public DaUserImpl getDaUser() {
 		return new DaUserImpl(new PoolImpl<LgUser>());
 	}
 	
 	@Override
-	public DaSurvey getDaSurvey() {
+	public DaSurveyImpl getDaSurvey() {
 		return new DaSurveyImpl(new PoolImpl<LgSurvey>());
 	}
 }

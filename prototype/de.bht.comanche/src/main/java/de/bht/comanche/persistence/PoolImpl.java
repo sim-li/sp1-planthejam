@@ -14,10 +14,13 @@ public class PoolImpl<E> implements Pool<E> {
 	private EntityManager entityManager;
 	private EntityManagerFactory entityManagerFactory;
 	
-	@Override
-	public void beginTransaction() {
+	public PoolImpl () {
 		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
 		entityManager = entityManagerFactory.createEntityManager();
+	}
+	
+	@Override
+	public void beginTransaction() {
 		EntityTransaction tr = entityManager.getTransaction();
 		tr.begin();
 	}
@@ -52,7 +55,9 @@ public class PoolImpl<E> implements Pool<E> {
 
 	@Override
 	public E find(Class<E> i_persistentClass, Long i_oid) throws NoPersistentClassExc, OidNotFoundExc {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		E result = entityManager.find(i_persistentClass, i_oid);
+		entityManager.close();
 		return result;
 	}
 

@@ -1,19 +1,22 @@
 package de.bht.comanche.server;
 
 import de.bht.comanche.logic.DbObject;
+import de.bht.comanche.persistence.DaFactory;
 import de.bht.comanche.persistence.OidNotFoundExc;
 import de.bht.comanche.persistence.Pool;
-import de.bht.comanche.persistence.PoolImpl;
 
 public abstract class Transaction<E> {
-	/*
-	 * TODO: Think about structure
-	 */
+	private final Pool<E> pool;
+	
+	public Transaction (Pool<E> pool) {
+		this.pool = pool;
+	}
+	
 	public ResponseObject execute () {
-//		Pool pool = PoolImpl.getInstance();  // TRANSACTION SHOULD BEGIN HERE
+		pool.beginTransaction();
 		ResponseObject serverResponse = new ResponseObject();
 		boolean success = false;
-		try {
+		try { // TODO : ROLL BACK
 			DbObject objectFromDb = executeWithThrows();
 			serverResponse.addData(objectFromDb);
 			serverResponse.setSuccess(true);
@@ -35,7 +38,7 @@ public abstract class Transaction<E> {
 			System.out.println("CATCH DONE");
 		} finally {
 			System.out.println("FINALLY DONE");
-//			pool.endTransaction(success); // TRANSACTION SHUOLD END HERE!
+			pool.endTransaction(success); 
 		}
 		return serverResponse;
 	}

@@ -15,6 +15,6 @@ public interface DaUser {
     Collection<LgUser> findByName(String name) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc;
     void beginTransaction();
     void endTransaction(boolean success);
-    
     public LgUser getDummy(); // for testing
+    public Pool getPool(); // Later overwritten by DaGenericImpl
 }

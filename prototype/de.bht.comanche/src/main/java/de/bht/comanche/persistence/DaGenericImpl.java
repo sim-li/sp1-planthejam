@@ -79,5 +79,9 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	public void endTransaction(boolean success) {
 		pool.endTransaction(success);
 	}
+	
+	public Pool<E> getPool() {
+		return this.pool;
+	}
 
 }
