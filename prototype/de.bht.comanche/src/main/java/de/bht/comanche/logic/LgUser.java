@@ -22,34 +22,36 @@ public class LgUser extends DbObject {
 	private String email;
 	private String password;
 
-	@ManyToMany(cascade = { CascadeType.ALL })
-	@JoinTable(name = "contact", joinColumns = { 
-			@JoinColumn(name = "user_Id") }, inverseJoinColumns = { 
-			@JoinColumn(name = "friend_Id") })
-	private List<LgUser> hasContacts;
+//	@ManyToMany(cascade = { CascadeType.ALL })
+//	@JoinTable(name = "contact", joinColumns = { 
+//			@JoinColumn(name = "user_Id") }, inverseJoinColumns = { 
+//			@JoinColumn(name = "friend_Id") })
+//	private List<LgUser> hasContacts;
 
-	@ManyToMany(mappedBy = "hasContacts")
-	private List<LgUser> isContacts;
+//	@ManyToMany(mappedBy = "hasContacts")
+	
+//	@ManyToMany(mappedBy = "user_id")
+//	private List<LgUser> contacts;
 
 	@OneToMany(mappedBy="user")
 	private List<LgInvite> invites;
 
 	public LgUser() {
-		this.hasContacts = new LinkedList<LgUser>();
-		this.isContacts = new LinkedList<LgUser>();
+//		this.hasContacts = new LinkedList<LgUser>();
+//		this.contacts = new LinkedList<LgUser>();
 		this.invites = new LinkedList<LgInvite>();
 	}
 	
 	public LgUser(String name, String tel, String email, String password,
-			List<LgUser> hasContacts, List<LgUser> isContacts,
+			/*List<LgUser> hasContacts,*/ List<LgUser> contacts,
 			List<LgInvite> invites) {
 		super();
 		this.name = name;
 		this.tel = tel;
 		this.email = email;
 		this.password = password;
-		this.hasContacts = hasContacts == null ? new LinkedList<LgUser>() : hasContacts;
-		this.isContacts = isContacts;
+//		this.hasContacts = hasContacts == null ? new LinkedList<LgUser>() : hasContacts;
+//		this.contacts = contacts;
 		this.invites = invites;
 	}
 	
@@ -85,37 +87,37 @@ public class LgUser extends DbObject {
 		this.password = password;
 	}
 
-	public List<LgUser> getHasContacts() {
-		return hasContacts;
-	}
+//	public List<LgUser> getHasContacts() {
+//		return hasContacts;
+//	}
+//
+//	public void setHasContacts(List<LgUser> hasContacts) {
+//		this.hasContacts = hasContacts;
+//	}
+//	
+//	public boolean addHasContact(LgUser hasContact) {
+//		return this.hasContacts.add(hasContact);
+//	}
+//	
+//	public boolean removeHasContact(LgUser hasContact) {
+//		return this.hasContacts.remove(hasContact);
+//	}
 
-	public void setHasContacts(List<LgUser> hasContacts) {
-		this.hasContacts = hasContacts;
-	}
-	
-	public boolean addHasContact(LgUser hasContact) {
-		return this.hasContacts.add(hasContact);
-	}
-	
-	public boolean removeHasContact(LgUser hasContact) {
-		return this.hasContacts.remove(hasContact);
-	}
-
-	public List<LgUser> getIsContacts() {
-		return isContacts;
-	}
-
-	public void setIsContacts(List<LgUser> isContacts) {
-		this.isContacts = isContacts;
-	}
-	
-	public boolean addIsContact(LgUser hasContact) {
-		return this.isContacts.add(hasContact);
-	}
-	
-	public boolean removeIsContact(LgUser isContact) {
-		return this.isContacts.remove(isContact);
-	}
+//	public List<LgUser> getContacts() {
+//		return contacts;
+//	}
+//
+//	public void setContacts(List<LgUser> contacts) {
+//		this.contacts = contacts;
+//	}
+//	
+//	public boolean addContact(LgUser contact) {
+//		return this.contacts.add(contact);
+//	}
+//	
+//	public boolean removeContact(LgUser contact) {
+//		return this.contacts.remove(contact);
+//	}
 
 	public List<LgInvite> getInvites() {
 		return invites;
@@ -138,8 +140,8 @@ public class LgUser extends DbObject {
 		this.tel = other.tel;
 		this.email = other.email;
 		this.password = other.password;
-		this.hasContacts = other.hasContacts;
-		this.isContacts = other.isContacts;
+//		this.hasContacts = other.hasContacts;
+//		this.contacts = other.contacts;
 		this.invites = other.invites;
 	}
 
