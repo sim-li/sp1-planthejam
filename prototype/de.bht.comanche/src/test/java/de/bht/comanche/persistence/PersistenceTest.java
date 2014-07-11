@@ -68,7 +68,7 @@ public class PersistenceTest {
 		bob.setEmail("bob@test.usr");
 		bob.setPassword("hiiambob");
 		bob.setTel("0309876543");
-//		bob.addContact(bob);
+//		bob.addHasContact(bob);
 		
 		boolean ok = false;
 		
