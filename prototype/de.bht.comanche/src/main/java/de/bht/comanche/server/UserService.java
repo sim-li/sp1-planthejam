@@ -42,7 +42,7 @@ public class UserService extends Service {
 		 }.execute();
 		
 		if (!response.isSuccess()) {
-			throw new WebApplicationException("Wrong name or password", 500);
+			throw new WebApplicationException();
 		}
 		return response;
     }
