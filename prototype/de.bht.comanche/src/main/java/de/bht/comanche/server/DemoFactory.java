@@ -5,10 +5,10 @@ import de.bht.comanche.logic.LgUser;
 public class DemoFactory {
 	public ResponseObject getTransactionObject() {
 		ResponseObject to = new ResponseObject();
-		to.setSuccess(true);
-		to.addServerMessage("Server msg 1: ERROR CODE 3");
-		to.addServerMessage("Server msg 2: ERROR CODE 13");
-		to.addServerMessage("Server msg 3: ERROR CODE 16");
+//		to.setSuccess(true);
+//		to.addServerMessage("Server msg 1: ERROR CODE 3");
+//		to.addServerMessage("Server msg 2: ERROR CODE 13");
+//		to.addServerMessage("Server msg 3: ERROR CODE 16");
 		LgUser user1 = new LgUser();
 		user1.setEmail("ralf@ralf.de");
 		user1.setName("Ralf Zakoni");

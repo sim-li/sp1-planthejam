@@ -5,7 +5,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Lg_Invite")
+//@Table(name = "Lg_Invite")
 public class LgInvite extends DbObject{
 	
 	private static final long serialVersionUID = 1L;
