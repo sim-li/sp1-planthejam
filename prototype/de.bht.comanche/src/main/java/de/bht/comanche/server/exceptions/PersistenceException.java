@@ -4,7 +4,7 @@ public class PersistenceException extends PtjException {
 	private static final long serialVersionUID = 617316525452380248L;
 
 	public PersistenceException(PersistenceErrorMessage msg) {
-		super(msg.toString());
+		super(msg.getResponseCode());
 	}
 
 }

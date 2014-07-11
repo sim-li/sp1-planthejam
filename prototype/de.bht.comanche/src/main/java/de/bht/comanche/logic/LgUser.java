@@ -90,6 +90,10 @@ public class LgUser extends DbObject {
 	}
 	
 	public boolean passwordMatchWith(LgUser user) {
-		return true;
+		final String password = user.getPassword();
+		if (this.password == null) {
+			return false;
+		}
+		return this.password.equals(password);
 	}
 }

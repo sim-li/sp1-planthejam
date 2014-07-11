@@ -1,6 +1,6 @@
 /*
  * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+ * (C)opyright Sebastian Dassï¿½, Mat.-Nr. 791537, s50602@beuth-hochschule.de
  * 
  * Module: REST service
  */
@@ -44,7 +44,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             return [
                 {   
                     "name": "Bandprobe", 
-                    "description": "Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?", 
+                    "description": "Wir mï¿½ssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann kï¿½nnt ihr?", 
                     "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
                     // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
                     "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
@@ -68,7 +68,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                     "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
                 }, 
                 {   "name": "Meeting", 
-                    "description": "Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.", 
+                    "description": "Unser monatliches Geschï¿½ftsessen. Dresscode: Bussiness casual.", 
                     "type": Type.RECURRING, 
                     "deadline": new Date(2014, 7, 31, 8, 0),
                     "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
@@ -101,7 +101,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             }).error(function(data, status, header, config) {
                 $log.error("error (from login:");
                 // $log.error(data);
-
+                console.log("Data", data, "Status", status, "Header", header, "Config", config)
                 deferred.reject("Login auf dem Server fehlgeschlagen. (status: " + status + ")");
             });
             return deferred.promise;

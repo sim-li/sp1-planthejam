@@ -19,33 +19,33 @@ public class UserService extends Service {
 	}
 
 	@Path("login")
-    @POST
-    @Consumes("application/json")
-    @Produces({"application/json"})
-    public ResponseObject loginUser(final LgUser userFromClient) {
-		 final DaUser daUser = factory.getDaUser();
-		 ResponseObject response = new Transaction<LgUser> (daUser.getPool()) {
-			 public LgUser executeWithThrows() throws Exception {
-				 List<LgUser> users = daUser.findByName(userFromClient.getName());
-				 if (users.isEmpty()) {
-					 throw new NoUserWithThisNameException();
-				 }
-				 LgUser userFromDb = users.get(0);
-				 if (!userFromDb.passwordMatchWith(userFromClient)) {
-					 throw new WrongPasswordException();
-				 }
-				 LgUser userWithId = new LgUser();
-				 userWithId.setIdFrom(userFromDb);
-				 daUser.endTransaction(true);
-				 return userWithId;
-			 }
-		 }.execute();
-		
-		if (!response.isSuccess()) {
-			throw new WebApplicationException();
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public ResponseObject loginUser(final LgUser userFromClient) {
+		final DaUser daUser = factory.getDaUser();
+		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+			public LgUser executeWithThrows() throws Exception {
+				List<LgUser> users = daUser
+						.findByName(userFromClient.getName());
+				if (users.isEmpty()) {
+					throw new NoUserWithThisNameException();
+				}
+				LgUser userFromDb = users.get(0);
+				if (!userFromDb.passwordMatchWith(userFromClient)) {
+					throw new WrongPasswordException();
+				}
+				LgUser userWithId = new LgUser();
+				userWithId.setIdFrom(userFromDb);
+				daUser.endTransaction(true);
+				return userWithId;
+			}
+		}.execute();
+		if (response.hasError()) {
+			throw new WebApplicationException(response.getResponseCode());
 		}
 		return response;
-    }
+	}
 	
 //	/**
 //	 * Return complete User by Id
