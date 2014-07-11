@@ -10,6 +10,12 @@ import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.server.exceptions.ArgumentCountException;
+import de.bht.comanche.server.exceptions.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.NoQueryClassException;
+import de.bht.comanche.server.exceptions.OidNotFoundException;
+
 public class PoolImpl<E> implements Pool<E> {
 	private EntityManager entityManager;
 	private EntityManagerFactory entityManagerFactory;
@@ -54,7 +60,7 @@ public class PoolImpl<E> implements Pool<E> {
 	}
 
 	@Override
-	public E find(Class<E> i_persistentClass, Long i_oid) throws NoPersistentClassExc, OidNotFoundExc {
+	public E find(Class<E> i_persistentClass, Long i_oid) throws NoPersistentClassException, OidNotFoundException {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		E result = entityManager.find(i_persistentClass, i_oid);
 		entityManager.close();
@@ -63,7 +69,7 @@ public class PoolImpl<E> implements Pool<E> {
 
 	@Override
 	public List<E> findAll(Class<E> i_persistentClass) throws
-			NoPersistentClassExc {
+			NoPersistentClassException {
 		final String qlString = "SELECT e FROM " + i_persistentClass.getSimpleName() + "e";
 		List<E> results = entityManager.createQuery(qlString, i_persistentClass).getResultList();
 		return results;
@@ -72,8 +78,8 @@ public class PoolImpl<E> implements Pool<E> {
 	@Override
 	public List<E> findManyByQuery(Class<E> i_resultClass,
 			String i_queryString, Object[] i_args)
-			throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc,
-			ArgumentTypeExc {
+			throws NoPersistentClassException, NoQueryClassException, ArgumentCountException,
+			ArgumentTypeException {
 		String qlString = String.format(i_queryString, i_args);
 		List<E> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
 		System.out.println("SIZE IS: " + results.size());

@@ -10,13 +10,16 @@ import javax.ws.rs.WebApplicationException;
 
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
+import de.bht.comanche.server.exceptions.NoUserWithThisNameExc;
+import de.bht.comanche.server.exceptions.OidNotFoundException;
+import de.bht.comanche.server.exceptions.WrongPasswordException;
 
 @Path("/user/")
 public class UserService extends Service {
 	public UserService() {
 		super();
 	}
-	
+
 	@Path("login")
     @POST
     @Consumes("application/json")
@@ -27,18 +30,18 @@ public class UserService extends Service {
 		 ResponseObject response = new Transaction<LgUser> (daUser.getPool()) {
 			 
 			 public LgUser executeWithThrows() throws Exception {
-				 Iterator<LgUser> it = daUser.findByName(userFromClient.getName()).iterator();
-				 if (!it.hasNext()) {
-					 throw new NoUserWithThisNameExc();
-				 }
-				 LgUser userFromDb = it.next(); 
-				 if (!userFromDb.passwordMatchWith(userFromClient.getPassword())) {
-					 throw new WrongPasswordExc();
-				 }
-				 LgUser userWithId = new LgUser();
-				 userWithId.setIdFrom(userFromDb);
-				 daUser.endTransaction(true);
-				 return userWithId;
+//				 Iterator<LgUser> it = daUser.findByName(userFromClient.getName()).iterator();
+//				 if (!it.hasNext()) {
+//					 throw new NoUserWithThisNameExc();
+//				 }
+//				 LgUser userFromDb = it.next(); 
+//				 if (!userFromDb.passwordMatchWith(userFromClient.getPassword())) {
+//					 throw new WrongPasswordException();
+//				 }
+//				 LgUser userWithId = new LgUser();
+//				 userWithId.setIdFrom(userFromDb);
+//				 daUser.endTransaction(true);
+//				 return userWithId;
 			 }
 		 }.execute();
 		

@@ -5,6 +5,12 @@ import java.util.List;
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.server.exceptions.ArgumentCountException;
+import de.bht.comanche.server.exceptions.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.NoQueryClassException;
+import de.bht.comanche.server.exceptions.OidNotFoundException;
+
 public interface Pool<E> {
 	public void beginTransaction();
 	/**
@@ -13,7 +19,7 @@ public interface Pool<E> {
 	public void endTransaction(boolean success);
 	public void save(E io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException;
 	public void delete(E io_object) throws IllegalArgumentException, TransactionRequiredException;
-	public E find(Class<E> i_persistentClass, Long i_oid) throws NoPersistentClassExc, OidNotFoundExc;
-	public List<E> findAll(Class<E> i_persistentClass) throws NoPersistentClassExc;
-	public List<E> findManyByQuery(Class<E> i_resultClass, String i_queryString, Object[] i_args) throws NoPersistentClassExc, NoQueryClassExc, ArgumentCountExc, ArgumentTypeExc;
+	public E find(Class<E> i_persistentClass, Long i_oid) throws NoPersistentClassException, OidNotFoundException;
+	public List<E> findAll(Class<E> i_persistentClass) throws NoPersistentClassException;
+	public List<E> findManyByQuery(Class<E> i_resultClass, String i_queryString, Object[] i_args) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException;
 }
