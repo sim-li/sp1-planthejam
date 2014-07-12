@@ -22,5 +22,5 @@ public interface DaUser {
     void beginTransaction();
     void endTransaction(boolean success);
     public LgUser getDummy(); // for testing
-    public Pool getPool(); // Later overwritten by DaGenericImpl
+    public Pool<LgUser> getPool(); // Later overwritten by DaGenericImpl
 }

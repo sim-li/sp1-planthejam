@@ -28,22 +28,21 @@ public class LgUser extends DbObject {
 			@JoinColumn(name = "friend_Id") })
 	private List<LgUser> hasContacts;
 
-//	@ManyToMany(mappedBy = "hasContacts")
 	
-//	@OneToMany(mappedBy = "user")
-//	private List<LgContact> contacts;
+	@ManyToMany(mappedBy = "user_id")
+	private List<LgUser> isContacts;
 
 	@OneToMany(mappedBy="user")
 	private List<LgInvite> invites;
 
 	public LgUser() {
 		this.hasContacts = new LinkedList<LgUser>();
-//		this.contacts = new LinkedList<LgContact>();
+		this.isContacts = new LinkedList<LgUser>();
 		this.invites = new LinkedList<LgInvite>();
 	}
 	
 	public LgUser(String name, String tel, String email, String password,
-			List<LgUser> hasContacts, /*List<LgContact> contacts,*/
+			List<LgUser> hasContacts, List<LgUser> isContacts,
 			List<LgInvite> invites) {
 		super();
 		this.name = name;
@@ -51,8 +50,8 @@ public class LgUser extends DbObject {
 		this.email = email;
 		this.password = password;
 		this.hasContacts = hasContacts == null ? new LinkedList<LgUser>() : hasContacts;
-//		this.contacts = contacts;
-		this.invites = invites;
+		this.isContacts = isContacts == null ? new LinkedList<LgUser>() : isContacts;
+		this.invites = invites == null ? new LinkedList<LgInvite>() : invites;
 	}
 	
 	public String getName() {
@@ -103,21 +102,21 @@ public class LgUser extends DbObject {
 		return this.hasContacts.remove(hasContact);
 	}
 
-//	public List<LgContact> getContacts() {
-//		return contacts;
-//	}
-//
-//	public void setContacts(List<LgContact> contacts) {
-//		this.contacts = contacts;
-//	}
-//	
-//	public boolean addContact(LgContact contact) {
-//		return this.contacts.add(contact);
-//	}
-//	
-//	public boolean removeContact(LgUser contact) {
-//		return this.contacts.remove(contact);
-//	}
+	public List<LgUser> getContacts() {
+		return isContacts;
+	}
+
+	public void setContacts(List<LgUser> contacts) {
+		this.isContacts = contacts;
+	}
+	
+	public boolean addContact(LgUser contact) {
+		return this.isContacts.add(contact);
+	}
+	
+	public boolean removeContact(LgUser contact) {
+		return this.isContacts.remove(contact);
+	}
 
 	public List<LgInvite> getInvites() {
 		return invites;
@@ -140,8 +139,8 @@ public class LgUser extends DbObject {
 		this.tel = other.tel;
 		this.email = other.email;
 		this.password = other.password;
-//		this.hasContacts = other.hasContacts;
-//		this.contacts = other.contacts;
+		this.hasContacts = other.hasContacts;
+		this.isContacts = other.isContacts;
 		this.invites = other.invites;
 	}
 
