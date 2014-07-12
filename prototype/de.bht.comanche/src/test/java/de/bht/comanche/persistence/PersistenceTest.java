@@ -25,8 +25,8 @@ import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public class PersistenceTest {
-	private final boolean THROW_STACKTRACE = false;
-	private final boolean ROLLBACK = true;
+	private final boolean THROW_STACKTRACE = true;
+	private final boolean ROLLBACK = false;
 	
 	private DaFactory daFactory;
 	
@@ -97,9 +97,17 @@ public class PersistenceTest {
 	//		bob.removeContact(alice);
 			daUser.save(alice);
 			daUser.save(bob);
+			
+			System.out.println(alice.getOid());
+			
+			LgUser aliceFromDb = daUser.find(alice.getOid());
+			LgUser bobFromDb = daUser.find(bob.getOid());
+			
+//			LgUser bobFromDb = daUser.findByName("Bob").get(0);
+//			LgUser aliceFromDb = daUser.findByName("Alice").get(0);
 	//		assertTrue(bob.getHasContacts().contains(alice));
-			assertTrue(alice.getHasContacts().contains(bob));
-			assertTrue(bob.getIsContacts().contains(alice));
+			assertTrue(aliceFromDb.getHasContacts().contains(bobFromDb));
+			assertTrue(bobFromDb.getIsContacts().contains(aliceFromDb));
 			}
 		}.execute();
 		assertTrue(success);
