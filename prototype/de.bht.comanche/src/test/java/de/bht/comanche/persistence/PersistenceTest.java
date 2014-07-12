@@ -1,20 +1,18 @@
 package de.bht.comanche.persistence;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
 import javax.persistence.EntityExistsException;
-import javax.transaction.TransactionRequiredException;
+import javax.persistence.TransactionRequiredException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
-import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
-import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
-import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 
 public class PersistenceTest {
 	
@@ -53,7 +51,8 @@ public class PersistenceTest {
 	@Test public void saveUserMoreComplete() {
 		DaUser daUser = factory.getDaUser();
 		
-		daUser.beginTransaction(); // FIXME --> Transaction
+		Pool<LgUser> pool = daUser.getPool();
+		pool.beginTransaction(); // FIXME --> Transaction
 		
 		LgUser alice = new LgUser();
 		alice.setName("Alice");
@@ -66,7 +65,7 @@ public class PersistenceTest {
 		bob.setEmail("bob@test.usr");
 		bob.setPassword("hiiambob");
 		bob.setTel("0309876543");
-//		bob.addHasContact(bob);
+		bob.addHasContact(bob);
 		
 		boolean ok = false;
 		
@@ -78,12 +77,11 @@ public class PersistenceTest {
 			e.printStackTrace();
 //			ok = true;
 		} finally {			
-			daUser.endTransaction(ok); // FIXME --> Transaction
+			pool.endTransaction(ok); // FIXME --> Transaction
 		}
 		
-		
 		assertEquals(ok, true);
-//		assertEquals(ok, false);
+		assertTrue(bob.getContacts().contains(alice));
     }
 	
 	@Test public void getByNameTest() {
@@ -115,8 +113,9 @@ public class PersistenceTest {
 		assertEquals("Ralf", nameField);
 	}
 	
-//	@After public void tearDown() {
-//		// TODO clean up the database when the tests are done 
-//	}
+	@After public void tearDown() {
+		// TODO clean up the database when the tests are done 
+	}
+	
 	
 }

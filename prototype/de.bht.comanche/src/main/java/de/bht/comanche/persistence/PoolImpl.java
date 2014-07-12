@@ -43,7 +43,7 @@ public class PoolImpl<E> implements Pool<E> {
 			}
 		}
 		catch (RollbackException e) {
-			tr.rollback();
+			tr.rollback(); // TODO is das sinnvoll so?
 		}
 		finally {
 			entityManager.close();
