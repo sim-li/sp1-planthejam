@@ -34,6 +34,7 @@ public class PersistenceComplexOperationsTest {
 		daFactory = new JpaDaFactory();
 	}
 	
+	@Ignore
 	@Test public void saveTwoContactsTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
