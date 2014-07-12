@@ -14,3 +14,18 @@ To make postgres work on startup:
     ALTER USER postgres PASSWORD 'postgres';
 
     with debian user postgres in psql shell (>psql)
+
+
+ACCESSING POSTGRES FROM OUTSIDE
+
+vi /etc/postgresql/9.1/main/pg_hba.conf
+add 
+
+# VBOX Open Port to Outside world
+host    all             all             0.0.0.0/0               trust
+
+vi /etc/postgresql/9.1/main/postgresql.conf
+
+--> set listenadresses = '*'
+
+/etc/init.d/postgresql restart

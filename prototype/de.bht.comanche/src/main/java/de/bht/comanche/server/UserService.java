@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.persistence.DaGenericImpl;
 import de.bht.comanche.persistence.DaUser;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisNameException;
 import de.bht.comanche.server.exceptions.logic.WrongPasswordException;
