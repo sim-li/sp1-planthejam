@@ -12,6 +12,7 @@ import javax.persistence.TransactionRequiredException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgInvite;
@@ -24,6 +25,8 @@ import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public class PersistenceTest {
+	private final boolean THROW_STACKTRACE = false;
+	private final boolean ROLLBACK = true;
 	
 	private DaFactory daFactory;
 	
@@ -31,6 +34,7 @@ public class PersistenceTest {
 		daFactory = new JpaDaFactory();
 	}
 	
+//	@Ignore
 	@Test public void simpleSaveUserTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
@@ -38,7 +42,7 @@ public class PersistenceTest {
 		 * This transaction doesn't throw a stacktrace.
 		 * (Throwstacktrace property set to false)
 		 */
-		boolean success = new TransactionWithStackTrace<LgUser>(pool) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				LgUser lgUser = new LgUser();
 				lgUser.setName("Ralf");
@@ -63,10 +67,11 @@ public class PersistenceTest {
 		assertTrue(success);
     }
 	
+//	@Ignore
 	@Test public void saveUserMoreComplete() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
-		boolean success = new TransactionWithStackTrace<LgUser>(pool) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 			LgUser alice = new LgUser();
 			alice.setName("Alice");
@@ -100,10 +105,11 @@ public class PersistenceTest {
 		assertTrue(success);
     }
 	
+//	@Ignore
 	@Test public void getByNameTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
-		boolean success = new TransactionWithStackTrace<LgUser>(pool) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				Collection<LgUser> foundUsers = daUser.findByName("Ralf");
 				String nameField = foundUsers.iterator().next().getName();
@@ -121,7 +127,7 @@ public class PersistenceTest {
 		/*
 		 * SAVE DEMOUSER (JUST IN CASE), SO THAT JPA PROVIDES ID.
 		 */
-		boolean success = new TransactionWithStackTrace<LgUser>(pool) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				System.out.println(">>> SAVE DEMOUSER (JUST IN CASE), SO THAT JPA PROVIDES ID.");
 				LgUser lgUser = new LgUser();
@@ -162,10 +168,6 @@ public class PersistenceTest {
 			}
 		}.execute();
 		assertTrue(success);
-	}
-	
-	@After public void tearDown() {
-		// TODO clean up the database when the tests are done 
 	}
 	
 }
