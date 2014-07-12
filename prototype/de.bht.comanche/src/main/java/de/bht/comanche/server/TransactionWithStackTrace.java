@@ -25,6 +25,10 @@ public abstract class TransactionWithStackTrace<E> {
 		return result;
 	}
 	
+	public void fireSave() {
+		
+	}
+	
 	public abstract DbObject executeWithThrows() throws Exception;
 }
 
