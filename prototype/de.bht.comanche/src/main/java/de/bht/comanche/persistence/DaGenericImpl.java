@@ -89,5 +89,9 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	public Pool<E> getPool() {
 		return this.pool;
 	}
+	
+	public void setPool(Pool pool) {
+		this.pool = pool;
+	}
 
 }
