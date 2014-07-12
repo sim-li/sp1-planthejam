@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 
 @Entity
 public class LgUser extends DbObject {
@@ -24,8 +23,7 @@ public class LgUser extends DbObject {
 
 	@Id
 	@Column(name="USER_ID")
-	@SequenceGenerator(name = "idGeneratorSeq", sequenceName = "idSequence")
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "idGeneratorSeq")
+//	@GeneratedValue(strategy = GenerationType.AUTO, generator = "idGeneratorSeq")
 	private long id;
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")

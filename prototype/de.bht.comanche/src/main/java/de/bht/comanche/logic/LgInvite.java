@@ -17,11 +17,11 @@ public class LgInvite extends DbObject{
 	private boolean isIgnored;
 	
 	@ManyToOne
-	@JoinColumn(name="USER_ID")
+//	@JoinColumn(name="USER_ID")
 	private LgUser user;
 	@Id
-	@SequenceGenerator(name = "idGeneratorSeq", sequenceName = "idSequence")
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "idGeneratorSeq")
+//	@SequenceGenerator(name = "idGeneratorSeq", sequenceName = "idSequence")
+//	@GeneratedValue(strategy = GenerationType.AUTO, generator = "idGeneratorSeq")
 	private long invite_id;
 
 	public boolean isHost() {
