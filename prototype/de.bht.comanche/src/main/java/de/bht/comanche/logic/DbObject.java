@@ -36,6 +36,24 @@ public abstract class DbObject implements Serializable{
 	public void setOid(long oid) {
 		this.oid = oid;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		LgUser other = (LgUser) obj;
+		if (other.getOid() == getOid()) {
+			return true;
+		}
+		return false;
+	}
 }
 
 

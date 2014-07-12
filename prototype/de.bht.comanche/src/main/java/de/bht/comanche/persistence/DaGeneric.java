@@ -28,4 +28,5 @@ public interface DaGeneric<E> {
     List<E> findByExample(E example);
     Pool<E> getPool();
     void setPool(Pool pool);
+    void flush();
 }

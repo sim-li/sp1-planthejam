@@ -23,11 +23,11 @@ public class PoolImpl<E> implements Pool<E> {
 	
 	public PoolImpl () {
 		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
-		entityManager = entityManagerFactory.createEntityManager();
 	}
 	
 	@Override
 	public void beginTransaction() {
+		entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction tr = entityManager.getTransaction();
 		tr.begin();
 	}

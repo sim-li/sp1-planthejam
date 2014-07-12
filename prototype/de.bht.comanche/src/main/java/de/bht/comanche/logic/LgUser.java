@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -27,13 +28,13 @@ public class LgUser extends DbObject {
 	@JoinTable(name = "contact", joinColumns = { 
 			@JoinColumn(name = "user_Id", referencedColumnName = "oid")}, inverseJoinColumns = { 
 			@JoinColumn(name = "friend_Id", referencedColumnName = "oid")})
-	@ManyToMany()
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<LgUser> hasContacts;
 	
-	@ManyToMany(mappedBy = "hasContacts")
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "hasContacts")
 	private List<LgUser> isContacts;
 
-	@OneToMany(mappedBy="user")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
 	private List<LgInvite> invites;
 
 	public LgUser() {
@@ -146,4 +147,15 @@ public class LgUser extends DbObject {
 		}
 		return this.password.equals(password);
 	}
+
+	@Override
+	public String toString() {
+		return "LgUser [name=" + name + ", tel=" + tel + ", email=" + email
+				+ ", password=" + password +
+//				", hasContacts=" + hasContacts
+//				+ ", isContacts=" + isContacts +
+				", invites=" + invites + "]" +
+				"OID>: " + getOid();
+	}
+	
 }
