@@ -37,7 +37,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 123: "FOO-ERROR", 
                 321: "BAR-ERROR"
             };
-            return error[status] || "(status " + status + ")";
+            var msg = error[status] || "";
+            return msg + " (status " + status + ")";
         }
 
 
