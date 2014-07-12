@@ -5,134 +5,181 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
+import javassist.NotFoundException;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.TransactionRequiredException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.TransactionWithStackTrace;
+import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
+import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
+import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public class PersistenceTest {
+	private final boolean THROW_STACKTRACE = true;
+	private final boolean ROLLBACK = false;
 	
-	private DaFactory factory;
+	private DaFactory daFactory;
 	
 	@Before public void setUp(){
-		factory = new JpaDaFactory();
+		daFactory = new JpaDaFactory();
 	}
 	
-	@Test public void saveUserTest() {
-		DaUser daUser = factory.getDaUser();
-		daUser.beginTransaction();
-		LgUser lgUser = new LgUser();
-		lgUser.setName("Ralf");
-		lgUser.setEmail("simon@a-studios.org");
-		lgUser.setPassword("myPwIsEasy");
-		lgUser.setTel("030-3223939");
-		boolean ok = false;
-		try {
-			daUser.save(lgUser);
-			ok = true;
-		} catch (EntityExistsException e) {
-			e.printStackTrace();
-		} catch (TransactionRequiredException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {			
-			daUser.endTransaction(ok);
-		}
-		assertEquals(ok, true);
+//	@Ignore
+	@Test public void simpleSaveUserTest() {
+		final DaUser daUser = daFactory.getDaUser();
+		final Pool pool = daUser.getPool();
+		/*
+		 * This transaction doesn't throw a stacktrace.
+		 * (Throwstacktrace property set to false)
+		 */
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
+			public void executeWithThrows() throws Exception {
+				LgUser lgUser = new LgUser();
+				lgUser.setName("Ralf");
+				lgUser.setEmail("simon@a-studios.org");
+				lgUser.setPassword("myPwIsEasy");
+				lgUser.setTel("030-3223939");
+//				daUser.save(lgUser);
+				/* forceNewTransaction();
+				 * Ends current transaction and starts a new one, for example
+				 * if we want to find an object in DB to see if ID was set correctly.
+				 * Doesn't contain any rollback handling (only for adults).
+				 * [ TO BE IMPLEMENTED ]
+				 */
+				LgUser lgUser1 = new LgUser();
+				lgUser.setName("Jenna");
+				lgUser.setEmail("simon@a-studios.org");
+				lgUser.setPassword("myPwIsEasy");
+				lgUser.setTel("030-3223939");
+				daUser.save(lgUser);
+			}
+		}.execute();
+		assertTrue(success);
     }
 	
+//	@Ignore
 	@Test public void saveUserMoreComplete() {
-		DaUser daUser = factory.getDaUser();
-		
-		Pool<LgUser> pool = daUser.getPool();
-		pool.beginTransaction(); // FIXME --> Transaction
-		
-		LgUser alice = new LgUser();
-		alice.setName("Alice");
-		alice.setEmail("alice@user.tst");
-		alice.setPassword("nosafepwd");
-		alice.setTel("0301234567");
-		
-		LgUser bob = new LgUser();
-		bob.setName("Bob");
-		bob.setEmail("bob@test.usr");
-		bob.setPassword("hiiambob");
-		bob.setTel("0309876543");
-		
-		bob.addContact(alice);
-		alice.addContact(bob);
-		bob.removeContact(alice);
-		
-//		bob.getHasContacts().add(alice);
-//		alice.getIsContacts().add(bob);
-//		
-//		alice.getHasContacts().add(bob);
-//		bob.getIsContacts().add(alice);
-//		
-//		bob.getHasContacts().remove(alice);
-//		alice.getIsContacts().remove(bob);
-		
-//		bob.reomveContact(alice);
-		
-		
-		boolean ok = false;
-		
-		try {
+		final DaUser daUser = daFactory.getDaUser();
+		final Pool pool = daUser.getPool();
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
+			public void executeWithThrows() throws Exception {
+			LgUser alice = new LgUser();
+			alice.setName("Alice");
+			alice.setEmail("alice@user.tst");
+			alice.setPassword("nosafepwd");
+			alice.setTel("0301234567");
+			System.out.println("OID from Alice before Save" + alice.getOid());
+			LgUser bob = new LgUser();
+			bob.setName("Bob");
+			bob.setEmail("bob@test.usr");
+			bob.setPassword("hiiambob");
+			bob.setTel("0309876543");
+			bob.addContact(alice);
+			alice.addContact(bob);
+			bob.removeContact(alice);
+	//		bob.getHasContacts().add(alice);
+	//		alice.getIsContacts().add(bob);
+	//		
+	//		alice.getHasContacts().add(bob);
+	//		bob.getIsContacts().add(alice);
+	//		
+	//		bob.getHasContacts().remove(alice);
+	//		alice.getIsContacts().remove(bob);
+	//		bob.removeContact(alice);
 			daUser.save(alice);
 			daUser.save(bob);
-			ok = true;
-		} catch (Exception  e) {
-			e.printStackTrace();
-//			ok = true;
-		} finally {			
-			pool.endTransaction(ok); // FIXME --> Transaction
-		}
-		
-		assertEquals(ok, true);
-//		assertTrue(bob.getHasContacts().contains(alice));
-		assertTrue(alice.getHasContacts().contains(bob));
-		assertTrue(bob.getIsContacts().contains(alice));
+			
+			System.out.println("OID from Alice after Save" + alice.getOid());
+			
+			LgUser aliceFromDb = daUser.find(alice.getOid());
+			LgUser bobFromDb = daUser.find(bob.getOid());
+			
+			
+			System.out.println("OID from Alice from DB" + aliceFromDb.getOid());
+			
+//			LgUser bobFromDb = daUser.findByName("Bob").get(0);
+//			LgUser aliceFromDb = daUser.findByName("Alice").get(0);
+	//		assertTrue(bob.getHasContacts().contains(alice));
+			assertTrue(aliceFromDb.getHasContacts().contains(bobFromDb));
+			assertTrue(bobFromDb.getIsContacts().contains(aliceFromDb));
+			}
+		}.execute();
+		assertTrue(success);
     }
 	
+//	@Ignore
 	@Test public void getByNameTest() {
-		JpaDaFactory factory = new JpaDaFactory();
-		DaUser daUser = factory.getDaUser();
-		daUser.beginTransaction();
-		String nameField = "";
-		boolean ok = false;
-		try {
-			Collection<LgUser> foundUsers = daUser.findByName("Ralf");
-			if (foundUsers.size() > 0) {
-				nameField = foundUsers.iterator().next().getName();
+		final DaUser daUser = daFactory.getDaUser();
+		final Pool pool = daUser.getPool();
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
+			public void executeWithThrows() throws Exception {
+				Collection<LgUser> foundUsers = daUser.findByName("Ralf");
+				String nameField = foundUsers.iterator().next().getName();
+				assertEquals("Ralf", nameField);
 			}
-			ok = true;
-		} catch (NoPersistentClassException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoQueryClassException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ArgumentCountException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ArgumentTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		daUser.endTransaction(ok);
-		assertEquals("Ralf", nameField);
+		}.execute();
+		assertTrue(success);
 	}
 	
-	@After public void tearDown() {
-		// TODO clean up the database when the tests are done 
+	@Test public void basicTestLayout() {
+		final DaUser daUser = daFactory.getDaUser();
+		final DaInvite daInvite = daFactory.getDaInvite();
+		final Pool pool = daUser.getPool();
+		daInvite.setPool(pool);
+		/*
+		 * SAVE DEMOUSER (JUST IN CASE), SO THAT JPA PROVIDES ID.
+		 */
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
+			public void executeWithThrows() throws Exception {
+				System.out.println(">>> SAVE DEMOUSER (JUST IN CASE), SO THAT JPA PROVIDES ID.");
+				LgUser lgUser = new LgUser();
+				lgUser.setName("Ralf");
+				lgUser.setEmail("simon@a-studios.org");
+				lgUser.setPassword("myPwIsEasy");
+				lgUser.setTel("030-3223939");
+				daUser.save(lgUser);
+				/*
+				 * RETRIEVE FIRST USER IN DB.
+				 */
+				System.out.println(">>> RETRIEVE FIRST USER IN DB.");
+				LgUser lgUserWithId = daUser.find(0);
+				/*
+				 * CREATE & SAVE INVITES 
+				 */
+				System.out.println("> CREATE & SAVE INVITES");
+				LgInvite lgInvite = new LgInvite();
+				LgInvite lgInvite2 = new LgInvite();
+				lgInvite.setUser(lgUser);
+				lgInvite2.setUser(lgUser);
+				lgInvite2.setHost(true);
+				daInvite.save(lgInvite);
+				daInvite.save(lgInvite2);
+				/*
+				 * RETRIEVE INVITES FROM DB
+				 */
+				System.out.println(">>> RETRIEVE INVITES FROM DB");
+				lgInvite = daInvite.find(0);
+				lgInvite2 = daInvite.find(1);
+				/*
+				 * SET INVITES IN USER & SAVE
+				 */
+				System.out.println(">>> SET INVITES IN USER & SAVE");
+				lgUser.addInvites(lgInvite);
+				lgUser.addInvites(lgInvite2);
+				daUser.save(lgUser);
+			}
+		}.execute();
+		assertTrue(success);
 	}
-	
 	
 }

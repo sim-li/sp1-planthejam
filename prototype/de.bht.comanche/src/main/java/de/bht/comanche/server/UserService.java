@@ -10,9 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.persistence.DaFactory;
 import de.bht.comanche.persistence.DaUser;
-import de.bht.comanche.persistence.JpaDaFactory;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisNameException;
 import de.bht.comanche.server.exceptions.logic.UserWithThisNameExist;

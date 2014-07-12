@@ -23,6 +23,7 @@ public class LgUser extends DbObject {
 	private String password;
 
 //	@ManyToMany(cascade = { CascadeType.ALL })
+	
 	@JoinTable(name = "contact", joinColumns = { 
 			@JoinColumn(name = "user_Id", referencedColumnName = "oid")}, inverseJoinColumns = { 
 			@JoinColumn(name = "friend_Id", referencedColumnName = "oid")})
@@ -94,26 +95,6 @@ public class LgUser extends DbObject {
 		this.hasContacts = hasContacts;
 	}
 	
-	
-	public boolean addContact(LgUser user) {
-		return this.getHasContacts().add(user) && 
-			   user.getIsContacts().add(this);
-	}
-	
-	public boolean removeContact(LgUser user) {
-		return this.getHasContacts().remove(user) && 
-			   user.getIsContacts().remove(this);
-	}
-	
-	
-	public boolean addHasContact(LgUser hasContact) {
-		return this.hasContacts.add(hasContact);
-	}
-	
-	public boolean removeHasContact(LgUser hasContact) {
-		return this.hasContacts.remove(hasContact);
-	}
-
 	public List<LgUser> getIsContacts() {
 		return isContacts;
 	}
@@ -122,14 +103,16 @@ public class LgUser extends DbObject {
 		this.isContacts = isContacts;
 	}
 	
-	public boolean addIsContact(LgUser isContact) {
-		return this.isContacts.add(isContact);
+	public boolean addContact(LgUser user) {
+		return this.getHasContacts().add(user) && 
+				user.getIsContacts().add(this);
 	}
 	
-	public boolean removeIsContact(LgUser isContact) {
-		return this.isContacts.remove(isContact);
+	public boolean removeContact(LgUser user) {
+		return this.getHasContacts().remove(user) && 
+				user.getIsContacts().remove(this);
 	}
-
+	
 	public List<LgInvite> getInvites() {
 		return invites;
 	}

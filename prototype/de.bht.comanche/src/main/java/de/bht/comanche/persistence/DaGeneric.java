@@ -27,4 +27,5 @@ public interface DaGeneric<E> {
     List<E> findByWhere(String whereClause, Object... args);
     List<E> findByExample(E example);
     Pool<E> getPool();
+    void setPool(Pool pool);
 }
