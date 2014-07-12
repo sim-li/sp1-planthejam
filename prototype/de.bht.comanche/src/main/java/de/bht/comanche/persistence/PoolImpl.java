@@ -87,4 +87,9 @@ public class PoolImpl<E> implements Pool<E> {
 		return results;
 
 	}
+	
+	@Override
+	public void flush() {
+		entityManager.flush();
+	}
 }

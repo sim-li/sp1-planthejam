@@ -34,7 +34,7 @@ public class PersistenceTest {
 		daFactory = new JpaDaFactory();
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test public void simpleSaveUserTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
@@ -98,9 +98,9 @@ public class PersistenceTest {
 	//		bob.removeContact(alice);
 			daUser.save(alice);
 			daUser.save(bob);
-			
 			System.out.println("OID from Alice after Save" + alice.getOid());
-			
+			System.out.println("FLUSHING>>");
+			daUser.flush();
 			LgUser aliceFromDb = daUser.find(alice.getOid());
 			LgUser bobFromDb = daUser.find(bob.getOid());
 			
@@ -117,7 +117,7 @@ public class PersistenceTest {
 		assertTrue(success);
     }
 	
-//	@Ignore
+	@Ignore
 	@Test public void getByNameTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
@@ -131,6 +131,7 @@ public class PersistenceTest {
 		assertTrue(success);
 	}
 	
+	@Ignore
 	@Test public void basicTestLayout() {
 		final DaUser daUser = daFactory.getDaUser();
 		final DaInvite daInvite = daFactory.getDaInvite();

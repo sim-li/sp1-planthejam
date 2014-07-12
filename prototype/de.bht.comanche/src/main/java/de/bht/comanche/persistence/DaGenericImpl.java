@@ -94,4 +94,7 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 		this.pool = pool;
 	}
 
+	public void flush() {
+		pool.flush();
+	}
 }
