@@ -59,11 +59,8 @@ public class PersistenceComplexOperationsTest {
 				 * JPA generates the ID via PostgreSQL
 				 */
 				forceRestartTransaction();
-				LgUser aliceFromDb = daUser.findByName("Alice").get(0);
-				LgUser bobFromDb = daUser.findByName("Bob").get(0);
-				
-//				LgUser aliceFromDb = daUser.find(alice.getOid());
-//				LgUser bobFromDb = daUser.find(bob.getOid());
+				LgUser aliceFromDb = daUser.find(alice.getOid());
+				LgUser bobFromDb = daUser.find(bob.getOid());
 				assertEquals(bob.getOid(), bobFromDb.getOid());
 				assertEquals(alice.getOid(), aliceFromDb.getOid());
 				assertTrue(aliceFromDb.getHasContacts().contains(bobFromDb));

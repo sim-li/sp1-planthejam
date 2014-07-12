@@ -1,25 +1,25 @@
-package de.bht.comanche.server;
-
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-
-import de.bht.comanche.logic.LgSurvey;
-import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.persistence.DaSurvey;
-import de.bht.comanche.persistence.DaUser;
-import de.bht.comanche.server.exceptions.logic.NoUserWithThisNameException;
-
-@Path("/survey/")
-public class SurveyService extends Service{
-	public SurveyService() {
-		super();
-	}
-	
+//package de.bht.comanche.server;
+//
+//import java.util.List;
+//
+//import javax.ws.rs.Consumes;
+//import javax.ws.rs.POST;
+//import javax.ws.rs.Path;
+//import javax.ws.rs.Produces;
+//import javax.ws.rs.WebApplicationException;
+//
+//import de.bht.comanche.logic.LgSurvey;
+//import de.bht.comanche.logic.LgUser;
+//import de.bht.comanche.persistence.DaSurvey;
+//import de.bht.comanche.persistence.DaUser;
+//import de.bht.comanche.server.exceptions.logic.NoUserWithThisNameException;
+//
+//@Path("/survey/")
+//public class SurveyService extends Service{
+//	public SurveyService() {
+//		super();
+//	}
+//	
 //	@Path("/update")
 //    @POST
 //    @Consumes("application/json")
@@ -70,4 +70,4 @@ public class SurveyService extends Service{
 //			}
 //   	 }.execute();
 //	}
-}
+//}
