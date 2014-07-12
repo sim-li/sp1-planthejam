@@ -45,6 +45,10 @@ public abstract class TransactionWithStackTrace<E> {
 		pool.flush();
 	}
 	
+	public void forceTransactionEnd() {
+		pool.endTransaction(true);
+	}
+	
 	public abstract void executeWithThrows() throws Exception;
 }
 

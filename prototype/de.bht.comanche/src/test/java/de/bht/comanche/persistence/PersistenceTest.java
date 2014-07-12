@@ -99,8 +99,10 @@ public class PersistenceTest {
 			daUser.save(alice);
 			daUser.save(bob);
 			System.out.println("OID from Alice after Save" + alice.getOid());
+			System.out.println("OID from Bob after Save" + bob.getOid());
 			System.out.println("FLUSHING>>");
 			daUser.flush();
+			forceTransactionEnd();
 			LgUser aliceFromDb = daUser.find(alice.getOid());
 			LgUser bobFromDb = daUser.find(bob.getOid());
 			
