@@ -16,7 +16,7 @@ public abstract class TransactionWithStackTrace<E> {
 		this.throwStackTrace = true;
 	}
 	
-	public void execute () {
+	public boolean execute () {
 		pool.beginTransaction();
 		boolean success = false;
 		try {
@@ -29,6 +29,7 @@ public abstract class TransactionWithStackTrace<E> {
 		} finally {
 			pool.endTransaction(success); 
 		}
+		return success;
 	}
 	
 	public void forceNewTransaction() {

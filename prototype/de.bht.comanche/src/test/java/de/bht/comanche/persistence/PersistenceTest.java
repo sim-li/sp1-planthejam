@@ -2,13 +2,18 @@ package de.bht.comanche.persistence;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
+
 import javassist.NotFoundException;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.TransactionRequiredException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.TransactionWithStackTrace;
@@ -33,7 +38,7 @@ public class PersistenceTest {
 		 * This transaction doesn't throw a stacktrace.
 		 * (Throwstacktrace property set to false)
 		 */
-		new TransactionWithStackTrace<LgUser>(pool, false) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool) {
 			public void executeWithThrows() throws Exception {
 				LgUser lgUser = new LgUser();
 				lgUser.setName("Ralf");
@@ -55,12 +60,13 @@ public class PersistenceTest {
 				daUser.save(lgUser);
 			}
 		}.execute();
+		assertTrue(success);
     }
 	
 	@Test public void saveUserMoreComplete() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
-		new TransactionWithStackTrace<LgUser>(pool) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool) {
 			public void executeWithThrows() throws Exception {
 			LgUser alice = new LgUser();
 			alice.setName("Alice");
@@ -91,18 +97,20 @@ public class PersistenceTest {
 			assertTrue(bob.getIsContacts().contains(alice));
 			}
 		}.execute();
+		assertTrue(success);
     }
 	
 	@Test public void getByNameTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
-		new TransactionWithStackTrace<LgUser>(pool) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool) {
 			public void executeWithThrows() throws Exception {
 				Collection<LgUser> foundUsers = daUser.findByName("Ralf");
 				String nameField = foundUsers.iterator().next().getName();
 				assertEquals("Ralf", nameField);
 			}
 		}.execute();
+		assertTrue(success);
 	}
 	
 	@Test public void basicTestLayout() throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException, EntityExistsException, TransactionRequiredException, IllegalArgumentException, OidNotFoundException, NotFoundException {
@@ -113,7 +121,7 @@ public class PersistenceTest {
 		/*
 		 * SAVE DEMOUSER (JUST IN CASE), SO THAT JPA PROVIDES ID.
 		 */
-		new TransactionWithStackTrace<LgUser>(pool) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool) {
 			public void executeWithThrows() throws Exception {
 				System.out.println(">>> SAVE DEMOUSER (JUST IN CASE), SO THAT JPA PROVIDES ID.");
 				LgUser lgUser = new LgUser();
@@ -153,6 +161,7 @@ public class PersistenceTest {
 				daUser.save(lgUser);
 			}
 		}.execute();
+		assertTrue(success);
 	}
 	
 	@After public void tearDown() {
