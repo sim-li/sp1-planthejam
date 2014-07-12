@@ -70,8 +70,8 @@ public class PersistenceTest {
 				 * SET INVITES IN USER & SAVE
 				 */
 				System.out.println(">>> SET INVITES IN USER & SAVE");
-				lgUser.addInvite(lgInvite);
-				lgUser.addInvite(lgInvite2);
+				lgUser.addInvites(lgInvite);
+				lgUser.addInvites(lgInvite2);
 				daUser.save(lgUser);
 				return lgUser;
 			}
