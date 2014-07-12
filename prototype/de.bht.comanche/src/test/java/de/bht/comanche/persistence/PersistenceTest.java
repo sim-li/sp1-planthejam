@@ -68,7 +68,22 @@ public class PersistenceTest {
 		bob.setEmail("bob@test.usr");
 		bob.setPassword("hiiambob");
 		bob.setTel("0309876543");
-		bob.addHasContact(bob);
+		
+		bob.addContact(alice);
+		alice.addContact(bob);
+		bob.removeContact(alice);
+		
+//		bob.getHasContacts().add(alice);
+//		alice.getIsContacts().add(bob);
+//		
+//		alice.getHasContacts().add(bob);
+//		bob.getIsContacts().add(alice);
+//		
+//		bob.getHasContacts().remove(alice);
+//		alice.getIsContacts().remove(bob);
+		
+//		bob.reomveContact(alice);
+		
 		
 		boolean ok = false;
 		
@@ -84,7 +99,9 @@ public class PersistenceTest {
 		}
 		
 		assertEquals(ok, true);
-		assertTrue(bob.getContacts().contains(alice));
+//		assertTrue(bob.getHasContacts().contains(alice));
+		assertTrue(alice.getHasContacts().contains(bob));
+		assertTrue(bob.getIsContacts().contains(alice));
     }
 	
 	@Test public void getByNameTest() {

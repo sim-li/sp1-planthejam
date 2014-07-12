@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "TimePeriod")
@@ -14,6 +15,7 @@ public class LgTimePeriod extends DbObject {
 	private Date startTime;
 	private int durationMinutes;
 
+	@NotNull
 	@ManyToOne
 	private LgSurvey survey;
 

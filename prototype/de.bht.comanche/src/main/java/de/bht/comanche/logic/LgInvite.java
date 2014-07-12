@@ -3,6 +3,7 @@ package de.bht.comanche.logic;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Lg_Invite")
@@ -13,9 +14,11 @@ public class LgInvite extends DbObject{
 	private boolean isHost;
 	private boolean isIgnored;
 	
+	@NotNull
 	@ManyToOne
 	private LgUser user;
 	
+	@NotNull
 	@ManyToOne
 	private LgSurvey invite_survey;
 

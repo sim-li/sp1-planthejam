@@ -22,14 +22,14 @@ public class LgUser extends DbObject {
 	private String email;
 	private String password;
 
-	@ManyToMany(cascade = { CascadeType.ALL })
+//	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "contact", joinColumns = { 
-			@JoinColumn(name = "user_Id") }, inverseJoinColumns = { 
-			@JoinColumn(name = "friend_Id") })
+			@JoinColumn(name = "user_Id", referencedColumnName = "oid")}, inverseJoinColumns = { 
+			@JoinColumn(name = "friend_Id", referencedColumnName = "oid")})
+	@ManyToMany()
 	private List<LgUser> hasContacts;
-
 	
-	@ManyToMany(mappedBy = "user_id")
+	@ManyToMany(mappedBy = "hasContacts")
 	private List<LgUser> isContacts;
 
 	@OneToMany(mappedBy="user")
@@ -94,6 +94,18 @@ public class LgUser extends DbObject {
 		this.hasContacts = hasContacts;
 	}
 	
+	
+	public boolean addContact(LgUser user) {
+		return this.getHasContacts().add(user) && 
+			   user.getIsContacts().add(this);
+	}
+	
+	public boolean removeContact(LgUser user) {
+		return this.getHasContacts().remove(user) && 
+			   user.getIsContacts().remove(this);
+	}
+	
+	
 	public boolean addHasContact(LgUser hasContact) {
 		return this.hasContacts.add(hasContact);
 	}
@@ -102,20 +114,20 @@ public class LgUser extends DbObject {
 		return this.hasContacts.remove(hasContact);
 	}
 
-	public List<LgUser> getContacts() {
+	public List<LgUser> getIsContacts() {
 		return isContacts;
 	}
 
-	public void setContacts(List<LgUser> contacts) {
-		this.isContacts = contacts;
+	public void setIsContacts(List<LgUser> isContacts) {
+		this.isContacts = isContacts;
 	}
 	
-	public boolean addContact(LgUser contact) {
-		return this.isContacts.add(contact);
+	public boolean addIsContact(LgUser isContact) {
+		return this.isContacts.add(isContact);
 	}
 	
-	public boolean removeContact(LgUser contact) {
-		return this.isContacts.remove(contact);
+	public boolean removeIsContact(LgUser isContact) {
+		return this.isContacts.remove(isContact);
 	}
 
 	public List<LgInvite> getInvites() {
