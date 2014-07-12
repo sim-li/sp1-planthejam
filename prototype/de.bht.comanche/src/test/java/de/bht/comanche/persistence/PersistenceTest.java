@@ -9,7 +9,6 @@ import javax.persistence.TransactionRequiredException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import de.bht.comanche.logic.DbObject;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.TransactionWithStackTrace;
@@ -26,95 +25,82 @@ public class PersistenceTest {
 	@Before public void setUp(){
 		daFactory = new JpaDaFactory();
 	}
-//	
-//	@Test public void simpleSaveUserTest() {
-//		DaUser daUser = factory.getDaUser();
-//		daUser.beginTransaction();
-//		LgUser lgUser = new LgUser();
-//		lgUser.setName("Ralf");
-//		lgUser.setEmail("simon@a-studios.org");
-//		lgUser.setPassword("myPwIsEasy");
-//		lgUser.setTel("030-3223939");
-//		boolean ok = false;
-//		try {
-//			daUser.save(lgUser);
-//			ok = true;
-//		} catch (EntityExistsException e) {
-//			e.printStackTrace();
-//		} catch (TransactionRequiredException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IllegalArgumentException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {			
-//			daUser.endTransaction(ok);
-//		}
-//		assertEquals(ok, true);
-//    }
-//	
-//	@Test public void saveUserMoreComplete() {
-//		DaUser daUser = factory.getDaUser();
-//		
-//		Pool<LgUser> pool = daUser.getPool();
-//		pool.beginTransaction(); // FIXME --> Transaction
-//		
-//		LgUser alice = new LgUser();
-//		alice.setName("Alice");
-//		alice.setEmail("alice@user.tst");
-//		alice.setPassword("nosafepwd");
-//		alice.setTel("0301234567");
-//		
-//		LgUser bob = new LgUser();
-//		bob.setName("Bob");
-//		bob.setEmail("bob@test.usr");
-//		bob.setPassword("hiiambob");
-//		bob.setTel("0309876543");
-//		
-//		bob.addContact(alice);
-//		alice.addContact(bob);
-//		bob.removeContact(alice);
-//		
-////		bob.getHasContacts().add(alice);
-////		alice.getIsContacts().add(bob);
-////		
-////		alice.getHasContacts().add(bob);
-////		bob.getIsContacts().add(alice);
-////		
-////		bob.getHasContacts().remove(alice);
-////		alice.getIsContacts().remove(bob);
-//		
-////		bob.reomveContact(alice);
-//		
-//		
-//		boolean ok = false;
-//		
-//		try {
-//			daUser.save(alice);
-//			daUser.save(bob);
-//			ok = true;
-//		} catch (Exception  e) {
-//			e.printStackTrace();
-////			ok = true;
-//		} finally {			
-//			pool.endTransaction(ok); // FIXME --> Transaction
-//		}
-//		
-//		assertEquals(ok, true);
-////		assertTrue(bob.getHasContacts().contains(alice));
-//		assertTrue(alice.getHasContacts().contains(bob));
-//		assertTrue(bob.getIsContacts().contains(alice));
-//    }
+	
+	@Test public void simpleSaveUserTest() {
+		final DaUser daUser = daFactory.getDaUser();
+		final Pool pool = daUser.getPool();
+		/*
+		 * This transaction doesn't throw a stacktrace.
+		 * (Throwstacktrace property set to false)
+		 */
+		new TransactionWithStackTrace<LgUser>(pool, false) {
+			public void executeWithThrows() throws Exception {
+				LgUser lgUser = new LgUser();
+				lgUser.setName("Ralf");
+				lgUser.setEmail("simon@a-studios.org");
+				lgUser.setPassword("myPwIsEasy");
+				lgUser.setTel("030-3223939");
+//				daUser.save(lgUser);
+				/* forceNewTransaction();
+				 * Ends current transaction and starts a new one, for example
+				 * if we want to find an object in DB to see if ID was set correctly.
+				 * Doesn't contain any rollback handling (only for adults).
+				 * [ TO BE IMPLEMENTED ]
+				 */
+				LgUser lgUser1 = new LgUser();
+				lgUser.setName("Jenna");
+				lgUser.setEmail("simon@a-studios.org");
+				lgUser.setPassword("myPwIsEasy");
+				lgUser.setTel("030-3223939");
+				daUser.save(lgUser);
+			}
+		}.execute();
+    }
+	
+	@Test public void saveUserMoreComplete() {
+		final DaUser daUser = daFactory.getDaUser();
+		final Pool pool = daUser.getPool();
+		new TransactionWithStackTrace<LgUser>(pool) {
+			public void executeWithThrows() throws Exception {
+			LgUser alice = new LgUser();
+			alice.setName("Alice");
+			alice.setEmail("alice@user.tst");
+			alice.setPassword("nosafepwd");
+			alice.setTel("0301234567");
+			LgUser bob = new LgUser();
+			bob.setName("Bob");
+			bob.setEmail("bob@test.usr");
+			bob.setPassword("hiiambob");
+			bob.setTel("0309876543");
+			bob.addContact(alice);
+			alice.addContact(bob);
+			bob.removeContact(alice);
+	//		bob.getHasContacts().add(alice);
+	//		alice.getIsContacts().add(bob);
+	//		
+	//		alice.getHasContacts().add(bob);
+	//		bob.getIsContacts().add(alice);
+	//		
+	//		bob.getHasContacts().remove(alice);
+	//		alice.getIsContacts().remove(bob);
+	//		bob.removeContact(alice);
+			daUser.save(alice);
+			daUser.save(bob);
+	//		assertTrue(bob.getHasContacts().contains(alice));
+			assertTrue(alice.getHasContacts().contains(bob));
+			assertTrue(bob.getIsContacts().contains(alice));
+			}
+		}.execute();
+    }
 	
 	@Test public void getByNameTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		final Pool pool = daUser.getPool();
-		DbObject result = new TransactionWithStackTrace<LgUser>(pool) {
-			public LgUser executeWithThrows() throws Exception {
+		new TransactionWithStackTrace<LgUser>(pool) {
+			public void executeWithThrows() throws Exception {
 				Collection<LgUser> foundUsers = daUser.findByName("Ralf");
 				String nameField = foundUsers.iterator().next().getName();
 				assertEquals("Ralf", nameField);
-				return null;
 			}
 		}.execute();
 	}
@@ -127,8 +113,8 @@ public class PersistenceTest {
 		/*
 		 * SAVE DEMOUSER (JUST IN CASE), SO THAT JPA PROVIDES ID.
 		 */
-		DbObject result = new TransactionWithStackTrace<LgUser>(pool) {
-			public LgUser executeWithThrows() throws Exception {
+		new TransactionWithStackTrace<LgUser>(pool) {
+			public void executeWithThrows() throws Exception {
 				System.out.println(">>> SAVE DEMOUSER (JUST IN CASE), SO THAT JPA PROVIDES ID.");
 				LgUser lgUser = new LgUser();
 				lgUser.setName("Ralf");
@@ -165,7 +151,6 @@ public class PersistenceTest {
 				lgUser.addInvites(lgInvite);
 				lgUser.addInvites(lgInvite2);
 				daUser.save(lgUser);
-				return lgUser;
 			}
 		}.execute();
 	}

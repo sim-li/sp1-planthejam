@@ -1,34 +1,41 @@
 package de.bht.comanche.server;
 
-import de.bht.comanche.logic.DbObject;
 import de.bht.comanche.persistence.Pool;
 
 public abstract class TransactionWithStackTrace<E> {
 	private final Pool<E> pool;
+	private final boolean throwStackTrace;
+	
+	public TransactionWithStackTrace (Pool<E> pool, boolean throwStackTrace) {
+		this.pool = pool;
+		this.throwStackTrace = throwStackTrace;
+	}
 	
 	public TransactionWithStackTrace (Pool<E> pool) {
 		this.pool = pool;
+		this.throwStackTrace = true;
 	}
 	
-	public DbObject execute () {
+	public void execute () {
 		pool.beginTransaction();
-		DbObject result = null;
 		boolean success = false;
 		try {
-			result = executeWithThrows();
+			executeWithThrows();
 			success = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			if (throwStackTrace) {
+				e.printStackTrace();
+			}
 		} finally {
 			pool.endTransaction(success); 
 		}
-		return result;
 	}
 	
-	public void fireSave() {
-		
+	public void forceNewTransaction() {
+		pool.endTransaction(true);
+		pool.beginTransaction();
 	}
 	
-	public abstract DbObject executeWithThrows() throws Exception;
+	public abstract void executeWithThrows() throws Exception;
 }
 
