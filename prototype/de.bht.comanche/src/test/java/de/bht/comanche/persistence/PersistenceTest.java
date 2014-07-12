@@ -25,8 +25,8 @@ import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public class PersistenceTest {
-	private final boolean THROW_STACKTRACE = false;
-	private final boolean ROLLBACK = true;
+	private final boolean THROW_STACKTRACE = true;
+	private final boolean ROLLBACK = false;
 	
 	private DaFactory daFactory;
 	
@@ -78,6 +78,7 @@ public class PersistenceTest {
 			alice.setEmail("alice@user.tst");
 			alice.setPassword("nosafepwd");
 			alice.setTel("0301234567");
+			System.out.println("OID from Alice before Save" + alice.getOid());
 			LgUser bob = new LgUser();
 			bob.setName("Bob");
 			bob.setEmail("bob@test.usr");
@@ -97,9 +98,20 @@ public class PersistenceTest {
 	//		bob.removeContact(alice);
 			daUser.save(alice);
 			daUser.save(bob);
+			
+			System.out.println("OID from Alice after Save" + alice.getOid());
+			
+			LgUser aliceFromDb = daUser.find(alice.getOid());
+			LgUser bobFromDb = daUser.find(bob.getOid());
+			
+			
+			System.out.println("OID from Alice from DB" + aliceFromDb.getOid());
+			
+//			LgUser bobFromDb = daUser.findByName("Bob").get(0);
+//			LgUser aliceFromDb = daUser.findByName("Alice").get(0);
 	//		assertTrue(bob.getHasContacts().contains(alice));
-			assertTrue(alice.getHasContacts().contains(bob));
-			assertTrue(bob.getIsContacts().contains(alice));
+			assertTrue(aliceFromDb.getHasContacts().contains(bobFromDb));
+			assertTrue(bobFromDb.getIsContacts().contains(aliceFromDb));
 			}
 		}.execute();
 		assertTrue(success);
@@ -119,7 +131,7 @@ public class PersistenceTest {
 		assertTrue(success);
 	}
 	
-	@Test public void basicTestLayout() throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException, EntityExistsException, TransactionRequiredException, IllegalArgumentException, OidNotFoundException, NotFoundException {
+	@Test public void basicTestLayout() {
 		final DaUser daUser = daFactory.getDaUser();
 		final DaInvite daInvite = daFactory.getDaInvite();
 		final Pool pool = daUser.getPool();
