@@ -46,27 +46,28 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 "isLoggedIn": false
             }
             $log.log("session initialized");
+            $log.log($scope.session);
         };
         initSession();
 
         
-        /**
-         * tries to get the specified user from the server
-         */
-        var fetchUserData = function(oid) {
-            var _fromGetUser = restService.getUser(oid);
-            if (!_fromGetUser.success) {
-                $log.error("Benutzerdaten konnten nicht vom Server geholt werden.");
-                $log.error(_fromGetUser.serverMessage);
-                return;
-            }
-            // *** get all user data from server ***
+        // /**
+        //  * tries to get the specified user from the server
+        //  */
+        // var fetchUserData = function(oid) {
+        //     var _fromGetUser = restService.getUser(oid);
+        //     if (!_fromGetUser.success) {
+        //         $log.error("Benutzerdaten konnten nicht vom Server geholt werden.");
+        //         $log.error(_fromGetUser.serverMessage);
+        //         return;
+        //     }
+        //     // *** get all user data from server ***
 
-            return _fromGetUser.user;
+        //     return _fromGetUser.user;
 
             // $scope.session.user.surveys = getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
             // $scope.session.user.surveys = [{}] // empty list for debugging
-        }
+        // }
         
 
         $scope.toggleLoginDialog = function() {
@@ -117,9 +118,9 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 $log.log("Login ungueltig.");
                 return;
             }
-            restService.login(_user.name, _user.password)
-                .then(function(success) {
-                    $scope.session.user = success;
+            restService.login(_user)
+                .then(function(user) {
+                    $scope.session.user = user;
                     $scope.session.isLoggedIn = true;
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
@@ -133,42 +134,30 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
         $scope.register = function() {
             var _user = $scope.session.user;
-
             if (!registerIsValidFor(_user)) {
                 $log.log("Registrierung ungueltig.");
-                $log.log(_user);
                 return;
             }
-
-            var _fromRegister = restService.register(_user.name, _user.password, _user.email, _user.tel);
-            if (!_fromRegister.success) {
-                $log.error("Registrierung auf dem Server fehlgeschlagen.");
-                $log.error(_fromRegister.serverMessage);
-                initSession();
-                return;
-            }
-
-            _user = fetchUserData(_fromRegister.oid);
-            if (!_user) {
-                $log.error("Login fehlgeschlagen.");
-                initSession();
-                return;
-            }
-            $scope.session.user = _user;
-            
-            $scope.session.isLoggedIn = true;
-            $log.log("Registrierung erfolgreich.");
-            $log.log($scope.session);
+            restService.register(_user.name, _user.password, _user.email, _user.tel)
+                .then(function(user) {
+                    $scope.session.user = user;
+                    $log.log("Registrierung erfolgreich.");
+                    $scope.login();
+                }, function(error) {
+                    $log.error(error);
+                    initSession();
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
         };
 
         $scope.logout = function() {
 
             // *** try to logout at server ***  -- TODO: not necessary?
 
+            $log.log("Logout erfolgreich.");
             initSession();
             $scope.showRegisterDialog = false;
-            $log.log("Logout erfolgreich.");
-            $log.log($scope.session);
         };
 
         $scope.discardWarnings = function() {
@@ -184,19 +173,20 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
         $scope.saveEditedUser = function() {
             var _user = $scope.session.tempUser;
-            var _fromUpdateUser = restService.updateUser(_user);
+            // var _fromUpdateUser = restService.updateUser(_user);
 
-            if (!_fromUpdateUser.success) {
-                $log.error("Update der Kontodaten auf dem Server fehlgeschlagen.");
-                $log.error(_fromUpdateUser.serverMessage);
-
-                cancelEditUser();
-                return;
-            }
-            $scope.session.user = _user;
-
-            $scope.session.inEditMode = false;
-            $scope.session.showEditUserDialog = false;
+            restService.updateUser(_user)
+                .then(function(success) {
+                    $log.log(success);
+                    $scope.session.user = _user;
+                    $scope.session.inEditMode = false;
+                    $scope.session.showEditUserDialog = false;
+                }, function(error) {
+                    $log.error(error);
+                    cancelEditUser();
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
         };
 
         $scope.cancelEditUser = function() {
@@ -210,18 +200,16 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             // *** ask: are you sure you want to delete? ***
 
             var _user = $scope.session.user;
-            var _fromDeleteUser = restService.deleteUser(_user.oid);
-
-            if (!_fromDeleteUser.success) {
-                $log.error("Loeschen des Kontos auf dem Server fehlgeschlagen.");
-                $log.error(_fromDeleteUser.serverMessage);
-                return;
-            }
-
-            initSession();
-            $scope.showRegisterDialog = false;
-            $log.log("Das Konto wurde erfolgreich geloescht.");
-            $log.log($scope.session);
+            restService.deleteUser(_user)
+                .then(function(success) {
+                    $log.log(success);
+                    initSession();
+                    $scope.showRegisterDialog = false;
+                }, function(error) {
+                    $log.error(error);
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
         };
 
 

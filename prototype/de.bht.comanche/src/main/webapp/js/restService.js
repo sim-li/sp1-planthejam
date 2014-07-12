@@ -22,6 +22,24 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             ERROR   = "ERROR ------------------------------------------------------------", 
             DONE    = "DONE =============================================================";
 
+        var getErrorMesage = function(status) {
+            var error = {
+                  1: "Dieser Benutzername ist schon vergeben.", 
+                  2: "Die Objekt-ID wurde in der Datenbank nicht gefunden.", 
+                  3: "Das Objekt wurde in der Datenbank nicht gefunden.", 
+                  4: "No query class.", 
+                  5: "Diese Klasse kann nicht gespeichert werden.", 
+                  6: "Falscher Argument-Typ.", 
+                  7: "Falsche Anzahl an Argumenten.", 
+                  8: "Falsches Passwort.", 
+                  9: "Kein Benutzer mit diesem Namen gefunden.", 
+                404: "REST-Service nicht gefunden.", 
+                123: "FOO-ERROR", 
+                321: "BAR-ERROR"
+            };
+            return error[status] || "(status " + status + ")";
+        }
+
 
         var getDummyUser = function() {
             return {
@@ -79,51 +97,40 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
 
-        var login = function(name, password) {
+        var login = function(user) {
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                data: { "name": name, "password": password }
+                data: { "name": user.name, "password": user.password }
             }).success(function(data, status, header, config) {
 
                 getUser(data.data[0].oid)
                     .then(function(success) {    
                         deferred.resolve(success);
                     }, function(error) {
-                        //-- do something
-                        $log.error("error (from getUser:");
-                        $log.error(error);
                         deferred.reject(error);
                     }, function(notification) {
                         // $log.log(notification); // for future use
                     });
             }).error(function(data, status, header, config) {
-                $log.error("error (from login:");
-                // $log.error(data);
-                console.log("Data", data, "Status", status, "Header", header, "Config", config)
-                deferred.reject("Login auf dem Server fehlgeschlagen. (status: " + status + ")");
+                deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status));
             });
             return deferred.promise;
         };
 
         var getUser = function(oid) {
-            $log.debug(">>>>>>>>>>>>>>> " + oid);
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "get", 
-                data: { "oid": oid, 
-                        // "name": "", 
-                        // "password": "", 
-                        // "email": "", 
-                        // "tel": "", 
-                        // "surveys": [] // FIXME missing on server in LgUser ?? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< !!!!! FIXME
-                    }
+                data: { "oid": oid }
             })
             .success(function(data, status, header, config) {
                 var _user = data.data[0];
                 $log.debug(_user);
+
+                // TODO needs to be checked
 
                 // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
                 var _surveys =  _user.surveys || [];
@@ -133,51 +140,75 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 _user.surveys = Survey.forSurveysConvertDatesToDatePickerDate(_surveys);
                 
                 deferred.resolve(_user);
-                // deferred.reject(_user); // FIXME -- Test -------------------------------------------------#############################
             })
             .error(function(data, status, header, config) {
-                // $log.debug(data);
-                $log.debug(config);
-                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. (status " + status + ")");
-
-                //-- TEST --                                   FIXME
-                $log.info("hack");
-                // deferred.resolve(getDummyUser());
-                //-- TEST --
+                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
             });
             return deferred.promise;
         };
 
-        var register = function(name, password, email, tel) {
-            $log.warn("register() not implemented");
-            // TODO retrieve data from rest service
+        var register = function(user) {
+            
+            $log.warn("register() not tested");
 
-            var dummyReturn = { "success": true, 
-                                "serverMessage": "HI FROM REGISTER", 
-                                "oid": new Date().getTime() };
-            return dummyReturn;
+            var deferred = $q.defer();
+            $http({ 
+                method: "POST", 
+                url: USER_PATH + "register", 
+                data: { "name": user.name, "password": user.password, "email": user.email, "tel": user.tel }
+            }).success(function(data, status, header, config) {
+
+                getUser(data.data[0].oid)
+                    .then(function(success) {    
+                        deferred.resolve(success);
+                    }, function(error) {
+                        deferred.reject(error);
+                    }, function(notification) {
+                        // $log.log(notification); // for future use
+                    });
+            }).error(function(data, status, header, config) {
+                deferred.reject("Registrierung auf dem Server fehlgeschlagen. " + getErrorMesage(status));
+            });
+            return deferred.promise;
         };
 
-        var deleteUser = function(oid) {
-            $log.warn("deleteUser() not implemented");
-            // TODO retrieve data from rest service
+        var deleteUser = function(user) {
+            
+            $log.warn("deleteUser() not tested");
 
-            var dummyReturn = { "success": true, 
-                                "serverMessage": "HI FROM DELETE_USER" };
-            return dummyReturn;
+            var deferred = $q.defer();
+            $http({ 
+                method: "POST", 
+                url: USER_PATH + "delete", 
+                data: { "oid": user.oid }
+            }).success(function(data, status, header, config) {
+                deferred.resolve("Das Konto wurde erfolgreich geloescht.");
+            }).error(function(data, status, header, config) {
+                deferred.reject("Loeschen des Kontos auf dem Server fehlgeschlagen. " + getErrorMesage(status));
+            });
+            return deferred.promise;
         };
 
         var updateUser = function(user) {
-            $log.warn("updateUser() not implemented");
-            // TODO retrieve data from rest service
+            $log.warn("updateUser() not tested");
 
+            // TODO needs to be checked
+            
             // convert all dates to the native date format
-            // var _user = ...;
+            // var _user = angular.copy(user);
             // Survey.forSurveysConvertDatesToJsDate(_user.surveys);
 
-            var dummyReturn = { "success": true, 
-                                "serverMessage": "HI FROM UPDATE_USER" };
-            return dummyReturn;
+            var deferred = $q.defer();
+            $http({ 
+                method: "POST", 
+                url: USER_PATH + "update", 
+                data: user
+            }).success(function(data, status, header, config) {
+                deferred.resolve("Die Kontodaten wurden erfolgreich auf dem Server gespeichert.");
+            }).error(function(data, status, header, config) {
+                deferred.reject("Update der Kontodaten auf dem Server fehlgeschlagen." + getErrorMesage(status));
+            });
+            return deferred.promise;
         };
 
         /*
