@@ -12,17 +12,20 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
+
 @Entity
 @Table(name = "user")
 public class LgUser extends DbObject {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String name;
 	private String tel;
 	private String email;
 	private String password;
 
+//<<<<<<< HEAD
 //	@ManyToMany(cascade = { CascadeType.ALL })
 	
 	@JoinTable(name = "contact", joinColumns = { 
@@ -35,6 +38,16 @@ public class LgUser extends DbObject {
 	private List<LgUser> isContacts;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
+//=======
+//	@JoinTable(name = "contact", joinColumns = { @JoinColumn(name = "user_Id", referencedColumnName = "oid") }, inverseJoinColumns = { @JoinColumn(name = "friend_Id", referencedColumnName = "oid") })
+//	@ManyToMany(cascade = CascadeType.ALL)
+//	private List<LgUser> hasContacts;
+//
+//	@ManyToMany(mappedBy = "hasContacts", cascade = CascadeType.ALL)
+//	private List<LgUser> isContacts;
+//
+//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//>>>>>>> 9065f683ea2cb0a25275e86593274f647a4da860
 	private List<LgInvite> invites;
 
 	public LgUser() {
@@ -42,7 +55,7 @@ public class LgUser extends DbObject {
 		this.isContacts = new LinkedList<LgUser>();
 		this.invites = new LinkedList<LgInvite>();
 	}
-	
+
 	public LgUser(String name, String tel, String email, String password,
 			List<LgUser> hasContacts, List<LgUser> isContacts,
 			List<LgInvite> invites) {
@@ -51,11 +64,13 @@ public class LgUser extends DbObject {
 		this.tel = tel;
 		this.email = email;
 		this.password = password;
-		this.hasContacts = hasContacts == null ? new LinkedList<LgUser>() : hasContacts;
-		this.isContacts = isContacts == null ? new LinkedList<LgUser>() : isContacts;
+		this.hasContacts = hasContacts == null ? new LinkedList<LgUser>()
+				: hasContacts;
+		this.isContacts = isContacts == null ? new LinkedList<LgUser>()
+				: isContacts;
 		this.invites = invites == null ? new LinkedList<LgInvite>() : invites;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -95,7 +110,7 @@ public class LgUser extends DbObject {
 	public void setHasContacts(List<LgUser> hasContacts) {
 		this.hasContacts = hasContacts;
 	}
-	
+
 	public List<LgUser> getIsContacts() {
 		return isContacts;
 	}
@@ -103,17 +118,17 @@ public class LgUser extends DbObject {
 	public void setIsContacts(List<LgUser> isContacts) {
 		this.isContacts = isContacts;
 	}
-	
-	public boolean addContact(LgUser user) {
-		return this.getHasContacts().add(user) && 
-				user.getIsContacts().add(this);
+
+	public void addContact(LgUser user) {
+		this.getHasContacts().add(user);
+		user.getHasContacts().add(this);
 	}
-	
-	public boolean removeContact(LgUser user) {
-		return this.getHasContacts().remove(user) && 
-				user.getIsContacts().remove(this);
+
+	public void removeContact(LgUser user) {
+		this.getHasContacts().remove(user);
+		user.getHasContacts().remove(this);
 	}
-	
+
 	public List<LgInvite> getInvites() {
 		return invites;
 	}
@@ -121,11 +136,11 @@ public class LgUser extends DbObject {
 	public void setInvites(List<LgInvite> invites) {
 		this.invites = invites;
 	}
-	
+
 	public boolean addInvites(LgInvite invite) {
 		return this.invites.add(invite);
 	}
-	
+
 	public boolean removeInvites(LgInvite invite) {
 		return this.invites.remove(invite);
 	}
