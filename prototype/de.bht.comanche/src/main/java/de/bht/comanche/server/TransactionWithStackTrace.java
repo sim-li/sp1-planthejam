@@ -41,7 +41,15 @@ public abstract class TransactionWithStackTrace<E> {
 		return success;
 	}
 	
-	public void forceNewTransaction() {
+	public void flush() {
+		pool.flush();
+	}
+	
+	public void forceTransactionEnd() {
+		pool.endTransaction(true);
+	}
+	
+	public void forceRestartTransaction() {
 		pool.endTransaction(true);
 		pool.beginTransaction();
 	}

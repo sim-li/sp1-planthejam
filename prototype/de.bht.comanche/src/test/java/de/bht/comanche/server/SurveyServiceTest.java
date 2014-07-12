@@ -7,7 +7,7 @@ import org.junit.Test;
 import de.bht.comanche.logic.LgSurvey;
 
 public class SurveyServiceTest {
-	@Test
+//	@Test
     public void saveSurvey() {
 	
 		LgSurvey testSurvey = new LgSurvey();
