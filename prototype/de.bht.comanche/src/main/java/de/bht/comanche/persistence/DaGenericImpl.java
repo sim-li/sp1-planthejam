@@ -53,7 +53,6 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 
 	@Override
 	public List<E> findByField(String fieldName, Object fieldValue) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException { 
-		//SELECT c.capital.name FROM Country AS c WHERE c.name = :name
 		final String OBJECT_NAME = type.getSimpleName();
 		String [] args = {
 				fieldName,

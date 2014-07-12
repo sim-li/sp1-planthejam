@@ -56,7 +56,6 @@ public class PersistenceBasicOperationsTest {
 			public void executeWithThrows() throws Exception {
 				LgUser aliceFromDb = daUser.findByName("Alice").get(0);
 				LgUser bobFromDb  = daUser.findByName("Bob").get(0);
-				
 				aliceFromDb.addContact(bobFromDb);
 			}
 		}.execute();
