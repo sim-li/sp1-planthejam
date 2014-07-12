@@ -100,6 +100,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
 
         var login = function(user) {
+            $log.log("REST login");
+
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
@@ -124,6 +126,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         var getUser = function(oid) {
+            $log.log("REST getUser");
+
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
@@ -153,6 +157,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         var register = function(user) {
+            $log.log("REST register");
             
             $log.warn("register() not tested");
 
@@ -178,6 +183,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         var deleteUser = function(user) {
+            $log.log("REST deleteUser");
             
             $log.warn("deleteUser() not tested");
 
@@ -195,6 +201,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         var updateUser = function(user) {
+            $log.log("REST updateUser");
             $log.warn("updateUser() not tested");
 
             // TODO needs to be checked
