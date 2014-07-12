@@ -3,6 +3,7 @@ package de.bht.comanche.logic;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -28,10 +29,10 @@ public class LgSurvey extends DbObject {
 	@Enumerated(EnumType.STRING)
 	private TimeUnit frequencyTimeUnit;
 
-	@OneToMany(mappedBy="invite_survey")
+	@OneToMany(mappedBy="invite_survey", cascade = CascadeType.ALL)
 	private List<LgInvite> invites;
 	
-	@OneToMany(mappedBy="survey")
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL)
 	private List<LgTimePeriod> possibleTimePeriods;
 
 	public String getName() {
