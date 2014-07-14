@@ -44,7 +44,6 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	@Override
 	public E find(long id) throws NotFoundException, NoPersistentClassException, OidNotFoundException {
 		return pool.find(type, id);
-		
 	}
 
 	@Override
@@ -54,7 +53,6 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 
 	@Override
 	public List<E> findByField(String fieldName, Object fieldValue) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException { 
-		//SELECT c.capital.name FROM Country AS c WHERE c.name = :name
 		final String OBJECT_NAME = type.getSimpleName();
 		String [] args = {
 				fieldName,
@@ -94,4 +92,7 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 		this.pool = pool;
 	}
 
+	public void flush() {
+		pool.flush();
+	}
 }

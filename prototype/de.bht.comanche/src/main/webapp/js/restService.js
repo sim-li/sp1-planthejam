@@ -24,7 +24,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         var getErrorMesage = function(status) {
             var error = {
-                  1: "Dieser Benutzername ist schon vergeben.", 
                   2: "Die Objekt-ID wurde in der Datenbank nicht gefunden.", 
                   3: "Das Objekt wurde in der Datenbank nicht gefunden.", 
                   4: "No query class.", 
@@ -33,11 +32,14 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                   7: "Falsche Anzahl an Argumenten.", 
                   8: "Falsches Passwort.", 
                   9: "Kein Benutzer mit diesem Namen gefunden.", 
+                 10: "Falsche ID.", 
+                 11: "Dieser Benutzername ist schon vergeben.", 
                 404: "REST-Service nicht gefunden.", 
                 123: "FOO-ERROR", 
                 321: "BAR-ERROR"
             };
-            return error[status] || "(status " + status + ")";
+            var msg = error[status] || "";
+            return msg + " (status " + status + ")";
         }
 
 
@@ -98,12 +100,16 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
 
         var login = function(user) {
+            $log.log("REST login");
+
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                data: { "name": user.name, "password": user.password }
+                // data: { "name": user.name, "password": user.password }
+                data: { "name": "Alice", "password": "nosafepwd" } // <<<<<<<<<<<<<<<<<<<<<<<<<<<< HACK    FIXME >>>>>>>>>>>>>>
             }).success(function(data, status, header, config) {
+                $log.debug(data.data[0]);
 
                 getUser(data.data[0].oid)
                     .then(function(success) {    
@@ -120,10 +126,12 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         var getUser = function(oid) {
+            $log.log("REST getUser");
+
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
-                url: USER_PATH + "get", 
+                url: USER_PATH + "getUser", 
                 data: { "oid": oid }
             })
             .success(function(data, status, header, config) {
@@ -142,12 +150,14 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 deferred.resolve(_user);
             })
             .error(function(data, status, header, config) {
+                $log.debug(config);
                 deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
             });
             return deferred.promise;
         };
 
         var register = function(user) {
+            $log.log("REST register");
             
             $log.warn("register() not tested");
 
@@ -173,6 +183,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         var deleteUser = function(user) {
+            $log.log("REST deleteUser");
             
             $log.warn("deleteUser() not tested");
 
@@ -190,6 +201,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         };
 
         var updateUser = function(user) {
+            $log.log("REST updateUser");
             $log.warn("updateUser() not tested");
 
             // TODO needs to be checked

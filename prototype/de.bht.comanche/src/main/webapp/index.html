@@ -50,6 +50,12 @@
     <!-- display errors here -->
     <pre id="error"></pre>
 
+    <!-- debugging errors here -->
+    <pre id="debug">
+        {{ session.user }}
+        {{ session.tempUser }}
+    </pre>
+
 
     <div id="login_area" ng-hide="session.isLoggedIn" class="input_area">
 

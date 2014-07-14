@@ -10,7 +10,6 @@ import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 import javax.transaction.TransactionRequiredException;
 
-import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
 import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
@@ -23,11 +22,11 @@ public class PoolImpl<E> implements Pool<E> {
 	
 	public PoolImpl () {
 		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
-		entityManager = entityManagerFactory.createEntityManager();
 	}
 	
 	@Override
 	public void beginTransaction() {
+		entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction tr = entityManager.getTransaction();
 		tr.begin();
 	}
@@ -83,8 +82,12 @@ public class PoolImpl<E> implements Pool<E> {
 			ArgumentTypeException {
 		String qlString = String.format(i_queryString, i_args);
 		List<E> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
-		System.out.println("SIZE IS: " + results.size());
 		return results;
 
+	}
+	
+	@Override
+	public void flush() {
+		entityManager.flush();
 	}
 }

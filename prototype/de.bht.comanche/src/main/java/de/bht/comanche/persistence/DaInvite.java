@@ -18,4 +18,5 @@ public interface DaInvite {
     void endTransaction(boolean success);
     public Pool getPool(); // Later overwritten by DaGenericImpl
     public void setPool(Pool pool); 
+    public void flush();
 }

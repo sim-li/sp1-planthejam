@@ -1,7 +1,6 @@
 package de.bht.comanche.server.exceptions;
 
 public enum PersistenceErrorMessage {
-	USER_EXISTS (1), 
 	OID_NOT_FOUND (2),
 	OBJECT_NOT_FOUND (3),
 	NO_QUERY_CLASS (4),

@@ -13,7 +13,7 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisNameException;
-import de.bht.comanche.server.exceptions.logic.UserWithThisNameExist;
+import de.bht.comanche.server.exceptions.logic.UserWithThisNameExistsException;
 import de.bht.comanche.server.exceptions.logic.WrongPasswordException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
@@ -57,27 +57,35 @@ public class UserService extends Service {
 	 * @return
 	 */
 	@POST
-	@Path("get")
+	@Path("getUser")
 	@Consumes("application/json")
 	@Produces({"application/json"})
 	public ResponseObject getUser(final LgUser userFromClient){
 		final DaUser daUser = factory.getDaUser();
 		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
+				System.out.println("HUHU from GET");
+				System.out.println(userFromClient.getOid());
+				
 				LgUser lgUser = null;
 				try{
 				lgUser = daUser.find(userFromClient.getOid());
 				} catch (OidNotFoundException oid){
+					System.out.println("WRONG ID");
 					throw new NoUserWithThisIdException();
 				}
+				
+				System.out.println("RETURNING USER");
 				return lgUser;
 			}
 		}.execute();
 
 		if (response.hasError()) {
+			System.out.println("RESPONSE HAS ERROR");
 			throw new WebApplicationException(response.getResponseCode());
 		}
 		
+		System.out.println("RESPONSE HAS RESPONSE");
 		return response;
 	}
    	 
@@ -92,7 +100,7 @@ public class UserService extends Service {
  				String name = newUserFromClient.getName();
  				List<LgUser> users = daUser.findByName(name);
 				if (!users.isEmpty()) {
-					throw new UserWithThisNameExist();
+					throw new UserWithThisNameExistsException();
 				}
     			 LgUser userSaveToDb = new LgUser();
     			 userSaveToDb.setName(name);

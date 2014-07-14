@@ -23,4 +23,5 @@ public interface Pool<E> {
 	public E find(Class<E> i_persistentClass, Long i_oid) throws NoPersistentClassException, OidNotFoundException;
 	public List<E> findAll(Class<E> i_persistentClass) throws NoPersistentClassException;
 	public List<E> findManyByQuery(Class<E> i_resultClass, String i_queryString, Object[] i_args) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException;
+	public void flush();
 }

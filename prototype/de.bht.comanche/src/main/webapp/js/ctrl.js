@@ -183,7 +183,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                     $scope.session.showEditUserDialog = false;
                 }, function(error) {
                     $log.error(error);
-                    cancelEditUser();
+                    $scope.cancelEditUser();
                 }, function(notification) {
                     // $log.log(notification); // for future use
                 });
