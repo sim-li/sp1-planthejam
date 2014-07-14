@@ -81,7 +81,7 @@ public class UserService extends Service {
 		return response;
 	}
    	 
-     @Path("/register")
+     @Path("register")
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
@@ -115,7 +115,7 @@ public class UserService extends Service {
     	 return response;
  	}
      
-     @Path("/delete")
+     @Path("delete")
      @DELETE
      @Consumes("application/json")
      @Produces({"application/json"})
@@ -141,7 +141,7 @@ public class UserService extends Service {
      	 return response;
  	} 
      
-     @Path("/update")
+     @Path("update")
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})

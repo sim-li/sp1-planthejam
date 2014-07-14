@@ -16,4 +16,8 @@ public interface DaSurvey {
 	LgSurvey find(long id) throws NotFoundException, NoPersistentClassException, OidNotFoundException;
 	List<LgSurvey> findAll() throws NoPersistentClassException ;
     List<LgSurvey> findByName(String name);
+    void beginTransaction();
+    void endTransaction(boolean success);
+    public Pool getPool(); // Later overwritten by DaGenericImpl
+    public void setPool(Pool pool); 
 }
