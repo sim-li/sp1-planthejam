@@ -19,6 +19,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         $scope.patterns = patterns;
         
         $scope.session = {};
+        $scope.warnings = {};
 
         /*
          * returns an initialized user
@@ -111,7 +112,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             }
             return true;
         };
-
+        
         $scope.login = function() {
             var _user = $scope.session.user;
             if (!loginIsValidFor(_user)) {
@@ -126,6 +127,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                     $log.log($scope.session);
                 }, function(error) {
                     $log.error(error);
+                    $scope.warnings.central = error;
                     initSession();
                 }, function(notification) {
                     // $log.log(notification); // for future use
@@ -145,6 +147,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                     $scope.login();
                 }, function(error) {
                     $log.error(error);
+                    $scope.warnings.central = error;
                     initSession();
                 }, function(notification) {
                     // $log.log(notification); // for future use
@@ -183,6 +186,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                     $scope.session.showEditUserDialog = false;
                 }, function(error) {
                     $log.error(error);
+                    $scope.warnings.central = error;
                     $scope.cancelEditUser();
                 }, function(notification) {
                     // $log.log(notification); // for future use
@@ -207,6 +211,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                     $scope.showRegisterDialog = false;
                 }, function(error) {
                     $log.error(error);
+                    $scope.warnings.central = error;
                 }, function(notification) {
                     // $log.log(notification); // for future use
                 });
