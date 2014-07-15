@@ -1,4 +1,4 @@
-package de.bht.comanche.server;
+package de.bht.comanche.testresources.server;
 
 import de.bht.comanche.persistence.Pool;
 

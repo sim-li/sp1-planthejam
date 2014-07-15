@@ -17,7 +17,7 @@ import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public class PoolImpl<E> implements Pool<E> {
-	private EntityManager entityManager;
+	private EntityManager em;
 	private EntityManagerFactory entityManagerFactory;
 	
 	public PoolImpl () {
@@ -26,14 +26,14 @@ public class PoolImpl<E> implements Pool<E> {
 	
 	@Override
 	public void beginTransaction() {
-		entityManager = entityManagerFactory.createEntityManager();
-		EntityTransaction tr = entityManager.getTransaction();
+		em = entityManagerFactory.createEntityManager();
+		EntityTransaction tr = em.getTransaction();
 		tr.begin();
 	}
 
 	@Override
 	public void endTransaction(boolean success) {
-		EntityTransaction tr = entityManager.getTransaction();
+		EntityTransaction tr = em.getTransaction();
 		try {
 			if (success) {
 				tr.commit();
@@ -45,18 +45,18 @@ public class PoolImpl<E> implements Pool<E> {
 			tr.rollback(); // TODO is das sinnvoll so?
 		}
 		finally {
-			entityManager.close();
+			em.close();
 		}
 	}
 	
 	@Override
 	public void save(E io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException {
-		entityManager.persist(io_object);
+		em.persist(io_object);
 	}
 
 	@Override
 	public void delete(E io_object) throws IllegalArgumentException, TransactionRequiredException {
-		entityManager.remove(io_object);
+		em.remove(em.contains(io_object) ? io_object : em.merge(io_object));
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class PoolImpl<E> implements Pool<E> {
 	public List<E> findAll(Class<E> i_persistentClass) throws
 			NoPersistentClassException {
 		final String qlString = "SELECT e FROM " + i_persistentClass.getSimpleName() + "e";
-		List<E> results = entityManager.createQuery(qlString, i_persistentClass).getResultList();
+		List<E> results = em.createQuery(qlString, i_persistentClass).getResultList();
 		return results;
 	}
 
@@ -81,13 +81,13 @@ public class PoolImpl<E> implements Pool<E> {
 			throws NoPersistentClassException, NoQueryClassException, ArgumentCountException,
 			ArgumentTypeException {
 		String qlString = String.format(i_queryString, i_args);
-		List<E> results = entityManager.createQuery(qlString, i_resultClass).getResultList();
+		List<E> results = em.createQuery(qlString, i_resultClass).getResultList();
 		return results;
 
 	}
 	
 	@Override
 	public void flush() {
-		entityManager.flush();
+		em.flush();
 	}
 }

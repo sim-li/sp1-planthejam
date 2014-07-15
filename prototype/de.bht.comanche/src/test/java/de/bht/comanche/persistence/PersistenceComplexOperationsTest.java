@@ -17,12 +17,12 @@ import org.junit.Test;
 
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.TransactionWithStackTrace;
 import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
 import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
 import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
+import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 
 public class PersistenceComplexOperationsTest {
 	private final boolean THROW_STACKTRACE = true;
