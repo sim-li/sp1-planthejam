@@ -22,13 +22,13 @@ public class PersistenceBasicOperationsTest {
 	private LgUser alice;
 	private LgUser bob;
 	
-	@Before public void setUp(){
+	@Before public void setUp() {
 		daFactory = new JpaDaFactory();
 		UserFactory userFactory = new UserFactory();
 		daUser = daFactory.getDaUser();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, false) {
+		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 					daUser.save(alice);
 					daUser.save(bob);
@@ -86,10 +86,10 @@ public class PersistenceBasicOperationsTest {
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
 	}
 
-
+	@Ignore
 	@After public void tearDown() {
 		final DaUser daUser = daFactory.getDaUser();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				LgUser aliceFromDb = daUser.find(alice.getOid());
 				LgUser bobFromDb = daUser.find(bob.getOid());
