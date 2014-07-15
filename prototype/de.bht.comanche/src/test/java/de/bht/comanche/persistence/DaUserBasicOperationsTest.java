@@ -60,14 +60,8 @@ public class DaUserBasicOperationsTest {
 			public void executeWithThrows() throws Exception {
 				LgUser aliceFromDb = daUser.findByName(alice.getName()).get(0);
 				LgUser bobFromDb = daUser.findByName(bob.getName()).get(0);
-				assertEquals(userName0 + " > NAME", aliceFromDb.getName(), alice.getName());
-				assertEquals(userName0 + " > EMAIL", aliceFromDb.getEmail(), alice.getEmail());
-				assertEquals(userName0 + " > TEL", aliceFromDb.getTel(), alice.getTel());
-				assertEquals(userName0 + " > PASSWORD", aliceFromDb.getPassword(), alice.getPassword());
-				assertEquals(userName1 + " > NAME", bobFromDb.getName(), bob.getName());
-				assertEquals(userName1 + " > EMAIL", bobFromDb.getEmail(), bob.getEmail());
-				assertEquals(userName1 + " > TEL", bobFromDb.getTel(), bob.getTel());
-				assertEquals(userName1 + " > PASSWORD", bobFromDb.getPassword(), bob.getPassword());
+				assertUser(userName0, alice, aliceFromDb);
+				assertUser(userName1, bob, bobFromDb);
 			}
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
@@ -98,11 +92,20 @@ public class DaUserBasicOperationsTest {
 					alice.getOid(), aliceFromDb.getOid());
 			assertEquals("Comparing " + userName1 + "> LOCAL: " + bob.getOid() + ", FROM DB: " +  bobFromDb.getOid(),
 					bob.getOid(), bobFromDb.getOid());
+			assertUser(userName0, alice, aliceFromDb);
+			assertUser(userName1, bob, bobFromDb);
 			}
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
 	}
 
+	public void assertUser(String userName, LgUser user, LgUser userFromDb) {
+		assertEquals(userName + " > NAME", user.getName(), userFromDb.getName());
+		assertEquals(userName + " > EMAIL", user.getEmail(), userFromDb.getEmail());
+		assertEquals(userName + " > TEL", user.getTel(), userFromDb.getTel());
+		assertEquals(userName + " > PASSWORD", user.getPassword(), userFromDb.getPassword());
+	}
+	
 	@After public void tearDown() {
 		final DaUser daUser = daFactory.getDaUser();
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
