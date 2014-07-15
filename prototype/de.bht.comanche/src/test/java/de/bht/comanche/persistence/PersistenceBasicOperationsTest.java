@@ -58,6 +58,7 @@ public class PersistenceBasicOperationsTest {
 		assertTrue("FIND BY NAME DA OPERATIONS, THROW EXCEPTIONS", success);
     }
 	
+	//TODO ( Missing assertion ) 
 	@Ignore
 	@Test
 	public void addContactsTest(){
@@ -71,18 +72,19 @@ public class PersistenceBasicOperationsTest {
 		}.execute();
 		assertTrue("ADD CONTACTS DA OPERATIONS, THROW EXCEPTIONS", success);
 	}
-		
-//	@Test public void findIdTest() {
-//		final DaUser daUser = daFactory.getDaUser();
-//		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
-//			public void executeWithThrows() throws Exception {
+	
+	//TODO ( Missing assertion )
+	@Ignore
+	@Test public void findIdTest() {
+		final DaUser daUser = daFactory.getDaUser();
+		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+			public void executeWithThrows() throws Exception {
 //			LgUser aliceFromDb = daUser.find(aliceFromDb.getOid());
 //			assertEquals(id, aliceFromFind.getOid());
-//			}
-//		}.execute();
-//		assertTrue(success);
-//		}
-//	}
+			}
+		}.execute();
+		assertTrue(success);
+	}
 
 
 	@After public void tearDown() {
