@@ -39,14 +39,14 @@ public class DaSurveyTest {
 		daSurvey = daFactory.getDaSurvey();
 		daUser = daFactory.getDaUser();
 		daUser.setPool(daSurvey.getPool());
-//		
-//		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
-//			public void executeWithThrows() throws Exception {
-//				PersistenceUtils persistenceUtils = new PersistenceUtils(daUser.getPool());
-//				persistenceUtils.initializeDb();
-//			}
-//		}.execute();
-//		assertTrue("Initializing DB", success);
+		
+		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
+			public void executeWithThrows() throws Exception {
+				PersistenceUtils persistenceUtils = new PersistenceUtils(daUser.getPool());
+				persistenceUtils.initializeDb();
+			}
+		}.execute();
+		assertTrue("Initializing DB", success);
 	}
 	
 	@Before public void setUp() {
@@ -70,11 +70,14 @@ public class DaSurveyTest {
 					daSurvey.save(survey0);
 					daSurvey.getPool().save(invite1);
 					daSurvey.getPool().save(invite0);
+					daUser.save(alice);
+					daUser.save(bob);
 			}
 		}.execute();
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
+//	@Ignore
 	@Test 
 	public void readSurveysTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
