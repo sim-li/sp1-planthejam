@@ -25,7 +25,6 @@ public class LgUser extends DbObject {
 	private String email;
 	private String password;
 
-//<<<<<<< HEAD
 //	@ManyToMany(cascade = { CascadeType.ALL })
 	
 	@JoinTable(name = "contact", joinColumns = { 
@@ -38,16 +37,6 @@ public class LgUser extends DbObject {
 	private List<LgUser> isContacts;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
-//=======
-//	@JoinTable(name = "contact", joinColumns = { @JoinColumn(name = "user_Id", referencedColumnName = "oid") }, inverseJoinColumns = { @JoinColumn(name = "friend_Id", referencedColumnName = "oid") })
-//	@ManyToMany(cascade = CascadeType.ALL)
-//	private List<LgUser> hasContacts;
-//
-//	@ManyToMany(mappedBy = "hasContacts", cascade = CascadeType.ALL)
-//	private List<LgUser> isContacts;
-//
-//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//>>>>>>> 9065f683ea2cb0a25275e86593274f647a4da860
 	private List<LgInvite> invites;
 
 	public LgUser() {
@@ -126,12 +115,12 @@ public class LgUser extends DbObject {
 
 	public void addContact(LgUser user) {
 		this.getHasContacts().add(user);
-		user.getHasContacts().add(this);
+		user.getIsContacts().add(this);
 	}
 
 	public void removeContact(LgUser user) {
 		this.getHasContacts().remove(user);
-		user.getHasContacts().remove(this);
+		user.getIsContacts().remove(this);
 	}
 
 	public List<LgInvite> getInvites() {

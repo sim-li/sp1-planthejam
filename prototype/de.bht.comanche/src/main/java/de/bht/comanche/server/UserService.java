@@ -94,28 +94,35 @@ public class UserService extends Service {
      @Consumes("application/json")
      @Produces({"application/json"})
      public ResponseObject registerUser(final LgUser newUserFromClient){
-    	final DaUser daUser = factory.getDaUser();
- 		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
- 			public LgUser executeWithThrows() throws Exception {
- 				String name = newUserFromClient.getName();
- 				List<LgUser> users = daUser.findByName(name);
-				if (!users.isEmpty()) {
-					throw new UserWithThisNameExistsException();
-				}
-    			 LgUser userSaveToDb = new LgUser();
-    			 userSaveToDb.setName(name);
-    			 userSaveToDb.setPassword(newUserFromClient.getPassword());
-    			 userSaveToDb.setEmail(newUserFromClient.getEmail());
-    			 userSaveToDb.setTel(newUserFromClient.getTel());
-    			 daUser.save(userSaveToDb);
+    	 final DaUser daUser = factory.getDaUser();
+    	 ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+    		 public LgUser executeWithThrows() throws Exception {
+    			 
+    			 System.out.println(newUserFromClient);
+    			 
+    			 String name = newUserFromClient.getName();
+    			 List<LgUser> users = daUser.findByName(name);
+    			 if (!users.isEmpty()) {
+    				 throw new UserWithThisNameExistsException();
+    			 }
+//    			 LgUser userSaveToDb = new LgUser();
+//    			 userSaveToDb.setName(name);
+//    			 userSaveToDb.setPassword(newUserFromClient.getPassword());
+//    			 userSaveToDb.setEmail(newUserFromClient.getEmail());
+//    			 userSaveToDb.setTel(newUserFromClient.getTel());
+//    			 daUser.save(userSaveToDb);
+    			 daUser.save(newUserFromClient);
+//    			 daUser.flush();
+    			 
     			 //POST request with this data
-    			 LgUser sendToClient = new LgUser();
-    			 sendToClient.setName(userSaveToDb.getName());
-    			 sendToClient.setPassword(userSaveToDb.getPassword());
-    			 return sendToClient;
+//    			 LgUser sendToClient = new LgUser();
+//    			 sendToClient.setName(userSaveToDb.getName());
+//    			 sendToClient.setPassword(userSaveToDb.getPassword());
+//    			 return sendToClient;
+    			 return newUserFromClient;
     		 }
     	 }.execute();
-    	 
+
     	 if (response.hasError()) {
  			throw new WebApplicationException(response.getResponseCode());
  		}
@@ -157,14 +164,22 @@ public class UserService extends Service {
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
-  				List<LgUser> users = daUser.findByName(updateUserFromClient.getName());
-				if (users.isEmpty()) {
-					throw new NoUserWithThisNameException();
-				}
-				LgUser saveUsertoDb = users.get(0);
-				saveUsertoDb.updateWith(updateUserFromClient);
-    			daUser.save(saveUsertoDb);
-    			return saveUsertoDb;
+//				List<LgUser> users = daUser.findByName(updateUserFromClient.getName());
+//				if (users.isEmpty()) {
+//					throw new NoUserWithThisNameException();
+//				}
+//				LgUser saveUsertoDb = users.get(0);^
+  				
+  				System.out.println(updateUserFromClient);
+  				LgUser fromDb = daUser.find(updateUserFromClient.getOid());
+  				fromDb.updateWith(updateUserFromClient);
+//				daUser.save(updateUserFromClient);
+  				daUser.save(fromDb);
+				
+//				saveUsertoDb.updateWith(updateUserFromClient);
+//    			daUser.save(saveUsertoDb);
+//    			return saveUsertoDb;
+  				return null;
     		 }
     	 }.execute();
 
