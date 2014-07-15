@@ -31,7 +31,7 @@ public class DaUserBasicOperationsTest {
 		daUser = daFactory.getDaUser();
 		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
 			public void executeWithThrows() throws Exception {
-				PersistenceUtils persistenceUtils = new PersistenceUtils(daFactory.getDaUser().getPool());
+				PersistenceUtils persistenceUtils = new PersistenceUtils(daUser.getPool());
 				persistenceUtils.initializeDb();
 			}
 		}.execute();
