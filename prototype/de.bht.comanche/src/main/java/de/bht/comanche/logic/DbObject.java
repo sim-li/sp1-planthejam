@@ -36,23 +36,27 @@ public abstract class DbObject implements Serializable{
 	public void setOid(long oid) {
 		this.oid = oid;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (oid ^ (oid >>> 32));
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
-		LgUser other = (LgUser) obj;
-		if (other.getOid() == getOid()) {
-			return true;
-		}
-		return false;
+		DbObject other = (DbObject) obj;
+		if (oid != other.oid)
+			return false;
+		return true;
 	}
 }
 

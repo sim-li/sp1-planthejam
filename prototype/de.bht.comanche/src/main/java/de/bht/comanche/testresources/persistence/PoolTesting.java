@@ -1,4 +1,4 @@
-package de.bht.comanche.persistence;
+package de.bht.comanche.testresources.persistence;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -8,6 +8,7 @@ import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
 import de.bht.comanche.logic.DbObject;
+import de.bht.comanche.persistence.Pool;
 import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
 import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
