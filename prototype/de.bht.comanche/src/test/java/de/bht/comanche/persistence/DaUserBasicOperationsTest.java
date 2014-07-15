@@ -60,22 +60,8 @@ public class DaUserBasicOperationsTest {
 			public void executeWithThrows() throws Exception {
 				LgUser aliceFromDb = daUser.findByName(alice.getName()).get(0);
 				LgUser bobFromDb = daUser.findByName(bob.getName()).get(0);
-<<<<<<< HEAD
-				final String userName0 = "ALICE";
-				assertEquals(userName0 + " > NAME", aliceFromDb.getName(), alice.getName());
-				assertEquals(userName0 + " > EMAIL", aliceFromDb.getEmail(), alice.getEmail());
-				assertEquals(userName0 + " > TEL", aliceFromDb.getTel(), alice.getTel());
-				assertEquals(userName0 + " > PASSWORD", aliceFromDb.getPassword(), alice.getPassword());
-				
-				final String userName1 = "BOB";
-				assertEquals(userName1 + " > NAME", bobFromDb.getName(), bob.getName());
-				assertEquals(userName1 + " > EMAIL", bobFromDb.getEmail(), bob.getEmail());
-				assertEquals(userName1 + " > TEL", bobFromDb.getTel(), bob.getTel());
-				assertEquals(userName1 + " > PASSWORD", bobFromDb.getPassword(), bob.getPassword());
-=======
 				assertUser(userName0, alice, aliceFromDb);
 				assertUser(userName1, bob, bobFromDb);
->>>>>>> 295f83677c69dc0028ef509896ae540a9c408219
 			}
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
