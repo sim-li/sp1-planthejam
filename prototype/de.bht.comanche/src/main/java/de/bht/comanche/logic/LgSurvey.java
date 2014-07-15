@@ -10,8 +10,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import de.bht.comanche.persistence.Pool;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "survey")
@@ -20,6 +20,8 @@ public class LgSurvey extends DbObject {
 	private String name;
 	private String description;
 	private int frequencyDist;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date deadline;
 
 	@Column

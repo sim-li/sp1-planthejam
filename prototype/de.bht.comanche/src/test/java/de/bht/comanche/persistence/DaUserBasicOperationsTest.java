@@ -3,8 +3,6 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -48,6 +46,7 @@ public class DaUserBasicOperationsTest {
 				assertEquals(userName0 + " > EMAIL", aliceFromDb.getEmail(), alice.getEmail());
 				assertEquals(userName0 + " > TEL", aliceFromDb.getTel(), alice.getTel());
 				assertEquals(userName0 + " > PASSWORD", aliceFromDb.getPassword(), alice.getPassword());
+				
 				final String userName1 = "BOB";
 				assertEquals(userName1 + " > NAME", bobFromDb.getName(), bob.getName());
 				assertEquals(userName1 + " > EMAIL", bobFromDb.getEmail(), bob.getEmail());

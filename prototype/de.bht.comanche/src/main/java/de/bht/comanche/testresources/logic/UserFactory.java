@@ -1,7 +1,6 @@
 package de.bht.comanche.testresources.logic;
 
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.ResponseObject;
 
 public class UserFactory {
 	public LgUser getUser0() {
