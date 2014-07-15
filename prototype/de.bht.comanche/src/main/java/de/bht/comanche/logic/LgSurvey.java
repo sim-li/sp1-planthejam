@@ -11,11 +11,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import de.bht.comanche.persistence.Pool;
+
 @Entity
 @Table(name = "survey")
 public class LgSurvey extends DbObject {
 	private static final long serialVersionUID = 1L;
-	
 	private String name;
 	private String description;
 	private int frequencyDist;
@@ -106,4 +107,16 @@ public class LgSurvey extends DbObject {
 		this.possibleTimePeriods = possibleTimePeriods;
 		return this;
 	}
+
+	public void updateWith(LgSurvey other) {
+			this.name = other.name;
+			this.description = other.description;
+			this.frequencyDist = other.frequencyDist;
+			this.deadline = other.deadline;
+			this.type = other.type;
+			this.frequencyTimeUnit = other.frequencyTimeUnit;
+			this.invites = other.invites;
+			this.possibleTimePeriods = other.possibleTimePeriods;
+	}
+
 }
