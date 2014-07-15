@@ -58,7 +58,7 @@ public class DaSurveyTest {
 					daUser.save(alice);
 					daUser.save(bob);
 					SurveyFactory surveyFactory = new SurveyFactory();
-					LgSurvey survey0 = surveyFactory.getSurvey0();
+					survey0 = surveyFactory.getSurvey0();
 					invite0 = new LgInvite();
 					invite1 = new LgInvite();
 					invite0.setUser(alice);
@@ -77,7 +77,6 @@ public class DaSurveyTest {
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
-//	@Ignore
 	@Test 
 	public void readSurveysTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -86,10 +85,10 @@ public class DaSurveyTest {
 				LgUser bobFromDb = daUser.findByName(bob.getName()).get(0);
 				assertUser(userName0, alice, aliceFromDb);
 				assertUser(userName1, bob, bobFromDb);
-				assertEquals("Check Alices first invite:", invite0, aliceFromDb.getInvites().get(0));
-				assertEquals("Check Bobs first invite:", invite1,  bobFromDb.getInvites().get(0));
-				assertEquals("Check Alices survey:", survey0,  aliceFromDb.getInvites().get(0).getSurvey());
-				assertEquals("Check Bobs survey:",  survey0, bobFromDb.getInvites().get(0).getSurvey());
+				assertEquals("Check Alices first invite (BY ID):", invite0.getOid(), aliceFromDb.getInvites().get(0).getOid());
+				assertEquals("Check Bobs first invite (BY ID):", invite1.getOid(),  bobFromDb.getInvites().get(0).getOid());
+				assertEquals("Check Alices survey (BY ID):", survey0.getOid(),  aliceFromDb.getInvites().get(0).getSurvey().getOid());
+				assertEquals("Check Bobs survey (BY ID):",  survey0.getOid(), bobFromDb.getInvites().get(0).getSurvey().getOid());
 			}
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
