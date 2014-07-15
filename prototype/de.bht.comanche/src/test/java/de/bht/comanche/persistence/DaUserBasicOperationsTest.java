@@ -3,15 +3,17 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.exceptions.PersistenceException;
 import de.bht.comanche.testresources.logic.UserFactory;
+import de.bht.comanche.testresources.persistence.PersistenceUtils;
+import de.bht.comanche.testresources.server.LowLevelTransaction;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 
 public class DaUserBasicOperationsTest {
@@ -22,10 +24,20 @@ public class DaUserBasicOperationsTest {
 	private LgUser alice;
 	private LgUser bob;
 	
-	@Before public void setUp() {
+	@BeforeClass public void initializeDb() throws PersistenceException {
 		daFactory = new JpaDaFactory();
-		UserFactory userFactory = new UserFactory();
 		daUser = daFactory.getDaUser();
+		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
+			public void executeWithThrows() throws Exception {
+				PersistenceUtils persistenceUtils = new PersistenceUtils(daFactory.getDaUser().getPool());
+				persistenceUtils.reinitizalizeEntityManager();
+			}
+		}.execute();
+		assertTrue("Initializing DB", success);
+	}
+	
+	@Before public void setUp() {
+		UserFactory userFactory = new UserFactory();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
@@ -98,6 +110,7 @@ public class DaUserBasicOperationsTest {
 			}
 		}.execute();
 		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
+		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
 	}
 	
 }

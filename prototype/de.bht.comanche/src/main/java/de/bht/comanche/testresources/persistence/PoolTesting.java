@@ -114,4 +114,9 @@ public class PoolTesting<E> implements Pool<E> {
 	public void flush() {
 		;
 	}
+
+	@Override
+	public String getPersistenceUnitName() {
+		return "ERROR> testPool: No persistence unit.";
+	}
 }
