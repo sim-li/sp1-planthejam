@@ -23,24 +23,27 @@ public class LgTimePeriod extends DbObject {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public LgTimePeriod setStartTime(Date startTime) {
 		this.startTime = startTime;
+		return this;
 	}
 
 	public int getDurationMinutes() {
 		return durationMinutes;
 	}
 
-	public void setDurationMinutes(int durationMinutes) {
+	public LgTimePeriod setDurationMinutes(int durationMinutes) {
 		this.durationMinutes = durationMinutes;
+		return this;
 	}
 
 	public LgSurvey getSurvey() {
 		return survey;
 	}
 
-	public void setSurvey(LgSurvey survey) {
+	public LgTimePeriod setSurvey(LgSurvey survey) {
 		this.survey = survey;
+		return this;
 	}
 
 }

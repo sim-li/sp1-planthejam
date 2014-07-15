@@ -24,7 +24,7 @@ import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 
-public class PersistenceComplexOperationsTest {
+public class ChainedOperationsTest {
 	private final boolean THROW_STACKTRACE = true;
 	private final boolean ROLLBACK = false;
 	

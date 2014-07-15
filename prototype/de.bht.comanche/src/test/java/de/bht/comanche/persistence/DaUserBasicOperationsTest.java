@@ -14,7 +14,7 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.testresources.logic.UserFactory;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 
-public class PersistenceBasicOperationsTest {
+public class DaUserBasicOperationsTest {
 	private final boolean THROW_STACKTRACE = true;
 	private final boolean ROLLBACK = false;
 	private DaUser daUser;
@@ -44,7 +44,7 @@ public class PersistenceBasicOperationsTest {
 				LgUser aliceFromDb = daUser.findByName(alice.getName()).get(0);
 				LgUser bobFromDb = daUser.findByName(bob.getName()).get(0);
 				final String userName0 = "ALICE";
-				assertEquals(userName0 + " > NAMEL", aliceFromDb.getName(), alice.getName());
+				assertEquals(userName0 + " > NAME", aliceFromDb.getName(), alice.getName());
 				assertEquals(userName0 + " > EMAIL", aliceFromDb.getEmail(), alice.getEmail());
 				assertEquals(userName0 + " > TEL", aliceFromDb.getTel(), alice.getTel());
 				assertEquals(userName0 + " > PASSWORD", aliceFromDb.getPassword(), alice.getPassword());
