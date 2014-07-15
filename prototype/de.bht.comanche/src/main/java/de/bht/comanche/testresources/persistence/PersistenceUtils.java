@@ -26,7 +26,7 @@ public class PersistenceUtils {
 	 * but not at every single test.
 	 * @throws PersistenceException
 	 */
-	public void reinitizalizeEntityManager() throws PersistenceException {
+	public void initializeDb() throws PersistenceException {
 		Map<String, String> properties = new HashMap<String, String>(1);
 		properties.put("hibernate.hbm2ddl.auto", "create");
 		entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName, properties);

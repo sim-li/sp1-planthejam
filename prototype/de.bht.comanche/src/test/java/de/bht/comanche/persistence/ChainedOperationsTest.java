@@ -21,7 +21,7 @@ public class ChainedOperationsTest {
 		daFactory = new JpaDaFactory();
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test public void saveTwoContactsTest() {
 		final DaUser daUser = daFactory.getDaUser();
 //		final DaGenericImpl<LgContact> daContact = new DaGenericImpl<LgContact>(null, null).getPool().save(bobsContact1);
