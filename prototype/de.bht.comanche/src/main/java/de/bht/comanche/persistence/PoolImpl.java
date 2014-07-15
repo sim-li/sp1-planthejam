@@ -17,11 +17,12 @@ import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public class PoolImpl<E> implements Pool<E> {
+	private final String persistenceUnitName = "planthejam.jpa";
 	private EntityManager em;
 	private EntityManagerFactory entityManagerFactory;
 	
 	public PoolImpl () {
-		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
+		entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
 	}
 	
 	@Override
@@ -52,6 +53,13 @@ public class PoolImpl<E> implements Pool<E> {
 	@Override
 	public void save(E io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException {
 		em.persist(io_object);
+//		if(em.contains(io_object)) {
+//			em.merge(io_object);
+////			em.persist(io_object);
+//			em.refresh(io_object);
+//		} else {
+//			em.persist(io_object);
+//		}
 	}
 
 	@Override
@@ -89,5 +97,10 @@ public class PoolImpl<E> implements Pool<E> {
 	@Override
 	public void flush() {
 		em.flush();
+	}
+	
+	@Override
+	public String getPersistenceUnitName() {
+		return persistenceUnitName;
 	}
 }

@@ -2,27 +2,14 @@ package de.bht.comanche.persistence;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 
-import java.util.Collection;
-
-import javassist.NotFoundException;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.TransactionRequiredException;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
-import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
-import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
-import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
-import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
-import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 
 public class ChainedOperationsTest {
 	private final boolean THROW_STACKTRACE = true;
@@ -37,7 +24,10 @@ public class ChainedOperationsTest {
 	@Ignore
 	@Test public void saveTwoContactsTest() {
 		final DaUser daUser = daFactory.getDaUser();
+//		final DaGenericImpl<LgContact> daContact = new DaGenericImpl<LgContact>(null, null).getPool().save(bobsContact1);
+//		final DaBase daBase = daFactory.getDaBase();
 		final Pool pool = daUser.getPool();
+//		daBase.setPool(pool);
 		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				LgUser alice = new LgUser();
@@ -50,10 +40,16 @@ public class ChainedOperationsTest {
 				bob.setEmail("bob@test.usr");
 				bob.setPassword("hiiambob");
 				bob.setTel("0309876543");
+				
+//				LgContact bobsContact1 = new LgContact(bob, alice);
+//				bob.getContacts().add(bobsContact1);
+				
 				bob.addContact(alice);
 				alice.addContact(bob);
 				daUser.save(alice);
 				daUser.save(bob);
+//				daBase.save(bobsContact1);
+				
 				/*
 				 * Transaction has to be closed so that entities are saved to DB.
 				 * Then we can search by persisted ID.
@@ -64,8 +60,8 @@ public class ChainedOperationsTest {
 				LgUser bobFromDb = daUser.find(bob.getOid());
 				assertEquals(bob.getOid(), bobFromDb.getOid());
 				assertEquals(alice.getOid(), aliceFromDb.getOid());
-				assertTrue(aliceFromDb.getHasContacts().contains(bobFromDb));
-				assertTrue(bobFromDb.getIsContacts().contains(aliceFromDb));
+//				assertTrue(aliceFromDb.getHasContacts().contains(bobFromDb));
+//				assertTrue(bobFromDb.getIsContacts().contains(aliceFromDb));
 				
 				
 			}

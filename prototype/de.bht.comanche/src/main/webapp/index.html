@@ -45,10 +45,10 @@
     <script src="js/restService.js"></script>
     
 </head>
-<body ng-app="myApp" ng-controller="Ctrl">
+<body ng-app="myApp" ng-controller="Ctrl" ng-keydown="discardWarnings()">
     
     <!-- display errors here -->
-    <pre id="error"></pre>
+    <pre id="error">{{ warnings.central }}</pre>
 
     <!-- debugging errors here -->
     <pre id="debug">
