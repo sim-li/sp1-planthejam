@@ -34,7 +34,7 @@ public class PersistenceBasicOperationsTest {
 					daUser.save(bob);
 			}
 		}.execute();
-		assertTrue("SET UP ( SAVE ) for ALICE&BOB", success);
+		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
 	@Test 
@@ -55,7 +55,7 @@ public class PersistenceBasicOperationsTest {
 				assertEquals(userName1 + " > PASSWORD", bobFromDb.getPassword(), bob.getPassword());
 			}
 		}.execute();
-		assertTrue("FIND BY NAME DA OPERATIONS, THROW EXCEPTIONS", success);
+		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
 	
 	//TODO ( Missing assertion ) 
@@ -70,12 +70,12 @@ public class PersistenceBasicOperationsTest {
 				aliceFromDb.addContact(bobFromDb);
 			}
 		}.execute();
-		assertTrue("ADD CONTACTS DA OPERATIONS, THROW EXCEPTIONS", success);
+		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
 	}
 	
 	//TODO ( Missing assertion )
 	@Ignore
-	@Test public void findIdTest() {
+	@Test public void findByIdTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
@@ -83,7 +83,7 @@ public class PersistenceBasicOperationsTest {
 //			assertEquals(id, aliceFromFind.getOid());
 			}
 		}.execute();
-		assertTrue(success);
+		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
 	}
 
 
@@ -97,7 +97,7 @@ public class PersistenceBasicOperationsTest {
 				daUser.delete(bobFromDb);
 			}
 		}.execute();
-		assertTrue("TEAR DOWN ( DELETE ) for ALICE&BOB: ALICE ID " + alice.getOid() + "BOB ID " + bob.getOid(), success);
+		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
 	}
 	
 }
