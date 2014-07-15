@@ -105,20 +105,7 @@ public class UserService extends Service {
     			 if (!users.isEmpty()) {
     				 throw new UserWithThisNameExistsException();
     			 }
-//    			 LgUser userSaveToDb = new LgUser();
-//    			 userSaveToDb.setName(name);
-//    			 userSaveToDb.setPassword(newUserFromClient.getPassword());
-//    			 userSaveToDb.setEmail(newUserFromClient.getEmail());
-//    			 userSaveToDb.setTel(newUserFromClient.getTel());
-//    			 daUser.save(userSaveToDb);
     			 daUser.save(newUserFromClient);
-//    			 daUser.flush();
-    			 
-    			 //POST request with this data
-//    			 LgUser sendToClient = new LgUser();
-//    			 sendToClient.setName(userSaveToDb.getName());
-//    			 sendToClient.setPassword(userSaveToDb.getPassword());
-//    			 return sendToClient;
     			 return newUserFromClient;
     		 }
     	 }.execute();
