@@ -11,7 +11,7 @@ import org.junit.Test;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
 
-public class PersistenceComplexOperationsTest {
+public class ChainedOperationsTest {
 	private final boolean THROW_STACKTRACE = true;
 	private final boolean ROLLBACK = false;
 	

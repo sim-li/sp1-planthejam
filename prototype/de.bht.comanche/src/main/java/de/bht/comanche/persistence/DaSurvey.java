@@ -7,6 +7,7 @@ import javax.transaction.TransactionRequiredException;
 
 import javassist.NotFoundException;
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
 import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
@@ -23,4 +24,5 @@ public interface DaSurvey {
     void endTransaction(boolean success);
     public Pool getPool(); // Later overwritten by DaGenericImpl
     public void setPool(Pool pool); 
+    public void flush();
 }

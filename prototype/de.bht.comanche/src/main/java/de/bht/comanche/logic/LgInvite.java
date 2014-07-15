@@ -26,31 +26,35 @@ public class LgInvite extends DbObject{
 		return isHost;
 	}
 
-	public void setHost(boolean isHost) {
+	public LgInvite setHost(boolean isHost) {
 		this.isHost = isHost;
+		return this;
 	}
 
 	public boolean isIgnored() {
 		return isIgnored;
 	}
 
-	public void setIgnored(boolean isIgnored) {
+	public LgInvite setIgnored(boolean isIgnored) {
 		this.isIgnored = isIgnored;
+		return this;
 	}
 
 	public LgUser getUser() {
 		return user;
 	}
 
-	public void setUser(LgUser user) {
+	public LgInvite setUser(LgUser user) {
 		this.user = user;
+		return this;
 	}
 
 	public LgSurvey getSurvey() {
 		return invite_survey;
 	}
 
-	public void setSurvey(LgSurvey survey) {
+	public LgInvite setSurvey(LgSurvey survey) {
 		this.invite_survey = survey;
+		return this;
 	}	
 }

@@ -11,11 +11,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import de.bht.comanche.persistence.Pool;
+
 @Entity
 @Table(name = "survey")
 public class LgSurvey extends DbObject {
 	private static final long serialVersionUID = 1L;
-	
 	private String name;
 	private String description;
 	private int frequencyDist;
@@ -39,63 +40,83 @@ public class LgSurvey extends DbObject {
 		return name;
 	}
 
-	public void setName(String name) {
+	public LgSurvey setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public LgSurvey setDescription(String description) {
 		this.description = description;
+		return this;
 	}
 
 	public int getFrequencyDist() {
 		return frequencyDist;
 	}
 
-	public void setFrequencyDist(int frequencyDist) {
+	public LgSurvey setFrequencyDist(int frequencyDist) {
 		this.frequencyDist = frequencyDist;
+		return this;
 	}
 
 	public Date getDeadline() {
 		return deadline;
 	}
 
-	public void setDeadline(Date deadline) {
+	public LgSurvey setDeadline(Date deadline) {
 		this.deadline = deadline;
+		return this;
 	}
 
 	public SurveyType getType() {
 		return type;
 	}
 
-	public void setType(SurveyType type) {
+	public LgSurvey setType(SurveyType type) {
 		this.type = type;
+		return this;
 	}
 
 	public TimeUnit getFrequencyTimeUnit() {
 		return frequencyTimeUnit;
 	}
 
-	public void setFrequencyTimeUnit(TimeUnit frequencyTimeUnit) {
+	public LgSurvey setFrequencyTimeUnit(TimeUnit frequencyTimeUnit) {
 		this.frequencyTimeUnit = frequencyTimeUnit;
+		return this;
 	}
 
 	public List<LgInvite> getInvites() {
 		return invites;
 	}
 
-	public void setInvites(List<LgInvite> invites) {
+	public LgSurvey setInvites(List<LgInvite> invites) {
 		this.invites = invites;
+		return this;
 	}
 
 	public List<LgTimePeriod> getPossibleTimePeriods() {
 		return possibleTimePeriods;
 	}
 
-	public void setPossibleTimePeriods(List<LgTimePeriod> possibleTimePeriods) {
+	public LgSurvey setPossibleTimePeriods(List<LgTimePeriod> possibleTimePeriods) {
 		this.possibleTimePeriods = possibleTimePeriods;
+		return this;
 	}
+
+	public void updateWith(LgSurvey other) {
+			this.name = other.name;
+			this.description = other.description;
+			this.frequencyDist = other.frequencyDist;
+			this.deadline = other.deadline;
+			this.type = other.type;
+			this.frequencyTimeUnit = other.frequencyTimeUnit;
+			this.invites = other.invites;
+			this.possibleTimePeriods = other.possibleTimePeriods;
+	}
+
 }
