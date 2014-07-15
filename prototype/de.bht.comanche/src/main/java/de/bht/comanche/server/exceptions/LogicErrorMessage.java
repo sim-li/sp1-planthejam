@@ -4,7 +4,8 @@ public enum LogicErrorMessage {
 	WRONG_PASSWORD(8),
 	WRONG_NAME(9),
 	WRONG_ID(10),
-	USER_EXIST(11);
+	USER_EXIST(11),
+	SURVEY_EXIST(12);
 	
 	private final int responseCode;
 	
