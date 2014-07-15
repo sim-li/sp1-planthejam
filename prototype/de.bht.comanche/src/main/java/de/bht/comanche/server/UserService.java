@@ -104,14 +104,19 @@ public class UserService extends Service {
     				 throw new UserWithThisNameExistsException();
     			 }
     			 daUser.save(newUserFromClient);
+    			 
+//    			 daUser.flush();
+    			 
+    			 System.out.println(newUserFromClient);
+    			 
     			 return newUserFromClient;
     		 }
     	 }.execute();
 
     	 if (response.hasError()) {
- 			throw new WebApplicationException(response.getResponseCode());
- 		}
-    	 
+    		 throw new WebApplicationException(response.getResponseCode());
+    	 }
+
     	 return response;
  	}
      
@@ -163,15 +168,22 @@ public class UserService extends Service {
 //				LgUser saveUsertoDb = users.get(0);^
   				
   				System.out.println(updateUserFromClient);
+  				
   				LgUser fromDb = daUser.find(updateUserFromClient.getOid());
   				fromDb.updateWith(updateUserFromClient);
-//				daUser.save(updateUserFromClient);
   				daUser.save(fromDb);
+  				
+//				daUser.save(updateUserFromClient);
+				System.out.println(updateUserFromClient);
+				System.out.println("------------------------");
+//  				daUser.save(fromDb);
 				
 //				saveUsertoDb.updateWith(updateUserFromClient);
 //    			daUser.save(saveUsertoDb);
 //    			return saveUsertoDb;
-  				return null;
+//				return updateUserFromClient;
+				
+				return fromDb;
     		 }
     	 }.execute();
 
