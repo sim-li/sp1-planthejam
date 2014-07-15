@@ -122,8 +122,8 @@ public class UserService extends Service {
      
    @Path("delete")
 //     @Path("delete{id}")
-//     @DELETE
-   @POST
+     @DELETE
+//   @POST
      @Consumes("application/json")
      @Produces({"application/json"})
      public ResponseObject deleteUser(final LgUser userFromClient){

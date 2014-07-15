@@ -193,9 +193,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
             var deferred = $q.defer();
             $http({ 
-                method: "POST", 
+                method: "DELETE", 
                 url: USER_PATH + "delete", 
-                data: { "oid": user.oid }
+                data: { "oid": user.oid }, 
+                headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 deferred.resolve("Das Konto wurde erfolgreich geloescht.");
             }).error(function(data, status, header, config) {
