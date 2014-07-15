@@ -6,8 +6,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+
+import org.jboss.logging.annotations.Param;
 
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
@@ -69,7 +72,7 @@ public class UserService extends Service {
 				
 				LgUser lgUser = null;
 				try{
-				lgUser = daUser.find(userFromClient.getOid());
+					lgUser = daUser.find(userFromClient.getOid());
 				} catch (OidNotFoundException oid){
 					System.out.println("WRONG ID");
 					throw new NoUserWithThisIdException();
@@ -97,12 +100,7 @@ public class UserService extends Service {
     	 final DaUser daUser = factory.getDaUser();
     	 ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
     		 public LgUser executeWithThrows() throws Exception {
-    			 
-    			 System.out.println(newUserFromClient);
-    			 
-    			 String name = newUserFromClient.getName();
-    			 List<LgUser> users = daUser.findByName(name);
-    			 if (!users.isEmpty()) {
+    			 if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
     				 throw new UserWithThisNameExistsException();
     			 }
 //    			 LgUser userSaveToDb = new LgUser();
@@ -130,21 +128,28 @@ public class UserService extends Service {
     	 return response;
  	}
      
-     @Path("delete")
-     @DELETE
+   @Path("delete")
+//     @Path("delete{id}")
+//     @DELETE
+   @POST
      @Consumes("application/json")
      @Produces({"application/json"})
      public ResponseObject deleteUser(final LgUser userFromClient){
+//     public ResponseObject deleteUser(@PathParam("oid") final long oid){
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
+  				
+  				System.out.println(userFromClient);
+  				
   				LgUser userFromDb = null;
   				try{
-  					userFromDb = daUser.find(userFromClient.getOid());
+					userFromDb = daUser.find(userFromClient.getOid());
   				} catch (OidNotFoundException oid) {
   					throw new NoUserWithThisIdException();
   				}
-    			daUser.delete(userFromDb);
+//    			daUser.delete(userFromClient);
+  				daUser.delete(userFromDb);
     			return null;
     		 }
     	 }.execute();

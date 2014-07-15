@@ -22,6 +22,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             ERROR   = "ERROR ------------------------------------------------------------", 
             DONE    = "DONE =============================================================";
 
+        
         var getErrorMesage = function(status) {
             var error = {
                   2: "Die Objekt-ID wurde in der Datenbank nicht gefunden.", 
@@ -137,6 +138,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             })
             .success(function(data, status, header, config) {
                 var _user = data.data[0];
+                $log.debug(data);
                 $log.debug(_user);
 
                 // TODO needs to be checked
@@ -159,8 +161,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         var register = function(user) {
             $log.log("REST register");
-            
-            $log.warn("register() not tested");
 
             var deferred = $q.defer();
             $http({ 
@@ -168,7 +168,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 url: USER_PATH + "register", 
                 data: { "name": user.name, "password": user.password, "email": user.email, "tel": user.tel }
             }).success(function(data, status, header, config) {
-                // $log.debug(data); // <<<<<<<<<<<<<<<<<<<<< DEBUGGING
+                $log.debug(data); // <<<<<<<<<<<<<<<<<<<<< DEBUGGING
                 getUser(data.data[0].oid)
                     .then(function(success) {    
                         deferred.resolve(success);
@@ -187,6 +187,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             $log.log("REST deleteUser");
             
             $log.warn("deleteUser() not tested");
+            $log.warn(user.oid);
 
             var deferred = $q.defer();
             $http({ 
@@ -203,13 +204,13 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         var updateUser = function(user) {
             $log.log("REST updateUser");
-            $log.warn("updateUser() not tested");
-
+            
             // TODO needs to be checked
             
             // convert all dates to the native date format
             // var _user = angular.copy(user);
             // Survey.forSurveysConvertDatesToJsDate(_user.surveys);
+
 
             var deferred = $q.defer();
             $http({ 
