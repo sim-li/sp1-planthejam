@@ -56,5 +56,44 @@ public class LgInvite extends DbObject{
 	public LgInvite setSurvey(LgSurvey survey) {
 		this.invite_survey = survey;
 		return this;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((invite_survey == null) ? 0 : invite_survey.hashCode());
+		result = prime * result + (isHost ? 1231 : 1237);
+		result = prime * result + (isIgnored ? 1231 : 1237);
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LgInvite other = (LgInvite) obj;
+		if (invite_survey == null) {
+			if (other.invite_survey != null)
+				return false;
+		} else if (!invite_survey.equals(other.invite_survey))
+			return false;
+		if (isHost != other.isHost)
+			return false;
+		if (isIgnored != other.isIgnored)
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
 	}	
+	
 }

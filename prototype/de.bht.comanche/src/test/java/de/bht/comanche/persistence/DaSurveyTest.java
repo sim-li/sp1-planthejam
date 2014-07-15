@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import antlr.collections.List;
@@ -29,20 +30,23 @@ public class DaSurveyTest {
 	private static DaFactory daFactory;
 	private LgUser alice;
 	private LgUser bob;
+	private LgSurvey survey0;
+	private LgInvite invite0;
+	private LgInvite invite1;
 	
 	@BeforeClass public static void initializeDb() throws PersistenceException {
 		daFactory = new JpaDaFactory();
 		daSurvey = daFactory.getDaSurvey();
 		daUser = daFactory.getDaUser();
 		daUser.setPool(daSurvey.getPool());
-		
-		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
-			public void executeWithThrows() throws Exception {
-				PersistenceUtils persistenceUtils = new PersistenceUtils(daUser.getPool());
-				persistenceUtils.initializeDb();
-			}
-		}.execute();
-		assertTrue("Initializing DB", success);
+//		
+//		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
+//			public void executeWithThrows() throws Exception {
+//				PersistenceUtils persistenceUtils = new PersistenceUtils(daUser.getPool());
+//				persistenceUtils.initializeDb();
+//			}
+//		}.execute();
+//		assertTrue("Initializing DB", success);
 	}
 	
 	@Before public void setUp() {
@@ -53,34 +57,36 @@ public class DaSurveyTest {
 			public void executeWithThrows() throws Exception {
 					daUser.save(alice);
 					daUser.save(bob);
+					SurveyFactory surveyFactory = new SurveyFactory();
+					LgSurvey survey0 = surveyFactory.getSurvey0();
+					invite0 = new LgInvite();
+					invite1 = new LgInvite();
+					invite0.setUser(alice);
+					invite1.setUser(bob);
+					invite0.setHost(true);
+					invite1.setHost(false);
+					invite0.setSurvey(survey0);
+					invite1.setSurvey(survey0);
+					daSurvey.save(survey0);
+					daSurvey.getPool().save(invite1);
+					daSurvey.getPool().save(invite0);
 			}
 		}.execute();
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
 	@Test 
-	public void createSurveyTest() {
+	public void readSurveysTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
-				SurveyFactory surveyFactory = new SurveyFactory();
 				LgUser aliceFromDb = daUser.findByName(alice.getName()).get(0);
 				LgUser bobFromDb = daUser.findByName(bob.getName()).get(0);
 				assertUser(userName0, alice, aliceFromDb);
 				assertUser(userName1, bob, bobFromDb);
-				LgSurvey survey0 = surveyFactory.getSurvey0();
-				LgInvite invite0 = new LgInvite();
-				LgInvite invite1 = new LgInvite();
-				invite0.setUser(aliceFromDb);
-				invite1.setUser(bobFromDb);
-				invite0.setHost(true);
-				invite1.setHost(false);
-				invite0.setSurvey(survey0);
-				invite1.setSurvey(survey0);
-				daSurvey.save(survey0);
-				daSurvey.getPool().save(invite0);
-				daSurvey.getPool().save(invite1);
-				daUser.save(aliceFromDb);
-				daUser.save(bobFromDb);
+				assertEquals("Check Alices first invite:", invite0, aliceFromDb.getInvites().get(0));
+				assertEquals("Check Bobs first invite:", invite1,  bobFromDb.getInvites().get(0));
+				assertEquals("Check Alices survey:", survey0,  aliceFromDb.getInvites().get(0).getSurvey());
+				assertEquals("Check Bobs survey:",  survey0, bobFromDb.getInvites().get(0).getSurvey());
 			}
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
