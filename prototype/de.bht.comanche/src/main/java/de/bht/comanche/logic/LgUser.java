@@ -64,32 +64,36 @@ public class LgUser extends DbObject {
 		return name;
 	}
 
-	public void setName(String name) {
+	public LgUser setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getTel() {
 		return tel;
 	}
 
-	public void setTel(String tel) {
+	public LgUser setTel(String tel) {
 		this.tel = tel;
+		return this;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public LgUser setEmail(String email) {
 		this.email = email;
+		return this;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public LgUser setPassword(String password) {
 		this.password = password;
+		return this;
 	}
 
 	public List<LgUser> getHasContacts() {
@@ -104,26 +108,28 @@ public class LgUser extends DbObject {
 		return isContacts;
 	}
 
-	public void setIsContacts(List<LgUser> isContacts) {
+	public LgUser setIsContacts(List<LgUser> isContacts) {
 		this.isContacts = isContacts;
+		return this;
 	}
 
 	public void addContact(LgUser user) {
 		this.getHasContacts().add(user);
-		user.getHasContacts().add(this);
+		user.getIsContacts().add(this);
 	}
 
 	public void removeContact(LgUser user) {
 		this.getHasContacts().remove(user);
-		user.getHasContacts().remove(this);
+		user.getIsContacts().remove(this);
 	}
 
 	public List<LgInvite> getInvites() {
 		return invites;
 	}
 
-	public void setInvites(List<LgInvite> invites) {
+	public LgUser setInvites(List<LgInvite> invites) {
 		this.invites = invites;
+		return this;
 	}
 
 	public boolean addInvites(LgInvite invite) {
@@ -150,6 +156,70 @@ public class LgUser extends DbObject {
 			return false;
 		}
 		return this.password.equals(password);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result
+				+ ((hasContacts == null) ? 0 : hasContacts.hashCode());
+		result = prime * result + ((invites == null) ? 0 : invites.hashCode());
+		result = prime * result
+				+ ((isContacts == null) ? 0 : isContacts.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LgUser other = (LgUser) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (hasContacts == null) {
+			if (other.hasContacts != null)
+				return false;
+		} else if (!hasContacts.equals(other.hasContacts))
+			return false;
+		if (invites == null) {
+			if (other.invites != null)
+				return false;
+		} else if (!invites.equals(other.invites))
+			return false;
+		if (isContacts == null) {
+			if (other.isContacts != null)
+				return false;
+		} else if (!isContacts.equals(other.isContacts))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (tel == null) {
+			if (other.tel != null)
+				return false;
+		} else if (!tel.equals(other.tel))
+			return false;
+		return true;
 	}
 
 	@Override

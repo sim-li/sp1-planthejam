@@ -7,7 +7,10 @@ import javax.transaction.TransactionRequiredException;
 
 import javassist.NotFoundException;
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
+import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
+import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public interface DaSurvey {
@@ -15,5 +18,9 @@ public interface DaSurvey {
 	void delete(LgSurvey survey) throws TransactionRequiredException, IllegalArgumentException;
 	LgSurvey find(long id) throws NotFoundException, NoPersistentClassException, OidNotFoundException;
 	List<LgSurvey> findAll() throws NoPersistentClassException ;
-    List<LgSurvey> findByName(String name);
+    List<LgSurvey> findByName(String name) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException;
+    void beginTransaction();
+    void endTransaction(boolean success);
+    public Pool getPool(); // Later overwritten by DaGenericImpl
+    public void setPool(Pool pool); 
 }

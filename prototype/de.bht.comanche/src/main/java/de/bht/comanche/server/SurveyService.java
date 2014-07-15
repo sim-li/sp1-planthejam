@@ -20,25 +20,31 @@
 //		super();
 //	}
 //	
+
+//	@Path("/save")
 //	@Path("/update")
 //    @POST
 //    @Consumes("application/json")
 //    @Produces({"application/json"})
-//    public ResponseObject updateUser(final LgUser updateUserFromClient){
-//   	final DaUser daUser = factory.getDaUser();
-// 		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+//    public ResponseObject registerUser(final LgSurvey newSurveyFromClient){
+//		final DaUser daUser = factory.getDaUser();
+//		final DaSurvey daSurvey = factory.getDaSurvey();
+//		ResponseObject response = new Transaction<LgSurvey>(LgSurvey.getPool()) {
 // 			public LgUser executeWithThrows() throws Exception {
-// 				List<LgUser> users = daUser.findByName(updateUserFromClient.getName());
-//				if (users.isEmpty()) {
-//					throw new NoUserWithThisNameException();
-//				}
-//				LgUser saveUsertoDb = users.get(0);
-//				saveUsertoDb.updateWith(updateUserFromClient);
-//   			daUser.save(saveUsertoDb);
-//   			return saveUsertoDb;
-//   		 }
+// 				List<LgSurvey> users = LgSurvey.findByName(updateUserFromClient.getName());
+//				//throws Exc if name not exist - need boolin
+//				LgSurvey surveyFromDb = daSurvey.findByName(newSurveyFromClient.getName()).iterator().next(); 
+////				if(surveyFromDb){
+////					if not exist -> save
+////				}
+//				
+//				//save new Survey to DbSurvey or LgUser?
+//				LgSurvey newSurveySaveToDb = new LgSurvey(); 
+//				newSurveySaveToDb.setName(newSurveyFromClient.getName());
+//				newSurveySaveToDb.setDescription(newSurveyFromClient.getDescription());
+//				return newSurveySaveToDb;
+//			}
 //   	 }.execute();
-//
 //   	 if (response.hasError()) {
 //  			throw new WebApplicationException(response.getResponseCode());
 //  		}

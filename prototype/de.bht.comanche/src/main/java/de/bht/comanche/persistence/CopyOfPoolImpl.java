@@ -16,11 +16,11 @@ import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
 import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
-public class PoolImpl<E> implements Pool<E> {
+public class CopyOfPoolImpl<E> implements Pool<E> {
 	private EntityManager em;
 	private EntityManagerFactory entityManagerFactory;
 	
-	public PoolImpl () {
+	public CopyOfPoolImpl () {
 		entityManagerFactory = Persistence.createEntityManagerFactory("planthejam.jpa");
 	}
 	

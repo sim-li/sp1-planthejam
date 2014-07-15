@@ -140,11 +140,17 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 $log.log("Registrierung ungueltig.");
                 return;
             }
-            restService.register(_user.name, _user.password, _user.email, _user.tel)
+            restService.register(_user)
                 .then(function(user) {
                     $scope.session.user = user;
+                    $scope.session.isLoggedIn = true;
                     $log.log("Registrierung erfolgreich.");
-                    $scope.login();
+                    // $scope.login();
+
+                    $log.log("Login erfolgreich.");
+                    $log.log($scope.session);
+
+
                 }, function(error) {
                     $log.error(error);
                     $scope.warnings.central = error;

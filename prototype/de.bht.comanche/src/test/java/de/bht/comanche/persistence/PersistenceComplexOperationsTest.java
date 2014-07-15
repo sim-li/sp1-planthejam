@@ -2,6 +2,7 @@ package de.bht.comanche.persistence;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -9,7 +10,6 @@ import org.junit.Test;
 
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.TransactionWithStackTrace;
 
 public class PersistenceComplexOperationsTest {
 	private final boolean THROW_STACKTRACE = true;
@@ -25,9 +25,9 @@ public class PersistenceComplexOperationsTest {
 	@Test public void saveTwoContactsTest() {
 		final DaUser daUser = daFactory.getDaUser();
 //		final DaGenericImpl<LgContact> daContact = new DaGenericImpl<LgContact>(null, null).getPool().save(bobsContact1);
-		final DaBaseEntity daBaseEntity = daFactory.getDaBaseEntity();
+//		final DaBase daBase = daFactory.getDaBase();
 		final Pool pool = daUser.getPool();
-		daBaseEntity.setPool(pool);
+//		daBase.setPool(pool);
 		boolean success = new TransactionWithStackTrace<LgUser>(pool, THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				LgUser alice = new LgUser();
@@ -41,13 +41,14 @@ public class PersistenceComplexOperationsTest {
 				bob.setPassword("hiiambob");
 				bob.setTel("0309876543");
 				
-				LgContact bobsContact1 = new LgContact(bob, alice);
-				bob.getContacts().add(bobsContact1);
-//				bob.addContact(alice);
-//				alice.addContact(bob);
+//				LgContact bobsContact1 = new LgContact(bob, alice);
+//				bob.getContacts().add(bobsContact1);
+				
+				bob.addContact(alice);
+				alice.addContact(bob);
 				daUser.save(alice);
 				daUser.save(bob);
-				daBaseEntity.save(bobsContact1);
+//				daBase.save(bobsContact1);
 				
 				/*
 				 * Transaction has to be closed so that entities are saved to DB.

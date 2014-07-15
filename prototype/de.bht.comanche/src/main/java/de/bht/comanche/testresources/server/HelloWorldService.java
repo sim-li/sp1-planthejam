@@ -1,3 +1,4 @@
+package de.bht.comanche.testresources.server;
 //package de.bht.comanche.server;
 //
 //import javax.ws.rs.GET;
