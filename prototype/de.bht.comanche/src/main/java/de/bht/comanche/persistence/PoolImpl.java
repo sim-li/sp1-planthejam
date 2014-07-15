@@ -52,7 +52,14 @@ public class PoolImpl<E> implements Pool<E> {
 	
 	@Override
 	public void save(E io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException {
-		em.persist(em.contains(io_object) ? io_object : em.merge(io_object));
+		em.persist(io_object);
+//		if(em.contains(io_object)) {
+//			em.merge(io_object);
+////			em.persist(io_object);
+//			em.refresh(io_object);
+//		} else {
+//			em.persist(io_object);
+//		}
 	}
 
 	@Override
