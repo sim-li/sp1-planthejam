@@ -18,6 +18,7 @@ public class LgInvite extends DbObject{
 	private boolean isHost;
 	private boolean isIgnored;
 	
+	@JsonBackReference
 	@NotNull
 	@ManyToOne
 	private LgUser user;
