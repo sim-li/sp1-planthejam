@@ -155,10 +155,10 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>${project.basedir}/src/main/resources</directory>
 			</resource>
 			<resource>
-				<directory>src/main/web/js</directory>
+				<directory>${project.basedir}/src/main/webapp/js</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
@@ -202,18 +202,31 @@
 					</execution>
 				</executions>
 				<configuration>
-					<jsSrcDir>src/main/web/js</jsSrcDir>
-					<jsSrcDir>src/main/webapp/js</jsSrcDir>
-					<jsTestSrcDir>src/test/web/js</jsTestSrcDir>
-					<jsTestSrcDir>src/test/webapp/js</jsTestSrcDir>
+					<!-- <jsSrcDir>${project.basedir}/src/main/web/js</jsSrcDir>
+					<jsTestSrcDir>${project.basedir}/src/test/web/js</jsTestSrcDir> -->
+					<jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
+					<jsTestSrcDir>${project.basedir}/src/test/webapp/js</jsTestSrcDir>
 
 					<preloadSources>
-						<!-- <source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source> -->
-						<source>${project.basedir}/src/main/web/lib/angular.js</source>
-						<source>${project.basedir}/src/main/web/lib/angular-mocks.js</source>
-						<source>${project.basedir}/src/main/web/lib/angular-scenario.js</source>
-						<!-- <source>${project.basedir}/src/main/web/lib/angular-mocks.js</source> -->
+						<!-- <source>${project.basedir}/src/main/webapp/lib/jquery-1.7.2.min.js</source> -->
+						<!-- <source>${project.basedir}/src/main/webapp/lib/angular.js</source> -->
+						<source>${project.basedir}/src/main/webapp/lib/angular.js</source>
+                        <source>${project.basedir}/src/main/webapp/lib/angular-mocks.js</source>
+						<!-- <source>${project.basedir}/src/test/webapp/js/datePickerDateTest.js</source> -->
 					</preloadSources>
+                    <!-- <sourceIncludes>
+                        <include>${project.basedir}/src/main/webapp/lib/angular.js</include>
+						<include>${project.basedir}/src/main/webapp/lib/angular-mocks.js</include>
+                        <include>**/*.js</include>
+                    </sourceIncludes>
+                    <sourceExcludes>
+                        <exclude>${project.basedir}/src/main/webapp/lib/angular-scenario.js</exclude>
+                    </sourceExcludes> -->
+                    <!-- <specIncludes> -->
+                        <!-- <include>${project.basedir}</include> -->
+                        <!-- <include>${project.basedir}src/test/webapp/js/**/*.js</include> -->
+                        <!-- <include>**/*.js</include> -->
+                    <!-- </specIncludes> -->
 				</configuration>
 				<dependencies>
 			      <dependency>
@@ -307,17 +320,15 @@
 							<artifactId>maven-jstools-plugin</artifactId>
 							<version>0.7</version>
 							<configuration>
-								<jsDir>src/main/web/js</jsDir>
+								<jsDir>src/main/webapp/js</jsDir>
 								<includePrivate>true</includePrivate>
 								<includeUndocumented>true</includeUndocumented>
 
 								<preloadSources>
-									<source>${project.basedir}/src/main/web/lib/jquery-1.7.2.min.js</source>
-									<source>${project.basedir}/src/main/web/lib/angular.js</source>
-									<source>${project.basedir}/src/main/web/lib/angular-mocks.js</source>
-									<source>${project.basedir}/src/main/web/lib/angular-scenario.js</source>
+									<!-- <source>${project.basedir}/src/main/webapp/lib/jquery-1.7.2.min.js</source> -->
+									<!-- <source>${project.basedir}/src/main/webapp/lib/angular.js</source> -->
 								</preloadSources>
-								<!-- <jsSrcDir>src/main/web/js</jsSrcDir> <jsTestSrcDir>src/test/web/js</jsTestSrcDir> -->
+								<!-- <jsSrcDir>src/main/webapp/js</jsSrcDir> <jsTestSrcDir>src/test/webapp/js</jsTestSrcDir> -->
 								<!-- <specIncludes> <include>*Spec.js</include> </specIncludes> -->
 
 							</configuration>
