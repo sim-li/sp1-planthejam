@@ -7,6 +7,7 @@ import javassist.NotFoundException;
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
 import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
@@ -29,4 +30,5 @@ public interface DaGeneric<E> {
     Pool<E> getPool();
     void setPool(Pool pool);
     void flush();
+    E merge(E io_object) throws TransactionRequiredException, IllegalArgumentException;
 }

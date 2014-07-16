@@ -19,6 +19,7 @@ public interface Pool<E> {
 	 */
 	public void endTransaction(boolean success);
 	public void save(E io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException;
+	public E merge (E io_object) throws IllegalArgumentException, TransactionRequiredException;
 	public void delete(E io_object) throws IllegalArgumentException, TransactionRequiredException;
 	public E find(Class<E> i_persistentClass, Long i_oid) throws NoPersistentClassException, OidNotFoundException;
 	public List<E> findAll(Class<E> i_persistentClass) throws NoPersistentClassException;

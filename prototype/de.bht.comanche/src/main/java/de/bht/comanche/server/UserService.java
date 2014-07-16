@@ -122,20 +122,15 @@ public class UserService extends Service {
      @Consumes("application/json")
      @Produces({"application/json"})
      public ResponseObject deleteUser(final LgUser userFromClient){
-//     public ResponseObject deleteUser(@PathParam("oid") final long oid){
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
-  				
-  				System.out.println(userFromClient);
-  				
   				LgUser userFromDb = null;
   				try{
 					userFromDb = daUser.find(userFromClient.getOid());
   				} catch (OidNotFoundException oid) {
   					throw new NoUserWithThisIdException();
   				}
-//    			daUser.delete(userFromClient);
   				daUser.delete(userFromDb);
     			return null;
     		 }
@@ -152,26 +147,16 @@ public class UserService extends Service {
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject updateUser(final LgUser updateUserFromClient){
+     public ResponseObject updateUser(final LgUser updatedUserFromClient){
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
-//				List<LgUser> users = daUser.findByName(updateUserFromClient.getName());
-//				if (users.isEmpty()) {
-//					throw new NoUserWithThisNameException();
-//				}
-//				LgUser saveUsertoDb = users.get(0);^
-  				
-  				System.out.println(updateUserFromClient);
-  				LgUser fromDb = daUser.find(updateUserFromClient.getOid());
-  				fromDb.updateWith(updateUserFromClient);
-//				daUser.save(updateUserFromClient);
-  				daUser.save(fromDb);
-				
-//				saveUsertoDb.updateWith(updateUserFromClient);
-//    			daUser.save(saveUsertoDb);
-//    			return saveUsertoDb;
-  				return null;
+				List<LgUser> users = daUser.findByName(updatedUserFromClient.getName());
+				if (users.isEmpty()) {
+					throw new NoUserWithThisNameException();
+				}
+//  				daUser.update(updatedUserFromClient);
+  				return updatedUserFromClient;
     		 }
     	 }.execute();
 

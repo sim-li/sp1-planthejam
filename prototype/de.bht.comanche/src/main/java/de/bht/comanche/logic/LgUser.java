@@ -3,7 +3,6 @@ package de.bht.comanche.logic;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -11,6 +10,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -122,7 +123,7 @@ public class LgUser extends DbObject {
 		this.getHasContacts().remove(user);
 		user.getIsContacts().remove(this);
 	}
-
+	@JsonIgnore
 	public List<LgInvite> getInvites() {
 		return invites;
 	}

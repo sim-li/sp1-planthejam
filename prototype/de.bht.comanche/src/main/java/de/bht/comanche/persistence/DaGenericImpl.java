@@ -25,15 +25,9 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 		this.pool = pool;
 	}
 
-	public static void main (String[] args) {
-//		DaGenericImpl<LgUser> da = new DaGenericImpl<LgUser>(LgUser.class, null);
-//		System.out.println(da.type.getSimpleName());
-	}
-	
 	@Override
 	public void save(E entity) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException {
 		pool.save(entity);
-		
 	}
 
 	@Override
@@ -94,5 +88,10 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 
 	public void flush() {
 		pool.flush();
+	}
+
+	@Override
+	public E merge(E io_object) throws TransactionRequiredException, IllegalArgumentException {
+		return pool.merge(io_object);
 	}
 }

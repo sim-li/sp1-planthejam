@@ -119,4 +119,10 @@ public class PoolTesting<E> implements Pool<E> {
 	public String getPersistenceUnitName() {
 		return "ERROR> testPool: No persistence unit.";
 	}
+
+	@Override
+	public E merge(E io_object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

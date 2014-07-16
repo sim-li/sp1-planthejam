@@ -42,8 +42,8 @@ public class PoolImpl<E> implements Pool<E> {
 				tr.rollback();
 			}
 		}
-		catch (RollbackException e) {
-			tr.rollback(); // TODO is das sinnvoll so?
+		catch (RollbackException e) { //TODO
+			tr.rollback();
 		}
 		finally {
 			em.close();
@@ -52,16 +52,14 @@ public class PoolImpl<E> implements Pool<E> {
 	
 	@Override
 	public void save(E io_object) throws EntityExistsException, IllegalArgumentException, TransactionRequiredException {
-//		em.persist(io_object);
-		if(em.contains(io_object)) {
-			em.merge(io_object);
-//			em.persist(io_object);
-			em.refresh(io_object);
-		} else {
-			em.persist(io_object);
-		}
+		em.persist(io_object);
 	}
 
+	@Override
+	public E merge(E io_object) throws IllegalArgumentException, TransactionRequiredException {
+		return em.merge(io_object);
+	}
+	
 	@Override
 	public void delete(E io_object) throws IllegalArgumentException, TransactionRequiredException {
 		em.remove(em.contains(io_object) ? io_object : em.merge(io_object));
@@ -103,4 +101,5 @@ public class PoolImpl<E> implements Pool<E> {
 	public String getPersistenceUnitName() {
 		return persistenceUnitName;
 	}
+
 }
