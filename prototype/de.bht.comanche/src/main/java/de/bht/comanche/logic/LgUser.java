@@ -3,6 +3,7 @@ package de.bht.comanche.logic;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -35,7 +36,7 @@ public class LgUser extends LgObject {
 	private List<LgUser> isContacts;
 
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<LgInvite> invites;
 
