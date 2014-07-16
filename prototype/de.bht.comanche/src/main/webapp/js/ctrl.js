@@ -125,6 +125,21 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                     $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
+
+
+                    restService.getInvites(user.oid)
+                        .then(function(success) {
+                            $log.debug(success);
+                        }, function(error) {
+                            $log.error(error);
+                            $scope.warnings.central = error;
+                            
+
+                        }, function(notification) {
+                            // $log.log(notification); // for future use
+                        });
+
+
                 }, function(error) {
                     $log.error(error);
                     $scope.warnings.central = error;
@@ -174,9 +189,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
 
         $scope.saveEditedUser = function() {
-            $log.debug("---------- DEBUGGING SAVE USER");
             var _user = $scope.session.tempUser;
-            $log.debug(_user);
             restService.updateUser(_user)
                 .then(function(success) {
                     $log.log(success);
