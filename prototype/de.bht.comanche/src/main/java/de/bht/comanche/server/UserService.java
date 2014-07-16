@@ -151,11 +151,12 @@ public class UserService extends Service {
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
-				List<LgUser> users = daUser.findByName(updatedUserFromClient.getName());
-				if (users.isEmpty()) {
-					throw new NoUserWithThisNameException();
-				}
-//  				daUser.update(updatedUserFromClient);
+  				try {
+  					daUser.find(updatedUserFromClient.getOid());
+  				} catch (OidNotFoundException oid) {
+  					throw new NoUserWithThisIdException();
+  				}
+  				daUser.merge(updatedUserFromClient);
   				return updatedUserFromClient;
     		 }
     	 }.execute();

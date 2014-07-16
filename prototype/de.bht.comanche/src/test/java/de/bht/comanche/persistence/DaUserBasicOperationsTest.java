@@ -91,7 +91,9 @@ public class DaUserBasicOperationsTest {
 			public void executeWithThrows() throws Exception {
 				// Alice was persisted in other context during Setup
 				alice.setName("AliciaTeba");
-				daUser.merge(alice);
+				LgUser newUser;
+				newUser = daUser.merge(alice);
+				
 				alice.setEmail("littleangel@angel.de");
 				forceRestartTransaction();
 				LgUser aliceAfterUpdate = daUser.find(alice.getOid());
