@@ -174,7 +174,9 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
 
         $scope.saveEditedUser = function() {
+            $log.debug("---------- DEBUGGING SAVE USER");
             var _user = $scope.session.tempUser;
+            $log.debug(_user);
             restService.updateUser(_user)
                 .then(function(success) {
                     $log.log(success);
@@ -190,6 +192,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
 
         $scope.cancelEditUser = function() {
+            $log.log("Bearbeitung der Kontodaten abgebrochen.");
             $scope.session.tempUser = undefined;
             $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
         };
