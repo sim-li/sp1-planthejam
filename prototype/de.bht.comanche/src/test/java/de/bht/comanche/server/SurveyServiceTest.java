@@ -3,11 +3,12 @@ package de.bht.comanche.server;
 import static com.jayway.restassured.RestAssured.given;
 
 import org.junit.Ignore;
+import org.junit.Test;
 
 import de.bht.comanche.logic.LgSurvey;
 @Ignore
 public class SurveyServiceTest {
-//	@Test
+	@Test
     public void saveSurvey() {
 	
 		LgSurvey testSurvey = new LgSurvey();

@@ -14,13 +14,14 @@ import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
+import de.bht.comanche.persistence.Pool;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
 import de.bht.comanche.server.exceptions.logic.SurveyWithThisNameExistsException;
 import de.bht.comanche.server.exceptions.persistence.NotFoundException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 
-@Path("/survey/")
+@Path("/invite/")
 public class InviteService extends Service{
 	public InviteService() {
 		super();
@@ -32,9 +33,9 @@ public class InviteService extends Service{
 	@Produces({"application/json"})
 	public ResponseObject<LgInvite> getInvites(final LgUser userFromClient){
 		final DaUser daUser = factory.getDaUser();
-		ResponseObject<LgInvite> response = new Transaction<LgInvite>(daUser.getPool()) {
+		Pool pool = daUser.getPool();
+		ResponseObject<LgInvite> response = new Transaction<LgInvite>(pool) {
 			public LgInvite executeWithThrows() throws Exception {
-				List<LgInvite> invites = null;
 				try{
 					LgUser lgUser = daUser.find(userFromClient.getOid());
 					addAllToResponse(lgUser.getInvites());

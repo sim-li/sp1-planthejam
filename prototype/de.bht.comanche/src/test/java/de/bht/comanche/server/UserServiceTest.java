@@ -1,6 +1,7 @@
 package de.bht.comanche.server;
 
 import static com.jayway.restassured.RestAssured.expect;
+
 import static com.jayway.restassured.RestAssured.get;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -12,9 +13,6 @@ import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 
 import de.bht.comanche.logic.LgUser;
-/*
- *  Caution: CLASS IGNORED, fails normal tests.
- */
 @Ignore
 public class UserServiceTest {
 
@@ -25,44 +23,14 @@ public class UserServiceTest {
 	}
 	
 	@Test
-    public void registerUser() {
+    public void getInvites() {
 	
 		LgUser testUser = new LgUser();
-		testUser.setName("John");
-		testUser.setEmail("test@test.com");
-		testUser.setPassword("password");
-		testUser.setTel("123456789");
+		testUser.setOid(1);
     	
 		Response response = expect().statusCode(200).given().body(testUser).contentType("application/json")
-		.when().post("/rest/user/register");
-		
-		
-//		response.prettyPrint();
-//		response.getBody().jsonPath();
-		
-		JsonPath jsonPath = response.getBody().jsonPath();
-//		int user_id = jsonPath.getInt("user_id");
-		
-		jsonPath.prettyPrint();
-		
-		
-//		String responseBody = response.getBody().asString();
-//		JsonPath jsonPath = new JsonPath(responseBody);
-//		long user_oid = jsonPath.getLong("oid");
-		
-//		System.out.println("user_oid" + user_oid + "++++++++++++++++++++++++++++");
-		
-//		getUser(user_oid);
-		
-//		given().contentType("application/json")
-//		.body(testUser)
-//		.expect().statusCode(200)
-//		.when().post("/rest/user/register");
-		
-//		ResponseObject ro = new ResponseObject();
-//		
-//		given().request().body(ro);
-//		System.out.println(ro.toString());
+		.when().post("/rest/survey/getInvites");
+		response.prettyPrint();
 		
 	}
 	

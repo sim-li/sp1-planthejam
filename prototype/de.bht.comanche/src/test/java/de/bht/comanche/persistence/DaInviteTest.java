@@ -3,21 +3,26 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.ResponseObject;
+import de.bht.comanche.server.TransactionWithList;
 import de.bht.comanche.server.exceptions.PersistenceException;
+import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
+import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 import de.bht.comanche.testresources.logic.SurveyFactory;
 import de.bht.comanche.testresources.logic.UserFactory;
 import de.bht.comanche.testresources.persistence.PersistenceUtils;
 import de.bht.comanche.testresources.server.LowLevelTransaction;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
-
 public class DaInviteTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -81,6 +86,7 @@ public class DaInviteTest {
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
+	@Ignore
     @Test 
 	public void readSurveysTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -98,6 +104,25 @@ public class DaInviteTest {
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
 	
+    @Test
+	public void readSurveysTestWithOriginalObj() {
+		final LgUser userFromClient = alice;
+		
+	    ResponseObject<LgInvite> response = new TransactionWithList<LgInvite>(pool) {
+			public List<LgInvite> executeWithThrows() throws Exception {
+				List<LgInvite> invites = null;
+				try{
+					LgUser lgUser = daUser.find(alice.getOid());
+					invites = lgUser.getInvites();
+					assertEquals("[Original TRANS Pattern] Check Alices first invite (BY ID):", invite0.getOid(), invites.get(0).getOid());
+				} catch (OidNotFoundException oid) {
+					throw new NoUserWithThisIdException();
+				}
+				return invites;
+			}
+		}.execute();
+		System.out.println(response.getData().toString());
+	}
 
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {
 		assertEquals(userName + " > NAME", user.getName(), userFromDb.getName());
