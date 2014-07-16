@@ -31,6 +31,7 @@ public class LgUser extends DbObject {
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "hasContacts")
 	private List<LgUser> isContacts;
 
+	@JsonManagedReference
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
 	private List<LgInvite> invites;
 

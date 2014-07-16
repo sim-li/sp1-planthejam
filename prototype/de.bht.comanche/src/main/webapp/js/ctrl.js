@@ -51,25 +51,10 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
         initSession();
 
-        
-        // /**
-        //  * tries to get the specified user from the server
-        //  */
-        // var fetchUserData = function(oid) {
-        //     var _fromGetUser = restService.getUser(oid);
-        //     if (!_fromGetUser.success) {
-        //         $log.error("Benutzerdaten konnten nicht vom Server geholt werden.");
-        //         $log.error(_fromGetUser.serverMessage);
-        //         return;
-        //     }
-        //     // *** get all user data from server ***
 
-        //     return _fromGetUser.user;
-
-            // $scope.session.user.surveys = getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
-            // $scope.session.user.surveys = [{}] // empty list for debugging
-        // }
-        
+        $scope.discardWarnings = function() {
+            $scope.warnings = {};
+        };
 
         $scope.toggleLoginDialog = function() {
             $scope.showRegisterDialog = !$scope.showRegisterDialog;
@@ -113,6 +98,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             return true;
         };
         
+
         $scope.login = function() {
             var _user = $scope.session.user;
             if (!loginIsValidFor(_user)) {
@@ -145,12 +131,8 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                     $scope.session.user = user;
                     $scope.session.isLoggedIn = true;
                     $log.log("Registrierung erfolgreich.");
-                    // $scope.login();
-
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
-
-
                 }, function(error) {
                     $log.error(error);
                     $scope.warnings.central = error;
@@ -162,17 +144,12 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
         $scope.logout = function() {
 
-            // *** try to logout at server ***  -- TODO: not necessary?
+            // *** if anything needs to be done on the server for logout, do it now ***
 
             $log.log("Logout erfolgreich.");
             initSession();
             $scope.showRegisterDialog = false;
         };
-
-        $scope.discardWarnings = function() {
-            $scope.warnings = {};
-        };
-
 
         $scope.editUser = function() {
             $scope.session.tempUser = angular.copy($scope.session.user);
@@ -182,8 +159,6 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
         $scope.saveEditedUser = function() {
             var _user = $scope.session.tempUser;
-            // var _fromUpdateUser = restService.updateUser(_user);
-
             restService.updateUser(_user)
                 .then(function(success) {
                     $log.log(success);
@@ -267,28 +242,61 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
         $scope.saveSurvey = function() {
             var _survey = $scope.session.tempSurvey;
-            var _fromSaveSurvey = restService.saveSurvey(_survey);
 
-            if (!_fromSaveSurvey.success) {
-                $log.error("Speichern der Terminumfrage auf dem Server fehlgeschlagen.");
-                $log.error(_fromSaveSurvey.serverMessage);
-                return;
-            }
-            _survey = _fromSaveSurvey.survey;
 
-            if (!$scope.session.addingSurvey) {
-                removeElementFrom(_survey, $scope.session.user.surveys);
-            }
-            $scope.session.user.surveys.push(_survey);
-            $scope.session.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
+            // *** change to async ***
 
-            $scope.session.selectedSurvey = _survey;
-            $scope.session.tempSurvey = "";
-            $scope.session.addingSurvey = false;
-            $scope.session.inEditMode = false;
-            $scope.session.showEditSurveysDialog = false;
+            restService.restService.saveSurvey(_survey)
+                .then(function(survey) {
+                    // $scope.session.user = user;
+                    // $scope.session.isLoggedIn = true;
+                    // $log.log("Registrierung erfolgreich.");
+                    // $log.log("Login erfolgreich.");
+                    // $log.log($scope.session);
+
+                    if (!$scope.session.addingSurvey) {
+                        removeElementFrom(_survey, $scope.session.user.surveys);
+                    }
+
+                    $scope.session.user.surveys.push(survey);
+                    $scope.session.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
+                    $scope.session.selectedSurvey = survey;
+                    $scope.session.tempSurvey = "";
+                    $scope.session.addingSurvey = false;
+                    $scope.session.inEditMode = false;
+                    $scope.session.showEditSurveysDialog = false;
+
+                }, function(error) {
+                    $log.error(error);
+                    $scope.warnings.central = error;
+                    // initSession();
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
+
+
+            // var _fromSaveSurvey = restService.saveSurvey(_survey);
+            //-- falls kein Fehlschlag:
+            // _survey = _fromSaveSurvey.survey;
+
+            // if (!$scope.session.addingSurvey) {
+            //     removeElementFrom(_survey, $scope.session.user.surveys);
+            // }
+
+            // $scope.session.user.surveys.push(_survey);
+            // $scope.session.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
+
+            // $scope.session.selectedSurvey = _survey;
+            // $scope.session.tempSurvey = "";
+            // $scope.session.addingSurvey = false;
+            // $scope.session.inEditMode = false;
+            // $scope.session.showEditSurveysDialog = false;
+
+
+            //---------------- ***
             console.log($scope.session.selectedSurvey);
             console.log($scope.session.user);
+            //---------------- ***
         };
 
 
@@ -313,20 +321,26 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 $log.log("Keine Terminumfrage ausgewaehlt.");
                 return;
             }
-            var _fromDeleteSurvey = restService.deleteSurvey(_survey.oid);
 
-            if (!_fromDeleteSurvey.success) {
-                $log.error("Loeschen der Terminumfrage auf dem Server fehlgeschlagen.");
-                $log.error(_fromDeleteSurvey.serverMessage);
-                return;
-            }
+            var _survey = $scope.session.user;
+            restService.deleteSurvey(_survey.oid)
+                .then(function(success) {
+                    $log.log(success);
+                    removeElementFrom(_survey, $scope.session.user.surveys);
+                    $scope.session.selectedSurvey = $scope.session.user.surveys[0] || "";
+                    $scope.session.tempSurvey = "";
+                }, function(error) {
+                    $log.error(error);
+                    $scope.warnings.central = error;
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
 
-            removeElementFrom(_survey, $scope.session.user.surveys);
-            $scope.session.selectedSurvey = $scope.session.user.surveys[0] || "";
-            $scope.session.tempSurvey = "";
-
+            
+            //-------------------- ***
             console.log($scope.session.selectedSurvey);
             console.log($scope.session.user);
+            //-------------------- ***
         };
 
         $scope.removeTimeperiodFromTempSurvey = function(timeperiod) {
