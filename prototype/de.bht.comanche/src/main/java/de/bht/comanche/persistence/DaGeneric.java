@@ -7,6 +7,7 @@ import javassist.NotFoundException;
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
 import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
 import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
@@ -24,9 +25,7 @@ public interface DaGeneric<E> {
     E find(long id) throws NotFoundException, NoPersistentClassException, OidNotFoundException;
     List<E> findAll() throws NoPersistentClassException ;
     List<E> findByField(String fieldName, Object fieldValue)  throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException;
-    List<E> findByWhere(String whereClause, Object... args);
-    List<E> findByExample(E example);
     Pool<E> getPool();
     void setPool(Pool pool);
-    void flush();
+    E update(E io_object) throws TransactionRequiredException, IllegalArgumentException;
 }

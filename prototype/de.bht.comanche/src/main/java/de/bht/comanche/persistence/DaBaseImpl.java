@@ -1,6 +1,7 @@
 package de.bht.comanche.persistence;
 
 import de.bht.comanche.logic.DbObject;
+import de.bht.comanche.server.DaBase;
 
 public class DaBaseImpl extends DaGenericImpl<DbObject> implements DaBase {
 

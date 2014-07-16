@@ -5,24 +5,28 @@ import java.util.List;
 
 import de.bht.comanche.logic.DbObject;
 
-public class ResponseObject {
-	protected List<DbObject> data;
+public class ResponseObject<E> {
+	protected List<E> data;
 	protected int responseCode;
 	
 	public ResponseObject() {
 		responseCode = 200;
-		data = new ArrayList<DbObject>();
+		data = new ArrayList<E>();
 	}
 	
-	public void addData(DbObject d) {
+	public void addData(E d) {
 		data.add(d);
 	}
 
-	public List<? extends DbObject> getData() {
+	public void addAll(List<E> l) {
+		data.addAll(l);
+	}
+	
+	public List<E> getData() {
 		return data;
 	}
 	
-	public void setData(List<DbObject> data) {
+	public void setData(List<E> data) {
 		this.data = data;
 	}
 

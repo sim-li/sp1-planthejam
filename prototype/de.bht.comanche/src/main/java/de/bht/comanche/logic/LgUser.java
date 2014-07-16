@@ -3,20 +3,15 @@ package de.bht.comanche.logic;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonManagedReference;
-
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "user")
@@ -28,20 +23,18 @@ public class LgUser extends DbObject {
 	private String tel;
 	private String email;
 	private String password;
-
-//	@ManyToMany(cascade = { CascadeType.ALL })
 	
 	@JoinTable(name = "contact", joinColumns = { 
 			@JoinColumn(name = "user_Id", referencedColumnName = "oid")}, inverseJoinColumns = { 
 			@JoinColumn(name = "friend_Id", referencedColumnName = "oid")})
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany
 	private List<LgUser> hasContacts;
 	
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "hasContacts")
+	@ManyToMany(mappedBy = "hasContacts")
 	private List<LgUser> isContacts;
 
-	@JsonManagedReference
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
+	@JsonIgnore
+	@OneToMany(mappedBy="user")
 	private List<LgInvite> invites;
 
 	public LgUser() {

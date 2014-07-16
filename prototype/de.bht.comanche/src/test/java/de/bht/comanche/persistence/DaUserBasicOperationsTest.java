@@ -15,8 +15,8 @@ import de.bht.comanche.testresources.logic.UserFactory;
 import de.bht.comanche.testresources.persistence.PersistenceUtils;
 import de.bht.comanche.testresources.server.LowLevelTransaction;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
-
-@Ignore public class DaUserBasicOperationsTest {
+@Ignore
+public class DaUserBasicOperationsTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
 	private static final boolean THROW_STACKTRACE = true;
@@ -54,6 +54,7 @@ import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
+	@Ignore
 	@Test 
 	public void findByNameTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -67,21 +68,47 @@ import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
 	
-	//TODO ( Missing assertion ) 
 	@Ignore
-	@Test
-	public void addContactsTest(){
-		final DaUser daUser = daFactory.getDaUser();
+	@Test 
+	public void updateWithSeperateTransactionsTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
-				LgUser aliceFromDb = daUser.findByName(userName0).get(0);
-				LgUser bobFromDb  = daUser.findByName(userName1).get(0);
-				aliceFromDb.addContact(bobFromDb);
+				// Alice was persisted in other context during Setup
+				alice.setName("AliciaTeba");
+				daUser.getPool().merge(alice);
+				forceRestartTransaction();
+				LgUser aliceAfterUpdate = daUser.find(alice.getOid());
+				assertEquals("Alice after update", alice.getOid(), aliceAfterUpdate.getOid());
+				assertEquals("Alice's name after update", alice.getName(), aliceAfterUpdate.getName());
 			}
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
-	}
+    }
 	
+	@Ignore
+	@Test 
+	public void updateModificationAfterMerge() {
+		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+			public void executeWithThrows() throws Exception {
+				// Alice was persisted in other context during Setup
+				alice.setName("AliciaTeba");
+				LgUser aliceInThisContext;
+				aliceInThisContext = daUser.update(alice);
+				aliceInThisContext.setEmail("littleangel@angel.de");
+				// Alice 
+				forceRestartTransaction();
+				LgUser aliceAfterUpdate = daUser.find(alice.getOid());
+				assertEquals("Alice after update", alice.getOid(), aliceAfterUpdate.getOid());
+				assertEquals("Alice's name after update", "AliciaTeba", aliceAfterUpdate.getName());
+				assertEquals("Alice's email after update", "littleangel@angel.de", aliceAfterUpdate.getEmail());
+			}
+		}.execute();
+		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
+    }
+	
+	
+	
+	@Ignore
 	@Test public void findByIdTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -98,26 +125,26 @@ import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
 	}
-
+	
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {
 		assertEquals(userName + " > NAME", user.getName(), userFromDb.getName());
 		assertEquals(userName + " > EMAIL", user.getEmail(), userFromDb.getEmail());
 		assertEquals(userName + " > TEL", user.getTel(), userFromDb.getTel());
 		assertEquals(userName + " > PASSWORD", user.getPassword(), userFromDb.getPassword());
 	}
-	
-	@After public void tearDown() {
-		final DaUser daUser = daFactory.getDaUser();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
-			public void executeWithThrows() throws Exception {
-				LgUser aliceFromDb = daUser.find(alice.getOid());
-				LgUser bobFromDb = daUser.find(bob.getOid());
-				daUser.delete(aliceFromDb);
-				daUser.delete(bobFromDb);
-			}
-		}.execute();
-		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
-		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
-	}
+
+//	@After public void tearDown() {
+//		final DaUser daUser = daFactory.getDaUser();
+//		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
+//			public void executeWithThrows() throws Exception {
+//				LgUser aliceFromDb = daUser.find(alice.getOid());
+//				LgUser bobFromDb = daUser.find(bob.getOid());
+//				daUser.delete(aliceFromDb);
+//				daUser.delete(bobFromDb);
+//			}
+//		}.execute();
+//		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
+//		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
+//	}
 	
 }

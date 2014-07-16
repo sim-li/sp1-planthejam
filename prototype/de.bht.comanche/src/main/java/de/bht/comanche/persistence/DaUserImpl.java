@@ -25,7 +25,6 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 		return findByField("name", name);
 
 	}
-	
 	public LgUser getDummy() {
 		LgUser user = new LgUser();
 		user.setOid(123456789);
@@ -35,4 +34,5 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 		user.setTel("00123456");
 		return user;
 	}
+
 }

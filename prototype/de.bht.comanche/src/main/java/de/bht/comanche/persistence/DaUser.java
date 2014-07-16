@@ -24,5 +24,5 @@ public interface DaUser {
     public LgUser getDummy(); // for testing
     public Pool getPool(); // Later overwritten by DaGenericImpl
     public void setPool(Pool pool); 
-    public void flush();
+    LgUser update(LgUser user) throws TransactionRequiredException, IllegalArgumentException;
 }

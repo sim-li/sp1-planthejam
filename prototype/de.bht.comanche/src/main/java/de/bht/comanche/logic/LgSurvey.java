@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,11 +33,10 @@ public class LgSurvey extends DbObject {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private TimeUnit frequencyTimeUnit;
-
 	@OneToMany(mappedBy="invite_survey", cascade = CascadeType.ALL)
 	private List<LgInvite> invites;
 	
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<LgTimePeriod> possibleTimePeriods;
 
 	public String getName() {

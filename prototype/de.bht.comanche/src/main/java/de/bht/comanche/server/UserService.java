@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-
-import org.jboss.logging.annotations.Param;
+import javax.ws.rs.core.MediaType;
 
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
@@ -30,11 +29,17 @@ public class UserService extends Service {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ResponseObject loginUser(final LgUser userFromClient) {
+	public ResponseObject<LgUser> loginUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+		ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				List<LgUser> users = daUser.findByName(userFromClient.getName());
+				/*
+				 * Available for Client: MultipleUsersWithThisNameException()
+				 */
+//				if (users.size() > 1) {
+//					throw new MultipleUsersWithThisNameException();
+//				}
 				if (users.isEmpty()) {
 					throw new NoUserWithThisNameException();
 				}
@@ -47,7 +52,6 @@ public class UserService extends Service {
 				return userWithId;
 			}
 		}.execute();
-		
 		if (response.hasError()) {
 			throw new WebApplicationException(response.getResponseCode());
 		}
@@ -63,32 +67,26 @@ public class UserService extends Service {
 	@Path("getUser")
 	@Consumes("application/json")
 	@Produces({"application/json"})
-	public ResponseObject getUser(final LgUser userFromClient){
+	public ResponseObject<LgUser> getUser(final LgUser userFromClient){
 		final DaUser daUser = factory.getDaUser();
-		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+		ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
-				System.out.println("HUHU from GET");
-				System.out.println(userFromClient.getOid());
-				
 				LgUser lgUser = null;
 				try{
+					System.out.println("Searching with OID> " + userFromClient.getOid());
 					lgUser = daUser.find(userFromClient.getOid());
+					System.out.println("And found:> " + lgUser.getOid());
+//					System.out.println("Number of Invites: " + lgUser.getInvites().size());
+					
 				} catch (OidNotFoundException oid){
-					System.out.println("WRONG ID");
 					throw new NoUserWithThisIdException();
 				}
-				
-				System.out.println("RETURNING USER");
 				return lgUser;
 			}
 		}.execute();
-
 		if (response.hasError()) {
-			System.out.println("RESPONSE HAS ERROR");
 			throw new WebApplicationException(response.getResponseCode());
 		}
-		
-		System.out.println("RESPONSE HAS RESPONSE");
 		return response;
 	}
    	 
@@ -96,60 +94,44 @@ public class UserService extends Service {
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject registerUser(final LgUser newUserFromClient){
+     public ResponseObject<LgUser> registerUser(final LgUser newUserFromClient){
     	 final DaUser daUser = factory.getDaUser();
-    	 ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+    	 ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
     		 public LgUser executeWithThrows() throws Exception {
     			 if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
     				 throw new UserWithThisNameExistsException();
     			 }
     			 daUser.save(newUserFromClient);
-    			 
-//    			 daUser.flush();
-    			 
-    			 System.out.println(newUserFromClient);
-    			 
     			 return newUserFromClient;
     		 }
     	 }.execute();
-
     	 if (response.hasError()) {
-    		 throw new WebApplicationException(response.getResponseCode());
-    	 }
-
+ 			throw new WebApplicationException(response.getResponseCode());
+ 		}
     	 return response;
  	}
      
    @Path("delete")
-//     @Path("delete{id}")
      @DELETE
-//   @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject deleteUser(final LgUser userFromClient){
-//     public ResponseObject deleteUser(@PathParam("oid") final long oid){
+     public ResponseObject<LgUser> deleteUser(final LgUser userFromClient){
     	final DaUser daUser = factory.getDaUser();
-  		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+  		ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
-  				
-  				System.out.println(userFromClient);
-  				
   				LgUser userFromDb = null;
   				try{
 					userFromDb = daUser.find(userFromClient.getOid());
   				} catch (OidNotFoundException oid) {
   					throw new NoUserWithThisIdException();
   				}
-//    			daUser.delete(userFromClient);
   				daUser.delete(userFromDb);
     			return null;
     		 }
     	 }.execute();
-    	 
     	 if (response.hasError()) {
   			throw new WebApplicationException(response.getResponseCode());
   		}
-     	 
      	 return response;
  	} 
      
@@ -157,41 +139,31 @@ public class UserService extends Service {
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject updateUser(final LgUser updateUserFromClient){
+     public ResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
     	final DaUser daUser = factory.getDaUser();
-  		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+  		ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
-//				List<LgUser> users = daUser.findByName(updateUserFromClient.getName());
-//				if (users.isEmpty()) {
-//					throw new NoUserWithThisNameException();
-//				}
-//				LgUser saveUsertoDb = users.get(0);^
-  				
-  				System.out.println(updateUserFromClient);
-  				
-  				LgUser fromDb = daUser.find(updateUserFromClient.getOid());
-  				fromDb.updateWith(updateUserFromClient);
-  				daUser.save(fromDb);
-  				
-//				daUser.save(updateUserFromClient);
-				System.out.println(updateUserFromClient);
-				System.out.println("------------------------");
-//  				daUser.save(fromDb);
-				
-//				saveUsertoDb.updateWith(updateUserFromClient);
-//    			daUser.save(saveUsertoDb);
-//    			return saveUsertoDb;
-//				return updateUserFromClient;
-				
-				return fromDb;
+  				try {
+  					daUser.find(dirtyUser.getOid());
+  				} catch (OidNotFoundException oid) {
+  					throw new NoUserWithThisIdException();
+  				}
+  				return daUser.update(dirtyUser);
     		 }
     	 }.execute();
-
     	 if (response.hasError()) {
    			throw new WebApplicationException(response.getResponseCode());
    		}
-      	 
       	 return response;
      }
+     
+     public static final String CLICHED_MESSAGE = "Hello World!";
+     
+     @Path("hello")
+     @GET
+     @Produces(MediaType.TEXT_HTML)
+         public String getHello() {
+             return CLICHED_MESSAGE;
+         }
 }
 

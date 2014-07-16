@@ -1,4 +1,4 @@
-package de.bht.comanche.persistence;
+package de.bht.comanche.server;
 
 import javassist.NotFoundException;
 
@@ -6,6 +6,7 @@ import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
 import de.bht.comanche.logic.DbObject;
+import de.bht.comanche.persistence.Pool;
 import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
@@ -17,5 +18,4 @@ public interface DaBase {
     void endTransaction(boolean success);
     public Pool getPool(); // Later overwritten by DaGenericImpl
     public void setPool(Pool pool); 
-    public void flush();
 }
