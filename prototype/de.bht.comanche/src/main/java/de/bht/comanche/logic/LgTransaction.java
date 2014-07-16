@@ -1,15 +1,16 @@
-package de.bht.comanche.rest;
+package de.bht.comanche.logic;
 
 import java.util.List;
 
 import de.bht.comanche.exceptions.PtjGlobalException;
 import de.bht.comanche.persistence.DaPool;
+import de.bht.comanche.rest.ReResponseObject;
 
-public abstract class ReTransaction<E> {
+public abstract class LgTransaction<E> {
 	private final DaPool<E> pool;
 	private ReResponseObject<E> response;
 	
-	public ReTransaction (DaPool<E> pool) {
+	public LgTransaction (DaPool<E> pool) {
 		this.pool = pool;
 		response = new ReResponseObject<E>();
 	}

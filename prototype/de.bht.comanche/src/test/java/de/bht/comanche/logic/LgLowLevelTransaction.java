@@ -1,9 +1,9 @@
-package de.bht.comanche.rest;
+package de.bht.comanche.logic;
 
-public abstract class ReLowLevelTransaction {
+public abstract class LgLowLevelTransaction {
 	private final boolean throwStackTrace;
 	
-	public ReLowLevelTransaction (boolean throwStackTrace) {
+	public LgLowLevelTransaction (boolean throwStackTrace) {
 		this.throwStackTrace = throwStackTrace;
 	}
 	

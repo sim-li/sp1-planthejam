@@ -22,17 +22,17 @@ public class ReUserServiceTest {
 		assertThat(body, equalTo("Hello World!"));
 	}
 	
-	@Test
-    public void getInvites() {
-	
-		LgUser testUser = new LgUser();
-		testUser.setOid(1);
-    	
-		Response response = expect().statusCode(200).given().body(testUser).contentType("application/json")
-		.when().post("/rest/survey/getInvites");
-		response.prettyPrint();
-		
-	}
+//	@Test
+//    public void getInvites() {
+//	
+//		LgUser testUser = new LgUser();
+//		testUser.setOid(1);
+//    	
+//		Response response = expect().statusCode(200).given().body(testUser).contentType("application/json")
+//		.when().post("/rest/survey/getInvites");
+//		response.prettyPrint();
+//		
+//	}
 	
 //	@Test
     public void getUser(long user_oid) {

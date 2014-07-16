@@ -15,6 +15,8 @@ import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.exceptions.LgSurveyWithThisNameExistsException;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgTransaction;
+import de.bht.comanche.logic.LgTransactionWithList;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
@@ -32,7 +34,7 @@ public class ReInviteService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgInvite> getInvites(final LgUser userFromClient) {
 		final DaUser daUser0 = factory.getDaUser();
-		ReResponseObject<LgInvite> response = new ReTransactionWithList<LgInvite>(
+		ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(
 				daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
@@ -57,7 +59,7 @@ public class ReInviteService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject saveSurvey(final LgSurvey newSurveyFromClient) {
 		final DaSurvey daSurvey = factory.getDaSurvey();
-		ReResponseObject response = new ReTransaction<LgSurvey>(daSurvey.getPool()) {
+		ReResponseObject response = new LgTransaction<LgSurvey>(daSurvey.getPool()) {
 			public LgSurvey executeWithThrows() throws Exception {
 				List<LgSurvey> survey = daSurvey.findByName(newSurveyFromClient
 						.getName());
@@ -80,7 +82,7 @@ public class ReInviteService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject deleteUser(final LgSurvey surveyFromClient) {
 		final DaSurvey daSurvey = factory.getDaSurvey();
-		ReResponseObject response = new ReTransaction<LgSurvey>(daSurvey.getPool()) {
+		ReResponseObject response = new LgTransaction<LgSurvey>(daSurvey.getPool()) {
 			public LgSurvey executeWithThrows() throws Exception {
 
 				System.out.println(surveyFromClient);

@@ -16,6 +16,7 @@ import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.exceptions.LgNoUserWithThisNameException;
 import de.bht.comanche.exceptions.LgUserWithThisNameExistsException;
 import de.bht.comanche.exceptions.LgWrongPasswordException;
+import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
 
@@ -31,7 +32,7 @@ public class ReUserService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new ReTransaction<LgUser>(daUser.getPool()) {
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				List<LgUser> users = daUser.findByName(userFromClient.getName());
 				/*
@@ -69,7 +70,7 @@ public class ReUserService extends ReService {
 	@Produces({"application/json"})
 	public ReResponseObject<LgUser> getUser(final LgUser userFromClient){
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new ReTransaction<LgUser>(daUser.getPool()) {
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				LgUser lgUser = null;
 				try{
@@ -96,7 +97,7 @@ public class ReUserService extends ReService {
      @Produces({"application/json"})
      public ReResponseObject<LgUser> registerUser(final LgUser newUserFromClient){
     	 final DaUser daUser = factory.getDaUser();
-    	 ReResponseObject<LgUser> response = new ReTransaction<LgUser>(daUser.getPool()) {
+    	 ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
     		 public LgUser executeWithThrows() throws Exception {
     			 if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
     				 throw new LgUserWithThisNameExistsException();
@@ -117,7 +118,7 @@ public class ReUserService extends ReService {
      @Produces({"application/json"})
      public ReResponseObject<LgUser> deleteUser(final LgUser userFromClient){
     	final DaUser daUser = factory.getDaUser();
-  		ReResponseObject<LgUser> response = new ReTransaction<LgUser>(daUser.getPool()) {
+  		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
   				LgUser userFromDb = null;
   				try{
@@ -141,7 +142,7 @@ public class ReUserService extends ReService {
      @Produces({"application/json"})
      public ReResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
     	final DaUser daUser = factory.getDaUser();
-  		ReResponseObject<LgUser> response = new ReTransaction<LgUser>(daUser.getPool()) {
+  		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
   				try {
   					daUser.find(dirtyUser.getOid());

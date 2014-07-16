@@ -7,21 +7,21 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import de.bht.comanche.exceptions.DaException;
 import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
-import de.bht.comanche.exceptions.DaException;
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgSurvey;
-import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgSurveyDummyFactory;
+import de.bht.comanche.logic.LgTransactionWithList;
+import de.bht.comanche.logic.LgTransactionWithStackTrace;
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgUserDummyFactory;
-import de.bht.comanche.rest.ReLowLevelTransaction;
 import de.bht.comanche.rest.ReResponseObject;
-import de.bht.comanche.rest.ReTransactionWithList;
-import de.bht.comanche.rest.TransactionWithStackTrace;
+
 public class DaInviteTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -48,7 +48,7 @@ public class DaInviteTest {
 		daSurvey.setPool(pool);
 		daInvite.setPool(pool);
 		
-		boolean success = new ReLowLevelTransaction(THROW_STACKTRACE) {
+		boolean success = new LgLowLevelTransaction(THROW_STACKTRACE) {
 			public void executeWithThrows() throws Exception {
 				DaTestUtils persistenceUtils = new DaTestUtils(daUser.getPool());
 				persistenceUtils.initializeDb();
@@ -61,7 +61,7 @@ public class DaInviteTest {
 		LgUserDummyFactory userFactory = new LgUserDummyFactory();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
-		boolean success = new TransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 					daUser.save(alice);
 					daUser.save(bob);
@@ -85,10 +85,9 @@ public class DaInviteTest {
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
-	@Ignore
     @Test 
 	public void readSurveysTest() {
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				LgUser aliceFromDb = daUser.find(alice.getOid());
 				LgUser bobFromDb = daUser.find(bob.getOid());
@@ -107,7 +106,7 @@ public class DaInviteTest {
 	public void readSurveysTestWithOriginalObj() {
 		final LgUser userFromClient = alice;
 		final DaUser daUser0 = daFactory.getDaUser();
-	    ReResponseObject<LgInvite> response = new ReTransactionWithList<LgInvite>(daUser0.getPool()) {
+	    ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try{

@@ -10,11 +10,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.exceptions.DaException;
+import de.bht.comanche.logic.LgLowLevelTransaction;
+import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgUserDummyFactory;
-import de.bht.comanche.rest.ReLowLevelTransaction;
-import de.bht.comanche.rest.TransactionWithStackTrace;
-@Ignore
 public class DaUserTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -28,7 +27,7 @@ public class DaUserTest {
 	@BeforeClass public static void initializeDb() throws DaException {
 		daFactory = new DaFactoryJpaImpl();
 		daUser = daFactory.getDaUser();
-		boolean success = new ReLowLevelTransaction(THROW_STACKTRACE) {
+		boolean success = new LgLowLevelTransaction(THROW_STACKTRACE) {
 			public void executeWithThrows() throws Exception {
 				DaTestUtils persistenceUtils = new DaTestUtils(daUser.getPool());
 				persistenceUtils.initializeDb();
@@ -42,7 +41,7 @@ public class DaUserTest {
 		LgUserDummyFactory userFactory = new LgUserDummyFactory();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 					daUser.save(alice);
 					daUser.save(bob);
@@ -55,7 +54,7 @@ public class DaUserTest {
 	
 	@Test 
 	public void findByNameTest() {
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				LgUser aliceFromDb = daUser.findByName(alice.getName()).get(0);
 				LgUser bobFromDb = daUser.findByName(bob.getName()).get(0);
@@ -68,7 +67,7 @@ public class DaUserTest {
 	
 	@Test 
 	public void updateWithSeperateTransactionsTest() {
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				// Alice was persisted in other context during Setup
 				alice.setName("AliciaTeba");
@@ -84,7 +83,7 @@ public class DaUserTest {
 	
 	@Test 
 	public void updateModificationAfterMerge() {
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				// Alice was persisted in other context during Setup
 				alice.setName("AliciaTeba");
@@ -106,7 +105,7 @@ public class DaUserTest {
 	
 	@Test public void findByIdTest() {
 		final DaUser daUser = daFactory.getDaUser();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 			LgUser aliceFromDb = daUser.find(alice.getOid());
 			LgUser bobFromDb = daUser.find(bob.getOid());
@@ -130,7 +129,7 @@ public class DaUserTest {
 
 	@After public void tearDown() {
 		final DaUser daUser = daFactory.getDaUser();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				LgUser aliceFromDb = daUser.find(alice.getOid());
 				LgUser bobFromDb = daUser.find(bob.getOid());
