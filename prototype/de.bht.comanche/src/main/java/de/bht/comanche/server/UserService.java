@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 
 import org.jboss.logging.annotations.Param;
 
@@ -121,13 +123,10 @@ public class UserService extends Service {
  	}
      
    @Path("delete")
-//     @Path("delete{id}")
      @DELETE
-//   @POST
      @Consumes("application/json")
      @Produces({"application/json"})
      public ResponseObject deleteUser(final LgUser userFromClient){
-//     public ResponseObject deleteUser(@PathParam("oid") final long oid){
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
@@ -193,5 +192,14 @@ public class UserService extends Service {
       	 
       	 return response;
      }
+     
+     public static final String CLICHED_MESSAGE = "Hello World!";
+     
+     @Path("hello")
+     @GET
+     @Produces(MediaType.TEXT_HTML)
+         public String getHello() {
+             return CLICHED_MESSAGE;
+         }
 }
 

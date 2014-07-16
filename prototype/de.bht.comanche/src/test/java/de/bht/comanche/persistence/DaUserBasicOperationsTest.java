@@ -54,7 +54,7 @@ import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
-	@Test 
+//	@Test 
 	public void findByNameTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
@@ -69,7 +69,7 @@ import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 	
 	//TODO ( Missing assertion ) 
 	@Ignore
-	@Test
+//	@Test
 	public void addContactsTest(){
 		final DaUser daUser = daFactory.getDaUser();
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -82,7 +82,8 @@ import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
 	}
 	
-	@Test public void findByIdTest() {
+//	@Test 
+		public void findByIdTest() {
 		final DaUser daUser = daFactory.getDaUser();
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
@@ -106,7 +107,8 @@ import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 		assertEquals(userName + " > PASSWORD", user.getPassword(), userFromDb.getPassword());
 	}
 	
-	@After public void tearDown() {
+//	@After 
+	public void tearDown() {
 		final DaUser daUser = daFactory.getDaUser();
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
