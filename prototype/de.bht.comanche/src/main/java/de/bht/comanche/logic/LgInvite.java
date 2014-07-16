@@ -13,7 +13,7 @@ import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
 @Table(name = "Lg_Invite")
-public class LgInvite extends DbObject{
+public class LgInvite extends LgObject{
 	
 	private static final long serialVersionUID = 1L;
 	

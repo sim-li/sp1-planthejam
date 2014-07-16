@@ -1,11 +1,11 @@
 package de.bht.comanche.persistence;
 
-import de.bht.comanche.logic.DbObject;
-import de.bht.comanche.server.DaBase;
+import de.bht.comanche.logic.LgObject;
+import de.bht.comanche.rest.DaBase;
 
-public class DaBaseImpl extends DaGenericImpl<DbObject> implements DaBase {
+public class DaBaseImpl extends DaGenericImpl<LgObject> implements DaBase {
 
-	public DaBaseImpl(Pool<DbObject> pool) {
-		super(DbObject.class, pool);
+	public DaBaseImpl(DaPool<LgObject> pool) {
+		super(LgObject.class, pool);
 	}
 }

@@ -9,12 +9,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.bht.comanche.exceptions.DaException;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.exceptions.PersistenceException;
-import de.bht.comanche.testresources.logic.UserFactory;
-import de.bht.comanche.testresources.persistence.PersistenceUtils;
-import de.bht.comanche.testresources.server.LowLevelTransaction;
-import de.bht.comanche.testresources.server.TransactionWithStackTrace;
+import de.bht.comanche.logic.LgUserDummyFactory;
+import de.bht.comanche.rest.ReLowLevelTransaction;
+import de.bht.comanche.rest.TransactionWithStackTrace;
 @Ignore
 public class DaUserTest {
 	final String userName0 = "ALICE";
@@ -26,12 +25,12 @@ public class DaUserTest {
 	private LgUser alice;
 	private LgUser bob;
 	
-	@BeforeClass public static void initializeDb() throws PersistenceException {
-		daFactory = new JpaDaFactory();
+	@BeforeClass public static void initializeDb() throws DaException {
+		daFactory = new DaFactoryJpaImpl();
 		daUser = daFactory.getDaUser();
-		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
+		boolean success = new ReLowLevelTransaction(THROW_STACKTRACE) {
 			public void executeWithThrows() throws Exception {
-				PersistenceUtils persistenceUtils = new PersistenceUtils(daUser.getPool());
+				DaTestUtils persistenceUtils = new DaTestUtils(daUser.getPool());
 				persistenceUtils.initializeDb();
 			}
 		}.execute();
@@ -40,7 +39,7 @@ public class DaUserTest {
 	}
 	
 	@Before public void setUp() {
-		UserFactory userFactory = new UserFactory();
+		LgUserDummyFactory userFactory = new LgUserDummyFactory();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
@@ -140,7 +139,7 @@ public class DaUserTest {
 			}
 		}.execute();
 		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
-		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
+		DaTestUtils pu = new DaTestUtils(daUser.getPool());
 	}
 	
 }

@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "survey")
-public class LgSurvey extends DbObject {
+public class LgSurvey extends LgObject {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;
@@ -28,11 +28,11 @@ public class LgSurvey extends DbObject {
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	private SurveyType type;
+	private LgSurveyType type;
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	private TimeUnit frequencyTimeUnit;
+	private LgTimeUnit frequencyTimeUnit;
 	@OneToMany(mappedBy="invite_survey", cascade = CascadeType.ALL)
 	private List<LgInvite> invites;
 	
@@ -75,20 +75,20 @@ public class LgSurvey extends DbObject {
 		return this;
 	}
 
-	public SurveyType getType() {
+	public LgSurveyType getType() {
 		return type;
 	}
 
-	public LgSurvey setType(SurveyType type) {
+	public LgSurvey setType(LgSurveyType type) {
 		this.type = type;
 		return this;
 	}
 
-	public TimeUnit getFrequencyTimeUnit() {
+	public LgTimeUnit getFrequencyTimeUnit() {
 		return frequencyTimeUnit;
 	}
 
-	public LgSurvey setFrequencyTimeUnit(TimeUnit frequencyTimeUnit) {
+	public LgSurvey setFrequencyTimeUnit(LgTimeUnit frequencyTimeUnit) {
 		this.frequencyTimeUnit = frequencyTimeUnit;
 		return this;
 	}

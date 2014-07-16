@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "user")
-public class LgUser extends DbObject {
+public class LgUser extends LgObject {
 
 	private static final long serialVersionUID = 1L;
 

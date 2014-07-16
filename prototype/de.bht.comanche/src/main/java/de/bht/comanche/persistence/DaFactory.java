@@ -1,6 +1,6 @@
 package de.bht.comanche.persistence;
 
-import de.bht.comanche.server.DaBase;
+import de.bht.comanche.rest.DaBase;
 
 public interface DaFactory {
 	DaBase getDaBase();
