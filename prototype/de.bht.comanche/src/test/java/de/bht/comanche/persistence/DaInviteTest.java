@@ -107,12 +107,12 @@ public class DaInviteTest {
     @Test
 	public void readSurveysTestWithOriginalObj() {
 		final LgUser userFromClient = alice;
-		
-	    ResponseObject<LgInvite> response = new TransactionWithList<LgInvite>(pool) {
+		final DaUser daUser0 = daFactory.getDaUser();
+	    ResponseObject<LgInvite> response = new TransactionWithList<LgInvite>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try{
-					LgUser lgUser = daUser.find(alice.getOid());
+					LgUser lgUser = daUser0.find(alice.getOid());
 					invites = lgUser.getInvites();
 					assertEquals("[Original TRANS Pattern] Check Alices first invite (BY ID):", invite0.getOid(), invites.get(0).getOid());
 				} catch (OidNotFoundException oid) {
@@ -121,7 +121,8 @@ public class DaInviteTest {
 				return invites;
 			}
 		}.execute();
-		System.out.println(response.getData().toString());
+		System.out.println("YY>>>>>>>>>>" + response.getData().get(0).getUser().getName());
+		System.out.println("SUCCESS? RESPONSE CODE: " + response.getResponseCode());
 	}
 
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {

@@ -14,6 +14,7 @@ import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
+import de.bht.comanche.persistence.Pool;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
 import de.bht.comanche.server.exceptions.logic.SurveyWithThisNameExistsException;
 import de.bht.comanche.server.exceptions.persistence.NotFoundException;
@@ -30,13 +31,13 @@ public class InviteService extends Service {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public ResponseObject<LgInvite> getInvites(final LgUser userFromClient) {
-		final DaUser daUser = factory.getDaUser();
+		final DaUser daUser0 = factory.getDaUser();
 		ResponseObject<LgInvite> response = new TransactionWithList<LgInvite>(
-				daUser.getPool()) {
+				daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try {
-					LgUser lgUser = daUser.find(userFromClient.getOid());
+					LgUser lgUser = daUser0.find(userFromClient.getOid());
 					invites = lgUser.getInvites();
 				} catch (OidNotFoundException oid) {
 					throw new NoUserWithThisIdException();
