@@ -1,0 +1,92 @@
+
+-- DebianLinux-System zum Laufen bringen --
+
+    - Oracle VirtualBox installieren
+    - Maschine erzeugen
+        Maschine > Neu >
+        Linux, Debian64 auswaehlen
+        Speichergroeße passend festlegen
+        vorhandene Festplatte verwenden, PTJ.vdi im mitgelieferten Image auswaehlen
+        jetzt ist die Maschine erzeugt
+    -  In den globalen Einstellung von Virtualbox sicherstellen, dass unter Netzwerk
+    der HostOnlyAdapter vboxnet0 hinzugefuegt ist (+ Symbol, Defaults bestaetigen)
+    - Der Hostonly Adapter muss unter der Konfigurationd es eben hinzgefuegten Images 
+    unter Adapter 2 hinzugefuegt sein.
+    - Adapter 1 soll der NAT Adapter sein.
+    - In der folgenden Ausfuehrung wird die IP 192.168.56.102 als ReferenzIP angeben.
+    U.u. mappt Virtualbox die IP auch auf [..].101
+    - Das System ist nun Betriebsbereit
+
+----------------
+
+-- Linux-Login fuer das Projekt --
+
+username:   ptj
+pass:       ptj
+
+Das Projektverzeichnis mit vorkonfiguriertem GIT + Maven Projekt befindet sich unter
+/home/ptj/sp1-plan-the-jam/prototype/de.bht.comanche
+
+--------------
+
+-- Build-Prozess --
+
+mvn package 
+im Projektverzeichnis.
+
+
+---------------
+-- Applikation ausfuehren -- 
+
+Server starten:
+
+mvn jetty:run
+
+Der Zugriff auf die Applikation ist im lokalen Browser (Hostsystem) mit Hilfe der IP
+    192.168.56.102:8080
+und im Image (Gastsystem) unter
+    localhost:8080
+moeglich.
+
+ 
+--------------
+
+-- Fernzugriff --
+
+ssh ptj@192.168.56.102
+pass: ptj 
+
+--------------
+
+-- Eclipse-IDE anbinden --
+
+- lokal Eclipse Enterprise Edition installieren
+- sshfs installieren
+    - fuer Windows muss zuvor die Dokan-Library installiert werden -> DokanInstall_0.6.0.exe
+    - Daten fuer die sshfs-Installation:
+        - beliebigen Drive-Namen vergeben
+        - Host: 192.168.56.102
+        - Port: 22
+        - Username: ptj
+        - Pass: ptj
+        - Directory: /home/ptj
+- Drive mounten
+- in Eclipse Maven-Projekt vom gemounteten Drive importieren
+
+--------------
+
+-- Postgres-Datenbank mit pgAdmin-III anzeigen --
+
+- pgAdmin ist im Image vorinstalliert. Nach einloggen mit User PTJ unter
+Anwendungen/Entwicklung zu finden.
+
+- Vom Host-System & lokal installiertem Client mit VirtualBox-IP statt localhost ansprechbar.
+
+- Login-Daten (Gastsystem):
+    Name:           <name>
+    Host:           'localhost'
+    Port:           '5432'
+    Service:        ''
+    Wartungs-DB:    'ptjdb'
+    Benutzername:   'postgres'
+    Passwort:       'postgres'
