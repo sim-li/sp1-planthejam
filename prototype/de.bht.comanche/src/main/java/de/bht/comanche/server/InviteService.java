@@ -19,9 +19,8 @@ import de.bht.comanche.server.exceptions.logic.SurveyWithThisNameExistsException
 import de.bht.comanche.server.exceptions.persistence.NotFoundException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
-
 @Path("/invite/")
-public class InviteService extends Service{
+public class InviteService extends Service {
 	public InviteService() {
 		super();
 	}
@@ -29,20 +28,20 @@ public class InviteService extends Service{
 	@POST
 	@Path("getInvites")
 	@Consumes("application/json")
-	@Produces({"application/json"})
-	public ResponseObject<LgInvite> getInvites(final LgUser userFromClient){
+	@Produces({ "application/json" })
+	public ResponseObject<LgInvite> getInvites(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ResponseObject<LgInvite> response = new Transaction<LgInvite>(daUser.getPool()) {
-			public LgInvite executeWithThrows() throws Exception {
+		ResponseObject<LgInvite> response = new TransactionWithList<LgInvite>(
+				daUser.getPool()) {
+			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
-				try{
+				try {
 					LgUser lgUser = daUser.find(userFromClient.getOid());
-					addAllToResponse(lgUser.getInvites());
-					
+					invites = lgUser.getInvites();
 				} catch (OidNotFoundException oid) {
 					throw new NoUserWithThisIdException();
 				}
-				return null;
+				return invites;
 			}
 		}.execute();
 		if (response.hasError()) {
@@ -50,56 +49,58 @@ public class InviteService extends Service{
 		}
 		return response;
 	}
-	
+
 	@Path("save")
-    @POST
-    @Consumes("application/json")
-    @Produces({"application/json"})
-    public ResponseObject saveSurvey(final LgSurvey newSurveyFromClient){
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public ResponseObject saveSurvey(final LgSurvey newSurveyFromClient) {
 		final DaSurvey daSurvey = factory.getDaSurvey();
 		ResponseObject response = new Transaction<LgSurvey>(daSurvey.getPool()) {
- 			public LgSurvey executeWithThrows() throws Exception {
- 				List<LgSurvey> survey = daSurvey.findByName(newSurveyFromClient.getName());
- 				if (!survey.isEmpty()) {
+			public LgSurvey executeWithThrows() throws Exception {
+				List<LgSurvey> survey = daSurvey.findByName(newSurveyFromClient
+						.getName());
+				if (!survey.isEmpty()) {
 					throw new SurveyWithThisNameExistsException();
 				}
- 	    			daSurvey.save(newSurveyFromClient);
-    			return newSurveyFromClient;
+				daSurvey.save(newSurveyFromClient);
+				return newSurveyFromClient;
 			}
-   	 }.execute();
-   	 if (response.hasError()) {
-  			throw new WebApplicationException(response.getResponseCode());
-  		}
-     	 return response;
-    }
-	
+		}.execute();
+		if (response.hasError()) {
+			throw new WebApplicationException(response.getResponseCode());
+		}
+		return response;
+	}
+
 	@Path("delete")
-    @DELETE
-    @Consumes("application/json")
-    @Produces({"application/json"})
-    public ResponseObject deleteUser(final LgSurvey surveyFromClient){
-   	final DaSurvey daSurvey = factory.getDaSurvey();
- 		ResponseObject response = new Transaction<LgSurvey>(daSurvey.getPool()) {
- 			public LgSurvey executeWithThrows() throws Exception {
- 				
- 				System.out.println(surveyFromClient);
- 				
- 				LgSurvey surveyFromDb = null;
- 				try{
-					surveyFromDb = (LgSurvey) daSurvey.findByName(surveyFromClient.getName());
- 				} catch (NotFoundException exc) {
- 					//throw new NoSurveyWithThisNameException();
- 				}
- 				daSurvey.delete(surveyFromDb);
-   			return null;
-   		 }
-   	 }.execute();
-   	 
-   	 if (response.hasError()) {
- 			throw new WebApplicationException(response.getResponseCode());
- 		}
-    	 
-    	 return response;
-	} 
-	
+	@DELETE
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public ResponseObject deleteUser(final LgSurvey surveyFromClient) {
+		final DaSurvey daSurvey = factory.getDaSurvey();
+		ResponseObject response = new Transaction<LgSurvey>(daSurvey.getPool()) {
+			public LgSurvey executeWithThrows() throws Exception {
+
+				System.out.println(surveyFromClient);
+
+				LgSurvey surveyFromDb = null;
+				try {
+					surveyFromDb = (LgSurvey) daSurvey
+							.findByName(surveyFromClient.getName());
+				} catch (NotFoundException exc) {
+					// throw new NoSurveyWithThisNameException();
+				}
+				daSurvey.delete(surveyFromDb);
+				return null;
+			}
+		}.execute();
+
+		if (response.hasError()) {
+			throw new WebApplicationException(response.getResponseCode());
+		}
+
+		return response;
+	}
+
 }
