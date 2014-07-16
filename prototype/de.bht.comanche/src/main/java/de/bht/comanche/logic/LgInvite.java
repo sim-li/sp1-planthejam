@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -13,7 +14,7 @@ import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
 @Table(name = "Lg_Invite")
-public class LgInvite extends DbObject{
+public class LgInvite extends LgObject{
 	
 	private static final long serialVersionUID = 1L;
 	

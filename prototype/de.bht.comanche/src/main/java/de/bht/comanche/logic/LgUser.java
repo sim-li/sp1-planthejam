@@ -3,6 +3,7 @@ package de.bht.comanche.logic;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -11,11 +12,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "user")
-public class LgUser extends DbObject {
+public class LgUser extends LgObject {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ public class LgUser extends DbObject {
 	private List<LgUser> isContacts;
 
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<LgInvite> invites;
 
@@ -222,7 +222,11 @@ public class LgUser extends DbObject {
 			return false;
 		return true;
 	}
-
+	
+	public void setIdFrom(LgUser other) {
+		this.setOid(other.getOid());
+	}
+	
 	@Override
 	public String toString() {
 		return "LgUser [name=" + name + ", tel=" + tel + ", email=" + email

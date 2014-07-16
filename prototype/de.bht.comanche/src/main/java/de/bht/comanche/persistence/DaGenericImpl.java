@@ -8,19 +8,19 @@ import javassist.NotFoundException;
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
+import de.bht.comanche.exceptions.DaArgumentCountException;
+import de.bht.comanche.exceptions.DaArgumentTypeException;
+import de.bht.comanche.exceptions.DaNoPersistentClassException;
+import de.bht.comanche.exceptions.DaNoQueryClassException;
+import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.exceptions.persistence.ArgumentCountException;
-import de.bht.comanche.server.exceptions.persistence.ArgumentTypeException;
-import de.bht.comanche.server.exceptions.persistence.NoPersistentClassException;
-import de.bht.comanche.server.exceptions.persistence.NoQueryClassException;
-import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
 	private Class<E> type;
-	private Pool<E> pool;
+	private DaPool<E> pool;
 	
-	public DaGenericImpl(Class<E> type, Pool<E> pool) {
+	public DaGenericImpl(Class<E> type, DaPool<E> pool) {
 		this.type = type;
 		this.pool = pool;
 	}
@@ -36,17 +36,17 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public E find(long id) throws NotFoundException, NoPersistentClassException, OidNotFoundException {
+	public E find(long id) throws NotFoundException, DaNoPersistentClassException, DaOidNotFoundException {
 		return pool.find(type, id);
 	}
 
 	@Override
-	public List<E> findAll() throws NoPersistentClassException {
+	public List<E> findAll() throws DaNoPersistentClassException {
 		return pool.findAll(type);
 	}
 
 	@Override
-	public List<E> findByField(String fieldName, Object fieldValue) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException { 
+	public List<E> findByField(String fieldName, Object fieldValue) throws DaNoPersistentClassException, DaNoQueryClassException, DaArgumentCountException, DaArgumentTypeException { 
 		final String OBJECT_NAME = type.getSimpleName();
 		String [] args = {
 				fieldName,
@@ -66,11 +66,11 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 		pool.endTransaction(success);
 	}
 	
-	public Pool<E> getPool() {
+	public DaPool getPool() {
 		return this.pool;
 	}
 	
-	public void setPool(Pool pool) {
+	public void setPool(DaPool pool) {
 		this.pool = pool;
 	}
 

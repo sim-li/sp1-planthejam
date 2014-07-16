@@ -7,22 +7,21 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import de.bht.comanche.exceptions.DaException;
+import de.bht.comanche.exceptions.DaOidNotFoundException;
+import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgSurveyDummyFactory;
+import de.bht.comanche.logic.LgTransactionWithList;
+import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.server.ResponseObject;
-import de.bht.comanche.server.TransactionWithList;
-import de.bht.comanche.server.exceptions.PersistenceException;
-import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
-import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
-import de.bht.comanche.testresources.logic.SurveyFactory;
-import de.bht.comanche.testresources.logic.UserFactory;
-import de.bht.comanche.testresources.persistence.PersistenceUtils;
-import de.bht.comanche.testresources.server.LowLevelTransaction;
-import de.bht.comanche.testresources.server.TransactionWithStackTrace;
+import de.bht.comanche.logic.LgUserDummyFactory;
+import de.bht.comanche.rest.ReResponseObject;
+
 public class DaInviteTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -37,10 +36,10 @@ public class DaInviteTest {
 	private LgSurvey survey0;
 	private LgInvite invite0;
 	private LgInvite invite1;
-	private static Pool pool;
+	private static DaPool pool;
 	
-	@BeforeClass public static void initializeDb() throws PersistenceException {
-		daFactory = new JpaDaFactory();
+	@BeforeClass public static void initializeDb() throws DaException {
+		daFactory = new DaFactoryJpaImpl();
 		daUser = daFactory.getDaUser();
 		daSurvey = daFactory.getDaSurvey();
 		daInvite = daFactory.getDaInvite();
@@ -49,9 +48,9 @@ public class DaInviteTest {
 		daSurvey.setPool(pool);
 		daInvite.setPool(pool);
 		
-		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
+		boolean success = new LgLowLevelTransaction(THROW_STACKTRACE) {
 			public void executeWithThrows() throws Exception {
-				PersistenceUtils persistenceUtils = new PersistenceUtils(daUser.getPool());
+				DaTestUtils persistenceUtils = new DaTestUtils(daUser.getPool());
 				persistenceUtils.initializeDb();
 			}
 		}.execute();
@@ -59,14 +58,14 @@ public class DaInviteTest {
 	}
 	
 	@Before public void setUp() {
-		UserFactory userFactory = new UserFactory();
+		LgUserDummyFactory userFactory = new LgUserDummyFactory();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
-		boolean success = new TransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 					daUser.save(alice);
 					daUser.save(bob);
-					SurveyFactory surveyFactory = new SurveyFactory();
+					LgSurveyDummyFactory surveyFactory = new LgSurveyDummyFactory();
 					survey0 = surveyFactory.getSurvey0();
 					invite0 = new LgInvite();
 					invite1 = new LgInvite();
@@ -86,10 +85,9 @@ public class DaInviteTest {
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
-	@Ignore
     @Test 
 	public void readSurveysTest() {
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
+		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 				LgUser aliceFromDb = daUser.find(alice.getOid());
 				LgUser bobFromDb = daUser.find(bob.getOid());
@@ -107,21 +105,22 @@ public class DaInviteTest {
     @Test
 	public void readSurveysTestWithOriginalObj() {
 		final LgUser userFromClient = alice;
-		
-	    ResponseObject<LgInvite> response = new TransactionWithList<LgInvite>(pool) {
+		final DaUser daUser0 = daFactory.getDaUser();
+	    ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try{
-					LgUser lgUser = daUser.find(alice.getOid());
+					LgUser lgUser = daUser0.find(alice.getOid());
 					invites = lgUser.getInvites();
 					assertEquals("[Original TRANS Pattern] Check Alices first invite (BY ID):", invite0.getOid(), invites.get(0).getOid());
-				} catch (OidNotFoundException oid) {
-					throw new NoUserWithThisIdException();
+				} catch (DaOidNotFoundException oid) {
+					throw new LgNoUserWithThisIdException();
 				}
 				return invites;
 			}
 		}.execute();
-		System.out.println(response.getData().toString());
+		System.out.println("YY>>>>>>>>>>" + response.getData().get(0).getUser().getName());
+		System.out.println("SUCCESS? RESPONSE CODE: " + response.getResponseCode());
 	}
 
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {
