@@ -11,7 +11,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "user")
@@ -222,7 +221,11 @@ public class LgUser extends LgObject {
 			return false;
 		return true;
 	}
-
+	
+	public void setIdFrom(LgUser other) {
+		this.setOid(other.getOid());
+	}
+	
 	@Override
 	public String toString() {
 		return "LgUser [name=" + name + ", tel=" + tel + ", email=" + email

@@ -23,16 +23,5 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 	@Override
 	public List<LgUser> findByName(String name) throws DaNoPersistentClassException, DaNoQueryClassException, DaArgumentCountException, DaArgumentTypeException {
 		return findByField("name", name);
-
 	}
-	public LgUser getDummy() {
-		LgUser user = new LgUser();
-		user.setOid(123456789);
-		user.setName("Tom Sawyer");
-		user.setPassword("letmeinplease");
-		user.setEmail("tom@sawyer.com");
-		user.setTel("00123456");
-		return user;
-	}
-
 }

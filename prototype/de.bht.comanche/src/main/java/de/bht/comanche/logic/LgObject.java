@@ -15,13 +15,16 @@ public abstract class LgObject implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
-	private long oid; // FIXME ("public" for testing) Alert: Change to private immediately
+	private long oid; 
 
 	public long getOid() {
 		return oid;
 	}
 	
-
+	protected void setOid(long oid) {
+		this.oid = oid;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

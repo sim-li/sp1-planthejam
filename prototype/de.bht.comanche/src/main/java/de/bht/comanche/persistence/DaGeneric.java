@@ -25,7 +25,7 @@ public interface DaGeneric<E> {
     E find(long id) throws NotFoundException, DaNoPersistentClassException, DaOidNotFoundException;
     List<E> findAll() throws DaNoPersistentClassException ;
     List<E> findByField(String fieldName, Object fieldValue)  throws DaNoPersistentClassException, DaNoQueryClassException, DaArgumentCountException, DaArgumentTypeException;
-    DaPool<E> getPool();
+    DaPool getPool();
     void setPool(DaPool pool);
     E update(E io_object) throws TransactionRequiredException, IllegalArgumentException;
 }

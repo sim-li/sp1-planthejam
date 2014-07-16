@@ -21,8 +21,7 @@ public interface DaUser {
     List <LgUser> findByName(String name) throws DaNoPersistentClassException, DaNoQueryClassException, DaArgumentCountException, DaArgumentTypeException;
     void beginTransaction();
     void endTransaction(boolean success);
-    public LgUser getDummy(); // for testing
-    public DaPool getPool(); // Later overwritten by DaGenericImpl
+    public DaPool getPool();
     public void setPool(DaPool pool); 
     LgUser update(LgUser user) throws TransactionRequiredException, IllegalArgumentException;
 }
