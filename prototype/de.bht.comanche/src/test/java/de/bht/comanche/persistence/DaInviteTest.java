@@ -6,10 +6,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import antlr.collections.List;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
@@ -28,17 +26,23 @@ public class DaInviteTest {
 	private static DaUser daUser;
 	private static DaSurvey daSurvey;
 	private static DaFactory daFactory;
+	private static DaInvite daInvite;
 	private LgUser alice;
 	private LgUser bob;
 	private LgSurvey survey0;
 	private LgInvite invite0;
 	private LgInvite invite1;
+	private static Pool pool;
 	
 	@BeforeClass public static void initializeDb() throws PersistenceException {
 		daFactory = new JpaDaFactory();
-		daSurvey = daFactory.getDaSurvey();
 		daUser = daFactory.getDaUser();
-		daUser.setPool(daSurvey.getPool());
+		daSurvey = daFactory.getDaSurvey();
+		daInvite = daFactory.getDaInvite();
+		pool = daUser.getPool();
+		daUser.setPool(pool);
+		daSurvey.setPool(pool);
+		daInvite.setPool(pool);
 		
 		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
 			public void executeWithThrows() throws Exception {
@@ -53,7 +57,7 @@ public class DaInviteTest {
 		UserFactory userFactory = new UserFactory();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 					daUser.save(alice);
 					daUser.save(bob);
@@ -68,8 +72,8 @@ public class DaInviteTest {
 					invite0.setSurvey(survey0);
 					invite1.setSurvey(survey0);
 					daSurvey.save(survey0);
-					daSurvey.getPool().save(invite1);
-					daSurvey.getPool().save(invite0);
+					daInvite.save(invite1);
+					daInvite.save(invite0);
 					daUser.save(alice);
 					daUser.save(bob);
 			}
@@ -103,9 +107,10 @@ public class DaInviteTest {
 	}
 	
 	
+// TODO DELETE WITH FULL CONSTRAINS.
 //	@After public void tearDown() {
 //		final DaUser daUser = daFactory.getDaUser();
-//		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
+//		boolean success = new TransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
 //			public void executeWithThrows() throws Exception {
 //				LgUser aliceFromDb = daUser.find(alice.getOid());
 //				LgUser bobFromDb = daUser.find(bob.getOid());
@@ -116,5 +121,5 @@ public class DaInviteTest {
 //		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
 //		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
 //	}
-//	
+	
 }

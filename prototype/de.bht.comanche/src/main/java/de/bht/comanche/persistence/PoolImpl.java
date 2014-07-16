@@ -67,8 +67,7 @@ public class PoolImpl<E> implements Pool<E> {
 
 	@Override
 	public E find(Class<E> i_persistentClass, Long i_oid) throws NoPersistentClassException, OidNotFoundException {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		E result = entityManager.find(i_persistentClass, i_oid);
+		E result = em.find(i_persistentClass, i_oid);
 		return result;
 	}
 
