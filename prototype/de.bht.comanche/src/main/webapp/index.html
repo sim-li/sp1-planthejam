@@ -40,12 +40,13 @@
     
     <script src="js/ctrl.js"></script>
     <script src="js/constants.js"></script>
+    <script src="js/invite.js"></script>
     <script src="js/survey.js"></script>
     <script src="js/datePickerDate.js"></script>
     <script src="js/restService.js"></script>
     
 </head>
-<body ng-app="myApp" ng-controller="Ctrl" ng-keydown="discardWarnings()">
+<body ng-app="myApp" ng-controller="ctrl" ng-keydown="discardWarnings()">
     
     <!-- display errors here -->
     <pre id="error">{{ warnings.central }}</pre>
@@ -57,7 +58,7 @@
     </pre>
 
 
-    <div id="login_area" ng-hide="session.state.isLoggedIn" class="input_area">
+    <div id="login_area" ng-controller="loginCtrl" ng-hide="session.state.isLoggedIn" class="input_area">
 
         <form name="loginForm" ng-show="session.state.is(dialogMap.USER_LOGIN)" ng-submit="login()" class="my_form">
             <div class="full_width_input">

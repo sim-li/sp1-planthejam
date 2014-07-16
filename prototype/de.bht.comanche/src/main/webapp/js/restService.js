@@ -8,9 +8,9 @@
 
 "use strict";
 
-angular.module("restModule", ["datePickerDate", "constants", "survey"])
-    .factory("restService", ["$http", "$q", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", 
-        function($http, $q, $log, $filter, DatePickerDate, TimeUnit, Type, Survey) {
+angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"])
+    .factory("restService", ["$http", "$q", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", "Invite", 
+        function($http, $q, $log, $filter, DatePickerDate, TimeUnit, Type, Survey, Invite) {
 
 
         // TODO refactor User, ...
@@ -243,6 +243,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 $log.debug(data);
                 deferred.resolve(data);
                 
+
+                // KONVERTIERUNG
+                // var _invites = ...;
+                // _invites = Invite.forInvitesConvertDatesToDatePickerDate(_invites);
 
 
                 // var _user = data.data[0];

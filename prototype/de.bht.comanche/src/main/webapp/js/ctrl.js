@@ -9,8 +9,15 @@
 "use strict";
 
 angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
-    .controller("Ctrl", ["$scope", "$log", "$filter", "DatePickerDate", "Survey", "TimeUnit", "Type", "patterns", "restService", 
-        function($scope, $log, $filter, DatePickerDate, Survey, TimeUnit, Type, patterns, restService) {
+    .constant("dialogMap", {
+        USER_LOGIN: 0, 
+        USER_REGISTER: 1, 
+        USER_EDIT: 2, 
+        SURVEY_SELECTION: 3,
+        SURVEY_EDIT: 4
+    })
+    .controller("ctrl", ["$scope", "$log", "$filter", "DatePickerDate", "Survey", "TimeUnit", "Type", "patterns", "restService", "dialogMap", 
+        function($scope, $log, $filter, DatePickerDate, Survey, TimeUnit, Type, patterns, restService, dialogMap) {
 
         // make services available for the use in html
         $scope.$log = $log;
@@ -20,14 +27,6 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         
         $scope.session = {};
         $scope.warnings = {};
-
-        var dialogMap = {
-             USER_LOGIN: 0, 
-             USER_REGISTER: 1, 
-             USER_EDIT: 2, 
-             SURVEY_SELECTION: 3,
-             SURVEY_EDIT: 4
-        };
         $scope.dialogMap = dialogMap;
 
         /*
@@ -75,102 +74,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
 
 
-        var loginIsValidFor = function(user) {
-            if (!user.name) {
-                $log.log("Benutzername fehlt.");
-                return false;
-            }
-            if (!user.password) {
-                $log.log("Passwort fehlt.");
-                return false;
-            }
-            if (!$scope.patterns.password.test(user.password)) {
-                $scope.warnings.password = "Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!";
-                $log.log($scope.warnings.password);
-                return false;
-            }
-            return true;
-        };
-
-        var registerIsValidFor = function(user) {
-            if (!loginIsValidFor(user)) {
-                return false;
-            }
-            // if (!user.email || !$scope.patterns.email.test(user.email)) {
-            if (!$scope.patterns.email.test(user.email)) {
-                $scope.warnings.email = "Bitte gib eine gueltige E-Mail-Adresse ein!";
-                $log.log($scope.warnings.email);
-                return false;
-            }
-            // if (!user.tel || !$scope.patterns.tel.test(user.tel)) {
-            if (!$scope.patterns.tel.test(user.tel)) {
-                $scope.warnings.tel = "Bitte gib eine gueltige Telefonnummer ein!";
-                $log.log($scope.warnings.tel);
-                return false;
-            }
-            return true;
-        };
         
-
-        $scope.login = function() {
-            var _user = $scope.session.user;
-            if (!loginIsValidFor(_user)) {
-                $log.log("Login ungueltig.");
-                return;
-            }
-            restService.login(_user)
-                .then(function(user) {
-                    $scope.session.user = user;
-                    $scope.session.state.isLoggedIn = true;
-                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
-                    $log.log("Login erfolgreich.");
-                    $log.log($scope.session);
-
-
-                    restService.getInvites(user.oid)
-                        .then(function(success) {
-                            $log.debug(success);
-                        }, function(error) {
-                            $log.error(error);
-                            $scope.warnings.central = error;
-                            
-
-                        }, function(notification) {
-                            // $log.log(notification); // for future use
-                        });
-
-
-                }, function(error) {
-                    $log.error(error);
-                    $scope.warnings.central = error;
-                    initSession();
-                }, function(notification) {
-                    // $log.log(notification); // for future use
-                });
-        };
-
-        $scope.register = function() {
-            var _user = $scope.session.user;
-            if (!registerIsValidFor(_user)) {
-                $log.log("Registrierung ungueltig.");
-                return;
-            }
-            restService.register(_user)
-                .then(function(user) {
-                    $scope.session.user = user;
-                    $scope.session.state.isLoggedIn = true;
-                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
-                    $log.log("Registrierung erfolgreich.");
-                    $log.log("Login erfolgreich.");
-                    $log.log($scope.session);
-                }, function(error) {
-                    $log.error(error);
-                    $scope.warnings.central = error;
-                    initSession();
-                }, function(notification) {
-                    // $log.log(notification); // for future use
-                });
-        };
 
         $scope.logout = function() {
 
@@ -364,5 +268,114 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             $scope.session.tempSurvey.possibleTimeperiods.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
         };
 
+
+    }]).controller("loginCtrl", ["$scope", "$log", "$filter", "DatePickerDate", "Survey", "TimeUnit", "Type", "patterns", "restService", "dialogMap", 
+        function($scope, $log, $filter, DatePickerDate, Survey, TimeUnit, Type, patterns, restService, dialogMap) {
+
+        $scope.dialogMap = dialogMap;
+
+
+
+        var loginIsValidFor = function(user) {
+            if (!user.name) {
+                $log.log("Benutzername fehlt.");
+                return false;
+            }
+            if (!user.password) {
+                $log.log("Passwort fehlt.");
+                return false;
+            }
+            if (!$scope.patterns.password.test(user.password)) {
+                $scope.warnings.password = "Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!";
+                $log.log($scope.warnings.password);
+                return false;
+            }
+            return true;
+        };
+
+        var registerIsValidFor = function(user) {
+            if (!loginIsValidFor(user)) {
+                return false;
+            }
+            // if (!user.email || !$scope.patterns.email.test(user.email)) {
+            if (!$scope.patterns.email.test(user.email)) {
+                $scope.warnings.email = "Bitte gib eine gueltige E-Mail-Adresse ein!";
+                $log.log($scope.warnings.email);
+                return false;
+            }
+            // if (!user.tel || !$scope.patterns.tel.test(user.tel)) {
+            if (!$scope.patterns.tel.test(user.tel)) {
+                $scope.warnings.tel = "Bitte gib eine gueltige Telefonnummer ein!";
+                $log.log($scope.warnings.tel);
+                return false;
+            }
+            return true;
+        };
+        
+
+        $scope.login = function() {
+            var _user = $scope.session.user;
+            if (!loginIsValidFor(_user)) {
+                $log.log("Login ungueltig.");
+                return;
+            }
+            restService.login(_user)
+                .then(function(user) {
+                    $scope.session.user = user;
+                    $scope.session.state.isLoggedIn = true;
+                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
+                    $log.log("Login erfolgreich.");
+                    $log.log($scope.session);
+
+
+                    restService.getInvites(user.oid)
+                        .then(function(success) {
+                            $log.debug(success);
+                        }, function(error) {
+                            $log.error(error);
+                            $scope.warnings.central = error;
+                            
+
+                        }, function(notification) {
+                            // $log.log(notification); // for future use
+                        });
+
+
+                }, function(error) {
+                    $log.error(error);
+                    $scope.warnings.central = error;
+                    initSession();
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
+        };
+
+        $scope.register = function() {
+            var _user = $scope.session.user;
+            if (!registerIsValidFor(_user)) {
+                $log.log("Registrierung ungueltig.");
+                return;
+            }
+            restService.register(_user)
+                .then(function(user) {
+                    $scope.session.user = user;
+                    $scope.session.state.isLoggedIn = true;
+                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
+                    $log.log("Registrierung erfolgreich.");
+                    $log.log("Login erfolgreich.");
+                    $log.log($scope.session);
+                }, function(error) {
+                    $log.error(error);
+                    $scope.warnings.central = error;
+                    initSession();
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
+        };        
+
+    }]).controller("loggedInCtrl", ["$scope", "$log", "$filter", "DatePickerDate", "Survey", "TimeUnit", "Type", "patterns", "restService", "dialogMap", 
+        function($scope, $log, $filter, DatePickerDate, Survey, TimeUnit, Type, patterns, restService, dialogMap) {
+
+            //...
     }]);
 
