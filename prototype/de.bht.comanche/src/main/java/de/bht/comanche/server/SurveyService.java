@@ -35,7 +35,7 @@ public class SurveyService extends Service{
 					LgUser lgUser = daUser.find(userFromClient.getOid());
 					addAllToResponse(lgUser.getInvites());
 					
-				} catch (OidNotFoundException oid){
+				} catch (OidNotFoundException oid) {
 					throw new NoUserWithThisIdException();
 				}
 				return null;

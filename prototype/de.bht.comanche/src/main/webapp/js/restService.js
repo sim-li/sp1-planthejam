@@ -17,7 +17,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
 
         var USER_PATH = "rest/user/";
-        var SURVEY_PATH = "rest/sruvey/";
+        var SURVEY_PATH = "rest/survey/";
 
         var SUCCESS = "SUCCESS ----------------------------------------------------------", 
             ERROR   = "ERROR ------------------------------------------------------------", 
