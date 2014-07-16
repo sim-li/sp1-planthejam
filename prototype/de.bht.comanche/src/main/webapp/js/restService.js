@@ -17,7 +17,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
 
         var USER_PATH = "rest/user/";
-        var SURVEY_PATH = "rest/survey/";
+        var INVITE_PATH = "rest/invite/";
+        var SURVEY_PATH = "rest/survey/"; // ???????????????? not used??
 
         var SUCCESS = "SUCCESS ----------------------------------------------------------", 
             ERROR   = "ERROR ------------------------------------------------------------", 
@@ -151,7 +152,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 deferred.resolve(_user);
             })
             .error(function(data, status, header, config) {
-                $log.debug(config);
                 deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
             });
             return deferred.promise;
@@ -231,6 +231,48 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             return deferred.promise;
         };
 
+
+        var getInvites = function(oid) { //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            $log.log("REST getInvites");
+            var deferred = $q.defer();
+            $http({ 
+                method: "POST", 
+                url: INVITE_PATH + "getInvites", 
+                data: { "oid": oid }
+            }).success(function(data, status, header, config) {
+                $log.debug(data);
+                deferred.resolve(data);
+                
+
+
+                // var _user = data.data[0];
+                
+
+
+                // TODO extract invites/surveys from user ********************************** 
+                // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
+                // var _surveys =  _user.surveys || [];
+                // for (var i = 0; i < _surveys.length; i++) {
+                //     _surveys.push(new Survey(_user.surveys[i]));
+                // }
+                // _user.surveys = Survey.forSurveysConvertDatesToDatePickerDate(_surveys);
+                
+                // deferred.resolve(_user);
+            }).error(function(data, status, header, config) {
+                
+                // ----DEBUGGING -------- ******************
+                $log.debug(data);
+                $log.debug(status);
+                $log.debug(header);
+                $log.debug(config);
+                // ----DEBUGGING -------- ******************
+                
+                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
+            });
+            return deferred.promise;
+        };
+
+
         /*
          * Update or insert a survey.
          * - @param survey optional. If not specified, a new survey will be created on the server and inserted into the database.
@@ -305,6 +347,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             register: register, 
             deleteUser: deleteUser, 
             updateUser: updateUser, 
+            getInvites: getInvites, 
             saveSurvey: saveSurvey, 
             deleteSurvey: deleteSurvey
         };

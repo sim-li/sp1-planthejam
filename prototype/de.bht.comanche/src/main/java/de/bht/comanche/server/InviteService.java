@@ -20,7 +20,7 @@ import de.bht.comanche.server.exceptions.persistence.NotFoundException;
 import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 
-@Path("/survey/")
+@Path("/invite/")
 public class InviteService extends Service{
 	public InviteService() {
 		super();
