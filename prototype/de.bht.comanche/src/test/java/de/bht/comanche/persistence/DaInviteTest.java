@@ -32,15 +32,17 @@ public class DaInviteTest {
 	private LgSurvey survey0;
 	private LgInvite invite0;
 	private LgInvite invite1;
+	private static Pool pool;
 	
 	@BeforeClass public static void initializeDb() throws PersistenceException {
 		daFactory = new JpaDaFactory();
+		daUser = daFactory.getDaUser();
 		daSurvey = daFactory.getDaSurvey();
 		daInvite = daFactory.getDaInvite();
-		daUser = daFactory.getDaUser();
-		daUser.setPool(daSurvey.getPool());
-		daSurvey.setPool(daUser.getPool());
-		daInvite.setPool(daUser.getPool());
+		pool = daUser.getPool();
+		daUser.setPool(pool);
+		daSurvey.setPool(pool);
+		daInvite.setPool(pool);
 		
 		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
 			public void executeWithThrows() throws Exception {
@@ -55,7 +57,7 @@ public class DaInviteTest {
 		UserFactory userFactory = new UserFactory();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
+		boolean success = new TransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
 					daUser.save(alice);
 					daUser.save(bob);
@@ -105,18 +107,19 @@ public class DaInviteTest {
 	}
 	
 	
-	@After public void tearDown() {
-		final DaUser daUser = daFactory.getDaUser();
-		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
-			public void executeWithThrows() throws Exception {
-				LgUser aliceFromDb = daUser.find(alice.getOid());
-				LgUser bobFromDb = daUser.find(bob.getOid());
-				daUser.delete(aliceFromDb);
-				daUser.delete(bobFromDb);
-			}
-		}.execute();
-		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
-		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
-	}
+// TODO DELETE WITH FULL CONSTRAINS.
+//	@After public void tearDown() {
+//		final DaUser daUser = daFactory.getDaUser();
+//		boolean success = new TransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
+//			public void executeWithThrows() throws Exception {
+//				LgUser aliceFromDb = daUser.find(alice.getOid());
+//				LgUser bobFromDb = daUser.find(bob.getOid());
+//				daUser.delete(aliceFromDb);
+//				daUser.delete(bobFromDb);
+//			}
+//		}.execute();
+//		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
+//		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
+//	}
 	
 }

@@ -2,10 +2,10 @@ package de.bht.comanche.server;
 
 import static com.jayway.restassured.RestAssured.given;
 
-import org.junit.Test;
+import org.junit.Ignore;
 
 import de.bht.comanche.logic.LgSurvey;
-
+@Ignore
 public class SurveyServiceTest {
 //	@Test
     public void saveSurvey() {
