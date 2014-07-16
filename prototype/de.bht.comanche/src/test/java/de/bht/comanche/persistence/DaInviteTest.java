@@ -3,13 +3,10 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import antlr.collections.List;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
@@ -28,6 +25,7 @@ public class DaInviteTest {
 	private static DaUser daUser;
 	private static DaSurvey daSurvey;
 	private static DaFactory daFactory;
+	private static DaInvite daInvite;
 	private LgUser alice;
 	private LgUser bob;
 	private LgSurvey survey0;
@@ -37,8 +35,11 @@ public class DaInviteTest {
 	@BeforeClass public static void initializeDb() throws PersistenceException {
 		daFactory = new JpaDaFactory();
 		daSurvey = daFactory.getDaSurvey();
+		daInvite = daFactory.getDaInvite();
 		daUser = daFactory.getDaUser();
 		daUser.setPool(daSurvey.getPool());
+		daSurvey.setPool(daUser.getPool());
+		daInvite.setPool(daUser.getPool());
 		
 		boolean success = new LowLevelTransaction(THROW_STACKTRACE) {
 			public void executeWithThrows() throws Exception {
@@ -68,8 +69,8 @@ public class DaInviteTest {
 					invite0.setSurvey(survey0);
 					invite1.setSurvey(survey0);
 					daSurvey.save(survey0);
-					daSurvey.getPool().save(invite1);
-					daSurvey.getPool().save(invite0);
+					daInvite.save(invite1);
+					daInvite.save(invite0);
 					daUser.save(alice);
 					daUser.save(bob);
 			}

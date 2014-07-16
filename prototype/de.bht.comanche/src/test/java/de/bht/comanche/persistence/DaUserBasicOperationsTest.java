@@ -3,7 +3,6 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -75,7 +74,7 @@ public class DaUserBasicOperationsTest {
 			public void executeWithThrows() throws Exception {
 				// Alice was persisted in other context during Setup
 				alice.setName("AliciaTeba");
-				daUser.getPool().merge(alice);
+				daUser.update(alice);
 				forceRestartTransaction();
 				LgUser aliceAfterUpdate = daUser.find(alice.getOid());
 				assertEquals("Alice after update", alice.getOid(), aliceAfterUpdate.getOid());
