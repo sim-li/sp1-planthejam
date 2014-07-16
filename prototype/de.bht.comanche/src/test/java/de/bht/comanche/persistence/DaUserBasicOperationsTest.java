@@ -68,7 +68,7 @@ public class DaUserBasicOperationsTest {
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
 	
-
+	@Ignore
 	@Test 
 	public void updateWithSeperateTransactionsTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -85,6 +85,7 @@ public class DaUserBasicOperationsTest {
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
 	
+	@Ignore
 	@Test 
 	public void updateModificationAfterMerge() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -131,6 +132,7 @@ public class DaUserBasicOperationsTest {
 		assertEquals(userName + " > PASSWORD", user.getPassword(), userFromDb.getPassword());
 	}
 	
+	@Ignore
 	@After 
 	public void tearDown() {
 		final DaUser daUser = daFactory.getDaUser();
