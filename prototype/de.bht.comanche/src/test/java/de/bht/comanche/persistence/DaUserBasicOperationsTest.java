@@ -3,19 +3,21 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.PersistenceException;
 import de.bht.comanche.testresources.logic.UserFactory;
 import de.bht.comanche.testresources.persistence.PersistenceUtils;
 import de.bht.comanche.testresources.server.LowLevelTransaction;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
-
+@Ignore
 public class DaUserBasicOperationsTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -68,7 +70,7 @@ public class DaUserBasicOperationsTest {
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
 	
-
+	@Ignore
 	@Test 
 	public void updateWithSeperateTransactionsTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -85,6 +87,7 @@ public class DaUserBasicOperationsTest {
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
 	
+	@Ignore
 	@Test 
 	public void updateModificationAfterMerge() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -106,6 +109,7 @@ public class DaUserBasicOperationsTest {
     }
 	
 	
+	
 	@Ignore
 	@Test public void findByIdTest() {
 		final DaUser daUser = daFactory.getDaUser();
@@ -123,7 +127,7 @@ public class DaUserBasicOperationsTest {
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
 	}
-
+	
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {
 		assertEquals(userName + " > NAME", user.getName(), userFromDb.getName());
 		assertEquals(userName + " > EMAIL", user.getEmail(), userFromDb.getEmail());

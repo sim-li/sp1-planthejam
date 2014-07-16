@@ -6,15 +6,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-
-import org.jboss.logging.annotations.Param;
-
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
-import de.bht.comanche.server.exceptions.logic.MultipleUsersWithThisNameException;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisNameException;
 import de.bht.comanche.server.exceptions.logic.UserWithThisNameExistsException;
@@ -31,9 +26,9 @@ public class UserService extends Service {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ResponseObject loginUser(final LgUser userFromClient) {
+	public ResponseObject<LgUser> loginUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+		ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				List<LgUser> users = daUser.findByName(userFromClient.getName());
 				/*
@@ -69,13 +64,17 @@ public class UserService extends Service {
 	@Path("getUser")
 	@Consumes("application/json")
 	@Produces({"application/json"})
-	public ResponseObject getUser(final LgUser userFromClient){
+	public ResponseObject<LgUser> getUser(final LgUser userFromClient){
 		final DaUser daUser = factory.getDaUser();
-		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+		ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				LgUser lgUser = null;
 				try{
+					System.out.println("Searching with OID> " + userFromClient.getOid());
 					lgUser = daUser.find(userFromClient.getOid());
+					System.out.println("And found:> " + lgUser.getOid());
+//					System.out.println("Number of Invites: " + lgUser.getInvites().size());
+					
 				} catch (OidNotFoundException oid){
 					throw new NoUserWithThisIdException();
 				}
@@ -92,31 +91,20 @@ public class UserService extends Service {
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject registerUser(final LgUser newUserFromClient){
+     public ResponseObject<LgUser> registerUser(final LgUser newUserFromClient){
     	 final DaUser daUser = factory.getDaUser();
-    	 ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+    	 ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
     		 public LgUser executeWithThrows() throws Exception {
     			 if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
     				 throw new UserWithThisNameExistsException();
     			 }
     			 daUser.save(newUserFromClient);
-    			 
-//    			 daUser.flush();
-    			 
-    			 System.out.println(newUserFromClient);
-    			 
     			 return newUserFromClient;
     		 }
     	 }.execute();
     	 if (response.hasError()) {
-<<<<<<< HEAD
  			throw new WebApplicationException(response.getResponseCode());
  		}
-=======
-    		 throw new WebApplicationException(response.getResponseCode());
-    	 }
-
->>>>>>> 5f2f663bcf24dd04feb57f2cb666e7f7db8e62ea
     	 return response;
  	}
      
@@ -124,9 +112,9 @@ public class UserService extends Service {
      @DELETE
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject deleteUser(final LgUser userFromClient){
+     public ResponseObject<LgUser> deleteUser(final LgUser userFromClient){
     	final DaUser daUser = factory.getDaUser();
-  		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+  		ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
   				LgUser userFromDb = null;
   				try{
@@ -148,9 +136,9 @@ public class UserService extends Service {
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject updateUser(final LgUser dirtyUser) {
+     public ResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
     	final DaUser daUser = factory.getDaUser();
-  		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
+  		ResponseObject<LgUser> response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
   				try {
   					daUser.find(dirtyUser.getOid());

@@ -1,23 +1,35 @@
 package de.bht.comanche.server;
 
-import de.bht.comanche.logic.DbObject;
+import java.util.List;
+
 import de.bht.comanche.persistence.Pool;
 import de.bht.comanche.server.exceptions.PtjException;
 
 public abstract class Transaction<E> {
 	private final Pool<E> pool;
+	private ResponseObject<E> response;
 	
 	public Transaction (Pool<E> pool) {
 		this.pool = pool;
+		response = new ResponseObject<E>();
 	}
 	
-	public ResponseObject execute () {
+	public void addToResponse(E data) {
+		response.addData(data);
+	}
+	
+	public void addAllToResponse(List<E> data) {
+		response.addAll(data);
+	}
+	
+	public ResponseObject<E> execute () {
 		pool.beginTransaction();
-		ResponseObject response = new ResponseObject();
 		boolean success = false;
 		try {
-			DbObject objectFromDb = executeWithThrows();
-			response.addData(objectFromDb);
+			E objectFromDb = executeWithThrows();
+			if (objectFromDb != null) {
+				response.addData(objectFromDb);
+			}
 			success = true;
 		} catch (PtjException ptjE) {
 			response.setResponseCode(ptjE.getResponseCode());
@@ -29,6 +41,6 @@ public abstract class Transaction<E> {
 		return response;
 	}
 	
-	public abstract DbObject executeWithThrows() throws Exception;
+	public abstract E executeWithThrows() throws Exception;
 }
 

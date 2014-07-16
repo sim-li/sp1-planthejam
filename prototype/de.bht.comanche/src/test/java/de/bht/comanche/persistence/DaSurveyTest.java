@@ -19,7 +19,7 @@ import de.bht.comanche.testresources.logic.UserFactory;
 import de.bht.comanche.testresources.persistence.PersistenceUtils;
 import de.bht.comanche.testresources.server.LowLevelTransaction;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
-@Ignore
+
 public class DaSurveyTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -81,8 +81,8 @@ public class DaSurveyTest {
 	public void readSurveysTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
-				LgUser aliceFromDb = daUser.findByName(alice.getName()).get(0);
-				LgUser bobFromDb = daUser.findByName(bob.getName()).get(0);
+				LgUser aliceFromDb = daUser.find(alice.getOid());
+				LgUser bobFromDb = daUser.find(bob.getOid());
 				assertUser(userName0, alice, aliceFromDb);
 				assertUser(userName1, bob, bobFromDb);
 				assertEquals("Check Alices first invite (BY ID):", invite0.getOid(), aliceFromDb.getInvites().get(0).getOid());
@@ -93,6 +93,7 @@ public class DaSurveyTest {
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
+	
 
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {
 		assertEquals(userName + " > NAME", user.getName(), userFromDb.getName());
