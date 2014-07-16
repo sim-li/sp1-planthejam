@@ -17,6 +17,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
 
         var USER_PATH = "rest/user/";
+        var SURVEY_PATH = "rest/sruvey/";
 
         var SUCCESS = "SUCCESS ----------------------------------------------------------", 
             ERROR   = "ERROR ------------------------------------------------------------", 
@@ -102,7 +103,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         var login = function(user) {
             $log.log("REST login");
-
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
@@ -129,7 +129,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         var getUser = function(oid) {
             $log.log("REST getUser");
-
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
@@ -138,11 +137,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
             })
             .success(function(data, status, header, config) {
                 var _user = data.data[0];
-                $log.debug(data);
                 $log.debug(_user);
 
-                // TODO needs to be checked
 
+                // TODO extract invites/surveys from user ********************************** 
                 // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
                 var _surveys =  _user.surveys || [];
                 for (var i = 0; i < _surveys.length; i++) {
@@ -161,16 +159,14 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         var register = function(user) {
             $log.log("REST register");
-
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "register", 
                 data: { "name": user.name, "password": user.password, "email": user.email, "tel": user.tel }
             }).success(function(data, status, header, config) {
-                $log.debug(data); // <<<<<<<<<<<<<<<<<<<<< DEBUGGING
-                $log.debug("and now the oid:"); // <<<<<<<<<<<<<<<<<<<<< DEBUGGING
-                $log.debug(data.data[0].oid); // <<<<<<<<<<<<<<<<<<<<< DEBUGGING
+                $log.debug(data.data[0]);
+
                 getUser(data.data[0].oid)
                     .then(function(success) {    
                         deferred.resolve(success);
@@ -187,10 +183,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
         var deleteUser = function(user) {
             $log.log("REST deleteUser");
-            
-            $log.warn("deleteUser() not tested");
-            $log.warn(user.oid);
-
             var deferred = $q.defer();
             $http({ 
                 method: "DELETE", 
@@ -198,6 +190,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 data: { "oid": user.oid }, 
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
+                $log.debug(data.data);
+
                 deferred.resolve("Das Konto wurde erfolgreich geloescht.");
             }).error(function(data, status, header, config) {
                 deferred.reject("Loeschen des Kontos auf dem Server fehlgeschlagen. " + getErrorMesage(status));
@@ -208,8 +202,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
         var updateUser = function(user) {
             $log.log("REST updateUser");
             
-            // TODO needs to be checked
             
+            // TODO assure, that user has all surveys wrapped up in invites ************************************************
             // convert all dates to the native date format
             // var _user = angular.copy(user);
             // Survey.forSurveysConvertDatesToJsDate(_user.surveys);
@@ -228,8 +222,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                     // invites: invites
                 }
             }).success(function(data, status, header, config) {
-                $log.log(data);
-                $log.log("------------ updated ");
+                $log.debug(data);
 
                 deferred.resolve("Die Kontodaten wurden erfolgreich auf dem Server gespeichert.");
             }).error(function(data, status, header, config) {
@@ -243,26 +236,67 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
          * - @param survey optional. If not specified, a new survey will be created on the server and inserted into the database.
          */
         var saveSurvey = function(survey) {
-            $log.warn("saveSurvey() not implemented");
+            // $log.warn("saveSurvey() not implemented");
+            $log.warn("saveSurvey() not tested");
             // TODO retrieve data from rest service
 
             // convert all dates to the native date format
             // var _survey = ...;
             // _survey.convertDatesToJsDate();
 
-            var dummyReturn = { "success": true, 
-                                "serverMessage": "HI FROM SAVE_SURVEY", 
-                                "survey": new Survey({name: "THE SURVEY" }) }; // for new survey: survey incl. oid of the newly generated Survey from the database
-            return dummyReturn;
+            // var dummyReturn = { "success": true, 
+            //                     "serverMessage": "HI FROM SAVE_SURVEY", 
+            //                     "survey": new Survey({name: "THE SURVEY" }) }; // for new survey: survey incl. oid of the newly generated Survey from the database
+            // return dummyReturn;
+
+            $log.log("REST save survey");
+            var deferred = $q.defer();
+            $http({ 
+                method: "POST", 
+                url: SURVEY_PATH + "save", 
+                data: {   
+                    "name": survey.name, 
+                    "description": survey.description, 
+                    "type": survey.type, 
+                    "deadline": survey.deadline, 
+                    "frequency": survey.frequency, 
+                    "possibleTimeperiods": survey.possibleTimeperiods, 
+                    "determinedTimeperiod": survey.determinedTimeperiod 
+                }
+            }).success(function(data, status, header, config) {
+                $log.debug(data.data[0]);
+
+                deferred.resolve(data.data[0]);
+            }).error(function(data, status, header, config) {
+                deferred.reject("Speichern der Terminumfrage auf dem Server fehlgeschlagen." + getErrorMesage(status));
+            });
+            return deferred.promise;
         };
 
         var deleteSurvey = function(oid) {
-            $log.warn("deleteSurvey() not implemented");
+            // $log.warn("deleteSurvey() not implemented");
+            $log.warn("deleteSurvey() not tested");
             // TODO retrieve data from rest service
 
-            var dummyReturn = { "success": true, 
-                                "serverMessage": "HI FROM DELETE_SURVEY" };
-            return dummyReturn;
+            // var dummyReturn = { "success": true, 
+            //                     "serverMessage": "HI FROM DELETE_SURVEY" };
+            // return dummyReturn;
+
+            $log.log("REST deleteUser");
+            var deferred = $q.defer();
+            $http({ 
+                method: "DELETE", 
+                url: USER_PATH + "delete", 
+                data: { "oid": user.oid }, 
+                headers: { "Content-Type": "application/json" }
+            }).success(function(data, status, header, config) {
+                $log.debug(data.data);
+
+                deferred.resolve("Die Terminumfrage wurde erfolgreich geloescht.");
+            }).error(function(data, status, header, config) {
+                deferred.reject("Loeschen der Terminumfrage auf dem Server fehlgeschlagen. " + getErrorMesage(status));
+            });
+            return deferred.promise;
         };
 
         return {

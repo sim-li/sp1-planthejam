@@ -19,7 +19,7 @@ import de.bht.comanche.testresources.logic.UserFactory;
 import de.bht.comanche.testresources.persistence.PersistenceUtils;
 import de.bht.comanche.testresources.server.LowLevelTransaction;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
-
+@Ignore
 public class DaSurveyTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";

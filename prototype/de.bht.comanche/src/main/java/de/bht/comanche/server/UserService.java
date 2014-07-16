@@ -16,6 +16,7 @@ import org.jboss.logging.annotations.Param;
 
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
+import de.bht.comanche.server.exceptions.logic.MultipleUsersWithThisNameException;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisNameException;
 import de.bht.comanche.server.exceptions.logic.UserWithThisNameExistsException;
@@ -37,6 +38,12 @@ public class UserService extends Service {
 		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				List<LgUser> users = daUser.findByName(userFromClient.getName());
+				/*
+				 * Available for Client: MultipleUsersWithThisNameException()
+				 */
+//				if (users.size() > 1) {
+//					throw new MultipleUsersWithThisNameException();
+//				}
 				if (users.isEmpty()) {
 					throw new NoUserWithThisNameException();
 				}
@@ -49,7 +56,6 @@ public class UserService extends Service {
 				return userWithId;
 			}
 		}.execute();
-		
 		if (response.hasError()) {
 			throw new WebApplicationException(response.getResponseCode());
 		}
@@ -69,28 +75,18 @@ public class UserService extends Service {
 		final DaUser daUser = factory.getDaUser();
 		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
-				System.out.println("HUHU from GET");
-				System.out.println(userFromClient.getOid());
-				
 				LgUser lgUser = null;
 				try{
 					lgUser = daUser.find(userFromClient.getOid());
 				} catch (OidNotFoundException oid){
-					System.out.println("WRONG ID");
 					throw new NoUserWithThisIdException();
 				}
-				
-				System.out.println("RETURNING USER");
 				return lgUser;
 			}
 		}.execute();
-
 		if (response.hasError()) {
-			System.out.println("RESPONSE HAS ERROR");
 			throw new WebApplicationException(response.getResponseCode());
 		}
-		
-		System.out.println("RESPONSE HAS RESPONSE");
 		return response;
 	}
    	 
@@ -114,11 +110,9 @@ public class UserService extends Service {
     			 return newUserFromClient;
     		 }
     	 }.execute();
-
     	 if (response.hasError()) {
     		 throw new WebApplicationException(response.getResponseCode());
     	 }
-
     	 return response;
  	}
      
@@ -130,25 +124,19 @@ public class UserService extends Service {
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
-  				
-  				System.out.println(userFromClient);
-  				
   				LgUser userFromDb = null;
   				try{
 					userFromDb = daUser.find(userFromClient.getOid());
   				} catch (OidNotFoundException oid) {
   					throw new NoUserWithThisIdException();
   				}
-//    			daUser.delete(userFromClient);
   				daUser.delete(userFromDb);
     			return null;
     		 }
     	 }.execute();
-    	 
     	 if (response.hasError()) {
   			throw new WebApplicationException(response.getResponseCode());
   		}
-     	 
      	 return response;
  	} 
      
@@ -156,40 +144,21 @@ public class UserService extends Service {
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject updateUser(final LgUser updateUserFromClient){
+     public ResponseObject updateUser(final LgUser dirtyUser) {
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
-//				List<LgUser> users = daUser.findByName(updateUserFromClient.getName());
-//				if (users.isEmpty()) {
-//					throw new NoUserWithThisNameException();
-//				}
-//				LgUser saveUsertoDb = users.get(0);^
-  				
-  				System.out.println(updateUserFromClient);
-  				
-  				LgUser fromDb = daUser.find(updateUserFromClient.getOid());
-  				fromDb.updateWith(updateUserFromClient);
-  				daUser.save(fromDb);
-  				
-//				daUser.save(updateUserFromClient);
-				System.out.println(updateUserFromClient);
-				System.out.println("------------------------");
-//  				daUser.save(fromDb);
-				
-//				saveUsertoDb.updateWith(updateUserFromClient);
-//    			daUser.save(saveUsertoDb);
-//    			return saveUsertoDb;
-//				return updateUserFromClient;
-				
-				return fromDb;
+  				try {
+  					daUser.find(dirtyUser.getOid());
+  				} catch (OidNotFoundException oid) {
+  					throw new NoUserWithThisIdException();
+  				}
+  				return daUser.update(dirtyUser);
     		 }
     	 }.execute();
-
     	 if (response.hasError()) {
    			throw new WebApplicationException(response.getResponseCode());
    		}
-      	 
       	 return response;
      }
      
