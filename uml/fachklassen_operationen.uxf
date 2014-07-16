@@ -5,13 +5,14 @@
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>594</x>
-      <y>616</y>
+      <y>506</y>
       <w>429</w>
-      <h>220</h>
+      <h>253</h>
     </coordinates>
     <panel_attributes>Benutzeraccount
 --
 name : String
+passwort: String
 telefonnummer : String
 emailadresse : String
 generelleVerfügbarkeit : List&lt;Zeitraum&gt;
@@ -28,7 +29,7 @@ angeboteneUndBelegteZeiträumeAnzeigen()</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>275</x>
-      <y>165</y>
+      <y>143</y>
       <w>209</w>
       <h>110</h>
     </coordinates>
@@ -43,7 +44,7 @@ einheit : Zeiteinheit</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1144</x>
-      <y>121</y>
+      <y>99</y>
       <w>132</w>
       <h>99</h>
     </coordinates>
@@ -58,7 +59,7 @@ _wiederholt_</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>814</x>
-      <y>407</y>
+      <y>385</y>
       <w>219</w>
       <h>54</h>
     </coordinates>
@@ -69,7 +70,7 @@ _wiederholt_</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>594</x>
-      <y>88</y>
+      <y>66</y>
       <w>495</w>
       <h>275</h>
     </coordinates>
@@ -95,7 +96,7 @@ ermittelterZeitraum : Zeitraum
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1012</x>
-      <y>396</y>
+      <y>374</y>
       <w>297</w>
       <h>110</h>
     </coordinates>
@@ -113,35 +114,35 @@ konkreteVerfügbarkeitFestlegen()</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>616</x>
-      <y>330</y>
+      <y>308</y>
       <w>96</w>
-      <h>307</h>
+      <h>219</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..*
 m2=1..*
 r1=Gastgeber</panel_attributes>
-    <additional_attributes>55;286;55;33</additional_attributes>
+    <additional_attributes>55;198;55;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>792</x>
-      <y>330</y>
+      <y>308</y>
       <w>100</w>
-      <h>307</h>
+      <h>219</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1.*
 m2=1..*
 r1=Teilnehmer</panel_attributes>
-    <additional_attributes>55;286;55;33</additional_attributes>
+    <additional_attributes>55;198;55;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>638</x>
-      <y>418</y>
+      <y>396</y>
       <w>230</w>
       <h>77</h>
     </coordinates>
@@ -153,7 +154,7 @@ r1=Teilnehmer</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>275</x>
-      <y>451</y>
+      <y>429</y>
       <w>209</w>
       <h>88</h>
     </coordinates>
@@ -169,7 +170,7 @@ dauerInMinuten : int
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>275</x>
-      <y>297</y>
+      <y>275</y>
       <w>209</w>
       <h>110</h>
     </coordinates>
@@ -185,21 +186,21 @@ _Monat_</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>935</x>
-      <y>770</y>
+      <y>682</y>
       <w>251</w>
       <h>154</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
-m1=1
+m1=0..*
 m2=0..*
 hat in Adressbuch &gt;</panel_attributes>
-    <additional_attributes>33;66;33;132;154;132;154;33;88;33</additional_attributes>
+    <additional_attributes>33;77;33;132;154;132;154;33;88;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>275</x>
-      <y>638</y>
+      <y>550</y>
       <w>220</w>
       <h>66</h>
     </coordinates>
@@ -212,12 +213,12 @@ name : String</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>462</x>
-      <y>649</y>
+      <y>561</y>
       <w>153</w>
       <h>54</h>
     </coordinates>
-    <panel_attributes>lt=-
-m1=1
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m1=0..*
 m2=0..*</panel_attributes>
     <additional_attributes>132;33;33;33</additional_attributes>
   </element>
@@ -225,13 +226,51 @@ m2=0..*</panel_attributes>
     <type>com.umlet.element.Note</type>
     <coordinates>
       <x>198</x>
-      <y>44</y>
+      <y>22</y>
       <w>363</w>
       <h>66</h>
     </coordinates>
     <panel_attributes>Analyse-Fachklassendiagramm mit Operationen
 Terminfindungs-App "Plan The Jam"
-Team: Comanche, 08.05.2014</panel_attributes>
+Team: Comanche, 16.07.2014</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>880</x>
+      <y>847</y>
+      <w>297</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>Adressbucheintrag
+
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>352</x>
+      <y>583</y>
+      <w>549</w>
+      <h>318</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;
+m1=0..*
+m2=0..*</panel_attributes>
+    <additional_attributes>33;33;33;297;528;297</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>990</x>
+      <y>781</y>
+      <w>54</w>
+      <h>87</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>33;66;33;33</additional_attributes>
   </element>
 </diagram>
