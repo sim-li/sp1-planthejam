@@ -20,7 +20,7 @@ import de.bht.comanche.testresources.persistence.PersistenceUtils;
 import de.bht.comanche.testresources.server.LowLevelTransaction;
 import de.bht.comanche.testresources.server.TransactionWithStackTrace;
 
-public class DaSurveyTest {
+public class DaInviteTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
 	private static final boolean THROW_STACKTRACE = true;
@@ -77,7 +77,7 @@ public class DaSurveyTest {
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
-//	@Test 
+    @Test 
 	public void readSurveysTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {

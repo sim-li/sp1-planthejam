@@ -21,8 +21,8 @@ import de.bht.comanche.server.exceptions.persistence.OidNotFoundException;
 
 
 @Path("/survey/")
-public class SurveyService extends Service{
-	public SurveyService() {
+public class InviteService extends Service{
+	public InviteService() {
 		super();
 	}
 
