@@ -4,6 +4,7 @@ import de.bht.comanche.logic.DbObject;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.server.DaBase;
 
 public class JpaDaFactory implements DaFactory {
 	@Override

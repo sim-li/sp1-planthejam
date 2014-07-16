@@ -3,14 +3,12 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.server.exceptions.PersistenceException;
 import de.bht.comanche.testresources.logic.UserFactory;
@@ -134,7 +132,7 @@ public class DaUserBasicOperationsTest {
 		assertEquals(userName + " > TEL", user.getTel(), userFromDb.getTel());
 		assertEquals(userName + " > PASSWORD", user.getPassword(), userFromDb.getPassword());
 	}
-	
+
 //	@After public void tearDown() {
 //		final DaUser daUser = daFactory.getDaUser();
 //		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {

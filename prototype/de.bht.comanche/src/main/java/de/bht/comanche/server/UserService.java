@@ -4,10 +4,13 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
 import de.bht.comanche.server.exceptions.logic.NoUserWithThisIdException;
@@ -153,5 +156,14 @@ public class UserService extends Service {
    		}
       	 return response;
      }
+     
+     public static final String CLICHED_MESSAGE = "Hello World!";
+     
+     @Path("hello")
+     @GET
+     @Produces(MediaType.TEXT_HTML)
+         public String getHello() {
+             return CLICHED_MESSAGE;
+         }
 }
 

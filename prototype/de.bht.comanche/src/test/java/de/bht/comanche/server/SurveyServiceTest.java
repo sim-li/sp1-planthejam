@@ -18,7 +18,7 @@ public class SurveyServiceTest {
 		given().contentType("application/json")
 		       .body(testSurvey)
 		       .expect().statusCode(200)
-		       .when().post("/plan-the-jam/rest/survey/register");
+		       .when().post("/survey/register");
 
     	}
 	

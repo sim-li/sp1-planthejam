@@ -2,6 +2,7 @@ package de.bht.comanche.persistence;
 
 import java.util.List;
 
+import javax.naming.NameNotFoundException;
 import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
@@ -19,9 +20,10 @@ public interface DaSurvey {
 	void delete(LgSurvey survey) throws TransactionRequiredException, IllegalArgumentException;
 	LgSurvey find(long id) throws NotFoundException, NoPersistentClassException, OidNotFoundException;
 	List<LgSurvey> findAll() throws NoPersistentClassException ;
-    List<LgSurvey> findByName(String name) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException;
+    List<LgSurvey> findByName(String name) throws NoPersistentClassException, NoQueryClassException, ArgumentCountException, ArgumentTypeException, de.bht.comanche.server.exceptions.persistence.NotFoundException;
     void beginTransaction();
     void endTransaction(boolean success);
     public Pool getPool(); // Later overwritten by DaGenericImpl
     public void setPool(Pool pool); 
 }
+

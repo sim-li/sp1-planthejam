@@ -77,7 +77,7 @@ public class DaSurveyTest {
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
-	@Test 
+//	@Test 
 	public void readSurveysTest() {
 		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
