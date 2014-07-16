@@ -47,9 +47,9 @@ public class ReInviteService extends ReService {
 				return invites;
 			}
 		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
-		}
+//		if (response.hasError()) {
+//			throw new WebApplicationException(response.getResponseCode());
+//		}
 		return response;
 	}
 

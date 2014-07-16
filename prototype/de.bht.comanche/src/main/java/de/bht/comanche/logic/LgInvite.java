@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -21,7 +20,6 @@ public class LgInvite extends LgObject{
 	private boolean isHost;
 	private boolean isIgnored;
 	
-	@JsonBackReference
 	@NotNull
 	@ManyToOne
 	private LgUser user;
