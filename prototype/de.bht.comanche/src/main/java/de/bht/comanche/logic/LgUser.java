@@ -28,13 +28,16 @@ public class LgUser extends DbObject {
 			@JoinColumn(name = "user_Id", referencedColumnName = "oid")}, inverseJoinColumns = { 
 			@JoinColumn(name = "friend_Id", referencedColumnName = "oid")})
 	@ManyToMany
+	@JsonIgnore
 	private List<LgUser> hasContacts;
 	
 	@ManyToMany(mappedBy = "hasContacts")
+	@JsonIgnore
 	private List<LgUser> isContacts;
 
-	@JsonIgnore
+	
 	@OneToMany(mappedBy="user")
+	@JsonIgnore
 	private List<LgInvite> invites;
 
 	public LgUser() {
