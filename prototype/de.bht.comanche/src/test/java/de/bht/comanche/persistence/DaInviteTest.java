@@ -3,6 +3,7 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -104,18 +105,18 @@ public class DaInviteTest {
 	}
 	
 	
-//	@After public void tearDown() {
-//		final DaUser daUser = daFactory.getDaUser();
-//		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
-//			public void executeWithThrows() throws Exception {
-//				LgUser aliceFromDb = daUser.find(alice.getOid());
-//				LgUser bobFromDb = daUser.find(bob.getOid());
-//				daUser.delete(aliceFromDb);
-//				daUser.delete(bobFromDb);
-//			}
-//		}.execute();
-//		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
-//		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
-//	}
-//	
+	@After public void tearDown() {
+		final DaUser daUser = daFactory.getDaUser();
+		boolean success = new TransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
+			public void executeWithThrows() throws Exception {
+				LgUser aliceFromDb = daUser.find(alice.getOid());
+				LgUser bobFromDb = daUser.find(bob.getOid());
+				daUser.delete(aliceFromDb);
+				daUser.delete(bobFromDb);
+			}
+		}.execute();
+		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
+		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
+	}
+	
 }
