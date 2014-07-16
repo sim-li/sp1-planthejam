@@ -21,6 +21,15 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         $scope.session = {};
         $scope.warnings = {};
 
+        var dialogMap = {
+             USER_LOGIN: 0, 
+             USER_REGISTER: 1, 
+             USER_EDIT: 2, 
+             SURVEY_SELECTION: 3,
+             SURVEY_EDIT: 4
+        };
+        $scope.dialogMap = dialogMap;
+
         /*
          * returns an initialized user
          */
@@ -44,21 +53,25 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         var initSession = function() {
             $scope.session = {
                 "user": getInitUser(), 
-                "isLoggedIn": false
+                "state": { 
+                    "isLoggedIn": false, 
+                    "isVal": dialogMap.USER_LOGIN, 
+                    "is": function(otherVal) { return otherVal === this.isVal } 
+                }
             }
             $log.log("session initialized");
             $log.log($scope.session);
         };
         initSession();
-
+        
 
         $scope.discardWarnings = function() {
             $scope.warnings = {};
         };
 
         $scope.toggleLoginDialog = function() {
-            $scope.showRegisterDialog = !$scope.showRegisterDialog;
-            initSession();
+            $scope.session.state.isVal = ($scope.session.state.is(dialogMap.USER_LOGIN)) ? dialogMap.USER_REGISTER : dialogMap.USER_LOGIN;
+            $log.debug($scope.session)
         };
 
 
@@ -108,7 +121,8 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             restService.login(_user)
                 .then(function(user) {
                     $scope.session.user = user;
-                    $scope.session.isLoggedIn = true;
+                    $scope.session.state.isLoggedIn = true;
+                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
                 }, function(error) {
@@ -129,7 +143,8 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             restService.register(_user)
                 .then(function(user) {
                     $scope.session.user = user;
-                    $scope.session.isLoggedIn = true;
+                    $scope.session.state.isLoggedIn = true;
+                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
                     $log.log("Registrierung erfolgreich.");
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
@@ -153,8 +168,9 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
         $scope.editUser = function() {
             $scope.session.tempUser = angular.copy($scope.session.user);
-            $scope.session.inEditMode = true;
-            $scope.session.showEditUserDialog = true;
+            // $scope.session.inEditMode = true;
+            $scope.session.state.isVal = dialogMap.USER_EDIT;
+            // $scope.session.showEditUserDialog = true;
         };
 
         $scope.saveEditedUser = function() {
@@ -163,8 +179,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 .then(function(success) {
                     $log.log(success);
                     $scope.session.user = _user;
-                    $scope.session.inEditMode = false;
-                    $scope.session.showEditUserDialog = false;
+                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
                 }, function(error) {
                     $log.error(error);
                     $scope.warnings.central = error;
@@ -176,8 +191,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
 
         $scope.cancelEditUser = function() {
             $scope.session.tempUser = undefined;
-            $scope.session.inEditMode = false;
-            $scope.session.showEditUserDialog = false;
+            $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
         };
 
         $scope.deleteUser = function() {
@@ -211,31 +225,20 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                 return;
             }
             $scope.session.tempSurvey = new Survey($scope.session.selectedSurvey);
-            $scope.session.inEditMode = true;
-            $scope.session.showEditSurveysDialog = true;
+            $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
             $log.log($scope.session.user);
         };
 
         $scope.addSurvey = function() {
-            var _fromSaveSurvey = restService.saveSurvey();
-            if (!_fromSaveSurvey.success) {
-                $log.error("Erstellen einer leeren Terminumfrage auf dem Server fehlgeschlagen.");
-                $log.error(_fromSaveSurvey.serverMessage);
-                return;
-            }
-            $scope.session.tempSurvey = _fromSaveSurvey.survey;
-            // $scope.session.tempSurvey = new Survey();
-
+            $scope.session.tempSurvey = new Survey();
             $scope.session.addingSurvey = true;
-            $scope.session.inEditMode = true;
-            $scope.session.showEditSurveysDialog = true;
+            $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
         };
 
         $scope.cancelEditSurvey = function() {
             $scope.session.tempSurvey = "";
             $scope.session.addingSurvey = false;
-            $scope.session.inEditMode = false;
-            $scope.session.showEditSurveysDialog = false;
+            $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
             $log.log($scope.session.selectedSurvey);
             $log.log($scope.session.user);
         };
@@ -244,15 +247,10 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
             var _survey = $scope.session.tempSurvey;
 
 
-            // *** change to async ***
+            // *** test the change to async ***
 
-            restService.restService.saveSurvey(_survey)
+            restService.saveSurvey(_survey)
                 .then(function(survey) {
-                    // $scope.session.user = user;
-                    // $scope.session.isLoggedIn = true;
-                    // $log.log("Registrierung erfolgreich.");
-                    // $log.log("Login erfolgreich.");
-                    // $log.log($scope.session);
 
                     if (!$scope.session.addingSurvey) {
                         removeElementFrom(_survey, $scope.session.user.surveys);
@@ -263,8 +261,7 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
                     $scope.session.selectedSurvey = survey;
                     $scope.session.tempSurvey = "";
                     $scope.session.addingSurvey = false;
-                    $scope.session.inEditMode = false;
-                    $scope.session.showEditSurveysDialog = false;
+                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
 
                 }, function(error) {
                     $log.error(error);

@@ -57,24 +57,24 @@
     </pre>
 
 
-    <div id="login_area" ng-hide="session.isLoggedIn" class="input_area">
+    <div id="login_area" ng-hide="session.state.isLoggedIn" class="input_area">
 
-        <form name="loginForm" ng-hide="showRegisterDialog" ng-submit="login()" class="my_form">
+        <form name="loginForm" ng-show="session.state.is(dialogMap.USER_LOGIN)" ng-submit="login()" class="my_form">
             <div class="full_width_input">
                 <label for="inputName">Benutzername</label>
                 <input id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
 
                 <label for="inputPassword">Passwort</label>
-                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="session.user.password" 
+                <input id="inputPassword" name="inputPassword" ng-hide="sessions.showPassword" type="password" ng-model="session.user.password" 
                 placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
 
-                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="session.user.password" 
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.user.password" 
                 placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
                 
                 <div class="error">{{ warnings.password }}</div>
             </div>
             
-            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
             <label for="toggleShowPassword">Klartext</label>
             
             <div>
@@ -87,22 +87,22 @@
         </form><!-- loginForm -->
 
 
-        <form name="registerForm" ng-show="showRegisterDialog" ng-submit="register()" class="my_form">
+        <form name="registerForm" ng-show="session.state.is(dialogMap.USER_REGISTER)" ng-submit="register()" class="my_form">
             <div class="full_width_input">
                 <label for="inputName">Benutzername</label>
                 <input id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
 
                 <label for="inputPassword">Passwort</label>
-                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="session.user.password" 
+                <input id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.user.password" 
                 placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
 
-                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="session.user.password" 
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.user.password" 
                 placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
                 
                 <div class="error">{{ warnings.password }}</div>
             </div>
 
-            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
             <label for="toggleShowPassword">Klartext</label>
 
             <div class="full_width_input">
@@ -128,32 +128,31 @@
 
 
 
-    <div id="logged_in_area" ng-show="session.isLoggedIn" class="input_area">
+    <div id="logged_in_area" ng-show="session.state.isLoggedIn" class="input_area">
 
-        <!-- <div id="menu_area" ng-show="session.isLoggedIn" class="full_width_input"> -->
-        <div id="menu_area" ng-show="session.isLoggedIn">
+        <div id="menu_area">
                 <input id="editUser" type="button" value="Konto" ng-click="editUser()" />
                 <input id="editContacts" type="button" value="Kontakte" ng-click="editContacts()" />
                 <input id="logout" type="button" value="Logout" ng-click="logout()" />
         </div><br /><!-- menu_area -->
 
 
-        <form name="editUserForm" ng-show="session.showEditUserDialog" class="my_form">
+        <form name="editUserForm" ng-show="session.state.is(dialogMap.USER_EDIT)" class="my_form">
             <div class="full_width_input">
                 <label for="inputName">Benutzername</label>
                 <input id="inputName" name="inputName" type="text" ng-model="session.tempUser.name" placeholder="Dein Benutzername ..." required />
 
                 <label for="inputPassword">Passwort</label>
-                <input id="inputPassword" name="inputPassword" ng-hide="showPassword" type="password" ng-model="session.tempUser.password" 
+                <input id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.tempUser.password" 
                 placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
 
-                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="showPassword" type="text" ng-model="session.tempUser.password" 
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.tempUser.password" 
                 placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
                 
                 <div class="error">{{ warnings.password }}</div>
             </div>
 
-            <input id="toggleShowPassword" type="checkbox" ng-model="showPassword" ng-checked="false" />
+            <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
             <label for="toggleShowPassword">Klartext</label>
 
             <div class="full_width_input">
@@ -174,7 +173,7 @@
         </form><!-- editUserForm -->
 
 
-        <div id="survey_selection_area" ng-hide="session.inEditMode">
+        <div id="survey_selection_area" ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
             <span class="full_width_input">
                 
                 <input id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addSurvey()" />
@@ -197,14 +196,16 @@
 
 
 
-        <div id="survey_edit_area" ng-show="session.showEditSurveysDialog">
+        <div id="survey_edit_area" ng-show="session.state.is(dialogMap.SURVEY_EDIT)">
             <span class="full_width_input">
 
                 <label for="editSurveyName">Name</label>
-                <input id="editSurveyName" type="text" ng-model="session.tempSurvey.name" ng-change="$log.log(session.tempSurvey.name);"/>
+                <!-- <input id="editSurveyName" type="text" ng-model="session.tempSurvey.name" ng-change="$log.log(session.tempSurvey.name);"/> -->
+                <input id="editSurveyName" type="text" ng-model="session.tempSurvey.name"/>
 
                 <label for="editSurveyDescription">Beschreibung</label>
-                <textarea id="editSurveyDescription" rows="5" ng-model="session.tempSurvey.description" ng-change="$log.log(session.tempSurvey.description);"></textarea>
+                <!-- <textarea id="editSurveyDescription" rows="5" ng-model="session.tempSurvey.description" ng-change="$log.log(session.tempSurvey.description);"></textarea> -->
+                <textarea id="editSurveyDescription" rows="5" ng-model="session.tempSurvey.description"></textarea>
                 
                 <label for="editSurveyType">Typ</label>
                 <select id="editSurveyType" ng-model="session.tempSurvey.type" ng-options="type for type in Type.options_" ng-change="$log.log(session.tempSurvey.type);"></select>
