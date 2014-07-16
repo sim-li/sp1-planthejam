@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "TimePeriod")
-public class LgTimePeriod extends DbObject {
+public class LgTimePeriod extends LgObject {
 
 	private static final long serialVersionUID = 1L;
 	private Date startTime;
