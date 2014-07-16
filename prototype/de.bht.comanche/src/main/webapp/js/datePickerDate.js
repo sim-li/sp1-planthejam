@@ -9,7 +9,7 @@
 "use strict";
 
 angular.module("datePickerDate", [])
-    .factory("DatePickerDate", function($filter, $log) {
+    .factory("DatePickerDate", function($filter) {
         /*
          * Converts a JavaScript Date to a date format the angular datepicker understands. 
          * - toDate() converts and returns the date back to JavaScript Date
@@ -31,13 +31,13 @@ angular.module("datePickerDate", [])
             return new Date(this.date + " " + this.time);
         };
 
-        DatePickerDate.convertDates = function(dates) {
+        DatePickerDate.convertDates = function(jsDates) {
             var _dates = [];
-            if (!dates) {
+            if (!jsDates) {
                 return _dates;
             }
-            for (var i = 0; i < dates.length; i++) {
-                _dates.push(new DatePickerDate(dates[i]));
+            for (var i = 0; i < jsDates.length; i++) {
+                _dates.push(new DatePickerDate(jsDates[i]));
             }
             return _dates;
         };

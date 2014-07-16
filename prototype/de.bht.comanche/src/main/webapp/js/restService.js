@@ -169,6 +169,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                 data: { "name": user.name, "password": user.password, "email": user.email, "tel": user.tel }
             }).success(function(data, status, header, config) {
                 $log.debug(data); // <<<<<<<<<<<<<<<<<<<<< DEBUGGING
+                $log.debug("and now the oid:"); // <<<<<<<<<<<<<<<<<<<<< DEBUGGING
+                $log.debug(data.data[0].oid); // <<<<<<<<<<<<<<<<<<<<< DEBUGGING
                 getUser(data.data[0].oid)
                     .then(function(success) {    
                         deferred.resolve(success);
@@ -191,9 +193,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
 
             var deferred = $q.defer();
             $http({ 
-                method: "POST", 
+                method: "DELETE", 
                 url: USER_PATH + "delete", 
-                data: { "oid": user.oid }
+                data: { "oid": user.oid }, 
+                headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 deferred.resolve("Das Konto wurde erfolgreich geloescht.");
             }).error(function(data, status, header, config) {
@@ -221,9 +224,13 @@ angular.module("restModule", ["datePickerDate", "constants", "survey"])
                     name: user.name, 
                     password: user.password, 
                     email: user.email, 
-                    tel: user.tel
+                    tel: user.tel//, 
+                    // invites: invites
                 }
             }).success(function(data, status, header, config) {
+                $log.log(data);
+                $log.log("------------ updated ");
+
                 deferred.resolve("Die Kontodaten wurden erfolgreich auf dem Server gespeichert.");
             }).error(function(data, status, header, config) {
                 deferred.reject("Update der Kontodaten auf dem Server fehlgeschlagen." + getErrorMesage(status));

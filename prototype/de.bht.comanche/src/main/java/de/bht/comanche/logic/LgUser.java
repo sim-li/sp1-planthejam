@@ -11,10 +11,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
-
 @Entity
 @Table(name = "user")
 public class LgUser extends DbObject {
@@ -25,8 +21,6 @@ public class LgUser extends DbObject {
 	private String tel;
 	private String email;
 	private String password;
-
-//	@ManyToMany(cascade = { CascadeType.ALL })
 	
 	@JoinTable(name = "contact", joinColumns = { 
 			@JoinColumn(name = "user_Id", referencedColumnName = "oid")}, inverseJoinColumns = { 

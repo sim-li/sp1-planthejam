@@ -100,17 +100,28 @@ public class UserService extends Service {
     				 throw new UserWithThisNameExistsException();
     			 }
     			 daUser.save(newUserFromClient);
+    			 
+//    			 daUser.flush();
+    			 
+    			 System.out.println(newUserFromClient);
+    			 
     			 return newUserFromClient;
     		 }
     	 }.execute();
     	 if (response.hasError()) {
+<<<<<<< HEAD
  			throw new WebApplicationException(response.getResponseCode());
  		}
+=======
+    		 throw new WebApplicationException(response.getResponseCode());
+    	 }
+
+>>>>>>> 5f2f663bcf24dd04feb57f2cb666e7f7db8e62ea
     	 return response;
  	}
      
    @Path("delete")
-   @POST
+     @DELETE
      @Consumes("application/json")
      @Produces({"application/json"})
      public ResponseObject deleteUser(final LgUser userFromClient){
@@ -137,7 +148,7 @@ public class UserService extends Service {
      @POST
      @Consumes("application/json")
      @Produces({"application/json"})
-     public ResponseObject updateUser(final LgUser dirtyUser){
+     public ResponseObject updateUser(final LgUser dirtyUser) {
     	final DaUser daUser = factory.getDaUser();
   		ResponseObject response = new Transaction<LgUser>(daUser.getPool()) {
   			public LgUser executeWithThrows() throws Exception {
