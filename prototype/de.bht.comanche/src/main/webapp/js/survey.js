@@ -13,11 +13,13 @@ angular.module("survey", ["datePickerDate", "constants"])
         
         var Survey = function(config) {
             config = config || {};
+            this.oid = config.oid || "";
             this.name = config.name || "";
             this.description = config.description || "";
             this.type = config.type || Type.UNIQUE;
-            this.deadline = config.deadline || new DatePickerDate(new Date());
-            this.frequency = config.frequency || { "distance": 0, "timeUnit": TimeUnit.WEEK };
+            this.deadline = new DatePickerDate(config.deadline) || new DatePickerDate(new Date());
+            // this.frequency = config.frequency || { "distance": 0, "timeUnit": TimeUnit.WEEK };
+            this.frequency = { "distance": config.frequencyDist || 0 , "timeUnit": TimeUnit[config.frequencyTimeUnit] || TimeUnit.WEEK };
             this.possibleTimeperiods = config.possibleTimeperiods || [], 
             this.determinedTimeperiod = config.determinedTimeperiod || { "startTime": new DatePickerDate(), "durationInMins": 0 }
         };

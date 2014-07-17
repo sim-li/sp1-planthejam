@@ -9,25 +9,34 @@
 "use strict";
 
 angular.module("invite", ["survey"])
-    .factory("Invite", ["Survey", function(Survey) {
+    .factory("Invite", ["Survey", "DatePickerDate", function(Survey, DatePickerDate) {
         
         var Invite = function(config) {
             config = config || {};
-            this.survey = config.survey || new Survey();
+            this.oid = config.oid || "";
+            this.ignored = config.ignored;
+            this.host = config.host;
+            this.survey = new Survey(config.survey) || new Survey();
         };
 
         Invite.prototype.convertDatesToDatePickerDate = function() {
             this.survey.convertDatesToDatePickerDate();
         }
 
-        Invite.forInvitesConvertDatesToDatePickerDate = function(invites) {
-            if (!invites) {
-                return invites;
+        Invite.forInvitesConvertFromRawInvites = function(rawInvites) {
+            if (!rawInvites) {
+                return rawInvites;
             }
-            for (var i = 0; i < invites.length; i++) {
-                invites[i].convertDatesToDatePickerDate();
+            var _invites = [];
+            for (var i = 0; i < rawInvites.length; i++) {
+                var _invite = new Invite(rawInvites[i]);
+                _invites.push(_invite);
+                
+                // console.log(new DatePickerDate(_invite.survey.deadline));
+                // console.log(_invite.survey);
+                // // rawInvites[i].convertDatesToDatePickerDate();
             }
-            return invites;
+            return _invites;
         }
         
         return (Invite);

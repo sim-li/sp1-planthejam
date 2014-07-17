@@ -240,8 +240,12 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 url: INVITE_PATH + "getInvites", 
                 data: { "oid": oid }
             }).success(function(data, status, header, config) {
-                $log.debug(data);
-                deferred.resolve(data);
+                $log.debug(data.data);
+                
+                var _invites = data.data;
+                _invites = Invite.forInvitesConvertFromRawInvites(_invites);
+                deferred.resolve(_invites);
+                
                 
 
                 // KONVERTIERUNG
