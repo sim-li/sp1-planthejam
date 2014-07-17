@@ -32,8 +32,7 @@ public class ReInviteService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgInvite> getInvites(final LgUser userFromClient) {
 		final DaUser daUser0 = factory.getDaUser();
-		ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(
-				daUser0.getPool()) {
+		ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try {
@@ -87,10 +86,9 @@ public class ReInviteService extends ReService {
 
 				LgSurvey surveyFromDb = null;
 				try {
-					surveyFromDb = (LgSurvey) daSurvey
-							.findByName(surveyFromClient.getName());
+					surveyFromDb = (LgSurvey) daSurvey.findByName(surveyFromClient.getName());
 				} catch (DaNotFoundException exc) {
-					// throw new NoSurveyWithThisNameException();
+//					 throw new NoSurveyWithThisNameException();
 				}
 				daSurvey.delete(surveyFromDb);
 				return null;

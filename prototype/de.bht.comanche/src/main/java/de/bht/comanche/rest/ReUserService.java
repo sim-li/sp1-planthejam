@@ -32,15 +32,17 @@ public class ReUserService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
+				daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
-				List<LgUser> users = daUser.findByName(userFromClient.getName());
+				List<LgUser> users = daUser
+						.findByName(userFromClient.getName());
 				/*
 				 * Available for Client: MultipleUsersWithThisNameException()
 				 */
-//				if (users.size() > 1) {
-//					throw new MultipleUsersWithThisNameException();
-//				}
+				// if (users.size() > 1) {
+				// throw new MultipleUsersWithThisNameException();
+				// }
 				if (users.isEmpty()) {
 					throw new LgNoUserWithThisNameException();
 				}
@@ -58,24 +60,26 @@ public class ReUserService extends ReService {
 		}
 		return response;
 	}
-	
+
 	/**
 	 * Return complete User by Id
+	 * 
 	 * @param userFromClient
 	 * @return
 	 */
 	@POST
 	@Path("getUser")
 	@Consumes("application/json")
-	@Produces({"application/json"})
-	public ReResponseObject<LgUser> getUser(final LgUser userFromClient){
+	@Produces({ "application/json" })
+	public ReResponseObject<LgUser> getUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
+				daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				LgUser lgUser = null;
-				try{
+				try {
 					lgUser = daUser.find(userFromClient.getOid());
-				} catch (DaOidNotFoundException oid){
+				} catch (DaOidNotFoundException oid) {
 					throw new LgNoUserWithThisIdException();
 				}
 				return lgUser;
@@ -86,73 +90,75 @@ public class ReUserService extends ReService {
 		}
 		return response;
 	}
-   	 
-     @Path("register")
-     @POST
-     @Consumes("application/json")
-     @Produces({"application/json"})
-     public ReResponseObject<LgUser> registerUser(final LgUser newUserFromClient){
-    	 final DaUser daUser = factory.getDaUser();
-    	 ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
-    		 public LgUser executeWithThrows() throws Exception {
-    			 if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
-    				 throw new LgUserWithThisNameExistsException();
-    			 }
-    			 daUser.save(newUserFromClient);
-    			 return newUserFromClient;
-    		 }
-    	 }.execute();
-    	 if (response.hasError()) {
- 			throw new WebApplicationException(response.getResponseCode());
- 		}
-    	 return response;
- 	}
-     
-   @Path("delete")
-     @DELETE
-     @Consumes("application/json")
-     @Produces({"application/json"})
-     public ReResponseObject<LgUser> deleteUser(final LgUser userFromClient){
-    	final DaUser daUser = factory.getDaUser();
-  		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
-  			public LgUser executeWithThrows() throws Exception {
-  				LgUser userFromDb = null;
-  				try{
-					userFromDb = daUser.find(userFromClient.getOid());
-  				} catch (DaOidNotFoundException oid) {
-  					throw new LgNoUserWithThisIdException();
-  				}
-  				daUser.delete(userFromDb);
-    			return null;
-    		 }
-    	 }.execute();
-    	 if (response.hasError()) {
-  			throw new WebApplicationException(response.getResponseCode());
-  		}
-     	 return response;
- 	} 
-     
-     @Path("update")
-     @POST
-     @Consumes("application/json")
-     @Produces({"application/json"})
-     public ReResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
-    	final DaUser daUser = factory.getDaUser();
-  		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
-  			public LgUser executeWithThrows() throws Exception {
-  				try {
-  					daUser.find(dirtyUser.getOid());
-  				} catch (DaOidNotFoundException oid) {
-  					throw new LgNoUserWithThisIdException();
-  				}
-  				return daUser.update(dirtyUser);
-    		 }
-    	 }.execute();
-    	 if (response.hasError()) {
-   			throw new WebApplicationException(response.getResponseCode());
-   		}
-      	 return response;
-     }
-     
-}
 
+	@Path("register")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public ReResponseObject<LgUser> registerUser(final LgUser newUserFromClient) {
+		final DaUser daUser = factory.getDaUser();
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
+				daUser.getPool()) {
+			public LgUser executeWithThrows() throws Exception {
+				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
+					throw new LgUserWithThisNameExistsException();
+				}
+				daUser.save(newUserFromClient);
+				return newUserFromClient;
+			}
+		}.execute();
+		if (response.hasError()) {
+			throw new WebApplicationException(response.getResponseCode());
+		}
+		return response;
+	}
+
+	@Path("delete")
+	@DELETE
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public ReResponseObject<LgUser> deleteUser(final LgUser userFromClient) {
+		final DaUser daUser = factory.getDaUser();
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
+				daUser.getPool()) {
+			public LgUser executeWithThrows() throws Exception {
+				LgUser userFromDb = null;
+				try {
+					userFromDb = daUser.find(userFromClient.getOid());
+				} catch (DaOidNotFoundException oid) {
+					throw new LgNoUserWithThisIdException();
+				}
+				daUser.delete(userFromDb);
+				return null;
+			}
+		}.execute();
+		if (response.hasError()) {
+			throw new WebApplicationException(response.getResponseCode());
+		}
+		return response;
+	}
+
+	@Path("update")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public ReResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
+		final DaUser daUser = factory.getDaUser();
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
+				daUser.getPool()) {
+			public LgUser executeWithThrows() throws Exception {
+				try {
+					daUser.find(dirtyUser.getOid());
+				} catch (DaOidNotFoundException oid) {
+					throw new LgNoUserWithThisIdException();
+				}
+				return daUser.update(dirtyUser);
+			}
+		}.execute();
+		if (response.hasError()) {
+			throw new WebApplicationException(response.getResponseCode());
+		}
+		return response;
+	}
+
+}
