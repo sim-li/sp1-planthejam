@@ -35,10 +35,9 @@ public class ReUserService extends ReService {
 		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				List<LgUser> users = daUser.findByName(userFromClient.getName());
-//				
-//				/*
-//				 * Available for Client: MultipleUsersWithThisNameException()
-//				 */
+				/*
+				 * Available for Client: MultipleUsersWithThisNameException()
+				 */
 //				if (users.size() > 1) {
 //					throw new MultipleUsersWithThisNameException();
 //				}
@@ -49,7 +48,9 @@ public class ReUserService extends ReService {
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
 					throw new LgWrongPasswordException();
 				}
-				return userFromDb;
+				LgUser userWithId = new LgUser();
+				userWithId.setIdFrom(userFromDb);
+				return userWithId;
 			}
 		}.execute();
 		if (response.hasError()) {

@@ -42,6 +42,15 @@ public abstract class LgTransaction<E> {
 		return response;
 	}
 	
+	public void forceTransactionEnd() {
+		pool.endTransaction(true);
+	}
+	
+	public void forceRestartTransaction() {
+		pool.endTransaction(true);
+		pool.beginTransaction();
+	}
+	
 	public abstract E executeWithThrows() throws Exception;
 }
 
