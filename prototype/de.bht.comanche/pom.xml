@@ -10,46 +10,17 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- Begin abgekupftere Versions -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
 
-		<scala.repoURL>http://scala-tools.org/repo-releases</scala.repoURL>
-
-		<!-- Dependency versions -->
-
-		<!-- Zur verwenden mit Eclipse 3.6 (Scala compiler/library 2.8.1) -->
-		<lift.version>2.2</lift.version>
-		<scala.version>2.8.1</scala.version>
-		<scalatest.version>1.5.1</scalatest.version>
-		<scalacheck.version>1.8</scalacheck.version>
-		<specs.version>1.6.8</specs.version>
-
-		<!-- Zur verwenden mit Eclipse 3.7 (Scala compiler/library 2.9.x) -->
-		<!-- <lift.version>2.4</lift.version> -->
-		<!-- <scala.version>2.9.1</scala.version> -->
-		<!-- <scalatest.version>1.6.1</scalatest.version> -->
-		<!-- <scalacheck.version>1.9</scalacheck.version> -->
-		<!-- <specs.version>1.6.9</specs.version> -->
-
-		<!-- Indicate version as m.n-SNAPSHOT during development, and finally before 
-			release as m.n! -->
-		<fb6util.version>3.0-SNAPSHOT</fb6util.version>
-
-		<!-- Tomcat 5.5 auf fb6test und fb6 kann nur Servlet 2.4. -->
-		<!-- Daher hier vorerst auch so. -->
-		<servlet.api.version>2.4</servlet.api.version>
-		<multex.version>8.3</multex.version>
-		<selenium.webdriver.version>2.24.1</selenium.webdriver.version>
-		<junit.version>4.9</junit.version>
-		<testng.version>6.2</testng.version>
+		<servlet.api.version>2.10.1</servlet.api.version>
+		<junit.version>4.11</junit.version>
 		<jetty.version>6.1.22</jetty.version>
 		<slf4j.api.version>1.6.1</slf4j.api.version>
 		<slf4j.log4j12.version>1.6.1</slf4j.log4j12.version>
 		<log4j.version>1.2.16</log4j.version>
 		<jetty.plugin.version>${jetty.version}</jetty.plugin.version>
 		<!-- Jetty configuration -->
-		<jetty.scanInterval>60</jetty.scanInterval>
+		<jetty.scanInterval>120</jetty.scanInterval>
 		<!-- Enable access to this application from other computers, not only from 
 			localhost. -->
 		<jetty.host>0.0.0.0</jetty.host>
@@ -60,8 +31,7 @@
 		<jetty.context.path>/</jetty.context.path>
 		<jetty.stop.port>9266</jetty.stop.port>
 		<jetty.stop.key>stop</jetty.stop.key>
-		<!-- <jetty.login.properties>src/test/jetty-login.properties</jetty.login.properties> -->
-		<!-- End abgekupferte Versions -->
+
 	</properties>
 	<dependencies>
 		<dependency>
@@ -128,13 +98,13 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-jetty-servlet</artifactId>
-			<version>2.10.1</version>
+			<version>${servlet.api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -173,7 +143,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- Abkupfer Begin -->
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
@@ -188,7 +157,6 @@
 					<stopPort>${jetty.stop.port}</stopPort>
 				</configuration>
 			</plugin>
-			<!-- Abkupfer End -->
 
 			<plugin>
 				<groupId>com.github.searls</groupId>
@@ -197,13 +165,12 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>test</goal>
+							<!-- <goal>test</goal> -->
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
-					<!-- <jsSrcDir>${project.basedir}/src/main/web/js</jsSrcDir>
-					<jsTestSrcDir>${project.basedir}/src/test/web/js</jsTestSrcDir> -->
+					<!-- <jsSrcDir>${project.basedir}/src/main/web/js</jsSrcDir> <jsTestSrcDir>${project.basedir}/src/test/web/js</jsTestSrcDir> -->
 					<jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
 					<jsTestSrcDir>${project.basedir}/src/test/webapp/js</jsTestSrcDir>
 
@@ -211,30 +178,26 @@
 						<!-- <source>${project.basedir}/src/main/webapp/lib/jquery-1.7.2.min.js</source> -->
 						<!-- <source>${project.basedir}/src/main/webapp/lib/angular.js</source> -->
 						<source>${project.basedir}/src/main/webapp/lib/angular.js</source>
-                        <source>${project.basedir}/src/main/webapp/lib/angular-mocks.js</source>
+						<source>${project.basedir}/src/main/webapp/lib/angular-mocks.js</source>
 						<!-- <source>${project.basedir}/src/test/webapp/js/datePickerDateTest.js</source> -->
 					</preloadSources>
-                    <!-- <sourceIncludes>
-                        <include>${project.basedir}/src/main/webapp/lib/angular.js</include>
-						<include>${project.basedir}/src/main/webapp/lib/angular-mocks.js</include>
-                        <include>**/*.js</include>
-                    </sourceIncludes>
-                    <sourceExcludes>
-                        <exclude>${project.basedir}/src/main/webapp/lib/angular-scenario.js</exclude>
-                    </sourceExcludes> -->
-                    <!-- <specIncludes> -->
-                        <!-- <include>${project.basedir}</include> -->
-                        <!-- <include>${project.basedir}src/test/webapp/js/**/*.js</include> -->
-                        <!-- <include>**/*.js</include> -->
-                    <!-- </specIncludes> -->
+					<!-- <sourceIncludes> <include>${project.basedir}/src/main/webapp/lib/angular.js</include> 
+						<include>${project.basedir}/src/main/webapp/lib/angular-mocks.js</include> 
+						<include>**/*.js</include> </sourceIncludes> <sourceExcludes> <exclude>${project.basedir}/src/main/webapp/lib/angular-scenario.js</exclude> 
+						</sourceExcludes> -->
+					<!-- <specIncludes> -->
+					<!-- <include>${project.basedir}</include> -->
+					<!-- <include>${project.basedir}src/test/webapp/js/**/*.js</include> -->
+					<!-- <include>**/*.js</include> -->
+					<!-- </specIncludes> -->
 				</configuration>
 				<dependencies>
-			      <dependency>
-			        <groupId>ch.qos.logback</groupId>
-			        <artifactId>logback-classic</artifactId>
-			        <version>0.9.29</version>
-			      </dependency>
-    			</dependencies>
+					<dependency>
+						<groupId>ch.qos.logback</groupId>
+						<artifactId>logback-classic</artifactId>
+						<version>0.9.29</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 
 			<plugin>

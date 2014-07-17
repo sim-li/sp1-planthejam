@@ -154,13 +154,5 @@ public class ReUserService extends ReService {
       	 return response;
      }
      
-     public static final String CLICHED_MESSAGE = "Hello World!";
-     
-     @Path("hello")
-     @GET
-     @Produces(MediaType.TEXT_HTML)
-         public String getHello() {
-             return CLICHED_MESSAGE;
-         }
 }
 

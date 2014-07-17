@@ -21,7 +21,8 @@ public abstract class LgObject implements Serializable {
 		return oid;
 	}
 	
-	protected void setOid(long oid) {
+	//changed to public for REST-Service
+	public void setOid(long oid) {
 		this.oid = oid;
 	}
 	
