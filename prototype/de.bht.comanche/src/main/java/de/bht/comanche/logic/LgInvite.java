@@ -18,7 +18,6 @@ public class LgInvite extends LgObject{
 	
 	@NotNull
 	@ManyToOne
-	@JsonIgnore
 	private LgUser user;
 	
 	@NotNull

@@ -35,9 +35,10 @@ public class ReUserService extends ReService {
 		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				List<LgUser> users = daUser.findByName(userFromClient.getName());
-				/*
-				 * Available for Client: MultipleUsersWithThisNameException()
-				 */
+//				
+//				/*
+//				 * Available for Client: MultipleUsersWithThisNameException()
+//				 */
 //				if (users.size() > 1) {
 //					throw new MultipleUsersWithThisNameException();
 //				}
@@ -48,9 +49,7 @@ public class ReUserService extends ReService {
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
 					throw new LgWrongPasswordException();
 				}
-				LgUser userWithId = new LgUser();
-				userWithId.setIdFrom(userFromDb);
-				return userWithId;
+				return userFromDb;
 			}
 		}.execute();
 		if (response.hasError()) {
@@ -74,11 +73,7 @@ public class ReUserService extends ReService {
 			public LgUser executeWithThrows() throws Exception {
 				LgUser lgUser = null;
 				try{
-					System.out.println("Searching with OID> " + userFromClient.getOid());
 					lgUser = daUser.find(userFromClient.getOid());
-					System.out.println("And found:> " + lgUser.getOid());
-//					System.out.println("Number of Invites: " + lgUser.getInvites().size());
-					
 				} catch (DaOidNotFoundException oid){
 					throw new LgNoUserWithThisIdException();
 				}
