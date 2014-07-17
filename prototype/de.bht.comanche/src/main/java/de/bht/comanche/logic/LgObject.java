@@ -8,6 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * @author Duc Tung Tong, Beuth Hochschule für Technik Berlin, SWP1 
+ * Dies ist eine abstract Klasse, die von Serializable erbt
+ * gibt automatisch das oid für jedes Objekt, welches in der Datenbank hinzugefügt wird
+ * und durch getOid() dieses oid zurückgeben. 
+ */
 @MappedSuperclass
 public abstract class LgObject implements Serializable {
 	

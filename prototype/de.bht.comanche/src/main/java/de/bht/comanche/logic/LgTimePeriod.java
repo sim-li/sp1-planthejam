@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -7,6 +8,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/**
+ * @author Duc Tung Tong, Beuth Hochschule für Technik Berlin, SWP1 
+ * Diese Klasse beschreibt ein Zeitraum von Survey oder die Verfügbarkeiten von Users.
+ */
 @Entity
 @Table(name = "TimePeriod")
 public class LgTimePeriod extends LgObject {
