@@ -74,11 +74,7 @@ public class ReUserService extends ReService {
 			public LgUser executeWithThrows() throws Exception {
 				LgUser lgUser = null;
 				try{
-					System.out.println("Searching with OID> " + userFromClient.getOid());
 					lgUser = daUser.find(userFromClient.getOid());
-					System.out.println("And found:> " + lgUser.getOid());
-//					System.out.println("Number of Invites: " + lgUser.getInvites().size());
-					
 				} catch (DaOidNotFoundException oid){
 					throw new LgNoUserWithThisIdException();
 				}

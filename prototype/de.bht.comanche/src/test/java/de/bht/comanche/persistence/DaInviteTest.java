@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.exceptions.DaException;
@@ -85,6 +86,7 @@ public class DaInviteTest {
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
+	@Ignore
     @Test 
 	public void readSurveysTest() {
 		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {

@@ -1,17 +1,12 @@
 package de.bht.comanche.logic;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonManagedReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "Lg_Invite")
 public class LgInvite extends LgObject{
@@ -21,13 +16,12 @@ public class LgInvite extends LgObject{
 	private boolean isHost;
 	private boolean isIgnored;
 	
-	@JsonBackReference
 	@NotNull
 	@ManyToOne
 	private LgUser user;
 	
 	@NotNull
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private LgSurvey invite_survey;
 
 	public boolean isHost() {
@@ -48,15 +42,16 @@ public class LgInvite extends LgObject{
 		return this;
 	}
 
+	@JsonIgnore
 	public LgUser getUser() {
 		return user;
 	}
-
+	
 	public LgInvite setUser(LgUser user) {
 		this.user = user;
 		return this;
 	}
-
+	
 	public LgSurvey getSurvey() {
 		return invite_survey;
 	}

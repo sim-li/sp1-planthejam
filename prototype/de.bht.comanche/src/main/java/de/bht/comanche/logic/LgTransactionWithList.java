@@ -32,6 +32,15 @@ public abstract class LgTransactionWithList<E> {
 		return response;
 	}
 	
+	public void forceTransactionEnd() {
+		pool.endTransaction(true);
+	}
+	
+	public void forceRestartTransaction() {
+		pool.endTransaction(true);
+		pool.beginTransaction();
+	}
+	
 	public abstract List<E> executeWithThrows() throws Exception;
 }
 

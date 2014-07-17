@@ -20,14 +20,12 @@ import de.bht.comanche.logic.LgTransactionWithList;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
-import de.bht.comanche.persistence.DaPool;
 
 @Path("/invite/")
 public class ReInviteService extends ReService {
 	public ReInviteService() {
 		super();
 	}
-
 	@POST
 	@Path("getInvites")
 	@Consumes("application/json")
