@@ -31,8 +31,7 @@ public class ReInviteService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgInvite> getInvites(final LgUser userFromClient) {
 		final DaUser daUser0 = factory.getDaUser();
-		ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(
-				daUser0.getPool()) {
+		ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try {

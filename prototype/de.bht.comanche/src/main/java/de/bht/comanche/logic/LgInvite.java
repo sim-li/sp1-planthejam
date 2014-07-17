@@ -3,12 +3,17 @@ package de.bht.comanche.logic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+/**
+ * @author Duc Tung Tong, Beuth Hochschule für Technik Berlin, SWP1 
+ * Diese Klasse beschreibt eine Einladung von Host zu Users
+ *  hat 2 boolean Werte : istHost und isIgnoredn
+ *  und die Verbindung mit LgUser und LgSurvey
+ */
 @Entity
 @Table(name = "Lg_Invite")
 public class LgInvite extends LgObject{

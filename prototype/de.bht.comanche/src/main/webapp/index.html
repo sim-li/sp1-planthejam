@@ -38,7 +38,12 @@
     <!-- <script type="text/javascript" src="webjars/angularjs/1.2.16-2/angular.js"></script> -->
 
     
+    <script src="js/myApp.js"></script>
     <script src="js/ctrl.js"></script>
+    <script src="js/loginCtrl.js"></script>
+    <script src="js/loggedInCtrl.js"></script>
+    <script src="js/editUserCtrl.js"></script>
+    <script src="js/editSurveyCtrl.js"></script>
     <script src="js/constants.js"></script>
     <script src="js/invite.js"></script>
     <script src="js/survey.js"></script>
@@ -51,11 +56,13 @@
     <!-- display errors here -->
     <pre id="error">{{ warnings.central }}</pre>
 
-    <!-- debugging errors here -->
-    <pre id="debug">
+    <!-- for debugging -->
+    <!-- <pre id="debug">
         {{ session.user }}
         {{ session.tempUser }}
-    </pre>
+        {{ session.tempInvite }}
+        {{ session.selectedInvite }}
+    </pre> -->
 
 
     <div id="login_area" ng-controller="loginCtrl" ng-hide="session.state.isLoggedIn" class="input_area">
@@ -129,7 +136,7 @@
 
 
 
-    <div id="logged_in_area" ng-show="session.state.isLoggedIn" class="input_area">
+    <div id="logged_in_area" ng-controller="loggedInCtrl" ng-show="session.state.isLoggedIn" class="input_area">
 
         <div id="menu_area">
                 <input id="editUser" type="button" value="Konto" ng-click="editUser()" />
@@ -138,7 +145,7 @@
         </div><br /><!-- menu_area -->
 
 
-        <form name="editUserForm" ng-show="session.state.is(dialogMap.USER_EDIT)" class="my_form">
+        <form name="editUserForm" ng-controller="editUserCtrl" ng-show="session.state.is(dialogMap.USER_EDIT)" class="my_form">
             <div class="full_width_input">
                 <label for="inputName">Benutzername</label>
                 <input id="inputName" name="inputName" type="text" ng-model="session.tempUser.name" placeholder="Dein Benutzername ..." required />
@@ -180,72 +187,72 @@
                 <input id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addSurvey()" />
                 
                 <!--++++ TODO: Baustelle ++++++++++++++++++++-->
-                <select id="surveyList" ng-model="session.selectedSurvey" ng-options="survey.name for survey in session.user.surveys | filter:session.user.searchString" size="5%"></select>
+                <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString" size="5%"></select>
                 
-                <!-- <select id="surveyList" ng-model="session.selectedSurvey" size="5%">
+                <!-- <select id="surveyList" ng-model="session.selectedInvite.survey" size="5%">
                     <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
                 </select> -->
 
                 <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="session.user.searchString" ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-change="updateSelection()"/>
 
                 <input id="editSurvey" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="editSurvey()" />
-                <input id="deleteSurvey" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedSurvey()" />
+                <input id="deleteSurvey" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedInvite()" />
             </span>
 
-            <textarea rows="5" readonly>{{ session.selectedSurvey.description }}</textarea>
+            <textarea rows="5" readonly>{{ session.selectedInvite.survey.description }}</textarea>
         </div><!-- survey_selection_area -->
 
 
 
-        <div id="survey_edit_area" ng-show="session.state.is(dialogMap.SURVEY_EDIT)">
+        <div id="survey_edit_area" ng-controller="editSurveyCtrl" ng-show="session.state.is(dialogMap.SURVEY_EDIT)">
             <span class="full_width_input">
 
                 <label for="editSurveyName">Name</label>
-                <!-- <input id="editSurveyName" type="text" ng-model="session.tempSurvey.name" ng-change="$log.log(session.tempSurvey.name);"/> -->
-                <input id="editSurveyName" type="text" ng-model="session.tempSurvey.name"/>
+                <!-- <input id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name" ng-change="$log.log(session.tempInvite.survey.name);"/> -->
+                <input id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name"/>
 
                 <label for="editSurveyDescription">Beschreibung</label>
-                <!-- <textarea id="editSurveyDescription" rows="5" ng-model="session.tempSurvey.description" ng-change="$log.log(session.tempSurvey.description);"></textarea> -->
-                <textarea id="editSurveyDescription" rows="5" ng-model="session.tempSurvey.description"></textarea>
+                <!-- <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description" ng-change="$log.log(session.tempInvite.survey.description);"></textarea> -->
+                <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description"></textarea>
                 
                 <label for="editSurveyType">Typ</label>
-                <select id="editSurveyType" ng-model="session.tempSurvey.type" ng-options="type for type in Type.options_" ng-change="$log.log(session.tempSurvey.type);"></select>
+                <select id="editSurveyType" ng-model="session.tempInvite.survey.type" ng-options="type for type in Type.options_" ng-change="$log.log(session.tempInvite.survey.type);"></select>
                 
                 <label for="editSurveyDeadlineDate">Deadline</label>
-                <input id="editSurveyDeadlineDate" type="date" ng-model="session.tempSurvey.deadline.date" ng-change="$log.log(session.tempSurvey.deadline.toDate())" required />
-                <input id="editSurveyDeadlineTime" type="time" ng-model="session.tempSurvey.deadline.time" ng-change="$log.log(session.tempSurvey.deadline.toDate())" required />
+                <input id="editSurveyDeadlineDate" type="date" ng-model="session.tempInvite.survey.deadline.date" ng-change="$log.log(session.tempInvite.survey.deadline.toDate())" required />
+                <input id="editSurveyDeadlineTime" type="time" ng-model="session.tempInvite.survey.deadline.time" ng-change="$log.log(session.tempInvite.survey.deadline.toDate())" required />
 
 
                 <label for="editSurveyFrequencyDistance">Frequenz - Abstand</label>
-                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="session.tempSurvey.frequency.distance" ng-change="$log.log(session.tempSurvey.frequency);"/>
+                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="session.tempInvite.survey.frequency.distance" ng-change="$log.log(session.tempInvite.survey.frequency);"/>
                 
                 <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
-                <select id="editSurveyFrequencyTimeUnit" ng-model="session.tempSurvey.frequency.timeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.tempSurvey.frequency);"></select>
+                <select id="editSurveyFrequencyTimeUnit" ng-model="session.tempInvite.survey.frequency.timeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.tempInvite.survey.frequency);"></select>
 
 
                 <label for="editSurveyPossibleTimeperiods">M&ouml;gliche Zeitr&auml;ume</label>
                 <div id="editSurveyPossibleTimeperiods">
                     <ul>
-                        <li ng-repeat="timeperiod in session.tempSurvey.possibleTimeperiods">
+                        <li ng-repeat="timeperiod in session.tempInvite.survey.possibleTimeperiods">
                             <label for="editSurveyDeterminedTimeperiodDuration">Startzeitpunkt</label>
                             <input id="timeperiodStartDate" type="date" ng-model="timeperiod.startTime.date" ng-change="$log.log(timeperiod.startTime.toDate())" required />
                             <input id="timeperiodStartTime" type="time" ng-model="timeperiod.startTime.time" ng-change="$log.log(timeperiod.startTime.toDate())" required />
 
                             <label id="timeperiodDuration" for="editSurveyDeterminedTimeperiodDuration">Dauer in Minuten</label>
                             <input type="number" min="0" ng-model="timeperiod.durationInMins" ng-change="$log.log(timeperiod.durationInMins)" required />
-                            [ <a href="" ng-click="removeTimeperiodFromTempSurvey(timeperiod)">L&ouml;schen</a> ]
+                            [ <a href="" ng-click="removeTimeperiodFromTempInvite(timeperiod)">L&ouml;schen</a> ]
                         </li>
-                        <li>[ <a href="" ng-click="addTimeperiodToTempSurvey()">Hinzuf&uuml;gen</a> ]</li>
+                        <li>[ <a href="" ng-click="addTimeperiodToTempInvite()">Hinzuf&uuml;gen</a> ]</li>
                     </ul>
                 </div>
 
 
                 <label for="editSurveyDeterminedTimeperiodStartDate">Ermittelter Zeitraum - Startzeitpunkt</label>
-                <input id="editSurveyDeterminedTimeperiodStartDate" type="date" ng-model="session.tempSurvey.determinedTimeperiod.startTime.date" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.startTime.toDate())" />
-                <input id="editSurveyDeterminedTimeperiodStartTime" type="time" ng-model="session.tempSurvey.determinedTimeperiod.startTime.time" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.startTime.toDate())" />
+                <input id="editSurveyDeterminedTimeperiodStartDate" type="date" ng-model="session.tempInvite.survey.determinedTimeperiod.startTime.date" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.startTime.toDate())" />
+                <input id="editSurveyDeterminedTimeperiodStartTime" type="time" ng-model="session.tempInvite.survey.determinedTimeperiod.startTime.time" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.startTime.toDate())" />
 
                 <label for="editSurveyDeterminedTimeperiodDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
-                <input id="editSurveyDeterminedTimeperiodDuration" type="number" min="0" ng-model="session.tempSurvey.determinedTimeperiod.durationInMins" ng-change="$log.log(session.tempSurvey.determinedTimeperiod.durationInMins);"/>
+                <input id="editSurveyDeterminedTimeperiodDuration" type="number" min="0" ng-model="session.tempInvite.survey.determinedTimeperiod.durationInMins" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.durationInMins);"/>
 
 
                 <input id="cancelSurveyEdit" type="button" value="Abbrechen" ng-click="cancelEditSurvey()" />
