@@ -4,22 +4,23 @@
     - Oracle VirtualBox installieren
     - Maschine erzeugen
         Maschine > Neu >
-        Linux, Debian64 auswÃ¤hlen
-        Speichergröße passend festlegen
-        vorhandene Festplatte verwenden, PTJ.vdi im mitgelieferten Image auswählen
+        Linux, Debian64 auswaehlen
+        Speichergroeße passend festlegen
+        vorhandene Festplatte verwenden, PTJ.vdi im mitgelieferten Image auswaehlen
         jetzt ist die Maschine erzeugt
     -  In den globalen Einstellung von Virtualbox sicherstellen, dass unter Netzwerk
-    der HostOnlyAdapter vboxnet0 hinzugefügt ist (+ Symbol, Defaults bestätigen)
-    - Der Hostonly Adapter muss unter der Konfigurationd es eben hinzgefügten Images 
-    unter Adapter 2 hinzugefügt sein.
+    der HostOnlyAdapter vboxnet0 hinzugefuegt ist (+ Symbol, Defaults bestaetigen)
+    - Der Hostonly Adapter muss unter der Konfigurationd es eben hinzgefuegten Images 
+    unter Adapter 2 hinzugefuegt sein.
     - Adapter 1 soll der NAT Adapter sein.
-    - In der folgenden Ausführung wird die IP 192.168.56.102 als ReferenzIP angeben.
+    - In der folgenden Ausfuehrung wird die IP 192.168.56.102 als ReferenzIP angeben.
     U.u. mappt Virtualbox die IP auch auf [..].101
     - Das System ist nun Betriebsbereit
 
 ----------------
 
--- Linux-Login für das Projekt --
+=======
+-- Linux-Login fuer das Projekt --
 
 username:   ptj
 pass:       ptj
@@ -36,7 +37,7 @@ im Projektverzeichnis.
 
 
 ---------------
--- Applikation ausführen -- 
+-- Applikation ausfuehren -- 
 
 Server starten:
 
@@ -46,7 +47,7 @@ Der Zugriff auf die Applikation ist im lokalen Browser (Hostsystem) mit Hilfe de
     192.168.56.102:8080
 und im Image (Gastsystem) unter
     localhost:8080
-möglich.
+moeglich.
 
  
 --------------
@@ -62,8 +63,8 @@ pass: ptj
 
 - lokal Eclipse Enterprise Edition installieren
 - sshfs installieren
-    - für Windows muss zuvor die Dokan-Library installiert werden -> DokanInstall_0.6.0.exe
-    - Daten für die sshfs-Installation:
+    - fuer Windows muss zuvor die Dokan-Library installiert werden -> DokanInstall_0.6.0.exe
+    - Daten fuer die sshfs-Installation:
         - beliebigen Drive-Namen vergeben
         - Host: 192.168.56.102
         - Port: 22

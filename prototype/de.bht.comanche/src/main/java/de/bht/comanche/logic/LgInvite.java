@@ -22,10 +22,11 @@ public class LgInvite extends LgObject{
 	
 	@NotNull
 	@ManyToOne
+	@JsonIgnore
 	private LgUser user;
 	
 	@NotNull
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private LgSurvey invite_survey;
 
 	public boolean isHost() {
@@ -46,15 +47,17 @@ public class LgInvite extends LgObject{
 		return this;
 	}
 
+	@JsonIgnore
 	public LgUser getUser() {
 		return user;
 	}
-
+	
 	public LgInvite setUser(LgUser user) {
 		this.user = user;
 		return this;
 	}
-
+	
+	@JsonIgnore
 	public LgSurvey getSurvey() {
 		return invite_survey;
 	}

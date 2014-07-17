@@ -13,6 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "survey")
@@ -32,10 +35,11 @@ public class LgSurvey extends LgObject {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private LgTimeUnit frequencyTimeUnit;
+	
 	@OneToMany(mappedBy="invite_survey", cascade = CascadeType.ALL)
 	private List<LgInvite> invites;
 	
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL)
 	private List<LgTimePeriod> possibleTimePeriods;
 
 	public String getName() {
@@ -92,6 +96,7 @@ public class LgSurvey extends LgObject {
 		return this;
 	}
 
+	@JsonIgnore
 	public List<LgInvite> getInvites() {
 		return invites;
 	}
