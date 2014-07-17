@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loggedInCtrl", ["$scope", "$log", "Survey", "restService", "dialogMap", "util", 
-        function($scope, $log, Survey, restService, dialogMap, util) {
+    .controller("loggedInCtrl", ["$scope", "$log", "Survey", "Invite", "restService", "dialogMap", "util", 
+        function($scope, $log, Survey, Invite, restService, dialogMap, util) {
 
         $scope.logout = function() {
 
@@ -34,38 +34,38 @@ angular.module("myApp")
 
 
         $scope.editSurvey = function() {
-            if (!$scope.session.selectedSurvey) {
+            if (!$scope.session.selectedInvite) {
                 $log.log("Keine Terminumfrage ausgewaehlt.");
                 return;
             }
-            $scope.session.tempSurvey = new Survey($scope.session.selectedSurvey);
+            $scope.session.tempInvite = new Invite($scope.session.selectedInvite);
             $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
             $log.log($scope.session.user);
         };
 
         $scope.addSurvey = function() {
-            $scope.session.tempSurvey = new Survey();
+            $scope.session.tempInvite = new Invite();
             $scope.session.addingSurvey = true;
             $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
         };
         
-        $scope.deleteSelectedSurvey = function() {
+        $scope.deleteSelectedInvite = function() {
 
             // *** ask: are you sure you want to delete? ***
 
-            var _survey = $scope.session.selectedSurvey;
-            if (!_survey) {
+            var _invite = $scope.session.selectedInvite;
+            if (!_invite) {
                 $log.log("Keine Terminumfrage ausgewaehlt.");
                 return;
             }
 
-            var _survey = $scope.session.user;
-            restService.deleteSurvey(_survey.oid)
+            var _invite = $scope.session.user;
+            restService.deleteSurvey(_invite.oid)
                 .then(function(success) {
                     $log.log(success);
-                    util.removeElementFrom(_survey, $scope.session.user.surveys);
-                    $scope.session.selectedSurvey = $scope.session.user.surveys[0] || "";
-                    $scope.session.tempSurvey = "";
+                    util.removeElementFrom(_invite, $scope.session.user.invites);
+                    $scope.session.selectedInvite = $scope.session.user.invites[0] || "";
+                    $scope.session.tempInvite = "";
                 }, function(error) {
                     $log.error(error);
                     $scope.warnings.central = error;
@@ -75,7 +75,7 @@ angular.module("myApp")
 
             
             //-------------------- ***
-            console.log($scope.session.selectedSurvey);
+            console.log($scope.session.selectedInvite);
             console.log($scope.session.user);
             //-------------------- ***
         };

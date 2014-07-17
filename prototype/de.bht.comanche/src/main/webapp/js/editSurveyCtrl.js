@@ -13,30 +13,30 @@ angular.module("myApp")
         function($scope, $log, DatePickerDate, Survey, restService, dialogMap, util) {
 
         $scope.cancelEditSurvey = function() {
-            $scope.session.tempSurvey = "";
+            $scope.session.tempInvite = "";
             $scope.session.addingSurvey = false;
             $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
-            $log.log($scope.session.selectedSurvey);
+            $log.log($scope.session.selectedInvite);
             $log.log($scope.session.user);
         };
 
         $scope.saveSurvey = function() {
-            var _survey = $scope.session.tempSurvey;
+            var _invite = $scope.session.tempInvite;
 
 
             // *** test the change to async ***
 
-            restService.saveSurvey(_survey)
-                .then(function(survey) {
+            restService.saveSurvey(_invite)
+                .then(function(invite) {
 
-                    if (!$scope.session.addingSurvey) {
-                        util.removeElementFrom(_survey, $scope.session.user.surveys);
+                    if (!$scope.session.addinginvite) {
+                        util.removeElementFrom(_invite, $scope.session.user.invites);
                     }
 
-                    $scope.session.user.surveys.push(survey);
-                    $scope.session.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
-                    $scope.session.selectedSurvey = survey;
-                    $scope.session.tempSurvey = "";
+                    $scope.session.user.invites.push(invite);
+                    $scope.session.user.invites.sort(function(a, b){ return a.name.localeCompare(b.name) });
+                    $scope.session.selectedInvite = invite;
+                    $scope.session.tempInvite = "";
                     $scope.session.addingSurvey = false;
                     $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
 
@@ -49,34 +49,34 @@ angular.module("myApp")
                 });
 
 
-            // var _fromSaveSurvey = restService.saveSurvey(_survey);
+            // var _fromSaveSurvey = restService.saveSurvey(_invite);
             //-- falls kein Fehlschlag:
-            // _survey = _fromSaveSurvey.survey;
+            // _invite = _fromSaveSurvey.survey;
 
             // if (!$scope.session.addingSurvey) {
-            //     util.removeElementFrom(_survey, $scope.session.user.surveys);
+            //     util.removeElementFrom(_invite, $scope.session.user.invites);
             // }
 
-            // $scope.session.user.surveys.push(_survey);
-            // $scope.session.user.surveys.sort(function(a, b){ return a.name.localeCompare(b.name) });
+            // $scope.session.user.invites.push(_invite);
+            // $scope.session.user.invites.sort(function(a, b){ return a.name.localeCompare(b.name) });
 
-            // $scope.session.selectedSurvey = _survey;
-            // $scope.session.tempSurvey = "";
+            // $scope.session.selectedInvite = _invite;
+            // $scope.session.tempInvite = "";
             // $scope.session.addingSurvey = false;
 
 
             //---------------- ***
-            console.log($scope.session.selectedSurvey);
+            console.log($scope.session.selectedInvite);
             console.log($scope.session.user);
             //---------------- ***
         };
         
-        $scope.removeTimeperiodFromTempSurvey = function(timeperiod) {
-            util.removeElementFrom(timeperiod, $scope.session.tempSurvey.possibleTimeperiods);
+        $scope.removeTimeperiodFromTempInvite = function(timeperiod) {
+            util.removeElementFrom(timeperiod, $scope.session.tempInvite.survey.possibleTimeperiods);
         };
 
-        $scope.addTimeperiodToTempSurvey = function() {
-            $scope.session.tempSurvey.possibleTimeperiods.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
+        $scope.addTimeperiodToTempInvite = function() {
+            $scope.session.tempInvite.survey.possibleTimeperiods.push({ "startTime": new DatePickerDate(new Date()), "durationInMins": 60 });
         };
 
 

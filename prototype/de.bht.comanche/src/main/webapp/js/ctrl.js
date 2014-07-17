@@ -33,7 +33,8 @@ angular.module("myApp")
                 "email": "", 
                 "tel": "", 
                 // "surveys": getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
-                "surveys": [{}] // empty list for debugging
+                // "surveys": [{}] // empty list for debugging
+                "invites": [{}] // empty list for debugging
             };
             $log.log("user initialized");
             return user;

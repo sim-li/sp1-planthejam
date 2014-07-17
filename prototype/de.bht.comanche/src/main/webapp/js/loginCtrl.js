@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loginCtrl", ["$scope", "$log", "Survey", "patterns", "restService", "dialogMap", 
-        function($scope, $log, Survey, patterns, restService, dialogMap) {
+    .controller("loginCtrl", ["$scope", "$log", "patterns", "restService", "dialogMap", 
+        function($scope, $log, patterns, restService, dialogMap) {
         
         var loginIsValidFor = function(user) {
             if (!user.name) {
@@ -68,11 +68,15 @@ angular.module("myApp")
                         .then(function(invites) {
                             $log.debug(invites);
 
-                            var _surveys = [];
+                            var _invites = [];
                             for (var i in invites) {
-                                _surveys.push(invites[i].survey);
+                                _invites.push(invites[i]);
                             }
-                            $scope.session.user.surveys = _surveys;
+                            $scope.session.user.invites  = _invites;
+                            $scope.session.selectedInvite = $scope.session.user.invites[0] || "";
+                            $log.debug($scope.session.user.invites[0].survey);
+                            $log.debug($scope.session.selectedInvite.survey);
+                            $log.debug("---------");
 
                         }, function(error) {
                             $log.error(error);
