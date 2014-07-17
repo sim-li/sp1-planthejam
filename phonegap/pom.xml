@@ -20,15 +20,17 @@
 			<version>2.2.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.cordova</groupId>
-			<artifactId>cordova</artifactId>
-			<version>2.0.0</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.errai</groupId>
+			<artifactId>cordova-maven-plugin</artifactId>
+			<version>3.0.1.Final</version>
+			<type>maven-plugin</type>
 		</dependency>
 	</dependencies>
 
@@ -51,10 +53,15 @@
 				<artifactId>android-maven-plugin</artifactId>
 				<configuration>
 					<sdk>
-						<!-- platform or api level (api level 4 = platform 1.6) -->
-						<platform>19</platform>
+						<path>/home/ptj/Arbeifläsche/sdk/</path>
+						<platform>16</platform>
 					</sdk>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jboss.errai</groupId>
+				<artifactId>cordova-maven-plugin</artifactId>
+				<version>3.0.1.Final</version>
 			</plugin>
 		</plugins>
 	</build>
