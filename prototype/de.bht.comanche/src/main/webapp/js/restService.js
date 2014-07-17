@@ -109,8 +109,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 method: "POST", 
                 url: USER_PATH + "login", 
                 data: { "name": user.name, "password": user.password }
-                // data: { "name": "Alice", "password": "nosafepwd" } // <<<<<<<<<<<<<<<<<<<<<<<<<<<< HACK    FIXME >>>>>>>>>>>>>>
-                // data: { "name": user.name, "password": "hiiambob" } // <<<<<<<<<<<<<<<<<<<<<<<<<<<< HACK    FIXME >>>>>>>>>>>>>>
             }).success(function(data, status, header, config) {
                 $log.debug(data.data[0]);
 

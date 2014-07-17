@@ -107,12 +107,8 @@ public class LgUser extends LgObject {
 		return this.password.equals(password);
 	}
 	
-	public void updateWith(LgUser other) {
-		this.name = other.name == null ?  this.name : other.name;
-		this.tel = other.tel;
-		this.email = other.email;
-		this.password = other.password;
-		this.invites = other.invites;
+	public void clearInvites() {
+		this.invites.clear();
 	}
 	
 	@Override

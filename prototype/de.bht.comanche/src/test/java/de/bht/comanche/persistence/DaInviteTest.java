@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -22,7 +23,6 @@ import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgUserDummyFactory;
 import de.bht.comanche.rest.ReResponseObject;
-
 public class DaInviteTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -86,7 +86,6 @@ public class DaInviteTest {
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
-	@Ignore
     @Test 
 	public void readSurveysTest() {
 		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), THROW_STACKTRACE, ROLLBACK) {
@@ -131,21 +130,5 @@ public class DaInviteTest {
 		assertEquals(userName + " > TEL", user.getTel(), userFromDb.getTel());
 		assertEquals(userName + " > PASSWORD", user.getPassword(), userFromDb.getPassword());
 	}
-	
-	
-// TODO DELETE WITH FULL CONSTRAINS.
-//	@After public void tearDown() {
-//		final DaUser daUser = daFactory.getDaUser();
-//		boolean success = new TransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
-//			public void executeWithThrows() throws Exception {
-//				LgUser aliceFromDb = daUser.find(alice.getOid());
-//				LgUser bobFromDb = daUser.find(bob.getOid());
-//				daUser.delete(aliceFromDb);
-//				daUser.delete(bobFromDb);
-//			}
-//		}.execute();
-//		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
-//		PersistenceUtils pu = new PersistenceUtils(daUser.getPool());
-//	}
 	
 }

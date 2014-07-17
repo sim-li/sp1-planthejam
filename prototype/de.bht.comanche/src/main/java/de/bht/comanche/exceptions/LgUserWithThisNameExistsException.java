@@ -7,7 +7,7 @@ public class LgUserWithThisNameExistsException extends LgException {
 	private static final long serialVersionUID = -3481383568588952305L;
 	
 	public LgUserWithThisNameExistsException() {
-		super(LgErrorValue.USER_EXIST);
+		super(LgErrorValues.USER_EXIST);
 	}
 }
 

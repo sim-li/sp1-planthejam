@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -23,11 +24,11 @@ public class LgInvite extends LgObject{
 	private boolean isIgnored;
 	
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL)
 	private LgUser user;
 	
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private LgSurvey invite_survey;
 
 	public boolean isHost() {
