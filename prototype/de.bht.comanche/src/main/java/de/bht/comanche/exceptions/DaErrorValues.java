@@ -6,7 +6,8 @@ public enum DaErrorValues {
 	NO_QUERY_CLASS (4),
 	NO_PERSISTENCE_CLASS (5),
 	WRONG_ARGUMENT_TYPE (6), 
-	WRONG_NUMBER_OF_ARGUMENTS (7);
+	WRONG_NUMBER_OF_ARGUMENTS (7),
+	INVITE_NOT_FOUND(14);
 	
 	private final int responseCode;
 	

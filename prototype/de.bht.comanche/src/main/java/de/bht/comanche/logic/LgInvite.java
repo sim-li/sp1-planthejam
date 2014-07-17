@@ -1,11 +1,13 @@
 package de.bht.comanche.logic;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "Lg_Invite")
@@ -21,7 +23,7 @@ public class LgInvite extends LgObject{
 	private LgUser user;
 	
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private LgSurvey invite_survey;
 
 	public boolean isHost() {
