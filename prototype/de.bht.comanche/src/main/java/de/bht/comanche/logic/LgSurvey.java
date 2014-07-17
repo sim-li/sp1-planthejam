@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "survey")
 public class LgSurvey extends LgObject {
@@ -34,10 +35,11 @@ public class LgSurvey extends LgObject {
 	@Enumerated(EnumType.STRING)
 	private LgTimeUnit frequencyTimeUnit;
 	
-	@OneToMany(mappedBy="invite_survey", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="invite_survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<LgInvite> invites;
 	
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgTimePeriod> possibleTimePeriods;
 
 	public String getName() {

@@ -53,7 +53,6 @@ public class LgInvite extends LgObject{
 		return this;
 	}
 	
-	@JsonIgnore
 	public LgSurvey getSurvey() {
 		return invite_survey;
 	}
