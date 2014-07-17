@@ -19,7 +19,7 @@ public class LgInvite extends LgObject{
 	private boolean isIgnored;
 	
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private LgUser user;
 	
 	@NotNull

@@ -102,6 +102,10 @@ public class LgUser extends LgObject {
 		return this.password.equals(password);
 	}
 	
+	public void clearInvites() {
+		this.invites.clear();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -122,6 +122,7 @@ public class ReUserService extends ReService {
   				} catch (DaOidNotFoundException oid) {
   					throw new LgNoUserWithThisIdException();
   				}
+  				userFromDb.clearInvites();
   				daUser.delete(userFromDb);
     			return null;
     		 }

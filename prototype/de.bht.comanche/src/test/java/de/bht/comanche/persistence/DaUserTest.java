@@ -15,7 +15,7 @@ import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgUserDummyFactory;
-@Ignore
+
 public class DaUserTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -129,18 +129,4 @@ public class DaUserTest {
 		assertEquals(userName + " > PASSWORD", user.getPassword(), userFromDb.getPassword());
 	}
 
-	@After public void tearDown() {
-		final DaUser daUser = daFactory.getDaUser();
-		boolean success = new LgTransactionWithStackTrace<LgUser>(daUser.getPool(), true, ROLLBACK) {
-			public void executeWithThrows() throws Exception {
-				LgUser aliceFromDb = daUser.find(alice.getOid());
-				LgUser bobFromDb = daUser.find(bob.getOid());
-				daUser.delete(aliceFromDb);
-				daUser.delete(bobFromDb);
-			}
-		}.execute();
-		assertTrue("Deleting Alice & Bob: |Alice ID|> " + alice.getOid() + " |Bob ID|> " + bob.getOid(), success);
-		DaTestUtils pu = new DaTestUtils(daUser.getPool());
-	}
-	
 }
