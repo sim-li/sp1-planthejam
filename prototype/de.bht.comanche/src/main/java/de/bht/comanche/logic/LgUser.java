@@ -11,6 +11,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * @author tonytong
+ * Diese Klasse beschreibt ein User, der in der Datenbank geschpeichert ist.
+ * ein User hat Username, Telephonenummer, Email, Password bzw. Contacts mit anderen Users
+ */
 @Entity
 @Table(name = "user")
 public class LgUser extends LgObject {
@@ -22,7 +27,7 @@ public class LgUser extends LgObject {
 	private String email;
 	private String password;
 
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<LgInvite> invites;
 
 	public LgUser() {
