@@ -15,4 +15,15 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         USER_EDIT: 2, 
         SURVEY_SELECTION: 3,
         SURVEY_EDIT: 4
+    })
+    .factory("util", function() {
+        var removeElementFrom = function(element, array) {
+            var index = array.indexOf(element);
+            if (index > -1) {
+                array.splice(index, 1);
+            }
+        };
+        return {
+            removeElementFrom: removeElementFrom
+        };
     });

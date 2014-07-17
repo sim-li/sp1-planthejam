@@ -337,7 +337,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             $http({ 
                 method: "DELETE", 
                 url: USER_PATH + "delete", 
-                data: { "oid": user.oid }, 
+                data: { "oid": oid }, 
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);

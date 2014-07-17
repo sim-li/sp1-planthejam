@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loggedInCtrl", ["$scope", "$log", "Survey", "dialogMap", 
-        function($scope, $log, Survey, dialogMap) {
+    .controller("loggedInCtrl", ["$scope", "$log", "Survey", "restService", "dialogMap", "util", 
+        function($scope, $log, Survey, restService, dialogMap, util) {
 
         $scope.logout = function() {
 
@@ -47,6 +47,37 @@ angular.module("myApp")
             $scope.session.tempSurvey = new Survey();
             $scope.session.addingSurvey = true;
             $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
+        };
+        
+        $scope.deleteSelectedSurvey = function() {
+
+            // *** ask: are you sure you want to delete? ***
+
+            var _survey = $scope.session.selectedSurvey;
+            if (!_survey) {
+                $log.log("Keine Terminumfrage ausgewaehlt.");
+                return;
+            }
+
+            var _survey = $scope.session.user;
+            restService.deleteSurvey(_survey.oid)
+                .then(function(success) {
+                    $log.log(success);
+                    util.removeElementFrom(_survey, $scope.session.user.surveys);
+                    $scope.session.selectedSurvey = $scope.session.user.surveys[0] || "";
+                    $scope.session.tempSurvey = "";
+                }, function(error) {
+                    $log.error(error);
+                    $scope.warnings.central = error;
+                }, function(notification) {
+                    // $log.log(notification); // for future use
+                });
+
+            
+            //-------------------- ***
+            console.log($scope.session.selectedSurvey);
+            console.log($scope.session.user);
+            //-------------------- ***
         };
 
 

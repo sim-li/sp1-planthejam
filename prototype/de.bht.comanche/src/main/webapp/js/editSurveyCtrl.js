@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("editSurveyCtrl", ["$scope", "$log", "DatePickerDate", "Survey", "restService", "dialogMap", 
-        function($scope, $log, DatePickerDate, Survey, restService, dialogMap) {
+    .controller("editSurveyCtrl", ["$scope", "$log", "DatePickerDate", "Survey", "restService", "dialogMap", "util", 
+        function($scope, $log, DatePickerDate, Survey, restService, dialogMap, util) {
 
         $scope.cancelEditSurvey = function() {
             $scope.session.tempSurvey = "";
@@ -30,7 +30,7 @@ angular.module("myApp")
                 .then(function(survey) {
 
                     if (!$scope.session.addingSurvey) {
-                        removeElementFrom(_survey, $scope.session.user.surveys);
+                        util.removeElementFrom(_survey, $scope.session.user.surveys);
                     }
 
                     $scope.session.user.surveys.push(survey);
@@ -54,7 +54,7 @@ angular.module("myApp")
             // _survey = _fromSaveSurvey.survey;
 
             // if (!$scope.session.addingSurvey) {
-            //     removeElementFrom(_survey, $scope.session.user.surveys);
+            //     util.removeElementFrom(_survey, $scope.session.user.surveys);
             // }
 
             // $scope.session.user.surveys.push(_survey);
@@ -70,53 +70,9 @@ angular.module("myApp")
             console.log($scope.session.user);
             //---------------- ***
         };
-
-
-        var removeElementFrom = function(element, array) {
-            var index = array.indexOf(element);
-            if (index > -1) {
-                array.splice(index, 1);
-            }
-        };
-
-        // var removeSelectedSurvey = function() {
-        //     removeElementFrom($scope.session.selectedSurvey, $scope.session.user.surveys);
-        //     $scope.session.selectedSurvey = "";
-        // };
-
-        $scope.deleteSelectedSurvey = function() {
-
-            // *** ask: are you sure you want to delete? ***
-
-            var _survey = $scope.session.selectedSurvey;
-            if (!_survey) {
-                $log.log("Keine Terminumfrage ausgewaehlt.");
-                return;
-            }
-
-            var _survey = $scope.session.user;
-            restService.deleteSurvey(_survey.oid)
-                .then(function(success) {
-                    $log.log(success);
-                    removeElementFrom(_survey, $scope.session.user.surveys);
-                    $scope.session.selectedSurvey = $scope.session.user.surveys[0] || "";
-                    $scope.session.tempSurvey = "";
-                }, function(error) {
-                    $log.error(error);
-                    $scope.warnings.central = error;
-                }, function(notification) {
-                    // $log.log(notification); // for future use
-                });
-
-            
-            //-------------------- ***
-            console.log($scope.session.selectedSurvey);
-            console.log($scope.session.user);
-            //-------------------- ***
-        };
-
+        
         $scope.removeTimeperiodFromTempSurvey = function(timeperiod) {
-            removeElementFrom(timeperiod, $scope.session.tempSurvey.possibleTimeperiods);
+            util.removeElementFrom(timeperiod, $scope.session.tempSurvey.possibleTimeperiods);
         };
 
         $scope.addTimeperiodToTempSurvey = function() {

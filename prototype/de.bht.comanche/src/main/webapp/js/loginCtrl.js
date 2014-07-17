@@ -65,19 +65,19 @@ angular.module("myApp")
 
                     // <<<<<<<<<<<<<<<<<<<< BAUSTELLE: Invites holen ------------------- TODO
                     restService.getInvites(user.oid)
-                        .then(function(success) {
-                            // $log.debug("--------------------");
-                            $log.debug(success);
-                            // $log.debug("--------------------");
+                        .then(function(invites) {
+                            $log.debug(invites);
 
-                            var _invites = success;
-                            $scope.session.user.surveys = [_invites[0].survey];
+                            var _surveys = [];
+                            for (var i in invites) {
+                                _surveys.push(invites[i].survey);
+                            }
+                            $scope.session.user.surveys = _surveys;
 
                         }, function(error) {
                             $log.error(error);
                             $scope.warnings.central = error;
                             
-
                         }, function(notification) {
                             // $log.log(notification); // for future use
                         });
