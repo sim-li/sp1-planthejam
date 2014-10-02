@@ -18,7 +18,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
 
         var USER_PATH = "rest/user/";
         var INVITE_PATH = "rest/invite/";
-        var SURVEY_PATH = "rest/survey/"; // ???????????????? not used??
+        //var SURVEY_PATH = "rest/survey/"; // ???????????????? not used??
 
         var SUCCESS = "SUCCESS ----------------------------------------------------------", 
             ERROR   = "ERROR ------------------------------------------------------------", 
@@ -301,7 +301,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
-                url: SURVEY_PATH + "save", 
+                url: INVITE_PATH + "save", 
                 data: {   
                     "name": survey.name, 
                     "description": survey.description, 
