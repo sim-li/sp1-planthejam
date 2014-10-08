@@ -34,7 +34,7 @@ angular.module("myApp")
                     }
 
                     $scope.session.user.invites.push(invite);
-                    $scope.session.user.invites.sort(function(a, b){ return a.name.localeCompare(b.name) });
+                    // $scope.session.user.invites.sort(function(a, b){ return a.name.localeCompare(b.name) }); // FIXME
                     $scope.session.selectedInvite = invite;
                     $scope.session.tempInvite = "";
                     $scope.session.addingSurvey = false;

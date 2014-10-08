@@ -7,6 +7,8 @@ import de.bht.comanche.logic.LgObject;
 
 public class ReResponseObject<E> {
 	protected List<E> data;
+	// TODO: change to: 
+//	protected E data;
 	protected int responseCode;
 	
 	public ReResponseObject() {

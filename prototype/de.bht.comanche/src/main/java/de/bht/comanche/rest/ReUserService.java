@@ -50,9 +50,10 @@ public class ReUserService extends ReService {
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
 					throw new LgWrongPasswordException();
 				}
-				LgUser userWithId = new LgUser();
-				userWithId.setIdFrom(userFromDb);
-				return userWithId;
+//				LgUser userWithId = new LgUser();
+//				userWithId.setIdFrom(userFromDb);
+//				return userWithId;
+				return userFromDb;
 			}
 		}.execute();
 		if (response.hasError()) {

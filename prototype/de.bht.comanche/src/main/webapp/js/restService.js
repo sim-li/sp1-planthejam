@@ -169,19 +169,21 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                data: { "name": "test", "password": "test1234" }  // for debugging <-----------FIXME --
-                // data: { "name": user.name, "password": user.password }   // the real thing <-----------FIXME --
+                // data: { "name": "test", "password": "test1234" }  // for debugging <-----------FIXME --
+                data: { "name": user.name, "password": user.password }   // the real thing <-----------FIXME --
             }).success(function(data, status, header, config) {
                 $log.debug(data.data[0]);
+                deferred.resolve(data.data[0]);
 
-                getUser(data.data[0].oid)
-                    .then(function(success) {    
-                        deferred.resolve(success);
-                    }, function(error) {
-                        deferred.reject(error);
-                    }, function(notification) {
-                        // $log.log(notification); // for future use
-                    });
+                // TODO: weg damit!
+                // getUser(data.data[0].oid)
+                //     .then(function(success) {    
+                //         deferred.resolve(success);
+                //     }, function(error) {
+                //         deferred.reject(error);
+                //     }, function(notification) {
+                //         // $log.log(notification); // for future use
+                //     });
             }).error(function(data, status, header, config) {
                 deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status));
             });
@@ -227,14 +229,18 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             }).success(function(data, status, header, config) {
                 $log.debug(data.data[0]);
 
-                getUser(data.data[0].oid)
-                    .then(function(success) {    
-                        deferred.resolve(success);
-                    }, function(error) {
-                        deferred.reject(error);
-                    }, function(notification) {
-                        // $log.log(notification); // for future use
-                    });
+                $log.debug("----- register without getUser ----");
+                $log.debug(data.data[0]);
+                deferred.resolve(data.data[0]);
+
+                // getUser(data.data[0].oid)
+                //     .then(function(success) {    
+                //         deferred.resolve(success);
+                //     }, function(error) {
+                //         deferred.reject(error);
+                //     }, function(notification) {
+                //         // $log.log(notification); // for future use
+                //     });
             }).error(function(data, status, header, config) {
                 deferred.reject("Registrierung auf dem Server fehlgeschlagen. " + getErrorMesage(status));
             });
@@ -305,8 +311,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 $log.debug(data);
                 $log.debug("<----- getInvites-success: data --");
                 
-                // var _invites = data.data;    // the real thing <<----------------------------- TODO --------------------
-                var _invites = getDummyInviteList();    // for manually testing the GUI <<------- TODO --------------------
+                var _invites = data.data;    // the real thing <<----------------------------- TODO --------------------
+                // var _invites = getDummyInviteList();    // for manually testing the GUI <<------- TODO --------------------
                 // _invites = Invite.forInvitesConvertFromRawInvites(_invites);     //  <<------- TODO --------------------
                 deferred.resolve(_invites);
                 
@@ -369,13 +375,17 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 method: "POST", 
                 url: INVITE_PATH + "save", 
                 data: {   
-                    "name": survey.name, 
-                    "description": survey.description, 
-                    "type": survey.type, 
-                    "deadline": survey.deadline, 
-                    "frequency": survey.frequency, 
-                    "possibleTimeperiods": survey.possibleTimeperiods, 
-                    "determinedTimeperiod": survey.determinedTimeperiod 
+                    "isHost": true,         // muss per GUI gesetzt werden <<------------------------ FIXME
+                    "isIgnored": false,     //                             <<------------------------
+                    "survey": {
+                        "name": survey.name, 
+                        "description": survey.description, 
+                        "type": survey.type, 
+                        "deadline": survey.deadline, 
+                        "frequency": survey.frequency, 
+                        "possibleTimeperiods": survey.possibleTimeperiods, 
+                        "determinedTimeperiod": survey.determinedTimeperiod 
+                    }
                 }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data[0]);
