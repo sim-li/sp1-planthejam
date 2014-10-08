@@ -20,7 +20,7 @@
 		<log4j.version>1.2.16</log4j.version>
 		<jetty.plugin.version>${jetty.version}</jetty.plugin.version>
 		<!-- Jetty configuration -->
-		<jetty.scanInterval>120</jetty.scanInterval>
+		<jetty.scanInterval>60</jetty.scanInterval>
 		<!-- Enable access to this application from other computers, not only from 
 			localhost. -->
 		<jetty.host>0.0.0.0</jetty.host>

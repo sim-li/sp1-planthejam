@@ -16,7 +16,7 @@ public class ReUserServiceTest {
 	static long oid = 0;
 	static String testUsername = "Muster10";
 
-//	@Test
+	@Test
 	public void test1registerUser() {
 		LgUser testUser = new LgUser();
 		testUser.setName(testUsername);
@@ -30,20 +30,18 @@ public class ReUserServiceTest {
 		
 		JsonPath jsonPath = response.getBody().jsonPath();
 		oid = jsonPath.getLong("data[0].oid");
-		
-		
+		}
 
-	}
-
-//	@Test
-	public void test2getUser() {
+	@Test
+	public void test2loginUser() {
 
 		LgUser testUser = new LgUser();
-		testUser.setOid(oid);
+		testUser.setName(testUsername);
+		testUser.setPassword("password");
 
 		Response response = expect().statusCode(200).given().body(testUser)
 				.contentType("application/json").when()
-				.post("/rest/user/getUser");
+				.post("/rest/user/login");
 
 		JsonPath jsonPath = response.getBody().jsonPath();
 		assertEquals(testUsername, jsonPath.get("data[0].name"));
@@ -52,7 +50,7 @@ public class ReUserServiceTest {
 		assertEquals("123456789", jsonPath.get("data[0].tel"));
 	}
 
-//	@Test
+	@Test
 	public void test3updateUser() {
 
 		LgUser testUser = new LgUser();
@@ -74,7 +72,7 @@ public class ReUserServiceTest {
 
 	}
 
-//	@Test
+	@Test
 	public void test4DeletedUser() {
 
 		LgUser testUser = new LgUser();
