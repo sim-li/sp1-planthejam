@@ -28,7 +28,7 @@ public class ReInviteServiceTest {
 	static long oid = 0;
 	static String testSurveyname = "testSurveyname4";
 
-	@Test
+//	@Test
 	public void test1saveInvite() {
 		
 		LgSurvey testSurvey = new LgSurvey();

@@ -19,13 +19,15 @@ import de.bht.comanche.exceptions.LgWrongPasswordException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
+//import javax.interceptor.AroundInvoke;
+//import javax.ws.rs.
 
 @Path("/user/")
 public class ReUserService extends ReService {
 	public ReUserService() {
 		super();
 	}
-
+	
 	@Path("login")
 	@POST
 	@Consumes("application/json")
@@ -50,40 +52,7 @@ public class ReUserService extends ReService {
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
 					throw new LgWrongPasswordException();
 				}
-//				LgUser userWithId = new LgUser();
-//				userWithId.setIdFrom(userFromDb);
-//				return userWithId;
 				return userFromDb;
-			}
-		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
-		}
-		return response;
-	}
-
-	/**
-	 * Return complete User by Id
-	 * 
-	 * @param userFromClient
-	 * @return
-	 */
-	@POST
-	@Path("getUser")
-	@Consumes("application/json")
-	@Produces({ "application/json" })
-	public ReResponseObject<LgUser> getUser(final LgUser userFromClient) {
-		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
-				daUser.getPool()) {
-			public LgUser executeWithThrows() throws Exception {
-				LgUser lgUser = null;
-				try {
-					lgUser = daUser.find(userFromClient.getOid());
-				} catch (DaOidNotFoundException oid) {
-					throw new LgNoUserWithThisIdException();
-				}
-				return lgUser;
 			}
 		}.execute();
 		if (response.hasError()) {
