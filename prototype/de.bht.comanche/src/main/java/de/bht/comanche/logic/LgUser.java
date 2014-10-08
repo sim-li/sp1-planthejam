@@ -91,11 +91,11 @@ public class LgUser extends LgObject {
 		return this;
 	}
 
-	public boolean addInvites(LgInvite invite) {
+	public boolean addInvite(LgInvite invite) {
 		return this.invites.add(invite);
 	}
 
-	public boolean removeInvites(LgInvite invite) {
+	public boolean removeInvite(LgInvite invite) {
 		return this.invites.remove(invite);
 	}
 
