@@ -102,7 +102,7 @@ public class DaInviteTest {
 		}.execute();
 		assertTrue("DA - operations with exceptions (see TransactionObject)", success);
     }
-	
+	@Ignore
     @Test
 	public void readSurveysTestWithOriginalObj() {
 		final LgUser userFromClient = alice;

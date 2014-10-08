@@ -15,7 +15,7 @@ import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgUserDummyFactory;
-
+@Ignore
 public class DaUserTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";

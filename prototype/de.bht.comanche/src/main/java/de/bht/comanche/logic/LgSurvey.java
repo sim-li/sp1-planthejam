@@ -45,6 +45,7 @@ public class LgSurvey extends LgObject {
 	private List<LgInvite> invites;
 	
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<LgTimePeriod> possibleTimePeriods;
 
 	public String getName() {
