@@ -46,6 +46,9 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
         }
 
 
+        /*
+         *
+         */
         var getDummyUser = function() {
             return {
                 "oid": new Date().getTime(), 
@@ -54,7 +57,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 "email": "dummy@test.net", 
                 "tel": "+49-30-1234567", 
                 // "surveys": [] // empty list for debugging
-                "surveys": getDummySurveyList() // dummy list for debugging
+                // "surveys": getDummySurveyList() // dummy list for debugging
+                "invites": getDummyInviteList() // dummy list for debugging
                 
             };
         };
@@ -63,43 +67,100 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
         /*
          *
          */
-        var getDummySurveyList = function() {
+        var getDummyInviteList = function() {
             return [
-                {   
-                    "name": "Bandprobe", 
-                    "description": "Wir m�ssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann k�nnt ihr?", 
-                    "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
-                    // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-                    "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
-                    "frequency": { "distance": 0, "timeUnit": TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
-                    "possibleTimeperiods": [
-                            { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
-                            { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
-                            { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
-                        ], 
-                    "determinedTimeperiod": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
+                {   "oid": 1, 
+                    "isHost": false, 
+                    "isIgnored": false, 
+                    "survey": {
+                        "name": "Bandprobe", 
+                        "description": "Wir m�ssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann k�nnt ihr?", 
+                        "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
+                        // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
+                        "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
+                        "frequency": { "distance": 0, "timeUnit": TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
+                        "possibleTimeperiods": [
+                                { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
+                                { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
+                                { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
+                            ], 
+                        "determinedTimeperiod": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
+                    }
                 }, 
-                {   "name": "Chorprobe", 
-                    "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
-                    "type": Type.RECURRING, 
-                    "deadline": new Date(2014, 7, 21, 12, 0),
-                    "frequency": { "distance": 0, "timeUnit": TimeUnit.DAY },
-                    "possibleTimeperiods": [
-                            { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
-                            { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
-                        ], 
-                    "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
+                {   "oid": 2, 
+                    "isHost": false, 
+                    "isIgnored": false, 
+                    "survey": {
+                        "name": "Chorprobe", 
+                        "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
+                        "type": Type.RECURRING, 
+                        "deadline": new Date(2014, 7, 21, 12, 0),
+                        "frequency": { "distance": 0, "timeUnit": TimeUnit.DAY },
+                        "possibleTimeperiods": [
+                                { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
+                                { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
+                            ], 
+                        "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
+                    }
                 }, 
-                {   "name": "Meeting", 
-                    "description": "Unser monatliches Gesch�ftsessen. Dresscode: Bussiness casual.", 
-                    "type": Type.RECURRING, 
-                    "deadline": new Date(2014, 7, 31, 8, 0),
-                    "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
-                    "possibleTimeperiods": [], 
-                    "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
+                {   "oid": 3, 
+                    "isHost": false, 
+                    "isIgnored": false, 
+                    "survey": {
+                        "name": "Meeting", 
+                        "description": "Unser monatliches Gesch�ftsessen. Dresscode: Bussiness casual.", 
+                        "type": Type.RECURRING, 
+                        "deadline": new Date(2014, 7, 31, 8, 0),
+                        "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
+                        "possibleTimeperiods": [], 
+                        "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
+                    }
                 }
             ];
         };
+
+
+        // /*
+        //  *
+        //  */
+        // var getDummySurveyList = function() {
+        //     return [
+        //         {   
+        //             "name": "Bandprobe", 
+        //             "description": "Wir m�ssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann k�nnt ihr?", 
+        //             "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
+        //             // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
+        //             "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
+        //             "frequency": { "distance": 0, "timeUnit": TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
+        //             "possibleTimeperiods": [
+        //                     { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
+        //                     { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
+        //                     { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
+        //                 ], 
+        //             "determinedTimeperiod": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
+        //         }, 
+        //         {   "name": "Chorprobe", 
+        //             "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
+        //             "type": Type.RECURRING, 
+        //             "deadline": new Date(2014, 7, 21, 12, 0),
+        //             "frequency": { "distance": 0, "timeUnit": TimeUnit.DAY },
+        //             "possibleTimeperiods": [
+        //                     { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
+        //                     { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
+        //                 ], 
+        //             "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
+        //         }, 
+        //         {   "name": "Meeting", 
+        //             "description": "Unser monatliches Gesch�ftsessen. Dresscode: Bussiness casual.", 
+        //             "type": Type.RECURRING, 
+        //             "deadline": new Date(2014, 7, 31, 8, 0),
+        //             "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
+        //             "possibleTimeperiods": [], 
+        //             "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
+        //         }
+        //     ];
+        // };
+
 
 
         var login = function(user) {
@@ -108,7 +169,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                data: { "name": user.name, "password": user.password }
+                data: { "name": "test", "password": "test1234" }  // for debugging <-----------FIXME --
+                // data: { "name": user.name, "password": user.password }   // the real thing <-----------FIXME --
             }).success(function(data, status, header, config) {
                 $log.debug(data.data[0]);
 
@@ -137,7 +199,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             .success(function(data, status, header, config) {
                 var _user = data.data[0];
                 $log.debug(_user);
-
+                
 
                 // TODO extract invites/surveys from user ********************************** 
                 // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
@@ -238,10 +300,14 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 url: INVITE_PATH + "getInvites", 
                 data: { "oid": oid }
             }).success(function(data, status, header, config) {
+                $log.debug("------ getInvites-success: data -->");
                 $log.debug(data.data);
+                $log.debug(data);
+                $log.debug("<----- getInvites-success: data --");
                 
-                var _invites = data.data;
-                _invites = Invite.forInvitesConvertFromRawInvites(_invites);
+                // var _invites = data.data;    // the real thing <<----------------------------- TODO --------------------
+                var _invites = getDummyInviteList();    // for manually testing the GUI <<------- TODO --------------------
+                // _invites = Invite.forInvitesConvertFromRawInvites(_invites);     //  <<------- TODO --------------------
                 deferred.resolve(_invites);
                 
                 
