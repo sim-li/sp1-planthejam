@@ -15,7 +15,6 @@ import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgTransaction;
-import de.bht.comanche.logic.LgTransactionWithList;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaInvite;
 import de.bht.comanche.persistence.DaUser;
@@ -29,9 +28,9 @@ public class ReInviteService extends ReService {
 	@Path("getInvites")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgInvite> getInvites(final LgUser userFromClient) {
+	public ReResponseObject<List<LgInvite>> getInvites(final LgUser userFromClient) {
 		final DaUser daUser0 = factory.getDaUser();
-		ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(daUser0.getPool()) {
+		ReResponseObject<List<LgInvite>> response = new LgTransaction<List<LgInvite>>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try {
@@ -44,7 +43,7 @@ public class ReInviteService extends ReService {
 			}
 		}.execute();
 		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
+			throw new WebApplicationException(response.responseCode);
 		}
 		return response;
 	}
@@ -62,7 +61,7 @@ public class ReInviteService extends ReService {
 			}
 		}.execute();
 		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
+			throw new WebApplicationException(response.responseCode);
 		}
 		return response;
 	}
@@ -88,7 +87,7 @@ public class ReInviteService extends ReService {
 		}.execute();
 
 		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
+			throw new WebApplicationException(response.responseCode);
 		}
 		return response;
 	}

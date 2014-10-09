@@ -172,52 +172,42 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 // data: { "name": "test", "password": "test1234" }  // for debugging <-----------FIXME --
                 data: { "name": user.name, "password": user.password }   // the real thing <-----------FIXME --
             }).success(function(data, status, header, config) {
-                $log.debug(data.data[0]);
-                deferred.resolve(data.data[0]);
-
-                // TODO: weg damit!
-                // getUser(data.data[0].oid)
-                //     .then(function(success) {    
-                //         deferred.resolve(success);
-                //     }, function(error) {
-                //         deferred.reject(error);
-                //     }, function(notification) {
-                //         // $log.log(notification); // for future use
-                //     });
+                $log.debug(data.data);
+                deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
                 deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status));
             });
             return deferred.promise;
         };
 
-        var getUser = function(oid) {
-            $log.log("REST getUser");
-            var deferred = $q.defer();
-            $http({ 
-                method: "POST", 
-                url: USER_PATH + "getUser", 
-                data: { "oid": oid }
-            })
-            .success(function(data, status, header, config) {
-                var _user = data.data[0];
-                $log.debug(_user);
+        // var getUser = function(oid) {
+        //     $log.log("REST getUser");
+        //     var deferred = $q.defer();
+        //     $http({ 
+        //         method: "POST", 
+        //         url: USER_PATH + "getUser", 
+        //         data: { "oid": oid }
+        //     })
+        //     .success(function(data, status, header, config) {
+        //         var _user = data.data[0];
+        //         $log.debug(_user);
                 
 
-                // TODO extract invites/surveys from user ********************************** 
-                // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
-                var _surveys =  _user.surveys || [];
-                for (var i = 0; i < _surveys.length; i++) {
-                    _surveys.push(new Survey(_user.surveys[i]));
-                }
-                _user.surveys = Survey.forSurveysConvertDatesToDatePickerDate(_surveys);
+        //         // TODO extract invites/surveys from user ********************************** 
+        //         // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
+        //         var _surveys =  _user.surveys || [];
+        //         for (var i = 0; i < _surveys.length; i++) {
+        //             _surveys.push(new Survey(_user.surveys[i]));
+        //         }
+        //         _user.surveys = Survey.forSurveysConvertDatesToDatePickerDate(_surveys);
                 
-                deferred.resolve(_user);
-            })
-            .error(function(data, status, header, config) {
-                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
-            });
-            return deferred.promise;
-        };
+        //         deferred.resolve(_user);
+        //     })
+        //     .error(function(data, status, header, config) {
+        //         deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
+        //     });
+        //     return deferred.promise;
+        // };
 
         var register = function(user) {
             $log.log("REST register");
@@ -227,20 +217,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 url: USER_PATH + "register", 
                 data: { "name": user.name, "password": user.password, "email": user.email, "tel": user.tel }
             }).success(function(data, status, header, config) {
-                $log.debug(data.data[0]);
-
-                $log.debug("----- register without getUser ----");
-                $log.debug(data.data[0]);
-                deferred.resolve(data.data[0]);
-
-                // getUser(data.data[0].oid)
-                //     .then(function(success) {    
-                //         deferred.resolve(success);
-                //     }, function(error) {
-                //         deferred.reject(error);
-                //     }, function(notification) {
-                //         // $log.log(notification); // for future use
-                //     });
+                $log.debug(data.data);
+                deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
                 deferred.reject("Registrierung auf dem Server fehlgeschlagen. " + getErrorMesage(status));
             });
@@ -257,7 +235,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
-
                 deferred.resolve("Das Konto wurde erfolgreich geloescht.");
             }).error(function(data, status, header, config) {
                 deferred.reject("Loeschen des Kontos auf dem Server fehlgeschlagen. " + getErrorMesage(status));
@@ -289,7 +266,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 }
             }).success(function(data, status, header, config) {
                 $log.debug(data);
-
                 deferred.resolve("Die Kontodaten wurden erfolgreich auf dem Server gespeichert.");
             }).error(function(data, status, header, config) {
                 deferred.reject("Update der Kontodaten auf dem Server fehlgeschlagen." + getErrorMesage(status));
@@ -339,10 +315,12 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             }).error(function(data, status, header, config) {
                 
                 // ----DEBUGGING -------- ******************
+                $log.debug("getInvites FAILED -->");
                 $log.debug(data);
                 $log.debug(status);
                 $log.debug(header);
                 $log.debug(config);
+                $log.debug("getInvites FAILED <--");
                 // ----DEBUGGING -------- ******************
                 
                 deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
@@ -388,9 +366,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                     }
                 }
             }).success(function(data, status, header, config) {
-                $log.debug(data.data[0]);
-
-                deferred.resolve(data.data[0]);
+                $log.debug(data.data);
+                deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
                 deferred.reject("Speichern der Terminumfrage auf dem Server fehlgeschlagen." + getErrorMesage(status));
             });
@@ -415,7 +392,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
-
                 deferred.resolve("Die Terminumfrage wurde erfolgreich geloescht.");
             }).error(function(data, status, header, config) {
                 deferred.reject("Loeschen der Terminumfrage auf dem Server fehlgeschlagen. " + getErrorMesage(status));
@@ -425,7 +401,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
 
         return {
             login: login, 
-            getUser: getUser, 
+            // getUser: getUser, 
             register: register, 
             deleteUser: deleteUser, 
             updateUser: updateUser, 

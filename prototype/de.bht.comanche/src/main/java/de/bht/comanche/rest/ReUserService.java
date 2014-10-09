@@ -27,18 +27,17 @@ public class ReUserService extends ReService {
 	public ReUserService() {
 		super();
 	}
-	
+
 	@Path("login")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
-				daUser.getPool()) {
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
+			@Override
 			public LgUser executeWithThrows() throws Exception {
-				List<LgUser> users = daUser
-						.findByName(userFromClient.getName());
+				List<LgUser> users = daUser.findByName(userFromClient.getName());
 				/*
 				 * Available for Client: MultipleUsersWithThisNameException()
 				 */
@@ -56,7 +55,7 @@ public class ReUserService extends ReService {
 			}
 		}.execute();
 		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
+			throw new WebApplicationException(response.responseCode);
 		}
 		return response;
 	}
@@ -67,8 +66,8 @@ public class ReUserService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgUser> registerUser(final LgUser newUserFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
-				daUser.getPool()) {
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
+			@Override
 			public LgUser executeWithThrows() throws Exception {
 				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
 					throw new LgUserWithThisNameExistsException();
@@ -78,7 +77,7 @@ public class ReUserService extends ReService {
 			}
 		}.execute();
 		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
+			throw new WebApplicationException(response.responseCode);
 		}
 		return response;
 	}
@@ -95,48 +94,49 @@ public class ReUserService extends ReService {
 				LgUser userFromDb = null;
 				try {
 					userFromDb = daUser.find(userFromClient.getOid());
-  				} catch (DaOidNotFoundException oid) {
-  					throw new LgNoUserWithThisIdException();
-  				}
-  				userFromDb.clearInvites();
-  				daUser.delete(userFromDb);
-    			return null;
-    		 }
-    	 }.execute();
-    	 if (response.hasError()) {
-  			throw new WebApplicationException(response.getResponseCode());
-  		}
-     	 return response;
- 	} 
-     
-     @Path("update")
-     @POST
-     @Consumes("application/json")
-     @Produces({"application/json"})
-     public ReResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
-    	final DaUser daUser = factory.getDaUser();
-  		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
-  			public LgUser executeWithThrows() throws Exception {
-  				try {
-  					daUser.find(dirtyUser.getOid());
-  				} catch (DaOidNotFoundException oid) {
-  					throw new LgNoUserWithThisIdException();
-  				}
-  				return daUser.update(dirtyUser);
-    		 }
-    	 }.execute();
-    	 if (response.hasError()) {
-   			throw new WebApplicationException(response.getResponseCode());
-   		}
-      	 return response;
-     }
-     
-     public static final String CLICHED_MESSAGE = "Hello World!";
-     
-     @Path("hello")
-     @GET
-     @Produces(MediaType.TEXT_HTML)
-         public String getHello() {
-             return CLICHED_MESSAGE;
-     }
+				} catch (DaOidNotFoundException oid) {
+					throw new LgNoUserWithThisIdException();
+				}
+				userFromDb.clearInvites();
+				daUser.delete(userFromDb);
+				return null;
+			}
+		}.execute();
+		if (response.hasError()) {
+			throw new WebApplicationException(response.responseCode);
+		}
+		return response;
+	} 
+
+	@Path("update")
+	@POST
+	@Consumes("application/json")
+	@Produces({"application/json"})
+	public ReResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
+		final DaUser daUser = factory.getDaUser();
+		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
+			@Override
+			public LgUser executeWithThrows() throws Exception {
+				try {
+					daUser.find(dirtyUser.getOid());
+				} catch (DaOidNotFoundException oid) {
+					throw new LgNoUserWithThisIdException();
+				}
+				return daUser.update(dirtyUser);
+			}
+		}.execute();
+		if (response.hasError()) {
+			throw new WebApplicationException(response.responseCode);
+		}
+		return response;
+	}
+
+	public static final String CLICHED_MESSAGE = "Hello World!";
+
+	@Path("hello")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String getHello() {
+		return CLICHED_MESSAGE;
+	}
 }

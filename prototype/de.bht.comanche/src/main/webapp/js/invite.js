@@ -14,8 +14,8 @@ angular.module("invite", ["survey"])
         var Invite = function(config) {
             config = config || {};
             this.oid = config.oid || "";
-            this.isIgnored = config.isIgnored;
-            this.isHost = config.isHost;
+            this.ignored = config.ignored;
+            this.host = config.host;
             this.survey = new Survey(config.survey) || new Survey();
         };
 

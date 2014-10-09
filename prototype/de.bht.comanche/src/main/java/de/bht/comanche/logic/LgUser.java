@@ -27,7 +27,7 @@ public class LgUser extends LgObject {
 	private String email;
 	private String password;
 
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
 	public LgUser() {
