@@ -5,7 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.junit.After;
+import de.bht.comanche.logic.LgTransaction;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -18,7 +19,6 @@ import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgSurveyDummyFactory;
-import de.bht.comanche.logic.LgTransactionWithList;
 import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgUserDummyFactory;
@@ -107,8 +107,9 @@ public class DaInviteTest {
 	public void readSurveysTestWithOriginalObj() {
 		final LgUser userFromClient = alice;
 		final DaUser daUser0 = daFactory.getDaUser();
-	    ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(daUser0.getPool()) {
-			public List<LgInvite> executeWithThrows() throws Exception {
+	    ReResponseObject<List<LgInvite>> response = new LgTransaction<List<LgInvite>>(daUser0.getPool()) {
+	    	@Override
+	    	public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try{
 					LgUser lgUser = daUser0.find(alice.getOid());
@@ -120,8 +121,8 @@ public class DaInviteTest {
 				return invites;
 			}
 		}.execute();
-		System.out.println("YY>>>>>>>>>>" + response.getData().get(0).getUser().getName());
-		System.out.println("SUCCESS? RESPONSE CODE: " + response.getResponseCode());
+		System.out.println("YY>>>>>>>>>>" + response.data.get(0).getUser().getName());
+		System.out.println("SUCCESS? RESPONSE CODE: " + response.responseCode);
 	}
 
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {

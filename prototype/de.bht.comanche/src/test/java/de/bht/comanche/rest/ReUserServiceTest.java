@@ -29,7 +29,7 @@ public class ReUserServiceTest {
 				.post("/rest/user/register");
 		
 		JsonPath jsonPath = response.getBody().jsonPath();
-		oid = jsonPath.getLong("data[0].oid");
+		oid = jsonPath.getLong("data.oid");
 		}
 
 	@Test
@@ -44,10 +44,10 @@ public class ReUserServiceTest {
 				.post("/rest/user/login");
 
 		JsonPath jsonPath = response.getBody().jsonPath();
-		assertEquals(testUsername, jsonPath.get("data[0].name"));
-		assertEquals("password", jsonPath.get("data[0].password"));
-		assertEquals("muster@test.com", jsonPath.get("data[0].email"));
-		assertEquals("123456789", jsonPath.get("data[0].tel"));
+		assertEquals(testUsername, jsonPath.get("data.name"));
+		assertEquals("password", jsonPath.get("data.password"));
+		assertEquals("muster@test.com", jsonPath.get("data.email"));
+		assertEquals("123456789", jsonPath.get("data.tel"));
 	}
 
 	@Test
@@ -65,10 +65,10 @@ public class ReUserServiceTest {
 				.post("/rest/user/update");
 
 		JsonPath jsonPath = response.getBody().jsonPath();
-		assertEquals("UpdatedMuster", jsonPath.get("data[0].name"));
-		assertEquals("updatedPassword", jsonPath.get("data[0].password"));
-		assertEquals("updated@test.com", jsonPath.get("data[0].email"));
-		assertEquals("1010101010", jsonPath.get("data[0].tel"));
+		assertEquals("UpdatedMuster", jsonPath.get("data.name"));
+		assertEquals("updatedPassword", jsonPath.get("data.password"));
+		assertEquals("updated@test.com", jsonPath.get("data.email"));
+		assertEquals("1010101010", jsonPath.get("data.tel"));
 
 	}
 
@@ -83,7 +83,7 @@ public class ReUserServiceTest {
 				.delete("/rest/user/delete");
 
 		JsonPath jsonPath = response.getBody().jsonPath();
-		assertNull(jsonPath.get("data[0]"));
+		assertNull(jsonPath.get("data"));
 
 	}
 
