@@ -46,7 +46,7 @@
     <script src="js/loginCtrl.js"></script>
     <script src="js/loggedInCtrl.js"></script>
     <script src="js/editUserCtrl.js"></script>
-    <script src="js/editSurveyCtrl.js"></script>
+    <script src="js/editInviteCtrl.js"></script>
     <script src="js/constants.js"></script>
     <script src="js/invite.js"></script>
     <script src="js/survey.js"></script>
@@ -187,7 +187,7 @@
         <div id="survey_selection_area" ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
             <span class="full_width_input">
                 
-                <input id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addSurvey()" />
+                <input id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addInvite()" />
                 
                 <!--++++ TODO: Baustelle ++++++++++++++++++++-->
                 <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString" size="5%"></select>
@@ -198,8 +198,8 @@
 
                 <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="session.user.searchString" ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-change="updateSelection()"/>
 
-                <input id="editSurvey" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="editSurvey()" />
-                <input id="deleteSurvey" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedInvite()" />
+                <input id="editInvite" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="editInvite()" />
+                <input id="deleteInvite" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedInvite()" />
             </span>
 
             <textarea rows="5" readonly>{{ session.selectedInvite.survey.description }}</textarea>
@@ -207,7 +207,7 @@
 
 
 
-        <div id="survey_edit_area" ng-controller="editSurveyCtrl" ng-show="session.state.is(dialogMap.SURVEY_EDIT)">
+        <div id="survey_edit_area" ng-controller="editInviteCtrl" ng-show="session.state.is(dialogMap.SURVEY_EDIT)">
             <span class="full_width_input">
 
                 <label for="editSurveyName">Name</label>
@@ -227,10 +227,10 @@
 
 
                 <label for="editSurveyFrequencyDistance">Frequenz - Abstand</label>
-                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="session.tempInvite.survey.frequency.distance" ng-change="$log.log(session.tempInvite.survey.frequency);"/>
+                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="session.tempInvite.survey.frequencyDist" ng-change="$log.log(session.tempInvite.survey.frequencyDist);"/>
                 
                 <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
-                <select id="editSurveyFrequencyTimeUnit" ng-model="session.tempInvite.survey.frequency.timeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.tempInvite.survey.frequency);"></select>
+                <select id="editSurveyFrequencyTimeUnit" ng-model="session.tempInvite.survey.frequencyTimeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.tempInvite.survey.frequencyTimeUnit);"></select>
 
 
                 <label for="editSurveyPossibleTimeperiods">M&ouml;gliche Zeitr&auml;ume</label>
@@ -258,8 +258,8 @@
                 <input id="editSurveyDeterminedTimeperiodDuration" type="number" min="0" ng-model="session.tempInvite.survey.determinedTimeperiod.durationInMins" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.durationInMins);"/>
 
 
-                <input id="cancelSurveyEdit" type="button" value="Abbrechen" ng-click="cancelEditSurvey()" />
-                <input id="saveSurveyEdit" type="button" value="Speichern" ng-click="saveSurvey()" />
+                <input id="cancelInviteEdit" type="button" value="Abbrechen" ng-click="cancelEditInvite()" />
+                <input id="saveInviteEdit" type="button" value="Speichern" ng-click="saveInvite()" />
             </span>
         </div><!-- survey_edit_area -->
 

@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loggedInCtrl", ["$scope", "$log", "Survey", "Invite", "restService", "dialogMap", "util", 
-        function($scope, $log, Survey, Invite, restService, dialogMap, util) {
+    .controller("loggedInCtrl", ["$scope", "$log", "Invite", "restService", "dialogMap", "util", 
+        function($scope, $log, Invite, restService, dialogMap, util) {
 
         $scope.logout = function() {
 
@@ -33,7 +33,7 @@ angular.module("myApp")
         };
 
 
-        $scope.editSurvey = function() {
+        $scope.editInvite = function() {
             if (!$scope.session.selectedInvite) {
                 $log.log("Keine Terminumfrage ausgewaehlt.");
                 return;
@@ -43,9 +43,9 @@ angular.module("myApp")
             $log.log($scope.session.user);
         };
 
-        $scope.addSurvey = function() {
+        $scope.addInvite = function() {
             $scope.session.tempInvite = new Invite();
-            $scope.session.addingSurvey = true;
+            $scope.session.addingInvite = true;
             $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
         };
         
@@ -59,8 +59,11 @@ angular.module("myApp")
                 return;
             }
 
-            var _invite = $scope.session.user;
-            restService.deleteSurvey(_invite.oid)
+            $log.log("deleteSelectedInvite: ");
+            $log.log(_invite);
+            
+            restService.deleteInvite(_invite.oid)
+            // restService.deleteInvite(_invite)
                 .then(function(success) {
                     $log.log(success);
                     util.removeElementFrom(_invite, $scope.session.user.invites);

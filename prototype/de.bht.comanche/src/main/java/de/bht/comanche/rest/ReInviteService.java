@@ -70,14 +70,14 @@ public class ReInviteService extends ReService {
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject deleteUser(final LgInvite inviteFromClient) {
+	public ReResponseObject deleteUser(final long inviteFromClientOid) {
 		final DaInvite daInvite = factory.getDaInvite();
 		ReResponseObject response = new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws Exception {
 				LgInvite InviteFromDb = null;
 				try {
 					InviteFromDb = (LgInvite) daInvite
-							.find(inviteFromClient.getOid());
+							.find(inviteFromClientOid);
 				} catch (NotFoundException exc) {
 					 throw new DaInviteNotFoundException();
 				}

@@ -8,17 +8,12 @@
 
 "use strict";
 
-angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"])
-    .factory("restService", ["$http", "$q", "$log", "$filter", "DatePickerDate", "TimeUnit", "Type", "Survey", "Invite", 
-        function($http, $q, $log, $filter, DatePickerDate, TimeUnit, Type, Survey, Invite) {
-
-
-        // TODO refactor User, ...
-
+angular.module("restModule", ["datePickerDate", "constants", "invite"])
+    .factory("restService", ["$http", "$q", "$log", "$filter", "Invite", 
+        function($http, $q, $log, $filter, Invite) {
 
         var USER_PATH = "rest/user/";
         var INVITE_PATH = "rest/invite/";
-        //var SURVEY_PATH = "rest/survey/"; // ???????????????? not used??
 
         var SUCCESS = "SUCCESS ----------------------------------------------------------", 
             ERROR   = "ERROR ------------------------------------------------------------", 
@@ -56,111 +51,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 "password": "supersafe123", 
                 "email": "dummy@test.net", 
                 "tel": "+49-30-1234567", 
-                // "surveys": [] // empty list for debugging
-                // "surveys": getDummySurveyList() // dummy list for debugging
-                "invites": getDummyInviteList() // dummy list for debugging
-                
+                // "invites": [] // empty list for debugging
+                "invites": Invite.getDummyInviteList() // dummy list for debugging
             };
         };
-        
-
-        /*
-         *
-         */
-        var getDummyInviteList = function() {
-            return [
-                {   "oid": 1, 
-                    "isHost": false, 
-                    "isIgnored": false, 
-                    "survey": {
-                        "name": "Bandprobe", 
-                        "description": "Wir m�ssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann k�nnt ihr?", 
-                        "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
-                        // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-                        "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
-                        "frequency": { "distance": 0, "timeUnit": TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
-                        "possibleTimeperiods": [
-                                { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
-                                { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
-                                { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
-                            ], 
-                        "determinedTimeperiod": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
-                    }
-                }, 
-                {   "oid": 2, 
-                    "isHost": false, 
-                    "isIgnored": false, 
-                    "survey": {
-                        "name": "Chorprobe", 
-                        "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
-                        "type": Type.RECURRING, 
-                        "deadline": new Date(2014, 7, 21, 12, 0),
-                        "frequency": { "distance": 0, "timeUnit": TimeUnit.DAY },
-                        "possibleTimeperiods": [
-                                { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
-                                { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
-                            ], 
-                        "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
-                    }
-                }, 
-                {   "oid": 3, 
-                    "isHost": false, 
-                    "isIgnored": false, 
-                    "survey": {
-                        "name": "Meeting", 
-                        "description": "Unser monatliches Gesch�ftsessen. Dresscode: Bussiness casual.", 
-                        "type": Type.RECURRING, 
-                        "deadline": new Date(2014, 7, 31, 8, 0),
-                        "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
-                        "possibleTimeperiods": [], 
-                        "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
-                    }
-                }
-            ];
-        };
-
-
-        // /*
-        //  *
-        //  */
-        // var getDummySurveyList = function() {
-        //     return [
-        //         {   
-        //             "name": "Bandprobe", 
-        //             "description": "Wir m�ssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann k�nnt ihr?", 
-        //             "type": Type.UNIQUE, // or "RECURRING" <<enumeration>> = einmalig oder wiederholt
-        //             // "deadline": "10.07.2014, 23:55", // <<datatype>> date = Zeipunkt
-        //             "deadline": new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
-        //             "frequency": { "distance": 0, "timeUnit": TimeUnit.WEEK }, // <<datatype>> iteration = Wiederholung
-        //             "possibleTimeperiods": [
-        //                     { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 }, // <<datatype>> <timeperiod> = List<Zeitraum>
-        //                     { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }, 
-        //                     { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
-        //                 ], 
-        //             "determinedTimeperiod": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 } // <<datatype>> timeperiod = Zeitraum
-        //         }, 
-        //         {   "name": "Chorprobe", 
-        //             "description": "Wir beginnen mit der Mozart-Messe in c-moll. In der Pause gibt es Kuchen im Garten.", 
-        //             "type": Type.RECURRING, 
-        //             "deadline": new Date(2014, 7, 21, 12, 0),
-        //             "frequency": { "distance": 0, "timeUnit": TimeUnit.DAY },
-        //             "possibleTimeperiods": [
-        //                     { "startTime": new Date(2014, 8, 1, 18, 30), "durationInMins": 150 },
-        //                     { "startTime": new Date(2014, 8, 2, 18, 30), "durationInMins": 150 } 
-        //                 ], 
-        //             "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
-        //         }, 
-        //         {   "name": "Meeting", 
-        //             "description": "Unser monatliches Gesch�ftsessen. Dresscode: Bussiness casual.", 
-        //             "type": Type.RECURRING, 
-        //             "deadline": new Date(2014, 7, 31, 8, 0),
-        //             "frequency": { "distance": 0, "timeUnit": TimeUnit.MONTH },
-        //             "possibleTimeperiods": [], 
-        //             "determinedTimeperiod": { "startTime": undefined, "durationInMins": 0 }
-        //         }
-        //     ];
-        // };
-
 
 
         var login = function(user) {
@@ -169,8 +63,8 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             $http({ 
                 method: "POST", 
                 url: USER_PATH + "login", 
-                // data: { "name": "test", "password": "test1234" }  // for debugging <-----------FIXME --
-                data: { "name": user.name, "password": user.password }   // the real thing <-----------FIXME --
+                // data: { "name": "Alice", "password": "yousnoozeyoulose" }        // for debugging <----------- ***** --
+                data: { "name": user.name, "password": user.password }              // the real thing <---------- ***** --
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
                 deferred.resolve(data.data);
@@ -179,35 +73,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             });
             return deferred.promise;
         };
-
-        // var getUser = function(oid) {
-        //     $log.log("REST getUser");
-        //     var deferred = $q.defer();
-        //     $http({ 
-        //         method: "POST", 
-        //         url: USER_PATH + "getUser", 
-        //         data: { "oid": oid }
-        //     })
-        //     .success(function(data, status, header, config) {
-        //         var _user = data.data[0];
-        //         $log.debug(_user);
-                
-
-        //         // TODO extract invites/surveys from user ********************************** 
-        //         // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
-        //         var _surveys =  _user.surveys || [];
-        //         for (var i = 0; i < _surveys.length; i++) {
-        //             _surveys.push(new Survey(_user.surveys[i]));
-        //         }
-        //         _user.surveys = Survey.forSurveysConvertDatesToDatePickerDate(_surveys);
-                
-        //         deferred.resolve(_user);
-        //     })
-        //     .error(function(data, status, header, config) {
-        //         deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
-        //     });
-        //     return deferred.promise;
-        // };
 
         var register = function(user) {
             $log.log("REST register");
@@ -244,14 +109,6 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
 
         var updateUser = function(user) {
             $log.log("REST updateUser");
-            
-            
-            // TODO assure, that user has all surveys wrapped up in invites ************************************************
-            // convert all dates to the native date format
-            // var _user = angular.copy(user);
-            // Survey.forSurveysConvertDatesToJsDate(_user.surveys);
-
-
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
@@ -261,8 +118,7 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                     name: user.name, 
                     password: user.password, 
                     email: user.email, 
-                    tel: user.tel//, 
-                    // invites: invites
+                    tel: user.tel
                 }
             }).success(function(data, status, header, config) {
                 $log.debug(data);
@@ -282,47 +138,15 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
                 url: INVITE_PATH + "getInvites", 
                 data: { "oid": oid }
             }).success(function(data, status, header, config) {
-                $log.debug("------ getInvites-success: data -->");
-                $log.debug(data.data);
-                $log.debug(data);
-                $log.debug("<----- getInvites-success: data --");
+                // deferred.resolve(data.data);                                    // the real thing <----------- ***** --
                 
-                var _invites = data.data;    // the real thing <<----------------------------- TODO --------------------
-                // var _invites = getDummyInviteList();    // for manually testing the GUI <<------- TODO --------------------
-                // _invites = Invite.forInvitesConvertFromRawInvites(_invites);     //  <<------- TODO --------------------
-                deferred.resolve(_invites);
+                deferred.resolve(Invite.getDummyInviteList());                      // for debugging <------------ ***** --
                 
-                
-
-                // KONVERTIERUNG
-                // var _invites = ...;
-                // _invites = Invite.forInvitesConvertDatesToDatePickerDate(_invites);
-
-
-                // var _user = data.data[0];
-                
-
-
-                // TODO extract invites/surveys from user ********************************** 
-                // convert all dates to our date format  -->  TODO: factory for survey[] from [] from input
-                // var _surveys =  _user.surveys || [];
-                // for (var i = 0; i < _surveys.length; i++) {
-                //     _surveys.push(new Survey(_user.surveys[i]));
-                // }
-                // _user.surveys = Survey.forSurveysConvertDatesToDatePickerDate(_surveys);
-                
-                // deferred.resolve(_user);
+                //---- conversion, if necessary:
+                // var _rawInvites = data.data;                                 
+                // var _invites = Invite.forInvitesConvertFromRawInvites(_rawInvites);
+                // deferred.resolve(_invites);
             }).error(function(data, status, header, config) {
-                
-                // ----DEBUGGING -------- ******************
-                $log.debug("getInvites FAILED -->");
-                $log.debug(data);
-                $log.debug(status);
-                $log.debug(header);
-                $log.debug(config);
-                $log.debug("getInvites FAILED <--");
-                // ----DEBUGGING -------- ******************
-                
                 deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
             });
             return deferred.promise;
@@ -333,38 +157,21 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
          * Update or insert a survey.
          * - @param survey optional. If not specified, a new survey will be created on the server and inserted into the database.
          */
-        var saveSurvey = function(survey) {
-            // $log.warn("saveSurvey() not implemented");
-            $log.warn("saveSurvey() not tested");
-            // TODO retrieve data from rest service
+        var saveInvite = function(invite, user) {
+            $log.warn("saveInvite() not working");
+            
+            
+            $log.debug("saveInvite: ");
+            $log.debug(invite);
+            $log.debug(invite.export(user));
 
-            // convert all dates to the native date format
-            // var _survey = ...;
-            // _survey.convertDatesToJsDate();
 
-            // var dummyReturn = { "success": true, 
-            //                     "serverMessage": "HI FROM SAVE_SURVEY", 
-            //                     "survey": new Survey({name: "THE SURVEY" }) }; // for new survey: survey incl. oid of the newly generated Survey from the database
-            // return dummyReturn;
-
-            $log.log("REST save survey");
+            $log.log("REST save invite");
             var deferred = $q.defer();
             $http({ 
                 method: "POST", 
                 url: INVITE_PATH + "save", 
-                data: {   
-                    "isHost": true,         // muss per GUI gesetzt werden <<------------------------ FIXME
-                    "isIgnored": false,     //                             <<------------------------
-                    "survey": {
-                        "name": survey.name, 
-                        "description": survey.description, 
-                        "type": survey.type, 
-                        "deadline": survey.deadline, 
-                        "frequency": survey.frequency, 
-                        "possibleTimeperiods": survey.possibleTimeperiods, 
-                        "determinedTimeperiod": survey.determinedTimeperiod 
-                    }
-                }
+                data: invite.export(user)
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
                 deferred.resolve(data.data);
@@ -374,16 +181,10 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
             return deferred.promise;
         };
 
-        var deleteSurvey = function(oid) {
-            // $log.warn("deleteSurvey() not implemented");
-            $log.warn("deleteSurvey() not tested");
-            // TODO retrieve data from rest service
+        var deleteInvite = function(oid) {
+            $log.warn("deleteInvite() not working");
 
-            // var dummyReturn = { "success": true, 
-            //                     "serverMessage": "HI FROM DELETE_SURVEY" };
-            // return dummyReturn;
-
-            $log.log("REST deleteUser");
+            $log.log("REST deleteInvite");
             var deferred = $q.defer();
             $http({ 
                 method: "DELETE", 
@@ -401,13 +202,12 @@ angular.module("restModule", ["datePickerDate", "constants", "survey", "invite"]
 
         return {
             login: login, 
-            // getUser: getUser, 
             register: register, 
             deleteUser: deleteUser, 
             updateUser: updateUser, 
             getInvites: getInvites, 
-            saveSurvey: saveSurvey, 
-            deleteSurvey: deleteSurvey
+            saveInvite: saveInvite, 
+            deleteInvite: deleteInvite
         };
     }]);
 
