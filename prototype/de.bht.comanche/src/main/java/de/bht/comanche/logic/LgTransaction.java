@@ -1,9 +1,7 @@
 package de.bht.comanche.logic;
 
-import javax.ws.rs.WebApplicationException;
-
-import multex.MultexUtil;
-import de.bht.comanche.exceptions.PtjGlobalException;
+import de.bht.comanche.exceptions.ErrorMessage;
+import de.bht.comanche.exceptions.ServerException;
 import de.bht.comanche.persistence.DaPool;
 import de.bht.comanche.rest.ReResponseObject;
 
@@ -23,7 +21,8 @@ public abstract class LgTransaction<E> {
 			objectFromDb = executeWithThrows();
 			success = true;
 		} catch (multex.Exc ex) {
-			throw new WebApplicationException(ex.getMessage()); // TODO use "ServerException" instead !!!
+			throw new ServerException(new ErrorMessage("message", "stack trace"));
+//			throw new WebApplicationException(ex.getMessage()); // TODO use "TestException" instead !!!
 		} catch (Exception e) {
 			
 			// FIXME remove later, when all exceptions are converted to multex !!!
