@@ -11,7 +11,7 @@
 angular.module("myApp")
     .controller("loginCtrl", ["$scope", "$log", "patterns", "restService", "dialogMap", 
         function($scope, $log, patterns, restService, dialogMap) {
-        
+       
         var loginIsValidFor = function(user) {
             if (!user.name) {
                 $log.log("Benutzername fehlt.");
@@ -57,12 +57,13 @@ angular.module("myApp")
             }
             restService.login(_user)
                 .then(function(user) {
+
                     $scope.session.user = user;
                     $scope.session.state.isLoggedIn = true;
                     $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
-
+                    console.log(user);
                     // <<<<<<<<<<<<<<<<<<<< BAUSTELLE: Invites holen ------------------- TODO
                     restService.getInvites(user.oid)
                         .then(function(invites) {

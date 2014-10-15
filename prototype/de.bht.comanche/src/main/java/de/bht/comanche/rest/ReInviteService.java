@@ -28,13 +28,13 @@ public class ReInviteService extends ReService {
 	@Path("getInvites")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<List<LgInvite>> getInvites(final LgUser userFromClient) {
+	public ReResponseObject<List<LgInvite>> getInvites(final long userFromClientOid) {
 		final DaUser daUser0 = factory.getDaUser();
 		ReResponseObject<List<LgInvite>> response = new LgTransaction<List<LgInvite>>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try {
-					LgUser lgUser = daUser0.find(userFromClient.getOid());
+					LgUser lgUser = daUser0.find(userFromClientOid);
 					invites = lgUser.getInvites();
 				} catch (DaOidNotFoundException oid) {
 					throw new LgNoUserWithThisIdException();
@@ -56,9 +56,19 @@ public class ReInviteService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject saveInvite(final LgInvite newInviteFromClient) {
 		final DaInvite daInvite = factory.getDaInvite();
+		final DaUser daUser = factory.getDaUser();
+		daUser.setPool(daInvite.getPool());
+		
 		ReResponseObject response = new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws Exception {
-				daInvite.save(newInviteFromClient);
+				System.out.println("ID: " + newInviteFromClient.getOid());
+				LgInvite invite = daInvite.find(newInviteFromClient.getOid());
+				if (invite != null) {
+					daInvite.update(newInviteFromClient);
+				} else {
+					newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
+					daInvite.save(newInviteFromClient);
+				} 
 				return newInviteFromClient;
 			}
 		}.execute();
@@ -74,18 +84,19 @@ public class ReInviteService extends ReService {
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject deleteUser(final long inviteFromClientOid) {
+	public ReResponseObject deleteInvite(final long inviteFromClientOid) {
 		final DaInvite daInvite = factory.getDaInvite();
 		ReResponseObject response = new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws Exception {
-				LgInvite InviteFromDb = null;
+				LgInvite inviteFromDb = null;
 				try {
-					InviteFromDb = (LgInvite) daInvite
+					inviteFromDb = daInvite
 							.find(inviteFromClientOid);
 				} catch (NotFoundException exc) {
 					 throw new DaInviteNotFoundException();
 				}
-				daInvite.delete(InviteFromDb);
+				inviteFromDb.removeInvite();
+				daInvite.delete(inviteFromDb);
 				return null;
 			}
 		}.execute();

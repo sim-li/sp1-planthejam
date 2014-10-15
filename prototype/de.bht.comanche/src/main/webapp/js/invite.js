@@ -20,6 +20,7 @@ angular.module("invite", ["survey"])
         };
 
         Invite.prototype.export = function(user) {
+            console.log("OIDS? ", this.oid, this.survey.oid);
             return {   
                     // "isHost": true,         // muss per GUI gesetzt werden <<------------------------ FIXME
                     // // "isIgnored": false,     //                             <<------------------------
@@ -28,10 +29,10 @@ angular.module("invite", ["survey"])
                 "oid": this.oid, 
                 "ignored": this.ignored, 
                 "host": this.host, 
-                // "user": {
-                //     "oid": user.oid, 
-                //     "name": user.name
-                // }, 
+                "user": {
+                    "oid": user.oid, 
+                    "name": user.name
+                }, 
                 "survey": {
                     "oid": this.survey.oid, 
                     "name": this.survey.name, 
@@ -65,7 +66,7 @@ angular.module("invite", ["survey"])
             }
             return _invites;
         }
-
+/*
         Invite.getDummyInviteList = function() {
             return [
                 {   "oid": 1, 
@@ -120,6 +121,6 @@ angular.module("invite", ["survey"])
                 }
             ];
         };
-        
+        */
         return (Invite);
     }]);

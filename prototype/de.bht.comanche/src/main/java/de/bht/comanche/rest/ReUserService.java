@@ -57,6 +57,7 @@ public class ReUserService extends ReService {
 					throw new LgNoUserWithThisNameException();
 				}
 				LgUser userFromDb = users.get(0);
+				System.out.println("Got user: " + userFromDb);
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
 					throw MultexUtil.create(LgWrongPasswordException.class, 
 							userFromClient.getName(), 
@@ -95,14 +96,14 @@ public class ReUserService extends ReService {
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgUser> deleteUser(final LgUser userFromClient) {
+	public ReResponseObject<LgUser> deleteUser(final long userFromClientOid) {
 		final DaUser daUser = factory.getDaUser();
 		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
 				daUser.getPool()) {
 			public LgUser executeWithThrows() throws Exception {
 				LgUser userFromDb = null;
 				try {
-					userFromDb = daUser.find(userFromClient.getOid());
+					userFromDb = daUser.find(userFromClientOid);
 				} catch (DaOidNotFoundException oid) {
 					throw new LgNoUserWithThisIdException();
 				}

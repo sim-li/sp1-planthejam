@@ -25,7 +25,7 @@ public class LgInvite extends LgObject{
 	private boolean isIgnored;
 	
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private LgUser user;
 	
 	@NotNull
@@ -50,6 +50,10 @@ public class LgInvite extends LgObject{
 		return this;
 	}
 
+	public void removeInvite() {
+		user.removeInvite(this);
+	}
+	
 	@JsonIgnore
 	public LgUser getUser() {
 		return user;

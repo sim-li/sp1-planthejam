@@ -66,7 +66,8 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 // data: { "name": "Alice", "password": "yousnoozeyoulose" }        // for debugging <----------- ***** --
                 data: { "name": user.name, "password": user.password }              // the real thing <---------- ***** --
             }).success(function(data, status, header, config) {
-                $log.debug(data.data);
+                $log.debug("DATA RESPONSE FROM USER LOGIN");
+                $log.debug(data);
                 deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
                 deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status) + " " + data);
@@ -96,7 +97,7 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
             $http({ 
                 method: "DELETE", 
                 url: USER_PATH + "delete", 
-                data: { "oid": user.oid }, 
+                data: user.oid, 
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
@@ -136,12 +137,11 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
             $http({ 
                 method: "POST", 
                 url: INVITE_PATH + "getInvites", 
-                data: { "oid": oid }
+                data: oid
             }).success(function(data, status, header, config) {
-                // deferred.resolve(data.data);                                    // the real thing <----------- ***** --
-                
-                deferred.resolve(Invite.getDummyInviteList());                      // for debugging <------------ ***** --
-                
+                deferred.resolve(data.data);                                    // the real thing <----------- ***** --
+                $log.debug(data);
+                //deferred.resolve(Invite.getDummyInviteList());                // for debugging <------------ ***** --
                 //---- conversion, if necessary:
                 // var _rawInvites = data.data;                                 
                 // var _invites = Invite.forInvitesConvertFromRawInvites(_rawInvites);
@@ -158,14 +158,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
          * - @param survey optional. If not specified, a new survey will be created on the server and inserted into the database.
          */
         var saveInvite = function(invite, user) {
-            $log.warn("saveInvite() not working");
-            
-            
             $log.debug("saveInvite: ");
             $log.debug(invite);
             $log.debug(invite.export(user));
-
-
             $log.log("REST save invite");
             var deferred = $q.defer();
             $http({ 
@@ -182,14 +177,12 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         };
 
         var deleteInvite = function(oid) {
-            $log.warn("deleteInvite() not working");
-
             $log.log("REST deleteInvite");
             var deferred = $q.defer();
             $http({ 
                 method: "DELETE", 
-                url: USER_PATH + "delete", 
-                data: { "oid": oid }, 
+                url: INVITE_PATH + "delete", 
+                data: oid, 
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
