@@ -69,7 +69,7 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data.data);
                 deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
-                deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status));
+                deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status) + " " + data);
             });
             return deferred.promise;
         };

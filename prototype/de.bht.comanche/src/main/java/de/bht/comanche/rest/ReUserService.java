@@ -12,11 +12,21 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
+<<<<<<< HEAD
 import multex.MultexUtil;
+=======
+import de.bht.comanche.exceptions.AdapterException;
+>>>>>>> f8c03d00f0970324bc6da213086f59103a486ae4
 import de.bht.comanche.exceptions.DaOidNotFoundException;
+import de.bht.comanche.exceptions.ErrorMessage;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.exceptions.LgNoUserWithThisNameException;
 import de.bht.comanche.exceptions.LgUserWithThisNameExistsException;
+<<<<<<< HEAD
+=======
+import de.bht.comanche.exceptions.LgWrongPasswordException;
+import de.bht.comanche.exceptions.TestException;
+>>>>>>> f8c03d00f0970324bc6da213086f59103a486ae4
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
@@ -41,7 +51,7 @@ public class ReUserService extends ReService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) {
+	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) throws AdapterException {
 		final DaUser daUser = factory.getDaUser();
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
@@ -67,6 +77,17 @@ public class ReUserService extends ReService {
 				return userFromDb;
 			}
 		}.execute();
+<<<<<<< HEAD
+=======
+		
+		if (response.hasError()) {
+//			throw new WebApplicationException(response.responseCode);
+			ErrorMessage message = new ErrorMessage(response.responseCode, "HUHUH-1", "HUHUH-2");
+			throw new TestException(message);
+//			throw new AdapterException(200, "Test1", "Test1");
+		}
+		return response;
+>>>>>>> f8c03d00f0970324bc6da213086f59103a486ae4
 	}
 
 	@Path("register")
