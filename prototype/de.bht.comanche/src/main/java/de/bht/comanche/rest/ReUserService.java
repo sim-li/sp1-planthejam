@@ -1,5 +1,6 @@
 package de.bht.comanche.rest;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -11,11 +12,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
+import multex.MultexUtil;
 import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.exceptions.LgNoUserWithThisNameException;
 import de.bht.comanche.exceptions.LgUserWithThisNameExistsException;
-import de.bht.comanche.exceptions.LgWrongPasswordException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
@@ -24,6 +25,14 @@ import de.bht.comanche.persistence.DaUser;
 
 @Path("/user/")
 public class ReUserService extends ReService {
+	
+	/**
+	 * Could not log in to account for user "{0}" with the given password at "{1}"
+	 */
+	public static final class LgWrongPasswordException extends multex.Exc {
+		private static final long serialVersionUID = 1053325287184937876L;
+	};
+	
 	public ReUserService() {
 		super();
 	}
@@ -34,7 +43,7 @@ public class ReUserService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
+		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
 			public LgUser executeWithThrows() throws Exception {
 				List<LgUser> users = daUser.findByName(userFromClient.getName());
@@ -49,15 +58,15 @@ public class ReUserService extends ReService {
 				}
 				LgUser userFromDb = users.get(0);
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
-					throw new LgWrongPasswordException();
+//					throw new LgWrongPasswordException();
+					throw MultexUtil.create(LgWrongPasswordException.class, 
+							userFromClient.getName(), 
+							new Date(System.currentTimeMillis()).toString());
 				}
+				
 				return userFromDb;
 			}
 		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.responseCode);
-		}
-		return response;
 	}
 
 	@Path("register")

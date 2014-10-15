@@ -1,5 +1,8 @@
 package de.bht.comanche.logic;
 
+import javax.ws.rs.WebApplicationException;
+
+import multex.MultexUtil;
 import de.bht.comanche.exceptions.PtjGlobalException;
 import de.bht.comanche.persistence.DaPool;
 import de.bht.comanche.rest.ReResponseObject;
@@ -19,10 +22,12 @@ public abstract class LgTransaction<E> {
 		try {
 			objectFromDb = executeWithThrows();
 			success = true;
-		} catch (PtjGlobalException ptjE) {
-			responseCode = ptjE.getResponseCode();
+		} catch (multex.Exc ex) {
+			throw new WebApplicationException(ex.getMessage()); // TODO use "TestException" instead !!!
 		} catch (Exception e) {
-			e.printStackTrace();		// TODO: should set responseCode to error (?)
+			
+			// FIXME remove later, when all exceptions are converted to multex !!!
+			
 		} finally {
 			pool.endTransaction(success); 
 		}

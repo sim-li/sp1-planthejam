@@ -121,6 +121,12 @@
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+		
+	    <dependency>
+			<groupId>de.tfh-berlin.knabe</groupId>
+			<artifactId>multex</artifactId>
+			<version>8.3</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -335,6 +341,15 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<repositories>
+		<repository>
+			<!-- Für MulTEx: -->
+			<id>tfh-knabe-repository</id>
+			<name>BHT Knabe Maven 2 repository</name>
+			<url>http://public.beuth-hochschule.de/~knabe/mvn-repo/</url>
+		</repository>
+	</repositories>
 
 
 </project>
