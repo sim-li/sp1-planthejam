@@ -42,9 +42,11 @@ public class ReInviteService extends ReService {
 				return invites;
 			}
 		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.responseCode);
-		}
+		// TODO -->
+//		if (response.hasError()) {
+//			throw new WebApplicationException(response.responseCode);
+//		}
+		// TODO <--
 		return response;
 	}
 
@@ -60,9 +62,11 @@ public class ReInviteService extends ReService {
 				return newInviteFromClient;
 			}
 		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.responseCode);
-		}
+		// TODO -->
+//		if (response.hasError()) {
+//			throw new WebApplicationException(response.responseCode);
+//		}
+		// TODO <--
 		return response;
 	}
 
@@ -86,9 +90,11 @@ public class ReInviteService extends ReService {
 			}
 		}.execute();
 
-		if (response.hasError()) {
-			throw new WebApplicationException(response.responseCode);
-		}
+		// TODO -->
+//		if (response.hasError()) {
+//			throw new WebApplicationException(response.responseCode);
+//		}
+		// TODO <--
 		return response;
 	}
 

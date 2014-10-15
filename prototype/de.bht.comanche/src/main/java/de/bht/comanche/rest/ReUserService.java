@@ -58,12 +58,10 @@ public class ReUserService extends ReService {
 				}
 				LgUser userFromDb = users.get(0);
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
-//					throw new LgWrongPasswordException();
 					throw MultexUtil.create(LgWrongPasswordException.class, 
 							userFromClient.getName(), 
 							new Date(System.currentTimeMillis()).toString());
 				}
-				
 				return userFromDb;
 			}
 		}.execute();
@@ -85,9 +83,11 @@ public class ReUserService extends ReService {
 				return newUserFromClient;
 			}
 		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.responseCode);
-		}
+		// TODO -->
+//		if (response.hasError()) {
+//			throw new WebApplicationException(response.responseCode);
+//		}
+		// TODO <--
 		return response;
 	}
 
@@ -111,9 +111,11 @@ public class ReUserService extends ReService {
 				return null;
 			}
 		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.responseCode);
-		}
+		// TODO -->
+//		if (response.hasError()) {
+//			throw new WebApplicationException(response.responseCode);
+//		}
+		// TODO <--
 		return response;
 	} 
 
@@ -134,9 +136,11 @@ public class ReUserService extends ReService {
 				return daUser.update(dirtyUser);
 			}
 		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.responseCode);
-		}
+		// TODO -->
+//		if (response.hasError()) {
+//			throw new WebApplicationException(response.responseCode);
+//		}
+		// TODO <--
 		return response;
 	}
 

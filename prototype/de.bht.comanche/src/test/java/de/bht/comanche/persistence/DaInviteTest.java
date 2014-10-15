@@ -122,7 +122,7 @@ public class DaInviteTest {
 			}
 		}.execute();
 		System.out.println("YY>>>>>>>>>>" + response.data.get(0).getUser().getName());
-		System.out.println("SUCCESS? RESPONSE CODE: " + response.responseCode);
+//		System.out.println("SUCCESS? RESPONSE CODE: " + response.responseCode); // -> responseCode was deleted from ReResponseObject
 	}
 
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {

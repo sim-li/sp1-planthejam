@@ -16,21 +16,21 @@ public abstract class LgTransaction<E> {
 		pool.beginTransaction();
 		boolean success = false;
 		E objectFromDb = null;
-		int responseCode = ReResponseObject.STATUS_OK;
 		try {
 			objectFromDb = executeWithThrows();
 			success = true;
 		} catch (multex.Exc ex) {
-			throw new ServerException(new ErrorMessage("message", "stack trace"));
+			ex.printStackTrace(); // TODO -> redirect System.err to log
+			throw new ServerException(new ErrorMessage(ex.getMessage(), ex.getStackTrace()));
 //			throw new WebApplicationException(ex.getMessage()); // TODO use "TestException" instead !!!
 		} catch (Exception e) {
-			
 			// FIXME remove later, when all exceptions are converted to multex !!!
-			
+			System.err.println("== exception in ReResponseObject --> TODO ==");
+			e.printStackTrace();
 		} finally {
 			pool.endTransaction(success); 
 		}
-		return new ReResponseObject<E>(objectFromDb, responseCode);
+		return new ReResponseObject<E>(objectFromDb);
 	}
 	
 	public void forceTransactionEnd() {
