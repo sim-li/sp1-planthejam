@@ -45,7 +45,7 @@
                 <configuration>
                     <sdk>
                         <!-- <path>$ANDROID_HOME</path>-->
-                        <path>/home/ptj/android-sdk-linux</path>
+                        <path>$ANDROID_HOME</path>
                         <platform>19</platform>
                     </sdk>
 
