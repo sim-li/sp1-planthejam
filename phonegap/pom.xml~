@@ -20,12 +20,7 @@
 			<version>2.2.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.jboss.errai</groupId>
-			<artifactId>cordova-maven-plugin</artifactId>
-			<version>3.1.0.CR1</version>
-		</dependency>
-
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
