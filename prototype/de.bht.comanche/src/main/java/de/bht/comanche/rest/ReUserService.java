@@ -11,11 +11,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
+import de.bht.comanche.exceptions.AdapterException;
 import de.bht.comanche.exceptions.DaOidNotFoundException;
+import de.bht.comanche.exceptions.ErrorMessage;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.exceptions.LgNoUserWithThisNameException;
 import de.bht.comanche.exceptions.LgUserWithThisNameExistsException;
 import de.bht.comanche.exceptions.LgWrongPasswordException;
+import de.bht.comanche.exceptions.TestException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
@@ -32,7 +35,7 @@ public class ReUserService extends ReService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) {
+	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) throws AdapterException {
 		final DaUser daUser = factory.getDaUser();
 		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
@@ -54,8 +57,12 @@ public class ReUserService extends ReService {
 				return userFromDb;
 			}
 		}.execute();
+		
 		if (response.hasError()) {
-			throw new WebApplicationException(response.responseCode);
+//			throw new WebApplicationException(response.responseCode);
+			ErrorMessage message = new ErrorMessage(response.responseCode, "HUHUH-1", "HUHUH-2");
+			throw new TestException(message);
+//			throw new AdapterException(200, "Test1", "Test1");
 		}
 		return response;
 	}
