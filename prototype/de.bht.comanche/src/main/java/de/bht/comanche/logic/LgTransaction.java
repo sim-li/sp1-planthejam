@@ -23,7 +23,7 @@ public abstract class LgTransaction<E> {
 			objectFromDb = executeWithThrows();
 			success = true;
 		} catch (multex.Exc ex) {
-			throw new WebApplicationException(ex.getMessage()); // TODO use "TestException" instead !!!
+			throw new WebApplicationException(ex.getMessage()); // TODO use "ServerException" instead !!!
 		} catch (Exception e) {
 			
 			// FIXME remove later, when all exceptions are converted to multex !!!

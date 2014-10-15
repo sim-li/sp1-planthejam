@@ -12,7 +12,7 @@ public class ErrorMessage {
 	 */
 	public final String stackTrace;
 
-	// used with TestException
+	// used with ServerException
 	public ErrorMessage(String errorMessage, String stackTrace) {
 		this.errorMessage = errorMessage;
 		this.stackTrace = stackTrace;
@@ -24,7 +24,5 @@ public class ErrorMessage {
 		this.errorMessage = exception.getErrorMessage();
 		this.stackTrace = exception.gStackTrace();
 	}
-
-
 
 }
