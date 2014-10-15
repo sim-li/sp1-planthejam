@@ -69,7 +69,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data.data);
                 deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
-                deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status) + " " + data);
+                $log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };
@@ -85,7 +87,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data.data);
                 deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
-                deferred.reject("Registrierung auf dem Server fehlgeschlagen. " + getErrorMesage(status));
+                $log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Registrierung auf dem Server fehlgeschlagen. " + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };
@@ -138,9 +142,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 url: INVITE_PATH + "getInvites", 
                 data: { "oid": oid }
             }).success(function(data, status, header, config) {
-                // deferred.resolve(data.data);                                    // the real thing <----------- ***** --
+                deferred.resolve(data.data);                                    // the real thing <----------- ***** --
                 
-                deferred.resolve(Invite.getDummyInviteList());                      // for debugging <------------ ***** --
+                // deferred.resolve(Invite.getDummyInviteList());                      // for debugging <------------ ***** --
                 
                 //---- conversion, if necessary:
                 // var _rawInvites = data.data;                                 

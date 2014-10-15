@@ -9,14 +9,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import multex.MultexUtil;
 import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
-import de.bht.comanche.exceptions.LgNoUserWithThisNameException;
-import de.bht.comanche.exceptions.LgUserWithThisNameExistsException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
@@ -27,10 +24,24 @@ import de.bht.comanche.persistence.DaUser;
 public class ReUserService extends ReService {
 	
 	/**
-	 * Could not log in to account for user "{0}" with the given password at "{1}"
+	 * Wrong password for user with name "{0}". Occured at "{1}"
 	 */
-	public static final class LgWrongPasswordException extends multex.Exc {
+	public static final class LgWrongPasswordExc extends multex.Exc {
 		private static final long serialVersionUID = 1053325287184937876L;
+	};
+	
+	/**
+	 * No user with name "{0}" found in the database. Occured at "{1}"
+	 */
+	public static final class LgNoUserWithThisNameExc extends multex.Exc {
+		private static final long serialVersionUID = 997957804551407265L;
+	};
+	
+	/**
+	 * A user with name "{0}" already exists in the database. Occured at "{1}"
+	 */
+	public static final class LgUserWithThisNameExistsExc extends multex.Exc {
+		private static final long serialVersionUID = -2460348018637263735L;
 	};
 	
 	public ReUserService() {
@@ -54,13 +65,16 @@ public class ReUserService extends ReService {
 				// throw new MultipleUsersWithThisNameException();
 				// }
 				if (users.isEmpty()) {
-					throw new LgNoUserWithThisNameException();
+//					throw new LgNoUserWithThisNameException();
+					throw MultexUtil.create(LgNoUserWithThisNameExc.class,
+							userFromClient.getName(), 
+							createTimeStamp());
 				}
 				LgUser userFromDb = users.get(0);
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
-					throw MultexUtil.create(LgWrongPasswordException.class, 
+					throw MultexUtil.create(LgWrongPasswordExc.class, 
 							userFromClient.getName(), 
-							new Date(System.currentTimeMillis()).toString());
+							createTimeStamp());
 				}
 				return userFromDb;
 			}
@@ -73,22 +87,18 @@ public class ReUserService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgUser> registerUser(final LgUser newUserFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
+		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
 			public LgUser executeWithThrows() throws Exception {
 				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
-					throw new LgUserWithThisNameExistsException();
+					throw MultexUtil.create(LgWrongPasswordExc.class, 
+							newUserFromClient.getName(), 
+							createTimeStamp());
 				}
 				daUser.save(newUserFromClient);
 				return newUserFromClient;
 			}
 		}.execute();
-		// TODO -->
-//		if (response.hasError()) {
-//			throw new WebApplicationException(response.responseCode);
-//		}
-		// TODO <--
-		return response;
 	}
 
 	@Path("delete")
@@ -97,12 +107,12 @@ public class ReUserService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgUser> deleteUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(
-				daUser.getPool()) {
+		return new LgTransaction<LgUser>(daUser.getPool()) {
+			@Override
 			public LgUser executeWithThrows() throws Exception {
 				LgUser userFromDb = null;
 				try {
-					userFromDb = daUser.find(userFromClient.getOid());
+					userFromDb = daUser.find(userFromClient.getOid()); // TODO use multex.Ex in DaUser.find
 				} catch (DaOidNotFoundException oid) {
 					throw new LgNoUserWithThisIdException();
 				}
@@ -111,12 +121,6 @@ public class ReUserService extends ReService {
 				return null;
 			}
 		}.execute();
-		// TODO -->
-//		if (response.hasError()) {
-//			throw new WebApplicationException(response.responseCode);
-//		}
-		// TODO <--
-		return response;
 	} 
 
 	@Path("update")
@@ -125,23 +129,17 @@ public class ReUserService extends ReService {
 	@Produces({"application/json"})
 	public ReResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
 		final DaUser daUser = factory.getDaUser();
-		ReResponseObject<LgUser> response = new LgTransaction<LgUser>(daUser.getPool()) {
+		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
 			public LgUser executeWithThrows() throws Exception {
 				try {
-					daUser.find(dirtyUser.getOid());
+					daUser.find(dirtyUser.getOid()); // TODO use multex.Ex in DaUser.find
 				} catch (DaOidNotFoundException oid) {
 					throw new LgNoUserWithThisIdException();
 				}
 				return daUser.update(dirtyUser);
 			}
 		}.execute();
-		// TODO -->
-//		if (response.hasError()) {
-//			throw new WebApplicationException(response.responseCode);
-//		}
-		// TODO <--
-		return response;
 	}
 
 	public static final String CLICHED_MESSAGE = "Hello World!";
@@ -151,5 +149,9 @@ public class ReUserService extends ReService {
 	@Produces(MediaType.TEXT_HTML)
 	public String getHello() {
 		return CLICHED_MESSAGE;
+	}
+	
+	private String createTimeStamp() {
+		return new Date(System.currentTimeMillis()).toString();
 	}
 }
