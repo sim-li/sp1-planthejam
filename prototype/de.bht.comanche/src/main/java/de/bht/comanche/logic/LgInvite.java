@@ -7,7 +7,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 /**
  * @author Duc Tung Tong, Beuth Hochschule für Technik Berlin, SWP1 
  * Diese Klasse beschreibt eine Einladung von Host zu Users

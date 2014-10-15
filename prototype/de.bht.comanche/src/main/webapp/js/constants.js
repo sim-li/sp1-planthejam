@@ -10,9 +10,12 @@
 
 angular.module("constants", [])
     .constant("TimeUnit", function() {
-        var DAY = "Tag", 
-            WEEK = "Woche", 
-            MONTH = "Monat";
+        // var DAY = "Tag", 
+        //     WEEK = "Woche", 
+        //     MONTH = "Monat";
+        var DAY = "DAY", 
+            WEEK = "WEEK", 
+            MONTH = "MONTH";
         return {
             DAY: DAY, 
             WEEK: WEEK, 
@@ -21,12 +24,14 @@ angular.module("constants", [])
         };
     }())
     .constant("Type", function() {
-        var UNIQUE = "einmalig", 
-            RECURRING = "wiederholt";
+        // var ONE_TIME = "einmalig", 
+        //     RECURRING = "wiederholt";
+        var ONE_TIME = "ONE_TIME", 
+            RECURRING = "RECURRING";
         return {
-            UNIQUE: UNIQUE, 
+            ONE_TIME: ONE_TIME, 
             RECURRING: RECURRING, 
-            options_: [ UNIQUE, RECURRING ]
+            options_: [ ONE_TIME, RECURRING ]
         };
     }())
     .constant("patterns", {

@@ -74,7 +74,7 @@ angular.module("myApp")
                             }
                             $scope.session.user.invites  = _invites;
                             $scope.session.selectedInvite = $scope.session.user.invites[0] || "";
-                            $log.debug($scope.session.user.invites[0].survey);
+                            $log.debug($scope.session.user.invites);
                             $log.debug($scope.session.selectedInvite.survey);
                             $log.debug("---------");
 
