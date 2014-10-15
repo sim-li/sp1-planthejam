@@ -25,7 +25,6 @@ public class ErrorMessage {
 	// TODO remove! - unused
 	// used with AdapterException
 	public ErrorMessage(AdapterException exception) {
-//		this.status = exception.getStatus();
 		this.message = exception.getErrorMessage();
 		this.stackTrace = exception.gStackTrace();
 	}

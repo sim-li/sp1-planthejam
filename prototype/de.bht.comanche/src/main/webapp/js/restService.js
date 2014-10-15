@@ -1,7 +1,7 @@
 /*
  * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
  * (C)opyright Sebastian Dass�, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * 
+ *
  * Module: REST service
  */
 
@@ -9,31 +9,31 @@
 "use strict";
 
 angular.module("restModule", ["datePickerDate", "constants", "invite"])
-    .factory("restService", ["$http", "$q", "$log", "$filter", "Invite", 
+    .factory("restService", ["$http", "$q", "$log", "$filter", "Invite",
         function($http, $q, $log, $filter, Invite) {
 
         var USER_PATH = "rest/user/";
         var INVITE_PATH = "rest/invite/";
 
-        var SUCCESS = "SUCCESS ----------------------------------------------------------", 
-            ERROR   = "ERROR ------------------------------------------------------------", 
+        var SUCCESS = "SUCCESS ----------------------------------------------------------",
+            ERROR   = "ERROR ------------------------------------------------------------",
             DONE    = "DONE =============================================================";
 
-        
+
         var getErrorMesage = function(status) {
             var error = {
-                  2: "Die Objekt-ID wurde in der Datenbank nicht gefunden.", 
-                  3: "Das Objekt wurde in der Datenbank nicht gefunden.", 
-                  4: "No query class.", 
-                  5: "Diese Klasse kann nicht gespeichert werden.", 
-                  6: "Falscher Argument-Typ.", 
-                  7: "Falsche Anzahl an Argumenten.", 
-                  8: "Falsches Passwort.", 
-                  9: "Kein Benutzer mit diesem Namen gefunden.", 
-                 10: "Falsche ID.", 
-                 11: "Dieser Benutzername ist schon vergeben.", 
-                404: "REST-Service nicht gefunden.", 
-                123: "FOO-ERROR", 
+                  2: "Die Objekt-ID wurde in der Datenbank nicht gefunden.",
+                  3: "Das Objekt wurde in der Datenbank nicht gefunden.",
+                  4: "No query class.",
+                  5: "Diese Klasse kann nicht gespeichert werden.",
+                  6: "Falscher Argument-Typ.",
+                  7: "Falsche Anzahl an Argumenten.",
+                  8: "Falsches Passwort.",
+                  9: "Kein Benutzer mit diesem Namen gefunden.",
+                 10: "Falsche ID.",
+                 11: "Dieser Benutzername ist schon vergeben.",
+                404: "REST-Service nicht gefunden.",
+                123: "FOO-ERROR",
                 321: "BAR-ERROR"
             };
             var msg = error[status] || "";
@@ -46,11 +46,11 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
          */
         var getDummyUser = function() {
             return {
-                "oid": new Date().getTime(), 
-                "name": "THE USER", 
-                "password": "supersafe123", 
-                "email": "dummy@test.net", 
-                "tel": "+49-30-1234567", 
+                "oid": new Date().getTime(),
+                "name": "THE USER",
+                "password": "supersafe123",
+                "email": "dummy@test.net",
+                "tel": "+49-30-1234567",
                 // "invites": [] // empty list for debugging
                 "invites": Invite.getDummyInviteList() // dummy list for debugging
             };
@@ -60,9 +60,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         var login = function(user) {
             $log.log("REST login");
             var deferred = $q.defer();
-            $http({ 
-                method: "POST", 
-                url: USER_PATH + "login", 
+            $http({
+                method: "POST",
+                url: USER_PATH + "login",
                 // data: { "name": "Alice", "password": "yousnoozeyoulose" }        // for debugging <----------- ***** --
                 data: { "name": user.name, "password": user.password }              // the real thing <---------- ***** --
             }).success(function(data, status, header, config) {
@@ -70,7 +70,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data);
                 deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
-                deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status) + " " + data);
+                $log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };
@@ -78,15 +80,17 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         var register = function(user) {
             $log.log("REST register");
             var deferred = $q.defer();
-            $http({ 
-                method: "POST", 
-                url: USER_PATH + "register", 
+            $http({
+                method: "POST",
+                url: USER_PATH + "register",
                 data: { "name": user.name, "password": user.password, "email": user.email, "tel": user.tel }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
                 deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
-                deferred.reject("Registrierung auf dem Server fehlgeschlagen. " + getErrorMesage(status));
+                $log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Registrierung auf dem Server fehlgeschlagen. " + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };
@@ -94,10 +98,10 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         var deleteUser = function(user) {
             $log.log("REST deleteUser");
             var deferred = $q.defer();
-            $http({ 
-                method: "DELETE", 
-                url: USER_PATH + "delete", 
-                data: user.oid, 
+            $http({
+                method: "DELETE",
+                url: USER_PATH + "delete",
+                data: user.oid,
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
@@ -111,14 +115,14 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         var updateUser = function(user) {
             $log.log("REST updateUser");
             var deferred = $q.defer();
-            $http({ 
-                method: "POST", 
-                url: USER_PATH + "update", 
-                data: { 
-                    oid: user.oid, 
-                    name: user.name, 
-                    password: user.password, 
-                    email: user.email, 
+            $http({
+                method: "POST",
+                url: USER_PATH + "update",
+                data: {
+                    oid: user.oid,
+                    name: user.name,
+                    password: user.password,
+                    email: user.email,
                     tel: user.tel
                 }
             }).success(function(data, status, header, config) {
@@ -134,16 +138,15 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         var getInvites = function(oid) { //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             $log.log("REST getInvites");
             var deferred = $q.defer();
-            $http({ 
-                method: "POST", 
-                url: INVITE_PATH + "getInvites", 
+            $http({
+                method: "POST",
+                url: INVITE_PATH + "getInvites",
                 data: oid
             }).success(function(data, status, header, config) {
                 deferred.resolve(data.data);                                    // the real thing <----------- ***** --
-                $log.debug(data);
-                //deferred.resolve(Invite.getDummyInviteList());                // for debugging <------------ ***** --
+                // deferred.resolve(Invite.getDummyInviteList());               // for debugging <------------ ***** --
                 //---- conversion, if necessary:
-                // var _rawInvites = data.data;                                 
+                // var _rawInvites = data.data;
                 // var _invites = Invite.forInvitesConvertFromRawInvites(_rawInvites);
                 // deferred.resolve(_invites);
             }).error(function(data, status, header, config) {
@@ -163,9 +166,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
             $log.debug(invite.export(user));
             $log.log("REST save invite");
             var deferred = $q.defer();
-            $http({ 
-                method: "POST", 
-                url: INVITE_PATH + "save", 
+            $http({
+                method: "POST",
+                url: INVITE_PATH + "save",
                 data: invite.export(user)
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
@@ -179,10 +182,10 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         var deleteInvite = function(oid) {
             $log.log("REST deleteInvite");
             var deferred = $q.defer();
-            $http({ 
-                method: "DELETE", 
-                url: INVITE_PATH + "delete", 
-                data: oid, 
+            $http({
+                method: "DELETE",
+                url: INVITE_PATH + "delete",
+                data: oid,
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
@@ -194,12 +197,12 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         };
 
         return {
-            login: login, 
-            register: register, 
-            deleteUser: deleteUser, 
-            updateUser: updateUser, 
-            getInvites: getInvites, 
-            saveInvite: saveInvite, 
+            login: login,
+            register: register,
+            deleteUser: deleteUser,
+            updateUser: updateUser,
+            getInvites: getInvites,
+            saveInvite: saveInvite,
             deleteInvite: deleteInvite
         };
     }]);
