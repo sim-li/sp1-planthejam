@@ -12,23 +12,24 @@ public abstract class LgTransaction<E> {
 		this.pool = pool;
 	}
 	
-	public ReResponseObject<E> execute () {
+	public ReResponseObject<E> execute() { // throws ServerException
 		pool.beginTransaction();
 		boolean success = false;
 		E objectFromDb = null;
-		int responseCode = ReResponseObject.STATUS_OK;
 		try {
 			objectFromDb = executeWithThrows();
 			success = true;
 		} catch (multex.Exc ex) {
-			throw new ServerException(new ErrorMessage(ex.getMessage(), ex.getStackTrace().toString()));
-		
+			ex.printStackTrace(); // TODO -> redirect System.err to log
+			throw new ServerException(new ErrorMessage(ex.getMessage(), ex.getStackTrace()));
 		} catch (Exception e) {
 			// FIXME remove later, when all exceptions are converted to multex !!!
+			System.err.println("== exception in ReResponseObject --> TODO ==");
+			e.printStackTrace();
 		} finally {
 			pool.endTransaction(success); 
 		}
-		return new ReResponseObject<E>(objectFromDb, responseCode);
+		return new ReResponseObject<E>(objectFromDb);
 	}
 	
 	public void forceTransactionEnd() {
@@ -40,5 +41,5 @@ public abstract class LgTransaction<E> {
 		pool.beginTransaction();
 	}
 	
-	public abstract E executeWithThrows() throws Exception;
+	public abstract E executeWithThrows() throws Exception; // TODO change to throws multex.Ex
 }

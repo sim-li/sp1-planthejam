@@ -1,17 +1,11 @@
 package de.bht.comanche.rest;
 
+// TODO not necessary (?) to wrap the data for the response into an object -> refactor
 public class ReResponseObject<E> {
-	public static final int STATUS_OK = 200;
 	
 	public final E data;
-	public final int responseCode;
 	
-	public ReResponseObject(E data, int responseCode) {
+	public ReResponseObject(E data) {
 		this.data = data;
-		this.responseCode = responseCode;
-	}
-	
-	public boolean hasError() {
-		return responseCode != STATUS_OK;
 	}
 }

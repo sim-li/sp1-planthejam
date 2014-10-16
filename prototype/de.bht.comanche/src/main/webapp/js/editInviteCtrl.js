@@ -37,7 +37,6 @@ angular.module("myApp")
                     if (!$scope.session.addingInvite) {
                         util.removeElementFrom(_invite, $scope.session.user.invites);
                     }
-
                     $scope.session.user.invites.push(invite);
                     // $scope.session.user.invites.sort(function(a, b){ return a.name.localeCompare(b.name) }); // FIXME
                     $scope.session.selectedInvite = invite;
