@@ -21,12 +21,10 @@ public abstract class LgTransaction<E> {
 			objectFromDb = executeWithThrows();
 			success = true;
 		} catch (multex.Exc ex) {
-			throw new ServerException(new ErrorMessage("message", "stack trace"));
-//			throw new WebApplicationException(ex.getMessage()); // TODO use "TestException" instead !!!
+			throw new ServerException(new ErrorMessage(ex.getMessage(), ex.getStackTrace().toString()));
+		
 		} catch (Exception e) {
-			
 			// FIXME remove later, when all exceptions are converted to multex !!!
-			
 		} finally {
 			pool.endTransaction(success); 
 		}

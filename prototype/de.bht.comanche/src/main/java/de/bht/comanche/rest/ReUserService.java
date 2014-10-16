@@ -20,8 +20,7 @@ import de.bht.comanche.exceptions.LgUserWithThisNameExistsException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaUser;
-//import javax.interceptor.AroundInvoke;
-//import javax.ws.rs.
+
 
 @Path("/user/")
 public class ReUserService extends ReService {
@@ -54,6 +53,7 @@ public class ReUserService extends ReService {
 				// throw new MultipleUsersWithThisNameException();
 				// }
 				if (users.isEmpty()) {
+					
 					throw new LgNoUserWithThisNameException();
 				}
 				LgUser userFromDb = users.get(0);
