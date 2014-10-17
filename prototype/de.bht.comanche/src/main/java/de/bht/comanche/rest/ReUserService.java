@@ -91,7 +91,7 @@ public class ReUserService extends ReService {
             @Override
             public LgUser executeWithThrows() throws Exception {
                 if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
-                    throw MultexUtil.create(LgWrongPasswordExc.class,
+                    throw MultexUtil.create(LgUserWithThisNameExistsExc.class,
                             newUserFromClient.getName(),
                             createTimeStamp());
                 }
