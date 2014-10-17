@@ -8,7 +8,7 @@ import de.bht.comanche.persistence.DaPoolImpl.EntityExistsExc;
 import de.bht.comanche.persistence.DaPoolImpl.IllegalArgumentExc;
 import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 
-// TODO ------> Max
+// TODO not ready for multex ------> Max
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
 	private Class<E> type;

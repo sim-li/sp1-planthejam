@@ -18,8 +18,6 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaPoolImpl;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
-//import javax.interceptor.AroundInvoke;
-//import javax.ws.rs.
 
 @Path("/user/")
 public class ReUserService extends ReService {

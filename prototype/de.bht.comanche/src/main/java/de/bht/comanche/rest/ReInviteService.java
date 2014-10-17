@@ -18,6 +18,8 @@ import de.bht.comanche.persistence.DaInvite;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
 
+//TODO not ready for multex ------> ???
+
 @Path("/invite/")
 public class ReInviteService extends ReService {
 	
@@ -29,13 +31,13 @@ public class ReInviteService extends ReService {
 	@Path("getInvites")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<List<LgInvite>> getInvites(final LgUser userFromClient) {
+	public ReResponseObject<List<LgInvite>> getInvites(final long userFromClientOid) {
 		final DaUser daUser0 = factory.getDaUser();
 		return new LgTransaction<List<LgInvite>>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try {
-					LgUser lgUser = daUser0.find(userFromClient.getOid());
+					LgUser lgUser = daUser0.find(userFromClientOid);
 					invites = lgUser.getInvites();
 				} catch (DaOidNotFoundExc oid) {
 					throw new LgNoUserWithThisIdException();
@@ -51,9 +53,18 @@ public class ReInviteService extends ReService {
 	@Produces({ "application/json" })
 	public ReResponseObject<LgInvite> saveInvite(final LgInvite newInviteFromClient) {
 		final DaInvite daInvite = factory.getDaInvite();
+		final DaUser daUser = factory.getDaUser();
+		daUser.setPool(daInvite.getPool());
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws Exception {
-				daInvite.save(newInviteFromClient);
+				System.out.println("ID: " + newInviteFromClient.getOid());
+				LgInvite invite = daInvite.find(newInviteFromClient.getOid());
+				if (invite != null) {
+					daInvite.update(newInviteFromClient);
+				} else {
+					newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
+					daInvite.save(newInviteFromClient);
+				} 
 				return newInviteFromClient;
 			}
 		}.execute();
@@ -67,13 +78,14 @@ public class ReInviteService extends ReService {
 		final DaInvite daInvite = factory.getDaInvite();
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws Exception {
-				LgInvite InviteFromDb = null;
+				LgInvite inviteFromDb = null;
 				try {
-					InviteFromDb = (LgInvite) daInvite.find(inviteFromClientOid);
+					inviteFromDb = daInvite.find(inviteFromClientOid);
 				} catch (NotFoundException exc) {
 					 throw new DaInviteNotFoundException();
 				}
-				daInvite.delete(InviteFromDb);
+				inviteFromDb.removeInvite();
+				daInvite.delete(inviteFromDb);
 				return null;
 			}
 		}.execute();

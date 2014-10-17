@@ -11,6 +11,7 @@ import de.bht.comanche.persistence.DaPoolImpl.DaArgumentCountExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaPoolImpl.EntityExistsExc;
+import de.bht.comanche.persistence.DaPoolImpl.IllegalArgumentExc;
 import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 
 public interface DaUser {
@@ -22,5 +23,5 @@ public interface DaUser {
     void endTransaction(boolean success);
     public DaPool getPool();
     public void setPool(DaPool pool); 
-    LgUser update(LgUser user) throws TransactionRequiredException, IllegalArgumentException;
+    LgUser update(LgUser user) throws TransactionRequiredExc, IllegalArgumentExc;
 }

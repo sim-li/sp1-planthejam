@@ -14,5 +14,6 @@ public interface DaInvite {
     void beginTransaction();
     void endTransaction(boolean success);
     public DaPool getPool(); // Later overwritten by DaGenericImpl
-    public void setPool(DaPool pool); 
+    public void setPool(DaPool pool);
+    LgInvite update(LgInvite invite) throws TransactionRequiredExc, IllegalArgumentExc;
 }

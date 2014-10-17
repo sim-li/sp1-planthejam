@@ -12,7 +12,7 @@ import javax.persistence.RollbackException;
 
 import de.bht.comanche.logic.LgObject;
 
-//TODO ------> Seb
+//TODO not ready for multex ------> Seb
 public class DaPoolImpl<E> implements DaPool<E> {
 	private final String persistenceUnitName = "planthejam.jpa";
 	private EntityManager em;
