@@ -1,5 +1,7 @@
 package de.bht.comanche.rest;
 
+import static multex.MultexUtil.create;
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import multex.MultexUtil;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
@@ -43,11 +44,11 @@ public class ReUserService extends ReService {
 				// throw new MultipleUsersWithThisNameException();
 				// }
 				if (users.isEmpty()) {
-					throw MultexUtil.create(LgNoUserWithThisNameExc.class, createTimeStamp(), userFromClient.getName());
+					throw create(LgNoUserWithThisNameExc.class, createTimeStamp(), userFromClient.getName());
 				}
 				LgUser userFromDb = users.get(0);
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
-					throw MultexUtil.create(LgWrongPasswordExc.class, createTimeStamp(), userFromClient.getName());
+					throw create(LgWrongPasswordExc.class, createTimeStamp(), userFromClient.getName());
 				}
 				return userFromDb;
 			}
@@ -64,7 +65,7 @@ public class ReUserService extends ReService {
 			@Override
 			public LgUser executeWithThrows() throws multex.Exc {
 				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
-					throw MultexUtil.create(LgWrongPasswordExc.class, createTimeStamp(), newUserFromClient.getName());
+					throw create(LgWrongPasswordExc.class, createTimeStamp(), newUserFromClient.getName());
 				}
 				daUser.save(newUserFromClient);
 				return newUserFromClient;
@@ -88,7 +89,7 @@ public class ReUserService extends ReService {
 					userFromDb.clearInvites(); // FIXME ! should not be necessary -> JPA does this; otherwise implement daUserImpl.delete and call user.clearInvites there !
 					daUser.delete(userFromDb);
 				} catch (Exception ex) {
-					throw MultexUtil.create(DaPoolImpl.DataAccessExc.class, ex,
+					throw create(DaPoolImpl.DataAccessExc.class, ex,
 							createTimeStamp(),
 							userFromClient.getOid(), 
 							userFromClient.getName());
