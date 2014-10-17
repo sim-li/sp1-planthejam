@@ -5,23 +5,22 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import de.bht.comanche.logic.LgTransaction;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.exceptions.DaException;
-import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgSurveyDummyFactory;
+import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgUserDummyFactory;
+import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.rest.ReResponseObject;
 public class DaInviteTest {
 	final String userName0 = "ALICE";
@@ -115,7 +114,7 @@ public class DaInviteTest {
 					LgUser lgUser = daUser0.find(alice.getOid());
 					invites = lgUser.getInvites();
 					assertEquals("[Original TRANS Pattern] Check Alices first invite (BY ID):", invite0.getOid(), invites.get(0).getOid());
-				} catch (DaOidNotFoundException oid) {
+				} catch (DaOidNotFoundExc oid) {
 					throw new LgNoUserWithThisIdException();
 				}
 				return invites;

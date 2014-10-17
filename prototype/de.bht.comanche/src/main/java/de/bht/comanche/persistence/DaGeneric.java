@@ -16,7 +16,7 @@ public interface DaGeneric<E> {
     void delete(E entity) throws TransactionRequiredExc, IllegalArgumentExc;
     void beginTransaction();
     void endTransaction(boolean success);
-    E find(long id) throws DaOidNotFoundExc, DaNoPersistentClassExc, DaOidNotFoundExc;
+    E find(long id) throws DaNoPersistentClassExc, DaOidNotFoundExc;
     List<E> findAll() throws DaNoPersistentClassExc;
     List<E> findByField(String fieldName, Object fieldValue);
     DaPool getPool();

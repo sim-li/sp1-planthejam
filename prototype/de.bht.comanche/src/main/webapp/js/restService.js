@@ -70,13 +70,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data);
                 deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
-<<<<<<< HEAD
-                deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status) + " " + data.errorMessage  + " " + data.stackTrace);
-=======
                 $log.debug(data);
                 $log.debug(data.stackTrace);
                 deferred.reject("Login auf dem Server fehlgeschlagen. " + getErrorMesage(status) + "\n" + data.message);
->>>>>>> 0e844bee13c576cd29118e259eb91900edd225c5
             });
             return deferred.promise;
         };
@@ -105,7 +101,7 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
             $http({
                 method: "DELETE",
                 url: USER_PATH + "delete",
-                data: user.oid,
+                data: { oid: user.oid },
                 headers: { "Content-Type": "application/json" }
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);

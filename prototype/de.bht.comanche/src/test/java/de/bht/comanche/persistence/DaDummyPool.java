@@ -4,16 +4,13 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.EntityExistsException;
-import javax.transaction.TransactionRequiredException;
-
-import de.bht.comanche.exceptions.DaArgumentCountException;
-import de.bht.comanche.exceptions.DaArgumentTypeException;
-import de.bht.comanche.exceptions.DaNoPersistentClassException;
-import de.bht.comanche.exceptions.DaNoQueryClassException;
-import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.logic.LgObject;
-import de.bht.comanche.persistence.DaPool;
+import de.bht.comanche.persistence.DaPoolImpl.DaArgumentCountExc;
+import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
+import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import de.bht.comanche.persistence.DaPoolImpl.EntityExistsExc;
+import de.bht.comanche.persistence.DaPoolImpl.IllegalArgumentExc;
+import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 
 public class DaDummyPool<E> implements DaPool<E> {
 	List<E> pool;
@@ -33,20 +30,17 @@ public class DaDummyPool<E> implements DaPool<E> {
 	}
 
 	@Override
-	public void save(E io_object) throws EntityExistsException,
-			IllegalArgumentException, TransactionRequiredException {
+	public void save(E io_object) throws EntityExistsExc, IllegalArgumentExc, TransactionRequiredExc {
 		pool.add(io_object);
 	}
 
 	@Override
-	public void delete(E io_object) throws IllegalArgumentException,
-			TransactionRequiredException {
+	public void delete(E io_object) throws IllegalArgumentExc, TransactionRequiredExc {
 		pool.remove(io_object);
 	}
 
 	@Override
-	public E find(Class<E> i_persistentClass, Long i_oid)
-			throws DaNoPersistentClassException, DaOidNotFoundException {
+	public E find(Class<E> i_persistentClass, Long i_oid) throws DaNoPersistentClassExc, DaOidNotFoundExc {
 		for (E e : pool) {
 			if (e instanceof LgObject) {
 				LgObject obj = (LgObject) e;
@@ -59,8 +53,7 @@ public class DaDummyPool<E> implements DaPool<E> {
 	}
 
 	@Override
-	public List<E> findAll(Class<E> i_persistentClass)
-			throws DaNoPersistentClassException {
+	public List<E> findAll(Class<E> i_persistentClass) throws DaNoPersistentClassExc {
 		List<E> result = new LinkedList<E>();
 		for (E e : pool) {
 			 if (e.getClass().equals(i_persistentClass)) {
@@ -77,10 +70,8 @@ public class DaDummyPool<E> implements DaPool<E> {
 	 * [2] (String) fieldValue
 	 */
 	@Override
-	public List<E> findManyByQuery(Class<E> i_resultClass,
-			String i_queryString, Object[] i_args)
-			throws DaNoPersistentClassException, DaNoQueryClassException,
-			DaArgumentCountException, DaArgumentTypeException {
+	public List<E> findManyByQuery(Class<E> i_resultClass, String i_queryString, Object[] i_args) 
+			throws DaNoPersistentClassExc, /*DaNoQueryClassExc,*/ DaArgumentCountExc /*, DaArgumentTypeExc*/ {
 		if (!i_queryString.equals("SELECT c FROM %2$s AS c WHERE c.%1$s LIKE '%3$s'")) {
 			throw new IllegalArgumentException();
 		}

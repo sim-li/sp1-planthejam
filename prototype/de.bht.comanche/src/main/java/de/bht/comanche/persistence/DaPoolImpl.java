@@ -119,7 +119,7 @@ public class DaPoolImpl<E> implements DaPool<E> {
 	}
 	
 	private boolean wrongArgumentCount(String i_queryString, Object[] i_args) {
-		return countOccurences(i_queryString, "%") == i_args.length;
+		return countOccurences(i_queryString, "%") != i_args.length;
 	}
 	
 	private int countOccurences(String i_queryString, String pattern) {
@@ -174,4 +174,10 @@ public class DaPoolImpl<E> implements DaPool<E> {
 	 */
 	@SuppressWarnings("serial")
 	public static final class IllegalArgumentExc extends multex.Exc {}
+	
+	/**
+	 * TODO add meaningful message here: "{0}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class DaNotFoundExc extends multex.Exc {}
 }

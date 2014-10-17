@@ -30,7 +30,7 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public E find(long id) throws DaOidNotFoundExc, DaNoPersistentClassExc, DaOidNotFoundExc {
+	public E find(long id) throws DaNoPersistentClassExc, DaOidNotFoundExc {
 		return pool.find(type, id);
 	}
 
