@@ -1,20 +1,14 @@
 package de.bht.comanche.persistence;
 
-import java.util.Collection;
 import java.util.List;
 
-import javassist.NotFoundException;
+import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
+import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import de.bht.comanche.persistence.DaPoolImpl.EntityExistsExc;
+import de.bht.comanche.persistence.DaPoolImpl.IllegalArgumentExc;
+import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 
-import javax.persistence.EntityExistsException;
-import javax.transaction.TransactionRequiredException;
-
-import de.bht.comanche.exceptions.DaArgumentCountException;
-import de.bht.comanche.exceptions.DaArgumentTypeException;
-import de.bht.comanche.exceptions.DaNoPersistentClassException;
-import de.bht.comanche.exceptions.DaNoQueryClassException;
-import de.bht.comanche.exceptions.DaOidNotFoundException;
-import de.bht.comanche.logic.LgUser;
-
+// TODO ------> Max
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
 	private Class<E> type;
@@ -26,27 +20,27 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public void save(E entity) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException {
+	public void save(E entity) throws EntityExistsExc, TransactionRequiredExc, IllegalArgumentExc {
 		pool.save(entity);
 	}
 
 	@Override
-	public void delete(E entity) throws TransactionRequiredException, IllegalArgumentException {
+	public void delete(E entity) throws TransactionRequiredExc, IllegalArgumentExc {
 		pool.delete(entity);
 	}
 
 	@Override
-	public E find(long id) throws NotFoundException, DaNoPersistentClassException, DaOidNotFoundException {
+	public E find(long id) throws DaOidNotFoundExc, DaNoPersistentClassExc, DaOidNotFoundExc {
 		return pool.find(type, id);
 	}
 
 	@Override
-	public List<E> findAll() throws DaNoPersistentClassException {
+	public List<E> findAll() throws DaNoPersistentClassExc {
 		return pool.findAll(type);
 	}
 
 	@Override
-	public List<E> findByField(String fieldName, Object fieldValue) throws DaNoPersistentClassException, DaNoQueryClassException, DaArgumentCountException, DaArgumentTypeException { 
+	public List<E> findByField(String fieldName, Object fieldValue) { 
 		final String OBJECT_NAME = type.getSimpleName();
 		String [] args = {
 				fieldName,
@@ -75,7 +69,7 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public E update(E io_object) throws TransactionRequiredException, IllegalArgumentException {
+	public E update(E io_object) throws TransactionRequiredExc, IllegalArgumentExc {
 		return pool.merge(io_object);
 	}
 }

@@ -1,19 +1,16 @@
 package de.bht.comanche.persistence;
 
-import javassist.NotFoundException;
-
-import javax.persistence.EntityExistsException;
-import javax.transaction.TransactionRequiredException;
-
-import de.bht.comanche.exceptions.DaNoPersistentClassException;
-import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.logic.LgInvite;
-import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
+import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import de.bht.comanche.persistence.DaPoolImpl.EntityExistsExc;
+import de.bht.comanche.persistence.DaPoolImpl.IllegalArgumentExc;
+import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 
 public interface DaInvite {
-	void save(LgInvite invite) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException ;
-	void delete(LgInvite invite)  throws TransactionRequiredException, IllegalArgumentException;
-	LgInvite find(long id) throws NotFoundException, DaNoPersistentClassException, DaOidNotFoundException;
+	void save(LgInvite invite) throws EntityExistsExc, TransactionRequiredExc, IllegalArgumentExc ;
+	void delete(LgInvite invite)  throws TransactionRequiredExc, IllegalArgumentExc;
+	LgInvite find(long id) throws DaOidNotFoundExc, DaNoPersistentClassExc, DaOidNotFoundExc;
     void beginTransaction();
     void endTransaction(boolean success);
     public DaPool getPool(); // Later overwritten by DaGenericImpl

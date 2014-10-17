@@ -4,21 +4,20 @@ import java.util.List;
 
 import javassist.NotFoundException;
 
-import javax.persistence.EntityExistsException;
 import javax.transaction.TransactionRequiredException;
 
-import de.bht.comanche.exceptions.DaArgumentCountException;
-import de.bht.comanche.exceptions.DaArgumentTypeException;
-import de.bht.comanche.exceptions.DaNoPersistentClassException;
-import de.bht.comanche.exceptions.DaNoQueryClassException;
-import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.persistence.DaPoolImpl.DaArgumentCountExc;
+import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
+import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import de.bht.comanche.persistence.DaPoolImpl.EntityExistsExc;
+import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 
 public interface DaUser {
-	void save(LgUser user) throws EntityExistsException, TransactionRequiredException, IllegalArgumentException ;
-	void delete(LgUser user)  throws TransactionRequiredException, IllegalArgumentException;
-	LgUser find(long id) throws NotFoundException, DaNoPersistentClassException, DaOidNotFoundException;
-    List <LgUser> findByName(String name) throws DaNoPersistentClassException, DaNoQueryClassException, DaArgumentCountException, DaArgumentTypeException;
+	void save(LgUser user) throws EntityExistsExc, TransactionRequiredExc;
+	void delete(LgUser user) throws TransactionRequiredException, IllegalArgumentException;
+	LgUser find(long id) throws NotFoundException, DaNoPersistentClassExc, DaOidNotFoundExc;
+    List <LgUser> findByName(String name) throws DaNoPersistentClassExc, /*DaNoQueryClassExc,*/ DaArgumentCountExc /*, DaArgumentTypeExc*/;
     void beginTransaction();
     void endTransaction(boolean success);
     public DaPool getPool();

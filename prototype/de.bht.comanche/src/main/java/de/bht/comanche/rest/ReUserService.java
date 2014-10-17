@@ -12,37 +12,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import multex.MultexUtil;
-import de.bht.comanche.exceptions.DaOidNotFoundException;
 import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.persistence.DaPoolImpl;
+import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
 //import javax.interceptor.AroundInvoke;
 //import javax.ws.rs.
 
 @Path("/user/")
 public class ReUserService extends ReService {
-	
-	/**
-	 * Wrong password for user with name "{0}". Occured at "{1}"
-	 */
-	public static final class LgWrongPasswordExc extends multex.Exc {
-		private static final long serialVersionUID = 1053325287184937876L;
-	};
-	
-	/**
-	 * No user with name "{0}" found in the database. Occured at "{1}"
-	 */
-	public static final class LgNoUserWithThisNameExc extends multex.Exc {
-		private static final long serialVersionUID = 997957804551407265L;
-	};
-	
-	/**
-	 * A user with name "{0}" already exists in the database. Occured at "{1}"
-	 */
-	public static final class LgUserWithThisNameExistsExc extends multex.Exc {
-		private static final long serialVersionUID = -2460348018637263735L;
-	};
 	
 	public ReUserService() {
 		super();
@@ -65,16 +45,11 @@ public class ReUserService extends ReService {
 				// throw new MultipleUsersWithThisNameException();
 				// }
 				if (users.isEmpty()) {
-//					throw new LgNoUserWithThisNameException();
-					throw MultexUtil.create(LgNoUserWithThisNameExc.class,
-							userFromClient.getName(), 
-							createTimeStamp());
+					throw MultexUtil.create(LgNoUserWithThisNameExc.class, createTimeStamp(), userFromClient.getName());
 				}
 				LgUser userFromDb = users.get(0);
 				if (!userFromDb.passwordMatchWith(userFromClient)) {
-					throw MultexUtil.create(LgWrongPasswordExc.class, 
-							userFromClient.getName(), 
-							createTimeStamp());
+					throw MultexUtil.create(LgWrongPasswordExc.class, createTimeStamp(), userFromClient.getName());
 				}
 				return userFromDb;
 			}
@@ -89,11 +64,9 @@ public class ReUserService extends ReService {
 		final DaUser daUser = factory.getDaUser();
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
-			public LgUser executeWithThrows() throws Exception {
+			public LgUser executeWithThrows() throws multex.Exc {
 				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
-					throw MultexUtil.create(LgWrongPasswordExc.class, 
-							newUserFromClient.getName(), 
-							createTimeStamp());
+					throw MultexUtil.create(LgWrongPasswordExc.class, createTimeStamp(), newUserFromClient.getName());
 				}
 				daUser.save(newUserFromClient);
 				return newUserFromClient;
@@ -101,6 +74,7 @@ public class ReUserService extends ReService {
 		}.execute();
 	}
 
+	//------------------------------------------ multex-ready ----
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")
@@ -109,15 +83,18 @@ public class ReUserService extends ReService {
 		final DaUser daUser = factory.getDaUser();
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
-			public LgUser executeWithThrows() throws Exception {
+			public LgUser executeWithThrows() throws multex.Exc {
 				LgUser userFromDb = null;
 				try {
 					userFromDb = daUser.find(userFromClient.getOid()); // TODO use multex.Ex in DaUser.find
-				} catch (DaOidNotFoundException oid) {
-					throw new LgNoUserWithThisIdException();
+					userFromDb.clearInvites(); // FIXME ! should not be necessary -> JPA does this; otherwise implement daUserImpl.delete and call user.clearInvites there !
+					daUser.delete(userFromDb);
+				} catch (Exception ex) {
+					throw MultexUtil.create(DaPoolImpl.DataAccessExc.class, ex,
+							createTimeStamp(),
+							userFromClient.getOid(), 
+							userFromClient.getName());
 				}
-				userFromDb.clearInvites();
-				daUser.delete(userFromDb);
 				return null;
 			}
 		}.execute();
@@ -134,14 +111,15 @@ public class ReUserService extends ReService {
 			public LgUser executeWithThrows() throws Exception {
 				try {
 					daUser.find(dirtyUser.getOid()); // TODO use multex.Ex in DaUser.find
-				} catch (DaOidNotFoundException oid) {
+				} catch (DaOidNotFoundExc oid) {
 					throw new LgNoUserWithThisIdException();
 				}
 				return daUser.update(dirtyUser);
 			}
 		}.execute();
 	}
-
+	
+	// TODO unused? --> remove ------>
 	public static final String CLICHED_MESSAGE = "Hello World!";
 
 	@Path("hello")
@@ -150,8 +128,28 @@ public class ReUserService extends ReService {
 	public String getHello() {
 		return CLICHED_MESSAGE;
 	}
+	//<------
+	
 	
 	private String createTimeStamp() {
 		return new Date(System.currentTimeMillis()).toString();
 	}
+	
+	/**
+	 * Occured at "{0}". Wrong password for user with name "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgWrongPasswordExc extends multex.Exc {}
+	
+	/**
+	 * Occured at "{0}". No user with name "{1}" found in the database
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgNoUserWithThisNameExc extends multex.Exc {}
+	
+	/**
+	 * Occured at "{0}". A user with name "{1}" already exists in the database
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgUserWithThisNameExistsExc extends multex.Exc {}
 }
