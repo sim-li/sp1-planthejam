@@ -111,28 +111,23 @@ public class ReUserService extends ReService {
 				try {
 					daUser.find(dirtyUser.getOid()); // TODO use multex.Ex in DaUser.find
 				} catch (DaOidNotFoundExc oid) {
-					throw new LgNoUserWithThisIdException();
+					throw create(LgNoUserWithThisIdExc.class, createTimeStamp(), dirtyUser.getOid());
 				}
 				return daUser.update(dirtyUser);
 			}
 		}.execute();
 	}
 	
-	// TODO unused? --> remove ------>
-	public static final String CLICHED_MESSAGE = "Hello World!";
-
-	@Path("hello")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String getHello() {
-		return CLICHED_MESSAGE;
-	}
-	//<------
-	
-	
 	private String createTimeStamp() {
 		return new Date(System.currentTimeMillis()).toString();
 	}
+	
+	/**
+	 * Occured at "{0}". No user with id "{1}" found in the database
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgNoUserWithThisIdExc extends multex.Exc {}
+	
 	
 	/**
 	 * Occured at "{0}". Wrong password for user with name "{1}"

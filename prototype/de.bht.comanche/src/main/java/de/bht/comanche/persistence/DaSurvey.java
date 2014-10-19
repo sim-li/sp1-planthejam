@@ -16,7 +16,7 @@ public interface DaSurvey {
 	void save(LgSurvey survey) throws EntityExistsExc, TransactionRequiredExc, IllegalArgumentExc;
 	void delete(LgSurvey survey) throws TransactionRequiredExc, IllegalArgumentExc;
 	LgSurvey find(long id) throws DaOidNotFoundExc;
-	List<LgSurvey> findAll() throws DaNoPersistentClassException;
+	List<LgSurvey> findAll() throws DaNoPersistentClassExc;
     List<LgSurvey> findByName(String name) throws DaNotFoundExc;
     void beginTransaction();
     void endTransaction(boolean success);

@@ -1,5 +1,8 @@
 package de.bht.comanche.rest;
 
+import static multex.MultexUtil.create;
+
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -17,6 +20,7 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaInvite;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
+import de.bht.comanche.rest.ReUserService.LgNoUserWithThisIdExc;
 
 //TODO not ready for multex ------> ???
 
@@ -40,8 +44,9 @@ public class ReInviteService extends ReService {
 					LgUser lgUser = daUser0.find(userFromClientOid);
 					invites = lgUser.getInvites();
 				} catch (DaOidNotFoundExc oid) {
-					throw new LgNoUserWithThisIdException();
+					throw create(LgNoUserWithThisIdExc.class, createTimeStamp(), userFromClientOid);
 				}
+				
 				return invites;
 			}
 		}.execute();
@@ -57,7 +62,7 @@ public class ReInviteService extends ReService {
 		daUser.setPool(daInvite.getPool());
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws Exception {
-				System.out.println("ID: " + newInviteFromClient.getOid());
+//				System.out.println("ID: " + newInviteFromClient.getOid());
 				LgInvite invite = daInvite.find(newInviteFromClient.getOid());
 				if (invite != null) {
 					daInvite.update(newInviteFromClient);
@@ -90,5 +95,8 @@ public class ReInviteService extends ReService {
 			}
 		}.execute();
 	}
-
+	
+	private String createTimeStamp() {
+		return new Date(System.currentTimeMillis()).toString();
+	}
 }
