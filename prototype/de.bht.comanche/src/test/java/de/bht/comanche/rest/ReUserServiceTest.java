@@ -16,7 +16,7 @@ public class ReUserServiceTest {
 	static long oid = 0;
 	static String testUsername = "Muster10";
 
-	@Test
+//	@Test
 	public void test1registerUser() {
 		LgUser testUser = new LgUser();
 		testUser.setName(testUsername);
@@ -32,7 +32,7 @@ public class ReUserServiceTest {
 		oid = jsonPath.getLong("data.oid");
 		}
 
-	@Test
+//	@Test
 	public void test2loginUser() {
 
 		LgUser testUser = new LgUser();
@@ -50,7 +50,7 @@ public class ReUserServiceTest {
 		assertEquals("123456789", jsonPath.get("data.tel"));
 	}
 
-	@Test
+//	@Test
 	public void test3updateUser() {
 
 		LgUser testUser = new LgUser();
@@ -72,7 +72,7 @@ public class ReUserServiceTest {
 
 	}
 
-	@Test
+//	@Test
 	public void test4DeletedUser() {
 
 		LgUser testUser = new LgUser();
