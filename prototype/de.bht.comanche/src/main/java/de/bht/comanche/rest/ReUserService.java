@@ -88,7 +88,14 @@ public class ReUserService extends ReService {
 			public LgUser executeWithThrows() throws multex.Exc {
 				LgUser userFromDb = null;
 				try {
+					System.err.println("------------------ daUser.find -try------------------");
 					userFromDb = daUser.find(userFromClient.getOid()); // TODO use multex.Ex in DaUser.find
+				} catch (DaOidNotFoundExc oid) {
+					throw create(LgNoUserWithThisIdNameExc.class, createTimeStamp(), userFromClient.getOid(), 
+							userFromClient.getName());
+				}
+				try{
+					System.err.println("------------------ userFromDb.clearInvites -try------------------");
 					userFromDb.clearInvites(); // FIXME ! should not be necessary -> JPA does this; otherwise implement daUserImpl.delete and call user.clearInvites there !
 					daUser.delete(userFromDb);
 				} catch (Exception ex) {
@@ -97,6 +104,8 @@ public class ReUserService extends ReService {
 							userFromClient.getOid(), 
 							userFromClient.getName());
 				}
+//				userFromDb.clearInvites();
+//				daUser.delete(userFromDb);
 				return null;
 			}
 		}.execute();
@@ -110,19 +119,23 @@ public class ReUserService extends ReService {
 	public ReResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
 		final DaUser daUser = factory.getDaUser();
 		return new LgTransaction<LgUser>(daUser.getPool()) {
+			LgUser lguser = null;
 			@Override
 			public LgUser executeWithThrows() throws multex.Exc {
 				try {
 					daUser.find(dirtyUser.getOid()); // TODO use multex.Ex in DaUser.find
-					daUser.update(dirtyUser);
 				} catch (DaOidNotFoundExc oid) {
 					throw create(LgNoUserWithThisIdNameExc.class, createTimeStamp(), dirtyUser.getOid(), 
 							dirtyUser.getName());
-				} catch (Exception ex){
+				} 
+				try{
+					lguser = daUser.update(dirtyUser);
+				}
+				catch (Exception ex){
 					throw create(LgUserNotUpdatedExc.class, ex,	createTimeStamp(), dirtyUser.getOid(), 
 							dirtyUser.getName());
 				}
-				return (LgUser) daUser;
+				return  lguser;
 			}
 		}.execute();
 	}

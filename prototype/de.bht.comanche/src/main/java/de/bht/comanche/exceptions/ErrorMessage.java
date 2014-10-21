@@ -22,13 +22,6 @@ public class ErrorMessage {
 		this(errorMessage, stackTraceToString(stackTrace));
 	}
 
-	// TODO remove! - unused
-	// used with AdapterException
-	public ErrorMessage(AdapterException exception) {
-		this.message = exception.getErrorMessage();
-		this.stackTrace = exception.gStackTrace();
-	}
-
 	// TODO is it working as it should?
 	private static String stackTraceToString(StackTraceElement[] stackTrace) {
 		StringBuilder sb = new StringBuilder();
