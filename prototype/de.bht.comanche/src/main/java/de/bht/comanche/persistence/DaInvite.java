@@ -10,7 +10,7 @@ import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 public interface DaInvite {
 	void save(LgInvite invite) throws EntityExistsExc, TransactionRequiredExc, IllegalArgumentExc ;
 	void delete(LgInvite invite)  throws TransactionRequiredExc, IllegalArgumentExc;
-	LgInvite find(long id) throws DaOidNotFoundExc, DaNoPersistentClassExc, DaOidNotFoundExc;
+	LgInvite find(long id) throws DaOidNotFoundExc, DaNoPersistentClassExc;
     void beginTransaction();
     void endTransaction(boolean success);
     public DaPool getPool(); // Later overwritten by DaGenericImpl
