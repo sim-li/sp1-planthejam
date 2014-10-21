@@ -18,6 +18,7 @@ import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaInvite;
+import de.bht.comanche.persistence.DaPoolImpl.DaNotFoundExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
 import de.bht.comanche.rest.ReUserService.LgNoUserWithThisIdExc;
@@ -86,8 +87,8 @@ public class ReInviteService extends ReService {
 				LgInvite inviteFromDb = null;
 				try {
 					inviteFromDb = daInvite.find(inviteFromClientOid);
-				} catch (NotFoundException exc) {
-					 throw new DaInviteNotFoundException();
+				} catch (DaNotFoundExc exc) {
+					 throw create(DaInviteNotFoundExc.class, createTimeStamp(), inviteFromClientOid);
 				}
 				inviteFromDb.removeInvite();
 				daInvite.delete(inviteFromDb);
@@ -99,4 +100,11 @@ public class ReInviteService extends ReService {
 	private String createTimeStamp() {
 		return new Date(System.currentTimeMillis()).toString();
 	}
+	
+	/**
+	 * Occured at "{0}". No invite with id "{1}" found in the database
+	 */
+	@SuppressWarnings("serial")
+	public static final class DaInviteNotFoundExc extends multex.Exc {}
+	
 }
