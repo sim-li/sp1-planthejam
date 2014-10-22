@@ -8,9 +8,6 @@ import de.bht.comanche.logic.LgObject;
 import de.bht.comanche.persistence.DaPoolImpl.DaArgumentCountExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
-import de.bht.comanche.persistence.DaPoolImpl.EntityExistsExc;
-import de.bht.comanche.persistence.DaPoolImpl.IllegalArgumentExc;
-import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 
 public class DaDummyPool<E> implements DaPool<E> {
 	List<E> pool;
@@ -30,12 +27,12 @@ public class DaDummyPool<E> implements DaPool<E> {
 	}
 
 	@Override
-	public void save(E io_object) throws EntityExistsExc, IllegalArgumentExc, TransactionRequiredExc {
+	public void save(E io_object) {
 		pool.add(io_object);
 	}
 
 	@Override
-	public void delete(E io_object) throws IllegalArgumentExc, TransactionRequiredExc {
+	public void delete(E io_object) {
 		pool.remove(io_object);
 	}
 

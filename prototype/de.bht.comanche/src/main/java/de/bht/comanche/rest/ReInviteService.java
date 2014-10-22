@@ -15,11 +15,9 @@ import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaInvite;
-import de.bht.comanche.persistence.DaPoolImpl.DaNotFoundExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
 
-//TODO not ready for multex ------> ???
 
 @Path("/invite/")
 public class ReInviteService extends ReService {
