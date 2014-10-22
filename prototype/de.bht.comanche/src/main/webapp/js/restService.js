@@ -107,7 +107,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data.data);
                 deferred.resolve("Das Konto wurde erfolgreich geloescht.");
             }).error(function(data, status, header, config) {
-                deferred.reject("Loeschen des Kontos auf dem Server fehlgeschlagen. " + getErrorMesage(status));
+				$log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Loeschen des Kontos auf dem Server fehlgeschlagen. " + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };
@@ -129,7 +131,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data);
                 deferred.resolve("Die Kontodaten wurden erfolgreich auf dem Server gespeichert.");
             }).error(function(data, status, header, config) {
-                deferred.reject("Update der Kontodaten auf dem Server fehlgeschlagen." + getErrorMesage(status));
+				$log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Update der Kontodaten auf dem Server fehlgeschlagen. " + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };
@@ -150,7 +154,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 // var _invites = Invite.forInvitesConvertFromRawInvites(_rawInvites);
                 // deferred.resolve(_invites);
             }).error(function(data, status, header, config) {
-                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status));
+				$log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Benutzerdaten konnten nicht vom Server geholt werden. " + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };
@@ -174,7 +180,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data.data);
                 deferred.resolve(data.data);
             }).error(function(data, status, header, config) {
-                deferred.reject("Speichern der Terminumfrage auf dem Server fehlgeschlagen." + getErrorMesage(status));
+				$log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Speichern der Terminumfrage auf dem Server fehlgeschlagen." + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };
@@ -191,7 +199,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 $log.debug(data.data);
                 deferred.resolve("Die Terminumfrage wurde erfolgreich geloescht.");
             }).error(function(data, status, header, config) {
-                deferred.reject("Loeschen der Terminumfrage auf dem Server fehlgeschlagen. " + getErrorMesage(status));
+				$log.debug(data);
+                $log.debug(data.stackTrace);
+                deferred.reject("Loeschen der Terminumfrage auf dem Server fehlgeschlagen. " + getErrorMesage(status) + "\n" + data.message);
             });
             return deferred.promise;
         };

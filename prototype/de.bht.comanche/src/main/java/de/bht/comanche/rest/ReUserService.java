@@ -11,6 +11,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import multex.Failure;
+
+import de.bht.comanche.exceptions.ErrorMessage;
+import de.bht.comanche.exceptions.ServerException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaPoolImpl;
@@ -88,24 +92,18 @@ public class ReUserService extends ReService {
 			public LgUser executeWithThrows() throws multex.Exc {
 				LgUser userFromDb = null;
 				try {
-					System.err.println("------------------ daUser.find -try------------------");
 					userFromDb = daUser.find(userFromClient.getOid()); // TODO use multex.Ex in DaUser.find
+					userFromDb.clearInvites(); // FIXME ! should not be necessary -> JPA does this; otherwise implement daUserImpl.delete and call user.clearInvites there !
+					daUser.delete(userFromDb);
 				} catch (DaOidNotFoundExc oid) {
 					throw create(LgNoUserWithThisIdNameExc.class, createTimeStamp(), userFromClient.getOid(), 
 							userFromClient.getName());
-				}
-				try{
-					System.err.println("------------------ userFromDb.clearInvites -try------------------");
-					userFromDb.clearInvites(); // FIXME ! should not be necessary -> JPA does this; otherwise implement daUserImpl.delete and call user.clearInvites there !
-					daUser.delete(userFromDb);
 				} catch (Exception ex) {
 					throw create(DaPoolImpl.DataAccessExc.class, ex,
 							createTimeStamp(),
 							userFromClient.getOid(), 
 							userFromClient.getName());
 				}
-//				userFromDb.clearInvites();
-//				daUser.delete(userFromDb);
 				return null;
 			}
 		}.execute();

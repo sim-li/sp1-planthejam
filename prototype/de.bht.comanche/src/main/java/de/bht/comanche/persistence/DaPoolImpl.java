@@ -43,7 +43,11 @@ public class DaPoolImpl<E> implements DaPool<E> {
 			tr.rollback();
 		}
 		finally {
-			em.close();
+			try {
+				em.close();
+			} catch (Exception e) {
+				throw create(DataAccessExc.class, e);
+			}
 		}
 	}
 	
