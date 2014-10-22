@@ -3,7 +3,7 @@ package de.bht.comanche.persistence;
 import java.util.List;
 
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.persistence.DaPoolImpl.DaNotFoundExc;
+import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 
 public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 	public DaUserImpl(DaPool<LgUser> pool) {
@@ -11,7 +11,7 @@ public class DaUserImpl extends DaGenericImpl<LgUser> implements DaUser {
 	}
 	
 	@Override
-	public List<LgUser> findByName(String name) throws DaNotFoundExc {
+	public List<LgUser> findByName(String name) throws DaNoPersistentClassExc {
 		return findByField("name", name);
 	}
 }

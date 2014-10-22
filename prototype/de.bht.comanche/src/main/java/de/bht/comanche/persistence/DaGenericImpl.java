@@ -4,11 +4,7 @@ import java.util.List;
 
 import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
-import de.bht.comanche.persistence.DaPoolImpl.EntityExistsExc;
-import de.bht.comanche.persistence.DaPoolImpl.IllegalArgumentExc;
-import de.bht.comanche.persistence.DaPoolImpl.TransactionRequiredExc;
 
-// TODO not ready for multex ------> Max
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	
 	private Class<E> type;
@@ -20,15 +16,20 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public void save(E entity) throws EntityExistsExc, TransactionRequiredExc, IllegalArgumentExc {
+	public void save(E entity) {
 		pool.save(entity);
 	}
 
 	@Override
-	public void delete(E entity) throws TransactionRequiredExc, IllegalArgumentExc {
+	public void delete(E entity) {
 		pool.delete(entity);
 	}
-
+	
+	@Override
+	public E update(E io_object) {
+		return pool.merge(io_object);
+	}
+	
 	@Override
 	public E find(long id) throws DaNoPersistentClassExc, DaOidNotFoundExc {
 		return pool.find(type, id);
@@ -40,7 +41,7 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public List<E> findByField(String fieldName, Object fieldValue) { 
+	public List<E> findByField(String fieldName, Object fieldValue) throws DaNoPersistentClassExc { 
 		final String OBJECT_NAME = type.getSimpleName();
 		String [] args = {
 				fieldName,
@@ -66,10 +67,5 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	
 	public void setPool(DaPool pool) {
 		this.pool = pool;
-	}
-
-	@Override
-	public E update(E io_object) throws TransactionRequiredExc, IllegalArgumentExc {
-		return pool.merge(io_object);
 	}
 }

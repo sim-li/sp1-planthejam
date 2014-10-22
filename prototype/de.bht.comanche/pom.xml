@@ -18,7 +18,10 @@
 		<slf4j.api.version>1.6.1</slf4j.api.version>
 		<slf4j.log4j12.version>1.6.1</slf4j.log4j12.version>
 		<log4j.version>1.2.16</log4j.version>
+		<multexVersion>8.3</multexVersion>
+    	<messageResourceFile>MessageResources.properties</messageResourceFile>
 		<jetty.plugin.version>${jetty.version}</jetty.plugin.version>
+		<multexVersion>8.3</multexVersion>
 		<!-- Jetty configuration -->
 		<jetty.scanInterval>60</jetty.scanInterval>
 		<!-- Enable access to this application from other computers, not only from 
@@ -39,7 +42,14 @@
 			<artifactId>postgresql</artifactId>
 			<version>9.2-1004-jdbc4</version>
 		</dependency>
-
+		
+		<dependency>
+      	<groupId>de.tfh-berlin.knabe</groupId>
+      	<!-- Multi Tier Exception Handling Framework -->
+     	 <artifactId>multex</artifactId>
+    	  <version>${multexVersion}</version>
+   		 </dependency>
+		
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -244,9 +254,16 @@
 							<goal>jar</goal>
 						</goals>
 					</execution>
+					
+					
+					
 				</executions>
 			</plugin>
-
+			
+			
+			
+			
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>

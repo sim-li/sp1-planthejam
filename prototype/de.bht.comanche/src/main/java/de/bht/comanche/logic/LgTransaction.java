@@ -19,24 +19,15 @@ public abstract class LgTransaction<E> {
 		try {
 			objectFromDb = executeWithThrows();
 			success = true;
-		} catch (multex.Exc ex) {
-//			multex.Msg.printStackTrace(ex); // TODO -> redirect System.err to log
-			
-//			multex.Msg.printMessages(io_destination, i_throwable);
-//			multex.Msg.printStackTrace(io_destination, i_throwable);
-//			multex.Msg.printReport(io_destination, i_throwable);
-			
-//			multex.Msg.getMessages(ex);
-//			multex.Msg.getStackTrace(ex);
-//			multex.Msg.getReport(ex);
-			
+		} catch (Exception ex) {
+			multex.Msg.printReport(System.err, ex);
 			throw new ServerException(new ErrorMessage(multex.Msg.getMessages(ex), multex.Msg.getStackTrace(ex)));
-		} catch (Exception e) {
-			// FIXME remove later, when all exceptions are converted to multex !!!
-			System.err.println("== exception in ReResponseObject --> TODO ==");
-			e.printStackTrace();
-		} finally {//TODO try catch hier auch?
-			pool.endTransaction(success); 
+		} finally {
+			try {
+				pool.endTransaction(success);
+			} catch (Exception ex) {
+				multex.Msg.printReport(System.err, ex);
+			} 
 		}
 		return new ReResponseObject<E>(objectFromDb);
 	}
@@ -50,5 +41,5 @@ public abstract class LgTransaction<E> {
 		pool.beginTransaction();
 	}
 	
-	public abstract E executeWithThrows() throws Exception; // TODO change to throws multex.Ex
+	public abstract E executeWithThrows() throws Exception;
 }
