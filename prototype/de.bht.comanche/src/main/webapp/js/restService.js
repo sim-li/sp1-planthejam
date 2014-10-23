@@ -16,13 +16,14 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         var INVITE_PATH = "rest/invite/";
  
  
-        var callHTTP = function(url, data, method) {
+        var callHTTP = function(url, data, method, headers) {
             $log.log("REST: " + url);
             var deferred = $q.defer();
             $http({
                 method: method || "POST",
                 url: url,
-                data: data
+                data: data, 
+                headers: headers
                 // , headers: { "Content-Type": "application/json" }                  // TODO check if necessary
             }).success(function(data, status, header, config) {
                 $log.debug(data.data);
@@ -42,22 +43,28 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         };
         
         var register = function(user) {
-            return callHTTP(USER_PATH + "login", { "name": user.name, "password": user.password } );
+            return callHTTP(USER_PATH + "register", 
+                {
+                    "name": user.name,
+                    "password": user.password,
+                    "email": user.email,
+                    "tel": user.tel
+                });
         };
         
         var deleteUser = function(user) {
-            return callHTTP(USER_PATH + "login", { "oid": user.oid }, "DELETE");
+            return callHTTP(USER_PATH + "delete", { "oid": user.oid }, "DELETE", { "Content-Type": "application/json" } );
             // --> $http( ... { headers: { "Content-Type": "application/json" } } )     // TODO check if necessary
         };
 
         var updateUser = function(user) {
             return callHTTP(USER_PATH + "update", 
                 {
-                    oid: user.oid,
-                    name: user.name,
-                    password: user.password,
-                    email: user.email,
-                    tel: user.tel
+                    "oid": user.oid,
+                    "name": user.name,
+                    "password": user.password,
+                    "email": user.email,
+                    "tel": user.tel
                 });
         };
         
@@ -83,7 +90,7 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
         };
         
         var deleteInvite = function(oid) {
-            return callHTTP(INVITE_PATH + "save", oid, "DELETE");
+            return callHTTP(INVITE_PATH + "delete", oid, "DELETE", { "Content-Type": "application/json" } );
             // --> $http( ... { headers: { "Content-Type": "application/json" } } )     // TODO check if necessary
         };
 
