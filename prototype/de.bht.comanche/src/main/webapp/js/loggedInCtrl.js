@@ -1,5 +1,5 @@
 /*
- * Ojektverwaltung-UI, SP1 SoSe 2014, Team: Comanche
+ * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
  * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
  * 
  * Module: logged in controller
