@@ -6,7 +6,6 @@ import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 
 public class DaGenericImpl<E> implements DaGeneric<E> {
-	
 	private Class<E> type;
 	private DaPool<E> pool;
 	

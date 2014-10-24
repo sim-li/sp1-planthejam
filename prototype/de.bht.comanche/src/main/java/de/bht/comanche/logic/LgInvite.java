@@ -10,10 +10,9 @@ import javax.validation.constraints.NotNull;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
- * @author Duc Tung Tong, Beuth Hochschule für Technik Berlin, SWP1 
- * Diese Klasse beschreibt eine Einladung von Host zu Users
- *  hat 2 boolean Werte : istHost und isIgnoredn
- *  und die Verbindung mit LgUser und LgSurvey
+ * Describes relation of host with users.
+ * 
+ * @author Duc Tung Tong
  */
 @Entity
 @Table(name = "Lg_Invite")

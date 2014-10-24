@@ -14,5 +14,4 @@ public class DaSurveyImpl extends DaGenericImpl<LgSurvey> implements DaSurvey {
 	public List<LgSurvey> findByName(String name) throws DaNoPersistentClassExc {
 		return findByField("name", name);
 	}
-
 }

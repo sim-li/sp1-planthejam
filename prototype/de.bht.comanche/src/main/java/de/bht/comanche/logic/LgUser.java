@@ -12,9 +12,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * @author tonytong
- * Diese Klasse beschreibt ein User, der in der Datenbank geschpeichert ist.
- * ein User hat Username, Telephonenummer, Email, Password bzw. Contacts mit anderen Users
+ * @author Duc Tung Tong
  */
 @Entity
 @Table(name = "user")

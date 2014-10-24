@@ -17,10 +17,9 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * @author Duc Tung Tong, Beuth Hochschule für Technik Berlin, SWP1 
- *	Diese Klasse beschreibt eine Terminumfrage.
- *  Eine Terminumfrage besteht aus Name,  description, frequency distance, deadline, type
- *  und hat die Verbindung mit Invite und TimePeriod
+ * A survey connects the invite to the time period.
+ * 
+ * @author Duc Tung Tong
  */
 @Entity
 @Table(name = "survey")

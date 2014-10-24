@@ -21,11 +21,9 @@ import de.bht.comanche.persistence.DaUser;
 
 @Path("/invite/")
 public class ReInviteService extends ReService {
-	
 	public ReInviteService() {
 		super();
 	}
-	
 	//-------------------------------------multex ready---------
 	@POST
 	@Path("getInvites")
@@ -42,12 +40,10 @@ public class ReInviteService extends ReService {
 				} catch (DaOidNotFoundExc oid) {
 					throw create(LgNoUserWithThisIdExc.class, createTimeStamp(), userFromClientOid);
 				}
-				
 				return invites;
 			}
 		}.execute();
 	}
-
 	//-------------------------------------multex ready---------
 	@Path("save")
 	@POST
@@ -59,26 +55,22 @@ public class ReInviteService extends ReService {
 		daUser.setPool(daInvite.getPool());
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws multex.Exc {
-//				System.out.println("ID: " + newInviteFromClient.getOid());
 				LgInvite invite;
 				try{
-					
 					invite = daInvite.find(newInviteFromClient.getOid());
-				if (invite != null) {
-					daInvite.update(newInviteFromClient);
-				} else {
-					newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
-					daInvite.save(newInviteFromClient);
-				} 
-				
-				} catch (Exception ex){
+					if (invite != null) {
+						daInvite.update(newInviteFromClient);
+					} else {
+						newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
+						daInvite.save(newInviteFromClient);
+					} 
+				} catch (Exception ex) {
 					throw create(DaInviteNotSavedExc.class, ex, createTimeStamp(), newInviteFromClient.getOid());
 				}
 				return newInviteFromClient;
 			}
 		}.execute();
 	}
-
 	//-------------------------------------multex ready---------
 	@Path("delete")
 	@DELETE
@@ -113,13 +105,11 @@ public class ReInviteService extends ReService {
 	@SuppressWarnings("serial")
 	public static final class DaInviteNotSavedExc extends multex.Exc {}
 	
-	
 	/**
 	 * Occured at "{0}". Could not delete invite with id "{1}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class DaInviteNotDeletedExc extends multex.Exc {}
-	
 	
 	/**
 	 * Occured at "{0}". No user with id "{1}" found in the database
@@ -132,5 +122,4 @@ public class ReInviteService extends ReService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class DaInviteIdNotFoundExc extends multex.Exc {}
-	
 }

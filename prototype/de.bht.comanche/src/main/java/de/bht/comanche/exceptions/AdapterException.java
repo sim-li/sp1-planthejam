@@ -27,10 +27,10 @@ public class AdapterException extends Exception{
 	
 	
 	public AdapterException(int status, String errorMessage, String stackTrace) {
-			this.status = status;
-			this.errorMessage = errorMessage;
-			this.stackTrace = stackTrace;
-			}
+        this.status = status;
+        this.errorMessage = errorMessage;
+        this.stackTrace = stackTrace;
+	}
 	
 	public void setStatus(int status) {
 		this.status = status;

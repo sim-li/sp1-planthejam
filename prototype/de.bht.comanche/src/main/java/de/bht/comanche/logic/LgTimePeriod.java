@@ -9,8 +9,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author Duc Tung Tong, Beuth Hochschule für Technik Berlin, SWP1 
- * Diese Klasse beschreibt ein Zeitraum von Survey oder die Verfügbarkeiten von Users.
+ * Is used to describe the timeperiod of a survey or the availability of
+ * users.
+ * 
+ * @author Duc Tung Tong
  */
 @Entity
 @Table(name = "TimePeriod")

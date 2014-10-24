@@ -16,7 +16,6 @@ public class DaFactoryJpaImpl implements DaFactory {
 		return new  DaInviteImpl(new DaPoolImpl<LgInvite>());
 	}
 
-
 	@Override
 	public DaSurvey getDaSurvey() {
 		return new  DaSurveyImpl(new DaPoolImpl<LgSurvey>());
