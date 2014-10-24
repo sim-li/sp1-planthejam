@@ -22,9 +22,9 @@ import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
 
 @Path("/user/")
-public class ReUserService extends ReService {
+public class UserService extends RestService {
 	
-	public ReUserService() {
+	public UserService() {
 		super();
 	}
 

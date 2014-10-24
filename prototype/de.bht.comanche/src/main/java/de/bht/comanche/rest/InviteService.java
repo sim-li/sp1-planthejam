@@ -18,10 +18,9 @@ import de.bht.comanche.persistence.DaInvite;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
 
-
 @Path("/invite/")
-public class ReInviteService extends ReService {
-	public ReInviteService() {
+public class InviteService extends RestService {
+	public InviteService() {
 		super();
 	}
 	//-------------------------------------multex ready---------
