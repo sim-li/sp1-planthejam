@@ -47,7 +47,7 @@ public class DaPoolImpl<E> implements DaPool<E> {
 
 	@Override
 	public void save(E io_object) {
-		em.persist(io_object);
+		em.persist(em.contains(io_object) ? io_object : em.merge(io_object));
 	}
 
 	@Override

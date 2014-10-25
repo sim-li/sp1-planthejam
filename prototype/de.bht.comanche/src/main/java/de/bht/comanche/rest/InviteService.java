@@ -16,6 +16,7 @@ import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaInvite;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
 
 @Path("/invite/")
@@ -44,6 +45,7 @@ public class InviteService extends RestService {
 		}.execute();
 	}
 	//-------------------------------------multex ready---------
+	// TODO: Save Error doesn't seem to pop up from DaPoolImpl
 	@Path("save")
 	@POST
 	@Consumes("application/json")
@@ -51,22 +53,25 @@ public class InviteService extends RestService {
 	public LgInvite saveInvite(final LgInvite newInviteFromClient) {
 		final DaInvite daInvite = factory.getDaInvite();
 		final DaUser daUser = factory.getDaUser();
+		final DaSurvey daSurvey = factory.getDaSurvey();
 		daUser.setPool(daInvite.getPool());
+		daSurvey.setPool(daInvite.getPool());
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws multex.Exc {
 				LgInvite invite;
 				try {	
-					try {
-						invite = daInvite.find(newInviteFromClient.getOid());
-					} catch (DaOidNotFoundExc oidExc) {
-					    invite = null;	
-					}
-					if (invite != null) {
-						daInvite.update(newInviteFromClient);
-					} else {
+//					try {
+//						invite = daInvite.find(newInviteFromClient.getOid());
+//					} catch (DaOidNotFoundExc oidExc) {
+//					    invite = null;	
+//					}
+//					if (invite != null) {
+//						daInvite.update(newInviteFromClient);
+//					} else {
 						newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
+                        daSurvey.save(newInviteFromClient.getSurvey());
 						daInvite.save(newInviteFromClient);
-					} 
+//					} 
 				} catch (Exception ex) {
 					throw create(DaInviteNotSavedExc.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
 							newInviteFromClient.getUser().getOid());
