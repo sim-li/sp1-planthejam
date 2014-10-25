@@ -55,8 +55,12 @@ public class InviteService extends RestService {
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws multex.Exc {
 				LgInvite invite;
-				try{
-					invite = daInvite.find(newInviteFromClient.getOid());
+				try {	
+					try {
+						invite = daInvite.find(newInviteFromClient.getOid());
+					} catch (DaOidNotFoundExc oidExc) {
+					    invite = null;	
+					}
 					if (invite != null) {
 						daInvite.update(newInviteFromClient);
 					} else {
