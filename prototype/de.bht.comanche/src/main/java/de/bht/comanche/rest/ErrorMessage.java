@@ -1,4 +1,4 @@
-package de.bht.comanche.exceptions;
+package de.bht.comanche.rest;
 
 public class ErrorMessage {
 

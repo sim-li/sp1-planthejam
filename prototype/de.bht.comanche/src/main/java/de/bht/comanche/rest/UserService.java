@@ -12,9 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import multex.Failure;
-
-import de.bht.comanche.exceptions.ErrorMessage;
-import de.bht.comanche.exceptions.ServerException;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaPoolImpl;

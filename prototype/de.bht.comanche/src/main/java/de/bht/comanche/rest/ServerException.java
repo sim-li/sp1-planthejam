@@ -1,4 +1,4 @@
-package de.bht.comanche.exceptions;
+package de.bht.comanche.rest;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
