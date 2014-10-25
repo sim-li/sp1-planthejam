@@ -28,7 +28,7 @@ public class InviteService extends RestService {
 	@Path("getInvites")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<List<LgInvite>> getInvites(final long userFromClientOid) {
+	public List<LgInvite> getInvites(final long userFromClientOid) {
 		final DaUser daUser0 = factory.getDaUser();
 		return new LgTransaction<List<LgInvite>>(daUser0.getPool()) {
 			public List<LgInvite> executeWithThrows() throws multex.Exc {
@@ -48,7 +48,7 @@ public class InviteService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgInvite> saveInvite(final LgInvite newInviteFromClient) {
+	public LgInvite saveInvite(final LgInvite newInviteFromClient) {
 		final DaInvite daInvite = factory.getDaInvite();
 		final DaUser daUser = factory.getDaUser();
 		daUser.setPool(daInvite.getPool());
@@ -75,7 +75,7 @@ public class InviteService extends RestService {
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgInvite> deleteUser(final long inviteFromClientOid) {
+	public LgInvite deleteUser(final long inviteFromClientOid) {
 		final DaInvite daInvite = factory.getDaInvite();
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws multex.Exc {

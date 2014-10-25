@@ -32,7 +32,7 @@ public class UserService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgUser> loginUser(final LgUser userFromClient) {
+	public LgUser loginUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
@@ -73,13 +73,12 @@ public class UserService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class LgWrongPasswordExc extends multex.Exc {}
 	
-	
 	//------------------------------------- not fully multex ready------ TODO
 	@Path("register")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgUser> registerUser(final LgUser newUserFromClient) {
+	public LgUser registerUser(final LgUser newUserFromClient) {
 		final DaUser daUser = factory.getDaUser();
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
@@ -101,7 +100,7 @@ public class UserService extends RestService {
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgUser> deleteUser(final LgUser userFromClient) {
+	public LgUser deleteUser(final LgUser userFromClient) {
 		final DaUser daUser = factory.getDaUser();
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
@@ -133,7 +132,7 @@ public class UserService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({"application/json"})
-	public ReResponseObject<LgUser> updateUser(final LgUser dirtyUser) {
+	public LgUser updateUser(final LgUser dirtyUser) {
 		final DaUser daUser = factory.getDaUser();
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			LgUser lguser = null;

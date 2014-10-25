@@ -12,7 +12,7 @@ public abstract class LgTransaction<E> {
 		this.pool = pool;
 	}
 	
-	public ReResponseObject<E> execute() { // throws ServerException
+	public E execute() { // throws ServerException
 		pool.beginTransaction();
 		boolean success = false;
 		E objectFromDb = null;
@@ -29,7 +29,7 @@ public abstract class LgTransaction<E> {
 				multex.Msg.printReport(System.err, ex);
 			} 
 		}
-		return new ReResponseObject<E>(objectFromDb);
+		return objectFromDb;
 	}
 	
 	public void forceTransactionEnd() {
