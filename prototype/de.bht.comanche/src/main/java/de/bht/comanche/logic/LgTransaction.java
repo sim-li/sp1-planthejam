@@ -3,7 +3,6 @@ package de.bht.comanche.logic;
 import de.bht.comanche.exceptions.ErrorMessage;
 import de.bht.comanche.exceptions.ServerException;
 import de.bht.comanche.persistence.DaPool;
-import de.bht.comanche.rest.ReResponseObject;
 
 public abstract class LgTransaction<E> {
 	private final DaPool<E> pool;

@@ -21,7 +21,7 @@ import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgUserDummyFactory;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
-import de.bht.comanche.rest.ReResponseObject;
+
 public class DaInviteTest {
 	final String userName0 = "ALICE";
 	final String userName1 = "BOB";
@@ -106,7 +106,7 @@ public class DaInviteTest {
 	public void readSurveysTestWithOriginalObj() {
 		final LgUser userFromClient = alice;
 		final DaUser daUser0 = daFactory.getDaUser();
-	    ReResponseObject<List<LgInvite>> response = new LgTransaction<List<LgInvite>>(daUser0.getPool()) {
+	    List<LgInvite> response = new LgTransaction<List<LgInvite>>(daUser0.getPool()) {
 	    	@Override
 	    	public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
@@ -120,8 +120,6 @@ public class DaInviteTest {
 				return invites;
 			}
 		}.execute();
-		System.out.println("YY>>>>>>>>>>" + response.data.get(0).getUser().getName());
-//		System.out.println("SUCCESS? RESPONSE CODE: " + response.responseCode); // -> responseCode was deleted from ReResponseObject
 	}
 
 	public void assertUser(String userName, LgUser user, LgUser userFromDb) {
