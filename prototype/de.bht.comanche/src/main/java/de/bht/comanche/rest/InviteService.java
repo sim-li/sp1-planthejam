@@ -64,7 +64,8 @@ public class InviteService extends RestService {
 						daInvite.save(newInviteFromClient);
 					} 
 				} catch (Exception ex) {
-					throw create(DaInviteNotSavedExc.class, ex, createTimeStamp(), newInviteFromClient.getOid());
+					throw create(DaInviteNotSavedExc.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
+							newInviteFromClient.getUser().getOid());
 				}
 				return newInviteFromClient;
 			}
@@ -99,7 +100,7 @@ public class InviteService extends RestService {
 	}
 	
 	/**
-	 * Occured at "{0}". Could not save invite with id "{1}"
+	 * Occured at "{0}". Could not save invite with id "{1}" and user id "{2}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class DaInviteNotSavedExc extends multex.Exc {}

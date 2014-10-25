@@ -87,12 +87,13 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	                var _invites = Invite.forInvitesConvertFromRawInvites(_rawInvites);
 	                deferred.resolve(_invites);
 	            }
-	            return DUMMY_INVITE_LIST === TRUE ? Invite.getDummyInviteList : callHTTP(INVITE_PATH + "getInvites", oid);
+	            return DUMMY_INVITE_LIST === true ? Invite.getDummyInviteList : callHTTP(INVITE_PATH + "getInvites", oid);
 	       };
 	
 	        /*
 	         * Update or insert a survey.
-	         * - @param invite optional. If not specified, a new invite will be created on the server and inserted into the database.
+	         * - @param invite optional. If not specified, a new invite will be created on the server
+	         * and inserted into the database.
 	         */
 	        var saveInvite = function(invite, user) {
 	        	if (LOG) {
