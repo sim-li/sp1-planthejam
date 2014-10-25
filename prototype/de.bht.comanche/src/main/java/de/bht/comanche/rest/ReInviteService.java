@@ -20,8 +20,8 @@ import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
 
 @Path("/invite/")
-public class InviteService extends RestService {
-	public InviteService() {
+public class ReInviteService extends RestService {
+	public ReInviteService() {
 		super();
 	}
 	//-------------------------------------multex ready---------

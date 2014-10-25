@@ -1,6 +1,6 @@
 package de.bht.comanche.rest;
 
-public class ErrorMessage {
+public class ReErrorMessage {
 
 	/**
 	 * user message
@@ -13,12 +13,12 @@ public class ErrorMessage {
 	public final String stackTrace;
 	
 	// used with ServerException
-	public ErrorMessage(String message, String stackTrace) {
+	public ReErrorMessage(String message, String stackTrace) {
 		this.message = message;
 		this.stackTrace = stackTrace;
 	}
 	
-	public ErrorMessage(String errorMessage, StackTraceElement[] stackTrace) {
+	public ReErrorMessage(String errorMessage, StackTraceElement[] stackTrace) {
 		this(errorMessage, stackTraceToString(stackTrace));
 	}
 

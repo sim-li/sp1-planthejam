@@ -1,8 +1,8 @@
 package de.bht.comanche.logic;
 
 import de.bht.comanche.persistence.DaPool;
-import de.bht.comanche.rest.ErrorMessage;
-import de.bht.comanche.rest.ServerException;
+import de.bht.comanche.rest.ReErrorMessage;
+import de.bht.comanche.rest.ReServerException;
 
 public abstract class LgTransaction<E> {
 	private final DaPool<E> pool;
@@ -20,7 +20,7 @@ public abstract class LgTransaction<E> {
 			success = true;
 		} catch (Exception ex) {
 			multex.Msg.printReport(System.err, ex);
-			throw new ServerException(new ErrorMessage(multex.Msg.getMessages(ex), multex.Msg.getStackTrace(ex)));
+			throw new ReServerException(new ReErrorMessage(multex.Msg.getMessages(ex), multex.Msg.getStackTrace(ex)));
 		} finally {
 			try {
 				pool.endTransaction(success);
