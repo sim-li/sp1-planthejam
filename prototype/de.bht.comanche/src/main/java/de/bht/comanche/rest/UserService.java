@@ -105,7 +105,6 @@ public class UserService extends RestService {
 				LgUser userFromDb = null;
 				try {
 					userFromDb = daUser.find(userFromClient.getOid());
-					userFromDb.clearInvites(); // FIXME ! should not be necessary -> JPA does this; otherwise implement daUserImpl.delete and call user.clearInvites there !
 					daUser.delete(userFromDb);
 				} catch (Exception ex) {
 					throw create(DeleteFailure.class, ex,

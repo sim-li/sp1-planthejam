@@ -3,6 +3,7 @@ package de.bht.comanche.logic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -28,7 +29,7 @@ public class LgInvite extends LgObject{
 	private LgUser user;
 	
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private LgSurvey invite_survey;
 
 	public boolean isHost() {

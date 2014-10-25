@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,7 +26,7 @@ public class LgUser extends LgObject {
 	private String email;
 	private String password;
 
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private List<LgInvite> invites;
 
 	public LgUser() {
@@ -167,8 +168,6 @@ public class LgUser extends LgObject {
 	public String toString() {
 		return "LgUser [name=" + name + ", tel=" + tel + ", email=" + email
 				+ ", password=" + password +
-//				", hasContacts=" + hasContacts
-//				+ ", isContacts=" + isContacts +
 				", invites=" + invites + "]" +
 				"OID>: " + getOid();
 	}
