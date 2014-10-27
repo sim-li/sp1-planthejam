@@ -125,4 +125,15 @@ public class DaPoolImpl implements DaPool {
 	private int countOccurences(String i_queryString, String pattern) {
 		return i_queryString.length() - i_queryString.replace(pattern, "").length();
 	}
+	
+	@Override
+	public List findByField(String fieldName, Object fieldValue) throws DaNoPersistentClassExc { 
+		final String OBJECT_NAME = type.getSimpleName();
+		String [] args = {
+				fieldName,
+				OBJECT_NAME,
+				(String) fieldValue
+		};
+		return pool.findManyByQuery(type, "SELECT c FROM %2$s AS c WHERE c.%1$s LIKE '%3$s'", args);
+	}
 }
