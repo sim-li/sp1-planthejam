@@ -4,11 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,11 +17,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author Duc Tung Tong
  */
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
 public class LgUser extends LgObject {
 
 	private static final long serialVersionUID = 1L;
-
+	@Column(unique=true, nullable=false)
 	private String name;
 	private String tel;
 	private String email;
@@ -32,7 +33,7 @@ public class LgUser extends LgObject {
 	public LgUser() {
 		this.invites = new LinkedList<LgInvite>();
 	}
-
+	
 	public LgUser(String name, String tel, String email, String password,
 			List<LgUser> hasContacts, List<LgUser> isContacts,
 			List<LgInvite> invites) {
@@ -42,6 +43,10 @@ public class LgUser extends LgObject {
 		this.email = email;
 		this.password = password;
 		this.invites = invites == null ? new LinkedList<LgInvite>() : invites;
+	}
+
+	public LgUser(long oid) {
+		super(oid);
 	}
 
 	public String getName() {
@@ -160,10 +165,6 @@ public class LgUser extends LgObject {
 		return true;
 	}
 
-	public void setIdFrom(LgUser other) {
-		this.setOid(other.getOid());
-	}
-	
 	@Override
 	public String toString() {
 		return "LgUser [name=" + name + ", tel=" + tel + ", email=" + email

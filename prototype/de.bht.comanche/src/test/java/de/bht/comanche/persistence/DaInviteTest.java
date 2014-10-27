@@ -10,8 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.bht.comanche.exceptions.DaException;
-import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgSurvey;
@@ -38,7 +36,7 @@ public class DaInviteTest {
 	private LgInvite invite1;
 	private static DaPool pool;
 	
-	@BeforeClass public static void initializeDb() throws DaException {
+	@BeforeClass public static void initializeDb(){
 		daFactory = new DaFactoryJpaImpl();
 		daUser = daFactory.getDaUser();
 		daSurvey = daFactory.getDaSurvey();
@@ -61,10 +59,14 @@ public class DaInviteTest {
 		LgUserDummyFactory userFactory = new LgUserDummyFactory();
 		alice = userFactory.getUser0();
 		bob = userFactory.getUser1();
+		alice.setName("Alice");
+		bob.setName("Bob");
 		boolean success = new LgTransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
 			public void executeWithThrows() throws Exception {
-					daUser.save(alice);
-					daUser.save(bob);
+					System.out.println("Alice before Persist "  + alice.getOid());
+					alice = daUser.save(alice);
+					alice = daUser.save(bob);
+					System.out.println("Alice after Persist " + alice.getOid());
 					LgSurveyDummyFactory surveyFactory = new LgSurveyDummyFactory();
 					survey0 = surveyFactory.getSurvey0();
 					invite0 = new LgInvite();
@@ -78,8 +80,8 @@ public class DaInviteTest {
 					daSurvey.save(survey0);
 					daInvite.save(invite1);
 					daInvite.save(invite0);
-					daUser.save(alice);
-					daUser.save(bob);
+//					daUser.save(alice);
+//					daUser.save(bob);
 			}
 		}.execute();
 		assertTrue("Persisting test users Alice & Bob", success);
@@ -115,7 +117,8 @@ public class DaInviteTest {
 					invites = lgUser.getInvites();
 					assertEquals("[Original TRANS Pattern] Check Alices first invite (BY ID):", invite0.getOid(), invites.get(0).getOid());
 				} catch (DaOidNotFoundExc oid) {
-					throw new LgNoUserWithThisIdException();
+					//Todo Update
+					//throw new LgNoUserWithThisIdException();
 				}
 				return invites;
 			}

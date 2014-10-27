@@ -80,9 +80,9 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			@Override
 			public LgUser executeWithThrows() throws multex.Exc {
-				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
-					throw create(LgUserWithThisNameExistsExc.class, createTimeStamp(), newUserFromClient.getName());
-				}
+//				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
+//					throw create(LgUserWithThisNameExistsExc.class, createTimeStamp(), newUserFromClient.getName());
+//				}
 				try{
 					daUser.save(newUserFromClient);
 				} catch (Exception ex){
