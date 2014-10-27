@@ -8,10 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import de.bht.comanche.logic.LgObject;
 
-//TODO not ready for multex ------> Seb
-public class DaPoolImpl<E> implements DaPool<E> {
+public class DaPoolImpl implements DaPool {
 	private final String persistenceUnitName = "planthejam.jpa";
 	private EntityManager em;
 	private EntityManagerFactory entityManagerFactory;
@@ -46,7 +44,7 @@ public class DaPoolImpl<E> implements DaPool<E> {
 	}
 
 	@Override
-	public void save(E io_object) {
+	public void save(DaObject io_object) {
 		em.persist(io_object);
 	}
 
@@ -61,8 +59,8 @@ public class DaPoolImpl<E> implements DaPool<E> {
 	}
 
 	@Override
-	public E find(Class<E> i_persistentClass, Long i_oid) throws DaNoPersistentClassExc, DaOidNotFoundExc {
-		if (!LgObject.class.isAssignableFrom(i_persistentClass)) {
+	public <T extends DaObject> T find(Class<T> i_persistentClass, Long i_oid) throws DaNoPersistentClassExc, DaOidNotFoundExc {
+		if (!DaObject.class.isAssignableFrom(i_persistentClass)) {
 			throw create(DaNoPersistentClassExc.class, i_persistentClass); 
 		}
 		E result = em.find(i_persistentClass, i_oid);
@@ -80,7 +78,7 @@ public class DaPoolImpl<E> implements DaPool<E> {
 
 	@Override
 	public List<E> findAll(Class<E> i_persistentClass) throws DaNoPersistentClassExc {
-		if (!LgObject.class.isAssignableFrom(i_persistentClass)) {
+		if (!DaObject.class.isAssignableFrom(i_persistentClass)) {
 			throw create(DaNoPersistentClassExc.class, i_persistentClass);
 		}
 		return em.createQuery("SELECT e FROM " + i_persistentClass.getSimpleName() + "e", i_persistentClass).getResultList();
@@ -88,7 +86,7 @@ public class DaPoolImpl<E> implements DaPool<E> {
 
 	@Override
 	public List<E> findManyByQuery(Class<E> i_resultClass, String i_queryString, Object[] i_args) throws DaNoPersistentClassExc, DaArgumentCountExc {
-		if (!LgObject.class.isAssignableFrom(i_resultClass)) {
+		if (!DaObject.class.isAssignableFrom(i_resultClass)) {
 			throw create(DaNoPersistentClassExc.class, i_resultClass); 
 		}
 		if (wrongArgumentCount(i_queryString, i_args)) {

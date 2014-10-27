@@ -6,11 +6,12 @@ import de.bht.comanche.persistence.DaPoolImpl.DaArgumentCountExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 
-public interface DaPool<E> {
+public interface DaPool {
+	
+	static final long createdOid = 0;
+	static final long deletedOid = -1; 
+	
 	public void beginTransaction();
-	/**
-	 * Should end the transaction with a commit if success was <code>true</code>, otherwise with a rollback.
-	 */
 	public void endTransaction(boolean success);
 	public void save(E io_object);
 	public E merge (E io_object);

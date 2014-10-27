@@ -13,12 +13,14 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.bht.comanche.persistence.DaObject;
+
 /**
  * @author Duc Tung Tong
  */
 @Entity
 @Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
-public class LgUser extends LgObject {
+public class LgUser extends DaObject {
 
 	private static final long serialVersionUID = 1L;
 	@Column(unique=true, nullable=false)

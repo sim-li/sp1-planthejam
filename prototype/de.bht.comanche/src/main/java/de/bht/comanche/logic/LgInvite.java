@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import de.bht.comanche.persistence.DaObject;
+
 /**
  * Describes relation of host with users.
  * 
@@ -15,7 +17,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 @Entity
 @Table(name = "Lg_Invite")
-public class LgInvite extends LgObject{
+public class LgInvite extends DaObject{
 	
 	private static final long serialVersionUID = 1L;
 	

@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.bht.comanche.persistence.DaObject;
+
 /**
  * A survey connects the invite to the time period.
  * 
@@ -24,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "survey")
-public class LgSurvey extends LgObject {
+public class LgSurvey extends DaObject {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;

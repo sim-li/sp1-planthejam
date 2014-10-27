@@ -1,6 +1,5 @@
 package de.bht.comanche.persistence;
 
-import de.bht.comanche.logic.LgObject;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
