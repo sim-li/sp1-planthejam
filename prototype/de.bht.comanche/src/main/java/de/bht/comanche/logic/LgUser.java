@@ -34,19 +34,9 @@ public class LgUser extends LgObject {
 		this.invites = new LinkedList<LgInvite>();
 	}
 	
-	public LgUser(String name, String tel, String email, String password,
-			List<LgUser> hasContacts, List<LgUser> isContacts,
-			List<LgInvite> invites) {
-		super();
-		this.name = name;
-		this.tel = tel;
-		this.email = email;
-		this.password = password;
-		this.invites = invites == null ? new LinkedList<LgInvite>() : invites;
-	}
-
 	public LgUser(long oid) {
 		super(oid);
+		this.invites = new LinkedList<LgInvite>();
 	}
 
 	public String getName() {

@@ -132,6 +132,9 @@ public class LgSurvey extends LgObject {
 		return this;
 	}
 	
+	public void addInvite(LgInvite invite) {
+		invites.add(invite);
+	}
 	public void addParticipant(LgUser participant) {
 		LgInvite invite = new LgInvite();
 		invite.setUser(participant).setSurvey(this).setHost(false).setIgnored(false);

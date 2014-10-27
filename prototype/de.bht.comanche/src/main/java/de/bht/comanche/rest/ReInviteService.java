@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaInvite;
@@ -50,7 +51,7 @@ public class ReInviteService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgInvite saveInvite(final LgInvite newInviteFromClient) {
+	public LgInvite saveInvite(final LgInvite receivedInvite) {
 		final DaInvite daInvite = factory.getDaInvite();
 		final DaUser daUser = factory.getDaUser();
 		final DaSurvey daSurvey = factory.getDaSurvey();
@@ -58,17 +59,26 @@ public class ReInviteService extends RestService {
 		daSurvey.setPool(daInvite.getPool());
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
 			public LgInvite executeWithThrows() throws multex.Exc {
-				LgInvite invite;
-				try {	
-					newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
-					// DaSurvey should return itself, so DaInvite can resolve dependency with new Oid
-                    daSurvey.save(newInviteFromClient.getSurvey());
-					daInvite.save(newInviteFromClient);
-				} catch (Exception ex) {
-					throw create(DaInviteNotSavedExc.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
-							newInviteFromClient.getUser().getOid());
-				}
-				return newInviteFromClient;
+				LgInvite existingInvite = daInvite.find(receivedInvite.getOid());
+			    if (existingInvite == null) {
+			    	daSurvey.save(receivedInvite.getSurvey());
+			    	daInvite.save(receivedInvite);
+			    	
+			    } else {
+			    	LgSurvey existingSurvey = receivedInvite.getSurvey();
+			    	LgUser existingUser = receivedInvite.getUser();
+			        existingInvite.setSurvey(existingSurvey);
+			        existingSurvey.addInvite(existingInvite); 
+			        existingInvite.setUser(existingUser);
+			        existingUser.addInvite(existingInvite);
+			    }
+//			    
+//			    
+//				} catch (Exception ex) {
+//					throw create(DaInviteNotSavedExc.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
+//							newInviteFromClient.getUser().getOid());
+//				}
+				return existingInvite;
 			}
 		}.execute();
 	}

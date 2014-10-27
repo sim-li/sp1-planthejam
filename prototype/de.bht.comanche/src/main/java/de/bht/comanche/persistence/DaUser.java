@@ -7,7 +7,7 @@ import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 
 public interface DaUser {
-	LgUser save(LgUser user);
+	void save(LgUser user);
 	void delete(LgUser user);
 	LgUser update(LgUser user);
 	LgUser find(long id) throws DaNoPersistentClassExc, DaOidNotFoundExc;

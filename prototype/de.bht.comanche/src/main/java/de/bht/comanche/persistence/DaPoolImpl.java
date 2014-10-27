@@ -46,15 +46,8 @@ public class DaPoolImpl<E> implements DaPool<E> {
 	}
 
 	@Override
-	public E save(E io_object) {
-		if (em.contains(io_object)) {
-			em.merge(io_object);
-			em.persist(io_object);
-		} else {
-			em.persist(io_object);
-			em.refresh(io_object);
-		}
-		return io_object;
+	public void save(E io_object) {
+		em.persist(io_object);
 	}
 
 	@Override
@@ -73,9 +66,9 @@ public class DaPoolImpl<E> implements DaPool<E> {
 			throw create(DaNoPersistentClassExc.class, i_persistentClass); 
 		}
 		E result = em.find(i_persistentClass, i_oid);
-		if (result == null) {
-			throw create(DaOidNotFoundExc.class, i_oid);
-		}
+//		if (result == null) {
+//			throw create(DaOidNotFoundExc.class, i_oid);
+//		}
 		return result;
 	}
 
