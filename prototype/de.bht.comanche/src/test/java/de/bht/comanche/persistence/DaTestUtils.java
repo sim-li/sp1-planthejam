@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import de.bht.comanche.exceptions.DaException;
 import de.bht.comanche.persistence.DaPool;
 
 public class DaTestUtils {
@@ -26,7 +25,7 @@ public class DaTestUtils {
 	 * but not at every single test.
 	 * @throws DaException
 	 */
-	public void initializeDb() throws DaException {
+	public void initializeDb() {
 		Map<String, String> properties = new HashMap<String, String>(1);
 		properties.put("hibernate.hbm2ddl.auto", "create");
 		entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName, properties);

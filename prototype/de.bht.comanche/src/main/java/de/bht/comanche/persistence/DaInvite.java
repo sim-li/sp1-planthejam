@@ -7,7 +7,7 @@ import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 
 public interface DaInvite {
-	void save(LgInvite invite);
+	LgInvite save(LgInvite invite);
 	void delete(LgInvite invite);
 	LgInvite update(LgInvite invite);
 	LgInvite find(long id) throws DaNoPersistentClassExc, DaOidNotFoundExc;

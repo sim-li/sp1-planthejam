@@ -20,12 +20,29 @@ public abstract class LgObject implements Serializable {
 	@Column(unique = true, nullable = false)
 	private long oid; 
 
+	/**
+	 *  Default constructor. The default OID value indicates
+	 *  an object that wasn't persisted jet.
+	 */
+	public LgObject() {
+		this.oid = -1;
+	}
+
+	/**
+	 * Constructor for manually initializing an object
+	 * with a custom id.
+	 * 
+	 * @param oid Custom id
+	 */
+	public LgObject(long oid) {
+		this.oid = oid;
+	}
+	
 	public long getOid() {
 		return oid;
 	}
 	
-	//changed to public for REST-Service
-	public void setOid(long oid) {
+	private void setOid(long oid) {
 		this.oid = oid;
 	}
 	

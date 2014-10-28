@@ -10,7 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.bht.comanche.exceptions.DaException;
 import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
@@ -26,7 +25,7 @@ public class DaUserTest {
 	private LgUser alice;
 	private LgUser bob;
 	
-	@BeforeClass public static void initializeDb() throws DaException {
+	@BeforeClass public static void initializeDb(){
 		daFactory = new DaFactoryJpaImpl();
 		daUser = daFactory.getDaUser();
 		boolean success = new LgLowLevelTransaction(THROW_STACKTRACE) {

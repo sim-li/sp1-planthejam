@@ -16,8 +16,8 @@ public class DaGenericImpl<E> implements DaGeneric<E> {
 	}
 
 	@Override
-	public void save(E entity) {
-		pool.save(entity);
+	public E save(E entity) {
+		return pool.save(entity);
 	}
 
 	@Override
