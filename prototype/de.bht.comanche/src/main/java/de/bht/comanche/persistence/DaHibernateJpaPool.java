@@ -9,40 +9,19 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-public class DaPoolImpl implements DaPool {
+public class DaHibernateJpaPool implements DaPool {
 	private final String persistenceUnitName = "planthejam.jpa";
 	private EntityManager em;
 	private EntityManagerFactory entityManagerFactory;
 
-	public DaPoolImpl () {
+	public DaHibernateJpaPool () {
 		entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
 	}
 
-	@Override
-	public void beginTransaction() {
-		em = entityManagerFactory.createEntityManager();
-		EntityTransaction tr = em.getTransaction();
-		tr.begin();
-	}
-
-	@Override
-	public void endTransaction(boolean success) {
-		EntityTransaction tr = em.getTransaction();
-		try {
-			if (success) {
-				tr.commit();
-			} else {
-				tr.rollback();
-			}
-		} finally {
-			try {
-				em.close();
-			} catch (Exception ex) {
-				multex.Msg.printReport(System.err, ex);
-			}
-		}
-	}
-
+    public EntityManager getEntityManager() {
+    	return em;
+    }
+    
 	@Override
 	public void save(DaObject io_object) {
 		em.persist(io_object);

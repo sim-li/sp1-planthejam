@@ -28,14 +28,6 @@ public class LgTimePeriod extends DaObject {
 	@ManyToOne
 	private LgSurvey survey;
 
-	public LgTimePeriod() {
-		super(-1);
-	}
-	
-	public LgTimePeriod(long oid) {
-		super(oid);
-	}
-
 	public Date getStartTime() {
 		return startTime;
 	}

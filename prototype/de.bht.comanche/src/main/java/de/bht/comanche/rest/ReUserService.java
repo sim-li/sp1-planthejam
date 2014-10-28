@@ -14,8 +14,8 @@ import javax.ws.rs.Produces;
 import multex.Failure;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.persistence.DaPoolImpl;
-import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import de.bht.comanche.persistence.DaHibernateJpaPool;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaUser;
 
 @Path("/user/")

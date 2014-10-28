@@ -51,16 +51,6 @@ public class LgSurvey extends DaObject {
 	@JsonIgnore
 	private List<LgTimePeriod> possibleTimePeriods;
 
-	public LgSurvey() {
-		super(-1);
-		this.possibleTimePeriods = new LinkedList<LgTimePeriod>();
-		this.invites = new LinkedList<LgInvite>();
-	}
-	
-	public LgSurvey(long oid) {
-		super(oid);
-	}
-	
 	public String getName() {
 		return name;
 	}

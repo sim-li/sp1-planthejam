@@ -2,17 +2,17 @@ package de.bht.comanche.persistence;
 
 import java.util.List;
 
-import de.bht.comanche.persistence.DaPoolImpl.DaArgumentCountExc;
-import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
-import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import javax.persistence.EntityManager;
+
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaArgumentCountExc;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaNoPersistentClassExc;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaOidNotFoundExc;
 
 public interface DaPool {
 	
 	static final long createdOid = 0;
 	static final long deletedOid = -1; 
 	
-	public void beginTransaction();
-	public void endTransaction(boolean success);
 	public void save(E io_object);
 	public E merge (E io_object);
 	public void delete(E io_object);
@@ -21,4 +21,5 @@ public interface DaPool {
 	public List<E> findManyByQuery(Class<E> i_resultClass, String i_queryString, Object[] i_args) throws DaNoPersistentClassExc, DaArgumentCountExc;
 	public void flush();
 	public String getPersistenceUnitName();
+    public EntityManager getEntityManager();	
 }

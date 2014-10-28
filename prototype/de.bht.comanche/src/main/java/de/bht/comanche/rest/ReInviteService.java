@@ -16,7 +16,7 @@ import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaInvite;
-import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
 

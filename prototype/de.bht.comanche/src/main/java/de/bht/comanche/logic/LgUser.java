@@ -32,15 +32,6 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private List<LgInvite> invites;
 
-	public LgUser() {
-		this.invites = new LinkedList<LgInvite>();
-	}
-	
-	public LgUser(long oid) {
-		super(oid);
-		this.invites = new LinkedList<LgInvite>();
-	}
-
 	public String getName() {
 		return name;
 	}

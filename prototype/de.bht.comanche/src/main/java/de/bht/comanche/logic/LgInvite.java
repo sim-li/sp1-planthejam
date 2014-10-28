@@ -32,14 +32,6 @@ public class LgInvite extends DaObject{
 	@ManyToOne(fetch = FetchType.EAGER)
 	private LgSurvey invite_survey;
 
-	public LgInvite() {
-		super(-1);
-	}
-	
-	public LgInvite(long oid) {
-		super(oid);
-	}
-	
 	public boolean isHost() {
 		return isHost;
 	}
