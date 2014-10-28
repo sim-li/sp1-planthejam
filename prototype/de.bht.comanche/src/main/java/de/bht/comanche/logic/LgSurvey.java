@@ -127,41 +127,7 @@ public class LgSurvey extends DaObject {
 	public void addInvite(LgInvite invite) {
 		invites.add(invite);
 	}
-	public void addParticipant(LgUser participant) {
-		LgInvite invite = new LgInvite();
-		invite.setUser(participant).setSurvey(this).setHost(false).setIgnored(false);
-		participant.addInvite(invite);
-	    invites.add(invite);
-	}
 	
-	public void addParticipants(List<LgUser> participants) {
-		for (LgUser participant : participants) {
-			LgInvite invite = new LgInvite();
-			invite.setUser(participant).setSurvey(this).setHost(false).setIgnored(false);
-			invites.add(invite);
-			participant.addInvite(invite);
-		}
-	}
-	
-	public void removeParticipant(LgUser participant) {
-		for (LgInvite invite : invites) {
-			if (invite.getUser().equals(participant)) {
-				invites.remove(invite);
-			}
-		}
-	}
-	
-	public void removeParticipants(List<LgUser> participants) {
-		for (LgUser participant : participants) {
-			for (LgInvite invite : invites) {
-				if (invite.getUser().equals(participant)) {
-					invites.remove(invite);
-				}
-			}
-		}
-	}
-	
-
 	public void updateWith(LgSurvey other) {
 			this.name = other.name;
 			this.description = other.description;

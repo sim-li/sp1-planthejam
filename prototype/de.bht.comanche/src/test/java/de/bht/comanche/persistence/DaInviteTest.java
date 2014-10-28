@@ -2,9 +2,15 @@ package de.bht.comanche.persistence;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.Persistence;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import de.bht.comanche.logic.LgInvite;
@@ -16,34 +22,12 @@ import de.bht.comanche.logic.LgTransactionWithStackTrace;
 import de.bht.comanche.logic.LgUser;
 
 public class DaInviteTest {
-	final String userName0 = "ALICE";
-	final String userName1 = "BOB";
-	private static final boolean THROW_STACKTRACE = true;
-	private static final boolean ROLLBACK = false;
-	private static DaUser daUser;
-	private static DaSurvey daSurvey;
-	private static DaFactory daFactory;
-	private static DaInvite daInvite;
-	private LgSurvey survey;
-	private static DaPool pool;
 	
 	@BeforeClass public static void initializeDb(){
-		daFactory = new DaFactoryJpaImpl();
-		daUser = daFactory.getDaUser();
-		daSurvey = daFactory.getDaSurvey();
-		daInvite = daFactory.getDaInvite();
-		pool = daUser.getPool();
-		daUser.setPool(pool);
-		daSurvey.setPool(pool);
-		daInvite.setPool(pool);
-		
-		boolean success = new LgLowLevelTransaction(THROW_STACKTRACE) {
-			public void executeWithThrows() throws Exception {
-				DaTestUtils persistenceUtils = new DaTestUtils(daUser.getPool());
-				persistenceUtils.initializeDb();
-			}
-		}.execute();
-		assertTrue("Initializing DB", success);
+		Map<String, String> properties = new HashMap<String, String>(1);
+		properties.put("hibernate.hbm2ddl.auto", "create");
+		Persistence.createEntityManagerFactory(DaHibernateJpaPool.persistenceUnitName, properties);
+		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
 	}
 	
 	@Before public void setUp() {
@@ -51,20 +35,13 @@ public class DaInviteTest {
 		final LgUser bob = new LgUser();
 		alice.setName("Alice");
 		bob.setName("Bob");
-		boolean success = new LgTransactionWithStackTrace<LgUser>(pool, true, ROLLBACK) {
-			public void executeWithThrows() throws Exception {
-					daUser.save(alice);
-					daUser.save(bob);
-			}
-		}.execute();
 		assertTrue("Persisting test users Alice & Bob", success);
 	}
 	
 	@Test public void detachedTest() {
 		LgSurveyDummyFactory surveyFactory = new LgSurveyDummyFactory();
-		
 		final LgInvite receivedInvite = new LgInvite();
-		survey = surveyFactory.getSurvey0();
+		final LgSurvey survey = surveyFactory.getSurvey0();
 		receivedInvite.setSurvey(survey);
 		
 		

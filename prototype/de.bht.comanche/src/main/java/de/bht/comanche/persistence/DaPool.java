@@ -17,5 +17,5 @@ public interface DaPool {
 	<E extends DaObject> List<E> findAll(Class<E> persistentClass);
 	<E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue);
 	<E extends DaObject> List<E> findManyByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue);
-    <E extends DaObject> List<E> findManyByQuery(Class<E> resultClass, Class queryClass, Object[] args);
+    <E extends DaObject> List<E> findManyByQuery(Class<E> resultClass, Class queryClass, String queryString, Object[] args);
 }
