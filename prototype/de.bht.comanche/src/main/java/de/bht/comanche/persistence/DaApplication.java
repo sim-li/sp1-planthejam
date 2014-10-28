@@ -2,9 +2,14 @@ package de.bht.comanche.persistence;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-
+/**
+ * @author Simon Lischka 
+ * 
+ * Initializes application specific persistence unit and 
+ * generates pool.
+ */
 public class DaApplication {
-	DaHibernateJpaPool pool;
+	protected DaHibernateJpaPool pool;
 	
 	public DaApplication() {
 		try {

@@ -7,13 +7,19 @@ public class LgSession {
 	 private final DaApplication application;
 	 private final DaPool pool;
 	 
-	 public LgSession() throws multex.Failure {
+	 public LgSession() {
+		 this.application = new DaApplication();
+		 this.pool = this.application.getPool();
+	 }
+	
+	 public LgUser registerUser(LgUser user) {
 		 try {
-			 this.application = new DaApplication();
-			 this.pool = this.application.getPool();
+			 this.pool.insert(user);
+			 return user;
 		 } catch (Exception ex) {
-			 throw new multex.Failure("Failure initializing Session", ex);
+//			 throw create()
 		 }
+		 return null;
 	 }
 	 
 	 protected DaPool getPool() {

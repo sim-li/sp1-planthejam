@@ -1,56 +1,55 @@
-//package de.bht.comanche.rest;
-//
-//import static multex.MultexUtil.create;
-//
-//import java.util.Date;
-//import java.util.List;
-//
-//import javax.ws.rs.Consumes;
-//import javax.ws.rs.DELETE;
-//import javax.ws.rs.POST;
-//import javax.ws.rs.Path;
-//import javax.ws.rs.Produces;
-//
-//import multex.Failure;
-//import de.bht.comanche.logic.LgTransaction;
-//import de.bht.comanche.logic.LgUser;
-//import de.bht.comanche.persistence.DaHibernateJpaPool;
-//import de.bht.comanche.persistence.DaHibernateJpaPool.DaOidNotFoundExc;
-//import de.bht.comanche.persistence.DaUser;
-//
-//@Path("/user/")
-//public class ReUserService extends RestService {
-//	
-//	public ReUserService() {
-//		super();
-//	}
-//
-//	@Path("login")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgUser loginUser(final LgUser userFromClient) {
-//		final DaUser daUser = factory.getDaUser();
-//		return new LgTransaction<LgUser>(daUser.getPool()) {
-//			@Override
-//			public LgUser executeWithThrows() throws Exception {
-//				List<LgUser> users;
-//				try {
-//					users = daUser.findByName(userFromClient.getName());
-//				} catch (Exception ex) {
-//					throw create(LoginFailure.class, ex, createTimeStamp(), userFromClient.getName());
-//				}
-//				if (users.isEmpty()) {
-//					throw create(LgNoUserWithThisNameExc.class, createTimeStamp(), userFromClient.getName());
-//				}
-//				LgUser userFromDb = users.get(0);
-//				if (!userFromDb.passwordMatchWith(userFromClient)) {
-//					throw create(LgWrongPasswordExc.class, createTimeStamp(), userFromClient.getName());
-//				}
-//				return userFromDb;
-//			}
-//		}.execute();
-//	}
+package de.bht.comanche.rest;
+
+import static multex.MultexUtil.create;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+import multex.Failure;
+import de.bht.comanche.logic.LgSession;
+import de.bht.comanche.logic.LgTransaction;
+import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.persistence.DaHibernateJpaPool;
+
+@Path("/user/")
+public class ReUserService extends RestService {
+	
+	public ReUserService() {
+		super();
+	}
+
+	@Path("login")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgUser loginUser(final LgUser userFromClient) {
+		final DaUser daUser = factory.getDaUser();
+		return new LgTransaction<LgUser>(daUser.getPool()) {
+			@Override
+			public LgUser executeWithThrows() throws Exception {
+				List<LgUser> users;
+				try {
+					users = daUser.findByName(userFromClient.getName());
+				} catch (Exception ex) {
+					throw create(LoginFailure.class, ex, createTimeStamp(), userFromClient.getName());
+				}
+				if (users.isEmpty()) {
+					throw create(LgNoUserWithThisNameExc.class, createTimeStamp(), userFromClient.getName());
+				}
+				LgUser userFromDb = users.get(0);
+				if (!userFromDb.passwordMatchWith(userFromClient)) {
+					throw create(LgWrongPasswordExc.class, createTimeStamp(), userFromClient.getName());
+				}
+				return userFromDb;
+			}
+		}.execute();
+	}
 //	
 //	/**
 //	 * Ocurred at "{0}". Could not login user with name "{1}"
@@ -71,27 +70,27 @@
 //	public static final class LgWrongPasswordExc extends multex.Exc {}
 //	
 //	//------------------------------------- not fully multex ready------ TODO
-//	@Path("register")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgUser registerUser(final LgUser newUserFromClient) {
-//		final DaUser daUser = factory.getDaUser();
-//		return new LgTransaction<LgUser>(daUser.getPool()) {
-//			@Override
-//			public LgUser executeWithThrows() throws multex.Exc {
-////				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
-////					throw create(LgUserWithThisNameExistsExc.class, createTimeStamp(), newUserFromClient.getName());
-////				}
-//				try{
-//					daUser.save(newUserFromClient);
-//				} catch (Exception ex){
-//					throw create(LgUserNotSavedExc.class, ex, createTimeStamp(), newUserFromClient.getName());
+	@Path("register")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgUser registerUser(final LgUser user) {
+		final LgSession session = new LgSession();
+		return new LgTransaction<LgUser>(session) {
+			@Override
+			public LgUser execute() throws multex.Exc {
+//				if (!daUser.findByName(newUserFromClient.getName()).isEmpty()) {
+//					throw create(LgUserWithThisNameExistsExc.class, createTimeStamp(), newUserFromClient.getName());
 //				}
-//				return newUserFromClient;
-//			}
-//		}.execute();
-//	}
+				try{
+					return session.registerUser(user);
+				} catch (Exception ex) {
+//					throw create(LgUserNotSavedExc.class, ex, createTimeStamp(), newUserFromClient.getName());
+				}
+				return null; 
+			}
+		}.execute();
+	}
 //
 //	@Path("delete")
 //	@DELETE
@@ -178,4 +177,4 @@
 //	 */
 //	@SuppressWarnings("serial")
 //	public static final class LgUserWithThisNameExistsExc extends multex.Exc {}
-//}
+}

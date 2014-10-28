@@ -8,7 +8,7 @@ public abstract class LgTransaction<E> {
 	
 	private final E result;
 	
-	public LgTransaction(LgSession session) throws Exception {
+	public LgTransaction(LgSession session) {
 	   	boolean success = false;
 		try {
 			session.beginTransaction();
