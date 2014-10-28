@@ -10,7 +10,7 @@ import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
  * Must have constructor(Class&lt;E&gt; type)
  */
 public interface DaGeneric<E> {
-	E save(E entity);
+	void save(E entity);
     void delete(E entity);
     E update(E io_object);
     void beginTransaction();

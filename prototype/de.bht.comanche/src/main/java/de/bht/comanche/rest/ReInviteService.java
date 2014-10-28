@@ -74,10 +74,17 @@ public class ReInviteService extends RestService {
 			public LgInvite executeWithThrows() throws Exception {
 				LgInvite invite;
 				try {	
-					newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
-					// DaSurvey should return itself, so DaInvite can resolve dependency with new Oid
-                    daSurvey.save(newInviteFromClient.getSurvey());
-					daInvite.save(newInviteFromClient);
+					try {
+						invite = daInvite.find(newInviteFromClient.getOid());
+					} catch (DaOidNotFoundExc oidExc) {
+					    invite = null;	
+					}
+					if (invite != null) {
+						daInvite.update(newInviteFromClient);
+					} else {
+						newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
+						daInvite.save(newInviteFromClient);
+					} 
 				} catch (Exception ex) {
 					throw create(SaveInviteFailure.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
 							newInviteFromClient.getUser().getOid());

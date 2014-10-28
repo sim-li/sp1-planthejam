@@ -12,7 +12,7 @@ public interface DaPool<E> {
 	 * Should end the transaction with a commit if success was <code>true</code>, otherwise with a rollback.
 	 */
 	public void endTransaction(boolean success);
-	public E save(E io_object);
+	public void save(E io_object);
 	public E merge (E io_object);
 	public void delete(E io_object);
 	public E find(Class<E> i_persistentClass, Long i_oid) throws DaNoPersistentClassExc, DaOidNotFoundExc;
