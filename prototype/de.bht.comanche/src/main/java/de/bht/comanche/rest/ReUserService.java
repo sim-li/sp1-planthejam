@@ -25,7 +25,6 @@ public class ReUserService extends RestService {
 		super();
 	}
 	
-	//-----------------last multex ready------------------------------
 	@Path("login")
 	@POST
 	@Consumes("application/json")
@@ -71,7 +70,6 @@ public class ReUserService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class LgWrongPasswordExc extends multex.Exc {}
 
-	//-----------------last multex ready------------------------------
 	@Path("register")
 	@POST
 	@Consumes("application/json")
@@ -87,7 +85,7 @@ public class ReUserService extends RestService {
 				try{
 					daUser.save(newUserFromClient);
 				} catch (Exception ex){
-					throw create(SaveFailure.class, ex, createTimeStamp(), newUserFromClient.getName());
+					throw create(SaveUserFailure.class, ex, createTimeStamp(), newUserFromClient.getName());
 				}
 				return newUserFromClient;
 			}
@@ -98,7 +96,7 @@ public class ReUserService extends RestService {
 	 * Occured at "{0}". Could not save user with id "{1}"
 	 */
 	@SuppressWarnings("serial")
-	public static final class SaveFailure extends multex.Failure {}
+	public static final class SaveUserFailure extends multex.Failure {}
 	
 	/**
 	 * Occured at "{0}". A user with name "{1}" already exists in the database
@@ -106,7 +104,6 @@ public class ReUserService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class LgUserWithThisNameExistsExc extends multex.Exc {}
 	
-	//-----------------last multex ready------------------------------
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")
@@ -121,7 +118,7 @@ public class ReUserService extends RestService {
 					userFromDb = daUser.find(userFromClient.getOid()); //should it throw DaNotFoudExc seperate?
 					daUser.delete(userFromDb);
 				} catch (Exception ex) {
-					throw create(DeleteFailure.class, ex,
+					throw create(DeleteUserFailure.class, ex,
 							createTimeStamp(),
 							userFromClient.getOid(), 
 							userFromClient.getName());
@@ -135,9 +132,8 @@ public class ReUserService extends RestService {
 	 * Ocurred at "{0}". Could not delete user with oid "{1}" and name "{2}"
 	 */
 	@SuppressWarnings("serial")
-	public static final class DeleteFailure extends multex.Failure {}
+	public static final class DeleteUserFailure extends multex.Failure {}
 
-	//------------------------------------- not ready multex ready--------- TODO
 	@Path("update")
 	@POST
 	@Consumes("application/json")
@@ -147,7 +143,7 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(daUser.getPool()) {
 			LgUser lguser = null;
 			@Override
-			public LgUser executeWithThrows() throws multex.Exc {
+			public LgUser executeWithThrows() throws Exception {
 				try {
 					daUser.find(dirtyUser.getOid()); 
 					lguser = daUser.update(dirtyUser);
@@ -155,7 +151,7 @@ public class ReUserService extends RestService {
 					throw create(LgNoUserWithThisIdNameExc.class, createTimeStamp(), dirtyUser.getOid(), 
 							dirtyUser.getName());
 				} catch (Exception ex){
-					throw create(UpdateFailure.class, ex, createTimeStamp(), dirtyUser.getOid(), 
+					throw create(UpdateUserFailure.class, ex, createTimeStamp(), dirtyUser.getOid(), 
 							dirtyUser.getName());
 				}
 				return lguser;
@@ -167,7 +163,7 @@ public class ReUserService extends RestService {
 	 * Occured at "{0}". Could not update user with id "{1}" and name "{2}"
 	 */
 	@SuppressWarnings("serial")
-	public static final class UpdateFailure extends multex.Failure {}
+	public static final class UpdateUserFailure extends multex.Failure {}
 	
 	/**
 	 * Occured at "{0}". No user with id "{1}" and name "{2}" found in the database

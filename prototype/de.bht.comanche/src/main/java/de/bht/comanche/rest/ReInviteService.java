@@ -18,13 +18,13 @@ import de.bht.comanche.persistence.DaInvite;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
+import de.bht.comanche.rest.ReUserService.DeleteUserFailure;
 
 @Path("/invite/")
 public class ReInviteService extends RestService {
 	public ReInviteService() {
 		super();
 	}
-	//-------------------------------------multex ready---------
 	@POST
 	@Path("getInvites")
 	@Consumes("application/json")
@@ -32,20 +32,34 @@ public class ReInviteService extends RestService {
 	public List<LgInvite> getInvites(final long userFromClientOid) {
 		final DaUser daUser0 = factory.getDaUser();
 		return new LgTransaction<List<LgInvite>>(daUser0.getPool()) {
-			public List<LgInvite> executeWithThrows() throws multex.Exc {
+			public List<LgInvite> executeWithThrows() throws Exception {
 				List<LgInvite> invites = null;
 				try {
 					LgUser lgUser = daUser0.find(userFromClientOid);
 					invites = lgUser.getInvites();
 				} catch (DaOidNotFoundExc oid) {
 					throw create(LgNoUserWithThisIdExc.class, createTimeStamp(), userFromClientOid);
+				} catch (Exception ex){
+					throw create(GetInviteFailure.class, ex, createTimeStamp(),	userFromClientOid);
 				}
 				return invites;
 			}
 		}.execute();
 	}
-	//-------------------------------------multex ready---------
-	// TODO: Save Error doesn't seem to pop up from DaPoolImpl
+	
+	/**
+	 * Ocurred at "{0}". Could not find invite with oid "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class GetInviteFailure extends multex.Failure {}
+
+	/**
+	 * Occured at "{0}". No user with id "{1}" found in the database
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgNoUserWithThisIdExc extends multex.Exc {}
+	
+	// TODO: Save Error doesn't seem to pop up from DaPoolImpl ----> TODO changed to SaveInviteFailure, is it ok now?
 	@Path("save")
 	@POST
 	@Consumes("application/json")
@@ -57,7 +71,7 @@ public class ReInviteService extends RestService {
 		daUser.setPool(daInvite.getPool());
 		daSurvey.setPool(daInvite.getPool());
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
-			public LgInvite executeWithThrows() throws multex.Exc {
+			public LgInvite executeWithThrows() throws Exception {
 				LgInvite invite;
 				try {	
 					newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
@@ -65,14 +79,20 @@ public class ReInviteService extends RestService {
                     daSurvey.save(newInviteFromClient.getSurvey());
 					daInvite.save(newInviteFromClient);
 				} catch (Exception ex) {
-					throw create(DaInviteNotSavedExc.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
+					throw create(SaveInviteFailure.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
 							newInviteFromClient.getUser().getOid());
 				}
 				return newInviteFromClient;
 			}
 		}.execute();
 	}
-	//-------------------------------------multex ready---------
+	
+	/**
+	 * Occured at "{0}". Could not save invite with id "{1}" and user id "{2}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class SaveInviteFailure extends multex.Failure {}
+	
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")
@@ -80,7 +100,7 @@ public class ReInviteService extends RestService {
 	public LgInvite deleteUser(final long inviteFromClientOid) {
 		final DaInvite daInvite = factory.getDaInvite();
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
-			public LgInvite executeWithThrows() throws multex.Exc {
+			public LgInvite executeWithThrows() throws Exception {
 				LgInvite inviteFromDb = null;
 				try {
 					inviteFromDb = daInvite.find(inviteFromClientOid);
@@ -89,38 +109,27 @@ public class ReInviteService extends RestService {
 				} catch (DaOidNotFoundExc exc) {
 					 throw create(DaInviteIdNotFoundExc.class, createTimeStamp(), inviteFromClientOid);
 				} catch (Exception ex) {
-					throw create(DaInviteNotDeletedExc.class, ex, createTimeStamp(), inviteFromClientOid);
+					throw create(DeleteInviteFailure.class, ex, createTimeStamp(), inviteFromClientOid);
 				}
 				return null;
 			}
 		}.execute();
 	}
 	
-	private String createTimeStamp() {
-		return new Date(System.currentTimeMillis()).toString();
-	}
-	
-	/**
-	 * Occured at "{0}". Could not save invite with id "{1}" and user id "{2}"
-	 */
-	@SuppressWarnings("serial")
-	public static final class DaInviteNotSavedExc extends multex.Exc {}
-	
 	/**
 	 * Occured at "{0}". Could not delete invite with id "{1}"
 	 */
 	@SuppressWarnings("serial")
-	public static final class DaInviteNotDeletedExc extends multex.Exc {}
-	
-	/**
-	 * Occured at "{0}". No user with id "{1}" found in the database
-	 */
-	@SuppressWarnings("serial")
-	public static final class LgNoUserWithThisIdExc extends multex.Exc {}
+	public static final class DeleteInviteFailure extends multex.Failure {}
 	
 	/**
 	 * Occured at "{0}". No invite with id "{1}" found in the database
 	 */
 	@SuppressWarnings("serial")
 	public static final class DaInviteIdNotFoundExc extends multex.Exc {}
+
+	private String createTimeStamp() {
+		return new Date(System.currentTimeMillis()).toString();
+	}
+	
 }
