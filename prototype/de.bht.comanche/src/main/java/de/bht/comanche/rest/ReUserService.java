@@ -24,7 +24,8 @@ public class ReUserService extends RestService {
 	public ReUserService() {
 		super();
 	}
-
+	
+	//-----------------last multex ready------------------------------
 	@Path("login")
 	@POST
 	@Consumes("application/json")
@@ -69,8 +70,8 @@ public class ReUserService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class LgWrongPasswordExc extends multex.Exc {}
-	
-	//------------------------------------- not fully multex ready------ TODO
+
+	//-----------------last multex ready------------------------------
 	@Path("register")
 	@POST
 	@Consumes("application/json")
@@ -86,13 +87,26 @@ public class ReUserService extends RestService {
 				try{
 					daUser.save(newUserFromClient);
 				} catch (Exception ex){
-					throw create(LgUserNotSavedExc.class, ex, createTimeStamp(), newUserFromClient.getName());
+					throw create(SaveFailure.class, ex, createTimeStamp(), newUserFromClient.getName());
 				}
 				return newUserFromClient;
 			}
 		}.execute();
 	}
-
+	
+	/**
+	 * Occured at "{0}". Could not save user with id "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class SaveFailure extends multex.Failure {}
+	
+	/**
+	 * Occured at "{0}". A user with name "{1}" already exists in the database
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgUserWithThisNameExistsExc extends multex.Exc {}
+	
+	//-----------------last multex ready------------------------------
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")
@@ -104,7 +118,7 @@ public class ReUserService extends RestService {
 			public LgUser executeWithThrows() throws Exception {
 				LgUser userFromDb = null;
 				try {
-					userFromDb = daUser.find(userFromClient.getOid());
+					userFromDb = daUser.find(userFromClient.getOid()); //should it throw DaNotFoudExc seperate?
 					daUser.delete(userFromDb);
 				} catch (Exception ex) {
 					throw create(DeleteFailure.class, ex,
@@ -135,13 +149,13 @@ public class ReUserService extends RestService {
 			@Override
 			public LgUser executeWithThrows() throws multex.Exc {
 				try {
-					daUser.find(dirtyUser.getOid()); // TODO use multex.Ex in DaUser.find
+					daUser.find(dirtyUser.getOid()); 
 					lguser = daUser.update(dirtyUser);
 				} catch (DaOidNotFoundExc oid) {
 					throw create(LgNoUserWithThisIdNameExc.class, createTimeStamp(), dirtyUser.getOid(), 
 							dirtyUser.getName());
 				} catch (Exception ex){
-					throw create(LgUserNotUpdatedExc.class, ex,	createTimeStamp(), dirtyUser.getOid(), 
+					throw create(UpdateFailure.class, ex, createTimeStamp(), dirtyUser.getOid(), 
 							dirtyUser.getName());
 				}
 				return lguser;
@@ -149,17 +163,11 @@ public class ReUserService extends RestService {
 		}.execute();
 	}
 	
-	private String createTimeStamp() {
-		return new Date(System.currentTimeMillis()).toString();
-	}
-	
-//	TODO check if exc are used:
-	
 	/**
-	 * Occured at "{0}". Could not save user with id "{1}"
+	 * Occured at "{0}". Could not update user with id "{1}" and name "{2}"
 	 */
 	@SuppressWarnings("serial")
-	public static final class LgUserNotSavedExc extends multex.Exc {}
+	public static final class UpdateFailure extends multex.Failure {}
 	
 	/**
 	 * Occured at "{0}". No user with id "{1}" and name "{2}" found in the database
@@ -167,15 +175,8 @@ public class ReUserService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class LgNoUserWithThisIdNameExc extends multex.Exc {}
 	
-	/**
-	 * Occured at "{0}". Could not update user with id "{1}" and name "{2}"
-	 */
-	@SuppressWarnings("serial")
-	public static final class LgUserNotUpdatedExc extends multex.Exc {}
-		
-	/**
-	 * Occured at "{0}". A user with name "{1}" already exists in the database
-	 */
-	@SuppressWarnings("serial")
-	public static final class LgUserWithThisNameExistsExc extends multex.Exc {}
+	
+	private String createTimeStamp() {
+		return new Date(System.currentTimeMillis()).toString();
+	}
 }

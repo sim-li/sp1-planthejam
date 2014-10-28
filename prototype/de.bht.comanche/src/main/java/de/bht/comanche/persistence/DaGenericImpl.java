@@ -5,6 +5,7 @@ import java.util.List;
 import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 
+//---------------last multex ready----------------
 public class DaGenericImpl<E> implements DaGeneric<E> {
 	private Class<E> type;
 	private DaPool<E> pool;
