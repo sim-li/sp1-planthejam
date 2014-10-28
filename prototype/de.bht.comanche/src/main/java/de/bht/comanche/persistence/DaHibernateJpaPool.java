@@ -11,38 +11,46 @@ public class DaHibernateJpaPool implements DaPool {
 	private final String persistenceUnitName = "planthejam.jpa";
 	private EntityManager entityManager;
 	private EntityManagerFactory entityManagerFactory;
-
-	public DaHibernateJpaPool () {
+    //Runtime exc -> Failure
+	//checked exc -> multex exc - 
+	public DaHibernateJpaPool() {
 		try {
 			this.entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
 			this.entityManager = entityManagerFactory.createEntityManager();
-		} catch (Exception ex) {
+		} catch (Exception ex) {//create benutzen
 			throw new Failure("Could not initialize JPA Entity Manager.", ex);
 		}
 	}
 
 	@Override
 	public void insert(DaObject io_object) {
-		// TODO Auto-generated method stub
-		
+		io_object.setPool(this);
+		this.entityManager.persist(io_object);
 	}
 
 	@Override
 	public void reattach(DaObject io_object) {
-		// TODO Auto-generated method stub
-		
+		this.entityManager.merge(io_object);
 	}
 
 	@Override
 	public boolean save(DaObject io_object) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager session = getEntityManager();
+		final boolean isPersistent = session.contains(io_object);
+		if (!isPersistent) {
+			io_object.setPool(this);
+		}
+		session.merge(io_object);
+		return !isPersistent;
 	}
 
 	@Override
 	public boolean delete(DaObject io_object) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager session = getEntityManager();
+		final boolean isPersistent = session.contains(io_object);
+		session.remove(io_object);
+		io_object.setOid(DaPool.deletedOid);
+		return isPersistent;
 	}
 
 	@Override

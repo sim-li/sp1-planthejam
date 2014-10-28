@@ -24,6 +24,10 @@ public abstract class DaObject implements Serializable {
 	public long getOid() {
 		return oid;
 	}
+	
+	protected void setOid(long oid) {
+		this.oid = oid;
+	}
     
 	public boolean isPersistent() {
 		return oid != DaPool.createdOid && oid > 0;
