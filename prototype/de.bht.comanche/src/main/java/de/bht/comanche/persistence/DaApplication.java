@@ -10,7 +10,7 @@ public class DaApplication {
 		try {
 			this.pool = new DaHibernateJpaPool();
 		} catch (Exception ex) {
-			throw new multex.Failure("Error initializing Hibernate / JPA", ex);
+			throw new multex.Failure("Error initializing Hibernate / JPA entity manager. Check db configuration.", ex);
 		}
 	}
 	
@@ -25,18 +25,11 @@ public class DaApplication {
 	public void endTransaction(boolean success) {
 		EntityManager session = this.pool.getEntityManager();
 		EntityTransaction transaction = session.getTransaction();
-		try {
-			if (success) {
-				transaction.commit();
-			} else {
-				transaction.rollback();
-			}
-		} finally {
-			try {
-				transaction.close();
-			} catch (Exception ex) {
-				multex.Msg.printReport(System.err, ex);
-			}
-		}
+		if (success) {
+			transaction.commit();
+		} else {
+			transaction.rollback();
+		} 
+		session.close();
 	}		
 }

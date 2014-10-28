@@ -43,12 +43,11 @@ public class DaHibernateJpaPool implements DaPool {
 			throw create(DaNoPersistentClassExc.class, i_persistentClass); 
 		}
 		E result = em.find(i_persistentClass, i_oid);
-//		if (result == null) {
-//			throw create(DaOidNotFoundExc.class, i_oid);
-//		}
+		if (result == null) {
+			throw create(DaOidNotFoundExc.class, i_oid);
+		}
 		return result;
 	}
-
 	/**
 	 * No entry found for oid "{0}" in the database
 	 */
@@ -74,18 +73,6 @@ public class DaHibernateJpaPool implements DaPool {
 		String qlString = String.format(i_queryString, i_args);
 		return em.createQuery(qlString, i_resultClass).getResultList();
 	}
-
-	/**
-	 * The class "{0}" is no persistent class
-	 */
-	@SuppressWarnings("serial")
-	public static final class DaNoPersistentClassExc extends multex.Exc {}
-
-	/**
-	 * Query string "{0}" does not match number of arguments "{1}"
-	 */
-	@SuppressWarnings("serial")
-	public static final class DaArgumentCountExc extends multex.Exc {}
 
 	@Override
 	public void flush() {

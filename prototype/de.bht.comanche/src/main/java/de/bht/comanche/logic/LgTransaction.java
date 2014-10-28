@@ -8,24 +8,27 @@ public abstract class LgTransaction<E> {
 	
 	private final E result;
 	
-	public E execute() { // throws ServerException
-		boolean success = false;
-		
+	public LgTransaction(LgSession session) throws Exception {
+	   	boolean success = false;
 		try {
-			result = executeWithThrows();
+			session.beginTransaction();
+			result = execute();
 			success = true;
 		} catch (Exception ex) {
 			multex.Msg.printReport(System.err, ex);
 			throw new ReServerException(new ReErrorMessage(multex.Msg.getMessages(ex), multex.Msg.getStackTrace(ex)));
 		} finally {
 			try {
-				pool.endTransaction(success);
+				session.endTransaction(success);
 			} catch (Exception ex) {
 				multex.Msg.printReport(System.err, ex);
 			} 
 		}
+	}
+		
+	public E getResult() {
 		return result;
 	}
-	
-	public abstract E executeWithThrows() throws Exception;
+
+	public abstract E execute() throws Exception;
 }
