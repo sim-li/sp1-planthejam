@@ -3,11 +3,13 @@ package de.bht.comanche.persistence;
 import java.util.List;
 
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 
 public interface DaSurvey {
     void save(LgSurvey survey);
+	LgSurvey update(LgSurvey survey);
     void delete(LgSurvey survey);
     LgSurvey find(long id) throws DaNoPersistentClassExc, DaOidNotFoundExc;
     List<LgSurvey> findAll() throws DaNoPersistentClassExc;

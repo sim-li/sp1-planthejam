@@ -12,13 +12,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaInvite;
 import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
 import de.bht.comanche.persistence.DaSurvey;
 import de.bht.comanche.persistence.DaUser;
-import de.bht.comanche.rest.ReUserService.DeleteUserFailure;
 
 @Path("/invite/")
 public class ReInviteService extends RestService {
@@ -64,32 +64,23 @@ public class ReInviteService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgInvite saveInvite(final LgInvite newInviteFromClient) {
+	public LgInvite saveInvite(final LgInvite invite) {
 		final DaInvite daInvite = factory.getDaInvite();
 		final DaUser daUser = factory.getDaUser();
 		final DaSurvey daSurvey = factory.getDaSurvey();
 		daUser.setPool(daInvite.getPool());
 		daSurvey.setPool(daInvite.getPool());
 		return new LgTransaction<LgInvite>(daInvite.getPool()) {
+			LgInvite invitePers;
 			public LgInvite executeWithThrows() throws Exception {
-				LgInvite invite;
 				try {	
-					try {
-						invite = daInvite.find(newInviteFromClient.getOid());
-					} catch (DaOidNotFoundExc oidExc) {
-					    invite = null;	
-					}
-					if (invite != null) {
-						daInvite.update(newInviteFromClient);
-					} else {
-						newInviteFromClient.setUser(daUser.find(newInviteFromClient.getUser().getOid()));
-						daInvite.save(newInviteFromClient);
-					} 
+					invite.setSurvey((LgSurvey)daUser.getPool().merge(invite.getSurvey()));
+					invitePers = daInvite.update(invite); 
 				} catch (Exception ex) {
-					throw create(SaveInviteFailure.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
-							newInviteFromClient.getUser().getOid());
+					throw create(SaveInviteFailure.class, ex, createTimeStamp(), invite.getOid(), 
+							invite.getUser().getOid());
 				}
-				return newInviteFromClient;
+				return invitePers;
 			}
 		}.execute();
 	}

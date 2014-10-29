@@ -66,9 +66,9 @@ public class DaPoolImpl<E> implements DaPool<E> {
 			throw create(DaNoPersistentClassExc.class, i_persistentClass); 
 		}
 		E result = em.find(i_persistentClass, i_oid);
-		if (result == null) {
-			throw create(DaOidNotFoundExc.class, i_oid);
-		}
+//		if (result == null) {
+//			throw create(DaOidNotFoundExc.class, i_oid);
+//		}
 		return result;
 	}
 
