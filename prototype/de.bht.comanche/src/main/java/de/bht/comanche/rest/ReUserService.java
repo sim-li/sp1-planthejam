@@ -28,44 +28,27 @@ public class ReUserService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgUser loginUser(final LgUser userFromClient) {
-		final DaUser daUser = factory.getDaUser();
-		return new LgTransaction<LgUser>(daUser.getPool()) {
+	public LgUser loginUser(final LgUser user) {
+		final LgSession session = new LgSession();
+		return new LgTransaction<LgUser>(session) {
 			@Override
-			public LgUser executeWithThrows() throws Exception {
-				List<LgUser> users;
-				try {
-					users = daUser.findByName(userFromClient.getName());
-				} catch (Exception ex) {
-					throw create(LoginFailure.class, ex, createTimeStamp(), userFromClient.getName());
-				}
-				if (users.isEmpty()) {
-					throw create(LgNoUserWithThisNameExc.class, createTimeStamp(), userFromClient.getName());
-				}
-				LgUser userFromDb = users.get(0);
-				if (!userFromDb.passwordMatchWith(userFromClient)) {
-					throw create(LgWrongPasswordExc.class, createTimeStamp(), userFromClient.getName());
-				}
-				return userFromDb;
+			public LgUser execute() throws multex.Exc {
+//				try {
+					return session.login(user);
+//				} catch (Exception ex) {
+//					throw create(LoginExc.class, ex, user.getName());
+//				}
 			}
 		}.execute();
 	}
+	
+	/**
+	 * Could not login user with name "{0}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class LoginExc extends multex.Exc {}
+	
 //	
-//	/**
-//	 * Ocurred at "{0}". Could not login user with name "{1}"
-//	 */
-//	@SuppressWarnings("serial")
-//	public static final class LoginFailure extends multex.Failure {}
-//	
-//	/**
-//	 * Ocurred at "{0}". No user with name "{1}" found in the database
-//	 */
-//	@SuppressWarnings("serial")
-//	public static final class LgNoUserWithThisNameExc extends multex.Exc {}
-//
-//	/**
-//	 * Ocurred at "{0}". Wrong password for user with name "{1}"
-//	 */
 //	@SuppressWarnings("serial")
 //	public static final class LgWrongPasswordExc extends multex.Exc {}
 //	
@@ -92,29 +75,27 @@ public class ReUserService extends RestService {
 		}.execute();
 	}
 //
-//	@Path("delete")
-//	@DELETE
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgUser deleteUser(final LgUser userFromClient) {
-//		final DaUser daUser = factory.getDaUser();
-//		return new LgTransaction<LgUser>(daUser.getPool()) {
-//			@Override
-//			public LgUser executeWithThrows() throws Exception {
-//				LgUser userFromDb = null;
-//				try {
-//					userFromDb = daUser.find(userFromClient.getOid());
-//					daUser.delete(userFromDb);
-//				} catch (Exception ex) {
+	@Path("delete")
+	@DELETE
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgUser deleteUser(final LgUser user) {
+		final LgSession session = new LgSession();
+		return new LgTransaction<LgUser>(session) {
+			@Override
+			public LgUser execute() throws multex.Exc {
+				try {
+					session.deleteUser(user);
+				} catch (Exception ex) {
 //					throw create(DeleteFailure.class, ex,
 //							createTimeStamp(),
 //							userFromClient.getOid(), 
 //							userFromClient.getName());
-//				}
-//				return null;
-//			}
-//		}.execute();
-//	} 
+				}
+				return null;
+			}
+		}.execute();
+	} 
 //	
 //	/**
 //	 * Ocurred at "{0}". Could not delete user with oid "{1}" and name "{2}"
