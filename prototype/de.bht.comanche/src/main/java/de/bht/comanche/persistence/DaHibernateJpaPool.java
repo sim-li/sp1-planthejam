@@ -90,14 +90,14 @@ public class DaHibernateJpaPool implements DaPool {
 	public <E extends DaObject> List<E> findManyByKey(Class<E> persistentClass,
 			String keyFieldName, Object keyFieldValue) {
 		checkPersistentClass(persistentClass);
-        final String className = persistentClass.getName();
+		final String className = persistentClass.getName();
         final  EntityManager entityManager = getEntityManager();
         final Query q = entityManager.createQuery("select o from " + className + " o where " + keyFieldName + " = :keyValue ORDER BY o.oid DESC");
         q.setParameter("keyValue", keyFieldValue);
         final List<E> results = q.getResultList();
         return results;
 	}
-
+	
 	@Override
 	public <E extends DaObject> List<E> findManyByQuery(Class<E> resultClass, 
 			Class queryClass, String queryString, Object[] args) {

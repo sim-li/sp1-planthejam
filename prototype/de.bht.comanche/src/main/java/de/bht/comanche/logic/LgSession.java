@@ -50,7 +50,7 @@ public class LgSession {
 			throw create(LgNoUserWithThisNameExc.class, user.getName());
 		}
 		if (!user.passwordMatchWith(dbUser)) {
-			throw create(LgWrongPasswordExc.class, user.getName());
+			throw create(LgWrongPasswordExc.class, user.getName(), dbUser.getName());
 		}
 		return dbUser; 
 	}

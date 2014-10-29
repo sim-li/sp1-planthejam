@@ -19,6 +19,7 @@ import de.bht.comanche.persistence.DaHibernateJpaPool;
 
 @Path("/user/")
 public class ReUserService extends RestService {
+	protected final LgSession session = new LgSession();
 	
 	public ReUserService() {
 		super();
@@ -29,7 +30,6 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser loginUser(final LgUser user) {
-		final LgSession session = new LgSession();
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
@@ -58,7 +58,6 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser registerUser(final LgUser user) {
-		final LgSession session = new LgSession();
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
@@ -80,7 +79,6 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser deleteUser(final LgUser user) {
-		final LgSession session = new LgSession();
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
