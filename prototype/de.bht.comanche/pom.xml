@@ -132,11 +132,6 @@
 			<version>${log4j.version}</version>
 		</dependency>
 		
-	    <dependency>
-			<groupId>de.tfh-berlin.knabe</groupId>
-			<artifactId>multex</artifactId>
-			<version>8.3</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<resources>
