@@ -20,7 +20,7 @@ public abstract class LgTransaction<E> {
 			success = true;
 		} catch (Exception ex) {
 			multex.Msg.printReport(System.err, ex);
-			throw new ReServerException(new ReErrorMessage(multex.Msg.getMessages(ex), multex.Msg.getStackTrace(ex)));
+			throw new ReServerException(new ReErrorMessage(ex, multex.Msg.getStackTrace(ex)));
 		} finally {
 			try {
 				pool.endTransaction(success);
