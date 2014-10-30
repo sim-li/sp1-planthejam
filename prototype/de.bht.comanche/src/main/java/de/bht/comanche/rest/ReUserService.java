@@ -1,25 +1,20 @@
 package de.bht.comanche.rest;
 
-import static multex.MultexUtil.create;
-
-import java.util.Date;
-import java.util.List;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 
-import multex.Failure;
 import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.persistence.DaHibernateJpaPool;
 
 @Path("/user/")
 public class ReUserService extends RestService {
-	protected final LgSession session = new LgSession();
 	
 	public ReUserService() {
 		super();
@@ -29,12 +24,19 @@ public class ReUserService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgUser loginUser(final LgUser user) {
-		return new LgTransaction<LgUser>(session) {
+	public LgUser loginUser(final LgUser user, @Context HttpServletRequest request) {
+		final LgSession session = new LgSession();
+		/*
+		final HttpSession httpSession = request.getSession();
+		final Object username = httpSession.getAttribute("USERNAME");
+	    username.toString(); // --> Transaction	
+	    */
+		return new LgTransaction<LgUser>(session) {//(session, username) 
 			@Override
 			public LgUser execute() throws multex.Exc {
+				final LgUser loggedIn = session.login(user); 
 //				try {
-					return session.login(user);
+					return loggedIn; 
 //				} catch (Exception ex) {
 //					throw create(LoginExc.class, ex, user.getName());
 //				}
@@ -58,6 +60,7 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser registerUser(final LgUser user) {
+		final LgSession session = new LgSession();
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
@@ -79,6 +82,7 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser deleteUser(final LgUser user) {
+		final LgSession session = new LgSession();
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {

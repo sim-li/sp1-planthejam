@@ -45,7 +45,7 @@ public class LgSession {
 
 	public LgUser login(LgUser user) {
 		// Maybe implement find by object?
-		LgUser dbUser = pool.findOneByKey(LgUser.class, "name", user.getName());
+		LgUser dbUser = pool.findOneByKey(LgUser.class, "NAME", user.getName());
 		if (dbUser == null) {
 			throw create(LgNoUserWithThisNameExc.class, user.getName());
 		}

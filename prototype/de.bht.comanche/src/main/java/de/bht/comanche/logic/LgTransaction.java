@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import de.bht.comanche.persistence.DaPool;
 import de.bht.comanche.rest.ReErrorMessage;
 import de.bht.comanche.rest.ReServerException;
 

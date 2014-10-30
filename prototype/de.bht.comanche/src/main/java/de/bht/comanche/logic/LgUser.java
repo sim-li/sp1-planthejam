@@ -78,6 +78,8 @@ public class LgUser extends DaObject {
 		return this;
 	}
 
+	public void delete() {
+	}
 	public boolean addInvite(LgInvite invite) {
 		return this.invites.add(invite);
 	}

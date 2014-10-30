@@ -80,10 +80,8 @@ public class DaHibernateJpaPool implements DaPool {
 	@Override
 	public <E extends DaObject> E findOneByKey(Class<E> persistentClass,
 			String keyFieldName, Object keyFieldValue) {
-		 final  EntityManager session = getEntityManager();
-         final Query q = session.createQuery("select o from " + persistentClass.getName() + " o ORDER BY oid DESC");
-         final List<E> results = q.getResultList();
-         return results.get(0);
+		final List<E> results = findManyByKey(persistentClass, keyFieldName, keyFieldValue);
+        return results.get(0);
 	}
 
 	@Override

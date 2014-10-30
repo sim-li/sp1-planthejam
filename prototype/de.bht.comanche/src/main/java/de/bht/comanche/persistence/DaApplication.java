@@ -28,8 +28,8 @@ public class DaApplication {
 	}
 	
 	public void endTransaction(boolean success) {
-		EntityManager session = this.pool.getEntityManager();
-		EntityTransaction transaction = session.getTransaction();
+		final EntityManager session = this.pool.getEntityManager();
+		final EntityTransaction transaction = session.getTransaction();
 		if (success) {
 			transaction.commit();
 		} else {
