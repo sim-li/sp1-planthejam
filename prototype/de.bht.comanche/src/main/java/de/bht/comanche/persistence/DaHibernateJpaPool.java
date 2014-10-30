@@ -53,7 +53,7 @@ public class DaHibernateJpaPool implements DaPool {
 	public boolean delete(DaObject io_object) {
 		EntityManager session = getEntityManager();
 		final boolean isPersistent = session.contains(io_object);
-		session.remove(io_object);
+		session.remove(isPersistent ? io_object : session.merge(io_object));
 		io_object.setOid(DaPool.deletedOid);
 		return isPersistent;
 	}

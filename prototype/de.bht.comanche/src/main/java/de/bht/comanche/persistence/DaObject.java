@@ -43,7 +43,8 @@ public abstract class DaObject implements Serializable {
     @SuppressWarnings("serial")
     public static final class OwningPoolChangedExc extends multex.Exc {}
 
-    protected void setPool(DaPool pool) throws multex.Exc {
+    //Make protected & refactor?
+    public void setPool(DaPool pool) throws multex.Exc {
     	if (this.pool != null && pool != this.pool) {
     		throw create(OwningPoolChangedExc.class, this.getClass().getName(), this.getOid());
     	}
@@ -59,7 +60,7 @@ public abstract class DaObject implements Serializable {
     protected DaPool getPool() {
     	return pool;
     }
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

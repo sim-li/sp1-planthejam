@@ -29,7 +29,7 @@ public class LgUser extends DaObject {
 	private String email;
 	private String password;
 
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
 	public String getName() {
@@ -95,6 +95,11 @@ public class LgUser extends DaObject {
 		}
 		return this.password.equals(password);
 	}
+	
+	public void update() {
+		this.getPool().reattach(this);
+	}
+	
 	
 	public void clearInvites() {
 		this.invites.clear();

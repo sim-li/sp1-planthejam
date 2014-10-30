@@ -15,6 +15,7 @@ import de.bht.comanche.logic.LgUser;
 
 @Path("/user/")
 public class ReUserService extends RestService {
+	final String USER_OID = "userOid";
 	
 	public ReUserService() {
 		super();
@@ -24,24 +25,21 @@ public class ReUserService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgUser loginUser(final LgUser user, @Context HttpServletRequest request) {
+	public LgUser loginUser(final LgUser user, @Context final HttpServletRequest request) {
 		final LgSession session = new LgSession();
-		/*
-		final HttpSession httpSession = request.getSession();
-		final Object username = httpSession.getAttribute("USERNAME");
-	    username.toString(); // --> Transaction	
-	    */
 		return new LgTransaction<LgUser>(session) {//(session, username) 
 			@Override
 			public LgUser execute() throws multex.Exc {
 				final LgUser loggedIn = session.login(user); 
+				final HttpSession httpSession = request.getSession();
+				httpSession.setAttribute(USER_OID, Long.toString(loggedIn.getOid()));
 //				try {
 					return loggedIn; 
 //				} catch (Exception ex) {
 //					throw create(LoginExc.class, ex, user.getName());
 //				}
 			}
-		}.execute();
+		}.getResult();
 	}
 	
 	/**
@@ -74,20 +72,53 @@ public class ReUserService extends RestService {
 				}
 				return null; 
 			}
-		}.execute();
+		}.getResult();
 	}
 //
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgUser deleteUser(final LgUser user) {
+	public LgUser deleteUser(final LgUser userX, @Context final HttpServletRequest request) {
 		final LgSession session = new LgSession();
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
 				try {
-					session.deleteUser(user);
+					final HttpSession httpSession = request.getSession();
+				    final long oid = Long.parseLong(httpSession.getAttribute(USER_OID).toString());
+					session.deleteUser(oid);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+//					throw create(DeleteFailure.class, ex,
+//							createTimeStamp(),
+//							userFromClient.getOid(), 
+//							userFromClient.getName());
+				}
+				return null;
+			}
+		}.getResult();
+	} 
+	
+	/**
+	 * Ocurred at "{0}". Could not delete user with oid "{1}" and name "{2}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class DeleteFailure extends multex.Failure {}
+
+	//------------------------------------- not ready multex ready--------- TODO
+	@Path("update")
+	@POST
+	@Consumes("application/json")
+	@Produces({"application/json"})
+	public LgUser updateUser(final LgUser user) {
+		final LgSession session = new LgSession();
+		return new LgTransaction<LgUser>(session) {
+			@Override
+			public LgUser execute() throws multex.Exc {
+				try {
+//					session.receiveObject(user);
+//					user.update();
 				} catch (Exception ex) {
 //					throw create(DeleteFailure.class, ex,
 //							createTimeStamp(),
@@ -96,40 +127,8 @@ public class ReUserService extends RestService {
 				}
 				return null;
 			}
-		}.execute();
-	} 
-//	
-//	/**
-//	 * Ocurred at "{0}". Could not delete user with oid "{1}" and name "{2}"
-//	 */
-//	@SuppressWarnings("serial")
-//	public static final class DeleteFailure extends multex.Failure {}
-//
-//	//------------------------------------- not ready multex ready--------- TODO
-//	@Path("update")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({"application/json"})
-//	public LgUser updateUser(final LgUser dirtyUser) {
-//		final DaUser daUser = factory.getDaUser();
-//		return new LgTransaction<LgUser>(daUser.getPool()) {
-//			LgUser lguser = null;
-//			@Override
-//			public LgUser executeWithThrows() throws multex.Exc {
-//				try {
-//					daUser.find(dirtyUser.getOid()); // TODO use multex.Ex in DaUser.find
-//					lguser = daUser.update(dirtyUser);
-//				} catch (DaOidNotFoundExc oid) {
-//					throw create(LgNoUserWithThisIdNameExc.class, createTimeStamp(), dirtyUser.getOid(), 
-//							dirtyUser.getName());
-//				} catch (Exception ex){
-//					throw create(LgUserNotUpdatedExc.class, ex,	createTimeStamp(), dirtyUser.getOid(), 
-//							dirtyUser.getName());
-//				}
-//				return lguser;
-//			}
-//		}.execute();
-//	}
+		}.getResult();
+	}
 //	
 //	private String createTimeStamp() {
 //		return new Date(System.currentTimeMillis()).toString();

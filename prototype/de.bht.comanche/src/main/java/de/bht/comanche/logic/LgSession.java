@@ -1,8 +1,9 @@
 package de.bht.comanche.logic;
 
-import de.bht.comanche.persistence.DaApplication;
-import de.bht.comanche.persistence.DaPool;
 import static multex.MultexUtil.create;
+import de.bht.comanche.persistence.DaApplication;
+import de.bht.comanche.persistence.DaObject;
+import de.bht.comanche.persistence.DaPool;
 
 public class LgSession {
 	private final DaApplication application;
@@ -23,8 +24,9 @@ public class LgSession {
 		return null;
 	}
 
-	public boolean deleteUser(LgUser user) {
+	public boolean deleteUser(long oid) {
 		try {
+		    final LgUser user = pool.find(LgUser.class, oid);	
 			return pool.delete(user);
 		} catch (Exception ex) {
 			// 	         throw create()
@@ -55,6 +57,10 @@ public class LgSession {
 		return dbUser; 
 	}
 
+	public void Object(DaObject object) {
+		object.setPool(pool);
+	}
+	
 	protected DaPool getPool() {
 		return pool;
 	}
