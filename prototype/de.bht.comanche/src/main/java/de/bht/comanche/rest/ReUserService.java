@@ -76,14 +76,16 @@ public class ReUserService extends RestService {
 	@POST
 	@Consumes("application/json")
 	@Produces({"application/json"})
-	public LgUser update(@Context final HttpServletRequest request) {
+	public LgUser update(final LgUser i_user, @Context final HttpServletRequest request) {
 		final LgSession session = new LgSession();
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-					session.startFor(RestService.getUserName(request));// throw Exception if no info in request
-					final LgUser user = session.getUser();
-					user.update();
+				    session.startFor(RestService.getUserName(request));
+				    final LgUser user = session.getUser();
+					user.update(i_user);
+					RestService.setUserName(request, user.getName()); //Bug on multiple updates!
+					//How do we transfer name back with HTTP Serv request?
 				return null;
 			}
 		}.getResult();
