@@ -22,16 +22,15 @@ public class LgSession {
 		this.user = i_user;
 	}
 
-	public LgUser login(LgUser user) {
-		LgUser dbUser = pool.findOneByKey(LgUser.class, "NAME", user.getName());
-		if (dbUser == null) {
-			throw create(LgNoUserWithThisNameExc.class, user.getName());
+	public void login(LgUser i_user) {
+		//throw failure when user already set in class
+		this.user = pool.findOneByKey(LgUser.class, "NAME", i_user.getName());
+		if (this.user == null) {
+			throw create(LgNoUserWithThisNameExc.class, i_user.getName());
 		}
-		if (!user.passwordMatchWith(dbUser)) {
-			throw create(LgWrongPasswordExc.class, user.getName(),
-					dbUser.getName());
+		if (!i_user.passwordMatchWith(this.user)) {
+			throw create(LgWrongPasswordExc.class, i_user.getName());
 		}
-		return dbUser;
 	}
 	/**
 	 * No user with name "{0}" found in the database
@@ -60,7 +59,7 @@ public class LgSession {
 
 	public void startFor(String userName) {
 		// throw exc when user not found
-		user = pool.findOneByKey(LgUser.class, "NAME", user.getName()); 
+		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
 	}
 
 	/**

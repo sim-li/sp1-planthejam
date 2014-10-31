@@ -43,7 +43,6 @@ public class LgUser extends DaObject {
 
 	public void delete() {
 		this.getPool().delete(this); //throw exc when delete errror
-
 	}
 
 	public boolean addInvite(LgInvite invite) {
@@ -63,7 +62,7 @@ public class LgUser extends DaObject {
 	}
 
 	public void update() {
-		this.getPool().reattach(this);
+		this.getPool().save(this);
 	}
 
 	/**

@@ -12,6 +12,9 @@ import multex.Failure;
  * @author Simon Lischka
  * TODO: Handle Exceptions
  */
+
+// Contract: Every newly retrieved object gets this pooL!
+
 public class DaHibernateJpaPool implements DaPool {
 	public static final String persistenceUnitName = "planthejam.jpa";
 	private EntityManager entityManager;
@@ -34,19 +37,10 @@ public class DaHibernateJpaPool implements DaPool {
 	}
 
 	@Override
-	public void reattach(DaObject io_object) {
-		this.entityManager.merge(io_object);
-	}
-
-	@Override
-	public boolean save(DaObject io_object) {
+	public void save(DaObject io_object) {
 		EntityManager session = getEntityManager();
-		final boolean isPersistent = session.contains(io_object);
-		if (!isPersistent) {
-			io_object.setPool(this);
-		}
+		io_object.setPool(this);
 		session.merge(io_object);
-		return !isPersistent;
 	}
 
 	@Override
@@ -65,6 +59,7 @@ public class DaHibernateJpaPool implements DaPool {
 		if (result == null) {
 			//			throw create(DaOidNotFoundExc.class, i_oid);
 		}
+		result.setPool(this);
 		return (E) result;
 	}
 
@@ -74,6 +69,9 @@ public class DaHibernateJpaPool implements DaPool {
 		final EntityManager session = getEntityManager();
 		final Query q = session.createQuery("SELECT e FROM " + persistentClass.getSimpleName() + "e", persistentClass); 
 		final List<E> results = q.getResultList();
+		for (E item : results) {
+			item.setPool(this); //Test!
+		}
 		return results;
 	}
 
@@ -81,7 +79,9 @@ public class DaHibernateJpaPool implements DaPool {
 	public <E extends DaObject> E findOneByKey(Class<E> persistentClass,
 			String keyFieldName, Object keyFieldValue) {
 		final List<E> results = findManyByKey(persistentClass, keyFieldName, keyFieldValue);
-		return results.get(0);
+		final E result = results.get(0);
+		result.setPool(this);
+		return result;
 	}
 
 	@Override
@@ -93,6 +93,9 @@ public class DaHibernateJpaPool implements DaPool {
 		final Query q = entityManager.createQuery("select o from " + className + " o where " + keyFieldName + " = :keyValue ORDER BY o.oid DESC");
 		q.setParameter("keyValue", keyFieldValue);
 		final List<E> results = q.getResultList();
+		for (E item : results) {
+			item.setPool(this); //Test!
+		}
 		return results;
 	}
 
@@ -110,6 +113,9 @@ public class DaHibernateJpaPool implements DaPool {
 		final Query query = session.createQuery(qlString, resultClass);
 		@SuppressWarnings("unchecked")
 		final List<E> results = query.getResultList();
+		for (E item : results) {
+			item.setPool(this); //Test!
+		}
 		return results; 
 	}
 
@@ -130,5 +136,4 @@ public class DaHibernateJpaPool implements DaPool {
 	public EntityManager getEntityManager() {
 		return this.entityManager;
 	}
-
 }
