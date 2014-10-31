@@ -13,53 +13,61 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 public abstract class DaObject implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(unique = true, nullable = false)
 	protected long oid = DaPool.createdOid; 
-	
+
 	private transient DaPool pool;
-	
+
+	public DaObject() {}
+
+	protected DaObject(DaPool pool) {
+		this.pool = pool;
+	}
+
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
+
+	/**
+	 *  Owning pool changed. Object of class "{0}" and with OID "{1}" 
+	 */
+	@SuppressWarnings("serial")
+	public static final class OwningPoolChangedExc extends multex.Exc {}
+
+	//Make protected & refactor?
+	public void setPool(DaPool pool) throws multex.Exc {
+		if (this.pool != null && pool != this.pool) {
+			throw create(OwningPoolChangedExc.class, this.getClass().getName(), this.getOid());
+		}
+		this.pool = pool;
+	}
+
+	protected DaPool getPool() {
+		return pool;
+	}
+
 	public long getOid() {
 		return oid;
 	}
-	
+
 	protected void setOid(long oid) {
 		this.oid = oid;
 	}
-    
+
 	public boolean isPersistent() {
 		return oid != DaPool.createdOid && oid > 0;
 	}
-	
+
 	public boolean isDeleted() {
 		return oid == DaPool.deletedOid;
 	}
-	
-	/**
-     *  Owning pool changed. Object of class "{0}" and with OID "{1}" 
-     */
-    @SuppressWarnings("serial")
-    public static final class OwningPoolChangedExc extends multex.Exc {}
 
-    //Make protected & refactor?
-    public void setPool(DaPool pool) throws multex.Exc {
-    	if (this.pool != null && pool != this.pool) {
-    		throw create(OwningPoolChangedExc.class, this.getClass().getName(), this.getOid());
-    	}
-    	this.pool = pool;
-	}
-    
-    public DaObject() {}
-    
-    protected DaObject(DaPool pool) {
-    	this.pool = pool;
-    }
-     
-    protected DaPool getPool() {
-    	return pool;
-    }
 
 	@Override
 	public int hashCode() {

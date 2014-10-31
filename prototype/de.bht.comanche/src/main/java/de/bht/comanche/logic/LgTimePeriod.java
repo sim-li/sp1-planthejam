@@ -28,6 +28,13 @@ public class LgTimePeriod extends DaObject {
 	@ManyToOne
 	private LgSurvey survey;
 
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
+
 	public Date getStartTime() {
 		return startTime;
 	}

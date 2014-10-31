@@ -8,61 +8,46 @@ import de.bht.comanche.persistence.DaPool;
 public class LgSession {
 	private final DaApplication application;
 	private final DaPool pool;
+	private LgUser user;
 
 	public LgSession() {
 		application = new DaApplication();
 		pool = application.getPool();
+		user = null;
 	}
 
-	public LgUser registerUser(LgUser user) {
-		try {
-			pool.insert(user);
-			return user;
-		} catch (Exception ex) {
-			//			 throw create()
-		}
-		return null;
+	public void registerUser(LgUser i_user) { // Throw exception when DB error
+		// or failure when user already set in class
+		pool.insert(i_user);
+		this.user = i_user;
 	}
-
-	public boolean deleteUser(long oid) {
-		try {
-		    final LgUser user = pool.find(LgUser.class, oid);	
-			return pool.delete(user);
-		} catch (Exception ex) {
-			// 	         throw create()
-		}
-		return false;
-	}
-	
-	/**
-	 *   No user with name "{0}" found in the database
-	 */
-	@SuppressWarnings("serial")
-	public static final class LgNoUserWithThisNameExc extends multex.Exc {}
-	/**
-	 *  Wrong password for user with name "{0}"
-	 */
-	@SuppressWarnings("serial")
-	public static final class LgWrongPasswordExc extends multex.Exc {}
 
 	public LgUser login(LgUser user) {
-		// Maybe implement find by object?
 		LgUser dbUser = pool.findOneByKey(LgUser.class, "NAME", user.getName());
 		if (dbUser == null) {
 			throw create(LgNoUserWithThisNameExc.class, user.getName());
 		}
 		if (!user.passwordMatchWith(dbUser)) {
-			throw create(LgWrongPasswordExc.class, user.getName(), dbUser.getName());
+			throw create(LgWrongPasswordExc.class, user.getName(),
+					dbUser.getName());
 		}
-		return dbUser; 
+		return dbUser;
+	}
+	/**
+	 * No user with name "{0}" found in the database
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgNoUserWithThisNameExc extends multex.Exc {
+	}
+	/**
+	 * Wrong password for user with name "{0}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgWrongPasswordExc extends multex.Exc {
 	}
 
 	public void Object(DaObject object) {
 		object.setPool(pool);
-	}
-	
-	protected DaPool getPool() {
-		return pool;
 	}
 
 	public void beginTransaction() {
@@ -71,5 +56,26 @@ public class LgSession {
 
 	public void endTransaction(boolean success) {
 		application.endTransaction(success);
+	}
+
+	public void startFor(String userName) {
+		// throw exc when user not found
+		user = pool.findOneByKey(LgUser.class, "NAME", user.getName()); 
+	}
+
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
+
+	protected DaPool getPool() {
+		return pool;
+	}
+
+
+	public LgUser getUser() { // throw exc when user not present
+		return user;
 	}
 }

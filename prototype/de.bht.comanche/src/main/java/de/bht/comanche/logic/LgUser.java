@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,6 +30,48 @@ public class LgUser extends DaObject {
 
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
+
+	@JsonIgnore
+	public List<LgInvite> getInvites() {
+		return invites;
+	}
+
+	public LgUser setInvites(List<LgInvite> invites) {
+		this.invites = invites;
+		return this;
+	}
+
+	public void delete() {
+		this.getPool().delete(this); //throw exc when delete errror
+
+	}
+
+	public boolean addInvite(LgInvite invite) {
+		return this.invites.add(invite);
+	}
+
+	public boolean removeInvite(LgInvite invite) {
+		return this.invites.remove(invite);
+	}
+
+	public boolean passwordMatchWith(LgUser user) {
+		final String password = user.getPassword();
+		if (this.password == null) {
+			return false;
+		}
+		return this.password.equals(password);
+	}
+
+	public void update() {
+		this.getPool().reattach(this);
+	}
+
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
 
 	public String getName() {
 		return name;
@@ -68,43 +109,6 @@ public class LgUser extends DaObject {
 		return this;
 	}
 
-	@JsonIgnore
-	public List<LgInvite> getInvites() {
-		return invites;
-	}
-
-	public LgUser setInvites(List<LgInvite> invites) {
-		this.invites = invites;
-		return this;
-	}
-
-	public void delete() {
-	}
-	public boolean addInvite(LgInvite invite) {
-		return this.invites.add(invite);
-	}
-
-	public boolean removeInvite(LgInvite invite) {
-		return this.invites.remove(invite);
-	}
-
-	public boolean passwordMatchWith(LgUser user) {
-		final String password = user.getPassword();
-		if (this.password == null) {
-			return false;
-		}
-		return this.password.equals(password);
-	}
-	
-	public void update() {
-		this.getPool().reattach(this);
-	}
-	
-	
-	public void clearInvites() {
-		this.invites.clear();
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -162,5 +166,5 @@ public class LgUser extends DaObject {
 				", invites=" + invites + "]" +
 				"OID>: " + getOid();
 	}
-	
+
 }

@@ -10,7 +10,7 @@ import javax.persistence.EntityTransaction;
  */
 public class DaApplication {
 	protected DaHibernateJpaPool pool;
-	
+
 	public DaApplication() {
 		try {
 			this.pool = new DaHibernateJpaPool();
@@ -18,15 +18,15 @@ public class DaApplication {
 			throw new multex.Failure("Error initializing Hibernate / JPA entity manager. Check db configuration.", ex);
 		}
 	}
-	
+
 	public DaPool getPool() {
 		return this.pool;
 	}
-	
+
 	public void beginTransaction() {
 		this.pool.getEntityManager().getTransaction().begin();
 	}
-	
+
 	public void endTransaction(boolean success) {
 		final EntityManager session = this.pool.getEntityManager();
 		final EntityTransaction transaction = session.getTransaction();

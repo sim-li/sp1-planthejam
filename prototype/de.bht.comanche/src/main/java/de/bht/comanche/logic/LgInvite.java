@@ -18,28 +18,35 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "Lg_Invite")
 public class LgInvite extends DaObject{
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private boolean isHost;
 	private boolean isIgnored;
-	
+
 	@NotNull
 	@ManyToOne
 	private LgUser user;
-	
+
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
 	private LgSurvey invite_survey;
+
+	public void removeInvite() {
+		user.removeInvite(this);
+	}
+
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
 
 	public boolean isHost() {
 		return isHost;
 	}
 
-	public LgInvite setHost(boolean isHost) {
-		this.isHost = isHost;
-		return this;
-	}
 
 	public boolean isIgnored() {
 		return isIgnored;
@@ -50,20 +57,21 @@ public class LgInvite extends DaObject{
 		return this;
 	}
 
-	public void removeInvite() {
-		user.removeInvite(this);
+	public LgInvite setHost(boolean isHost) {
+		this.isHost = isHost;
+		return this;
 	}
-	
+
 	@JsonIgnore
 	public LgUser getUser() {
 		return user;
 	}
-	
+
 	public LgInvite setUser(LgUser user) {
 		this.user = user;
 		return this;
 	}
-	
+
 	public LgSurvey getSurvey() {
 		return invite_survey;
 	}
@@ -110,5 +118,5 @@ public class LgInvite extends DaObject{
 			return false;
 		return true;
 	}	
-	
+
 }

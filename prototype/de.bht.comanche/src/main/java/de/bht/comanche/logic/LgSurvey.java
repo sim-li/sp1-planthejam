@@ -31,7 +31,7 @@ public class LgSurvey extends DaObject {
 	private String name;
 	private String description;
 	private int frequencyDist;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deadline;
 
@@ -42,14 +42,26 @@ public class LgSurvey extends DaObject {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private LgTimeUnit frequencyTimeUnit;
-	
+
 	@OneToMany(mappedBy="invite_survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<LgInvite> invites;
-	
+
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<LgTimePeriod> possibleTimePeriods;
+
+
+	public void addInvite(LgInvite invite) {
+		invites.add(invite);
+	}
+
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
 
 	public String getName() {
 		return name;
@@ -123,20 +135,16 @@ public class LgSurvey extends DaObject {
 		this.possibleTimePeriods = possibleTimePeriods;
 		return this;
 	}
-	
-	public void addInvite(LgInvite invite) {
-		invites.add(invite);
-	}
-	
+
 	public void updateWith(LgSurvey other) {
-			this.name = other.name;
-			this.description = other.description;
-			this.frequencyDist = other.frequencyDist;
-			this.deadline = other.deadline;
-			this.type = other.type;
-			this.frequencyTimeUnit = other.frequencyTimeUnit;
-			this.invites = other.invites;
-			this.possibleTimePeriods = other.possibleTimePeriods;
+		this.name = other.name;
+		this.description = other.description;
+		this.frequencyDist = other.frequencyDist;
+		this.deadline = other.deadline;
+		this.type = other.type;
+		this.frequencyTimeUnit = other.frequencyTimeUnit;
+		this.invites = other.invites;
+		this.possibleTimePeriods = other.possibleTimePeriods;
 	}
 
 }
