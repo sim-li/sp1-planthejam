@@ -16,10 +16,6 @@ import de.bht.comanche.logic.LgUser;
 public class ReUserService extends RestService {
 	final String USER_OID = "userOid";
 	
-	public ReUserService() {
-		super();
-	}
-
 	@Path("login")
 	@POST
 	@Consumes("application/json")
