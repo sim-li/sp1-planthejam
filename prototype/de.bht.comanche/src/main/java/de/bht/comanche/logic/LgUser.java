@@ -61,11 +61,12 @@ public class LgUser extends DaObject {
 		return this.password.equals(password);
 	}
 
-	public void update(LgUser i_user) {
+	public LgUser update(LgUser i_user) {
 		this.name = i_user.name;
 		this.tel = i_user.tel;
 		this.email = i_user.email;
 		this.password = i_user.password;
+		return this;
 	}
 
 	/**

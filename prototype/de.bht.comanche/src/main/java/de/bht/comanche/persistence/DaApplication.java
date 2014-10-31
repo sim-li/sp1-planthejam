@@ -1,7 +1,9 @@
 package de.bht.comanche.persistence;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 /**
  * @author Simon Lischka 
  * 
@@ -10,7 +12,7 @@ import javax.persistence.EntityTransaction;
  */
 public class DaApplication {
 	protected DaHibernateJpaPool pool;
-
+	
 	public DaApplication() {
 		try {
 			this.pool = new DaHibernateJpaPool();
@@ -18,7 +20,7 @@ public class DaApplication {
 			throw new multex.Failure("Error initializing Hibernate / JPA entity manager. Check db configuration.", ex);
 		}
 	}
-
+	
 	public DaPool getPool() {
 		return this.pool;
 	}

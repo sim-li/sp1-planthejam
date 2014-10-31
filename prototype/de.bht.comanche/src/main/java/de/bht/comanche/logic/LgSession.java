@@ -1,6 +1,7 @@
 package de.bht.comanche.logic;
 
 import static multex.MultexUtil.create;
+import java.util.List;
 import de.bht.comanche.persistence.DaApplication;
 import de.bht.comanche.persistence.DaObject;
 import de.bht.comanche.persistence.DaPool;
@@ -16,13 +17,14 @@ public class LgSession {
 		user = null;
 	}
 
-	public void registerUser(LgUser i_user) { // Throw exception when DB error
+	public LgSession  registerUser(LgUser i_user) { // Throw exception when DB error
 		// or failure when user already set in class
 		pool.insert(i_user);
 		this.user = i_user;
+		return this;
 	}
 
-	public void login(LgUser i_user) {
+	public LgSession login(LgUser i_user) {
 		//throw failure when user already set in class
 		this.user = pool.findOneByKey(LgUser.class, "NAME", i_user.getName());
 		if (this.user == null) {
@@ -31,6 +33,7 @@ public class LgSession {
 		if (!i_user.passwordMatchWith(this.user)) {
 			throw create(LgWrongPasswordExc.class, i_user.getName());
 		}
+		return this;
 	}
 	/**
 	 * No user with name "{0}" found in the database
@@ -57,10 +60,11 @@ public class LgSession {
 		application.endTransaction(success);
 	}
 
-	public void startFor(String userName) {
+	public LgSession startFor(String userName) {
 		// throw exc when user not found
 		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
 		System.out.println("Started Session for " + user.getName());
+		return this;
 	}
 
 	/**

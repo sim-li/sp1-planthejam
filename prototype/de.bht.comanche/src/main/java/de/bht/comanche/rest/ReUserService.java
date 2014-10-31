@@ -29,9 +29,9 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-				session.login(i_user); //throw exc when login failure
-				final LgUser o_user = session.getUser();
-				RestService.setUserName(request, o_user.getName());
+				 //throw exc when login failure
+				final LgUser o_user = session.login(i_user).getUser();
+				setUserName(request, o_user.getName());
 				return o_user;
 			}
 		}.getResult();
@@ -46,9 +46,8 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-					session.registerUser(i_user);
-					LgUser o_user = session.getUser();
-					RestService.setUserName(request, o_user.getName());
+					final LgUser o_user = session.registerUser(i_user).getUser();
+					setUserName(request, o_user.getName());
 					return o_user;
 			}
 		}.getResult();
@@ -63,10 +62,12 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-					session.startFor(RestService.getUserName(request)); // throw Exception if no info in request
-					final LgUser user = session.getUser();
-					user.delete(); // must throw if Exception if null or user not found
-					RestService.removeUserName(request);
+				 // throw Exception if no info in request 
+				//must throw if Exception if null or user not found
+				session.startFor(getUserName(request))
+				 	.getUser()
+				 		.delete(); 
+				removeUserName(request);
 				return null;
 			}
 		}.getResult();
@@ -81,11 +82,10 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-				    session.startFor(RestService.getUserName(request));
-				    final LgUser user = session.getUser();
-					user.update(i_user);
-					RestService.setUserName(request, user.getName()); //Bug on multiple updates!
-					//How do we transfer name back with HTTP Serv request?
+				    final LgUser user = session.startFor(getUserName(request))
+				    		.getUser()
+				    			.update(i_user);
+				    setUserName(request, user.getName());
 				return null;
 			}
 		}.getResult();

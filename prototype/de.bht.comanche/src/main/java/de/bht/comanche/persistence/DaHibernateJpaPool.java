@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import de.bht.comanche.rest.RestService;
 import multex.Failure;
 /**
  * 
@@ -16,20 +17,21 @@ import multex.Failure;
 // Contract: Every newly retrieved object gets this pooL!
 
 public class DaHibernateJpaPool implements DaPool {
-	public static final String persistenceUnitName = "planthejam.jpa";
 	private EntityManager entityManager;
 	private EntityManagerFactory entityManagerFactory;
 	//Runtime exc -> Failure
 	//checked exc -> multex exc - 
+	
 	public DaHibernateJpaPool() {
 		try {
-			this.entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
+			this.entityManagerFactory = DaEmProvider.getInstance().getEntityManagerFactory();
 			this.entityManager = entityManagerFactory.createEntityManager();
 		} catch (Exception ex) {//create benutzen
 			throw new Failure("Could not initialize JPA Entity Manager.", ex);
 		}
 	}
 
+	
 	@Override
 	public void insert(DaObject io_object) {
 		this.entityManager.persist(io_object);

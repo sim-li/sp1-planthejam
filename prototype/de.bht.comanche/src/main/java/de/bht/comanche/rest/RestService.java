@@ -1,14 +1,15 @@
 package de.bht.comanche.rest;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import de.bht.comanche.persistence.DaApplication;
 
 
 public class RestService {
 	private static final String USER_NAME = "user_name";
-	
-	public RestService() {
-	}
 
 	public static String getUserName(HttpServletRequest request) {
 		final HttpSession httpSession = request.getSession();
