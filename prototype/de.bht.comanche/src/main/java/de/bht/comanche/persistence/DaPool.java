@@ -8,9 +8,11 @@ public interface DaPool {
 	static final long createdOid = 0;
 	static final long deletedOid = -1; 
 
+	void reattach(DaObject io_object);
 	void insert(DaObject io_object);
-	void save(DaObject io_object);
+	public <E extends DaObject> E save(DaObject io_object); 
 	boolean delete(DaObject io_object);
+	boolean contains(DaObject io_object);
 
 	<E extends DaObject> E find(Class<E> persistentClass, Long oid);
 	<E extends DaObject> List<E> findAll(Class<E> persistentClass);

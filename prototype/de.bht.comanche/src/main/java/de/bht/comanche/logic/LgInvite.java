@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -29,11 +30,12 @@ public class LgInvite extends DaObject{
 	private LgUser user;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private LgSurvey invite_survey;
 
-	public void removeInvite() {
+	public void delete() {
 		user.removeInvite(this);
+		this.getPool().delete(this); //throw exc when delete errror
 	}
 
 	/**
@@ -80,7 +82,15 @@ public class LgInvite extends DaObject{
 		this.invite_survey = survey;
 		return this;
 	}
-
+	
+	public LgInvite updateWith(LgInvite other) {
+		this.invite_survey = other.invite_survey;
+		this.isHost = other.isHost;
+		this.isIgnored = other.isIgnored;
+		this.user = other.user;
+		return this;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

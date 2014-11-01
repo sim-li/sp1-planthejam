@@ -25,7 +25,7 @@ public class ReInviteService extends RestService {
 	@Path("getInvites")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public List<LgInvite> getInvites(@Context final HttpServletRequest request) {
+	public List<LgInvite> get(@Context final HttpServletRequest request) {
 		final LgSession session = new LgSession();
 		return new LgTransaction<List<LgInvite>>(session) {
 			@Override
@@ -37,65 +37,37 @@ public class ReInviteService extends RestService {
 		}.getResult();
 	}
 	
-//	@Path("save")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgInvite saveInvite(final LgInvite receivedInvite) {
-//		final DaInvite daInvite = factory.getDaInvite();
-//		final DaUser daUser = factory.getDaUser();
-//		final DaSurvey daSurvey = factory.getDaSurvey();
-//		daUser.setPool(daInvite.getPool());
-//		daSurvey.setPool(daInvite.getPool());
-//		return new LgTransaction<LgInvite>(daInvite.getPool()) {
-//			public LgInvite executeWithThrows() throws multex.Exc {
-//				LgInvite existingInvite = daInvite.find(receivedInvite.getOid());
-//			    if (existingInvite == null) {
-//			    	daSurvey.save(receivedInvite.getSurvey());
-//			    	daInvite.save(receivedInvite);
-//			    	
-//			    } else {
-//			    	LgSurvey existingSurvey = receivedInvite.getSurvey();
-//			    	LgUser existingUser = receivedInvite.getUser();
-//			        existingInvite.setSurvey(existingSurvey);
-//			        existingSurvey.addInvite(existingInvite); 
-//			        existingInvite.setUser(existingUser);
-//			        existingUser.addInvite(existingInvite);
-//			    }
-////			    
-////			    
-////				} catch (Exception ex) {
-////					throw create(DaInviteNotSavedExc.class, ex, createTimeStamp(), newInviteFromClient.getOid(), 
-////							newInviteFromClient.getUser().getOid());
-////				}
-//				return existingInvite;
-//			}
-//		}.execute();
-//	}
-//	//-------------------------------------multex ready---------
-//	@Path("delete")
-//	@DELETE
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgInvite deleteUser(final long inviteFromClientOid) {
-//		final DaInvite daInvite = factory.getDaInvite();
-//		return new LgTransaction<LgInvite>(daInvite.getPool()) {
-//			public LgInvite executeWithThrows() throws multex.Exc {
-//				LgInvite inviteFromDb = null;
-//				try {
-//					inviteFromDb = daInvite.find(inviteFromClientOid);
-//					inviteFromDb.removeInvite();
-//					daInvite.delete(inviteFromDb);
-//				} catch (DaOidNotFoundExc exc) {
-//					 throw create(DaInviteIdNotFoundExc.class, createTimeStamp(), inviteFromClientOid);
-//				} catch (Exception ex) {
-//					throw create(DaInviteNotDeletedExc.class, ex, createTimeStamp(), inviteFromClientOid);
-//				}
-//				return null;
-//			}
-//		}.execute();
-//	}
-//	
+	@Path("save")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgInvite save(final LgInvite invite, @Context final HttpServletRequest request) {
+		final LgSession session = new LgSession();
+		return new LgTransaction<LgInvite>(session) {
+			public LgInvite execute() {
+				return session.startFor(RestService.getUserName(request))
+						.getUser()
+							.saveInvite(invite);
+			}
+		}.getResult();
+	}
+	
+	@Path("delete")
+	@DELETE
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgInvite delete(final long oid, @Context final HttpServletRequest request) {
+		final LgSession session = new LgSession();
+		return new LgTransaction <LgInvite>(session) {
+			public LgInvite execute() {
+				session.startFor(RestService.getUserName(request))
+						.getUser()
+							.deleteInvite(oid);
+				return null;
+			}
+		}.getResult();
+	}
+	
 //	private String createTimeStamp() {
 //		return new Date(System.currentTimeMillis()).toString();
 //	}

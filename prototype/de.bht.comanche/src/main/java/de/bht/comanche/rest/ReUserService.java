@@ -80,7 +80,7 @@ public class ReUserService extends RestService {
 			public LgUser execute() throws multex.Exc {
 				    final LgUser user = session.startFor(getUserName(request))
 				    		.getUser()
-				    			.update(i_user);
+				    			.updateWith(i_user);
 				    setUserName(request, user.getName());
 				return null;
 			}

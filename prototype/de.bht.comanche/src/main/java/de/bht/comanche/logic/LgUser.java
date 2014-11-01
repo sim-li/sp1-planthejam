@@ -45,13 +45,6 @@ public class LgUser extends DaObject {
 		this.getPool().delete(this); //throw exc when delete errror
 	}
 
-	public boolean addInvite(LgInvite invite) {
-		return this.invites.add(invite);
-	}
-
-	public boolean removeInvite(LgInvite invite) {
-		return this.invites.remove(invite);
-	}
 
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
@@ -61,12 +54,31 @@ public class LgUser extends DaObject {
 		return this.password.equals(password);
 	}
 
-	public LgUser update(LgUser i_user) {
-		this.name = i_user.name;
-		this.tel = i_user.tel;
-		this.email = i_user.email;
-		this.password = i_user.password;
-		return this;
+	public LgInvite saveInvite(LgInvite other) {
+		return getPool().save(other);
+	}
+
+	public LgInvite addInvite(LgInvite invite) {
+		invites.add(invite);
+		return invite;
+	}
+
+	public void removeInvite(LgInvite invite) {
+		invites.remove(invite);
+	}
+	
+	public void deleteInvite(long oid) {
+		final LgInvite invite = getPool().find(LgInvite.class, oid);
+		deleteInvite(invite);
+	}
+
+	public void deleteInvite(LgInvite invite) {
+		getPool().reattach(invite);
+		invite.delete();
+	}
+
+	public LgUser updateWith(LgUser user) {
+		return getPool().save(user);
 	}
 
 	/**

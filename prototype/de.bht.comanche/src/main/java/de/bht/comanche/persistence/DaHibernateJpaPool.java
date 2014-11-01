@@ -30,7 +30,12 @@ public class DaHibernateJpaPool implements DaPool {
 			throw new Failure("Could not initialize JPA Entity Manager.", ex);
 		}
 	}
-
+    
+	@Override
+	public void reattach(DaObject io_object) {
+	    io_object.setPool(this);
+	    this.entityManager.merge(io_object);
+	}
 	
 	@Override
 	public void insert(DaObject io_object) {
@@ -38,10 +43,15 @@ public class DaHibernateJpaPool implements DaPool {
 	}
 
 	@Override
-	public void save(DaObject io_object) {
+	public boolean contains(DaObject io_object) {
+		return this.contains(io_object);
+	}
+	
+	@Override
+	public <E extends DaObject> E save(DaObject io_object) {
 		EntityManager session = getEntityManager();
 		io_object.setPool(this);
-		session.merge(io_object);
+		return (E) session.merge(io_object);
 	}
 
 	@Override
@@ -49,7 +59,6 @@ public class DaHibernateJpaPool implements DaPool {
 		EntityManager session = getEntityManager();
 		final boolean isPersistent = session.contains(io_object);
 		session.remove(isPersistent ? io_object : session.merge(io_object));
-		io_object.setOid(DaPool.deletedOid);
 		return isPersistent;
 	}
 

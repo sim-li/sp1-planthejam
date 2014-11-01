@@ -63,7 +63,6 @@ public class LgSession {
 	public LgSession startFor(String userName) {
 		// throw exc when user not found
 		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
-		System.out.println("Started Session for " + user.getName());
 		return this;
 	}
 
@@ -78,8 +77,7 @@ public class LgSession {
 		return pool;
 	}
 
-
-	public LgUser getUser() { // throw exc when user not present
+	public LgUser getUser() {
 		return user;
 	}
 }
