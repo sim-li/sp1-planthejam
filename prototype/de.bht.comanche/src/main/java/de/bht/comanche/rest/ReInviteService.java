@@ -47,7 +47,7 @@ public class ReInviteService extends RestService {
 			public LgInvite execute() {
 				return session.startFor(RestService.getUserName(request))
 						.getUser()
-							.get(invite)
+							.set(invite)
 								.save();
 			}
 		}.getResult();

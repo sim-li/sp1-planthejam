@@ -44,37 +44,25 @@ public class LgUser extends DaObject {
 	}
 	
 	public LgInvite getInvite(long oid) {
-//		for (LgInvite invite : getInvites()) {
-//			if (oid == invite.getOid()) {
-//				return (LgInvite) invite.attach(getPool());
-//			}
-//		}
-//		return null; //Throw exc
-		return getPool().find(LgInvite.class, oid); 
-	}
-	
-	public LgInvite get(LgInvite invite) {
-		if (invite.getOid() <= 0) {
-			return (LgInvite) invite.attach(getPool());
+		for (LgInvite invite : getInvites()) {
+			if (oid == invite.getOid()) {
+				return (LgInvite) invite.attach(getPool());
+			}
 		}
-		return getInvite(invite.getOid()); //Expects same ID but not equal object
-	}//Change to SET //Additionally implement GET with complete name!
-	
-	
-	public LgInvite add(LgInvite invite) {
-		invite.attach(getPool());
-		return invite.save();
+		return null; //Throw exc
 	}
-
-	protected void remove(LgInvite other){
-		final LgInvite invite = get(other);
-		invite.delete();
+	
+	public LgInvite set(LgInvite invite) {
+		return (LgInvite) invite.attach(getPool());
 	}
 	
 	public void delete() {
 		this.getPool().delete(this); 
 	}
-
+    
+	public void remove(final LgInvite invite) {
+		invites.remove(invite);
+	}
 
 	/**
 	 * --------------------------------------------------------------------------------------------
