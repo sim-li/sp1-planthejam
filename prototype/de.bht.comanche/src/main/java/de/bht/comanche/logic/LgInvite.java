@@ -31,13 +31,36 @@ public class LgInvite extends DaObject{
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private LgSurvey invite_survey;
+	private LgSurvey survey;
 
+	public LgInvite() {}
+	
+	public LgInvite(final long oid) {
+		this.oid = oid;
+	}
+	
+	public LgInvite save() {
+		return getPool().save(this);
+	}
+	
 	public void delete() {
-		user.removeInvite(this);
+		user.remove(this);
 		this.getPool().delete(this); //throw exc when delete errror
 	}
+	
+	
+	public LgSurvey getSurvey(long oid) { //secure
+		// FIND WITH JPA+CHECK IF LINKED?
+		if (this.survey.getOid() == oid) {
+			return this.survey;
+		}
+		return null; //throw exception (not same)
+	}
 
+	public LgSurvey get(LgSurvey survey) { //secure
+		return getSurvey(survey.getOid());
+	}
+	
 	/**
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -75,16 +98,16 @@ public class LgInvite extends DaObject{
 	}
 
 	public LgSurvey getSurvey() {
-		return invite_survey;
+		return survey;
 	}
 
 	public LgInvite setSurvey(LgSurvey survey) {
-		this.invite_survey = survey;
+		this.survey = survey;
 		return this;
 	}
 	
 	public LgInvite updateWith(LgInvite other) {
-		this.invite_survey = other.invite_survey;
+		this.survey = other.survey;
 		this.isHost = other.isHost;
 		this.isIgnored = other.isIgnored;
 		this.user = other.user;
@@ -96,7 +119,7 @@ public class LgInvite extends DaObject{
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result
-				+ ((invite_survey == null) ? 0 : invite_survey.hashCode());
+				+ ((survey == null) ? 0 : survey.hashCode());
 		result = prime * result + (isHost ? 1231 : 1237);
 		result = prime * result + (isIgnored ? 1231 : 1237);
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
@@ -112,10 +135,10 @@ public class LgInvite extends DaObject{
 		if (getClass() != obj.getClass())
 			return false;
 		LgInvite other = (LgInvite) obj;
-		if (invite_survey == null) {
-			if (other.invite_survey != null)
+		if (survey == null) {
+			if (other.survey != null)
 				return false;
-		} else if (!invite_survey.equals(other.invite_survey))
+		} else if (!survey.equals(other.survey))
 			return false;
 		if (isHost != other.isHost)
 			return false;

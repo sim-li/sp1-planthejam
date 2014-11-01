@@ -62,4 +62,10 @@ public class LgTimePeriod extends DaObject {
 		return this;
 	}
 
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

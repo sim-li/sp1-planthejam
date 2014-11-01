@@ -40,13 +40,15 @@ public abstract class DaObject implements Serializable {
 	@SuppressWarnings("serial")
 	public static final class OwningPoolChangedExc extends multex.Exc {}
 
-	//Make protected & refactor?
-	public void setPool(DaPool pool) throws multex.Exc {
+	public DaObject attach(DaPool pool) throws multex.Exc {
 		if (this.pool != null && pool != this.pool) {
 			throw create(OwningPoolChangedExc.class, this.getClass().getName(), this.getOid());
 		}
 		this.pool = pool;
+		return this;
 	}
+	
+	public abstract void delete();
 
 	protected DaPool getPool() {
 		return pool;

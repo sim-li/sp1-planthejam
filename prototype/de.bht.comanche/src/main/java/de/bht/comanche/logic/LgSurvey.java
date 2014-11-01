@@ -43,7 +43,8 @@ public class LgSurvey extends DaObject {
 	@Enumerated(EnumType.STRING)
 	private LgTimeUnit frequencyTimeUnit;
 
-	@OneToMany(mappedBy="invite_survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//Is survey from invite class add comment
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<LgInvite> invites;
 
@@ -51,9 +52,10 @@ public class LgSurvey extends DaObject {
 	@JsonIgnore
 	private List<LgTimePeriod> possibleTimePeriods;
 
-
-	public void addInvite(LgInvite invite) {
-		invites.add(invite);
+	//TODO
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -146,5 +148,4 @@ public class LgSurvey extends DaObject {
 		this.invites = other.invites;
 		this.possibleTimePeriods = other.possibleTimePeriods;
 	}
-
 }

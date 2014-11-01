@@ -8,7 +8,6 @@ public interface DaPool {
 	static final long createdOid = 0;
 	static final long deletedOid = -1; 
 
-	void reattach(DaObject io_object);
 	void insert(DaObject io_object);
 	public <E extends DaObject> E save(DaObject io_object); 
 	boolean delete(DaObject io_object);

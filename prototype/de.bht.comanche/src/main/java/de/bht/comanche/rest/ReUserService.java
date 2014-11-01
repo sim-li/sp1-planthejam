@@ -42,7 +42,7 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-					final LgUser o_user = session.registerUser(i_user).getUser();
+					final LgUser o_user = session.register(i_user).getUser();
 					setUserName(request, o_user.getName());
 					return o_user;
 			}
@@ -79,8 +79,7 @@ public class ReUserService extends RestService {
 			@Override
 			public LgUser execute() throws multex.Exc {
 				    final LgUser user = session.startFor(getUserName(request))
-				    		.getUser()
-				    			.updateWith(i_user);
+				    	.save(i_user);
 				    setUserName(request, user.getName());
 				return null;
 			}

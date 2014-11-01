@@ -32,12 +32,6 @@ public class DaHibernateJpaPool implements DaPool {
 	}
     
 	@Override
-	public void reattach(DaObject io_object) {
-	    io_object.setPool(this);
-	    this.entityManager.merge(io_object);
-	}
-	
-	@Override
 	public void insert(DaObject io_object) {
 		this.entityManager.persist(io_object);
 	}
@@ -50,7 +44,7 @@ public class DaHibernateJpaPool implements DaPool {
 	@Override
 	public <E extends DaObject> E save(DaObject io_object) {
 		EntityManager session = getEntityManager();
-		io_object.setPool(this);
+		io_object.attach(this);
 		return (E) session.merge(io_object);
 	}
 
@@ -69,7 +63,7 @@ public class DaHibernateJpaPool implements DaPool {
 		if (result == null) {
 			//			throw create(DaOidNotFoundExc.class, i_oid);
 		}
-		result.setPool(this);
+		result.attach(this);
 		return (E) result;
 	}
 
@@ -80,7 +74,7 @@ public class DaHibernateJpaPool implements DaPool {
 		final Query q = session.createQuery("SELECT e FROM " + persistentClass.getSimpleName() + "e", persistentClass); 
 		final List<E> results = q.getResultList();
 		for (E item : results) {
-			item.setPool(this); //Test!
+			item.attach(this); //Test!
 		}
 		return results;
 	}
@@ -90,7 +84,7 @@ public class DaHibernateJpaPool implements DaPool {
 			String keyFieldName, Object keyFieldValue) {
 		final List<E> results = findManyByKey(persistentClass, keyFieldName, keyFieldValue);
 		final E result = results.get(0);
-		result.setPool(this);
+		result.attach(this);
 		return result;
 	}
 
@@ -104,7 +98,7 @@ public class DaHibernateJpaPool implements DaPool {
 		q.setParameter("keyValue", keyFieldValue);
 		final List<E> results = q.getResultList();
 		for (E item : results) {
-			item.setPool(this); //Test!
+			item.attach(this); //Test!
 		}
 		return results;
 	}
@@ -124,7 +118,7 @@ public class DaHibernateJpaPool implements DaPool {
 		@SuppressWarnings("unchecked")
 		final List<E> results = query.getResultList();
 		for (E item : results) {
-			item.setPool(this); //Test!
+			item.attach(this); //Test!
 		}
 		return results; 
 	}

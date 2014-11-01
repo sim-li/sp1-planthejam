@@ -31,21 +31,6 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
-	@JsonIgnore
-	public List<LgInvite> getInvites() {
-		return invites;
-	}
-
-	public LgUser setInvites(List<LgInvite> invites) {
-		this.invites = invites;
-		return this;
-	}
-
-	public void delete() {
-		this.getPool().delete(this); //throw exc when delete errror
-	}
-
-
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
 		if (this.password == null) {
@@ -54,32 +39,42 @@ public class LgUser extends DaObject {
 		return this.password.equals(password);
 	}
 
-	public LgInvite saveInvite(LgInvite other) {
-		return getPool().save(other);
-	}
-
-	public LgInvite addInvite(LgInvite invite) {
-		invites.add(invite);
-		return invite;
-	}
-
-	public void removeInvite(LgInvite invite) {
-		invites.remove(invite);
+	public LgUser save() {
+		return getPool().save(this);
 	}
 	
-	public void deleteInvite(long oid) {
-		final LgInvite invite = getPool().find(LgInvite.class, oid);
-		deleteInvite(invite);
+	public LgInvite getInvite(long oid) {
+//		for (LgInvite invite : getInvites()) {
+//			if (oid == invite.getOid()) {
+//				return (LgInvite) invite.attach(getPool());
+//			}
+//		}
+//		return null; //Throw exc
+		return getPool().find(LgInvite.class, oid); 
+	}
+	
+	public LgInvite get(LgInvite invite) {
+		if (invite.getOid() <= 0) {
+			return (LgInvite) invite.attach(getPool());
+		}
+		return getInvite(invite.getOid()); //Expects same ID but not equal object
+	}//Change to SET //Additionally implement GET with complete name!
+	
+	
+	public LgInvite add(LgInvite invite) {
+		invite.attach(getPool());
+		return invite.save();
 	}
 
-	public void deleteInvite(LgInvite invite) {
-		getPool().reattach(invite);
+	protected void remove(LgInvite other){
+		final LgInvite invite = get(other);
 		invite.delete();
 	}
-
-	public LgUser updateWith(LgUser user) {
-		return getPool().save(user);
+	
+	public void delete() {
+		this.getPool().delete(this); 
 	}
+
 
 	/**
 	 * --------------------------------------------------------------------------------------------
@@ -87,7 +82,12 @@ public class LgUser extends DaObject {
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
-
+	
+	@JsonIgnore
+	public List<LgInvite> getInvites() {
+		return invites;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -181,5 +181,6 @@ public class LgUser extends DaObject {
 				", invites=" + invites + "]" +
 				"OID>: " + getOid();
 	}
+
 
 }

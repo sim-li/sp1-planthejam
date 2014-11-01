@@ -17,11 +17,19 @@ public class LgSession {
 		user = null;
 	}
 
-	public LgSession  registerUser(LgUser i_user) { // Throw exception when DB error
+	public LgSession register(LgUser i_user) { // Throw exception when DB error
 		// or failure when user already set in class
 		pool.insert(i_user);
 		this.user = i_user;
 		return this;
+	}
+	
+	//Parents can save their children through delegation
+	public LgUser save(final LgUser user) {
+		user.attach(getPool());
+		final LgUser o_user = user.save(); //can throw exception
+		this.user = o_user;
+		return o_user; 
 	}
 
 	public LgSession login(LgUser i_user) {
@@ -35,6 +43,7 @@ public class LgSession {
 		}
 		return this;
 	}
+	
 	/**
 	 * No user with name "{0}" found in the database
 	 */
@@ -49,7 +58,7 @@ public class LgSession {
 	}
 
 	public void Object(DaObject object) {
-		object.setPool(pool);
+		object.attach(pool);
 	}
 
 	public void beginTransaction() {
