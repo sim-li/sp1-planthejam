@@ -61,6 +61,7 @@ angular.module("myApp")
                     $scope.session.user = user;
                     $scope.session.state.isLoggedIn = true;
                     $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
+                    $location.path('#/logedin');
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
                     console.log(user);

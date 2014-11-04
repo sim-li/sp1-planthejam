@@ -7,9 +7,8 @@
 
 
 "use strict";
-
 angular.module("myApp")
-    .controller("ctrl", ["$scope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap", 
+    .controller("ctrl", ["$scope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap",
         function($scope, $log, Survey, TimeUnit, Type, patterns, dialogMap) {
 
         // make services available for the use in html
@@ -67,5 +66,5 @@ angular.module("myApp")
             $log.debug($scope.session)
         };
 
-    }]);
-
+    }])
+    

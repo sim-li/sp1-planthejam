@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
+angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "restModule"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -25,5 +25,22 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
         return {
             removeElementFrom: removeElementFrom
-        };
-    });
+        }
+    })
+    .config(function($routeProvider) {
+        $routeProvider
+            .when('/login', {
+                templateUrl : 'pages/login.html',
+                controller  : 'loginCtrl'
+            })
+            .when('/register', {
+                templateUrl : 'pages/register.html',
+                controller  : 'loginCtrl'
+            })
+            .when('/logedin', {
+                templateUrl : 'pages/logedin.html',
+                controller  : 'loggedInCtrl'
+            })
+
+    })
+    ;
