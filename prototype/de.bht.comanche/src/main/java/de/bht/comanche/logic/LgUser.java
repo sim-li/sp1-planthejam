@@ -21,7 +21,6 @@ import de.bht.comanche.persistence.DaObject;
 @Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
 public class LgUser extends DaObject {
 
-	private transient LgSession session;
 	private static final long serialVersionUID = 1L;
 	@Column(unique=true, nullable=false)
 	private String name;
@@ -32,10 +31,12 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
-	public LgUser save(final LgUser user) {
-		final LgUser o_user = user.save(); //can throw exception
-		session.setUser(o_user);
-		return o_user; 
+	public LgInvite save(final LgInvite invite) {
+		return attach(invite).save();
+	}
+	
+	public void deleteInvite(final long oid) {
+		getInvite(oid).delete();
 	}
 	
 	public boolean passwordMatchWith(LgUser user) {
@@ -60,10 +61,6 @@ public class LgUser extends DaObject {
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
-
-	public void setSession(LgSession session) {
-		this.session = session;
-	}
 
 	@JsonIgnore
 	public List<LgInvite> getInvites() {

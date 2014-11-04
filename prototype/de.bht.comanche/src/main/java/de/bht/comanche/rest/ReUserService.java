@@ -60,7 +60,7 @@ public class ReUserService extends RestService {
 			public LgUser execute() throws multex.Exc {
 				 // throw Exception if no info in request 
 				//must throw if Exception if null or user not found
-				session.startFor(getUserName(request)).delete(); 
+				session.startFor(getUserName(request)).getUser().delete(); 
 				removeUserName(request);
 				return null;
 			}
