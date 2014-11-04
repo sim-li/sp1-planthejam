@@ -26,7 +26,7 @@ public class ReUserService extends RestService {
 			@Override
 			public LgUser execute() throws multex.Exc {
 				 //throw exc when login failure
-				final LgUser o_user = session.login(i_user).getUser();
+				final LgUser o_user = session.login(i_user);
 				setUserName(request, o_user.getName());
 				return o_user;
 			}
@@ -42,7 +42,7 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(session) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-					final LgUser o_user = session.register(i_user).getUser();
+					final LgUser o_user = session.register(i_user);
 					setUserName(request, o_user.getName());
 					return o_user;
 			}
@@ -60,9 +60,7 @@ public class ReUserService extends RestService {
 			public LgUser execute() throws multex.Exc {
 				 // throw Exception if no info in request 
 				//must throw if Exception if null or user not found
-				session.startFor(getUserName(request))
-				 	.getUser()
-				 		.delete(); 
+				session.startFor(getUserName(request)).delete(); 
 				removeUserName(request);
 				return null;
 			}

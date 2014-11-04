@@ -50,7 +50,6 @@ public class LgInvite extends DaObject{
 	
 	
 	public LgSurvey getSurvey(long oid) { //secure
-		// FIND WITH JPA+CHECK IF LINKED?
 		if (this.survey.getOid() == oid) {
 			return this.survey;
 		}

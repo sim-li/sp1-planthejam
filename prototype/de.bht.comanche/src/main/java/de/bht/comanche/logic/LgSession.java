@@ -16,23 +16,15 @@ public class LgSession {
 		pool = application.getPool();
 		user = null;
 	}
-
-	public LgSession register(LgUser i_user) { // Throw exception when DB error
+	
+	public LgUser register(LgUser i_user) { // Throw exception when DB error
 		// or failure when user already set in class
 		pool.insert(i_user);
 		this.user = i_user;
-		return this;
+		return this.user;
 	}
 	
-	//Parents can save their children through delegation
-	public LgUser save(final LgUser user) {
-		user.attach(getPool());
-		final LgUser o_user = user.save(); //can throw exception
-		this.user = o_user;
-		return o_user; 
-	}
-
-	public LgSession login(LgUser i_user) {
+	public LgUser login(LgUser i_user) {
 		//throw failure when user already set in class
 		this.user = pool.findOneByKey(LgUser.class, "NAME", i_user.getName());
 		if (this.user == null) {
@@ -41,7 +33,7 @@ public class LgSession {
 		if (!i_user.passwordMatchWith(this.user)) {
 			throw create(LgWrongPasswordExc.class, i_user.getName());
 		}
-		return this;
+		return this.user;
 	}
 	
 	/**
@@ -57,10 +49,6 @@ public class LgSession {
 	public static final class LgWrongPasswordExc extends multex.Exc {
 	}
 
-	public void Object(DaObject object) {
-		object.attach(pool);
-	}
-
 	public void beginTransaction() {
 		application.beginTransaction();
 	}
@@ -69,10 +57,10 @@ public class LgSession {
 		application.endTransaction(success);
 	}
 
-	public LgSession startFor(String userName) {
+	public LgUser startFor(String userName) {
 		// throw exc when user not found
 		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
-		return this;
+		return user;
 	}
 
 	/**
@@ -88,5 +76,9 @@ public class LgSession {
 
 	public LgUser getUser() {
 		return user;
+	}
+	
+	public void setUser(LgUser user) {
+		this.user = user;
 	}
 }

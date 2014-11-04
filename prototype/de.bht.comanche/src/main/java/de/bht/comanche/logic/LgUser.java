@@ -21,6 +21,7 @@ import de.bht.comanche.persistence.DaObject;
 @Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
 public class LgUser extends DaObject {
 
+	private transient LgSession session;
 	private static final long serialVersionUID = 1L;
 	@Column(unique=true, nullable=false)
 	private String name;
@@ -31,6 +32,12 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
+	public LgUser save(final LgUser user) {
+		final LgUser o_user = user.save(); //can throw exception
+		session.setUser(o_user);
+		return o_user; 
+	}
+	
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
 		if (this.password == null) {
@@ -39,25 +46,8 @@ public class LgUser extends DaObject {
 		return this.password.equals(password);
 	}
 
-	public LgUser save() {
-		return getPool().save(this);
-	}
-	
 	public LgInvite getInvite(long oid) {
-		for (LgInvite invite : getInvites()) {
-			if (oid == invite.getOid()) {
-				return (LgInvite) invite.attach(getPool());
-			}
-		}
-		return null; //Throw exc
-	}
-	
-	public LgInvite set(LgInvite invite) {
-		return (LgInvite) invite.attach(getPool());
-	}
-	
-	public void delete() {
-		this.getPool().delete(this); 
+		return search(getInvites(), oid);
 	}
     
 	public void remove(final LgInvite invite) {
@@ -70,7 +60,11 @@ public class LgUser extends DaObject {
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
-	
+
+	public void setSession(LgSession session) {
+		this.session = session;
+	}
+
 	@JsonIgnore
 	public List<LgInvite> getInvites() {
 		return invites;

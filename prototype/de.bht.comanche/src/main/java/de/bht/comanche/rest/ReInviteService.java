@@ -31,7 +31,6 @@ public class ReInviteService extends RestService {
 			@Override
 			public List<LgInvite> execute() throws multex.Exc {
 				return session.startFor(RestService.getUserName(request))
-					.getUser()
 						.getInvites();
 			}
 		}.getResult();
@@ -46,8 +45,7 @@ public class ReInviteService extends RestService {
 		return new LgTransaction<LgInvite>(session) {
 			public LgInvite execute() {
 				return session.startFor(RestService.getUserName(request))
-						.getUser()
-							.set(invite)
+							.attach(invite)
 								.save();
 			}
 		}.getResult();
@@ -62,7 +60,6 @@ public class ReInviteService extends RestService {
 		return new LgTransaction <LgInvite>(session) {
 			public LgInvite execute() {
 				session.startFor(RestService.getUserName(request))
-						.getUser()
 							.getInvite(oid)
 								.delete();
 				return null;

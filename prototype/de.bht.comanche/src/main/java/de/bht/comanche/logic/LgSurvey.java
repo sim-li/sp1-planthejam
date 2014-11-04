@@ -148,4 +148,10 @@ public class LgSurvey extends DaObject {
 		this.invites = other.invites;
 		this.possibleTimePeriods = other.possibleTimePeriods;
 	}
+
+	@Override
+	public <E extends DaObject> E save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

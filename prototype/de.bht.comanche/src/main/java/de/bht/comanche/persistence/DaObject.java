@@ -1,12 +1,18 @@
 package de.bht.comanche.persistence;
 
-import java.io.Serializable;
 import static multex.MultexUtil.create;
+
+import java.io.Serializable;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+
+import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgUser;
 
 /**
  * @author Simon Lischka
@@ -28,13 +34,6 @@ public abstract class DaObject implements Serializable {
 	}
 
 	/**
-	 * --------------------------------------------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
-
-	/**
 	 *  Owning pool changed. Object of class "{0}" and with OID "{1}" 
 	 */
 	@SuppressWarnings("serial")
@@ -48,8 +47,33 @@ public abstract class DaObject implements Serializable {
 		return this;
 	}
 	
-	public abstract void delete();
+	public <E extends DaObject> E attach(E item) {
+		return (E) item.attach(getPool());
+	}
+	
+	public void delete() {
+		this.getPool().delete(this);
+	}
+	
+	public <E extends DaObject> E save() {
+		return getPool().save(this);
+	}
+	
+	public <E extends DaObject> E search(List <E> list, long oid) {
+		for (DaObject item : list) {
+			if (oid == item.getOid()) {
+				return (E) item.attach(getPool());
+			}
+		}
+		return null;
+	}
 
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
 	protected DaPool getPool() {
 		return pool;
 	}
@@ -69,7 +93,6 @@ public abstract class DaObject implements Serializable {
 	public boolean isDeleted() {
 		return oid == DaPool.deletedOid;
 	}
-
 
 	@Override
 	public int hashCode() {
