@@ -53,3 +53,6 @@ label {
 .calc input {
     width: 5em;
 }
+#filter{
+ width: 30%;
+}
