@@ -26,7 +26,7 @@ public class ReUserService extends RestService {
 			public LgUser execute() throws multex.Exc {
 				 //throw exc when login failure
 				final LgUser o_user = getSession()
-						.login(i_user);
+				    .login(i_user);
 				setUserName(request, o_user.getName());
 				return o_user;
 			}
@@ -42,7 +42,7 @@ public class ReUserService extends RestService {
 			@Override
 			public LgUser execute() throws multex.Exc {
 					final LgUser o_user = getSession()
-							.register(i_user);
+						.register(i_user);
 					setUserName(request, o_user.getName());
 					return o_user;
 			}
@@ -60,7 +60,7 @@ public class ReUserService extends RestService {
 				 // throw Exception if no info in request 
 				//must throw if Exception if null or user not found
 			    startSession()
-			         .deleteAccount();
+			        .deleteAccount();
 				removeUserName(request);
 				return null;
 			}
