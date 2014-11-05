@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
 
+	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.bht.comanche</groupId>
 	<artifactId>plan-the-jam</artifactId>
 	<version>1.0-SNAPSHOT</version>
@@ -18,10 +18,7 @@
 		<slf4j.api.version>1.6.1</slf4j.api.version>
 		<slf4j.log4j12.version>1.6.1</slf4j.log4j12.version>
 		<log4j.version>1.2.16</log4j.version>
-		<multexVersion>8.3</multexVersion>
-    	<messageResourceFile>MessageResources.properties</messageResourceFile>
 		<jetty.plugin.version>${jetty.version}</jetty.plugin.version>
-		<multexVersion>8.3</multexVersion>
 		<!-- Jetty configuration -->
 		<jetty.scanInterval>60</jetty.scanInterval>
 		<!-- Enable access to this application from other computers, not only from 
@@ -34,8 +31,14 @@
 		<jetty.context.path>/</jetty.context.path>
 		<jetty.stop.port>9266</jetty.stop.port>
 		<jetty.stop.key>stop</jetty.stop.key>
-
+		<!-- Multex configuration -->
+		<multexVersion>8.3</multexVersion>
+    	<messageResourceFile>MessageResources.properties</messageResourceFile>
+    	<maven.compiler.source>7</maven.compiler.source>
+   		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 	</properties>
+	
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -43,9 +46,9 @@
 			<version>9.2-1004-jdbc4</version>
 		</dependency>
 		
+      	<!-- Multi Tier Exception Handling Framework -->
 		<dependency>
       	<groupId>de.tfh-berlin.knabe</groupId>
-      	<!-- Multi Tier Exception Handling Framework -->
      	 <artifactId>multex</artifactId>
     	  <version>${multexVersion}</version>
    		 </dependency>
@@ -131,14 +134,52 @@
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-		
-	    <dependency>
-			<groupId>de.tfh-berlin.knabe</groupId>
-			<artifactId>multex</artifactId>
-			<version>8.3</version>
-		</dependency>
 	</dependencies>
+	
+	
 	<build>
+	
+	
+	<!-- Add only for multex doclet -->
+	 <pluginManagement>
+        <plugins>
+            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+            <plugin>
+                <groupId>org.eclipse.m2e</groupId>
+                <artifactId>lifecycle-mapping</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <lifecycleMappingMetadata>
+                        <pluginExecutions>
+                            <pluginExecution>
+                                <pluginExecutionFilter>
+                                    <groupId>
+                                        org.apache.maven.plugins
+                                    </groupId>
+                                    <artifactId>
+                                        maven-javadoc-plugin
+                                    </artifactId>
+                                    <versionRange>
+                                        [2.9.1,)
+                                    </versionRange>
+                                    <goals>
+                                        <goal>javadoc</goal>
+                                    </goals>
+                                </pluginExecutionFilter>
+                                <action>
+                                    <ignore></ignore>
+                                </action>
+                            </pluginExecution>
+                        </pluginExecutions>
+                    </lifecycleMappingMetadata>
+                </configuration>
+            </plugin>
+        </plugins>
+    </pluginManagement>
+	
+	
+	
+	
 		<resources>
 			<resource>
 				<directory>${project.basedir}/src/main/resources</directory>
@@ -152,10 +193,10 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>${maven.compiler.source}</source>
+         			<target>${maven.compiler.source}</target>
 				</configuration>
 			</plugin>
 
@@ -233,8 +274,11 @@
 			<!-- <plugin> <groupId>net.alchim31.maven</groupId> <artifactId>yuicompressor-maven-plugin</artifactId> 
 				<version>1.4.0</version> <executions> <execution> <id>compress-js</id> <goals> 
 				<goal>compress</goal> </goals> </execution> </executions> </plugin> -->
-
-			<plugin>
+	
+	
+				<!--  Turn off for tests with multex doclet-->
+				 
+	<!--	<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9.1</version>
@@ -253,15 +297,45 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
-					</execution>
-					
-					
-					
-				</executions>
-			</plugin>
+					</execution> 
+  				 </executions>
+			</plugin> -->
 			
-			
-			
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-javadoc-plugin</artifactId>
+		        <version>2.9.1</version>
+		        <configuration>
+		          <!-- Default configuration for all reports -->
+		        </configuration>
+		        <executions>
+		          <execution>
+		            <goals>
+		              <goal>javadoc</goal>
+		            </goals>
+		            <phase>process-classes</phase>
+		            <configuration>
+		              <!-- Specific configuration for the messages report -->
+		              <doclet>multex.tool.ExceptionMessagesDoclet</doclet>
+		              <docletArtifact>
+		                <groupId>de.tfh-berlin.knabe</groupId>
+		                <artifactId>multex</artifactId>
+		                <version>${multexVersion}</version>
+		              </docletArtifact>
+		              <useStandardDocletOptions>false</useStandardDocletOptions>
+		              <show>private</show>
+		              <verbose>false</verbose>
+		              <debug>false</debug>
+		              <additionalparam>
+		                    -out ${project.build.directory}/classes/${messageResourceFile}
+		              </additionalparam>
+		              <!-- For the project-reports page-->
+		              <name>ExceptionTexts</name>
+		              <description>Extraction of Exception Message Texts from Source Code</description>
+		            </configuration>
+		          </execution>
+		        </executions>
+		      </plugin>
 			
 			
 			<plugin>
