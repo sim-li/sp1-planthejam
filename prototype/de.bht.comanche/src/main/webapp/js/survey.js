@@ -11,6 +11,7 @@
 angular.module("survey", ["datePickerDate", "constants"])
     .factory("Survey", ["DatePickerDate", "TimeUnit", "Type", function(DatePickerDate, TimeUnit, Type) {
         
+        // TODO still lacks the list of invites !!!
         var Survey = function(config) {
             config = config || {};
             this.oid = config.oid || "";

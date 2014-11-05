@@ -19,6 +19,7 @@ angular.module("invite", ["survey"])
             this.survey = new Survey(config.survey) || new Survey();
         };
 
+        // TODO if possible, simplify like this:  var that = this; that.user = { ... }; return that;
         Invite.prototype.export = function(user) {
             console.log("OIDS? ", this.oid, this.survey.oid);
             return {   

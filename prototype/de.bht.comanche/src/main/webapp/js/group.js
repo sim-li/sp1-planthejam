@@ -15,9 +15,29 @@ angular.module("group", [])
             config = config || {};
             this.oid = config.oid || "";
             this.name = config.name || "";
-            this.friendsOids = [];  // e.g.: [1, 2, 3]
-            this.friendsNames = []; // e.g.: ["Alice", "Bob", "Carla"]
+            this.membersOids = [];  // e.g.: [1, 2, 3]
+            this.membersNames = []; // e.g.: ["Alice", "Bob", "Carla"]
         };
+        
+        Group.prototype.export = function(user) {
+            var that = this;
+            that.user = {
+                "oid": user.oid, 
+                "name": user.name
+            };
+            return that;
+            
+            // return {
+                // "oid": this.oid, 
+                // "name": this.name, 
+                // "host": this.membersOids, 
+                // "host": this.membersNames, 
+                // "user": {
+                    // "oid": user.oid, 
+                    // "name": user.name
+                // }
+            // }
+        }
         
         return (Group);
     });
