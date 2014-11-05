@@ -19,10 +19,10 @@ public class LgSession {
 		user = null;
 	}
 
-	public LgSession startFor(String userName) {
+	public LgUser startFor(String userName) {
 		// throw exc when user not found
 		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
-		return this;
+		return user;
 	}
 
 	public LgUser save(final LgUser user) {
@@ -49,7 +49,12 @@ public class LgSession {
 		}
 		return this.user;
 	}
-	
+
+	public void deleteUser() {
+	    user.delete(); 
+	    this.user = null;
+	}	
+
 	/**
 	 * No user with name "{0}" found in the database
 	 */
@@ -90,4 +95,5 @@ public class LgSession {
 	public void setUser(LgUser user) {
 		this.user = user;
 	}
+
 }

@@ -31,10 +31,15 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
+
 	public LgInvite save(final LgInvite invite) {
 		return attach(invite).save();
 	}
-	
+
+	public void deleteAccount() {
+		delete();
+	}
+
 	public void deleteInvite(final long oid) {
 		getInvite(oid).delete();
 	}
@@ -161,5 +166,6 @@ public class LgUser extends DaObject {
 				"OID>: " + getOid();
 	}
 
+	
 
 }
