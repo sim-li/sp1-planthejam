@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loggedInCtrl", ["$scope", "$log", "Invite", "restService", "dialogMap", "util", 
-        function($scope, $log, Invite, restService, dialogMap, util) {
+    .controller("loggedInCtrl", ["$scope", "$location", "$log", "Invite", "restService", "dialogMap", "util", 
+        function($scope, $location, $log, Invite, restService, dialogMap, util) {
 
         $scope.logout = function() {
 
@@ -19,6 +19,7 @@ angular.module("myApp")
             $log.log("Logout erfolgreich.");
             $scope.initSession();
             $scope.showRegisterDialog = false;
+            $location.path('/');
         };
 
         

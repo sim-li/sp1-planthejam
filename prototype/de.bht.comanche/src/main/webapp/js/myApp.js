@@ -41,6 +41,5 @@ angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "res
                 templateUrl : 'pages/logedin.html',
                 controller  : 'loggedInCtrl'
             })
-
     })
     ;

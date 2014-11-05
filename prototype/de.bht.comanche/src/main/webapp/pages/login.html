@@ -1,24 +1,22 @@
 <div id="login_area" class="container"  ng-hide="session.state.isLoggedIn" class="input_area" >
 
         <form name="loginForm" ng-show="session.state.is(dialogMap.USER_LOGIN)" ng-submit="login()" class="container">
-            <div >
-                <label for="inputName">Benutzername</label>
-                <input class="form-control" id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required >
-                    
-                </input>
+            <div>
+        <label for="inputName">Benutzername</label>
+        <input class="form-control" id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
 
-                <label for="inputPassword">Passwort</label>
-                <input class="form-control" id="inputPassword" name="inputPassword" ng-hide="sessions.showPassword" type="password" ng-model="session.user.password" 
-                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+        <label for="inputPassword">Passwort</label>
+        <input class="form-control" id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.user.password" 
+        placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
 
-                <input class="form-control" id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.user.password" 
-                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
-                
-                <div class="error">{{ warnings.password }}</div>
-            </div>
-            
-            <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
-            <label for="toggleShowPassword">Klartext</label>
+        <input class="form-control" id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.user.password" 
+        placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+
+        <div class="error">{{ warnings.password }}</div>
+    </div>
+
+    <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
+    <label for="toggleShowPassword">Klartext</label>
             
             <div>
                 <a id="registerLink" href="#/register" ng-click="toggleLoginDialog()">Registrieren</a>
