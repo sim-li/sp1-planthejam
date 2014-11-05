@@ -54,7 +54,7 @@
                 <input class="btn btn-primary" id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addInvite()" />
                 
                 <!--++++ TODO: Baustelle ++++++++++++++++++++-->
-                <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString"></select>
+                <!-- <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString"></select> -->
                 
                 <!-- <select id="surveyList" ng-model="session.selectedInvite.survey" size="5%">
                     <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
