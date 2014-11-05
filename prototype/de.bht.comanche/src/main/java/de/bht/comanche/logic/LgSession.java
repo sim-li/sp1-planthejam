@@ -50,11 +50,6 @@ public class LgSession {
 		return this.user;
 	}
 
-	public void deleteUser() {
-	    user.delete(); 
-	    this.user = null;
-	}	
-
 	/**
 	 * No user with name "{0}" found in the database
 	 */

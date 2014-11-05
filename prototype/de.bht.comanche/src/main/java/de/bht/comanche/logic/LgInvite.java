@@ -40,24 +40,12 @@ public class LgInvite extends DaObject{
 	}
 	
 	public LgInvite save() {
-		return getPool().save(this);
+		return pool.save(this);
 	}
 	
 	public void delete() {
 		user.remove(this);
-		this.getPool().delete(this); //throw exc when delete errror
-	}
-	
-	
-	public LgSurvey getSurvey(long oid) { //secure
-		if (this.survey.getOid() == oid) {
-			return this.survey;
-		}
-		return null; //throw exception (not same)
-	}
-
-	public LgSurvey get(LgSurvey survey) { //secure
-		return getSurvey(survey.getOid());
+		pool.delete(this); //throw exc when delete errror
 	}
 	
 	/**

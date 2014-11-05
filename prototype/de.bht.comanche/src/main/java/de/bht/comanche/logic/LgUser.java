@@ -55,7 +55,7 @@ public class LgUser extends DaObject {
 	public LgInvite getInvite(long oid) {
 		return search(getInvites(), oid);
 	}
-    
+   
 	public void remove(final LgInvite invite) {
 		invites.remove(invite);
 	}

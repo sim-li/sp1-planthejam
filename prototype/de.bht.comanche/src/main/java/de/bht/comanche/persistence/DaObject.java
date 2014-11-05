@@ -25,7 +25,7 @@ public abstract class DaObject implements Serializable {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(unique = true, nullable = false)
 	protected long oid = DaPool.createdOid; 
 
-	private transient DaPool pool;
+	protected transient DaPool pool;
 
 	public DaObject() {}
 
@@ -48,21 +48,25 @@ public abstract class DaObject implements Serializable {
 	}
 	
 	public <E extends DaObject> E attach(E item) {
-		return (E) item.attach(getPool());
+		@SuppressWarnings("unchecked")
+		final E result = (E) item.attach(getPool());
+		return result;
 	}
 	
 	public void delete() {
-		this.getPool().delete(this);
+		pool.delete(this);
 	}
 	
 	public <E extends DaObject> E save() {
-		return getPool().save(this);
+		return pool.save(this);
 	}
 	
 	public <E extends DaObject> E search(List <E> list, long oid) {
 		for (DaObject item : list) {
 			if (oid == item.getOid()) {
-				return (E) item.attach(getPool());
+				@SuppressWarnings("unchecked")
+				final E result = (E) item.attach(getPool());
+				return result;
 			}
 		}
 		return null;

@@ -52,12 +52,6 @@ public class LgSurvey extends DaObject {
 	@JsonIgnore
 	private List<LgTimePeriod> possibleTimePeriods;
 
-	//TODO
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-	}
-
 	/**
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
