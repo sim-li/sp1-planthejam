@@ -29,7 +29,7 @@ angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "res
     })
     .config(function($routeProvider) {
         $routeProvider
-            .when('/login', {
+            .when('/', {
                 templateUrl : 'pages/login.html',
                 controller  : 'loginCtrl'
             })
