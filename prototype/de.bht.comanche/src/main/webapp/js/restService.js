@@ -38,10 +38,10 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	            	}
 	                deferred.resolve(data);
 	            }).error(function(data, status, header, config) {
-	            	if (LOG) {
+	            	// if (LOG) {       // TODO errors should always be logged, but with proper $log.error or similar
 	                    $log.debug(data);
 	                    $log.debug(data.stackTrace);
-	            	}
+	            	// }
 	                deferred.reject("REST: " + url + " failed. \n" + data.message);
 	            });
 	            return deferred.promise;
@@ -107,6 +107,21 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	        var deleteInvite = function(oid) {
 	            return callHTTP(INVITE_PATH + "delete", oid, "DELETE", { "Content-Type": "application/json" } );
 	        };
+            
+            var getGroups = function() {
+                // TODO
+                $log.info("getGroups is not implemented");
+            };
+            
+            var saveGroups = function() {
+                // TODO
+                $log.info("saveGroups is not implemented");
+            };
+            
+            var deleteGroup = function() {
+                // TODO
+                $log.info("deleteGroup is not implemented");
+            };
 	
 	        return {
 	            login: login,
@@ -115,7 +130,10 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	            updateUser: updateUser,
 	            getInvites: getInvites,
 	            saveInvite: saveInvite,
-	            deleteInvite: deleteInvite
+	            deleteInvite: deleteInvite, 
+                getGroups: getGroups, 
+                saveGroups: saveGroups, 
+                deleteGroup: deleteGroup
 	        };
     }]);
 
