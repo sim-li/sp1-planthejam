@@ -42,4 +42,9 @@ angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "res
                 controller  : 'loggedInCtrl'
             })
     })
-    ;
+    .directive('ptjMenu', function() {
+        return {
+            restrict: 'E', 
+            templateUrl: 'partials/menu.html'
+        }
+    });
