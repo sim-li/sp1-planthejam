@@ -14,10 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
 import de.bht.comanche.logic.LgInvite;
-import de.bht.comanche.logic.LgSession;
-import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
-import de.bht.comanche.logic.LgUser;
 
 @Path("/invite/")
 public class ReInviteService extends RestService {
