@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "restModule"])
+var myApp = angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "restModule"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -46,10 +46,35 @@ angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "res
                 templateUrl : 'pages/invite.html',
                 controller  : 'inviteCtrl'
             })
-    })
-    .directive('ptjMenu', function() {
+    });
+
+    myApp.directive('ptjMenu', function() {
         return {
             restrict: 'E', 
             templateUrl: 'partials/menu.html'
+        }
+    })
+    myApp.directive('ptjGroups', function() {
+        return {
+            restrict: 'E', 
+            templateUrl: 'partials/invite/groups.html'
+        }
+    });
+    myApp.directive('ptjSearch', function() {
+        return {
+            restrict: 'E', 
+            templateUrl: 'partials/search.html'
+        }
+    });
+    myApp.directive('ptjSurveyDetails', function() {
+        return {
+            restrict: 'E', 
+            templateUrl: 'partials/surveydetails.html'
+        }
+    });
+    myApp.directive('ptjMembers', function() {
+        return {
+            restrict: 'E', 
+            templateUrl: 'partials/invite/members.html'
         }
     });

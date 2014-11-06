@@ -1,43 +1,15 @@
-<ptj-menu></ptj-menu>
+<ptj-menu></ptj-menu></div>
 
 <div ng-controller="inviteCtrl">
 	<!-- sidebar -->
-	<div class="list-group col-md-2">
-		<div class="list-group-item active">Gruppen</div>
-		<div href="#" class="list-group-item">Group A</div>
-		<div href="#" class="list-group-item">Group A</div>
-		<div href="#" class="list-group-item">Group A</div>
-		<div href="#" class="list-group-item">Group A</div>
-		<div href="#" class="list-group-item">Group A</div>
-	</div>
+	<ptj-groups></ptj-groups>
 
 	<div class="row">
 		<!-- add to group -->
-		<div class="col-md-4" id="group">
-			<h3>Group members:</h3> 
-			<p>-hier werden alle Mitglieder der Gruppe angezeigt, auch die neu hinzugefügt werden.
-				<- sidebar muss noch als directive gemacht werden.</p>
-			<button ng-show="showInviteButton()">alle einladen</button>
-			<ul>
-				<li ng-repeat="u in addedUsers">
-					{{u.name}} - {{u.email}}
-					<button ng-click="addedUsers.splice($index, 1)">entfernen</button>
-				</li>
-			</ul>
-		</div>
+		<ptj-members></ptj-members>
 
 		<!-- search & results -->
-		<div class="col-md-4" id="searchFriends">
-			<input class="form-control col-xs-1" type="text" placeholder="search your friends!!!" ng-model="searchString"/>
-		
-			<h3>Vorschlag:</h3>
-			<ul>
-				<li ng-repeat="user in users | filter:searchString | limitTo:3 ">
-					{{user.name}} - {{user.email}}
-					<button href ng-click="addedUsers.push({name:user.name, email:user.email})">add to Group</button>
-				</li>
-			</ul>
-		</div>
+		<ptj-search></ptj-search>
 	</div>
 
 </div>
