@@ -1,0 +1,7 @@
+<h3>Vorschlag:</h3>
+			<ul>
+				<li ng-repeat="user in users | filter:searchString | limitTo:3 ">
+					{{user.name}} - {{user.email}}
+					<button  class="btn btn-default " href ng-click="addedUsers.push({name:user.name, email:user.email})"> <span class="glyphicon glyphicon-plus"></span></button>
+				</li>
+			</ul>

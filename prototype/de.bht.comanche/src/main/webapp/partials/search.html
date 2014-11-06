@@ -1,10 +1,9 @@
-
-			<input class="form-control " type="text" placeholder="search your friends!!!" ng-model="searchString"/>
-		
-			<h3>Vorschlag:</h3>
-			<ul>
-				<li ng-repeat="user in users | filter:searchString | limitTo:3 ">
-					{{user.name}} - {{user.email}}
-					<button href ng-click="addedUsers.push({name:user.name, email:user.email})">add to Group</button>
-				</li>
-			</ul>
+<script>
+$(document).ready( function() {
+$('.dropdown-toggle').dropdown();
+});
+</script>
+	<div class="col-md-6">
+	<input type="text" ng-model="userSelected" placeholder="Custom template" typeahead="user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5" class="form-control">
+	</div>
+	</div>

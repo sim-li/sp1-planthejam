@@ -11,9 +11,9 @@ angular.module('myApp')
     ]
 
     $scope.addedUsers = []
-
+   
     $scope.showInviteButton = function(){
     	console.log("number of users in group : " + $scope.addedUsers.length)
-    	return $scope.addedUsers.length == 0? false: true;
+    	return $scope.addedUsers.length == 0 ? false: true;
     }
  }]);

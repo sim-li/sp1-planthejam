@@ -8,7 +8,7 @@
 
 "use strict";
 
-var myApp = angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "restModule"])
+var myApp = angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "constants", "restModule"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -78,3 +78,4 @@ var myApp = angular.module("myApp", ["ngRoute","datePickerDate", "survey", "cons
             templateUrl: 'partials/invite/members.html'
         }
     });
+   
