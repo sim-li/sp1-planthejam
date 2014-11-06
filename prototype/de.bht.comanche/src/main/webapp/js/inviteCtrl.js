@@ -1,5 +1,5 @@
-angular.module('group', [])
-  .controller('groupController', ['$scope', function($scope) {
+angular.module('myApp')
+  .controller('inviteCtrl', ['$scope', function($scope) {
     $scope.users = [
        {name:'Blackjack', email:'bj@gmail.com'},
        {name:'Bob', 	  email:'bob@gmail.com'},

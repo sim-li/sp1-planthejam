@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "restModule", "group"])
+angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "restModule"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -37,13 +37,14 @@ angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "res
                 templateUrl : 'pages/register.html',
                 controller  : 'loginCtrl'
             })
+            // Temporaly redirecting to invite
             .when('/cockpit', {
-                templateUrl : 'pages/cockpit.html',
-                controller  : 'cockpitCtrl'
+                templateUrl : 'pages/invite.html',
+                controller  : 'inviteCtrl'
             })
-            .when('/group', {
-                templateUrl : 'pages/group.html',
-                controller  : ''
+            .when('/invite', {
+                templateUrl : 'pages/invite.html',
+                controller  : 'inviteCtrl'
             })
     })
     .directive('ptjMenu', function() {
