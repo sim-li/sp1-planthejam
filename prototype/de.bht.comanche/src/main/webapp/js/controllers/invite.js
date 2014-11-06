@@ -11,9 +11,20 @@ angular.module('myApp')
     ]
 
     $scope.addedUsers = []
-   
+
+    $scope.$watch('userSelected', function() {
+      for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
+        if($scope.addedUsers[i] === $scope.userSelected) {
+          return;
+        }
+      }
+      if ($scope.userSelected !== undefined && $scope.userSelected.name !== undefined) {
+        $scope.addedUsers.push($scope.userSelected);
+      }
+    });
+
     $scope.showInviteButton = function(){
-    	console.log("number of users in group : " + $scope.addedUsers.length)
+    	// console.log("number of users in group : " + $scope.addedUsers.length)
     	return $scope.addedUsers.length == 0 ? false: true;
     }
  }]);
