@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "restModule"])
+angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "restModule", "group"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -40,6 +40,10 @@ angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "res
             .when('/logedin', {
                 templateUrl : 'pages/logedin.html',
                 controller  : 'loggedInCtrl'
+            })
+            .when('/group', {
+                templateUrl : 'pages/group.html',
+                controller  : ''
             })
     })
     .directive('ptjMenu', function() {

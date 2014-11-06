@@ -1,7 +1,7 @@
 
-<div class="container" id="logged_in_area"  class="input_area">        
-    
+<div>        
     <ptj-menu></ptj-menu>
+    
 
     <form name="editUserForm" ng-controller="editUserCtrl" ng-show="session.state.is(dialogMap.USER_EDIT)" class="container">
         <div>
@@ -39,18 +39,16 @@
     </form><!-- editUserForm -->
 
     <!-- TerminUmfrage -->
-    <div class="container" id="survey_selection_area" ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
-        <!-- <h1> hier ist terminumfrage </h1> -->
+    <div ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
         <span>
-
             <input class="btn btn-primary" id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addInvite()" />
 
             <!--++++ TODO: Baustelle ++++++++++++++++++++-->
-            <!-- <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString"></select> -->
+            <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString"></select>
 
-                <!-- <select id="surveyList" ng-model="session.selectedInvite.survey" size="5%">
+                <select id="surveyList" ng-model="session.selectedInvite.survey" size="5%">
                     <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
-                </select> -->
+                </select>
                 
                 <input class="form-control" id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="session.user.searchString" ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-change="updateSelection()"/>
 

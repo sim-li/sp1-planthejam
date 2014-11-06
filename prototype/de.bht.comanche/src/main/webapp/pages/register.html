@@ -1,4 +1,5 @@
-<form name="registerForm" ng-show="session.state.is(dialogMap.USER_REGISTER)" ng-submit="register()" class="container">
+<form name="registerForm" ng-show="session.state.is(dialogMap.USER_REGISTER)" ng-submit="register()" class="form-signin">
+    <h2 class="form-signin-heading">Registrieren</h2>
     <div>
         <label for="inputName">Benutzername</label>
         <input class="form-control" id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
@@ -27,7 +28,7 @@
     </div>
 
     <div>
-        <a id="cancelRegisterLink" href="" ng-click="toggleLoginDialog()">Registrieren abbrechen</a>
+        <a id="cancelRegisterLink" href="/" ng-click="toggleLoginDialog()">Registrieren abbrechen</a>
     </div>
 
     <span>

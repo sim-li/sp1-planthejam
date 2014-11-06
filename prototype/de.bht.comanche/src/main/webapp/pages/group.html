@@ -1,0 +1,24 @@
+<ptj-menu></ptj-menu>
+
+<div ng-controller="groupController">
+	<label> Freunde suchen </label>
+	<input type="text" placeholder="search your friends!!!" ng-model="searchString"/> 
+	<h3>Vorschlag:</h3>
+	<ul>
+	    <li ng-repeat="user in users | filter:searchString | limitTo:3 ">
+	       {{user.name}} - {{user.email}}
+	      <button href ng-click="addedUsers.push({name:user.name, email:user.email})">add to Group</button>
+	    </li>
+  	</ul>
+	
+	<h2>Group members:</h2>
+	<ul>
+	    <li ng-repeat="u in addedUsers">
+	       {{u.name}} - {{u.email}}
+	      <button ng-click="addedUsers.splice($index, 1)">entfernen</button>
+	    </li>
+  	</ul>
+
+	<button ng-show="showInviteButton()">alle einladen</button>
+
+</div>
