@@ -11,7 +11,7 @@ angular.module('myApp')
     ]
 
     $scope.addedUsers = []
-
+    $scope.isCollapsed = false;
     $scope.$watch('userSelected', function() {
       for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
         if($scope.addedUsers[i] === $scope.userSelected) {
@@ -22,9 +22,4 @@ angular.module('myApp')
         $scope.addedUsers.push($scope.userSelected);
       }
     });
-
-    $scope.showInviteButton = function(){
-    	// console.log("number of users in group : " + $scope.addedUsers.length)
-    	return $scope.addedUsers.length == 0 ? false: true;
-    }
  }]);

@@ -69,7 +69,7 @@ var myApp = angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate",
     myApp.directive('ptjSurveyDetails', function() {
         return {
             restrict: 'E', 
-            templateUrl: 'partials/surveydetails.html'
+            templateUrl: 'partials/invite/surveydetails.html'
         }
     });
     myApp.directive('ptjMembers', function() {

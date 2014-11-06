@@ -1,11 +1,17 @@
 
-			<h3>Group members:</h3> 
-			<p>-hier werden alle Mitglieder der Gruppe angezeigt, auch die neu hinzugefügt werden.
-			</p>
-			<button ng-show="showInviteButton()">alle einladen</button>
-			<ul>
-				<li ng-repeat="u in addedUsers">
-					{{u.name}} - {{u.email}}
-					<button ng-click="addedUsers.splice($index, 1)">entfernen</button>
-				</li>
-			</ul>
+	<div collapse="isCollapsed">
+		<div class="well well-sm">
+
+<div class="container-fluid">
+	<div class="btn-group">
+			<button class="btn btn-default" type="button" ng-repeat="u in addedUsers" >
+					{{u.name}}
+					{{u.email}}
+					<span class="badge" ng-click="addedUsers.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></span>
+					<!-- <button ng-click="addedUsers.splice($index, 1)">entfernen</button> -->
+					</button> 
+			</div>
+			
+			</div> 
+			</div>
+	
