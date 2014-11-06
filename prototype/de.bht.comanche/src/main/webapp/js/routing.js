@@ -11,9 +11,9 @@ angular.module('myApp', ['ngRoute']).
 				templateUrl : 'pages/register.html',
 				controller  : 'loginCtrl'
 			})
-			.when('/logedin', {
-				templateUrl : 'pages/logedin.html',
-				controller  : 'loggedInCtrl'
+			.when('/cockpit', {
+				templateUrl : 'pages/cockpit.html',
+				controller  : 'cockpitCtrl'
 			})
 
 	});

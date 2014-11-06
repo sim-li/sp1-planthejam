@@ -4,11 +4,9 @@
 			<div class="navbar-header">
         		<a class="navbar-brand" href="/">COMANCHE</a>
       		</div>
-			<li class="nav"><a id="editUser" ng-click="editUser()" >Konto</a></li>
-			<li class="nav"><a id="editContacts" ng-click="editContacts()">Kontakte</a></li>
-            <li class="nav active"><a href="#/group">Groupe</a></li>
+            <li class="nav active"><a href="#/group">Create Survey</a></li>
 			<li class="nav"><a id="logout" ng-click="logout()">Logout</a></li>
-			<li class="nav navbar-right"><a href=""> {{session.user.name}}</a></li>
+			<li class="nav navbar-right"><a id="editUser" ng-click="editUser()" > {{session.user.name}}</a></li>
 		</ui>    
 	</div>
 </div>

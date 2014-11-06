@@ -37,9 +37,9 @@ angular.module("myApp", ["ngRoute","datePickerDate", "survey", "constants", "res
                 templateUrl : 'pages/register.html',
                 controller  : 'loginCtrl'
             })
-            .when('/logedin', {
-                templateUrl : 'pages/logedin.html',
-                controller  : 'loggedInCtrl'
+            .when('/cockpit', {
+                templateUrl : 'pages/cockpit.html',
+                controller  : 'cockpitCtrl'
             })
             .when('/group', {
                 templateUrl : 'pages/group.html',
