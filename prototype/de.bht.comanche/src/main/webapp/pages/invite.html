@@ -1,15 +1,25 @@
-<ptj-menu></ptj-menu></div>
-
+<div class="container">
 <div ng-controller="inviteCtrl">
+<div class="row">
+<ptj-menu></ptj-menu></div>
+</div>
+<div class="row">
+<!-- search & results -->
+	
+			<ptj-search></ptj-search>
+	
 	<!-- sidebar -->
-	<ptj-groups></ptj-groups>
-
-	<div class="row">
-		<!-- add to group -->
-		<ptj-members></ptj-members>
-
-		<!-- search & results -->
-		<ptj-search></ptj-search>
+	<div class="list-group col-md-2">
+		<ptj-groups></ptj-groups>
 	</div>
 
+	<!-- <div class="row"> -->
+	<div class="col-md-4" id="group">
+		<!-- add to group -->
+		<ptj-members></ptj-members>
+	</div>
+		
+	<!-- </div> -->
 </div>
+</div>
+

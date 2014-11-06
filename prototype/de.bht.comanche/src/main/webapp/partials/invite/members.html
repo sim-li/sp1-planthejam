@@ -1,7 +1,7 @@
-<div class="col-md-4" id="group">
+
 			<h3>Group members:</h3> 
 			<p>-hier werden alle Mitglieder der Gruppe angezeigt, auch die neu hinzugefügt werden.
-				<- sidebar muss noch als directive gemacht werden.</p>
+			</p>
 			<button ng-show="showInviteButton()">alle einladen</button>
 			<ul>
 				<li ng-repeat="u in addedUsers">
@@ -9,4 +9,3 @@
 					<button ng-click="addedUsers.splice($index, 1)">entfernen</button>
 				</li>
 			</ul>
-		</div>
