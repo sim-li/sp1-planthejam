@@ -1,9 +1,8 @@
 
-<div>        
+<div class="container">        
     <ptj-menu></ptj-menu>
     
-
-    <form name="editUserForm" ng-controller="editUserCtrl" ng-show="session.state.is(dialogMap.USER_EDIT)" class="container">
+    <form name="editUserForm" ng-controller="editUserCtrl" ng-show="session.state.is(dialogMap.USER_EDIT)" class="list-group col-md-4">
         <div>
             <label for="inputName">Benutzername</label>
             <input class="form-control" id="inputName" name="inputName" type="text" ng-model="session.tempUser.name" placeholder="Dein Benutzername ..." required />
@@ -39,14 +38,14 @@
     </form><!-- editUserForm -->
 
     <!-- TerminUmfrage -->
-    <div ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
+    <div class="container" ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
         <span>
             <input class="btn btn-primary" id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addInvite()" />
 
             <!--++++ TODO: Baustelle ++++++++++++++++++++-->
             <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString"></select>
 
-                <select id="surveyList" ng-model="session.selectedInvite.survey" size="5%">
+                <select id="surveyList" ng-model="session.selectedInvite.survey">
                     <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
                 </select>
                 

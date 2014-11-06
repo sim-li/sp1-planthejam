@@ -49,3 +49,18 @@
   border-top-right-radius: 0;
 }
 
+.list-group{
+  
+}
+
+#inhalt{
+  position: relative;
+  right: 0px;
+  border-color: black;
+  border-width: 5px;
+}
+
+#searchFriends{
+ border-color: black;
+ border-radius: 5px;
+}
