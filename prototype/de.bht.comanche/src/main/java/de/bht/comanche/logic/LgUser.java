@@ -31,6 +31,19 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
+
+	public LgInvite save(final LgInvite invite) {
+		return attach(invite).save();
+	}
+
+	public void deleteAccount() {
+		delete();
+	}
+
+	public void deleteInvite(final long oid) {
+		getInvite(oid).delete();
+	}
+	
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
 		if (this.password == null) {
@@ -39,27 +52,10 @@ public class LgUser extends DaObject {
 		return this.password.equals(password);
 	}
 
-	public LgUser save() {
-		return getPool().save(this);
-	}
-	
 	public LgInvite getInvite(long oid) {
-		for (LgInvite invite : getInvites()) {
-			if (oid == invite.getOid()) {
-				return (LgInvite) invite.attach(getPool());
-			}
-		}
-		return null; //Throw exc
+		return search(getInvites(), oid);
 	}
-	
-	public LgInvite set(LgInvite invite) {
-		return (LgInvite) invite.attach(getPool());
-	}
-	
-	public void delete() {
-		this.getPool().delete(this); 
-	}
-    
+   
 	public void remove(final LgInvite invite) {
 		invites.remove(invite);
 	}
@@ -70,7 +66,7 @@ public class LgUser extends DaObject {
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
-	
+
 	@JsonIgnore
 	public List<LgInvite> getInvites() {
 		return invites;
@@ -170,5 +166,6 @@ public class LgUser extends DaObject {
 				"OID>: " + getOid();
 	}
 
+	
 
 }

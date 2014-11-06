@@ -21,12 +21,12 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser login(final LgUser i_user, @Context final HttpServletRequest request) {
-		final LgSession session = new LgSession();
-		return new LgTransaction<LgUser>(session) {
+		return new LgTransaction<LgUser>(request) {
 			@Override
 			public LgUser execute() throws multex.Exc {
 				 //throw exc when login failure
-				final LgUser o_user = session.login(i_user).getUser();
+				final LgUser o_user = getSession()
+				    .login(i_user);
 				setUserName(request, o_user.getName());
 				return o_user;
 			}
@@ -38,11 +38,11 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser register(final LgUser i_user, @Context final HttpServletRequest request) {
-		final LgSession session = new LgSession();
-		return new LgTransaction<LgUser>(session) {
+		return new LgTransaction<LgUser>(request) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-					final LgUser o_user = session.register(i_user).getUser();
+					final LgUser o_user = getSession()
+						.register(i_user);
 					setUserName(request, o_user.getName());
 					return o_user;
 			}
@@ -54,15 +54,13 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser delete(@Context final HttpServletRequest request) { // TODO: Don't send OID from client
-		final LgSession session = new LgSession();
-		return new LgTransaction<LgUser>(session) {
+		return new LgTransaction<LgUser>(request) {
 			@Override
 			public LgUser execute() throws multex.Exc {
 				 // throw Exception if no info in request 
 				//must throw if Exception if null or user not found
-				session.startFor(getUserName(request))
-				 	.getUser()
-				 		.delete(); 
+			    startSession()
+			        .deleteAccount();
 				removeUserName(request);
 				return null;
 			}
@@ -74,11 +72,10 @@ public class ReUserService extends RestService {
 	@Consumes("application/json")
 	@Produces({"application/json"})
 	public LgUser update(final LgUser i_user, @Context final HttpServletRequest request) {
-		final LgSession session = new LgSession();
-		return new LgTransaction<LgUser>(session) {
+		return new LgTransaction<LgUser>(request) {
 			@Override
 			public LgUser execute() throws multex.Exc {
-				    final LgUser user = session.startFor(getUserName(request))
+				    final LgUser user = getSession() 
 				    	.save(i_user);
 				    setUserName(request, user.getName());
 				return null;

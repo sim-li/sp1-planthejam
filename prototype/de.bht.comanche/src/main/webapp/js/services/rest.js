@@ -14,6 +14,7 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	        var LOG = true;
 	        var USER_PATH = "rest/user/";
 	        var INVITE_PATH = "rest/invite/";
+	        var GROUP_PATH = "rest/group/";
 	
 	        var callHTTP = function(url, data, method, headers) {
 	        	if (LOG) {
@@ -38,10 +39,10 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	            	}
 	                deferred.resolve(data);
 	            }).error(function(data, status, header, config) {
-	            	if (LOG) {
+	            	// if (LOG) {       // TODO errors should always be logged, but with proper $log.error or similar
 	                    $log.debug(data);
 	                    $log.debug(data.stackTrace);
-	            	}
+	            	// }
 	                deferred.reject("REST: " + url + " failed. \n" + data.message);
 	            });
 	            return deferred.promise;
@@ -80,6 +81,7 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	                });
 	        };
 	        
+            // TODO oid not necessary, because of new authentification with http user session ??? if so -> same for Server-REST
 	        var getInvites = function(oid) {
 	        	//TODO@CodeCleanup: If not necessary, remove from code.
 	            if (false) {
@@ -107,6 +109,28 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	        var deleteInvite = function(oid) {
 	            return callHTTP(INVITE_PATH + "delete", oid, "DELETE", { "Content-Type": "application/json" } );
 	        };
+            
+            // TODO oid not necessary, because of new authentification with http user session ??? if so -> same for Server-REST
+            var getGroups = function(oid) {
+                
+                $log.info("getGroups is untested!");
+                
+                return callHTTP(GROUP_PATH + "getGroups", oid);
+            };
+            
+            var saveGroup = function(group, user) {
+                
+                $log.info("saveGroups is untested!");
+                
+                return callHTTP(GROUP_PATH + "save", group.export(user));
+            };
+            
+            var deleteGroup = function() {
+                
+                $log.info("deleteGroup is untested!");
+                
+                return callHTTP(GROUP_PATH + "delete", oid, "DELETE", { "Content-Type": "application/json" } );
+            };
 	
 	        return {
 	            login: login,
@@ -115,7 +139,10 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	            updateUser: updateUser,
 	            getInvites: getInvites,
 	            saveInvite: saveInvite,
-	            deleteInvite: deleteInvite
+	            deleteInvite: deleteInvite, 
+                getGroups: getGroups, 
+                saveGroup: saveGroup, 
+                deleteGroup: deleteGroup
 	        };
     }]);
 

@@ -1,12 +1,18 @@
 package de.bht.comanche.persistence;
 
-import java.io.Serializable;
 import static multex.MultexUtil.create;
+
+import java.io.Serializable;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+
+import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgUser;
 
 /**
  * @author Simon Lischka
@@ -19,20 +25,13 @@ public abstract class DaObject implements Serializable {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(unique = true, nullable = false)
 	protected long oid = DaPool.createdOid; 
 
-	private transient DaPool pool;
+	protected transient DaPool pool;
 
 	public DaObject() {}
 
 	protected DaObject(DaPool pool) {
 		this.pool = pool;
 	}
-
-	/**
-	 * --------------------------------------------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
 
 	/**
 	 *  Owning pool changed. Object of class "{0}" and with OID "{1}" 
@@ -48,8 +47,37 @@ public abstract class DaObject implements Serializable {
 		return this;
 	}
 	
-	public abstract void delete();
+	public <E extends DaObject> E attach(E item) {
+		@SuppressWarnings("unchecked")
+		final E result = (E) item.attach(getPool());
+		return result;
+	}
+	
+	public void delete() {
+		pool.delete(this);
+	}
+	
+	public <E extends DaObject> E save() {
+		return pool.save(this);
+	}
+	
+	public <E extends DaObject> E search(List <E> list, long oid) {
+		for (DaObject item : list) {
+			if (oid == item.getOid()) {
+				@SuppressWarnings("unchecked")
+				final E result = (E) item.attach(getPool());
+				return result;
+			}
+		}
+		return null;
+	}
 
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
 	protected DaPool getPool() {
 		return pool;
 	}
@@ -69,7 +97,6 @@ public abstract class DaObject implements Serializable {
 	public boolean isDeleted() {
 		return oid == DaPool.deletedOid;
 	}
-
 
 	@Override
 	public int hashCode() {

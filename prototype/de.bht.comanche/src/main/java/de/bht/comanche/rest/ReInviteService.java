@@ -14,10 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
 import de.bht.comanche.logic.LgInvite;
-import de.bht.comanche.logic.LgSession;
-import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
-import de.bht.comanche.logic.LgUser;
 
 @Path("/invite/")
 public class ReInviteService extends RestService {
@@ -26,13 +23,11 @@ public class ReInviteService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public List<LgInvite> get(@Context final HttpServletRequest request) {
-		final LgSession session = new LgSession();
-		return new LgTransaction<List<LgInvite>>(session) {
+		return new LgTransaction<List<LgInvite>>(request) {
 			@Override
 			public List<LgInvite> execute() throws multex.Exc {
-				return session.startFor(RestService.getUserName(request))
-					.getUser()
-						.getInvites();
+				return startSession()
+					.getInvites();
 			}
 		}.getResult();
 	}
@@ -42,13 +37,10 @@ public class ReInviteService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgInvite save(final LgInvite invite, @Context final HttpServletRequest request) {
-		final LgSession session = new LgSession();
-		return new LgTransaction<LgInvite>(session) {
+		return new LgTransaction<LgInvite>(request) {
 			public LgInvite execute() {
-				return session.startFor(RestService.getUserName(request))
-						.getUser()
-							.set(invite)
-								.save();
+				return startSession()
+					.save(invite);
 			}
 		}.getResult();
 	}
@@ -58,13 +50,10 @@ public class ReInviteService extends RestService {
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgInvite delete(final long oid, @Context final HttpServletRequest request) {
-		final LgSession session = new LgSession();
-		return new LgTransaction <LgInvite>(session) {
+		return new LgTransaction <LgInvite>(request) {
 			public LgInvite execute() {
-				session.startFor(RestService.getUserName(request))
-						.getUser()
-							.getInvite(oid)
-								.delete();
+				startSession()
+			    	.deleteInvite(oid);	
 				return null;
 			}
 		}.getResult();
