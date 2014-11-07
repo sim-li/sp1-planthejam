@@ -1,5 +1,8 @@
 angular.module('myApp')
 .controller('inviteCtrl', ['$scope', function($scope) {
+
+    $scope.surveyTitle = 'Lets have a beer, guys';
+
     $scope.today = function() {
         $scope.dt = new Date();
     };
