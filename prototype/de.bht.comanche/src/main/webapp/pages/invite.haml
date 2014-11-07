@@ -15,7 +15,19 @@
           {{surveyTitle}}
       %br
       / add to group
-      %ptj-search
-      %ptj-members
+
+      %form.form-inline
+        %div.form-group
+          .well.well-sm
+            %div.btn-group-vertical
+              %button.btn.btn-default.btn-sm{:type => "button"}
+                %span.glyphicon.glyphicon-pencil
+              %button.btn.btn-default.btn-sm{:type => "button"}
+                %span.glyphicon.glyphicon-trash
+              %button.btn.btn-default.btn-sm{:type => "button"}
+                %span.glyphicon.glyphicon-plus
+        %div.form-group
+          %ptj-search
+          %ptj-members
     / %ptj-survey-details
   / </div>

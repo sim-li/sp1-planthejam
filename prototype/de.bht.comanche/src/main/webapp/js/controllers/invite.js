@@ -65,7 +65,7 @@ angular.module('myApp')
     
     $scope.switchDetailPanel = function() {
         if ($scope.isCollapsed) {
-            openDetailPanel;
+            $scope.openDetailPanel();
         } else {
             $scope.isCollapsed = true;
         }
@@ -73,7 +73,6 @@ angular.module('myApp')
 
     $scope.openDetailPanel = function() {
         if ($scope.addedUsers.length <= 0) {
-            $scope.isCollapsed = true;
             return;
         }
         $scope.isCollapsed = false;
