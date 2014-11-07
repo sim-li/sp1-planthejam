@@ -7,7 +7,7 @@
 			<button class="btn btn-default" type="button" ng-repeat="u in addedUsers" >
 					{{u.name}}
 					{{u.email}}
-					<span class="badge" ng-click="addedUsers.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="badge" ng-click="removeMember($index)"><span class="glyphicon glyphicon-remove"></span></span>
 					<!-- <button ng-click="addedUsers.splice($index, 1)">entfernen</button> -->
 					</button> 
 			</div>
