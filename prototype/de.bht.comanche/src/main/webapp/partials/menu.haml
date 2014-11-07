@@ -1,0 +1,11 @@
+.navbar.navbar-default
+  .navbar-left
+    %ui.nav.navbar-nav.navbar-right
+      .navbar-header
+        %a.navbar-brand{:href => "/"} COMANCHE
+      %li.nav.active
+        %a{:href => "#/group"} Create Survey
+      %li.nav.navbar-right
+        %a#editUser{"ng-click" => "editUser()"} Testname
+      %li.nav
+        %a#logout{"ng-click" => "logout()"} Logout

@@ -1,0 +1,11 @@
+%form.form-signin{:name => "loginForm", "ng-hide" => "session.state.isLoggedIn", "ng-show" => "session.state.is(dialogMap.USER_LOGIN)", "ng-submit" => "login()"}
+  %h2.form-signin-heading Bitte einlogen
+  %div
+    %label{:for => "inputName"} Benutzername
+    %input#inputName.form-control{:autofocus => "", :name => "inputName", "ng-model" => "session.user.name", :placeholder => "Dein Benutzername ...", :required => "", :type => "text"}/
+    %label{:for => "inputPassword"} Passwort
+    %input#inputPassword.form-control{:name => "inputPassword", "ng-change" => "discardWarnings()", "ng-hide" => "session.showPassword", "ng-model" => "session.user.password", :placeholder => "8-20 Buchstaben", :required => "", :type => "password"}/
+  %div
+    %a#registerLink{:href => "#/register", "ng-click" => "toggleLoginDialog()"} Registrieren
+  %input#loginBtn.btn.btn-primary.btn-block{:type => "submit", :value => "Login"}/
+/ loginForm

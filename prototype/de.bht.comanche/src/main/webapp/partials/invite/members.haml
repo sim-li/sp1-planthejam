@@ -1,0 +1,10 @@
+%div{:collapse => "isCollapsed"}
+  .well.well-sm
+    .container-fluid
+      .btn-group
+        %span{"ng-repeat" => "user in addedUsers"}
+          %button.btn.btn-default{:type => "button"}
+            
+            / - 
+            %span.badge{"ng-click" => "removeMember($index)"}
+              %span.glyphicon.glyphicon-remove
