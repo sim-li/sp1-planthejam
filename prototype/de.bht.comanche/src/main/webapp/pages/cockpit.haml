@@ -3,42 +3,42 @@
   %form.list-group.col-md-4{:name => "editUserForm", "ng-controller" => "editUserCtrl", "ng-show" => "session.state.is(dialogMap.USER_EDIT)"}
     %div
       %label{:for => "inputName"} Benutzername
-      %input#inputName.form-control{:name => "inputName", "ng-model" => "session.tempUser.name", :placeholder => "Dein Benutzername ...", :required => "", :type => "text"}/
+      %input#inputName.form-control{:name => "inputName", "ng-model" => "session.tempUser.name", :placeholder => "Dein Benutzername ...", :required => "", :type => "text"}
       %label{:for => "inputPassword"} Passwort
-      %input#inputPassword.form-control{:name => "inputPassword", "ng-change" => "discardWarnings()", "ng-hide" => "session.showPassword", "ng-model" => "session.tempUser.password", :placeholder => "8-20 Buchstaben", :required => "", :type => "password"}/
-      %input#inputPasswordPlain.form-control{:name => "inputPasswordPlain", "ng-change" => "discardWarnings()", "ng-model" => "session.tempUser.password", "ng-show" => "session.showPassword", :placeholder => "8-20 Buchstaben", :required => "", :type => "text"}/
+      %input#inputPassword.form-control{:name => "inputPassword", "ng-change" => "discardWarnings()", "ng-hide" => "session.showPassword", "ng-model" => "session.tempUser.password", :placeholder => "8-20 Buchstaben", :required => "", :type => "password"}
+      %input#inputPasswordPlain.form-control{:name => "inputPasswordPlain", "ng-change" => "discardWarnings()", "ng-model" => "session.tempUser.password", "ng-show" => "session.showPassword", :placeholder => "8-20 Buchstaben", :required => "", :type => "text"}
       .error 
-    %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "session.showPassword", :type => "checkbox"}/
+    %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "session.showPassword", :type => "checkbox"}
     %label{:for => "toggleShowPassword"} Klartext
     %div
       %label{:for => "inputEmail"} E-Mail
-      %input#inputEmail.form-control{:name => "inputEmail", "ng-change" => "discardWarnings()", "ng-model" => "session.tempUser.email", :placeholder => "Deine E-Mail-Adresse ...", :required => "", :type => "text"}/
+      %input#inputEmail.form-control{:name => "inputEmail", "ng-change" => "discardWarnings()", "ng-model" => "session.tempUser.email", :placeholder => "Deine E-Mail-Adresse ...", :required => "", :type => "text"}
       .error 
       %label{:for => "inputTel"} Telefon
-      %input#inputTel.form-control{:name => "inputTel", "ng-change" => "discardWarnings()", "ng-model" => "session.tempUser.tel", :placeholder => "Deine Telefonnummer ...", :required => "", :type => "text"}/
+      %input#inputTel.form-control{:name => "inputTel", "ng-change" => "discardWarnings()", "ng-model" => "session.tempUser.tel", :placeholder => "Deine Telefonnummer ...", :required => "", :type => "text"}
       .error 
     %span
-      %input#cancelUserEditBtn.btn.btn-primary{"ng-click" => "cancelEditUser()", :type => "button", :value => "Abbrechen"}/
-      %input#saveUserEditBtn.btn.btn-primary{"ng-click" => "saveEditedUser()", :type => "submit", :value => "Speichern"}/
-      %input#deleteUserBtn.btn.btn-primary{"ng-click" => "deleteUser()", :type => "button", :value => "Löschen"}/
+      %input#cancelUserEditBtn.btn.btn-primary{"ng-click" => "cancelEditUser()", :type => "button", :value => "Abbrechen"}
+      %input#saveUserEditBtn.btn.btn-primary{"ng-click" => "saveEditedUser()", :type => "submit", :value => "Speichern"}
+      %input#deleteUserBtn.btn.btn-primary{"ng-click" => "deleteUser()", :type => "button", :value => "Löschen"}
   / editUserForm
   / TerminUmfrage
   .container{"ng-show" => "session.state.is(dialogMap.SURVEY_SELECTION)"}
     %span
-      %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Neue Terminumfrage erstellen"}/
+      %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Neue Terminumfrage erstellen"}
       / ++++ TODO: Baustelle ++++++++++++++++++++
       %select#surveyList{"ng-model" => "session.selectedInvite", "ng-options" => "invite.survey.name for invite in session.user.invites | filter:session.user.searchString"}
       %select#surveyList{"ng-model" => "session.selectedInvite.survey"}
         %option{"ng-repeat" => "survey in session.user.surveys | filter:session.user.searchString", :onselect => "console.log('hi')", :value => "survey.name"}  (Deadline: )
-      %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + session.user.searchString + '\\'')", "ng-model" => "session.user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}/
-      %input#editInvite.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Terminumfrage anzeigen und bearbeiten"}/
-      %input#deleteInvite.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Terminumfrage löschen"}/
+      %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + session.user.searchString + '\\'')", "ng-model" => "session.user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+      %input#editInvite.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Terminumfrage anzeigen und bearbeiten"}
+      %input#deleteInvite.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Terminumfrage löschen"}
     %textarea{:readonly => "readonly", :rows => "5"} 
   / survey_selection_area
   #survey_edit_area.container{"ng-controller" => "editInviteCtrl", "ng-show" => "session.state.is(dialogMap.SURVEY_EDIT)"}
     %span
       %label{:for => "editSurveyName"} Name
       / <input id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name" ng-change="$log.log(session.tempInvite.survey.name);"/>
-      %input#editSurveyName.form-control{"ng-model" => "session.tempInvite.survey.name", :type => "text"}/
+      %input#editSurveyName.form-control{"ng-model" => "session.tempInvite.survey.name", :type => "text"}
       %label{:for => "editSurveyDescription"} Beschreibung
       / <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description" ng-change="$log.log(session.tempInvite.survey.description);">

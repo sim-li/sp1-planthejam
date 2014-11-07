@@ -1,29 +1,28 @@
-<div class="container">
-          <div class="row">
-            <ptj-menu></ptj-menu>
-        </div>
+<div class='container'>
+  <div class='row'>
+    <ptj-menu></ptj-menu>
+  </div>
+</div>
+<a data-pk='1' data-title='Enter username' data-type='text' data-url='/post' href='#' id='username'>superuser</a>
+<div class='row'>
+  <!-- search & results -->
+  <!-- sidebar -->
+  <div class='col-md-2'>
+    <!-- <ptj-groups></ptj-groups> -->
+  </div>
+  <div class='col-md-8'>
+    <div class='btn-group pull-right'>
+      <label btn-radio="'Once'" class='btn btn-primary' ng-model='radioModel'>Once</label>
+      <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-model='radioModel'>Repeatedly</label>
     </div>
-    <a href="#" id="username" data-type="text" data-pk="1" data-url="/post" data-title="Enter username">superuser</a>
-    <div class="row">
-        <!-- search & results -->
-        <!-- sidebar -->
-        <div class="col-md-2">
-            <!-- <ptj-groups></ptj-groups> -->
-        </div>
-        <div class="col-md-8">
-            <div class="btn-group pull-right">
-                <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Once'">Once</label>
-                <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Repeatedly'">Repeatedly</label>
-            </div>
-            <h2>
-            <a href="#" editable-text="surveyTitle">
-            {{surveyTitle}}</a></h2><br>
-            <!-- add to group -->
-            <ptj-search></ptj-search>
-            <ptj-members></ptj-members>
-            <ptj-survey-details></ptj-survey-details>
-        </div>
-        <!-- </div> -->
-    </div>
-
+    <h2>
+      <a editable-text='surveyTitle' href='#'></a>
+    </h2>
+    <br>
+    <!-- add to group -->
+    <ptj-search></ptj-search>
+    <ptj-members></ptj-members>
+    <ptj-survey-details></ptj-survey-details>
+  </div>
+  <!-- </div> -->
 </div>

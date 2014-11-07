@@ -4,7 +4,6 @@
       .btn-group
         %span{"ng-repeat" => "user in addedUsers"}
           %button.btn.btn-default{:type => "button"}
-            
-            / - 
+            {{user.name}}
             %span.badge{"ng-click" => "removeMember($index)"}
               %span.glyphicon.glyphicon-remove
