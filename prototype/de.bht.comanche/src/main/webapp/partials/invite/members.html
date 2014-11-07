@@ -4,12 +4,13 @@
 
 <div class="container-fluid">
 	<div class="btn-group">
-			<button class="btn btn-default" type="button" ng-repeat="u in addedUsers" >
-					{{u.name}}
-					{{u.email}}
+	<span ng-repeat="user in addedUsers">
+			<button class="btn btn-default" type="button" >
+					{{user.name}}
+					<!-- - {{user.email}} -->
 					<span class="badge" ng-click="removeMember($index)"><span class="glyphicon glyphicon-remove"></span></span>
-					<!-- <button ng-click="addedUsers.splice($index, 1)">entfernen</button> -->
 					</button> 
+					</span>
 			</div>
 			
 			</div> 
