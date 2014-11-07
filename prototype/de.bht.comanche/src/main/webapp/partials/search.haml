@@ -11,11 +11,7 @@
         %li{"ng-repeat" => "group in groups"}
           %a{"ng-click" => "selectGroup(group.name)"}
             {{group.name}}
-            %button.btn.btn-default.btn-xs{:type => "button"}
-              %span.glyphicon.glyphicon-pencil
-            %button.btn.btn-default.btn-xs{:type => "button"}
-              %span.glyphicon.glyphicon-trash
-        %li.divider
+          %li.divider
         %li
           %a{:href => "#"} Separated link
   %input.form-control{"ng-model" => "userSelected", :placeholder => "Search user...", :type => "text", :typeahead => "user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5"}

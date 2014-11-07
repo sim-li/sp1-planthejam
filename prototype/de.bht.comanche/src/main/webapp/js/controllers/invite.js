@@ -102,7 +102,8 @@ angular.module('myApp')
 
     var findGroup = function(name) {
         for (var i = 0, len = $scope.groups.length; i < len; i++) {
-            if ($scope.groups[i].name === name) {
+            var group = $scope.groups[i];
+            if (group.name === name && group.members !== undefined && group.members.length > 0) {
                 return $scope.groups[i];
             }
         }

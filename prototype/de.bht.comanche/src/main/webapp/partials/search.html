@@ -11,15 +11,9 @@
         <li ng-repeat='group in groups'>
           <a ng-click='selectGroup(group.name)'>
             {{group.name}}
-            <button class='btn btn-default btn-xs' type='button'>
-              <span class='glyphicon glyphicon-pencil'></span>
-            </button>
-            <button class='btn btn-default btn-xs' type='button'>
-              <span class='glyphicon glyphicon-trash'></span>
-            </button>
           </a>
+          <li class='divider'></li>
         </li>
-        <li class='divider'></li>
         <li>
           <a href='#'>Separated link</a>
         </li>
