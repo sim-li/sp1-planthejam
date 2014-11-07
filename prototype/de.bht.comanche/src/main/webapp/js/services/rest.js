@@ -97,13 +97,15 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
              * - @param invite optional. If not specified, a new invite will be created on the server
              * and inserted into the database.
              */
-            var saveInvite = function(invite, user) {
+            // var saveInvite = function(invite, user) {
+            var saveInvite = function(invite) {
                 if (LOG) {
                     $log.debug("saveInvite: ");
                     $log.debug(invite);
                     $log.debug(invite.export(user));
                 }
-                return callHTTP(INVITE_PATH + "save", invite.export(user));
+                // return callHTTP(INVITE_PATH + "save", invite.export(user));
+                return callHTTP(INVITE_PATH + "save", invite);
             };
             
             var deleteInvite = function(oid) {

@@ -5,12 +5,14 @@
  * Module: main controller
  */
 
-
 "use strict";
-angular.module("myApp")
-    .controller("ctrl", ["$scope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap",
-        function($scope, $log, Survey, TimeUnit, Type, patterns, dialogMap) {
 
+angular.module("myApp")
+    .controller("ctrl", ["$scope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap", "typeAugmentations", 
+        function($scope, $log, Survey, TimeUnit, Type, patterns, dialogMap, typeAugmentations) {
+        
+        typeAugmentations();
+        
         // make services available for the use in html
         $scope.$log = $log;
         $scope.TimeUnit = TimeUnit;
@@ -67,5 +69,5 @@ angular.module("myApp")
             $log.debug($scope.session)
         };
 
-    }])
+    }]);
     
