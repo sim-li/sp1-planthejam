@@ -1,7 +1,18 @@
 <!-- search & results -->
 <div class='input-group'>
   <div class='input-group-btn'>
-    <span class='input-group-addon'><span class='glyphicon glyphicon-star'></span>{{selectedGroup}}
+    <span class='input-group-addon'>
+      <span class='glyphicon glyphicon-pencil'></span>
+    </span>
+  </div>
+  <div class='input-group-btn'>
+    <span class='input-group-addon'>
+      <span class='glyphicon glyphicon-pencil' ng-click='rowform.$show()'></span>
+      <span class='glyphicon glyphicon-star'>
+        <span e-form='rowform' editable-text='selectedGroup' href='#'>
+          {{selectedGroup}}
+        </span>
+      </span>
     </span>
     <div class='input-group-btn'>
       <button class='btn btn-default dropdown-toggle' data-toggle='dropdown' type='button'>
