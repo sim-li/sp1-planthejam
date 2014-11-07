@@ -17,11 +17,32 @@
             </div>
             <h2>Lets have a beer, guys</h2>
             <!-- add to group -->
-            <ptj-search></ptj-search>
+            <ptj-search ></ptj-search>
             <ptj-members></ptj-members>
-            <ptj-survey-details></ptj-survey-details>
+
+            <div class="col-md-6" style="background-color: rgba(0,0,255,0.1);">
+                <div>START : </div>
+                <timepicker ng-model="mytime" hour-step="1" minute-step="1"></timepicker>
+                <ptj-survey-details></ptj-survey-details>
+                
+            </div>
+            <div class="col-md-6" style="background-color: rgba(25,25,25,0.1);">
+                <div>END : </div>
+                <timepicker ng-model="mytime2" hour-step="1" minute-step="1"></timepicker>
+                <ptj-survey-details></ptj-survey-details>
+                
+            </div>     
+            
+            <!-- slider           -->
+            <div id="red" class="ng-valid ui-slider ui-widget ui-widget-content ui-corner-all ui-slider-horizontal ng-dirty" ng-model="colorpicker.red" ui-slider="colorpicker.options" aria-disabled="false">
+
+                <div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style="width: 78.4314%;"></div>
+                <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 78.4314%;"></a>
+
+            </div>
+            <pre class="alert alert-info">Zeit von {{mytime | date:'shortTime' }} bis {{mytime2 | date:'shortTime' }} am {{dt | date:'fullDate' }}</pre>
         </div>
-        <!-- </div> -->
+        
     </div>
 </div>
 </div>
