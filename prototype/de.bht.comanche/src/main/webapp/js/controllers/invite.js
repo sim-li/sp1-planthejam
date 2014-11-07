@@ -3,6 +3,19 @@ angular.module('myApp')
 
     $scope.surveyTitle = 'Lets have a beer, guys';
     $scope.selectedGroup = '';
+    $scope.showTrash = true;
+
+    $scope.$watch('selectedGroup', function() {
+        if (findGroup($scope.selectedGroup) === -1) {
+            $scope.showTrash = false;
+        } else {
+            $scope.showTrash = true;
+        }
+    });
+
+    $scope.hideTrash = function() {
+        $scope.showTrash = false;
+    };
 
     $scope.today = function() {
         $scope.dt = new Date();
