@@ -44,7 +44,7 @@ public class LgInvite extends DaObject{
 	}
 	
 	public void delete() {
-		user.remove(this);
+		user.removeInvite(this);
 		pool.delete(this); //throw exc when delete errror
 	}
 	

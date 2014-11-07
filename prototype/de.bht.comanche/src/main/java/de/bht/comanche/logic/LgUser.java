@@ -32,10 +32,14 @@ public class LgUser extends DaObject {
 	private List<LgInvite> invites;
 	
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<LgGroup> group;
+	private List<LgGroup> groups;
 	
 	public LgInvite save(final LgInvite invite) {
 		return attach(invite).save();
+	}
+	
+	public LgGroup save(final LgGroup group) {
+		return attach(group).save();
 	}
 
 	public void deleteAccount() {
@@ -44,6 +48,10 @@ public class LgUser extends DaObject {
 
 	public void deleteInvite(final long oid) {
 		getInvite(oid).delete();
+	}
+	
+	public void deleteGroup(final long oid) {
+		getGroup(oid).delete();
 	}
 	
 	public boolean passwordMatchWith(LgUser user) {
@@ -57,9 +65,17 @@ public class LgUser extends DaObject {
 	public LgInvite getInvite(long oid) {
 		return search(getInvites(), oid);
 	}
+	
+	private LgGroup getGroup(long oid) {
+		return search(getGroups(), oid);
+	}
    
-	public void remove(final LgInvite invite) {
+	public void removeInvite(final LgInvite invite) {
 		invites.remove(invite);
+	}
+	
+	public void removeGroup(final LgGroup group) {
+		invites.remove(group);
 	}
 
 	/**
@@ -72,6 +88,11 @@ public class LgUser extends DaObject {
 	@JsonIgnore
 	public List<LgInvite> getInvites() {
 		return invites;
+	}
+	
+	@JsonIgnore
+	public List<LgGroup> getGroups() {
+		return groups;
 	}
 	
 	public String getName() {

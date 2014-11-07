@@ -1,7 +1,6 @@
 package de.bht.comanche.logic;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
