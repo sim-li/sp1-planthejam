@@ -2,6 +2,7 @@ angular.module('myApp')
 .controller('inviteCtrl', ['$scope', function($scope) {
 
     $scope.surveyTitle = 'Lets have a beer, guys';
+    $scope.selectedGroup = '';
 
     $scope.today = function() {
         $scope.dt = new Date();
@@ -24,7 +25,6 @@ angular.module('myApp')
     $scope.open = function($event) {
         $event.preventDefault();
         $event.stopPropagation();
-
         $scope.opened = true;
     };
 
@@ -64,11 +64,19 @@ angular.module('myApp')
     $scope.userSelected = undefined;
     
     $scope.switchDetailPanel = function() {
+        if ($scope.isCollapsed) {
+            openDetailPanel;
+        } else {
+            $scope.isCollapsed = true;
+        }
+    }
+
+    $scope.openDetailPanel = function() {
         if ($scope.addedUsers.length <= 0) {
             $scope.isCollapsed = true;
             return;
         }
-        $scope.isCollapsed = !$scope.isCollapsed;
+        $scope.isCollapsed = false;
     }
 
     $scope.removeMember = function(index) {
@@ -86,8 +94,10 @@ angular.module('myApp')
         if (group === -1) { 
             return;
         }
+        $scope.selectedGroup = group.name;
         $scope.addedUsers = [];
         $scope.addedUsers = group.members;
+        $scope.openDetailPanel();
     }
 
     var findGroup = function(name) {

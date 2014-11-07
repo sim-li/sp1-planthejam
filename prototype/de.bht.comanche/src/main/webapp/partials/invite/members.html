@@ -3,9 +3,9 @@
     <div class='container-fluid'>
       <div class='btn-group'>
         <span ng-repeat='user in addedUsers'>
-          <button class='btn btn-default' type='button'>
+          <button class='btn btn-default' ng-click='removeMember($index)' type='button'>
             {{user.name}}
-            <span class='badge' ng-click='removeMember($index)'>
+            <span class='badge'>
               <span class='glyphicon glyphicon-remove'></span>
             </span>
           </button>

@@ -3,7 +3,7 @@
     .container-fluid
       .btn-group
         %span{"ng-repeat" => "user in addedUsers"}
-          %button.btn.btn-default{:type => "button"}
+          %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"}
             {{user.name}}
-            %span.badge{"ng-click" => "removeMember($index)"}
+            %span.badge
               %span.glyphicon.glyphicon-remove

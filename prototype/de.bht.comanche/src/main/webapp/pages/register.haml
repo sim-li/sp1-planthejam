@@ -2,12 +2,12 @@
   %h2.form-signin-heading Registrieren
   %div
     %label{:for => "inputName"} Benutzername
-    %input#inputName.form-control{:name => "inputName", "ng-model" => "session.user.name", :placeholder => "Dein Benutzername ...", :required => "", :type => "text"}/
+    %input#inputName.form-control{:name => "inputName", "ng-model" => "session.user.name", :placeholder => "Dein Benutzername ...", :required => "", :type => "text"}
     %label{:for => "inputPassword"} Passwort
-    %input#inputPassword.form-control{:name => "inputPassword", "ng-change" => "discardWarnings()", "ng-hide" => "session.showPassword", "ng-model" => "session.user.password", :placeholder => "8-20 Buchstaben", :required => "", :type => "password"}/
-    %input#inputPasswordPlain.form-control{:name => "inputPasswordPlain", "ng-change" => "discardWarnings()", "ng-model" => "session.user.password", "ng-show" => "session.showPassword", :placeholder => "8-20 Buchstaben", :required => "", :type => "text"}/
+    %input#inputPassword.form-control{:name => "inputPassword", "ng-change" => "discardWarnings()", "ng-hide" => "session.showPassword", "ng-model" => "session.user.password", :placeholder => "8-20 Buchstaben", :required => "", :type => "password"}
+    %input#inputPasswordPlain.form-control{:name => "inputPasswordPlain", "ng-change" => "discardWarnings()", "ng-model" => "session.user.password", "ng-show" => "session.showPassword", :placeholder => "8-20 Buchstaben", :required => "", :type => "text"}
     .error 
-  %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "session.showPassword", :type => "checkbox"}/
+  %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "session.showPassword", :type => "checkbox"}
   %label{:for => "toggleShowPassword"} Klartext
   %div
     %label{:for => "inputEmail"} E-Mail
