@@ -1,46 +1,5 @@
 angular.module('myApp')
 .controller('inviteCtrl', ['$scope', function($scope) {
-
-    $scope.surveyTitle = 'Lets have a beer, guys';
-    $scope.selectedGroup = '';
-    $scope.showTrash = true;
-
-    $scope.$watch('selectedGroup', function() {
-        if (findGroup($scope.selectedGroup) === -1) {
-            $scope.showTrash = false;
-        } else {
-            $scope.showTrash = true;
-        }
-    });
-
-    $scope.hideTrash = function() {
-        $scope.showTrash = false;
-    };
-
-    $scope.today = function() {
-        $scope.dt = new Date();
-    };
-    $scope.today();
-
-    $scope.clear = function () {
-        $scope.dt = null;
-    };
-    // Disable weekend selection
-    $scope.disabled = function(date, mode) {
-        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
-
-    $scope.toggleMin = function() {
-        $scope.minDate = $scope.minDate ? null : new Date();
-    };
-    $scope.toggleMin();
-
-    $scope.open = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.opened = true;
-    };
-
     $scope.users = [
     {name:'Blackjack', email:'bj@gmail.com'},
     {name:'Bob',      email:'bob@gmail.com'},
@@ -50,7 +9,6 @@ angular.module('myApp')
     {name:'Max',       email:'max@gmail.com'},
     {name:'Sebastian', email:'sb@gmail.com'}
     ]
-
     $scope.groups = [
         {
             name: 'Rockettes',
@@ -71,11 +29,39 @@ angular.module('myApp')
         {name: 'Dam Killers'},
         {name: 'Masaki Haki Kaki'}
     ]
-
+    $scope.surveyTitle = 'Lets have a beer, guys';
+    $scope.selectedGroup = '';
+    $scope.showTrash = true;
     $scope.addedUsers = []
     $scope.isCollapsed = true;
     $scope.userSelected = undefined;
     
+    $scope.$watch('selectedGroup', function() {
+        if (findGroup($scope.selectedGroup) === -1) {
+            $scope.showTrash = false;
+        } else {
+            $scope.showTrash = true;
+        }
+    });
+
+    $scope.$watch('userSelected', function() {
+        if ($scope.userSelected === undefined || $scope.userSelected.name === undefined) {
+            return;
+        }
+        for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
+            if($scope.addedUsers[i] === $scope.userSelected) {
+                $scope.isCollapsed = false;
+                return;
+            }
+        }
+        $scope.addedUsers.push($scope.userSelected);
+        $scope.isCollapsed = false;
+    });
+
+    $scope.hideTrash = function() {
+        $scope.showTrash = false;
+    };
+
     $scope.switchDetailPanel = function() {
         if ($scope.isCollapsed) {
             $scope.openDetailPanel();
@@ -112,6 +98,30 @@ angular.module('myApp')
         $scope.openDetailPanel();
     }
 
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        $scope.dt = null;
+    };
+    // Disable weekend selection
+    $scope.disabled = function(date, mode) {
+        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
+
+    $scope.toggleMin = function() {
+        $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.open = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened = true;
+    };
+
     var findGroup = function(name) {
         for (var i = 0, len = $scope.groups.length; i < len; i++) {
             var group = $scope.groups[i];
@@ -121,18 +131,4 @@ angular.module('myApp')
         }
         return -1;
     };
-
-    $scope.$watch('userSelected', function() {
-        if ($scope.userSelected === undefined || $scope.userSelected.name === undefined) {
-            return;
-        }
-        for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
-            if($scope.addedUsers[i] === $scope.userSelected) {
-                $scope.isCollapsed = false;
-                return;
-            }
-        }
-        $scope.addedUsers.push($scope.userSelected);
-        $scope.isCollapsed = false;
-     });
 }]);
