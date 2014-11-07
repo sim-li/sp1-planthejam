@@ -5,7 +5,6 @@
  * Module: edit invite controller
  */
 
-
 "use strict";
 
 angular.module("myApp")
