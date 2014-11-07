@@ -30,8 +30,10 @@ public class LgUser extends DaObject {
 
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
-
-
+	
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<LgGroup> group;
+	
 	public LgInvite save(final LgInvite invite) {
 		return attach(invite).save();
 	}
