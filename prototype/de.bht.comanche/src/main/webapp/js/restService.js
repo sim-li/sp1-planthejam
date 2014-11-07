@@ -93,9 +93,8 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	       };
 	
 	        /*
-	         * Update or insert a survey.
-	         * - @param invite optional. If not specified, a new invite will be created on the server
-	         * and inserted into the database.
+	         * Update or insert an invite.
+	         * - @param invite ...
 	         */
 	        var saveInvite = function(invite, user) {
 	        	if (LOG) {
@@ -118,11 +117,11 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 return callHTTP(GROUP_PATH + "getGroups", oid);
             };
             
-            var saveGroup = function(group, user) {
+            var saveGroup = function(group) {
                 
                 $log.info("saveGroups is untested!");
                 
-                return callHTTP(GROUP_PATH + "save", group.export(user));
+                return callHTTP(GROUP_PATH + "save", group.export());
             };
             
             var deleteGroup = function() {
