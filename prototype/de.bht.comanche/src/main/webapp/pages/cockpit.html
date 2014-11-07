@@ -1,4 +1,3 @@
-
 <div class="container">        
     <ptj-menu></ptj-menu>
     
@@ -6,55 +5,42 @@
         <div>
             <label for="inputName">Benutzername</label>
             <input class="form-control" id="inputName" name="inputName" type="text" ng-model="session.tempUser.name" placeholder="Dein Benutzername ..." required />
-
             <label for="inputPassword">Passwort</label>
             <input class="form-control" id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.tempUser.password" 
             placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
-
             <input class="form-control" id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.tempUser.password" 
             placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
-
             <div class="error">{{ warnings.password }}</div>
         </div>
-
         <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
         <label for="toggleShowPassword">Klartext</label>
-
         <div>
             <label for="inputEmail">E-Mail</label>
             <input class="form-control" id="inputEmail" name="inputEmail" type="text" ng-model="session.tempUser.email" placeholder="Deine E-Mail-Adresse ..." ng-change="discardWarnings()" required />
             <div class="error">{{ warnings.email }}</div>
-
             <label for="inputTel">Telefon</label>
             <input class="form-control" id="inputTel" name="inputTel" type="text" ng-model="session.tempUser.tel" placeholder="Deine Telefonnummer ..." ng-change="discardWarnings()" required />
             <div class="error">{{ warnings.tel }}</div>
         </div>
-
         <span>
             <input class="btn btn-primary" id="cancelUserEditBtn" type="button" value="Abbrechen" ng-click="cancelEditUser()" />
             <input class="btn btn-primary" id="saveUserEditBtn" type="submit" value="Speichern" ng-click="saveEditedUser()" />
             <input class="btn btn-primary" id="deleteUserBtn" type="button" value="L&ouml;schen" ng-click="deleteUser()" />
         </span>
     </form><!-- editUserForm -->
-
     <!-- TerminUmfrage -->
     <div class="container" ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
         <span>
             <input class="btn btn-primary" id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addInvite()" />
-
             <!--++++ TODO: Baustelle ++++++++++++++++++++-->
             <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString"></select>
-
                 <select id="surveyList" ng-model="session.selectedInvite.survey">
                     <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
                 </select>
-                
                 <input class="form-control" id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="session.user.searchString" ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-change="updateSelection()"/>
-
                 <input class="btn btn-primary" id="editInvite" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="editInvite()" />
                 <input class="btn btn-primary" id="deleteInvite" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedInvite()" />
             </span>
-
             <textarea rows="5" readonly>{{ session.selectedInvite.survey.description }}</textarea>
         </div><!-- survey_selection_area -->
 

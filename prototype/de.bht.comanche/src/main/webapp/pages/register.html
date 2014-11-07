@@ -3,20 +3,15 @@
     <div>
         <label for="inputName">Benutzername</label>
         <input class="form-control" id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
-
         <label for="inputPassword">Passwort</label>
         <input class="form-control" id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.user.password" 
         placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
-
         <input class="form-control" id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.user.password" 
         placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
-
         <div class="error">{{ warnings.password }}</div>
     </div>
-
     <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
     <label for="toggleShowPassword">Klartext</label>
-
     <div>
         <label for="inputEmail">E-Mail</label>
         <input class="form-control" id="inputEmail" name="inputEmail" type="text" ng-model="session.user.email" placeholder="Deine E-Mail-Adresse ..." ng-change="discardWarnings()" required />
@@ -26,7 +21,6 @@
         <input class="form-control" id="inputTel" name="inputTel" type="text" ng-model="session.user.tel" placeholder="Deine Telefonnummer ..." ng-change="discardWarnings()" required />
         <div class="error">{{ warnings.tel }}</div>
     </div>
-
     <div>
         <a id="cancelRegisterLink" href="/" ng-click="toggleLoginDialog()">Registrieren abbrechen</a>
     </div>
@@ -34,4 +28,4 @@
     <span>
         <input class="btn btn-primary btn-block" id="registerBtn" type="submit" value="Registrieren" />
     </span>
-</form><!-- registerForm -->
+</form>

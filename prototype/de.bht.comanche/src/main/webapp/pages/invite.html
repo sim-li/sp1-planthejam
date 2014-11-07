@@ -1,35 +1,27 @@
 <div class="container">
-<div ng-controller="inviteCtrl">
-<div class="row">
-<ptj-menu></ptj-menu></div>
-</div>
-<div class="row">
-
-
-<!-- search & results -->
-
-
-
-	<!-- sidebar -->
-	<div class="col-md-2">
-	<!-- <ptj-groups></ptj-groups> -->
-	</div>
-	<div class="col-md-8">
-
-	<div class="btn-group pull-right">
-        <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Once'">Once</label>
-        <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Repeatedly'">Repeatedly</label>
+    <div ng-controller="inviteCtrl">
+        <div class="row">
+            <ptj-menu></ptj-menu>
+        </div>
     </div>
-<h2>Lets have a beer, guys</h2>     
-		
-		<!-- add to group -->
-			<ptj-search></ptj-search>
-		<ptj-members></ptj-members>
-		<ptj-survey-details></ptj-survey-details>
-	</div>
-
-    
-	<!-- </div> -->
+    <div class="row">
+        <!-- search & results -->
+        <!-- sidebar -->
+        <div class="col-md-2">
+            <!-- <ptj-groups></ptj-groups> -->
+        </div>
+        <div class="col-md-8">
+            <div class="btn-group pull-right">
+                <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Once'">Once</label>
+                <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Repeatedly'">Repeatedly</label>
+            </div>
+            <h2>Lets have a beer, guys</h2>
+            <!-- add to group -->
+            <ptj-search></ptj-search>
+            <ptj-members></ptj-members>
+            <ptj-survey-details></ptj-survey-details>
+        </div>
+        <!-- </div> -->
+    </div>
 </div>
-</div></div>
-
+</div>

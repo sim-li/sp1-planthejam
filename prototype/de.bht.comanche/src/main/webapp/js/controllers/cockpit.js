@@ -51,18 +51,13 @@ angular.module("myApp")
         };
         
         $scope.deleteSelectedInvite = function() {
-
-            // *** ask: are you sure you want to delete? ***
-
             var _invite = $scope.session.selectedInvite;
             if (!_invite) {
                 $log.log("Keine Terminumfrage ausgewaehlt.");
                 return;
             }
-
             $log.log("deleteSelectedInvite: ");
             $log.log(_invite);
-            
             restService.deleteInvite(_invite.oid)
             // restService.deleteInvite(_invite)
                 .then(function(success) {
@@ -77,13 +72,9 @@ angular.module("myApp")
                     // $log.log(notification); // for future use
                 });
 
-            
             //-------------------- ***
             console.log($scope.session.selectedInvite);
             console.log($scope.session.user);
             //-------------------- ***
         };
-
-
     }]);
-
