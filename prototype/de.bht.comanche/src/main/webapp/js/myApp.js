@@ -50,31 +50,31 @@ var myApp = angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate",
 
     myApp.directive('ptjMenu', function() {
         return {
-            restrict: 'E', 
+            restrict: 'E',
             templateUrl: 'partials/menu.html'
         }
-    })
+    });
     myApp.directive('ptjGroups', function() {
         return {
-            restrict: 'E', 
+            restrict: 'E',
             templateUrl: 'partials/invite/groups.html'
         }
     });
     myApp.directive('ptjSearch', function() {
         return {
-            restrict: 'E', 
+            restrict: 'E',
             templateUrl: 'partials/search.html'
         }
     });
     myApp.directive('ptjSurveyDetails', function() {
         return {
-            restrict: 'E', 
+            restrict: 'E',
             templateUrl: 'partials/invite/surveydetails.html'
         }
     });
     myApp.directive('ptjMembers', function() {
         return {
-            restrict: 'E', 
+            restrict: 'E',
             templateUrl: 'partials/invite/members.html'
         }
     });
