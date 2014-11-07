@@ -5,7 +5,8 @@ target/
 ._.DS_Store
 *.swp
 phonegap-prototype
-
+*._
+.fuse_h*
 webtest/target/
 #hibernate-prototype/java/target/classes/
 #server-prototype/eclipse_jetty_jersea/WebContent/WEB-INF/lib

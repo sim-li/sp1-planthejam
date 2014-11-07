@@ -9,7 +9,7 @@
       </button>
       <ul class='dropdown-menu' role='menu'>
         <li ng-repeat='group in groups'>
-          <a href='#'>
+          <a ng-click='selectGroup(group.name)'>
             {{group.name}}
             <button class='btn btn-default btn-xs' type='button'>
               <span class='glyphicon glyphicon-pencil'></span>

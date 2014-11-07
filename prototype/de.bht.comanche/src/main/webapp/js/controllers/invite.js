@@ -39,24 +39,36 @@ angular.module('myApp')
     ]
 
     $scope.groups = [
-    {name: 'Rockettes'},
-    {name: 'Ralf Laurens'},
-    {name: 'Sam Fillers'},
-    {name: 'Dam Killers'},
-    {name: 'Masaki Haki Kaki'}
+        {
+            name: 'Rockettes',
+            members: [
+                {name:'Blackjack', email:'bj@gmail.com'},
+                {name:'Bob',      email:'bob@gmail.com'},
+                {name:'Sebastian', email:'sb@gmail.com'}
+            ]
+        }, {
+            name: 'Ralf Laurens',
+            members: [
+                {name:'Marie',     email:'marie@gmail.com'},
+                {name:'Sarah',     email:'sr@gmail.com'},
+                {name:'Simon',     email:'sm@gmail.com'},
+            ]
+        },
+        {name: 'Sam Fillers'},
+        {name: 'Dam Killers'},
+        {name: 'Masaki Haki Kaki'}
     ]
 
     $scope.addedUsers = []
     $scope.isCollapsed = true;
-
+    $scope.userSelected = undefined;
+    
     $scope.switchDetailPanel = function() {
         if ($scope.addedUsers.length <= 0) {
             $scope.isCollapsed = true;
-            console.log($scope.isCollapsed);
             return;
         }
         $scope.isCollapsed = !$scope.isCollapsed;
-        console.log($scope.isCollapsed);
     }
 
     $scope.removeMember = function(index) {
@@ -66,16 +78,38 @@ angular.module('myApp')
         }
     }
 
+    $scope.selectGroup = function(groupName) {
+        if (groupName === undefined || $scope.groups === undefined) {
+            return;
+        }
+        var group = findGroup(groupName);
+        if (group === -1) { 
+            return;
+        }
+        $scope.addedUsers = [];
+        $scope.addedUsers = group.members;
+    }
+
+    var findGroup = function(name) {
+        for (var i = 0, len = $scope.groups.length; i < len; i++) {
+            if ($scope.groups[i].name === name) {
+                return $scope.groups[i];
+            }
+        }
+        return -1;
+    };
+
     $scope.$watch('userSelected', function() {
+        if ($scope.userSelected === undefined || $scope.userSelected.name === undefined) {
+            return;
+        }
         for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
             if($scope.addedUsers[i] === $scope.userSelected) {
                 $scope.isCollapsed = false;
                 return;
             }
         }
-        if ($scope.userSelected !== undefined && $scope.userSelected.name !== undefined) {
-            $scope.addedUsers.push($scope.userSelected);
-            $scope.isCollapsed = false;
-        }
-    });
+        $scope.addedUsers.push($scope.userSelected);
+        $scope.isCollapsed = false;
+     });
 }]);
