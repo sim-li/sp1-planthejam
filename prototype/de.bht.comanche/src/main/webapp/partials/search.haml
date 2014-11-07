@@ -1,25 +1,22 @@
 / search & results
 .input-group
-  .input-group-btn
-    %span.input-group-addon
-      %span.glyphicon.glyphicon-pencil
-  .input-group-btn
-    %span.input-group-addon
-      %span.glyphicon.glyphicon-pencil{"ng-click" => "rowform.$show()"}
-      %span.glyphicon.glyphicon-star       
-        %span{"editable-text" => "selectedGroup", "e-form" => "rowform", :href => "#"}
+  .input-group-addon
+    %span.glyphicon.glyphicon-plus
+  .input-group-addon
+    %div.item-wrapper
+      %a{"editable-text" => "selectedGroup", :href => "#"}    
+        %b
+          %span.glyphicon.glyphicon-star 
           {{selectedGroup}}
-    .input-group-btn
-      %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
-        %span.caret
-      %ul.dropdown-menu{:role => "menu"}
-        %li{"ng-repeat" => "group in groups"}
-          %a{"ng-click" => "selectGroup(group.name)"}
-            {{group.name}}
-          %li.divider
-        %li
-          %a{:href => "#"} Separated link
+  .input-group-btn
+    %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+      %span.caret
+    %ul.dropdown-menu{:role => "menu"}
+      %li{"ng-repeat" => "group in groups"}
+        %a{"ng-click" => "selectGroup(group.name)"}
+          {{group.name}}
+        %li.divider
   %input.form-control{"ng-model" => "userSelected", :placeholder => "Search user...", :type => "text", :typeahead => "user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5"}
   .input-group-btn
     %button.btn.btn-default{"ng-click" => "switchDetailPanel()", :type => "button"}
-      %span.glyphicon.glyphicon-list
+      %span.glyphicon.glyphicon-resize-vertical
