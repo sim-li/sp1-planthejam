@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loggedInCtrl", ["$scope", "$log", "Invite", "restService", "dialogMap", "util", 
-        function($scope, $log, Invite, restService, dialogMap, util) {
+    .controller("cockpitCtrl", ["$scope", "$location", "$log", "Invite", "restService", "dialogMap", "util", 
+        function($scope, $location, $log, Invite, restService, dialogMap, util) {
 
         $scope.logout = function() {
 
@@ -19,6 +19,7 @@ angular.module("myApp")
             $log.log("Logout erfolgreich.");
             $scope.initSession();
             $scope.showRegisterDialog = false;
+            $location.path('/');
         };
 
         
@@ -50,18 +51,13 @@ angular.module("myApp")
         };
         
         $scope.deleteSelectedInvite = function() {
-
-            // *** ask: are you sure you want to delete? ***
-
             var _invite = $scope.session.selectedInvite;
             if (!_invite) {
                 $log.log("Keine Terminumfrage ausgewaehlt.");
                 return;
             }
-
             $log.log("deleteSelectedInvite: ");
             $log.log(_invite);
-            
             restService.deleteInvite(_invite.oid)
             // restService.deleteInvite(_invite)
                 .then(function(success) {
@@ -76,13 +72,9 @@ angular.module("myApp")
                     // $log.log(notification); // for future use
                 });
 
-            
             //-------------------- ***
             console.log($scope.session.selectedInvite);
             console.log($scope.session.user);
             //-------------------- ***
         };
-
-
     }]);
-

@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loginCtrl", ["$scope", "$log", "patterns", "restService", "dialogMap", 
-        function($scope, $log, patterns, restService, dialogMap) {
+    .controller("loginCtrl", ["$scope", "$location", "$log", "patterns", "restService", "dialogMap", 
+        function($scope, $location, $log, patterns, restService, dialogMap) {
        
         var loginIsValidFor = function(user) {
             if (!user.name) {
@@ -61,6 +61,7 @@ angular.module("myApp")
                     $scope.session.user = user;
                     $scope.session.state.isLoggedIn = true;
                     $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
+                    $location.path('/cockpit');
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
                     console.log(user);
@@ -111,6 +112,7 @@ angular.module("myApp")
                     $log.log("Registrierung erfolgreich.");
                     $log.log("Login erfolgreich.");
                     $log.log($scope.session);
+                    $location.path('/'); // come back to login seite when register succesful
                 }, function(error) {
                     $log.error(error);
                     $scope.warnings.central = error;
