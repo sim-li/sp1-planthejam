@@ -1,8 +1,5 @@
 package de.bht.comanche.rest;
 
-import static multex.MultexUtil.create;
-
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +15,8 @@ import de.bht.comanche.logic.LgTransaction;
 
 @Path("/invite/")
 public class ReInviteService extends RestService {
+	
+	// TODO should be changed to GET, because no data is sent from calling client
 	@POST
 	@Path("getInvites")
 	@Consumes("application/json")

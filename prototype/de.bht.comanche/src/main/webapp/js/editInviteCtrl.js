@@ -34,10 +34,13 @@ angular.module("myApp")
             restService.saveInvite(_invite, $scope.session.user)
                 .then(function(invite) {
 
-                    if (!$scope.session.addingInvite) {
+                    /*if (!$scope.session.addingInvite) {
                         util.removeElementFrom(_invite, $scope.session.user.invites);
                     }
-                    $scope.session.user.invites.push(invite);
+                    $scope.session.user.invites.push(invite);*/
+
+                    $scope.session.user.invites.updateElementWithOid(invite);
+
                     // $scope.session.user.invites.sort(function(a, b){ return a.name.localeCompare(b.name) }); // FIXME
                     $scope.session.selectedInvite = invite;
                     $scope.session.tempInvite = "";

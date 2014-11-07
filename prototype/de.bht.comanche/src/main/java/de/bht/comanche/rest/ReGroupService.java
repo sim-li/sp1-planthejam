@@ -24,7 +24,8 @@
 //
 //@Path("/group/")
 //public class ReGroupService extends RestService {
-//	
+//
+//  // TODO should be changed to GET, because no data is sent from calling client
 //	@Path("getGroups")
 //	@POST
 //	@Consumes("application/json")

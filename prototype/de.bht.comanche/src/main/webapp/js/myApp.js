@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
+angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule", "typeAugmentations"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 

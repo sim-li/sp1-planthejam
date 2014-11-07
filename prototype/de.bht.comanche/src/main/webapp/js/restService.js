@@ -82,28 +82,27 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	        };
 	        
             // TODO oid not necessary, because of new authentification with http user session ??? if so -> same for Server-REST
-	        var getInvites = function(oid) {
+	        var getInvites = function() {
 	        	//TODO@CodeCleanup: If not necessary, remove from code.
 	            if (false) {
 	          	    var _rawInvites = data;
 	                var _invites = Invite.forInvitesConvertFromRawInvites(_rawInvites);
 	                deferred.resolve(_invites);
 	            }
-	            return DUMMY_INVITE_LIST === true ? Invite.getDummyInviteList : callHTTP(INVITE_PATH + "getInvites", oid);
+	            return DUMMY_INVITE_LIST === true ? Invite.getDummyInviteList : callHTTP(INVITE_PATH + "getInvites");
 	       };
 	
 	        /*
-	         * Update or insert a survey.
-	         * - @param invite optional. If not specified, a new invite will be created on the server
-	         * and inserted into the database.
+	         * Update or insert an invite.
+	         * - @param invite ...
 	         */
-	        var saveInvite = function(invite, user) {
+        	var saveInvite = function(invite) {
 	        	if (LOG) {
 	        		$log.debug("saveInvite: ");
 	        		$log.debug(invite);
-	        		$log.debug(invite.export(user));
+	        		$log.debug(invite.export());
 	        	}
-	            return callHTTP(INVITE_PATH + "save", invite.export(user));
+	            return callHTTP(INVITE_PATH + "save", invite.export());
 	        };
 	        
 	        var deleteInvite = function(oid) {
