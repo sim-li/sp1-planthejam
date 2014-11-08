@@ -30,9 +30,8 @@ angular.module('myApp')
         {name: 'Masaki Haki Kaki'}
     ]
     $scope.surveyTitle = 'Lets have a beer, guys';
-    $scope.editedGroupName = $scope.groups.length > 0 && $scope.groups[0].name !== undefined ?
-        $scope.groups[0].name : '[New group]';
-    $scope.selectedGroupName = $scope.editedGroupName;
+    $scope.editedGroupName = '';
+    $scope.selectedGroupName = '';
     $scope.showTrash = true;
     $scope.addedUsers = []
     $scope.isCollapsed = true;
@@ -80,6 +79,15 @@ angular.module('myApp')
         $scope.showTrash = true;
     };
 
+    $scope.deleteGroup = function() {
+        var index = find($scope.groups, 'name', $scope.selectedGroupName);
+        if (index === -1) {
+            return;
+        }
+        $scope.groups.splice(index, 1);
+        setDefaultGroup();
+    };
+
     $scope.hideTrash = function() {
         $scope.showTrash = false;
     };
@@ -90,7 +98,7 @@ angular.module('myApp')
         } else {
             $scope.isCollapsed = true;
         }
-    }
+    };
 
     $scope.openDetailPanel = function() {
         if ($scope.addedUsers.length <= 0) {
@@ -104,7 +112,7 @@ angular.module('myApp')
         if ($scope.addedUsers.length <= 0) {
             $scope.isCollapsed = true;
         }
-    }
+    };
 
     $scope.selectGroup = function(groupName) {
         if (groupName === undefined || $scope.groups === undefined) {
@@ -120,7 +128,7 @@ angular.module('myApp')
         $scope.addedUsers = group.members;
         $scope.showTrash = true;
         // $scope.openDetailPanel();
-    }
+    };
 
     $scope.clear = function () {
         $scope.dt = null;
@@ -133,14 +141,27 @@ angular.module('myApp')
     $scope.toggleMin = function() {
         $scope.minDate = $scope.minDate ? null : new Date();
     };
-    $scope.toggleMin();
 
     $scope.open = function($event) {
         $event.preventDefault();
         $event.stopPropagation();
         $scope.opened = true;
     };
-    
+
+    var setDefaultGroup = function() {
+        var hasEntries = $scope.groups.length > 0 && $scope.groups[0].name !== undefined;
+        var groupName;
+        if (hasEntries) {
+            groupName = $scope.groups[0].name;
+            $scope.addedUsers = $scope.groups[0].members;
+        } else {
+            groupName = '[New group]';
+            $scope.addedUsers = [];
+        }
+        $scope.editedGroupName = groupName;
+        return groupName;
+    };
+
     var removeEmptyGroups = function() {
         var i = $scope.groups.length;
         while (i--) {
@@ -149,15 +170,6 @@ angular.module('myApp')
                 $scope.groups.splice(i, 1);
             }
         }
-    };
-    removeEmptyGroups();
-
-    var deleteGroup = function() {
-        var index = find($scope.groups, 'name', selectedGroupName);
-        if (index === -1) {
-            return;
-        }
-        $scope.groups.splice(index, 1);
     };
 
     var changeGroupName = function(oldName, newName) {
@@ -187,5 +199,9 @@ angular.module('myApp')
         }
         return -1;
     };
-
+    
+    $scope.toggleMin();
+    removeEmptyGroups();
+    setDefaultGroup();
+    $scope.selectGroup($scope.editedGroupName);
 }]);
