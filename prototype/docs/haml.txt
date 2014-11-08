@@ -1,0 +1,16 @@
+In  HAML Arbeiten:
+------------------
+
+Vorbereitung:
+    - Root werden (su, pw. "ptj")
+
+Ruby Haml installieren:
+
+sudo apt-get install rubygems build-essential
+gem install haml
+gem install watchr
+gem install fssm
+
+In sp1-plan-the-jam
+./watchhaml.rb
+ausführen. Alle HAMLS werden bei Veränderung automatisch in HTML compiliert.
