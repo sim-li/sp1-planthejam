@@ -31,16 +31,18 @@ angular.module('myApp')
     ]
     $scope.surveyTitle = 'Lets have a beer, guys';
     $scope.selectedGroup = '';
+    $scope.editedGroup = '';
     $scope.showTrash = true;
     $scope.addedUsers = []
     $scope.isCollapsed = true;
     $scope.userSelected = undefined;
-    
-    $scope.$watch('selectedGroup', function() {
-        if (findGroup($scope.selectedGroup) === -1) {
-            $scope.showTrash = false;
-        } else {
+
+    $scope.$watch('editedGroup', function() {
+        if ($scope.selectedGroup === $scope.editedGroup) {
             $scope.showTrash = true;
+        } else {
+            $scope.showTrash = false;
+            changeGroupName($scope.selectedGroup, $scope.editedGroup);
         }
     });
 
@@ -57,6 +59,18 @@ angular.module('myApp')
         $scope.addedUsers.push($scope.userSelected);
         $scope.isCollapsed = false;
     });
+
+    $scope.addGroup = function() {
+        if ($scope.addedUsers.length <= 0) {
+            return;
+        }
+        changeGroupName($scope.editedGroup, $scope.selectedGroup);
+        $scope.groups.push({
+            name: $scope.editedGroup,
+            members: $scope.addedUsers
+        });
+        $scope.showTrash = true;
+    };
 
     $scope.hideTrash = function() {
         $scope.showTrash = false;
@@ -93,6 +107,7 @@ angular.module('myApp')
             return;
         }
         $scope.selectedGroup = group.name;
+        $scope.editedGroup = group.name;
         $scope.addedUsers = [];
         $scope.addedUsers = group.members;
         $scope.openDetailPanel();
@@ -120,6 +135,16 @@ angular.module('myApp')
         $event.preventDefault();
         $event.stopPropagation();
         $scope.opened = true;
+    };
+    
+    var changeGroupName = function(oldName, newName) {
+        for (var i = 0, len = $scope.groups.length; i < len; i++) {
+            var group = $scope.groups[i];
+            if (group.name === oldName) {
+                $scope.groups[i].name = newName;
+            }
+        }
+        return -1;
     };
 
     var findGroup = function(name) {

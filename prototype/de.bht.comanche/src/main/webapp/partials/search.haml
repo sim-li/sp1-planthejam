@@ -1,17 +1,17 @@
 / search & results
 .input-group
   .input-group-btn{"ng-show" => "!showTrash && !isCollapsed"}
-    %button.btn.btn-default{"ng-click" => "switchDetailPanel()", :type => "button"}
+    %button.btn.btn-default{"ng-click" => "addGroup()", :type => "button"}
       %span.glyphicon.glyphicon-plus
   .input-group-btn{"ng-show" => "showTrash && !isCollapsed"}
     %button.btn.btn-default{"ng-click" => "switchDetailPanel()", :type => "button"}
       %span.glyphicon.glyphicon-trash
   .input-group-addon
     %div.item-wrapper
-      %a{"editable-text" => "selectedGroup", :href => "#"}    
+      %a{"editable-text" => "editedGroup", :href => "#"}    
         %b
           %span.glyphicon.glyphicon-star 
-          {{selectedGroup}}
+          {{editedGroup}}
   .input-group-btn
     %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
       %span.caret

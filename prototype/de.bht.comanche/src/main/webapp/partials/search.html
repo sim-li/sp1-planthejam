@@ -1,7 +1,7 @@
 <!-- search & results -->
 <div class='input-group'>
   <div class='input-group-btn' ng-show='!showTrash &amp;&amp; !isCollapsed'>
-    <button class='btn btn-default' ng-click='switchDetailPanel()' type='button'>
+    <button class='btn btn-default' ng-click='addGroup()' type='button'>
       <span class='glyphicon glyphicon-plus'></span>
     </button>
   </div>
@@ -12,10 +12,10 @@
   </div>
   <div class='input-group-addon'>
     <div class='item-wrapper'>
-      <a editable-text='selectedGroup' href='#'>
+      <a editable-text='editedGroup' href='#'>
         <b>
           <span class='glyphicon glyphicon-star'></span>
-          {{selectedGroup}}
+          {{editedGroup}}
         </b>
       </a>
     </div>
