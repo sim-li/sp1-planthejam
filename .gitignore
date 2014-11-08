@@ -2,11 +2,10 @@ target/
 .settings
 .classpath
 .DS_Store
-._.DS_Store
+._*
 *.swp
 phonegap-prototype
 
-webtest/target/
 #hibernate-prototype/java/target/classes/
 #server-prototype/eclipse_jetty_jersea/WebContent/WEB-INF/lib
 #*.jar
