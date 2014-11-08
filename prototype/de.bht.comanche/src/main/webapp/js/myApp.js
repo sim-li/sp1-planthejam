@@ -27,7 +27,7 @@ angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "
             removeElementFrom: removeElementFrom
         }
     })
-    .config(function($routeProvider) {
+    .config(function($routeProvider, $locationProvider) {
         $routeProvider
             .when('/', {
                 templateUrl : 'pages/login.html',
@@ -45,7 +45,8 @@ angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "
             .when('/invite', {
                 templateUrl : 'pages/invite.html',
                 controller  : 'inviteCtrl'
-            })
+            });
+        $locationProvider.html5Mode(true);
     })
     .directive('ptjMenu', function() {
         return {
@@ -77,4 +78,3 @@ angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "
             templateUrl: 'partials/invite/members.html'
         }
     });
-   
