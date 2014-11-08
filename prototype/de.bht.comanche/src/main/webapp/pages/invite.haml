@@ -1,0 +1,42 @@
+.container
+  .row
+    %ptj-menu
+  .row
+    / search & results
+    / sidebar
+    .col-md-2
+      / <ptj-groups></ptj-groups>
+    .col-md-8
+      .row
+        .col-md-8
+          %h2
+            %div.item-wrapper
+            %a{"editable-text" => "surveyTitle", :href => "#"} 
+              {{surveyTitle}}
+        .col-md-4
+          .row
+            .btn-group.pull-right
+              %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "radioModel"} Once
+              %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "radioModel"} Repeatedly
+            %br
+            %br            
+            %btn.btn-sm.btn-success.pull-right{"ng-show" => "showLiveButton", "ng-click" => "showLiveButton=false"}
+              Live
+              %span.glyphicon.glyphicon-bullhorn
+            %btn.btn-sm.btn-warning.pull-right{"ng-show" => "!showLiveButton", "ng-click" => "showLiveButton=true"}
+              Staged
+              %span.glyphicon.glyphicon-off
+       
+      %br
+      / .well.well-sm
+      /   div.btn-group-vertical
+      /     %button.btn.btn-default.btn-sm{:type => "button"}
+      /       %span.glyphicon.glyphicon-pencil
+      /     %button.btn.btn-default.btn-sm{:type => "button"}
+      /       %span.glyphicon.glyphicon-trash
+      /     %button.btn.btn-default.btn-sm{:type => "button"}
+      /       %span.glyphicon.glyphicon-plus
+      %ptj-search
+      %ptj-members
+    / %ptj-survey-details
+  / </div>

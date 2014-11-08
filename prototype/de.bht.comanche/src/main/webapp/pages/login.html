@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <form name="loginForm" ng-hide="session.state.isLoggedIn"  ng-show="session.state.is(dialogMap.USER_LOGIN)" ng-submit="login()" class="form-signin">
     <h2 class="form-signin-heading">Bitte einloggen</h2>
     <div>
@@ -12,3 +13,19 @@
     </div>
     <input class="btn btn-primary btn-block" id="loginBtn" type="submit" value="Login" />
 </form><!-- loginForm -->
+=======
+<form class='form-signin' name='loginForm' ng-hide='session.state.isLoggedIn' ng-show='session.state.is(dialogMap.USER_LOGIN)' ng-submit='login()'>
+  <h2 class='form-signin-heading'>Bitte einlogen</h2>
+  <div>
+    <label for='inputName'>Benutzername</label>
+    <input autofocus='' class='form-control' id='inputName' name='inputName' ng-model='session.user.name' placeholder='Dein Benutzername ...' required='' type='text'>
+    <label for='inputPassword'>Passwort</label>
+    <input class='form-control' id='inputPassword' name='inputPassword' ng-change='discardWarnings()' ng-hide='session.showPassword' ng-model='session.user.password' placeholder='8-20 Buchstaben' required='' type='password'>
+  </div>
+  <div>
+    <a href='#/register' id='registerLink' ng-click='toggleLoginDialog()'>Registrieren</a>
+  </div>
+  <input class='btn btn-primary btn-block' id='loginBtn' type='submit' value='Login'>
+</form>
+<!-- loginForm -->
+>>>>>>> I31SIM

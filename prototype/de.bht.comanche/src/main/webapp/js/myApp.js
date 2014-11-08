@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations"])
+angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate", "survey", "constants", "restModule"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -77,4 +77,8 @@ angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "
             restrict: 'E',
             templateUrl: 'partials/invite/members.html'
         }
+    })
+    .run(function(editableOptions) {
+        editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
     });
+
