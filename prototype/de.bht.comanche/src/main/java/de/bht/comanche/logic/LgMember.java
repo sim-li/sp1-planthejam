@@ -18,7 +18,6 @@ public class LgMember extends DaObject{
 	
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="group_oid")
 	private LgGroup group;
 	
 	@Column
