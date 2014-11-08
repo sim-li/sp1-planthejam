@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate", "survey", "constants", "restModule"])
+var myApp = angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -53,32 +53,32 @@ angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate"
             restrict: 'E',
             templateUrl: 'partials/menu.html'
         }
-    })
-    .directive('ptjGroups', function() {
+    });
+    myApp.directive('ptjGroups', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/invite/groups.html'
         }
-    })
-    .directive('ptjSearch', function() {
+    });
+    myApp.directive('ptjSearch', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/search.html'
         }
-    })
-    .directive('ptjSurveyDetails', function() {
+    });
+    myApp.directive('ptjSurveyDetails', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/invite/surveydetails.html'
         }
-    })
-    .directive('ptjMembers', function() {
+    });
+    myApp.directive('ptjMembers', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/invite/members.html'
         }
-    })
-    .run(function(editableOptions) {
+    });
+    myApp.run(function(editableOptions) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
     });
 
