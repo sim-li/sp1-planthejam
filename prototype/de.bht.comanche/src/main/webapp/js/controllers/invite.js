@@ -1,3 +1,6 @@
+// TODO: Merge AddMember ETC with direct Groups
+// Simplify, Patterns, Comment.
+
 angular.module('myApp')
 .controller('inviteCtrl', ['$scope', function($scope) {
     $scope.users = [
