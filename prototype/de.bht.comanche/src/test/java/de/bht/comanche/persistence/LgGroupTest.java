@@ -33,4 +33,4 @@ public class LgGroupTest {
 		assertTrue("Persisting test users Alice & Bob", true);
 	}
 	
-  }
+}
