@@ -45,12 +45,12 @@ angular.module("invite", ["survey"])
                     // "possibleTimeperiods": _survey.possibleTimeperiods, 
                     // "determinedTimeperiod": _survey.determinedTimeperiod 
                 }
-            }
-        }
+            };
+        };
 
         Invite.prototype.convertDatesToDatePickerDate = function() {
             this.survey.convertDatesToDatePickerDate();
-        }
+        };
 
         Invite.forInvitesConvertFromRawInvites = function(rawInvites) {
             if (!rawInvites) {
@@ -66,7 +66,7 @@ angular.module("invite", ["survey"])
                 // // rawInvites[i].convertDatesToDatePickerDate();
             }
             return _invites;
-        }
+        };
 /*
         Invite.getDummyInviteList = function() {
             return [

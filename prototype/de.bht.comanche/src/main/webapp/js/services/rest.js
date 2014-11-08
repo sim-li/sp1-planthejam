@@ -6,9 +6,9 @@
  */
 "use strict";
 
-angular.module("restModule", ["datePickerDate", "constants", "invite"])
-    .factory("restService", ["$http", "$q", "$log", "$filter", "Invite",
-        function($http, $q, $log, $filter, Invite) {
+angular.module("restModule", ["datePickerDate", "constants", "invite", "group"])
+    .factory("restService", ["$http", "$q", "$log", "$filter", "Invite", "Group",
+        function($http, $q, $log, $filter, Invite, Group) {
             var DUMMY_INVITE_LIST = false;
             var DUMMY_LOGIN = false;
             var LOG = true;
@@ -81,15 +81,14 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                     });
             };
             
-            // TODO oid not necessary, because of new authentification with http user session ??? if so -> same for Server-REST
-            var getInvites = function(oid) {
+            var getInvites = function() {
                 //TODO@CodeCleanup: If not necessary, remove from code.
                 if (false) {
                     var _rawInvites = data;
                     var _invites = Invite.forInvitesConvertFromRawInvites(_rawInvites);
                     deferred.resolve(_invites);
                 }
-                return DUMMY_INVITE_LIST === true ? Invite.getDummyInviteList : callHTTP(INVITE_PATH + "getInvites", oid);
+                return DUMMY_INVITE_LIST === true ? Invite.getDummyInviteList : callHTTP(INVITE_PATH + "getInvites");
            };
     
             /*
@@ -109,12 +108,11 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 return callHTTP(INVITE_PATH + "delete", oid, "DELETE", { "Content-Type": "application/json" } );
             };
             
-            // TODO oid not necessary, because of new authentification with http user session ??? if so -> same for Server-REST
-            var getGroups = function(oid) {
+            var getGroups = function() {
                 
                 $log.info("getGroups is untested!");
                 
-                return callHTTP(GROUP_PATH + "getGroups", oid);
+                return callHTTP(GROUP_PATH + "getGroups");
             };
             
             var saveGroup = function(group) {
@@ -130,6 +128,10 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 
                 return callHTTP(GROUP_PATH + "delete", oid, "DELETE", { "Content-Type": "application/json" } );
             };
+
+            var sayHi = function() {
+                $log.log("HI from rest");
+            };
     
             return {
                 login: login,
@@ -141,7 +143,8 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
                 deleteInvite: deleteInvite, 
                 getGroups: getGroups, 
                 saveGroup: saveGroup, 
-                deleteGroup: deleteGroup
+                deleteGroup: deleteGroup, 
+                sayHi: sayHi
             };
     }]);
 

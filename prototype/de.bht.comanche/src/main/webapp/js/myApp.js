@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations"])
+angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations", "group"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -46,7 +46,7 @@ angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "
                 templateUrl : 'pages/invite.html',
                 controller  : 'inviteCtrl'
             });
-        $locationProvider.html5Mode(true);
+        // $locationProvider.html5Mode(true); // for prettier urls
     })
     .directive('ptjMenu', function() {
         return {

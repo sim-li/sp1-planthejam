@@ -6,11 +6,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
 
@@ -29,7 +30,7 @@ public class LgGroup extends DaObject{
 	private LgUser user;
 		
 	@OneToMany(mappedBy="group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<LgMember> member;
+	private List<LgMember> members;
 	
 	public String getName() {
 		return name;
@@ -37,6 +38,16 @@ public class LgGroup extends DaObject{
 
 	public LgGroup setName(String name) {
 		this.name = name;
+		return this;
+	}
+	
+	@JsonIgnore
+	public LgUser getUser() {
+		return user;
+	}
+
+	public LgGroup setUser(LgUser user) {
+		this.user = user;
 		return this;
 	}
 	

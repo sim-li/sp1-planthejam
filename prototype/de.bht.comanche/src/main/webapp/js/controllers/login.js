@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loginCtrl", ["$scope", "$location", "$log", "patterns", "restService", "dialogMap", 
-        function($scope, $location, $log, patterns, restService, dialogMap) {
+    .controller("loginCtrl", ["$scope", "$location", "$log", "patterns", "restService", "dialogMap", "Group", 
+        function($scope, $location, $log, patterns, restService, dialogMap, Group) {
        
         var loginIsValidFor = function(user) {
             if (!user.name) {
@@ -70,13 +70,10 @@ angular.module("myApp")
                         .then(function(invites) {
                             $log.debug(invites);
 
-                            var _invites = [];
-                            for (var i in invites) {
-                                _invites.push(invites[i]);
-                            }
-                            $scope.session.user.invites  = _invites;
+                            $scope.session.user.invites = invites;
                             $scope.session.selectedInvite = $scope.session.user.invites[0] || "";
                             $log.debug($scope.session.user.invites);
+                            $log.debug($scope.session.selectedInvite);
                             $log.debug($scope.session.selectedInvite.survey);
                             $log.debug("---------");
 
@@ -87,6 +84,50 @@ angular.module("myApp")
                         }, function(notification) {
                             // $log.log(notification); // for future use
                         });
+
+
+                    // TODO still testing
+                    restService.getGroups()
+                        .then(function(groups) {
+                            $log.info("================>");
+                            $log.debug(groups);
+
+                            
+                            $scope.session.user.groups = Group.import(groups);
+                            $log.debug($scope.session.user.groups);
+                            // $log.info("================");
+                            // $log.info(Group.import);
+                            // var receivedGroups = groups;
+                            // $log.log("receivedGroups: " + receivedGroups.length);
+                            // for (var i = 0, len = receivedGroups.length; i < len; i++) {
+                            //     $log.log(receivedGroups[i]);
+                            // }
+                            // var importedGroups = Group.import(receivedGroups);
+                            // $log.log("importedGroups: " + importedGroups.length);
+                            // for (var i = 0, len = importedGroups.length; i < len; i++) {
+                            //     $log.log(importedGroups[i]);
+                            // }
+                            // $log.info("<================");
+
+
+                            // $scope.session.user.groups = receivedGroups;
+                            // $scope.session.user.groups = groups;
+
+                        }, function(error) {
+                            $log.error(error);
+                            $scope.warnings.central = error;
+                            
+                        }, function(notification) {
+                            // $log.log(notification); // for future use
+                        });
+
+                    // FIXME quick hack for debugging
+                    // var dummyGroup = new Group({
+                    //     oid: 123, 
+                    //     name: "Kaffeeklatsch", 
+                    //     members: [{oid: 1, name: "Alice"}, {oid: 2, name: "Bob"}, {oid: 3, name: "Carla"}]
+                    // });
+                    // restService.saveGroup(dummyGroup);
 
 
                 }, function(error) {

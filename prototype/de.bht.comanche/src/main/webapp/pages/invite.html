@@ -1,8 +1,8 @@
 <div class="container">
-          <div class="row">
-            <ptj-menu></ptj-menu>
-        </div>
+    <div class="row">
+        <ptj-menu></ptj-menu>
     </div>
+
     <a href="#" id="username" data-type="text" data-pk="1" data-url="/post" data-title="Enter username">superuser</a>
     <div class="row">
         <!-- search & results -->
@@ -41,6 +41,21 @@
 
             </div>
             <pre class="alert alert-info">Zeit von {{mytime | date:'shortTime' }} bis {{mytime2 | date:'shortTime' }} am {{dt | date:'fullDate' }}</pre>
+
+
+            <!-- ++++ Baustelle ++++ -->
+            <div ng-repeat="group in session.user.groups">
+                <!-- <input type="text" ng-model="group.oid" /> -->
+                <input type="text" ng-model="group.name" />
+                <!-- <input type="text" ng-model="group.members" /> -->
+                >> {{ group }} <<
+                <!-- <input type="button" value="speichern" ng-click="$log.log('clicked'); restService.saveGroup(group); $log.log('saved')" /></> -->
+                <input type="button" value="speichern" ng-click="restService.saveGroup(group); restService.sayHi();" /></>
+                <!-- <input type="button" value="speichern" ng-click="sayHi()" /></> -->
+                ####
+            </div>
+
+
         </div>
         
     </div>

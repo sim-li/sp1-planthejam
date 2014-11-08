@@ -17,6 +17,7 @@ import de.bht.comanche.logic.LgTransaction;
 @Path("/group/")
 public class ReGroupService extends RestService {
 	
+	// TODO should probably be changed to GET, as no data is received from client
 	@Path("getGroups")
 	@POST
 	@Consumes("application/json")

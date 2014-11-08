@@ -18,6 +18,8 @@ import de.bht.comanche.logic.LgTransaction;
 
 @Path("/invite/")
 public class ReInviteService extends RestService {
+	
+	// TODO should probably be changed to GET, as no data is received from client
 	@POST
 	@Path("getInvites")
 	@Consumes("application/json")
