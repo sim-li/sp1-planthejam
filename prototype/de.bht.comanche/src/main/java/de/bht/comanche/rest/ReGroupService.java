@@ -1,5 +1,6 @@
 package de.bht.comanche.rest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,16 @@ public class ReGroupService extends RestService {
 		return new LgTransaction<List<LgGroup>>(request) {
 			@Override
 			public List<LgGroup> execute() throws Exception {
-				return startSession().getGroups();
+//				return startSession().getGroups();
+				
+				// FIXME - hard coded quick hack to test communication with client
+				List<LgGroup> dummyGroups = Arrays.asList(new LgGroup[] {
+						new LgGroup().setName("Krabbelgruppe"), 
+						new LgGroup().setName("Musikgruppe"), 
+						new LgGroup().setName("Chorprobe"), 
+						new LgGroup().setName("Skat spielen") 
+				});
+				return dummyGroups;
 			}
 		}.getResult();
 	}
