@@ -10,40 +10,40 @@ angular.module('myApp')
     {name:'Sebastian', email:'sb@gmail.com'}
     ]
     $scope.groups = [
-        // {
-        //     name: 'Rockettes',
-        //     members: [
-        //         {name:'Blackjack', email:'bj@gmail.com'},
-        //         {name:'Bob',      email:'bob@gmail.com'},
-        //         {name:'Sebastian', email:'sb@gmail.com'}
-        //     ]
-        // }, {
-        //     name: 'Ralf Laurens',
-        //     members: [
-        //         {name:'Marie',     email:'marie@gmail.com'},
-        //         {name:'Sarah',     email:'sr@gmail.com'},
-        //         {name:'Simon',     email:'sm@gmail.com'},
-        //     ]
-        // },
-        // {name: 'Sam Fillers'},
-        // {name: 'Dam Killers'},
-        // {name: 'Masaki Haki Kaki'}
+        {
+            name: 'Rockettes',
+            members: [
+                {name:'Blackjack', email:'bj@gmail.com'},
+                {name:'Bob',      email:'bob@gmail.com'},
+                {name:'Sebastian', email:'sb@gmail.com'}
+            ]
+        }, {
+            name: 'Ralf Laurens',
+            members: [
+                {name:'Marie',     email:'marie@gmail.com'},
+                {name:'Sarah',     email:'sr@gmail.com'},
+                {name:'Simon',     email:'sm@gmail.com'},
+            ]
+        },
+        {name: 'Sam Fillers'},
+        {name: 'Dam Killers'},
+        {name: 'Masaki Haki Kaki'}
     ]
     $scope.surveyTitle = 'Lets have a beer, guys';
-    $scope.editedGroup = $scope.groups.length > 0 && $scope.groups[0].name !== undefined ?
+    $scope.editedGroupName = $scope.groups.length > 0 && $scope.groups[0].name !== undefined ?
         $scope.groups[0].name : '[New group]';
-    $scope.selectedGroup = '';
+    $scope.selectedGroupName = $scope.editedGroupName;
     $scope.showTrash = true;
     $scope.addedUsers = []
     $scope.isCollapsed = true;
     $scope.userSelected = undefined;
 
-    $scope.$watch('editedGroup', function() {
-        if ($scope.selectedGroup === $scope.editedGroup) {
+    $scope.$watch('editedGroupName', function() {
+        if ($scope.selectedGroupName === $scope.editedGroupName) {
             $scope.showTrash = true;
         } else {
             $scope.showTrash = false;
-            changeGroupName($scope.selectedGroup, $scope.editedGroup);
+            changeGroupName($scope.selectedGroupName, $scope.editedGroupName);
         }
     });
 
@@ -64,16 +64,16 @@ angular.module('myApp')
     $scope.addGroup = function() {
         if ($scope.groups.length <= 0) {
             $scope.groups.push({
-                name: $scope.editedGroup,
+                name: $scope.editedGroupName,
                 members: $scope.addedUsers
             });
-            $scope.selectedGroup = $scope.editedGroup;
+            $scope.selectedGroupName = $scope.editedGroupName;
             $scope.showTrash = true;
             return;
         }
-        changeGroupName($scope.editedGroup, $scope.selectedGroup);
+        changeGroupName($scope.editedGroupName, $scope.selectedGroupName);
         $scope.groups.push({
-            name: $scope.editedGroup,
+            name: $scope.editedGroupName,
             members: $scope.addedUsers
         });
         $scope.showTrash = true;
@@ -113,8 +113,8 @@ angular.module('myApp')
         if (group === -1) { 
             return;
         }
-        $scope.selectedGroup = group.name;
-        $scope.editedGroup = group.name;
+        $scope.selectedGroupName = group.name;
+        $scope.editedGroupName = group.name;
         $scope.addedUsers = [];
         $scope.addedUsers = group.members;
         $scope.showTrash = true;
