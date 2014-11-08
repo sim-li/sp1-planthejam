@@ -41,6 +41,7 @@ angular.module('myApp')
     $scope.isCollapsed = true;
     $scope.userSelected = undefined;
     $scope.dt = new Date();
+    $scope.showLiveButton = true;
 
     $scope.$watch('editedGroupName', function() {
         if ($scope.selectedGroupName === $scope.editedGroupName) {
