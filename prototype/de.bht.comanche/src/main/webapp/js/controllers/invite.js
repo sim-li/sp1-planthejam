@@ -10,28 +10,29 @@ angular.module('myApp')
     {name:'Sebastian', email:'sb@gmail.com'}
     ]
     $scope.groups = [
-        {
-            name: 'Rockettes',
-            members: [
-                {name:'Blackjack', email:'bj@gmail.com'},
-                {name:'Bob',      email:'bob@gmail.com'},
-                {name:'Sebastian', email:'sb@gmail.com'}
-            ]
-        }, {
-            name: 'Ralf Laurens',
-            members: [
-                {name:'Marie',     email:'marie@gmail.com'},
-                {name:'Sarah',     email:'sr@gmail.com'},
-                {name:'Simon',     email:'sm@gmail.com'},
-            ]
-        },
-        {name: 'Sam Fillers'},
-        {name: 'Dam Killers'},
-        {name: 'Masaki Haki Kaki'}
+        // {
+        //     name: 'Rockettes',
+        //     members: [
+        //         {name:'Blackjack', email:'bj@gmail.com'},
+        //         {name:'Bob',      email:'bob@gmail.com'},
+        //         {name:'Sebastian', email:'sb@gmail.com'}
+        //     ]
+        // }, {
+        //     name: 'Ralf Laurens',
+        //     members: [
+        //         {name:'Marie',     email:'marie@gmail.com'},
+        //         {name:'Sarah',     email:'sr@gmail.com'},
+        //         {name:'Simon',     email:'sm@gmail.com'},
+        //     ]
+        // },
+        // {name: 'Sam Fillers'},
+        // {name: 'Dam Killers'},
+        // {name: 'Masaki Haki Kaki'}
     ]
     $scope.surveyTitle = 'Lets have a beer, guys';
+    $scope.editedGroup = $scope.groups.length > 0 && $scope.groups[0].name !== undefined ?
+        $scope.groups[0].name : '[New group]';
     $scope.selectedGroup = '';
-    $scope.editedGroup = '';
     $scope.showTrash = true;
     $scope.addedUsers = []
     $scope.isCollapsed = true;
@@ -61,7 +62,13 @@ angular.module('myApp')
     });
 
     $scope.addGroup = function() {
-        if ($scope.addedUsers.length <= 0) {
+        if ($scope.groups.length <= 0) {
+            $scope.groups.push({
+                name: $scope.editedGroup,
+                members: $scope.addedUsers
+            });
+            $scope.selectedGroup = $scope.editedGroup;
+            $scope.showTrash = true;
             return;
         }
         changeGroupName($scope.editedGroup, $scope.selectedGroup);
