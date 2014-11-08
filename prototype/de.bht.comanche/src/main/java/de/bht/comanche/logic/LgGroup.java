@@ -45,7 +45,7 @@ public class LgGroup extends DaObject{
 	}
 	
 	public void delete() {
-		user.removeGroup(this);
+		user.remove(this);
 		pool.delete(this); //throw exc when delete errror
 	}
 	
