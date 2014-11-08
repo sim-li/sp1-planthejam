@@ -1,4 +1,5 @@
 // TODO: Merge AddMember ETC with direct Groups
+// Bug: Multiple Rename fails unless select happens
 // Simplify, Patterns, Comment.
 
 angular.module('myApp')
