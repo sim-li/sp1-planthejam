@@ -37,6 +37,7 @@ angular.module('myApp')
     $scope.addedUsers = []
     $scope.isCollapsed = true;
     $scope.userSelected = undefined;
+    $scope.dt = new Date();
 
     $scope.$watch('editedGroupName', function() {
         if ($scope.selectedGroupName === $scope.editedGroupName) {
@@ -109,7 +110,7 @@ angular.module('myApp')
         if (groupName === undefined || $scope.groups === undefined) {
             return;
         }
-        var group = findGroup(groupName);
+        var group = getGroup(groupName);
         if (group === -1) { 
             return;
         }
@@ -120,11 +121,6 @@ angular.module('myApp')
         $scope.showTrash = true;
         // $scope.openDetailPanel();
     }
-
-    $scope.today = function() {
-        $scope.dt = new Date();
-    };
-    $scope.today();
 
     $scope.clear = function () {
         $scope.dt = null;
@@ -145,23 +141,51 @@ angular.module('myApp')
         $scope.opened = true;
     };
     
-    var changeGroupName = function(oldName, newName) {
-        for (var i = 0, len = $scope.groups.length; i < len; i++) {
+    var removeEmptyGroups = function() {
+        var i = $scope.groups.length;
+        while (i--) {
             var group = $scope.groups[i];
-            if (group.name === oldName) {
-                $scope.groups[i].name = newName;
+            if (group.members === undefined || group.members.length <= 0) {
+                $scope.groups.splice(i, 1);
             }
+        }
+    };
+    removeEmptyGroups();
+
+    var deleteGroup = function() {
+        var index = find($scope.groups, 'name', selectedGroupName);
+        if (index === -1) {
+            return;
+        }
+        $scope.groups.splice(index, 1);
+    };
+
+    var changeGroupName = function(oldName, newName) {
+        var index = find($scope.groups, 'name', oldName);
+        if (index === -1) {
+            return index;
+        }
+        $scope.groups[index].name = newName;
+        return newName;
+    };
+
+    var getGroup = function(name) {
+        var index = find($scope.groups, 'name', name);
+        if (index === -1) {
+            return index;
+        }
+        return $scope.groups[index];
+    };
+
+    var find = function(array, key, value) {
+        var i = array.length;
+        while(i--) {
+            if (array[i][key] === undefined || array[i][key] !== value) {
+                continue;
+            }
+            return i;
         }
         return -1;
     };
 
-    var findGroup = function(name) {
-        for (var i = 0, len = $scope.groups.length; i < len; i++) {
-            var group = $scope.groups[i];
-            if (group.name === name && group.members !== undefined && group.members.length > 0) {
-                return $scope.groups[i];
-            }
-        }
-        return -1;
-    };
 }]);
