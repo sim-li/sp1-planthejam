@@ -110,7 +110,8 @@ angular.module('myApp')
         $scope.editedGroup = group.name;
         $scope.addedUsers = [];
         $scope.addedUsers = group.members;
-        $scope.openDetailPanel();
+        $scope.showTrash = true;
+        // $scope.openDetailPanel();
     }
 
     $scope.today = function() {
