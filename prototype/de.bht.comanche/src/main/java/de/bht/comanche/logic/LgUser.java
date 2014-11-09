@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -33,6 +34,9 @@ public class LgUser extends DaObject {
 	
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgGroup> groups;
+	
+//	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	private LgMember lgMember;
 	
 	public LgInvite save(final LgInvite invite) {
 		return attach(invite).save();
