@@ -22,14 +22,16 @@ import de.bht.comanche.logic.LgUser;
 
 public class DaInviteTest {
 	
-	@BeforeClass public static void initializeDb(){
+//	@BeforeClass 
+	public static void initializeDb(){
 		Map<String, String> properties = new HashMap<String, String>(1);
 		properties.put("hibernate.hbm2ddl.auto", "create");
 		Persistence.createEntityManagerFactory(DaEmProvider.persistenceUnitName, properties);
 		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
 	}
 	
-	@Test public void detachedTest() {
+//	@Test 
+	public void detachedTest() {
 		assertTrue("Persisting test users Alice & Bob", true);
 	}
 //	
