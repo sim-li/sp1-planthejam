@@ -25,30 +25,11 @@ public class LgMember extends DaObject{
 	@ManyToOne
 	private LgGroup group;
 	
-//	---------
-//	@NotNull
-//	@OneToOne
-//	@JoinColumn(name="user_oid")
-//	private LgUser lgUser;
-	
-	@Column
-	private long userOid;
-	
-	@OneToOne(fetch=FetchType.LAZY)
-	@PrimaryKeyJoinColumn
-	private LgUser lgUser;
-	
-//	@OneToOne(fetch=FetchType.LAZY)
-//	@JoinTable(
-//		      name="temp_member",
-//		      joinColumns=
-//		        @JoinColumn(name="oid", referencedColumnName="oid"),
-//		      inverseJoinColumns=
-//		        @JoinColumn(name="oid", referencedColumnName="userOid"))
-//	private LgUser lgUser;
+	@OneToOne(fetch=FetchType.EAGER)
+	private LgUser user;
 	
 	public long getMemberId() {
-		return lgUser.getOid();
+		return user.getOid();
 	}
 	
 	public LgMember(){}
