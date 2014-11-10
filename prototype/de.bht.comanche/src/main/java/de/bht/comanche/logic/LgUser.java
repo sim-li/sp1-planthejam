@@ -79,7 +79,7 @@ public class LgUser extends DaObject {
 	}
 	
 	public void removeGroup(final LgGroup group) {
-		invites.remove(group);
+		groups.remove(group);
 	}
 
 	/**

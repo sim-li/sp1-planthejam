@@ -16,9 +16,21 @@ public class RestService {
 		return httpSession.getAttribute(USER_NAME).toString();
 	}
 	
+	//for tests only, delete later
+	public static String getDummyUserName(HttpServletRequest request) {
+		final HttpSession httpSession = request.getSession();
+		return httpSession.getAttribute("Alice").toString();
+	}
+	
 	public static void setUserName(HttpServletRequest request, final String name) {
 		final HttpSession httpSession = request.getSession();
 		httpSession.setAttribute(USER_NAME, name);
+	}
+	
+	//for tests only, delete later
+	public static void setDummyUserName(HttpServletRequest request, final String name) {
+		final HttpSession httpSession = request.getSession();
+		httpSession.setAttribute(USER_NAME, "Alice");
 	}
 	
 	public static void removeUserName(HttpServletRequest request) {
