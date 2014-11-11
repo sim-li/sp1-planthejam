@@ -43,10 +43,5 @@ public abstract class LgTransaction<E> {
 		return session.startFor(RestService.getUserName(request));
 	}
 	
-	//for tests only, delete later
-	public LgUser startDummySession() {
-		return session.startFor(RestService.getDummyUserName(request));
-	}
-
 	public abstract E execute() throws Exception;
 }

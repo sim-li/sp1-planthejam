@@ -1,5 +1,6 @@
 package test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +28,14 @@ import org.junit.runners.MethodSorters;
 import com.jayway.restassured.path.json.JsonPath;
 import de.bht.comanche.logic.LgGroup;
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgMember;
 import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgTransaction;
 //import com.jayway.restassured.response.Response;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.*;
+import de.bht.comanche.rest.ReErrorMessage;
+import de.bht.comanche.rest.ReServerException;
 
 public class ReGroupServiceTest {
 	
@@ -45,41 +49,87 @@ public class ReGroupServiceTest {
 	
 	@Before 
 	public void setUp() {
+		
+		
+//		LgSession session = new LgSession{
+//			application = new DaApplication();
+//			pool = application.getPool();
+//			user = "Alice";
+//		};
+		LgSession session = new LgSession();
+		session.beginTransaction();
 		final LgUser alice = new LgUser();
 		final LgUser bob = new LgUser();
 		alice.setName("Alice");
-		bob.setName("Bob1");
+		bob.setName("Bob");
+		session.save(alice);
+		session.save(bob);
+		final LgGroup alice_group = new LgGroup();
+		alice_group.setName("AliceGroup");
+		alice.save(alice_group);
 		
-		final HttpServletRequest rq = new Request(null, null);
+		final LgGroup alice_group1 = new LgGroup();
+		alice_group1.setName("AliceGroup1");
+		alice.save(alice_group1);
 		
-		new LgTransaction<LgUser>(rq) {
-			@Override
-			public LgUser execute() throws multex.Exc {
-					final LgUser o_user = getSession()
-						.register(alice);
-					return o_user;
-			}
-		};	
+		final LgGroup bob_group = new LgGroup();
+		bob_group.setName("BobGroup");
+		bob.save(bob_group);
 		
-		final LgInvite li = new LgInvite();
+//		List<LgMember> memberList = new ArrayList<LgMember>();
+//		memberList.add(alice);
+//		bob_group.setMembers(member)
+//		
+//		if(!bob.getGroups().isEmpty()){
+//			LgGroup lg = bob.getGroups().get(0);	
+//			System.out.println("------------------- " + lg.getName() + " -----------------");
+//		} else {
+//			System.err.println("------------------- Group Is empty -----------------");
+//		}
 		
-		 new LgTransaction<LgInvite>(rq) {
-			public LgInvite execute() throws multex.Exc{
-				return startSession()
-					.save(li);
-			}
-		 };
+		session.endTransaction(true);
+		
+		
+		
+//		boolean success = false;
+//		try {
+//			session.beginTransaction();
+////			result = execute();
+//			
+//			success = true;
+//		} catch (Exception ex) {
+//			multex.Msg.printReport(System.err, ex);
+//			throw new ReServerException(new ReErrorMessage(ex, multex.Msg.getStackTrace(ex)));
+//		} finally {
+//			try {
+//				session.endTransaction(success);
+//			} catch (Exception ex) {
+//				multex.Msg.printReport(System.err, ex);
+//			} 
+//		
+		
+		
+		
+		
+		
+		
+//		final LgInvite li = new LgInvite();
+//		
+//		 new LgTransaction<LgInvite>(rq) {
+//			public LgInvite execute() throws multex.Exc{
+//				return startSession()
+//					.save(li);
+//			}
+//		 };
 		 
-		final LgGroup lg = new LgGroup();
-		lg.setName("Test");
-		alice.save(lg);
 		
-		 new LgTransaction<LgGroup>(rq) {
-			@Override
-			public LgGroup execute() throws Exception {
-				return startDummySession().save(new LgGroup().setName("Bier trinken"));
-			}
-		};	
+		
+//		 new LgTransaction<LgGroup>(rq) {
+//			@Override
+//			public LgGroup execute() throws Exception {
+//				return startDummySession().save(new LgGroup().setName("Bier trinken"));
+//			}
+//		};	
 			
 		
 		assertTrue("Persisting test users Alice & Bob", true);

@@ -53,6 +53,19 @@ public class ReGroupService extends RestService {
 		}.getResult();
 	}
 	
+//	@Path("saveMember")
+//	@POST
+//	@Consumes("application/json")
+//	@Produces({ "application/json" })
+//	public LgGroup saveMember(final LgGroup group, @Context final HttpServletRequest request) {
+//		return new LgTransaction<LgGroup>(request) {
+//			@Override
+//			public LgGroup execute() throws Exception {
+//				return startSession().save(group.setMembers(member));
+//			}
+//		}.getResult();
+//	}
+	
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")

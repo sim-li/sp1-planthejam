@@ -18,7 +18,7 @@ public class LgSession {
 		pool = application.getPool();
 		user = null;
 	}
-
+	
 	public LgUser startFor(String userName) {
 		// throw exc when user not found
 		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
