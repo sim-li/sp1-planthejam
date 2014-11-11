@@ -5,11 +5,10 @@
  * Module: my app -- the main module
  */
 
-
 "use strict";
 
-angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations", "group"])
-    .constant("dialogMap", {
+angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations", "group", "user"])
+    .constant("dialogMap", { // TODO remove after routing works without it
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
         USER_EDIT: 2, 
@@ -37,9 +36,8 @@ angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "
                 templateUrl : 'pages/register.html',
                 controller  : 'loginCtrl'
             })
-            // Temporaly redirecting to invite
             .when('/cockpit', {
-                templateUrl : 'pages/invite.html',
+                templateUrl : 'pages/cockpit.html',
                 controller  : 'inviteCtrl'
             })
             .when('/invite', {
