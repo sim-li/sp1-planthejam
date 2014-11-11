@@ -19,6 +19,21 @@ angular.module('myApp')
 
     $scope.groups = $scope.session.user.groups;
     $scope.invites = $scope.session.user.invites;
+    console.log("INV", $scope.invites);
+    
+    $scope.getInvites = function() {
+        var work = function(){
+          $scope.invcon =[];
+          var i = $scope.invites.length;
+          while(i--) {
+             $scope.invcon.push($scope.invites[i].survey.name);
+           }
+          return invcon;  
+        }
+        return work;
+    };
+  
+    console.log("Invcon", $scope.invcon);
     console.log('Groups%o', $scope.groups);
     console.log('Invites%o', $scope.invites);
    
