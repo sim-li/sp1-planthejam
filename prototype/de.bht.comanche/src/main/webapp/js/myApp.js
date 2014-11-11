@@ -42,7 +42,12 @@ angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate"
             })
             .when('/invite', {
                 templateUrl : 'pages/invite.html',
-                controller  : 'inviteCtrl'
+                controller  : 'inviteCtrl',
+                resolve: {
+                    'groupData': function(restService) {
+                        return restService.getGroups();
+                    }
+                },
             });
         // $locationProvider.html5Mode(true); // for prettier urls
     })
