@@ -189,8 +189,8 @@ angular.module('myApp')
         return -1;
     };
     
-    $scope.toggleMin();
-    setDefaultGroup();
-    $scope.selectGroup($scope.editedGroupName);
+    // $scope.toggleMin();
+    // setDefaultGroup();
+    // $scope.selectGroup($scope.editedGroupName);
 
 }]);
