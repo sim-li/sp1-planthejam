@@ -1,3 +1,7 @@
+
+
+"use strict";
+
 angular.module('myApp')
     .controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", function($scope, restService) {
 
