@@ -5,11 +5,10 @@
  * Module: my app -- the main module
  */
 
-
 "use strict";
 
-var myApp = angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations"])
-    .constant("dialogMap", {
+angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations", "group", "user"])
+    .constant("dialogMap", { // TODO remove after routing works without it
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
         USER_EDIT: 2, 
@@ -37,48 +36,47 @@ var myApp = angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","dat
                 templateUrl : 'pages/register.html',
                 controller  : 'loginCtrl'
             })
-            // Temporaly redirecting to invite
             .when('/cockpit', {
-                templateUrl : 'pages/invite.html',
+                templateUrl : 'pages/cockpit.html',
                 controller  : 'inviteCtrl'
             })
             .when('/invite', {
                 templateUrl : 'pages/invite.html',
                 controller  : 'inviteCtrl'
             });
-        $locationProvider.html5Mode(true);
+        // $locationProvider.html5Mode(true); // for prettier urls
     })
     .directive('ptjMenu', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/menu.html'
         }
-    });
-    myApp.directive('ptjGroups', function() {
+    })
+    .directive('ptjGroups', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/invite/groups.html'
         }
-    });
-    myApp.directive('ptjSearch', function() {
+    })
+    .directive('ptjSearch', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/search.html'
         }
-    });
-    myApp.directive('ptjSurveyDetails', function() {
+    })
+    .directive('ptjSurveyDetails', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/invite/surveydetails.html'
         }
-    });
-    myApp.directive('ptjMembers', function() {
+    })
+    .directive('ptjMembers', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/invite/members.html'
         }
-    });
-    myApp.run(function(editableOptions) {
+    })
+    .run(function(editableOptions) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
     });
 

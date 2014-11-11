@@ -5,7 +5,6 @@
  * Module: invite
  */
 
-
 "use strict";
 
 angular.module("invite", ["survey"])
@@ -19,21 +18,11 @@ angular.module("invite", ["survey"])
             this.survey = new Survey(config.survey) || new Survey();
         };
 
-        // TODO if possible, simplify like this:  var that = this; that.user = { ... }; return that;
-        Invite.prototype.export = function(user) {
-            console.log("OIDS? ", this.oid, this.survey.oid);
+        Invite.prototype.export = function() {
             return {   
-                    // "isHost": true,         // muss per GUI gesetzt werden <<------------------------ FIXME
-                    // // "isIgnored": false,     //                             <<------------------------
-                    // // "host": true,         // muss per GUI gesetzt werden <<------------------------ FIXME
-                    // // "ignored": false,     //                             <<------------------------
                 "oid": this.oid, 
                 "ignored": this.ignored, 
                 "host": this.host, 
-                "user": {
-                    "oid": user.oid, 
-                    "name": user.name
-                }, 
                 "survey": {
                     "oid": this.survey.oid, 
                     "name": this.survey.name, 
@@ -45,12 +34,12 @@ angular.module("invite", ["survey"])
                     // "possibleTimeperiods": _survey.possibleTimeperiods, 
                     // "determinedTimeperiod": _survey.determinedTimeperiod 
                 }
-            }
-        }
+            };
+        };
 
         Invite.prototype.convertDatesToDatePickerDate = function() {
             this.survey.convertDatesToDatePickerDate();
-        }
+        };
 
         Invite.forInvitesConvertFromRawInvites = function(rawInvites) {
             if (!rawInvites) {
@@ -66,7 +55,7 @@ angular.module("invite", ["survey"])
                 // // rawInvites[i].convertDatesToDatePickerDate();
             }
             return _invites;
-        }
+        };
 /*
         Invite.getDummyInviteList = function() {
             return [

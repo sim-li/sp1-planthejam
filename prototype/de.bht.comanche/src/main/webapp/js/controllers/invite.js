@@ -3,7 +3,11 @@
 // Simplify, Patterns, Comment.
 
 angular.module('myApp')
-.controller('inviteCtrl', ['$scope', function($scope) {
+.controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", function($scope, restService) {
+
+    // make restService available for scope  -->  remove if not needed
+    $scope.restService = restService;
+
     $scope.users = [
     {name:'Blackjack', email:'bj@gmail.com'},
     {name:'Bob',      email:'bob@gmail.com'},
@@ -112,14 +116,15 @@ angular.module('myApp')
         $scope.isCollapsed = false;
     }
 
+
     $scope.removeMember = function(index) {
         $scope.addedUsers.splice(index, 1);
         if ($scope.addedUsers.length <= 0) {
             $scope.isCollapsed = true;
         }
-    };
+    }
 
-    $scope.selectGroup = function(groupName) {
+     $scope.selectGroup = function(groupName) {
         if (groupName === undefined || $scope.groups === undefined) {
             return;
         }

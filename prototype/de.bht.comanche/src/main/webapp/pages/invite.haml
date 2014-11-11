@@ -1,46 +1,40 @@
 .container
   .row
     %ptj-menu
+  %a#username{"data-pk" => "1", "data-title" => "Enter username", "data-type" => "text", "data-url" => "/post", :href => "#"} superuser
   .row
     / search & results
     / sidebar
     .col-md-2
       / <ptj-groups></ptj-groups>
     .col-md-8
-      .row
-        .col-md-8
-          %h2
-            %div.item-wrapper
-              %a{"editable-text" => "surveyTitle", :href => "#"} 
-                {{surveyTitle}}
-        .col-md-4
-          .row
-            .btn-group.pull-right
-              %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "radioModel"} Once
-              %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "radioModel"} Repeatedly
-            %br
-            %br            
-            %btn.btn-sm.btn-success.pull-right{"ng-show" => "showLiveButton", "ng-click" => "showLiveButton=false"}
-              Live
-              %span.glyphicon.glyphicon-bullhorn
-            %btn.btn-sm.btn-warning.pull-right{"ng-show" => "!showLiveButton", "ng-click" => "showLiveButton=true"}
-              Staged
-              %span.glyphicon.glyphicon-off
-      %br
+      .btn-group.pull-right
+        %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "radioModel"} Once
+        %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "radioModel"} Repeatedly
+      %h2 Lets have a beer, guys
+      / add to group
       %ptj-search
       %ptj-members
-      .row
-        %br
-        .col-md-6{:style => "background-color: rgba(0,0,255,0.1);"}
-          %div START :
-          %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime"}
-          %ptj-survey-details
-        .col-md-6{:style => "background-color: rgba(25,25,25,0.1);"}
-          %div END :
-          %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime2"}
-          %ptj-survey-details
+      .col-md-6{:style => "background-color: rgba(0,0,255,0.1);"}
+        %div START :
+        %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime"}
+        %ptj-survey-details
+      .col-md-6{:style => "background-color: rgba(25,25,25,0.1);"}
+        %div END :
+        %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime2"}
+        %ptj-survey-details
       / slider
       #red.ng-valid.ui-slider.ui-widget.ui-widget-content.ui-corner-all.ui-slider-horizontal.ng-dirty{"aria-disabled" => "false", "ng-model" => "colorpicker.red", "ui-slider" => "colorpicker.options"}
         .ui-slider-range.ui-widget-header.ui-corner-all.ui-slider-range-min{:style => "width: 78.4314%;"}
         %a.ui-slider-handle.ui-state-default.ui-corner-all{:href => "#", :style => "left: 78.4314%;"}
       %pre.alert.alert-info Zeit von  bis  am 
+      / ++++ Baustelle ++++
+      %div{"ng-repeat" => "group in session.user.groups"}
+        / <input type="text" ng-model="group.oid" />
+        %input{"ng-model" => "group.name", :type => "text"}/
+        / <input type="text" ng-model="group.members" />
+        \>> 
+        / <input type="button" value="speichern" ng-click="$log.log('clicked'); restService.saveGroup(group); $log.log('saved')" /></>
+        %input{"ng-click" => "restService.saveGroup(group); restService.sayHi();", :type => "button", :value => "speichern"}/
+      / <input type="button" value="speichern" ng-click="sayHi()" /></>
+      \####

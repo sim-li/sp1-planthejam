@@ -5,13 +5,15 @@
  * Module: user
  */
 
-
 "use strict";
 
 angular.module("user", [])
     .factory("User", function(Survey) {
         
         var User = function(config) {
+            if (!(this instanceof User)) {
+                return new User(config);
+            }
             config = config || {};
             this.oid = config.oid || "";
             this.name = config.name || "";

@@ -8,8 +8,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("ctrl", ["$scope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap", "typeAugmentations", 
-        function($scope, $log, Survey, TimeUnit, Type, patterns, dialogMap, typeAugmentations) {
+    .controller("ctrl", ["$scope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap", "typeAugmentations", "User", 
+        function($scope, $log, Survey, TimeUnit, Type, patterns, dialogMap, typeAugmentations, User) {
         
         typeAugmentations();
         
@@ -23,31 +23,32 @@ angular.module("myApp")
         $scope.warnings = {};
         $scope.dialogMap = dialogMap;
 
-        /*
-         * returns an initialized user
-         */
-        var getInitUser = function() {
-            var user = {
-                "oid": "", 
-                "name": "", 
-                "password": "", 
-                "email": "", 
-                "tel": "", 
-                // "surveys": getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
-                // "surveys": [{}] // empty list for debugging
-                "invites": [{}], // empty list for debugging
-                "groups": []
-            };
-            $log.log("user initialized");
-            return user;
-        };
+        // /*
+        //  * returns an initialized user
+        //  */
+        // var getInitUser = function() {
+        //     var user = {
+        //         "oid": "", 
+        //         "name": "", 
+        //         "password": "", 
+        //         "email": "", 
+        //         "tel": "", 
+        //         // "surveys": getDummySurveyList() // *** replace list of dummy surveys by real data from server ***
+        //         // "surveys": [{}] // empty list for debugging
+        //         "invites": [{}], // empty list for debugging
+        //         "groups": []
+        //     };
+        //     $log.log("user initialized");
+        //     return user;
+        // };
 
         /*
          * initializes the session
          */
         $scope.initSession = function() {
             $scope.session = {
-                "user": getInitUser(), 
+                // "user": getInitUser(), 
+                "user": new User(), // maybe:  "user": ""  does the trick -> in this case delete user class
                 "state": { 
                     "isLoggedIn": false, 
                     "isVal": dialogMap.USER_LOGIN, 

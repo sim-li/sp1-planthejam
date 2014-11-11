@@ -1,11 +1,14 @@
-.navbar.navbar-inverse
+.navbar.navbar-default
   .navbar-left
     %ui.nav.navbar-nav.navbar-right
       .navbar-header
         %a.navbar-brand{:href => "/"} COMANCHE
-      %li.nav.active
-        %a{:href => "#/group"} Create Survey
-      %li.nav.navbar-right
-        %a#editUser{"ng-click" => "editUser()"} Testname
       %li.nav
-        %a#logout{"ng-click" => "logout()"} Logout
+        %a{:href => "#/cockpit"} Cockpit
+      %li.nav
+        %a{:href => "#/invite"} Create Invite
+      %li.nav.navbar-right
+        %a#editUser{"ng-click" => "editUser()"} 
+      %li.nav
+        %a#logout{:href => "#/", "ng-click" => "initSession();"} Logout
+      / TODO should trigger logout via REST
