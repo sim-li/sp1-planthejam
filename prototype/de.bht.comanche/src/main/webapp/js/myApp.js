@@ -43,11 +43,6 @@ angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate"
             .when('/invite', {
                 templateUrl : 'pages/invite.html',
                 controller  : 'inviteCtrl',
-                resolve: {
-                    'groupData': function(restService) {
-                        return restService.getGroups();
-                    }
-                },
             });
         // $locationProvider.html5Mode(true); // for prettier urls
     })
@@ -79,6 +74,12 @@ angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate"
         return {
             restrict: 'E',
             templateUrl: 'partials/invite/members.html'
+        }
+    })
+    .directive('ptjSurveySelect', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/surveyselect.html'
         }
     })
     .run(function(editableOptions) {

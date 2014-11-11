@@ -3,27 +3,24 @@
 // Simplify, Patterns, Comment.
 
 angular.module('myApp')
-.controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", "groupData",
-    function($scope, restService, $log, Group, groupData) { 
-
-    
-    console.log("Got group data from promise ", groupData);
-    // make restService available for scope  -->  remove if not needed
-    $scope.restService = restService;
-    $scope.groups = groupData;
-
-
-    console.log("In thingy", $scope.groups);
-
+.controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", 
+    function($scope, restService, $log, Group) { 
     $scope.users = [
-        {name:'Blackjack', email:'bj@gmail.com'},
+        {
+            name:'Blackjack', 
+            email:'bj@gmail.com'},
         {name:'Bob',      email:'bob@gmail.com'},
         {name:'Marie',     email:'marie@gmail.com'},
         {name:'Sarah',     email:'sr@gmail.com'},
         {name:'Simon',     email:'sm@gmail.com'},
         {name:'Max',       email:'max@gmail.com'},
         {name:'Sebastian', email:'sb@gmail.com'}
-    ]
+    ];
+
+    $scope.groups = $scope.session.user.groups;
+    $scope.invites = $scope.session.user.invites;
+    console.log('Groups%o', $scope.groups);
+    console.log('Invites%o', $scope.invites);
    
     $scope.surveyTitle = 'Lets have a beer, guys';
     $scope.editedGroupName = '';

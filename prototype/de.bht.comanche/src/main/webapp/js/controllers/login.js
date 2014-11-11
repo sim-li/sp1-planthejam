@@ -9,8 +9,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("loginCtrl", ["$scope", "$location", "$log", "patterns", "restService", "dialogMap", "Group", 
-        function($scope, $location, $log, patterns, restService, dialogMap, Group) {
+    .controller("loginCtrl", ["$scope", "$rootScope", "$location", "$log", "patterns", "restService", "dialogMap", "Group", 
+        function($scope, $rootScope, $location, $log, patterns, restService, dialogMap, Group) {
        
         var loginIsValidFor = function(user) {
             if (!user.name) {
@@ -50,7 +50,7 @@ angular.module("myApp")
         
 
         $scope.login = function() {
-            var _user = $scope.session.user;
+            var _user = $rootScope.session.user;
             if (!loginIsValidFor(_user)) {
                 $log.log("Login ungueltig.");
                 return;
@@ -58,23 +58,23 @@ angular.module("myApp")
             restService.login(_user)
                 .then(function(user) {
 
-                    $scope.session.user = user;
-                    $scope.session.state.isLoggedIn = true;
-                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
+                    $rootScope.session.user = user;
+                    $rootScope.session.state.isLoggedIn = true;
+                    $rootScope.session.state.isVal = dialogMap.SURVEY_SELECTION;
                     $location.path('/cockpit');
                     $log.log("Login erfolgreich.");
-                    $log.log($scope.session);
+                    $log.log($rootScope.session);
                     console.log(user);
                     // <<<<<<<<<<<<<<<<<<<< BAUSTELLE: Invites holen ------------------- TODO
                     restService.getInvites(user.oid)
                         .then(function(invites) {
                             $log.debug(invites);
 
-                            $scope.session.user.invites = invites;
-                            $scope.session.selectedInvite = $scope.session.user.invites[0] || "";
-                            $log.debug($scope.session.user.invites);
-                            $log.debug($scope.session.selectedInvite);
-                            $log.debug($scope.session.selectedInvite.survey);
+                            $rootScope.session.user.invites = invites;
+                            $rootScope.session.selectedInvite = $rootScope.session.user.invites[0] || "";
+                            $log.debug($rootScope.session.user.invites);
+                            $log.debug($rootScope.session.selectedInvite);
+                            $log.debug($rootScope.session.selectedInvite.survey);
                             $log.debug("---------");
 
                         }, function(error) {
@@ -93,8 +93,8 @@ angular.module("myApp")
                             $log.debug(groups);
 
                             
-                            $scope.session.user.groups = Group.import(groups);
-                            $log.debug($scope.session.user.groups);
+                            $rootScope.session.user.groups = Group.import(groups);
+                            $log.debug($rootScope.session.user.groups);
                             // $log.info("================");
                             // $log.info(Group.import);
                             // var receivedGroups = groups;
@@ -110,8 +110,8 @@ angular.module("myApp")
                             // $log.info("<================");
 
 
-                            // $scope.session.user.groups = receivedGroups;
-                            // $scope.session.user.groups = groups;
+                            // $rootScope.session.user.groups = receivedGroups;
+                            // $rootScope.session.user.groups = groups;
 
                         }, function(error) {
                             $log.error(error);
@@ -140,19 +140,19 @@ angular.module("myApp")
         };
 
         $scope.register = function() {
-            var _user = $scope.session.user;
+            var _user = $rootScope.session.user;
             if (!registerIsValidFor(_user)) {
                 $log.log("Registrierung ungueltig.");
                 return;
             }
             restService.register(_user)
                 .then(function(user) {
-                    $scope.session.user = user;
-                    $scope.session.state.isLoggedIn = true;
-                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
+                    $rootScope.session.user = user;
+                    $rootScope.session.state.isLoggedIn = true;
+                    $rootScope.session.state.isVal = dialogMap.SURVEY_SELECTION;
                     $log.log("Registrierung erfolgreich.");
                     $log.log("Login erfolgreich.");
-                    $log.log($scope.session);
+                    $log.log($rootScope.session);
                     $location.path('/'); // come back to login seite when register succesful
                 }, function(error) {
                     $log.error(error);

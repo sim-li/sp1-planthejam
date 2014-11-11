@@ -9,6 +9,7 @@
 angular.module("restModule", ["datePickerDate", "constants", "invite", "group"])
     .factory("restService", ["$http", "$q", "$log", "$filter", "Invite", "Group",
         function($http, $q, $log, $filter, Invite, Group) {
+            
             var DUMMY_INVITE_LIST = false;
             var DUMMY_LOGIN = false;
             var LOG = true;
