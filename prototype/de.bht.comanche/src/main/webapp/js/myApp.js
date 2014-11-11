@@ -38,7 +38,7 @@ angular.module("myApp", ["ui.bootstrap", "xeditable", "ngRoute","datePickerDate"
             })
             .when('/cockpit', {
                 templateUrl : 'pages/cockpit.html',
-                controller  : 'inviteCtrl'
+                controller  : 'cockpitCtrl'
             })
             .when('/invite', {
                 templateUrl : 'pages/invite.html',
