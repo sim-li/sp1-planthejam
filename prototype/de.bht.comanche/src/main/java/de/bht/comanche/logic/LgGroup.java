@@ -49,8 +49,22 @@ public class LgGroup extends DaObject{
 		pool.delete(this); //throw exc when delete errror
 	}
 	
+	public List<LgMember> getMembers() {
+		return member;
+	}
+
+	public LgGroup setMembers(List<LgMember> member) {
+		this.member = member;
+		return this;
+	}
+	
+//	public void setMember(long groupOid){
+//		user.save(user.getGroups().).saveMember
+//		
+//	}
+	
 //	TODO How to find group by id - pool.find-getOid??
-//	public LgGroup getLgGroup(long oid){
+//	public LgGroup getLgGroup(User , long group_oid){
 //		return null;
 //	}
 	
