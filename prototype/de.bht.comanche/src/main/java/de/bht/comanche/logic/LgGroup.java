@@ -31,7 +31,7 @@ public class LgGroup extends DaObject{
 	@OneToMany(mappedBy="group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgMember> member;
 	
-	public String getName() {
+	public String getGroupName() {
 		return name;
 	}
 
@@ -43,6 +43,10 @@ public class LgGroup extends DaObject{
 	public LgGroup setUser(LgUser user) {
 		this.user = user;
 		return this;
+	}
+	
+	public long getGroupOid() {
+		return this.getOid();
 	}
 	
 	public LgGroup save() {

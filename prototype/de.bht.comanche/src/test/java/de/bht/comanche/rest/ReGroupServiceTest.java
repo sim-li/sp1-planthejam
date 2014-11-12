@@ -57,7 +57,7 @@ public class ReGroupServiceTest {
 		LgSession session = new LgSession();
 		session.beginTransaction();
 		
-//save user
+//save user - it works
 //		final LgUser alice = new LgUser();
 //		alice.setName("Alice");
 //		alice.setEmail("test@test.de");
@@ -65,23 +65,26 @@ public class ReGroupServiceTest {
 //		session.save(alice);
 		
 //login user
-//		session.login(alice);
 		session.startFor("Alice");
-		
+		LgUser sessionUser = session.getUser();
 		
 		System.out.println(session.getUser().getOid() + " -----------------------------");
 		
-//save group
-		final LgGroup alice_group = new LgGroup();
-		alice_group.setName("Group");
-		alice_group.setUser(session.getUser());
-//		alice_group.save();
-//		alice.save(alice_group);
+//save group with userId - it works
+//		final LgGroup alice_group = new LgGroup();
+//		alice_group.setName("Group");
+//		alice_group.setUser(sessionUser);		
+//		sessionUser.save(alice_group);
 		
-		session.getUser().save(alice_group);
-		
-		
-		
+//change group name - it works 		
+//		List<LgGroup> lgrop = sessionUser.getGroups();
+//		lgrop.get(0).setName("NewGroup");
+//		System.out.println( lgrop.get(0).getName() + " -----------------------------");
+
+//delete group
+		List<LgGroup> lgrop = sessionUser.getGroups();
+		long oid = lgrop.get(0).getGroupOid();
+		sessionUser.deleteGroup(oid);
 		
 //		List<LgMember> memberList = new ArrayList<LgMember>();
 //		memberList.add(alice);
