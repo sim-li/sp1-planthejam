@@ -38,6 +38,9 @@ import de.bht.comanche.rest.ReErrorMessage;
 import de.bht.comanche.rest.ReServerException;
 
 public class ReGroupServiceTest {
+	static long user_oid;
+	static long group_oid;
+	
 	
 	@BeforeClass 
 	public static void initializeDb(){
@@ -47,8 +50,8 @@ public class ReGroupServiceTest {
 		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
 	}
 	
-	@Before 
-	public void setUp() {
+	@Test
+	public void testSaveGroup(){
 		
 		
 //		LgSession session = new LgSession{
@@ -56,25 +59,35 @@ public class ReGroupServiceTest {
 //			pool = application.getPool();
 //			user = "Alice";
 //		};
+		
 		LgSession session = new LgSession();
 		session.beginTransaction();
+		
 		final LgUser alice = new LgUser();
-		final LgUser bob = new LgUser();
 		alice.setName("Alice");
-		bob.setName("Bob");
+		session.setUser(alice);
+//		session.startFor("Alice");
 		session.save(alice);
-		session.save(bob);
+		
+		//save group
 		final LgGroup alice_group = new LgGroup();
 		alice_group.setName("AliceGroup");
 		alice.save(alice_group);
+
+//		//save group
+//		final LgGroup alice_group1 = new LgGroup();
+//		alice_group1.setName("AliceGroup1");
+//		alice.save(alice_group1);
 		
-		final LgGroup alice_group1 = new LgGroup();
-		alice_group1.setName("AliceGroup1");
-		alice.save(alice_group1);
 		
-		final LgGroup bob_group = new LgGroup();
-		bob_group.setName("BobGroup");
-		bob.save(bob_group);
+
+		
+//		user_oid = alice.getOid();
+
+		
+//		final LgGroup bob_group = new LgGroup();
+//		bob_group.setName("BobGroup");
+//		bob.save(bob_group);
 		
 //		List<LgMember> memberList = new ArrayList<LgMember>();
 //		memberList.add(alice);
@@ -91,24 +104,19 @@ public class ReGroupServiceTest {
 		
 		
 		
-//		boolean success = false;
-//		try {
-//			session.beginTransaction();
-////			result = execute();
-//			
-//			success = true;
-//		} catch (Exception ex) {
-//			multex.Msg.printReport(System.err, ex);
-//			throw new ReServerException(new ReErrorMessage(ex, multex.Msg.getStackTrace(ex)));
-//		} finally {
-//			try {
-//				session.endTransaction(success);
-//			} catch (Exception ex) {
-//				multex.Msg.printReport(System.err, ex);
-//			} 
+		assertTrue("Persisting test users Alice & Bob", true);
 //		
-		
-		
+	}
+	
+	@Test
+	public void testDeleteGroup(){
+
+//		alice_group1.getOid();
+//		alice.deleteGroup(alice_group1.getOid());	
+	
+	
+		assertTrue("Persisting test users Alice & Bob", true);
+	}
 		
 		
 		
@@ -132,13 +140,13 @@ public class ReGroupServiceTest {
 //		};	
 			
 		
-		assertTrue("Persisting test users Alice & Bob", true);
+		
 //		final LgUser o_user = getSession().register(i_user);
 //		pool.
-	}	
+		
 	
 	@Test
-	public void testSaveGroup() {
+	public void testSaveGroup1() {
 		LgUser testUser = new LgUser();
 //		testUser.setName("Alice1");
 //		
@@ -158,7 +166,7 @@ public class ReGroupServiceTest {
 //		
 //		JsonPath jsonPath = response.getBody().jsonPath();
 //		jsonPath.prettyPrint();
-//		oid = jsonPath.getLong("data.oid");
+//		user_oid = jsonPath.getLong("data.oid");
 		}
 
 //	// FIXME - hard coded quick hack to test communication with client

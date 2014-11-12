@@ -36,7 +36,7 @@ public class LgUser extends DaObject {
 	private List<LgGroup> groups;
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private LgMember user;
+	private LgMember member;
 	
 	public LgInvite save(final LgInvite invite) {
 		return attach(invite).save();
