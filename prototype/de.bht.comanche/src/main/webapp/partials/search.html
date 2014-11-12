@@ -1,4 +1,8 @@
-<!-- search & results -->
+<div ng-repepeat='group in session.user.groups'>
+  <input ng-model='group.members' type='text'>
+    {{group}}
+  </input>
+</div>
 <div class='input-group'>
   <div class='input-group-btn' ng-show='!showTrash &amp;&amp; !isCollapsed'>
     <button class='btn btn-default' ng-click='addGroup()' type='button'>
@@ -25,7 +29,7 @@
       <span class='caret'></span>
     </button>
     <ul class='dropdown-menu' role='menu'>
-      <li ng-repeat='group in groups'>
+      <li ng-repeat='group in session.user.groups'>
         <a ng-click='selectGroup(group.name)'>
           {{group.name}}
         </a>

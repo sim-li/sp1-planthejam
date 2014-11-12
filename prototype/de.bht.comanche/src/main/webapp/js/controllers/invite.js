@@ -3,40 +3,20 @@
 // Simplify, Patterns, Comment.
 
 angular.module('myApp')
-.controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", function($scope, restService) {
-
+.controller('inviteCtrl', ['$scope', 'restService', "$log", "Group",  function($scope, restService, $log, Group) {
     // make restService available for scope  -->  remove if not needed
     $scope.restService = restService;
-
+    
     $scope.users = [
-    {name:'Blackjack', email:'bj@gmail.com'},
-    {name:'Bob',      email:'bob@gmail.com'},
-    {name:'Marie',     email:'marie@gmail.com'},
-    {name:'Sarah',     email:'sr@gmail.com'},
-    {name:'Simon',     email:'sm@gmail.com'},
-    {name:'Max',       email:'max@gmail.com'},
-    {name:'Sebastian', email:'sb@gmail.com'}
+        {name:'Blackjack', email:'bj@gmail.com'},
+        {name:'Bob',      email:'bob@gmail.com'},
+        {name:'Marie',     email:'marie@gmail.com'},
+        {name:'Sarah',     email:'sr@gmail.com'},
+        {name:'Simon',     email:'sm@gmail.com'},
+        {name:'Max',       email:'max@gmail.com'},
+        {name:'Sebastian', email:'sb@gmail.com'}
     ]
-    $scope.groups = [
-        {
-            name: 'Rockettes',
-            members: [
-                {name:'Blackjack', email:'bj@gmail.com'},
-                {name:'Bob',      email:'bob@gmail.com'},
-                {name:'Sebastian', email:'sb@gmail.com'}
-            ]
-        }, {
-            name: 'Ralf Laurens',
-            members: [
-                {name:'Marie',     email:'marie@gmail.com'},
-                {name:'Sarah',     email:'sr@gmail.com'},
-                {name:'Simon',     email:'sm@gmail.com'},
-            ]
-        },
-        {name: 'Sam Fillers'},
-        {name: 'Dam Killers'},
-        {name: 'Masaki Haki Kaki'}
-    ]
+   
     $scope.surveyTitle = 'Lets have a beer, guys';
     $scope.editedGroupName = '';
     $scope.selectedGroupName = '';
@@ -57,7 +37,7 @@ angular.module('myApp')
     });
 
     $scope.$watch('userSelected', function() {
-        if ($scope.userSelected === undefined || $scope.userSelected.name === undefined) {
+        if ($scope.userSelected === undefined || $scope.userSelected.name === undefined) {
             return;
         }
         for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
@@ -71,8 +51,8 @@ angular.module('myApp')
     });
 
     $scope.addGroup = function() {
-        if ($scope.groups.length <= 0) {
-            $scope.groups.push({
+        if (session.user.groups.length <= 0) {
+            session.user.groups.push({
                 name: $scope.editedGroupName,
                 members: $scope.addedUsers
             });
@@ -81,7 +61,7 @@ angular.module('myApp')
             return;
         }
         changeGroupName($scope.editedGroupName, $scope.selectedGroupName);
-        $scope.groups.push({
+        session.user.groups.push({
             name: $scope.editedGroupName,
             members: $scope.addedUsers
         });
@@ -89,11 +69,11 @@ angular.module('myApp')
     };
 
     $scope.deleteGroup = function() {
-        var index = find($scope.groups, 'name', $scope.selectedGroupName);
+        var index = find(session.user.groups, 'name', $scope.selectedGroupName);
         if (index === -1) {
             return;
         }
-        $scope.groups.splice(index, 1);
+        session.user.groups.splice(index, 1);
         setDefaultGroup();
     };
 
@@ -116,16 +96,15 @@ angular.module('myApp')
         $scope.isCollapsed = false;
     }
 
-
     $scope.removeMember = function(index) {
         $scope.addedUsers.splice(index, 1);
         if ($scope.addedUsers.length <= 0) {
             $scope.isCollapsed = true;
         }
-    }
+    };
 
-     $scope.selectGroup = function(groupName) {
-        if (groupName === undefined || $scope.groups === undefined) {
+    $scope.selectGroup = function(groupName) {
+        if (groupName === undefined || session.user.groups === undefined) {
             return;
         }
         var group = getGroup(groupName);
@@ -159,11 +138,11 @@ angular.module('myApp')
     };
 
     var setDefaultGroup = function() {
-        var hasEntries = $scope.groups.length > 0 && $scope.groups[0].name !== undefined;
+        var hasEntries = session.user.groups.length > 0 && session.user.groups[0].name !== undefined;
         var groupName;
         if (hasEntries) {
-            groupName = $scope.groups[0].name;
-            $scope.addedUsers = $scope.groups[0].members;
+            groupName = session.user.groups[0].name;
+            $scope.addedUsers = session.user.groups[0].members;
         } else {
             groupName = '[New group]';
             $scope.addedUsers = [];
@@ -173,36 +152,36 @@ angular.module('myApp')
     };
 
     var removeEmptyGroups = function() {
-        var i = $scope.groups.length;
+        var i = session.user.groups.length;
         while (i--) {
-            var group = $scope.groups[i];
-            if (group.members === undefined || group.members.length <= 0) {
-                $scope.groups.splice(i, 1);
+            var group = session.user.groups[i];
+            if (group.members === undefined || group.members.length <= 0) {
+                session.user.groups.splice(i, 1);
             }
         }
     };
 
     var changeGroupName = function(oldName, newName) {
-        var index = find($scope.groups, 'name', oldName);
+        var index = find(session.user.groups, 'name', oldName);
         if (index === -1) {
             return index;
         }
-        $scope.groups[index].name = newName;
+        session.user.groups[index].name = newName;
         return newName;
     };
 
-    var getGroup = function(name) {
-        var index = find($scope.groups, 'name', name);
+    var getGroup = function(name) {
+        var index = find(session.user.groups, 'name', name);
         if (index === -1) {
             return index;
         }
-        return $scope.groups[index];
+        return session.user.groups[index];
     };
 
     var find = function(array, key, value) {
         var i = array.length;
         while(i--) {
-            if (array[i][key] === undefined || array[i][key] !== value) {
+            if (array[i][key] === undefined || array[i][key] !== value) {
                 continue;
             }
             return i;
@@ -211,7 +190,7 @@ angular.module('myApp')
     };
     
     $scope.toggleMin();
-    removeEmptyGroups();
     setDefaultGroup();
     $scope.selectGroup($scope.editedGroupName);
+
 }]);
