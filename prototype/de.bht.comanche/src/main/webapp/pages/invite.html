@@ -13,7 +13,9 @@
         <div class='col-md-8'>
           <h2>
             <div class='item-wrapper'>
-              <a editable-text='surveyTitle' href='#'></a>
+              <a editable-text='surveyTitle' href='#'>
+                {{surveyTitle}}
+              </a>
             </div>
           </h2>
         </div>
@@ -51,11 +53,6 @@
           <timepicker hour-step='1' minute-step='1' ng-model='mytime2'></timepicker>
           <ptj-survey-details></ptj-survey-details>
         </div>
-      </div>
-      <!-- slider -->
-      <div aria-disabled='false' class='ng-valid ui-slider ui-widget ui-widget-content ui-corner-all ui-slider-horizontal ng-dirty' id='red' ng-model='colorpicker.red' ui-slider='colorpicker.options'>
-        <div class='ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min' style='width: 78.4314%;'></div>
-        <a class='ui-slider-handle ui-state-default ui-corner-all' href='#' style='left: 78.4314%;'></a>
       </div>
       <pre class='alert alert-info'>Zeit von  bis  am</pre>
     </div>

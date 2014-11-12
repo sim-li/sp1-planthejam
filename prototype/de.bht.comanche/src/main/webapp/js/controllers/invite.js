@@ -3,12 +3,13 @@
 // Simplify, Patterns, Comment.
 
 angular.module('myApp')
-.controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", 
-    function($scope, restService, $log, Group) { 
+.controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", "Type", "TimeUnit",
+    function($scope, restService, $log, Group, Type, TimeUnit) { 
     $scope.users = [
         {
             name:'Blackjack', 
-            email:'bj@gmail.com'},
+            email:'bj@gmail.com'
+        },
         {name:'Bob',      email:'bob@gmail.com'},
         {name:'Marie',     email:'marie@gmail.com'},
         {name:'Sarah',     email:'sr@gmail.com'},
@@ -20,8 +21,6 @@ angular.module('myApp')
     $scope.groups = $scope.session.user.groups;
     $scope.invites = $scope.session.user.invites;
 
-    console.log("Sess", $scope.session);
-    console.log('Groups%o', $scope.groups);
     console.log('Invites%o', $scope.invites);
    
     $scope.surveyTitle = 'Lets have a beer, guys';
@@ -33,6 +32,26 @@ angular.module('myApp')
     $scope.userSelected = undefined;
     $scope.dt = new Date();
     $scope.showLiveButton = true;
+
+
+    var mockInvites = function() {
+        for (var i = 0, len = $scope.invites.length; i < len; i++) {
+            $scope.invites[i].survey = {
+                "name": i + " BandprobeNo" + i,
+                "description": "Wir muessen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann k�nnt ihr?",
+                "type": Type.ONE_TIME,
+                "deadline": new Date(2014, 7, 10, 23, 55),
+                "frequencyDist": 0,
+                "frequencyTimeUnit": TimeUnit.WEEK,
+                "possibleTimeperiods": [
+                        { "startTime": new Date(2014, 7, 11, 19, 0), "durationInMins": 120 },
+                        { "startTime": new Date(2014, 7, 18, 19, 30), "durationInMins": 120 } 
+                    ], 
+                "determinedTimeperiod": { "startTime": new Date(2014, 7, 12, 20, 0), "durationInMins": 120 }
+            };
+        }
+    };
+    mockInvites();
 
     $scope.$watch('editedGroupName', function() {
         if ($scope.selectedGroupName === $scope.editedGroupName) {
