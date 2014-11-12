@@ -5,13 +5,23 @@
     / search & results
     / sidebar
     .col-md-2
-      / <ptj-groups></ptj-groups>
+      %ptj-survey-select
     .col-md-8
+      .row
+        .col-md-8
+          %h2
+            .item-wrapper
+              %a{"editable-text" => "surveyTitle", :href => "#"}
+                {{surveyTitle}}
+          %h4
+            .item-wrapper
+              %a{"editable-text" => "surveyDescription", :href => "#"}
+                {{surveyDescription}}
         .col-md-4
           .row
             .btn-group.pull-right
-              %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "radioModel"} Once
-              %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "radioModel"} Repeatedly
+              %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-click"=>"repeatedly=false"} Once
+              %label.btn.btn-primary{"btn-radio" => "'Repeatedly'",  "ng-click"=>"repeatedly=true"} Repeatedly
             %br/
             %br/
             %btn.btn-sm.btn-success.pull-right{"ng-click" => "showLiveButton=false", "ng-show" => "showLiveButton"}
@@ -23,18 +33,37 @@
       %br/
       %ptj-search
       %ptj-members
-      .row
-        %br/
-        .col-md-6{:style => "background-color: rgba(0,0,255,0.1);"}
-          %div START :
-          %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime"}
-          %ptj-survey-details
-        .col-md-6{:style => "background-color: rgba(25,25,25,0.1);"}
-          %div END :
-          %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime2"}
-          %ptj-survey-details
-      / slider
-      #red.ng-valid.ui-slider.ui-widget.ui-widget-content.ui-corner-all.ui-slider-horizontal.ng-dirty{"aria-disabled" => "false", "ng-model" => "colorpicker.red", "ui-slider" => "colorpicker.options"}
-        .ui-slider-range.ui-widget-header.ui-corner-all.ui-slider-range-min{:style => "width: 78.4314%;"}
-        %a.ui-slider-handle.ui-state-default.ui-corner-all{:href => "#", :style => "left: 78.4314%;"}
-      %pre.alert.alert-info Zeit von  bis  am
+      %br
+      .panel.panel-primary
+        .panel-heading
+          .glyphicon.glyphicon-time
+          Survey Runtime
+        .panel-body
+          %row
+            .col-md-9.col-md-offset-1
+              .row
+                .col-md-6
+                  %p.input-group
+                    %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "datepicker-popup" => "dd-MMMM-yyyy", "is-open" => "fromOpened", "max-date" => "'2015-06-22'", "min-date" => "minDate", "ng-model" => "dt", "ng-required" => "true", :type => "text"}
+                    %span.input-group-btn
+                      %button.btn.btn-default{"ng-click" => "openFrom($event)", :type => "button"}
+                        %i.glyphicon.glyphicon-calendar
+                  %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime1"}
+                .col-md-6
+                  %p.input-group
+                    %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "datepicker-popup" => "dd-MMMM-yyyy", "is-open" => "toOpened", "max-date" => "'2015-06-22'", "min-date" => "minDate", "ng-model" => "dt", "ng-required" => "true", :type => "text"}
+                    %span.input-group-btn
+                      %button.btn.btn-default{"ng-click" => "openTo($event)", :type => "button"}
+                        %i.glyphicon.glyphicon-calendar
+                  %timepicker.pull-right{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime2"}
+      %slider{:max => "", :min => "", "ng-model" => "sliders.sliderValue", :step => "", :value => ""}
+    .col-md-2
+      %input-group{"ng-show"=>"repeatedly"}
+        %input.form-control{"type"=>"text", "placeholder"=>"Frequency"}
+        %input.form-control{"type"=>"text", "placeholder"=>"Distance"}
+  .row
+    .col-md-2
+    .col-md-8
+      %btn.pull-right{"type"=>"button", "class"=>"btn btn-primary"}
+        Send
+

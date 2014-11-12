@@ -1,0 +1,105 @@
+<div class='container'>
+  <div class='row'>
+    <ptj-menu></ptj-menu>
+  </div>
+  <div class='row'>
+    <!-- search & results -->
+    <!-- sidebar -->
+    <div class='col-md-2'>
+      <ptj-survey-select></ptj-survey-select>
+    </div>
+    <div class='col-md-8'>
+      <div class='row'>
+        <div class='col-md-8'>
+          <h2>
+            <div class='item-wrapper'>
+              <a editable-text='surveyTitle' href='#'>
+                {{surveyTitle}}
+              </a>
+            </div>
+          </h2>
+          <h4>
+            <div class='item-wrapper'>
+              <a editable-text='surveyDescription' href='#'>
+                {{surveyDescription}}
+              </a>
+            </div>
+          </h4>
+        </div>
+        <div class='col-md-4'>
+          <div class='row'>
+            <div class='btn-group pull-right'>
+              <label btn-radio="'Once'" class='btn btn-primary' ng-click='repeatedly=false'>Once</label>
+              <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='repeatedly=true'>Repeatedly</label>
+            </div>
+            <br>
+            <br>
+            <btn class='btn-sm btn-success pull-right' ng-click='showLiveButton=false' ng-show='showLiveButton'>
+              Live
+              <span class='glyphicon glyphicon-bullhorn'></span>
+            </btn>
+            <btn class='btn-sm btn-warning pull-right' ng-click='showLiveButton=true' ng-show='!showLiveButton'>
+              Staged
+              <span class='glyphicon glyphicon-off'></span>
+            </btn>
+          </div>
+        </div>
+      </div>
+      <br>
+      <ptj-search></ptj-search>
+      <ptj-members></ptj-members>
+      <br>
+      <div class='panel panel-primary'>
+        <div class='panel-heading'>
+          <div class='glyphicon glyphicon-time'></div>
+          Survey Runtime
+        </div>
+        <div class='panel-body'>
+          <row>
+            <div class='col-md-9 col-md-offset-1'>
+              <div class='row'>
+                <div class='col-md-6'>
+                  <p class='input-group'>
+                    <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' datepicker-popup='dd-MMMM-yyyy' is-open='fromOpened' max-date="'2015-06-22'" min-date='minDate' ng-model='dt' ng-required='true' type='text'>
+                    <span class='input-group-btn'>
+                      <button class='btn btn-default' ng-click='openFrom($event)' type='button'>
+                        <i class='glyphicon glyphicon-calendar'></i>
+                      </button>
+                    </span>
+                  </p>
+                  <timepicker hour-step='1' minute-step='1' ng-model='mytime1'></timepicker>
+                </div>
+                <div class='col-md-6'>
+                  <p class='input-group'>
+                    <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' datepicker-popup='dd-MMMM-yyyy' is-open='toOpened' max-date="'2015-06-22'" min-date='minDate' ng-model='dt' ng-required='true' type='text'>
+                    <span class='input-group-btn'>
+                      <button class='btn btn-default' ng-click='openTo($event)' type='button'>
+                        <i class='glyphicon glyphicon-calendar'></i>
+                      </button>
+                    </span>
+                  </p>
+                  <timepicker class='pull-right' hour-step='1' minute-step='1' ng-model='mytime2'></timepicker>
+                </div>
+              </div>
+            </div>
+          </row>
+        </div>
+      </div>
+      <slider max='' min='' ng-model='sliders.sliderValue' step='' value=''></slider>
+    </div>
+    <div class='col-md-2'>
+      <input-group ng-show='repeatedly'>
+        <input class='form-control' placeholder='Frequency' type='text'>
+        <input class='form-control' placeholder='Distance' type='text'>
+      </input-group>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-md-2'></div>
+    <div class='col-md-8'>
+      <btn class='btn btn-primary pull-right' type='button'>
+        Send
+      </btn>
+    </div>
+  </div>
+</div>

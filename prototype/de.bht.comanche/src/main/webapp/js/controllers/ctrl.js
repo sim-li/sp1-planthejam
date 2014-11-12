@@ -8,8 +8,8 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("ctrl", ["$scope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap", "typeAugmentations", "User", 
-        function($scope, $log, Survey, TimeUnit, Type, patterns, dialogMap, typeAugmentations, User) {
+    .controller("ctrl", ["$scope", "$rootScope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap", "typeAugmentations", "User", 
+        function($scope, $rootScope, $log, Survey, TimeUnit, Type, patterns, dialogMap, typeAugmentations, User) {
         
         typeAugmentations();
         
@@ -19,7 +19,7 @@ angular.module("myApp")
         $scope.Type = Type;
         $scope.patterns = patterns;
         
-        $scope.session = {};
+        $rootScope.session = {};
         $scope.warnings = {};
         $scope.dialogMap = dialogMap;
 
@@ -46,7 +46,7 @@ angular.module("myApp")
          * initializes the session
          */
         $scope.initSession = function() {
-            $scope.session = {
+            $rootScope.session = {
                 // "user": getInitUser(), 
                 "user": new User(), // maybe:  "user": ""  does the trick -> in this case delete user class
                 "state": { 
