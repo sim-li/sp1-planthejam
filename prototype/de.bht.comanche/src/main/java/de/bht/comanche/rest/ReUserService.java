@@ -12,6 +12,8 @@ import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 
+//Some text added
+
 @Path("/user/")
 public class ReUserService extends RestService {
 	final String USER_OID = "userOid";
