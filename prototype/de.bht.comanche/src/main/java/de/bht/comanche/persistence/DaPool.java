@@ -2,22 +2,20 @@ package de.bht.comanche.persistence;
 
 import java.util.List;
 
-import de.bht.comanche.persistence.DaPoolImpl.DaArgumentCountExc;
-import de.bht.comanche.persistence.DaPoolImpl.DaNoPersistentClassExc;
-import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
+import javax.persistence.EntityManager;
 
-public interface DaPool<E> {
-	public void beginTransaction();
-	/**
-	 * Should end the transaction with a commit if success was <code>true</code>, otherwise with a rollback.
-	 */
-	public void endTransaction(boolean success);
-	public void save(E io_object);
-	public E merge (E io_object);
-	public void delete(E io_object);
-	public E find(Class<E> i_persistentClass, Long i_oid) throws DaNoPersistentClassExc, DaOidNotFoundExc;
-	public List<E> findAll(Class<E> i_persistentClass) throws DaNoPersistentClassExc;
-	public List<E> findManyByQuery(Class<E> i_resultClass, String i_queryString, Object[] i_args) throws DaNoPersistentClassExc, DaArgumentCountExc;
-	public void flush();
-	public String getPersistenceUnitName();
+public interface DaPool {
+	static final long createdOid = 0;
+	static final long deletedOid = -1; 
+
+	void insert(DaObject io_object);
+	public <E extends DaObject> E save(DaObject io_object); 
+	boolean delete(DaObject io_object);
+	boolean contains(DaObject io_object);
+
+	<E extends DaObject> E find(Class<E> persistentClass, Long oid);
+	<E extends DaObject> List<E> findAll(Class<E> persistentClass);
+	<E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue);
+	<E extends DaObject> List<E> findManyByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue);
+	<E extends DaObject> List<E> findManyByQuery(Class<E> resultClass, Class queryClass, String queryString, Object[] args);
 }

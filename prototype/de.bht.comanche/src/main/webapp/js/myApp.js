@@ -8,7 +8,7 @@
 
 "use strict";
 
-angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
+angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations"])
     .constant("dialogMap", {
         USER_LOGIN: 0, 
         USER_REGISTER: 1, 
@@ -25,5 +25,56 @@ angular.module("myApp", ["datePickerDate", "survey", "constants", "restModule"])
         };
         return {
             removeElementFrom: removeElementFrom
-        };
+        }
+    })
+    .config(function($routeProvider, $locationProvider) {
+        $routeProvider
+            .when('/', {
+                templateUrl : 'pages/login.html',
+                controller  : 'loginCtrl'
+            })
+            .when('/register', {
+                templateUrl : 'pages/register.html',
+                controller  : 'loginCtrl'
+            })
+            // Temporaly redirecting to invite
+            .when('/cockpit', {
+                templateUrl : 'pages/invite.html',
+                controller  : 'inviteCtrl'
+            })
+            .when('/invite', {
+                templateUrl : 'pages/invite.html',
+                controller  : 'inviteCtrl'
+            });
+        $locationProvider.html5Mode(true);
+    })
+    .directive('ptjMenu', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/menu.html'
+        }
+    })
+    .directive('ptjGroups', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/invite/groups.html'
+        }
+    })
+    .directive('ptjSearch', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/search.html'
+        }
+    })
+    .directive('ptjSurveyDetails', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/invite/surveydetails.html'
+        }
+    })
+    .directive('ptjMembers', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/invite/members.html'
+        }
     });

@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,12 +12,14 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.bht.comanche.persistence.DaObject;
+
 /**
  * @author Duc Tung Tong
  */
 @Entity
 @Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
-public class LgUser extends LgObject {
+public class LgUser extends DaObject {
 
 	private static final long serialVersionUID = 1L;
 	@Column(unique=true, nullable=false)
@@ -27,28 +28,51 @@ public class LgUser extends LgObject {
 	private String email;
 	private String password;
 
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
-	public LgUser() {
-		this.invites = new LinkedList<LgInvite>();
+
+	public LgInvite save(final LgInvite invite) {
+		invite.setUser(this);
+		return attach(invite).save();
+	}
+
+	public void deleteAccount() {
+		delete();
+	}
+
+	public void deleteInvite(final long oid) {
+		getInvite(oid).delete();
 	}
 	
-	public LgUser(String name, String tel, String email, String password,
-			List<LgUser> hasContacts, List<LgUser> isContacts,
-			List<LgInvite> invites) {
-		super();
-		this.name = name;
-		this.tel = tel;
-		this.email = email;
-		this.password = password;
-		this.invites = invites == null ? new LinkedList<LgInvite>() : invites;
+	public boolean passwordMatchWith(LgUser user) {
+		final String password = user.getPassword();
+		if (this.password == null) {
+			return false;
+		}
+		return this.password.equals(password);
 	}
 
-	public LgUser(long oid) {
-		super(oid);
+	public LgInvite getInvite(long oid) {
+		return search(getInvites(), oid);
+	}
+   
+	public void remove(final LgInvite invite) {
+		invites.remove(invite);
 	}
 
+	/**
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
+
+	@JsonIgnore
+	public List<LgInvite> getInvites() {
+		return invites;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -85,36 +109,6 @@ public class LgUser extends LgObject {
 		return this;
 	}
 
-	@JsonIgnore
-	public List<LgInvite> getInvites() {
-		return invites;
-	}
-
-	public LgUser setInvites(List<LgInvite> invites) {
-		this.invites = invites;
-		return this;
-	}
-
-	public boolean addInvite(LgInvite invite) {
-		return this.invites.add(invite);
-	}
-
-	public boolean removeInvite(LgInvite invite) {
-		return this.invites.remove(invite);
-	}
-
-	public boolean passwordMatchWith(LgUser user) {
-		final String password = user.getPassword();
-		if (this.password == null) {
-			return false;
-		}
-		return this.password.equals(password);
-	}
-	
-	public void clearInvites() {
-		this.invites.clear();
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -172,5 +166,7 @@ public class LgUser extends LgObject {
 				", invites=" + invites + "]" +
 				"OID>: " + getOid();
 	}
+
 	
+
 }

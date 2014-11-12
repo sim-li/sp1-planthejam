@@ -12,42 +12,55 @@
     font-size: 0.6em; 
 }
 
-.input_area {
-    float: left;
-    width: 75%;
-    min-width: 150px;
-    max-width: 450px;
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+  background-color: #FAFAFA;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
-label {
-    font-size: 0.75em;
-    /*display: inline-block;*/
+.list-group{
+  
 }
 
-.full_width_input input {
-    width: 98%;
+#inhalt{
+  position: relative;
+  right: 0px;
+  border-color: black;
+  border-width: 5px;
 }
 
-.my_form {
-    width: 98%;
-    padding: 2%;
+#searchFriends{
+ border-color: black;
+ border-radius: 5px;
 }
-
-.my_form.ng-invalid {
-    width: 98%;
-    border-style: solid;
-    border-color: red;
-}
-
-select {
-    width: 98%;
-}
-
-textarea {
-    width: 97%;
-}
-
-/*.output_area {
-    float: left;
-    width: 40%;
-}*/
