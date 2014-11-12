@@ -1,52 +1,271 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <base href="/">
-  <!--
+    <meta charset="UTF-8">
+    
+    <!-- 
      * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
-     * (C)opyright Sebastian DassÃ©, Mat.-Nr. 791537, s50602@beuth-hochschule.de
-     * and Tong Duc Tung , s51488@beuth-hochschule.de
+     * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+     *
     -->
-  <title>SP1 Ojektverwaltung-UI, Team: Comanche</title>
-  <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-<link rel="stylesheet" type="text/css" href="">
+    
+    <title>SP1 Ojektverwaltung-UI, Team: Comanche</title>
+    
+    <!-- import style sheets -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Latest compiled and minified JavaScript -->
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="css/style.css">
-  <link rel="stylesheet" type="text/css" href="css/style_prototype.css">
-  <link href="css/xeditable.css" rel="stylesheet">
-  <script src="vendor/lib/angular.min.js"></script>
-  <script src="vendor/lib/angular-route.js"></script>
-  <script src="vendor/lib/ui-bootstrap-tpls-0.11.2.min.js"></script>
-  <script src="vendor/lib/jquery-2.1.1.min.js"></script>
 
-  <!-- May be unwise to mix normal bootstrap with angular ui bootstrap -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="vendor/lib/xeditable.min.js"></script>
-  <script src="js/myApp.js"></script>
-  <script src="js/controllers/ctrl.js"></script>
-  <script src="js/controllers/login.js"></script>
-  <script src="js/controllers/cockpit.js"></script>
-  <script src="js/controllers/editUser.js"></script>
-  <script src="js/controllers/editInvite.js"></script>
-  <script src="js/controllers/invite.js"></script>
-  <script src="js/models/invite.js"></script>
-  <script src="js/models/survey.js"></script>
-  <script src="js/models/user.js"></script>
-  <script src="js/models/group.js"></script>
-  <script src="js/util/constants.js"></script>
-  <script src="js/util/datePickerDate.js"></script>
-  <script src="js/util/typeAugmentations.js"></script>
-  <script src="js/services/rest.js"></script>
-  <script src="vendor/lib/angular-slider.min.js"></script>
+    <!-- import javascript -->
+
+    <!-- for production -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script> -->
+    
+    <!-- for development -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script> -->
+    
+    
+    <!-- for production -->
+    <!-- <script src="lib/angular.min.js"></script> -->
+    
+    <!-- for development -->
+    <script src="lib/angular.js"></script>
+
+    <!-- bootstrap/angular library -->
+    <script src="lib/ui-bootstrap-tpls-0.11.0.min.js"></script>
+    
+    <!-- maven for production -->
+    <!-- <script type="text/javascript" src="webjars/angularjs/1.2.16-2/angular.min.js"></script> -->
+    
+    <!-- maven for development -->
+    <!-- <script type="text/javascript" src="webjars/angularjs/1.2.16-2/angular.js"></script> -->
+
+    
+    <script src="js/myApp.js"></script>
+    <script src="js/ctrl.js"></script>
+    <script src="js/loginCtrl.js"></script>
+    <script src="js/loggedInCtrl.js"></script>
+    <script src="js/editUserCtrl.js"></script>
+    <script src="js/editInviteCtrl.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/invite.js"></script>
+    <script src="js/survey.js"></script>
+    <script src="js/datePickerDate.js"></script>
+    <script src="js/restService.js"></script>
+    
 </head>
-<!-- define angular controller -->
-<body ng-app="myApp" ng-controller="ctrl">
-    <div ng-view></div>
+<body ng-app="myApp" ng-controller="ctrl" ng-keydown="discardWarnings()">
+    
+    <!-- display errors here -->
+    <pre id="error">{{ warnings.central }}</pre>
+
+    <!-- for debugging -->
+    <!-- <pre id="debug">
+        {{ session.user }}
+        {{ session.tempUser }}
+        {{ session.tempInvite }}
+        {{ session.selectedInvite }}
+    </pre> -->
+
+
+    <div id="login_area" ng-controller="loginCtrl" ng-hide="session.state.isLoggedIn" class="input_area">
+
+        <form name="loginForm" ng-show="session.state.is(dialogMap.USER_LOGIN)" ng-submit="login()" class="my_form">
+            <div class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="sessions.showPassword" type="password" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+                
+                <div class="error">{{ warnings.password }}</div>
+            </div>
+            
+            <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+            
+            <div>
+                <a id="registerLink" href="" ng-click="toggleLoginDialog()">Registrieren</a>
+            </div>
+
+            <span class="full_width_input">
+                <input id="loginBtn" type="submit" value="Login" />
+            </span>
+        </form><!-- loginForm -->
+
+
+        <form name="registerForm" ng-show="session.state.is(dialogMap.USER_REGISTER)" ng-submit="register()" class="my_form">
+            <div class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required />
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.user.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+                
+                <div class="error">{{ warnings.password }}</div>
+            </div>
+
+            <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+
+            <div class="full_width_input">
+                <label for="inputEmail">E-Mail</label>
+                <input id="inputEmail" name="inputEmail" type="text" ng-model="session.user.email" placeholder="Deine E-Mail-Adresse ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.email }}</div>
+                
+                <label for="inputTel">Telefon</label>
+                <input id="inputTel" name="inputTel" type="text" ng-model="session.user.tel" placeholder="Deine Telefonnummer ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.tel }}</div>
+            </div>
+
+            <div>
+                <a id="cancelRegisterLink" href="" ng-click="toggleLoginDialog()">Registrieren abbrechen</a>
+            </div>
+
+            <span class="full_width_input">
+                <input id="registerBtn" type="submit" value="Registrieren" />
+            </span>
+        </form><!-- registerForm -->
+        
+    </div><!-- login_area -->
+
+
+
+    <div id="logged_in_area" ng-controller="loggedInCtrl" ng-show="session.state.isLoggedIn" class="input_area">
+
+        <div id="menu_area">
+                <input id="editUser" type="button" value="Konto" ng-click="editUser()" />
+                <input id="editContacts" type="button" value="Kontakte" ng-click="editContacts()" />
+                <input id="logout" type="button" value="Logout" ng-click="logout()" />
+        </div><br /><!-- menu_area -->
+
+
+        <form name="editUserForm" ng-controller="editUserCtrl" ng-show="session.state.is(dialogMap.USER_EDIT)" class="my_form">
+            <div class="full_width_input">
+                <label for="inputName">Benutzername</label>
+                <input id="inputName" name="inputName" type="text" ng-model="session.tempUser.name" placeholder="Dein Benutzername ..." required />
+
+                <label for="inputPassword">Passwort</label>
+                <input id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.tempUser.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+
+                <input id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.tempUser.password" 
+                placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
+                
+                <div class="error">{{ warnings.password }}</div>
+            </div>
+
+            <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
+            <label for="toggleShowPassword">Klartext</label>
+
+            <div class="full_width_input">
+                <label for="inputEmail">E-Mail</label>
+                <input id="inputEmail" name="inputEmail" type="text" ng-model="session.tempUser.email" placeholder="Deine E-Mail-Adresse ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.email }}</div>
+                
+                <label for="inputTel">Telefon</label>
+                <input id="inputTel" name="inputTel" type="text" ng-model="session.tempUser.tel" placeholder="Deine Telefonnummer ..." ng-change="discardWarnings()" required />
+                <div class="error">{{ warnings.tel }}</div>
+            </div>
+
+            <span class="full_width_input">
+                <input id="cancelUserEditBtn" type="button" value="Abbrechen" ng-click="cancelEditUser()" />
+                <input id="saveUserEditBtn" type="submit" value="Speichern" ng-click="saveEditedUser()" />
+                <input id="deleteUserBtn" type="button" value="L&ouml;schen" ng-click="deleteUser()" />
+            </span>
+        </form><!-- editUserForm -->
+
+
+        <div id="survey_selection_area" ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
+            <span class="full_width_input">
+                
+                <input id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addInvite()" />
+                
+                <!--++++ TODO: Baustelle ++++++++++++++++++++-->
+                <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString" size="5%"></select>
+                
+                <!-- <select id="surveyList" ng-model="session.selectedInvite.survey" size="5%">
+                    <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
+                </select> -->
+
+                <input id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="session.user.searchString" ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-change="updateSelection()"/>
+
+                <input id="editInvite" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="editInvite()" />
+                <input id="deleteInvite" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedInvite()" />
+            </span>
+
+            <textarea rows="5" readonly>{{ session.selectedInvite.survey.description }}</textarea>
+        </div><!-- survey_selection_area -->
+
+
+
+        <div id="survey_edit_area" ng-controller="editInviteCtrl" ng-show="session.state.is(dialogMap.SURVEY_EDIT)">
+            <span class="full_width_input">
+
+                <label for="editSurveyName">Name</label>
+                <!-- <input id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name" ng-change="$log.log(session.tempInvite.survey.name);"/> -->
+                <input id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name"/>
+
+                <label for="editSurveyDescription">Beschreibung</label>
+                <!-- <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description" ng-change="$log.log(session.tempInvite.survey.description);"></textarea> -->
+                <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description"></textarea>
+                
+                <label for="editSurveyType">Typ</label>
+                <select id="editSurveyType" ng-model="session.tempInvite.survey.type" ng-options="type for type in Type.options_" ng-change="$log.log(session.tempInvite.survey.type);"></select>
+                
+                <label for="editSurveyDeadlineDate">Deadline</label>
+                <input id="editSurveyDeadlineDate" type="date" ng-model="session.tempInvite.survey.deadline.date" ng-change="$log.log(session.tempInvite.survey.deadline.toDate())" required />
+                <input id="editSurveyDeadlineTime" type="time" ng-model="session.tempInvite.survey.deadline.time" ng-change="$log.log(session.tempInvite.survey.deadline.toDate())" required />
+
+
+                <label for="editSurveyFrequencyDistance">Frequenz - Abstand</label>
+                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="session.tempInvite.survey.frequencyDist" ng-change="$log.log(session.tempInvite.survey.frequencyDist);"/>
+                
+                <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
+                <select id="editSurveyFrequencyTimeUnit" ng-model="session.tempInvite.survey.frequencyTimeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.tempInvite.survey.frequencyTimeUnit);"></select>
+
+
+                <label for="editSurveyPossibleTimeperiods">M&ouml;gliche Zeitr&auml;ume</label>
+                <div id="editSurveyPossibleTimeperiods">
+                    <ul>
+                        <li ng-repeat="timeperiod in session.tempInvite.survey.possibleTimeperiods">
+                            <label for="editSurveyDeterminedTimeperiodDuration">Startzeitpunkt</label>
+                            <input id="timeperiodStartDate" type="date" ng-model="timeperiod.startTime.date" ng-change="$log.log(timeperiod.startTime.toDate())" required />
+                            <input id="timeperiodStartTime" type="time" ng-model="timeperiod.startTime.time" ng-change="$log.log(timeperiod.startTime.toDate())" required />
+
+                            <label id="timeperiodDuration" for="editSurveyDeterminedTimeperiodDuration">Dauer in Minuten</label>
+                            <input type="number" min="0" ng-model="timeperiod.durationInMins" ng-change="$log.log(timeperiod.durationInMins)" required />
+                            [ <a href="" ng-click="removeTimeperiodFromTempInvite(timeperiod)">L&ouml;schen</a> ]
+                        </li>
+                        <li>[ <a href="" ng-click="addTimeperiodToTempInvite()">Hinzuf&uuml;gen</a> ]</li>
+                    </ul>
+                </div>
+
+
+                <label for="editSurveyDeterminedTimeperiodStartDate">Ermittelter Zeitraum - Startzeitpunkt</label>
+                <input id="editSurveyDeterminedTimeperiodStartDate" type="date" ng-model="session.tempInvite.survey.determinedTimeperiod.startTime.date" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.startTime.toDate())" />
+                <input id="editSurveyDeterminedTimeperiodStartTime" type="time" ng-model="session.tempInvite.survey.determinedTimeperiod.startTime.time" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.startTime.toDate())" />
+
+                <label for="editSurveyDeterminedTimeperiodDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
+                <input id="editSurveyDeterminedTimeperiodDuration" type="number" min="0" ng-model="session.tempInvite.survey.determinedTimeperiod.durationInMins" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.durationInMins);"/>
+
+
+                <input id="cancelInviteEdit" type="button" value="Abbrechen" ng-click="cancelEditInvite()" />
+                <input id="saveInviteEdit" type="button" value="Speichern" ng-click="saveInvite()" />
+            </span>
+        </div><!-- survey_edit_area -->
+
+
+    </div><!-- logged_in_area -->
+
+ 
 </body>
 </html>

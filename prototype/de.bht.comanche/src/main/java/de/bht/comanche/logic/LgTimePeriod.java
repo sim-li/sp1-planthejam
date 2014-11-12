@@ -8,8 +8,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import de.bht.comanche.persistence.DaObject;
-
 /**
  * Is used to describe the timeperiod of a survey or the availability of
  * users.
@@ -18,7 +16,7 @@ import de.bht.comanche.persistence.DaObject;
  */
 @Entity
 @Table(name = "TimePeriod")
-public class LgTimePeriod extends DaObject {
+public class LgTimePeriod extends LgObject {
 
 	private static final long serialVersionUID = 1L;
 	private Date startTime;
@@ -27,13 +25,6 @@ public class LgTimePeriod extends DaObject {
 	@NotNull
 	@ManyToOne
 	private LgSurvey survey;
-
-	/**
-	 * --------------------------------------------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
 
 	public Date getStartTime() {
 		return startTime;
@@ -60,12 +51,6 @@ public class LgTimePeriod extends DaObject {
 	public LgTimePeriod setSurvey(LgSurvey survey) {
 		this.survey = survey;
 		return this;
-	}
-
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
