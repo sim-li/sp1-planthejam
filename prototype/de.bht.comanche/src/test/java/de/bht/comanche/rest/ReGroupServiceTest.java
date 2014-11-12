@@ -1,10 +1,11 @@
-package test;
+package de.bht.comanche.rest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,7 @@ public class ReGroupServiceTest {
 	static long group_oid;
 	
 	
-	@BeforeClass 
+//	@BeforeClass 
 	public static void initializeDb(){
 		Map<String, String> properties = new HashMap<String, String>(1);
 		properties.put("hibernate.hbm2ddl.auto", "create");
@@ -53,26 +54,36 @@ public class ReGroupServiceTest {
 	@Test
 	public void testSaveGroup(){
 		
-		LgSession session = new LgSession();
+		LgSession session. = new LgSession();
 		session.beginTransaction();
 		
 		final LgUser alice = new LgUser();
-		alice.setName("Alice");
-		session.setUser(alice);
-		session.save(alice);
+//		alice.setName("Alice");
+//		session.setUser(alice);
+//		session.save(alice);
+//		
+//		session.login(alice);
+		session.startFor("Alice");
 		
-		//save group
+		System.out.println(session.getUser().getOid() + " -----------------------------");
+		
+//		save group
 		final LgGroup alice_group = new LgGroup();
-		alice_group.setName("AliceGroup");
-		alice.save(alice_group);
+		alice_group.setName("AliceGroup1");
+		
+		session.getUser().save(alice_group);
+		
+//		alice.save(alice_group);
+		
+		
+		
 
+		
+		
 		//save group
-		final LgGroup alice_group1 = new LgGroup();
-		alice_group1.setName("AliceGroup1");
-		alice.save(alice_group1);
-		
-		
-
+//		final LgGroup alice_group1 = new LgGroup();
+//		alice_group1.setName("AliceGroup1");
+//		alice.save(alice_group1);
 		
 //		user_oid = alice.getOid();
 
@@ -92,7 +103,9 @@ public class ReGroupServiceTest {
 //			System.err.println("------------------- Group Is empty -----------------");
 //		}
 		
-		session.endTransaction(true);
+		session.endTransaction(true);	
+		
+		
 		
 		
 		

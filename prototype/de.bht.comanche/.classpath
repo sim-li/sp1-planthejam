@@ -7,12 +7,13 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry including="**/*.java" kind="src" path="src/main/resources"/>
-	<classpathentry excluding="main/java/|test/java/|test/resources/|main/web/js/|main/resources/" including="**/*.java" kind="src" path="src"/>
+	<classpathentry excluding="main/java/|main/resources/|main/web/js/|test/resources/|test/java/de/bht/comanche/logic/|test/java/de/bht/comanche/persistence/|test/java/de/bht/comanche/rest/|test/java/de/bht/comanche/|test/java/de/bht/" including="**/*.java|test/java/|test/resources/" kind="src" path="src"/>
 	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="src/test/java/de/bht/comanche"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
