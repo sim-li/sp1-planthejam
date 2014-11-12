@@ -40,6 +40,11 @@ public class LgGroup extends DaObject{
 		return this;
 	}
 	
+	public LgGroup setUser(LgUser user) {
+		this.user = user;
+		return this;
+	}
+	
 	public LgGroup save() {
 		return pool.save(this);
 	}
