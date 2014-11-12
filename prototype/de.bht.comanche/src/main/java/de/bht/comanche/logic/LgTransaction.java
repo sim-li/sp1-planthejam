@@ -1,47 +1,44 @@
 package de.bht.comanche.logic;
 
-import javax.servlet.http.HttpServletRequest;
-
+import de.bht.comanche.persistence.DaPool;
 import de.bht.comanche.rest.ReErrorMessage;
 import de.bht.comanche.rest.ReServerException;
-import de.bht.comanche.rest.RestService;
 
 public abstract class LgTransaction<E> {
+	private final DaPool<E> pool;
 	
-	private final E result;
-	private final LgSession session = new LgSession();
-    private HttpServletRequest request;	
-
-	public LgTransaction(final HttpServletRequest request) {
-		this.request = request;
-	   	boolean success = false;
+	public LgTransaction (DaPool<E> pool) {
+		this.pool = pool;
+	}
+	
+	public E execute() { // throws ServerException
+		pool.beginTransaction();
+		boolean success = false;
+		E objectFromDb = null;
 		try {
-			session.beginTransaction();
-			result = execute();
+			objectFromDb = executeWithThrows();
 			success = true;
 		} catch (Exception ex) {
 			multex.Msg.printReport(System.err, ex);
-			throw new ReServerException(new ReErrorMessage(ex, multex.Msg.getStackTrace(ex)));
+			throw new ReServerException(new ReErrorMessage(multex.Msg.getMessages(ex), multex.Msg.getStackTrace(ex)));
 		} finally {
 			try {
-				session.endTransaction(success);
+				pool.endTransaction(success);
 			} catch (Exception ex) {
 				multex.Msg.printReport(System.err, ex);
 			} 
 		}
-	}
-		
-	public E getResult() {
-		return result;
+		return objectFromDb;
 	}
 	
-	public LgSession getSession() {
-		return session;
+	public void forceTransactionEnd() {
+		pool.endTransaction(true);
 	}
 	
-	public LgUser startSession() {
-		return session.startFor(RestService.getUserName(request));
+	public void forceRestartTransaction() {
+		pool.endTransaction(true);
+		pool.beginTransaction();
 	}
-
-	public abstract E execute() throws Exception;
+	
+	public abstract E executeWithThrows() throws Exception;
 }

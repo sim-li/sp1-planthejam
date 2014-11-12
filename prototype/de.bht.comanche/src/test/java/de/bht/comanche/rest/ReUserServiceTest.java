@@ -53,7 +53,8 @@
 ////	@Test
 //	public void test3updateUser() {
 //
-//		LgUser testUser = new LgUser(oid);
+//		LgUser testUser = new LgUser();
+//		testUser.setOid(oid);
 //		testUser.setName("UpdatedMuster");
 //		testUser.setPassword("updatedPassword");
 //		testUser.setEmail("updated@test.com");
@@ -74,7 +75,8 @@
 ////	@Test
 //	public void test4DeletedUser() {
 //
-//		LgUser testUser = new LgUser(oid);
+//		LgUser testUser = new LgUser();
+//		testUser.setOid(oid);
 //
 //		Response response = expect().statusCode(200).given().body(testUser)
 //				.contentType("application/json").when()
