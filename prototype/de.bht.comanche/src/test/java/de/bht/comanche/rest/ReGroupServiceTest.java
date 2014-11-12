@@ -54,7 +54,7 @@ public class ReGroupServiceTest {
 	@Test
 	public void testSaveGroup(){
 		
-		LgSession session. = new LgSession();
+		LgSession session = new LgSession();
 		session.beginTransaction();
 		
 		final LgUser alice = new LgUser();
@@ -69,7 +69,7 @@ public class ReGroupServiceTest {
 		
 //		save group
 		final LgGroup alice_group = new LgGroup();
-		alice_group.setName("AliceGroup1");
+		alice_group.setName("AliceGroup2");
 		
 		session.getUser().save(alice_group);
 		
