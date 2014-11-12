@@ -53,20 +53,12 @@ public class ReGroupServiceTest {
 	@Test
 	public void testSaveGroup(){
 		
-		
-//		LgSession session = new LgSession{
-//			application = new DaApplication();
-//			pool = application.getPool();
-//			user = "Alice";
-//		};
-		
 		LgSession session = new LgSession();
 		session.beginTransaction();
 		
 		final LgUser alice = new LgUser();
 		alice.setName("Alice");
 		session.setUser(alice);
-//		session.startFor("Alice");
 		session.save(alice);
 		
 		//save group
@@ -74,10 +66,10 @@ public class ReGroupServiceTest {
 		alice_group.setName("AliceGroup");
 		alice.save(alice_group);
 
-//		//save group
-//		final LgGroup alice_group1 = new LgGroup();
-//		alice_group1.setName("AliceGroup1");
-//		alice.save(alice_group1);
+		//save group
+		final LgGroup alice_group1 = new LgGroup();
+		alice_group1.setName("AliceGroup1");
+		alice.save(alice_group1);
 		
 		
 
