@@ -24,6 +24,8 @@ angular.module('myApp')
     console.log('Invites%o', $scope.invites);
    
     $scope.surveyTitle = 'Lets have a beer, guys';
+    $scope.surveyDescription = 'This will a a really casual get together with the uppermose style etiquette. Eventhough there'
+    + 'will be beer involved, we will not get to the limits of our physical capacities.';
     $scope.editedGroupName = '';
     $scope.selectedGroupName = '';
     $scope.showTrash = true;
@@ -32,8 +34,11 @@ angular.module('myApp')
     $scope.userSelected = undefined;
     $scope.dt = new Date();
     $scope.showLiveButton = true;
+    $scope.repeatedly = false;
+    $scope.toOpened = false;
+    $scope.fromOpened = false;
 
-
+    // For debug. Comment out with you have a working system.
     var mockInvites = function() {
         for (var i = 0, len = $scope.invites.length; i < len; i++) {
             $scope.invites[i].survey = {
@@ -157,10 +162,16 @@ angular.module('myApp')
         $scope.minDate = $scope.minDate ? null : new Date();
     };
 
-    $scope.open = function($event) {
+    $scope.openTo = function($event) {
         $event.preventDefault();
         $event.stopPropagation();
-        $scope.opened = true;
+        $scope.toOpened = !$scope.toOpened;
+    };
+
+    $scope.openFrom = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.fromOpened = !$scope.fromOpened;
     };
 
     var setDefaultGroup = function() {

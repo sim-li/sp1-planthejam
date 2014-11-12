@@ -52,3 +52,9 @@
 select.editable-input{
  width: 114px; 
 }
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}

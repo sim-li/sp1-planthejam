@@ -1,32 +1,5 @@
 <div class='container'>
   <ptj-menu></ptj-menu>
-  <form class='list-group col-md-4' name='editUserForm' ng-controller='editUserCtrl' ng-show='session.state.is(dialogMap.USER_EDIT)'>
-    <div>
-      <label for='inputName'>Benutzername</label>
-      <input class='form-control' id='inputName' name='inputName' ng-model='session.tempUser.name' placeholder='Dein Benutzername ...' required='' type='text'>
-      <label for='inputPassword'>Passwort</label>
-      <input class='form-control' id='inputPassword' name='inputPassword' ng-change='discardWarnings()' ng-hide='session.showPassword' ng-model='session.tempUser.password' placeholder='8-20 Buchstaben' required='' type='password'>
-      <input class='form-control' id='inputPasswordPlain' name='inputPasswordPlain' ng-change='discardWarnings()' ng-model='session.tempUser.password' ng-show='session.showPassword' placeholder='8-20 Buchstaben' required='' type='text'>
-      <div class='error'></div>
-    </div>
-    <input id='toggleShowPassword' ng-checked='false' ng-model='session.showPassword' type='checkbox'>
-    <label for='toggleShowPassword'>Klartext</label>
-    <div>
-      <label for='inputEmail'>E-Mail</label>
-      <input class='form-control' id='inputEmail' name='inputEmail' ng-change='discardWarnings()' ng-model='session.tempUser.email' placeholder='Deine E-Mail-Adresse ...' required='' type='text'>
-      <div class='error'></div>
-      <label for='inputTel'>Telefon</label>
-      <input class='form-control' id='inputTel' name='inputTel' ng-change='discardWarnings()' ng-model='session.tempUser.tel' placeholder='Deine Telefonnummer ...' required='' type='text'>
-      <div class='error'></div>
-    </div>
-    <span>
-      <input class='btn btn-primary' id='cancelUserEditBtn' ng-click='cancelEditUser()' type='button' value='Abbrechen'>
-      <input class='btn btn-primary' id='saveUserEditBtn' ng-click='saveEditedUser()' type='submit' value='Speichern'>
-      <input class='btn btn-primary' id='deleteUserBtn' ng-click='deleteUser()' type='button' value='Löschen'>
-    </span>
-  </form>
-  <!-- editUserForm -->
-  <!-- TerminUmfrage -->
   <div class='container' ng-show='session.state.is(dialogMap.SURVEY_SELECTION)'>
     <span>
       <input class='btn btn-primary' id='addSurvey' ng-click='addInvite()' type='button' value='Neue Terminumfrage erstellen'>
