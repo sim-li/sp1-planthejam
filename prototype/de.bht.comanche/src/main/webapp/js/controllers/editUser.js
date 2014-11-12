@@ -1,7 +1,7 @@
 /*
  * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
  * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * 
+ *
  * Module: edit user controller
  */
 
@@ -9,7 +9,7 @@
 "use strict";
 
 angular.module("myApp")
-    .controller("editUserCtrl", ["$scope", "$log", "Survey", "restService", "dialogMap", 
+    .controller("editUserCtrl", ["$scope", "$log", "Survey", "restService", "dialogMap",
         function($scope, $log, Survey, restService, dialogMap) {
 
         $scope.saveEditedUser = function() {
@@ -35,7 +35,7 @@ angular.module("myApp")
         };
 
         $scope.deleteUser = function() {
-            
+
             // *** ask: are you sure you want to delete? ***
 
             var _user = $scope.session.user;
