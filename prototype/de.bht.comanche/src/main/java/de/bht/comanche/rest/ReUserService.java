@@ -12,6 +12,9 @@ import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 
+
+//Delete this line plese
+
 @Path("/user/")
 public class ReUserService extends RestService {
 	final String USER_OID = "userOid";
