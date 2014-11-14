@@ -24,6 +24,11 @@ public class LgSession {
 		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
 		return user;
 	}
+	
+	public LgUser findByName(String userName) {
+		// throw exc when user not found
+		return pool.findOneByKey(LgUser.class, "NAME", userName);
+	}
 
 	public LgUser save(final LgUser user) {
 		final LgUser o_user = user.attach(getPool()).save(); //can throw exception
@@ -82,7 +87,7 @@ public class LgSession {
 	protected DaPool getPool() {
 		return pool;
 	}
-
+	
 	public LgUser getUser() {
 		return user;
 	}

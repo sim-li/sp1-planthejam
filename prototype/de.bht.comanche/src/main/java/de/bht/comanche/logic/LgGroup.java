@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,11 +26,11 @@ public class LgGroup extends DaObject{
 	private String name;
 
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private LgUser user;
 		
-	@OneToMany(mappedBy="group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<LgMember> member;
+	@OneToMany(mappedBy="group", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	private List<LgMember> member ;
 	
 	public String getGroupName() {
 		return name;
@@ -49,28 +50,54 @@ public class LgGroup extends DaObject{
 		return this.getOid();
 	}
 	
-	public LgGroup save() {
-		return pool.save(this);
-	}
+//	public LgGroup save() {
+//		return pool.save(this);
+//	}
 	
 	public void delete() {
 		user.removeGroup(this);
 		pool.delete(this); //throw exc when delete errror
 	}
 	
-	public List<LgMember> getMembers() {
+//---------LgMember operations----------------	
+	
+	public List<LgMember> getLgMembers(){
 		return member;
 	}
-
-	public LgGroup setMembers(List<LgMember> member) {
-		this.member = member;
-		return this;
-	}
 	
-//	public void setMember(long groupOid){
-//		user.save(user.getGroups().).saveMember
-//		
+	
+	//not used
+//	public LgMember lgUserToLgMember(LgUser user){
+//		return new LgMember(user);
 //	}
+	
+	//not used
+//	public List<LgMember> addUserMember(LgUser user){
+//		List<LgMember> result = new ArrayList<LgMember>();
+//		if(!(user == null)){
+//			 result.set(0, lgUserToLgMember(user));
+//			 return result;
+//		}
+//		return result;
+//	}
+	
+	//not used
+//	public List<LgMember> addLgMember(LgMember lgMember){
+//		List<LgMember> result = new ArrayList<LgMember>();
+//		if(!(user == null)){
+//			 result.set(0, lgMember);
+//			 return result;
+//		}
+//		return result;
+//	}
+	
+	//not used
+//	public LgGroup setMembers(List<LgMember> member) {
+//		this.member = member;
+//		return this;
+//	}
+	
+	
 	
 //	TODO How to find group by id - pool.find-getOid??
 //	public LgGroup getLgGroup(User , long group_oid){

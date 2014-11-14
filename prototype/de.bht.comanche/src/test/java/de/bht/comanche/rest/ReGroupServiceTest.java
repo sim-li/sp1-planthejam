@@ -51,25 +51,48 @@ public class ReGroupServiceTest {
 		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
 	}
 	
+//	@BeforeClass 
+	public static void initializeUser(){
+		
+		LgSession session = new LgSession();
+		session.beginTransaction();
+		
+		//save user - it works
+		final LgUser alice = new LgUser();
+		alice.setName("Alice");
+		alice.setEmail("test@test.de");
+		alice.setPassword("testtest");
+		session.save(alice);
+		
+		//create new LgUser 
+		final LgUser bob = new LgUser();
+		bob.setName("Bob");
+		bob.setEmail("bob@test.de");
+		bob.setPassword("testtest");
+		session.save(bob);
+		
+		//create new LgUser 
+		final LgUser pit = new LgUser();
+		pit.setName("Pit");
+		pit.setEmail("pit@test.de");
+		pit.setPassword("testtest");
+		session.save(pit);
+		
+		session.endTransaction(true);	
+	}
+	
 	@Test
 	public void testSaveGroup(){
 		
 		LgSession session = new LgSession();
 		session.beginTransaction();
 		
-//save user - it works
-//		final LgUser alice = new LgUser();
-//		alice.setName("Alice");
-//		alice.setEmail("test@test.de");
-//		alice.setPassword("testtest");
-//		session.save(alice);
-		
-//login user
+//"login" user Alice
 		session.startFor("Alice");
 		LgUser sessionUser = session.getUser();
 		
-		System.out.println(session.getUser().getOid() + " -----------------------------");
-		
+		System.out.println("------- Alice Oid: " + session.getUser().getOid() + "-------------");
+
 //save group with userId - it works
 //		final LgGroup alice_group = new LgGroup();
 //		alice_group.setName("Group");
@@ -78,31 +101,40 @@ public class ReGroupServiceTest {
 		
 //change group name - it works 		
 //		List<LgGroup> lgrop = sessionUser.getGroups();
-//		lgrop.get(0).setName("NewGroup");
-//		System.out.println( lgrop.get(0).getName() + " -----------------------------");
+//		//incoming updated group with changed name
+//		LgGroup tempGroup = lgrop.get(0);
+//		tempGroup.setName("NewGroup");
+//		sessionUser.save(tempGroup);
+//		System.out.println( lgrop.get(0).getGroupName() + " -----------------------------");
 
-//delete group
-		List<LgGroup> lgrop = sessionUser.getGroups();
-		long oid = lgrop.get(0).getGroupOid();
-		sessionUser.deleteGroup(oid);
+//delete group - it works
+//		List<LgGroup> lgrop = sessionUser.getGroups();
+		// worked with .getGroupOid()
+//		long oid = lgrop.get(0).getOid();
+//		sessionUser.deleteGroup(oid);
 		
-//		List<LgMember> memberList = new ArrayList<LgMember>();
-//		memberList.add(alice);
-//		bob_group.setMembers(member)
-//		
-//		if(!bob.getGroups().isEmpty()){
-//			LgGroup lg = bob.getGroups().get(0);	
-//			System.out.println("------------------- " + lg.getName() + " -----------------");
-//		} else {
-//			System.err.println("------------------- Group Is empty -----------------");
-//		}
+
+		
+//add new LgUser(LgMember) to LgGroup - it works
+//		LgGroup aliceGroup = sessionUser.getGroups().get(0);
+//		sessionUser.save(new LgMember(session.findByName("Pit"), aliceGroup));
+//		sessionUser.save(new LgMember(session.findByName("Bob"), aliceGroup));
+//		System.out.println("------------GroupName: " + aliceGroup.getGroupName() + " -----------------");
+		
+
+//delete group with members	
+		System.out.println("------------GroupName: " + sessionUser.getGroups().get(0).getGroupName() + " -----------------");
+		sessionUser.getGroups().get(0).delete();
+		
+//delete one member and update group
+//first way - just delete LgMember by oid
+//second way - get group - delete user - save group
+//		LgGroup aliceGroup = sessionUser.getGroups().get(0);
+//		List<LgMember> lg = aliceGroup.getLgMembers();
+//		lg.get(0).delete();
+
 		
 		session.endTransaction(true);	
-		
-		
-		
-		
-		
 		assertTrue("Persisting test users Alice & Bob", true);
 //		
 	}

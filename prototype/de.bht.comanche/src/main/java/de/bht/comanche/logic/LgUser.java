@@ -32,10 +32,10 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 	
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private List<LgGroup> groups;
 	
-	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private LgMember member;
 	
 	public LgInvite save(final LgInvite invite) {
@@ -44,6 +44,10 @@ public class LgUser extends DaObject {
 	
 	public LgGroup save(final LgGroup group) {
 		return attach(group).save();
+	}
+	
+	public LgMember save(final LgMember lgMember) {
+		return attach(lgMember).save();
 	}
 
 	public void deleteAccount() {

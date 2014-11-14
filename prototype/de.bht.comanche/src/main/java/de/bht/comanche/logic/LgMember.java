@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -12,20 +13,43 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "member")
 public class LgMember extends DaObject{
-	
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull
 	@ManyToOne
 	private LgGroup group;
 	
-	@OneToOne(fetch=FetchType.EAGER)
+	@OneToOne
 	private LgUser user;
 	
 	public long getMemberId() {
 		return user.getOid();
 	}
 	
+	protected LgMember(){}
+	
+	public LgMember(LgUser user, LgGroup group) {
+		this.group = group;
+		this.user = user;
+	}
+	
+//	public LgMember getLgMemberByOid(long oid) {
+//		this.search(list, oid);
+//		return null;
+//	}
+	
+//	public LgMember setLgMember(LgUser user, LgGroup group) {
+//		this.group = group;
+//		this.user = user;
+//		return this;
+//	}
+	
+//	public LgMember save() {
+//		return pool.save(this);
+//	}
+	
+
+//	
 //	public void setMemberId(final long userOid) {
 //		this.userOid = userOid;
 //	}
