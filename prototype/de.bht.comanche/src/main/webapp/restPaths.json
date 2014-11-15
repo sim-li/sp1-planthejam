@@ -1,0 +1,18 @@
+{
+    "basePath": "/rest",
+    "user": {
+        "path": "/user"
+    },
+    "invite": {
+        "path": "/invite",
+        "getMany": "/getInvites",
+        "save": "/save",
+        "delete": "/delete"
+    },
+    "group": {
+        "path": "/group",
+        "getMany": "/getGroups",
+        "save": "/save",
+        "delete": "/delete"
+    }
+}

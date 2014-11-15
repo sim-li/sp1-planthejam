@@ -18,7 +18,7 @@ import de.bht.comanche.persistence.DaObject;
  */
 @Entity
 @Table(name = "Lg_Invite")
-public class LgInvite extends DaObject{
+public class LgInvite extends DaObject {
 
 	private static final long serialVersionUID = 1L;
 
