@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -32,10 +33,10 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 	
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
 	private List<LgGroup> groups;
 	
-	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	@OneToOne(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
 	private LgMember member;
 	
 	public LgInvite save(final LgInvite invite) {
@@ -62,6 +63,10 @@ public class LgUser extends DaObject {
 		getGroup(oid).delete();
 	}
 	
+	public void deleteLgMember(final long oid) {
+		getLgMember(oid).delete();
+	}
+	
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
 		if (this.password == null) {
@@ -76,6 +81,10 @@ public class LgUser extends DaObject {
 	
 	private LgGroup getGroup(long oid) {
 		return search(getGroups(), oid);
+	}
+	
+	private LgMember getLgMember(long oid) {
+		return search(getMembers(), oid);
 	}
    
 	public void removeInvite(final LgInvite invite) {
@@ -101,6 +110,13 @@ public class LgUser extends DaObject {
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
 		return groups;
+	}
+	
+	@JsonIgnore
+	public List<LgMember> getMembers() {
+		List<LgMember> result = new ArrayList<LgMember>();
+		result.set(0, member);
+		return result;
 	}
 	
 	public String getName() {

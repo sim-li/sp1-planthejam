@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
 
 @Entity
@@ -26,17 +28,17 @@ public class LgGroup extends DaObject{
 	private String name;
 
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne
 	private LgUser user;
 		
-	@OneToMany(mappedBy="group", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
-	private List<LgMember> member ;
+	@OneToMany(mappedBy="group", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	private List<LgMember> members ;
 	
 	public String getGroupName() {
 		return name;
 	}
 
-	public LgGroup setName(String name) {
+	public LgGroup setGroupName(String name) {
 		this.name = name;
 		return this;
 	}
@@ -46,25 +48,33 @@ public class LgGroup extends DaObject{
 		return this;
 	}
 	
-	public long getGroupOid() {
-		return this.getOid();
-	}
+//	public long getGroupOid() {
+//		return this.getOid();
+//	}
 	
 //	public LgGroup save() {
 //		return pool.save(this);
 //	}
-	
-	public void delete() {
-		user.removeGroup(this);
-		pool.delete(this); //throw exc when delete errror
-	}
-	
+
 //---------LgMember operations----------------	
 	
-	public List<LgMember> getLgMembers(){
-		return member;
+	private LgMember getLgMember(long oid) {
+		return search(getLgMembers(), oid);
 	}
 	
+	//not work
+//	public void deleteLgMember(final long oid) {
+//		getLgMember(oid).delete();
+//	}
+	
+	public List<LgMember> getLgMembers(){
+		return members;
+	}
+	
+	//is it works on group? - no, on this way, no -> only user.save(member)
+//	public LgMember save(final LgMember lgMember) {
+//		return attach(lgMember).save();
+//	}
 	
 	//not used
 //	public LgMember lgUserToLgMember(LgUser user){
@@ -92,17 +102,9 @@ public class LgGroup extends DaObject{
 //	}
 	
 	//not used
-//	public LgGroup setMembers(List<LgMember> member) {
-//		this.member = member;
+//	public LgGroup setMembers(List<LgMember> members) {
+//		this.member = members;
 //		return this;
 //	}
-	
-	
-	
-//	TODO How to find group by id - pool.find-getOid??
-//	public LgGroup getLgGroup(User , long group_oid){
-//		return null;
-//	}
-	
 
 }

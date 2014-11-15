@@ -95,7 +95,7 @@ public class ReGroupServiceTest {
 
 //save group with userId - it works
 //		final LgGroup alice_group = new LgGroup();
-//		alice_group.setName("Group");
+//		alice_group.setGroupName("Group");
 //		alice_group.setUser(sessionUser);		
 //		sessionUser.save(alice_group);
 		
@@ -103,11 +103,11 @@ public class ReGroupServiceTest {
 //		List<LgGroup> lgrop = sessionUser.getGroups();
 //		//incoming updated group with changed name
 //		LgGroup tempGroup = lgrop.get(0);
-//		tempGroup.setName("NewGroup");
+//		tempGroup.setGroupName("NewGroup");
 //		sessionUser.save(tempGroup);
 //		System.out.println( lgrop.get(0).getGroupName() + " -----------------------------");
 
-//delete group - it works
+//delete group (without members) - it works
 //		List<LgGroup> lgrop = sessionUser.getGroups();
 		// worked with .getGroupOid()
 //		long oid = lgrop.get(0).getOid();
@@ -117,22 +117,25 @@ public class ReGroupServiceTest {
 		
 //add new LgUser(LgMember) to LgGroup - it works
 //		LgGroup aliceGroup = sessionUser.getGroups().get(0);
-//		sessionUser.save(new LgMember(session.findByName("Pit"), aliceGroup));
-//		sessionUser.save(new LgMember(session.findByName("Bob"), aliceGroup));
 //		System.out.println("------------GroupName: " + aliceGroup.getGroupName() + " -----------------");
+//		System.out.println("------------session.findByName-Bred: " + session.findByName("Bred").getName() + " -----------------");
+//		aliceGroup.save(new LgMember(session.findByName("Bred"), aliceGroup)); --> it doest't work on this way
+//		sessionUser.save(new LgMember(session.findByName("Pit"), aliceGroup)); -> is ok
+//		sessionUser.save(new LgMember(session.findByName("Bob"), aliceGroup)); -> is ok
 		
 
-//delete group with members	
-		System.out.println("------------GroupName: " + sessionUser.getGroups().get(0).getGroupName() + " -----------------");
-		sessionUser.getGroups().get(0).delete();
+//delete group with members	- it works
+//		System.out.println("------------GroupName: " + sessionUser.getGroups().get(0).getGroupName() + " -----------------");
+//		sessionUser.deleteGroup(sessionUser.getGroups().get(0).getOid());
 		
 //delete one member and update group
 //first way - just delete LgMember by oid
 //second way - get group - delete user - save group
-//		LgGroup aliceGroup = sessionUser.getGroups().get(0);
-//		List<LgMember> lg = aliceGroup.getLgMembers();
-//		lg.get(0).delete();
-
+		LgGroup aliceGroup = sessionUser.getGroups().get(0);
+		System.out.println("------------GroupName: " + aliceGroup.getGroupName() + " -----------------");
+		System.out.println("------------Name of User in group: " + session.findByName("Bob").getName() + " -----------------");
+//		aliceGroup.deleteLgMember(session.findByName("Bob").getOid()); --> it doesn't work on this way 
+		sessionUser.deleteLgMember(session.findByName("Bob").getOid());
 		
 		session.endTransaction(true);	
 		assertTrue("Persisting test users Alice & Bob", true);
@@ -179,34 +182,7 @@ public class ReGroupServiceTest {
 	@Test
 	public void testSaveGroup1() {
 		LgUser testUser = new LgUser();
-//		testUser.setName("Alice1");
-//		
-//		
-//		List<LgGroup> dummyGroups = Arrays.asList(new LgGroup[] {
-//				new LgGroup().setName("Bier trinken")
-//		});
-//		
-//		LgGroup lg = new LgGroup();
-//		lg.setName("Test");
-//		
-//		testUser.save(lg);
 		
-//		com.jayway.restassured.response.Response response = expect().statusCode(0).given().body(dummyGroups)
-//				.contentType("application/json").when()
-//				.post("/rest/group/save");
-//		
-//		JsonPath jsonPath = response.getBody().jsonPath();
-//		jsonPath.prettyPrint();
-//		user_oid = jsonPath.getLong("data.oid");
-		}
-
-//	// FIXME - hard coded quick hack to test communication with client
-//	List<LgGroup> dummyGroups = Arrays.asList(new LgGroup[] {
-//			new LgGroup().setName("Bier trinken"), 
-//			new LgGroup().setName("Chorprobe"), 
-//			new LgGroup().setName("Skat spielen") 
-//	});
-//	return dummyGroups;
-	
+	}
 }
 

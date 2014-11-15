@@ -19,6 +19,7 @@ public class LgMember extends DaObject{
 	@ManyToOne
 	private LgGroup group;
 	
+	@NotNull
 	@OneToOne
 	private LgUser user;
 	
@@ -28,9 +29,20 @@ public class LgMember extends DaObject{
 	
 	protected LgMember(){}
 	
+//	remove after tests? - no, so it safe
 	public LgMember(LgUser user, LgGroup group) {
 		this.group = group;
 		this.user = user;
+	}
+	
+	public LgMember setLgMember(LgUser user) {
+		this.user = user;
+		return this;
+	}
+	
+	public LgMember setLgGroup(LgGroup group) {
+		this.group = group;
+		return this;
 	}
 	
 //	public LgMember getLgMemberByOid(long oid) {
