@@ -1,7 +1,11 @@
 {
     "basePath": "/rest",
     "user": {
-        "path": "/user"
+        "path": "/user",
+        "login": "/login",
+        "register": "/register",
+        "delete": "/deleteUser",
+        "update": "/updateUser"
     },
     "invite": {
         "path": "/invite",
