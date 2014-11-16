@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -35,6 +36,11 @@ public class LgUser extends DaObject {
 	private List<LgGroup> groups;
 
 
+	public LgUser() {
+		invites = new ArrayList<LgInvite>();
+		groups = new ArrayList<LgGroup>();
+	}
+	
 	public LgInvite save(final LgInvite invite) {
 		invite.setUser(this);
 		return attach(invite).save();

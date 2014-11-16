@@ -3,10 +3,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import de.bht.comanche.rest.RestService;
 import multex.Failure;
 /**
  * 
@@ -33,26 +31,24 @@ public class DaHibernateJpaPool implements DaPool {
     
 	@Override
 	public void insert(DaObject io_object) {
-		this.entityManager.persist(io_object);
+		entityManager.persist(io_object);
 	}
 
 	@Override
 	public boolean contains(DaObject io_object) {
-		return this.contains(io_object);
+		return entityManager.contains(io_object);
 	}
 	
 	@Override
 	public <E extends DaObject> E save(DaObject io_object) {
-		EntityManager session = getEntityManager();
 		io_object.attach(this);
-		return (E) session.merge(io_object);
+		return (E) entityManager.merge(io_object);
 	}
 
 	@Override
 	public boolean delete(DaObject io_object) {
-		EntityManager session = getEntityManager();
-		final boolean isPersistent = session.contains(io_object);
-		session.remove(isPersistent ? io_object : session.merge(io_object));
+		final boolean isPersistent = entityManager.contains(io_object);
+		entityManager.remove(isPersistent ? io_object : entityManager.merge(io_object));
 		return isPersistent;
 	}
 
@@ -70,8 +66,7 @@ public class DaHibernateJpaPool implements DaPool {
 	@Override
 	public <E extends DaObject> List<E> findAll(Class<E> persistentClass) {
 		// TODO at try/catch
-		final EntityManager session = getEntityManager();
-		final Query q = session.createQuery("SELECT e FROM " + persistentClass.getSimpleName() + "e", persistentClass); 
+		final Query q = entityManager.createQuery("SELECT e FROM " + persistentClass.getSimpleName() + "e", persistentClass); 
 		final List<E> results = q.getResultList();
 		for (E item : results) {
 			item.attach(this); //Test!
@@ -93,7 +88,6 @@ public class DaHibernateJpaPool implements DaPool {
 			String keyFieldName, Object keyFieldValue) {
 		checkPersistentClass(persistentClass);
 		final String className = persistentClass.getName();
-		final  EntityManager entityManager = getEntityManager();
 		final Query q = entityManager.createQuery("select o from " + className + " o where " + keyFieldName + " = :keyValue ORDER BY o.oid DESC");
 		q.setParameter("keyValue", keyFieldValue);
 		final List<E> results = q.getResultList();
@@ -106,7 +100,6 @@ public class DaHibernateJpaPool implements DaPool {
 	@Override
 	public <E extends DaObject> List<E> findManyByQuery(Class<E> resultClass, 
 			Class queryClass, String queryString, Object[] args) {
-		final EntityManager session = getEntityManager();
 		if (!DaObject.class.isAssignableFrom(resultClass)) {
 			//	throw create(DaNoPersistentClassExc.class, i_resultClass); 
 		}
@@ -114,7 +107,7 @@ public class DaHibernateJpaPool implements DaPool {
 			//	throw create(DaArgumentCountExc.class, i_queryString, i_args.length);
 		}
 		String qlString = String.format(queryString, args);
-		final Query query = session.createQuery(qlString, resultClass);
+		final Query query = entityManager.createQuery(qlString, resultClass);
 		@SuppressWarnings("unchecked")
 		final List<E> results = query.getResultList();
 		for (E item : results) {
