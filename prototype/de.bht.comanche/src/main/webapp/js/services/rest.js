@@ -4,171 +4,160 @@
  *
  * Module: REST service
  */
-"use strict";
+'use strict';
 
-angular.module("restModule", ["datePickerDate", "constants", "invite", "group"])
-    .factory("restService", ["$http", "$q", "$log", "$filter", "Invite", "Group", function($http, $q, $log, $filter, Invite, Group) {
+angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
+    .factory('restService', ['$http', '$q', '$log', function($http, $q, $log) {
 
-        var DUMMY_INVITE_LIST = false;
-        var DUMMY_LOGIN = false;
         var LOG = true;
-        var USER_PATH = "rest/user/";
-        var INVITE_PATH = "rest/invite/";
-        var GROUP_PATH = "rest/group/";
+        var DUMMY_LOGIN = false;
 
-        // var thisModel = config[modek.modelId]
-        // config.basePath + thisModel.path + thisModel.get
+        // TODO the paths should best be retrieved from a config file
+        var restPaths = {
+            'basePath': '/rest',
+            'user': {
+                'path': '/user',
+                'login': '/login',
+                'register': '/register',
+                'delete': '/deleteUser',
+                'update': '/updateUser'
+            },
+            'invite': {
+                'path': '/invite',
+                'getMany': '/getInvites',
+                'save': '/save',
+                'delete': '/delete'
+            },
+            'group': {
+                'path': '/group',
+                'getMany': '/getGroups',
+                'save': '/save',
+                'delete': '/delete'
+            }
+        };
 
-        // config.basePath + config.invite.path + config.invite.get
+        // $http.get('restPaths.json').success(function(data, status, header, config) {
+        //     restPaths = data;
+        // }).error(function(data, status, header, config) {
+        //     $log.error('Failed loading the REST paths configuration file restPaths.json.');
+        //     $log.error(data);
+        // });
 
-        //     [
-        //     basePath: '/rest',
-        //     models: [{
-        //             'invite': [{
-        //                 'path': '/invite'
-        //                 'get': '/get',
-        //                 'save': '/save',
-        //             ]]
-        //         ]
-        //         var paths = [{
-        //             'invite': [{
-        //                 'get': '/invite/get',
-        //                 'save': '/invite/save'
-        //             }]
-        //         }]
+        /**
+         * Returns the relative HTTP path for the given model and operation from the central REST path table.
+         * @param  {object} model    needs to have a method called getModelId() that returns the model ID as a String
+         * @param  {String} opString a String that denotes the desired operation
+         * @return {String}          the relative HTTP path
+         */
+        var getPath = function(model, opString) {
+            var getModelId = model.getModelId || new model().getModelId;
+            var theModel = restPaths[getModelId()];
+            return restPaths.basePath + theModel.path + theModel[opString];
+        };
 
-        // return callHTTP('save', invite)
-
-        // saveModel(invite) -- >
-        // callHttp('save', invite)
-
-        var callHTTP = function(url, data, method, headers) {
+        /**
+         * Calls the HTTP service at the specified URL with the specified data using the specified method.
+         * @param  {String} url    the URL
+         * @param  {object} data   the data to be sent to the server
+         * @param  {String} method the REST method (GET, POST, PUT, DELETE)
+         * @return {promise}       [description]
+         */
+        var callHTTP = function(url, data, method) {
             if (LOG)  {
-                $log.log("REST: " + url);
+                $log.log('REST: ' + url);
             }
             var deferred = $q.defer();
             $http({
-                method: method || "POST",
+                method: method || 'POST',
                 url: url,
                 data: data,
-                headers: headers
-                    /*
-                     * TODO@CodeCleanup: If not necessary, remove from code. Removed equivalent code
-                     * duplicate from deleteUser & deleteInvite.
-                     * >
-                     *    $http( ... { headers: { "Content-Type": "application/json" } } )
-                     * <
-                     */
+                headers: (method !== 'DELETE') ? {
+                    'Content-Type': 'application/json'
+                } : ''
             }).success(function(data, status, header, config) {
                 if (LOG) {
                     $log.debug(data);
                 }
                 deferred.resolve(data);
             }).error(function(data, status, header, config) {
-                // if (LOG) {       // TODO errors should always be logged, but with proper $log.error or similar
-                $log.debug(data);
-                $log.debug(data.stackTrace);
-                // }
-                deferred.reject("REST: " + url + " failed. \n" + data.message);
+                // errors should always be logged
+                $log.error(data);
+                $log.error(data.stackTrace);
+                deferred.reject('REST: ' + url + ' failed. \n' + data.message);
             });
             return deferred.promise;
         };
 
         var login = function(user) {
             if (DUMMY_LOGIN) {
-                return callHTTP(USER_PATH + "login", {
-                    "name": "Alice",
-                    "password": "yousnoozeyoulose"
-                });
+                user.name = 'Alice';
+                user.password = 'yousnoozeyoulose';
             }
-            return callHTTP(USER_PATH + "login", {
-                "name": user.name,
-                "password": user.password
+            return callHTTP(getPath(user, 'login'), {
+                'name': user.name,
+                'password': user.password
             });
         };
 
         var register = function(user) {
-            return callHTTP(USER_PATH + "register", {
-                "name": user.name,
-                "password": user.password,
-                "email": user.email,
-                "tel": user.tel
+            return callHTTP(getPath(user, 'register'), {
+                'name': user.name,
+                'password': user.password,
+                'email': user.email,
+                'tel': user.tel
             });
         };
 
         var deleteUser = function(user) {
-            return callHTTP(USER_PATH + "delete", {
-                "oid": user.oid
-            }, "DELETE", {
-                "Content-Type": "application/json"
-            });
-
+            return callHTTP(getPath(user, 'delete'), {
+                'oid': user.oid
+            }, 'DELETE');
         };
 
         var updateUser = function(user) {
-            return callHTTP(USER_PATH + "update", {
-                "oid": user.oid,
-                "name": user.name,
-                "password": user.password,
-                "email": user.email,
-                "tel": user.tel
+            return callHTTP(getPath(user, 'update'), {
+                'oid': user.oid,
+                'name': user.name,
+                'password': user.password,
+                'email': user.email,
+                'tel': user.tel
             });
         };
 
-        var getInvites = function() {
-            //TODO@CodeCleanup: If not necessary, remove from code.
-            if (false) {
-                var _rawInvites = data;
-                var _invites = Invite.forInvitesConvertFromRawInvites(_rawInvites);
-                deferred.resolve(_invites);
-            }
-            return DUMMY_INVITE_LIST === true ? Invite.getDummyInviteList : callHTTP(INVITE_PATH + "getInvites");
-        };
-
-        /*
-         * Update or insert a invite.
-         * - @param invite ...
+        /**
+         * Gets a collection of objects of the specified model.
+         * @param  {object} modelClass needs to have a method called getModelId() that returns the model ID as a String
+         * @return {promise}           a promise for a collection of objects of the specified model type
          */
-        var saveInvite = function(invite) {
-            if (LOG) {
-                $log.debug("saveInvite: ");
-                $log.debug(invite);
-                $log.debug(invite.export());
-            }
-            return callHTTP(INVITE_PATH + "save", invite.export());
+        var doGetMany = function(modelClass) {
+            // return callHTTP(getPath(new modelClass(), 'getMany'));
+            return callHTTP(getPath(modelClass, 'getMany'));
         };
 
-        var deleteInvite = function(oid) {
-            return callHTTP(INVITE_PATH + "delete", oid, "DELETE", {
-                "Content-Type": "application/json"
-            });
+        /**
+         * Saves a model.
+         *
+         * @param  {object} model needs to have a method called getModelId() that returns the model ID as a String
+         * @return {promise}      a promise for the saved objection of the specified model
+         */
+        var doSave = function(model) {
+            return callHTTP(getPath(model, 'save'), model.export());
         };
 
-        var getGroups = function() {
-
-            $log.info("getGroups is untested!");
-
-            return callHTTP(GROUP_PATH + "getGroups");
-        };
-
-        var saveGroup = function(group) {
-
-            $log.info("saveGroups is untested!");
-
-            return callHTTP(GROUP_PATH + "save", group.export());
-        };
-
-        var deleteGroup = function() {
-
-            $log.info("deleteGroup is untested!");
-
-            return callHTTP(GROUP_PATH + "delete", oid, "DELETE", {
-                "Content-Type": "application/json"
+        // NOTE: delete is a javascript keyword, therefore the otherwise strange 'do'-prefix naming convention
+        /**
+         * Deletes a model.
+         * @param  {object} model needs to have a method called getModelId() that returns the model ID as a String
+         * @return {promise}      an empty (???) promise
+         */
+        var doDelete = function(model) {
+            return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE', {
+                'Content-Type': 'application/json'
             });
         };
 
         var sayHi = function() {
-            $log.log("HI from rest");
+            $log.log('HI from rest');
         };
 
         return {
@@ -176,12 +165,9 @@ angular.module("restModule", ["datePickerDate", "constants", "invite", "group"])
             register: register,
             deleteUser: deleteUser,
             updateUser: updateUser,
-            getInvites: getInvites,
-            saveInvite: saveInvite,
-            deleteInvite: deleteInvite,
-            getGroups: getGroups,
-            saveGroup: saveGroup,
-            deleteGroup: deleteGroup,
+            doGetMany: doGetMany,
+            doSave: doSave,
+            doDelete: doDelete,
             sayHi: sayHi
         };
     }]);
