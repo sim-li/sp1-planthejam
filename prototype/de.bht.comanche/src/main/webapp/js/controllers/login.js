@@ -8,8 +8,10 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('loginCtrl', ['$scope', '$rootScope', '$location', '$log', 'patterns', 'restService', 'dialogMap', 'Group',
-        function($scope, $rootScope, $location, $log, patterns, restService, dialogMap, Group) {
+    .controller('loginCtrl', ['$scope', '$rootScope', '$location', '$log', 'patterns', 'restService', 'dialogMap', 'Invite', 'Group',
+        function($scope, $rootScope, $location, $log, patterns, restService, dialogMap, Invite, Group) {
+
+            var DUMMY_INVITE_LIST = false;
 
             var loginIsValidFor = function(user) {
                 if (!user.name) {
@@ -63,10 +65,10 @@ angular.module('myApp')
                         $location.path('/cockpit');
                         $log.log('Login erfolgreich.');
                         $log.log($rootScope.session);
-                        console.log(user);
+                        $log.log(user);
 
                         // <<<<<<<<<<<<<<<<<<<< BAUSTELLE: Invites holen ------------------- TODO
-                        // restService.getInvites(user.oid) // deprecated service
+
                         restService.doGetMany(Invite)
                             .then(function(invites) {
                                 $log.debug(invites);
@@ -88,7 +90,7 @@ angular.module('myApp')
 
 
                         // TODO still testing
-                        restService.getGroups()
+                        restService.doGetMany(Group)
                             .then(function(groups) {
                                 $log.info('================>');
                                 $log.debug(groups);
@@ -124,8 +126,8 @@ angular.module('myApp')
 
                         // FIXME quick hack for debugging
                         // var dummyGroup = new Group({
-                        //     oid: 123, 
-                        //     name: 'Kaffeeklatsch', 
+                        //     oid: 123,
+                        //     name: 'Kaffeeklatsch',
                         //     members: [{oid: 1, name: 'Alice'}, {oid: 2, name: 'Bob'}, {oid: 3, name: 'Carla'}]
                         // });
                         // restService.saveGroup(dummyGroup);

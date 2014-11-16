@@ -11,6 +11,9 @@ angular.module('invite', ['survey'])
     .factory('Invite', ['Survey', 'DatePickerDate', 'TimeUnit', 'Type', function(Survey, DatePickerDate, TimeUnit, Type) {
 
         var Invite = function(config) {
+            if (!(this instanceof Invite)) {
+                return new Invite(config);
+            }
             config = config || {};
             this.oid = config.oid || '';
             this.ignored = config.ignored;
@@ -18,12 +21,8 @@ angular.module('invite', ['survey'])
             this.survey = new Survey(config.survey) || new Survey();
         };
 
-        Invite.getModelId = function() {
-            return Invite.prototype.getModelId.apply();
-        };
-
         Invite.prototype.getModelId = function() {
-            return 'survey';
+            return 'invite';
         };
 
         Invite.prototype.export = function() {
@@ -73,7 +72,7 @@ angular.module('invite', ['survey'])
         //             'isIgnored': false,
         //             'survey': {
         //                 'name': 'Bandprobe',
-        //                 'description': 'Wir m�ssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann k�nnt ihr?',
+        //                 'description': 'Wir müssen vor dem Konzert Ende des Monats mindestens noch einmal proben. Wann könnt ihr?',
         //                 'type': Type.ONE_TIME, // or 'RECURRING' <<enumeration>> = einmalig oder wiederholt
         //                 // 'deadline': '10.07.2014, 23:55', // <<datatype>> date = Zeipunkt
         //                 'deadline': new Date(2014, 7, 10, 23, 55), // <<datatype>> date = Zeipunkt
@@ -109,7 +108,7 @@ angular.module('invite', ['survey'])
         //             'isIgnored': false,
         //             'survey': {
         //                 'name': 'Meeting',
-        //                 'description': 'Unser monatliches Gesch�ftsessen. Dresscode: Bussiness casual.',
+        //                 'description': 'Unser monatliches Geschäftsessen. Dresscode: Bussiness casual.',
         //                 'type': Type.RECURRING,
         //                 'deadline': new Date(2014, 7, 31, 8, 0),
         //                 'frequencyDist': 0,
