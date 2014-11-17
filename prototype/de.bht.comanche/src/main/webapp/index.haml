@@ -8,29 +8,30 @@
       * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
       * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
       * and Tong Duc Tung , s51488@beuth-hochschule.de
-    %title SP1 Ojektverwaltung-UI, Team: Comanche
+    %title Plan The Jam
     / Latest compiled and minified CSS
     %link{:href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css", :rel => "stylesheet"}
     / Optional theme
     %link{:href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css", :rel => "stylesheet"}
     %link{:href => "", :rel => "stylesheet", :type => "text/css"}
     / Latest compiled and minified JavaScript
-    %link{:href => "css/bootstrap.min.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "bower_components/bootstrap/dist/css/bootstrap.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "bower_components/angular-xeditable/dist/css/xeditable.css", :rel => "stylesheet"}
+    %link{:href => "css/slider.css", :rel => "stylesheet", :type => "text/css"}
+    / TODO clean up duplicate or orphan CSS ->
     %link{:href => "css/style.css", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "css/style_prototype.css", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "css/ptj.css", :rel => "stylesheet", :type => "text/css"}
-    %link{:href => "css/xeditable.css", :rel => "stylesheet"}
-    %link{:href => "css/slider.css", :rel => "stylesheet", :type => "text/css"}
     / for production
-    / <script src="vendor/lib/angular.min.js"></script>
+    / MINIFIED VERSION OF THE LIBRARIES GO HERE
     / for development
-    %script{:src => "vendor/lib/angular.js"}
-    %script{:src => "vendor/lib/angular-route.js"}
-    %script{:src => "vendor/lib/ui-bootstrap-tpls-0.11.2.min.js"}
-    %script{:src => "vendor/lib/jquery-2.1.1.min.js"}
+    %script{:src => "bower_components/angular/angular.js"}
+    %script{:src => "bower_components/angular-bootstrap/ui-bootstrap-tpls.js"}
+    %script{:src => "bower_components/angular-route/angular-route.js"}
+    %script{:src => "bower_components/jquery/dist/jquery.min.js"}
     / May be unwise to mix normal bootstrap with angular ui bootstrap
     %script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"}
-    %script{:src => "vendor/lib/xeditable.min.js"}
+    %script{:src => "bower_components/angular-xeditable/dist/js/xeditable.js"}
     %script{:src => "js/myApp.js"}
     %script{:src => "js/controllers/ctrl.js"}
     %script{:src => "js/controllers/login.js"}
@@ -46,9 +47,9 @@
     %script{:src => "js/util/datePickerDate.js"}
     %script{:src => "js/util/typeAugmentations.js"}
     %script{:src => "js/services/rest.js"}
-    %script{:src => "vendor/lib/angular-slider.min.js"}
-    %script{:src => "vendor/lib/bootstrap-slider.js"}
-    %script{:src => "vendor/lib/slider.js"}
+    / TODO comment back in if really used -> get dependencies using bower -> use directory 'bower_components'
+    / %script{:src => "lib/angular-slider.min.js"}
+    / %script{:src => "lib/bootstrap-slider.js"}
   / define angular controller
   %body{"ng-app" => "myApp", "ng-controller" => "ctrl"}
     %div{"ng-view" => ""}

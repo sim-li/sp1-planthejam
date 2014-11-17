@@ -12,5 +12,5 @@ gem install watchr
 gem install fssm
 
 In sp1-plan-the-jam
-./watchhaml.rb
+ruby ./watchhaml.rb .
 ausführen. Alle HAMLS werden bei Veränderung automatisch in HTML compiliert.
