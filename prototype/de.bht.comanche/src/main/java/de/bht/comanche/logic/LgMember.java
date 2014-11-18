@@ -1,5 +1,8 @@
 package de.bht.comanche.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,7 +30,7 @@ public class LgMember extends DaObject{
 		return user.getOid();
 	}
 	
-	protected LgMember(){}
+	public LgMember(){}
 	
 //	remove after tests? - no, so it safe
 	public LgMember(LgUser user, LgGroup group) {
@@ -35,26 +38,18 @@ public class LgMember extends DaObject{
 		this.user = user;
 	}
 	
-	public LgMember setLgMember(LgUser user) {
+	public LgMember setLgMember(LgUser user, LgGroup group) {
+		this.group = group;
 		this.user = user;
 		return this;
 	}
 	
-	public LgMember setLgGroup(LgGroup group) {
-		this.group = group;
-		return this;
-	}
 	
-//	public LgMember getLgMemberByOid(long oid) {
-//		this.search(list, oid);
-//		return null;
+	
+//	public LgUser getLgMemberByOid(long oid) {
+//		return pool.find(LgUser.class, oid);
 //	}
 	
-//	public LgMember setLgMember(LgUser user, LgGroup group) {
-//		this.group = group;
-//		this.user = user;
-//		return this;
-//	}
 	
 //	public LgMember save() {
 //		return pool.save(this);

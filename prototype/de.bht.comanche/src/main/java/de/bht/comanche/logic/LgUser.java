@@ -63,8 +63,19 @@ public class LgUser extends DaObject {
 		getGroup(oid).delete();
 	}
 	
-	public void deleteLgMember(final long oid) {
-		getLgMember(oid).delete();
+	public void deleteLgMember(LgMember member) {
+		member.delete();
+	}
+	
+	public List<LgMember> findMemberByTwoId(long groupId, long userId) {
+		// throw exc when user not found
+		List<LgMember> lg = null;
+		try{
+			lg = pool.findManyByTwoKeys(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
+		} catch (Exception e) {
+			multex.Msg.printReport(System.err, e);
+		}
+		return lg;
 	}
 	
 	public boolean passwordMatchWith(LgUser user) {
@@ -82,11 +93,31 @@ public class LgUser extends DaObject {
 	private LgGroup getGroup(long oid) {
 		return search(getGroups(), oid);
 	}
+
+//--------------------------------------------------------------------------------------------------
+//	public void deleteLgMemberById(final long userId, final long memberOid, final long groupOid) {
+//		getLgMembers(groupOid, groupOid).delete();
+//	}
+//	
+//	private LgMember getLgMembers(final long userId, long memberOid) {
+//		//all members for one group with id
+//		return search(getMembersByUserId(userId), memberOid);
+//	}
+//	
+//	public List<LgMember> getMembersByUserId(final long userId) {
+//		// throw exc when user not found
+//		return pool.findManyByKey(LgMember.class, "USER_OID", userId);
+//	}
+
+//--------------------------------------------------------------------------------------------------	
 	
-	private LgMember getLgMember(long oid) {
-		return search(getMembers(), oid);
-	}
-   
+	
+//------------------------------------------------------------------------------------------------------	
+//	public void deleteLgMember(long groupId, long userId) {
+//		findMemberByTwoId(groupId, userId).get(0).delete();
+//	}
+//	
+//----------------------------------------------------------------------------------------------------	
 	public void removeInvite(final LgInvite invite) {
 		invites.remove(invite);
 	}
@@ -94,7 +125,8 @@ public class LgUser extends DaObject {
 	public void removeGroup(final LgGroup group) {
 		groups.remove(group);
 	}
-
+	
+	
 	/**
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -110,13 +142,6 @@ public class LgUser extends DaObject {
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
 		return groups;
-	}
-	
-	@JsonIgnore
-	public List<LgMember> getMembers() {
-		List<LgMember> result = new ArrayList<LgMember>();
-		result.set(0, member);
-		return result;
 	}
 	
 	public String getName() {

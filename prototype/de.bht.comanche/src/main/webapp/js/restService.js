@@ -36,6 +36,7 @@ angular.module("restModule", ["datePickerDate", "constants", "invite"])
 	            }).success(function(data, status, header, config) {
 	            	if (LOG) {
 	            		$log.debug(data);
+						$log.debug(status);
 	            	}
 	                deferred.resolve(data);
 	            }).error(function(data, status, header, config) {

@@ -29,7 +29,7 @@ public class LgSession {
 		// throw exc when user not found
 		return pool.findOneByKey(LgUser.class, "NAME", userName);
 	}
-
+	
 	public LgUser save(final LgUser user) {
 		final LgUser o_user = user.attach(getPool()).save(); //can throw exception
 		this.setUser(o_user);

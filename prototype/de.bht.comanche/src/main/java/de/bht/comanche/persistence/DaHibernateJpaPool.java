@@ -87,6 +87,14 @@ public class DaHibernateJpaPool implements DaPool {
 		result.attach(this);
 		return result;
 	}
+	
+	public <E extends DaObject> E findOneByTwoKeys(Class<E> persistentClass, String firstKeyFieldName,
+			Object firstKey, String secondKeyFieldName, Object secondKey) {
+		final List<E> results = findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);
+		final E result = results.get(0);
+		result.attach(this);
+		return result;
+	}
 
 	@Override
 	public <E extends DaObject> List<E> findManyByKey(Class<E> persistentClass,
@@ -96,6 +104,23 @@ public class DaHibernateJpaPool implements DaPool {
 		final  EntityManager entityManager = getEntityManager();
 		final Query q = entityManager.createQuery("select o from " + className + " o where " + keyFieldName + " = :keyValue ORDER BY o.oid DESC");
 		q.setParameter("keyValue", keyFieldValue);
+		final List<E> results = q.getResultList();
+		for (E item : results) {
+			item.attach(this); //Test!
+		}
+		return results;
+	}
+	
+	public <E extends DaObject> List<E> findManyByTwoKeys(Class<E> persistentClass, String firstKeyFieldName,
+			Object firstKey, String secondKeyFieldName, Object secondKey) {
+		checkPersistentClass(persistentClass);
+		final String className = persistentClass.getName();
+		final  EntityManager entityManager = getEntityManager();
+		
+		final Query q = entityManager.createQuery("select o from " + className + " o where " + firstKeyFieldName + " = :firstKeyValue AND "
+				+ secondKeyFieldName + " = :secondKeyValue");
+		q.setParameter("firstKeyValue", firstKey);
+		q.setParameter("secondKeyValue", secondKey);
 		final List<E> results = q.getResultList();
 		for (E item : results) {
 			item.attach(this); //Test!
@@ -140,4 +165,6 @@ public class DaHibernateJpaPool implements DaPool {
 	public EntityManager getEntityManager() {
 		return this.entityManager;
 	}
+
+	
 }

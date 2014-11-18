@@ -71,6 +71,15 @@ public abstract class DaObject implements Serializable {
 		}
 		return null;
 	}
+	
+	public <E extends DaObject> E search( E obj, long oid) {
+			if (oid == obj.getOid()) {
+				@SuppressWarnings("unchecked")
+				final E result = (E) obj.attach(getPool());
+				return result;
+		}
+		return null;
+	}
 
 	/**
 	 * --------------------------------------------------------------------------------------------

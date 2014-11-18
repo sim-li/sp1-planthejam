@@ -48,6 +48,22 @@ public class LgGroup extends DaObject{
 		return this;
 	}
 	
+	public List<LgMember> getMember(){
+		return members;
+	}
+		
+	//it doesn't work on this place -> only in LgMember
+//	public List<LgMember> findMemberByTwoId(long groupId, long userId) {
+//		// throw exc when user not found
+//		List<LgMember> lg = null;
+//		try{
+//			lg = pool.findManyByTwoKeys(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
+//		} catch (Exception e) {
+//			multex.Msg.printReport(System.err, e);
+//		}
+//		return lg;
+//	}
+	
 //	public long getGroupOid() {
 //		return this.getOid();
 //	}
@@ -58,18 +74,24 @@ public class LgGroup extends DaObject{
 
 //---------LgMember operations----------------	
 	
-	private LgMember getLgMember(long oid) {
-		return search(getLgMembers(), oid);
-	}
 	
-	//not work
+//-------------delete user operations------------
+//	private LgMember getLgMember(long oid) {
+//		System.out.println("------------getLgMember: " + search(getLgMembers(), oid) + " -----------------");
+//		return search(getLgMembers(), oid);
+//	}
+//	
+//	//not work
 //	public void deleteLgMember(final long oid) {
 //		getLgMember(oid).delete();
 //	}
-	
-	public List<LgMember> getLgMembers(){
-		return members;
-	}
+//	
+//	public List<LgMember> getLgMembers(){
+//		System.out.println("------------members.size(): " + members.size() + " -----------------");
+//		System.out.println("------------members.oid(): " + members.get(0).getMemberId() + " -----------------");
+//		return members;
+//	}
+//------------------------------------------------------
 	
 	//is it works on group? - no, on this way, no -> only user.save(member)
 //	public LgMember save(final LgMember lgMember) {
