@@ -48,9 +48,9 @@ public class LgGroup extends DaObject{
 		return this;
 	}
 	
-	public List<LgMember> getMember(){
-		return members;
-	}
+//	public List<LgMember> getMember(){
+//		return members;
+//	}
 		
 	//it doesn't work on this place -> only in LgMember
 //	public List<LgMember> findMemberByTwoId(long groupId, long userId) {

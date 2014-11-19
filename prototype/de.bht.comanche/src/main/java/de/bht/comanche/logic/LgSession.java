@@ -54,6 +54,7 @@ public class LgSession {
 		}
 		return this.user;
 	}
+	
 
 	/**
 	 * No user with name "{0}" found in the database

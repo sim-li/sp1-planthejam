@@ -11,7 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import de.bht.comanche.logic.LgGroup;
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgMember;
 import de.bht.comanche.logic.LgUser;
 
 /**
@@ -80,7 +82,24 @@ public abstract class DaObject implements Serializable {
 		}
 		return null;
 	}
-
+	
+	public <E extends DaObject> List<E> search(Class<E> persistentClass, String firstKeyFieldName,
+			Object firstKey, String secondKeyFieldName, Object secondKey) {
+		// throw exc when not found
+		List<E> result = null;
+		try{
+			result = pool.findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);
+		} catch (Exception e) {
+			multex.Msg.printReport(System.err, e);// TODO Multex exc
+		}
+		return result;
+	}	
+	
+	public <E extends DaObject> List<E> searchByField(Class<E> persistentClass,
+			String keyFieldName, Object keyFieldValue){
+		return pool.findManyByKey(persistentClass, keyFieldName, keyFieldValue);
+	}
+	
 	/**
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access

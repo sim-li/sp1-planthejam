@@ -47,10 +47,6 @@ public class LgUser extends DaObject {
 		return attach(group).save();
 	}
 	
-	public LgMember save(final LgMember lgMember) {
-		return attach(lgMember).save();
-	}
-
 	public void deleteAccount() {
 		delete();
 	}
@@ -63,19 +59,20 @@ public class LgUser extends DaObject {
 		getGroup(oid).delete();
 	}
 	
+	public LgMember save(final LgMember member) {
+		return attach(member).save();
+	}
+	
 	public void deleteLgMember(LgMember member) {
 		member.delete();
 	}
 	
-	public List<LgMember> findMemberByTwoId(long groupId, long userId) {
-		// throw exc when user not found
-		List<LgMember> lg = null;
-		try{
-			lg = pool.findManyByTwoKeys(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
-		} catch (Exception e) {
-			multex.Msg.printReport(System.err, e);
-		}
-		return lg;
+	public List<LgMember> getMember(final long groupId, final long userId){
+		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
+	}
+	
+	public List<LgMember> getMembersByGroupId(final long groupId){
+		return searchByField(LgMember.class, "GROUP_OID", groupId);
 	}
 	
 	public boolean passwordMatchWith(LgUser user) {
@@ -94,30 +91,6 @@ public class LgUser extends DaObject {
 		return search(getGroups(), oid);
 	}
 
-//--------------------------------------------------------------------------------------------------
-//	public void deleteLgMemberById(final long userId, final long memberOid, final long groupOid) {
-//		getLgMembers(groupOid, groupOid).delete();
-//	}
-//	
-//	private LgMember getLgMembers(final long userId, long memberOid) {
-//		//all members for one group with id
-//		return search(getMembersByUserId(userId), memberOid);
-//	}
-//	
-//	public List<LgMember> getMembersByUserId(final long userId) {
-//		// throw exc when user not found
-//		return pool.findManyByKey(LgMember.class, "USER_OID", userId);
-//	}
-
-//--------------------------------------------------------------------------------------------------	
-	
-	
-//------------------------------------------------------------------------------------------------------	
-//	public void deleteLgMember(long groupId, long userId) {
-//		findMemberByTwoId(groupId, userId).get(0).delete();
-//	}
-//	
-//----------------------------------------------------------------------------------------------------	
 	public void removeInvite(final LgInvite invite) {
 		invites.remove(invite);
 	}
