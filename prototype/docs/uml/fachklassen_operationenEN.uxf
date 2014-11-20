@@ -4,25 +4,27 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>594</x>
+      <x>726</x>
       <y>506</y>
       <w>429</w>
-      <h>253</h>
+      <h>275</h>
     </coordinates>
-    <panel_attributes>Benutzeraccount
+    <panel_attributes>User
 --
 name : String
-passwort: String
-telefonnummer : String
-emailadresse : String
-generelleVerfügbarkeit : List&lt;Zeitraum&gt;
+password : String
+tel : String
+email : String
+generalAvailability : List&lt;TimerPreiod&gt;
 --
-&lt;&lt;gastgeber&gt;&gt; terminumfrageErstellen()
-gruppeErstellen()
-gruppeLöschen()
-generelleVerfügbarkeitFestlegen()
-benutzerZuGruppeHinzufügen()
-angeboteneUndBelegteZeiträumeAnzeigen()</panel_attributes>
+&lt;&lt;host&gt;&gt; addSurvey(survey : Survey)
+&lt;&lt;host&gt;&gt; deleteSurvey(survey: Survey)
+addGroup(group : Group)
+deleteGroup(group: Group)
+setGeneralAvailability(generalAvailability : List&lt;TimePeriod&gt;)
+addUserToGroup(user : User)
+removeUserFromGroup(user : User)
+showAvailableAndBlockedTimePeriods()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -33,11 +35,11 @@ angeboteneUndBelegteZeiträumeAnzeigen()</panel_attributes>
       <w>209</w>
       <h>110</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;Datentyp&gt;&gt;
-Wiederholung
+    <panel_attributes>&lt;&lt;data type&gt;&gt;
+Repetition
 --
-abstand : int
-einheit : Zeiteinheit</panel_attributes>
+distance : int
+unit: TimeUnit</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -49,17 +51,17 @@ einheit : Zeiteinheit</panel_attributes>
       <h>99</h>
     </coordinates>
     <panel_attributes>«enumeration»
-Umfragetyp
+SurveyType
 --
-_einmalig_
-_wiederholt_</panel_attributes>
+_once_
+_repeatedly_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>814</x>
-      <y>385</y>
+      <x>946</x>
+      <y>374</y>
       <w>219</w>
       <h>54</h>
     </coordinates>
@@ -74,74 +76,75 @@ _wiederholt_</panel_attributes>
       <w>495</w>
       <h>275</h>
     </coordinates>
-    <panel_attributes>Terminumfrage
+    <panel_attributes>Survey
 --
 name : String
-beschreibung : String
-typ : Umfragetyp
-deadline : Zeitpunkt
-frequenz : Wiederholung
-möglicheZeiträume : List&lt;Zeitraum&gt;
-ermittelterZeitraum : Zeitraum
+description : String
+type : SurveyType
+deadline : Date
+frequency : Repetition
+possibleTimePeriods : List&lt;TimePeriod&gt;
+determinedTimePeriod : TimePeriod
 --
-&lt;&lt;gastgeber&gt;&gt; teilnehmerZuTerminumfrageHinzufügen()
-&lt;&lt;gastgeber&gt;&gt; gruppeVonTeilnehmernZuTerminumfrageHinzufügen()
-&lt;&lt;gastgeber&gt;&gt; alleTeilnehmerEinladen()
-&lt;&lt;gastgeber&gt;&gt; terminUmfrageÄndern()
-&lt;&lt;gestgeber&gt;&gt; möglicheTermineAnzeigen()
-&lt;&lt;gastgeber&gt;&gt; ausMöglichenTerminenWählen()</panel_attributes>
+&lt;&lt;host&gt;&gt; addParticipantToSurvey(user : User)
+&lt;&lt;host&gt;&gt; addAllUsersFromGroupToSurvey(group : Group)
+&lt;&lt;host&gt;&gt; sendInviteToAllParticipants()
+&lt;&lt;host&gt;&gt; editSurvey()
+&lt;&lt;host&gt;&gt; showPossibleTimePeriods() : List&lt;TimePeriod&gt;
+&lt;&lt;host&gt;&gt; chooseFromPossibleTimePeriods() : TimePeriod</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1012</x>
-      <y>374</y>
+      <x>1144</x>
+      <y>352</y>
       <w>297</w>
-      <h>110</h>
+      <h>132</h>
     </coordinates>
-    <panel_attributes>Einladung
+    <panel_attributes>Invite
 
 --
-ignoriert : boolean = false
-konkreteVerfügbarkeit : List&lt;Zeitraum&gt;
+isHost : boolean = false
+isIgnored : boolean = false
+concreteAvailability : List&lt;TimePeriod&gt;
 --
-teilnahmeStatusSetzen()
-konkreteVerfügbarkeitFestlegen()</panel_attributes>
+setParticipationStatus(boolean)
+setConcreteAvailability(List&lt;TimePeriod&gt;)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>616</x>
+      <x>770</x>
       <y>308</y>
-      <w>96</w>
+      <w>56</w>
       <h>219</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..*
 m2=1..*
-r1=Gastgeber</panel_attributes>
-    <additional_attributes>55;198;55;33</additional_attributes>
+r1=Host</panel_attributes>
+    <additional_attributes>33;198;33;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>792</x>
+      <x>924</x>
       <y>308</y>
-      <w>100</w>
+      <w>96</w>
       <h>219</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1.*
 m2=1..*
-r1=Teilnehmer</panel_attributes>
+r1=Participant</panel_attributes>
     <additional_attributes>55;198;55;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>638</x>
+      <x>770</x>
       <y>396</y>
       <w>230</w>
       <h>77</h>
@@ -158,11 +161,11 @@ r1=Teilnehmer</panel_attributes>
       <w>209</w>
       <h>88</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;Datentyp&gt;&gt;
-Zeitraum
+    <panel_attributes>&lt;&lt;data type&gt;&gt;
+TimePeriod
 --
-startzeitpunkt : Zeitpunkt
-dauerInMinuten : int
+startTime : Date
+durationMins : int
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -175,36 +178,22 @@ dauerInMinuten : int
       <h>110</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
-Zeiteinheit
+TimeUnit
 --
-_Tag_
-_Woche_
-_Monat_</panel_attributes>
+_Day_
+_Week_
+_Month_</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>935</x>
-      <y>682</y>
-      <w>251</w>
-      <h>154</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-m1=0..*
-m2=0..*
-hat in Adressbuch &gt;</panel_attributes>
-    <additional_attributes>33;77;33;132;154;132;154;33;88;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>275</x>
+      <x>385</x>
       <y>550</y>
       <w>220</w>
       <h>66</h>
     </coordinates>
-    <panel_attributes>Gruppe
+    <panel_attributes>Group
 --
 name : String</panel_attributes>
     <additional_attributes/>
@@ -212,15 +201,15 @@ name : String</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>462</x>
+      <x>572</x>
       <y>561</y>
-      <w>153</w>
+      <w>175</w>
       <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
 m1=0..*
 m2=0..*</panel_attributes>
-    <additional_attributes>132;33;33;33</additional_attributes>
+    <additional_attributes>154;33;33;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Note</type>
@@ -230,20 +219,20 @@ m2=0..*</panel_attributes>
       <w>363</w>
       <h>66</h>
     </coordinates>
-    <panel_attributes>Analyse-Fachklassendiagramm mit Operationen
+    <panel_attributes>Entwurfs-Fachklassendiagramm mit Operationen
 Terminfindungs-App "Plan The Jam"
-Team: Comanche, 16.07.2014</panel_attributes>
+Team: Comanche, 19.11.2014</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>880</x>
-      <y>847</y>
-      <w>297</w>
+      <x>495</x>
+      <y>737</y>
+      <w>187</w>
       <h>66</h>
     </coordinates>
-    <panel_attributes>Adressbucheintrag
+    <panel_attributes>Member
 
 --
 </panel_attributes>
@@ -252,25 +241,38 @@ Team: Comanche, 16.07.2014</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>352</x>
-      <y>583</y>
-      <w>549</w>
-      <h>318</h>
+      <x>550</x>
+      <y>649</y>
+      <w>54</w>
+      <h>109</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-&gt;
-m1=0..*
-m2=0..*</panel_attributes>
-    <additional_attributes>33;33;33;297;528;297</additional_attributes>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>33;88;33;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>990</x>
-      <y>781</y>
-      <w>54</w>
-      <h>87</h>
+      <x>484</x>
+      <y>132</y>
+      <w>131</w>
+      <h>439</h>
     </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>33;66;33;33</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m1=1..1
+m2=1..1</panel_attributes>
+    <additional_attributes>110;33;33;33;33;418</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>451</x>
+      <y>583</y>
+      <w>296</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;
+m1=0..*
+m2=0..*</panel_attributes>
+    <additional_attributes>33;33;33;99;275;99</additional_attributes>
   </element>
 </diagram>
