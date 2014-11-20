@@ -43,9 +43,6 @@ public class LgUser extends DaObject {
 		return attach(invite).save();
 	}
 	
-	public LgGroup save(final LgGroup group) {
-		return attach(group).save();
-	}
 	
 	public void deleteAccount() {
 		delete();
@@ -55,24 +52,24 @@ public class LgUser extends DaObject {
 		getInvite(oid).delete();
 	}
 	
+	public LgGroup save(final LgGroup group) {
+		return attach(group).save();
+	}
+	
 	public void deleteGroup(final long oid) {
 		getGroup(oid).delete();
+	}
+	
+	public LgGroup getGroup(final long oid) {
+		return search(getGroups(), oid);
 	}
 	
 	public LgMember save(final LgMember member) {
 		return attach(member).save();
 	}
 	
-	public void deleteLgMember(LgMember member) {
-		member.delete();
-	}
-	
-	public List<LgMember> getMember(final long groupId, final long userId){
+	public List<LgMember> search(final long groupId, final long userId){
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
-	}
-	
-	public List<LgMember> getMembersByGroupId(final long groupId){
-		return searchByField(LgMember.class, "GROUP_OID", groupId);
 	}
 	
 	public boolean passwordMatchWith(LgUser user) {
@@ -83,14 +80,12 @@ public class LgUser extends DaObject {
 		return this.password.equals(password);
 	}
 
-	public LgInvite getInvite(long oid) {
-		return search(getInvites(), oid);
+	public LgInvite getInvite(final long oid) {
+		return search(invites, oid);
 	}
 	
-	private LgGroup getGroup(long oid) {
-		return search(getGroups(), oid);
-	}
-
+	
+	
 	public void removeInvite(final LgInvite invite) {
 		invites.remove(invite);
 	}

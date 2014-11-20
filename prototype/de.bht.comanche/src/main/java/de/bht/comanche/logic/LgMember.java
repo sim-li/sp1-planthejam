@@ -1,11 +1,8 @@
 package de.bht.comanche.logic;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,41 +23,15 @@ public class LgMember extends DaObject{
 	@OneToOne
 	private LgUser user;
 	
-	public long getMemberId() {
-		return user.getOid();
-	}
-	
 	public LgMember(){}
 	
-//	remove after tests? - no, so it safe
-	public LgMember(LgUser user, LgGroup group) {
-		this.group = group;
-		this.user = user;
+	public LgUser getUser() {
+		return user;
 	}
 	
-	public LgMember setLgMember(LgUser user, LgGroup group) {
+	public LgMember setUser(LgUser user, LgGroup group) {
 		this.group = group;
 		this.user = user;
 		return this;
 	}
-	
-	
-	
-//	public LgUser getLgMemberByOid(long oid) {
-//		return pool.find(LgUser.class, oid);
-//	}
-	
-	
-//	public LgMember save() {
-//		return pool.save(this);
-//	}
-	
-
-//	
-//	public void setMemberId(final long userOid) {
-//		this.userOid = userOid;
-//	}
-	
-//	public void deleteMember(final long userOid) //only one member (it's reference from table)
-	
 }

@@ -53,6 +53,10 @@ public class ReInviteService extends RestService {
 		return new LgTransaction <LgInvite>(request) {
 			public LgInvite execute() throws multex.Exc{
 				startSession()
+					.getInvite(oid)
+						.delete();
+						
+				startSession()
 			    	.deleteInvite(oid);	
 				return null;
 			}
