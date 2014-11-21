@@ -1,30 +1,27 @@
 <div class='container'>
   <ptj-menu></ptj-menu>
-  <div class='container' ng-show='session.state.is(dialogMap.SURVEY_SELECTION)'>
-    <span>
-      <input class='btn btn-primary' id='addSurvey' ng-click='addInvite()' type='button' value='Neue Terminumfrage erstellen'>
-      <!-- ++++ TODO: Baustelle ++++++++++++++++++++ -->
-      <select id='surveyList' ng-model='session.selectedInvite' ng-options='invite.survey.name for invite in session.user.invites | filter:session.user.searchString'></select>
-      <select id='surveyList' ng-model='session.selectedInvite.survey'>
-        <option ng-repeat='survey in session.user.surveys | filter:session.user.searchString' onselect="console.log('hi')" value='survey.name'>(Deadline: )</option>
-      </select>
-      <input class='form-control' id='filter' ng-change='updateSelection()' ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-model='session.user.searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
-      <input class='btn btn-primary' id='editInvite' ng-click='editInvite()' type='button' value='Terminumfrage anzeigen und bearbeiten'>
-      <input class='btn btn-primary' id='deleteInvite' ng-click='deleteSelectedInvite()' type='button' value='Terminumfrage löschen'>
-    </span>
-    <textarea readonly='readonly' rows='5'></textarea>
+  <div class='container'>
+    <div class='panel panel-default'>
+      <div class='panel-body'>
+        <span>
+          <input class='btn btn-primary' id='addSurvey' ng-click='addInvite()' type='button' value='Neue Terminumfrage erstellen'>
+          <select id='surveyList' ng-model='session.selectedInvite' ng-options='invite.survey.name for invite in session.user.invites | filter:session.user.searchString'></select>
+          <input class='form-control' id='filter' ng-change='updateSelection()' ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-model='session.user.searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+          <input class='btn btn-primary' id='editInvite' ng-click='editInvite()' type='button' value='Terminumfrage anzeigen und bearbeiten'>
+          <input class='btn btn-primary' id='deleteInvite' ng-click='deleteSelectedInvite()' type='button' value='Terminumfrage löschen'>
+        </span>
+        <div class='list-group'>
+          <a class='list-group-item' href='' ng-repeat='invite in session.user.invites | filter:session.user.searchString'>{{invite.survey.name}}</a>
+        </div>
+        <div class='panel panel-default'>
+          <div class='panel-body'>
+            <label for='selectedSurveyDescription'>Beschreibung:</label>
+            <div id='selectedSurveyDescription'>{{ session.selectedInvite.survey.description }}</div>
+            <label for='selectedSurveyDescription'>Deadline:</label>
+            <div id='selectedSurveyDescription'>{{ session.selectedInvite.survey.deadline }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- survey_selection_area -->
-  <div class='container' id='survey_edit_area' ng-controller='editInviteCtrl' ng-show='session.state.is(dialogMap.SURVEY_EDIT)'>
-    <span>
-      <label for='editSurveyName'>Name</label>
-      <!-- <input id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name" ng-change="$log.log(session.tempInvite.survey.name);"/> -->
-      <input class='form-control' id='editSurveyName' ng-model='session.tempInvite.survey.name' type='text'>
-      <label for='editSurveyDescription'>Beschreibung</label>
-      <!-- <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description" ng-change="$log.log(session.tempInvite.survey.description);"> -->
-    </span>
-  </div>
-
-  <!-- DEBUGGING -->
-  {{ session.user }}
 </div>

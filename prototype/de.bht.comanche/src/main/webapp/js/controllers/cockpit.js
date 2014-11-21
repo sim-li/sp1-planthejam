@@ -9,8 +9,20 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'Invite', 'restService', 'dialogMap', 'util',
-        function($scope, $location, $log, Invite, restService, dialogMap, util) {
+    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'Invite', 'restService', 'dialogMap', 'util', 'invites', 'groups',
+        function($scope, $location, $log, Invite, restService, dialogMap, util, invites, groups) {
+
+            $log.log('---------------------------------------------------------------------------------------');
+            $scope.invites = invites;
+            $scope.groups = groups;
+            $log.log($scope);
+            $log.log($scope.invites);
+            $log.log($scope.groups);
+
+            // $scope.invites = invites;
+            // $scope.groups = groups;
+            // $log.log($scope.invites);
+            // $log.log($scope.groups);
 
             $scope.logout = function() {
 
@@ -74,8 +86,8 @@ angular.module('myApp')
                     });
 
                 //-------------------- ***
-                console.log($scope.session.selectedInvite);
-                console.log($scope.session.user);
+                // console.log($scope.session.selectedInvite);
+                // console.log($scope.session.user);
                 //-------------------- ***
             };
         }

@@ -1,17 +1,17 @@
 /*
  * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
  * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * 
+ *
  * Module: type augmentations
  */
 
 
-"use strict";
+'use strict';
 
-angular.module("typeAugmentations", [])
-    .factory("typeAugmentations", ["$log", function($log) {
+angular.module('typeAugmentations', [])
+    .factory('typeAugmentations', ['$log', function($log) {
         return function() {
-            
+
             /**
              * TODO doc comment
              */
@@ -34,6 +34,6 @@ angular.module("typeAugmentations", [])
                 }
             };
 
-            $log.log("type augmentations done");
+            $log.log('type augmentations done');
         };
     }]);
