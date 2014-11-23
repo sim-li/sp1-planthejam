@@ -16,6 +16,9 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
         SURVEY_EDIT: 4
     })
     .factory('util', function() {
+
+        // TODO is it still in use?
+
         var removeElementFrom = function(element, array) {
             var index = array.indexOf(element);
             if (index > -1) {
@@ -65,7 +68,8 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
     .directive('ptjMenu', function() {
         return {
             restrict: 'E',
-            templateUrl: 'partials/menu.html'
+            templateUrl: 'partials/menu.html',
+            controller: 'menuCtrl'
         };
     })
     .directive('ptjGroups', function() {

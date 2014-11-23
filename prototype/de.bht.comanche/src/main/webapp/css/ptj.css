@@ -1,3 +1,13 @@
+label {
+    font-size: 13px;
+    display: inline-block;
+}
+
+.ng-invalid {
+    border-style: solid;
+    border-color: red;
+}
+
 .item-wrapper a{
     display: inline !important;     
 }
