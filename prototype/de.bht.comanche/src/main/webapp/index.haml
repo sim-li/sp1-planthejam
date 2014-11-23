@@ -20,7 +20,6 @@
     %link{:href => "css/slider.css", :rel => "stylesheet", :type => "text/css"}
     / TODO clean up duplicate or orphan CSS ->
     %link{:href => "css/style.css", :rel => "stylesheet", :type => "text/css"}
-    %link{:href => "css/style_prototype.css", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "css/ptj.css", :rel => "stylesheet", :type => "text/css"}
     / for production
     / MINIFIED VERSION OF THE LIBRARIES GO HERE
@@ -39,6 +38,7 @@
     %script{:src => "js/controllers/editUser.js"}
     %script{:src => "js/controllers/editInvite.js"}
     %script{:src => "js/controllers/invite.js"}
+    %script{:src => "js/controllers/menuCtrl.js"}
     %script{:src => "js/models/user.js"}
     %script{:src => "js/models/invite.js"}
     %script{:src => "js/models/survey.js"}
@@ -51,5 +51,6 @@
     / %script{:src => "lib/angular-slider.min.js"}
     / %script{:src => "lib/bootstrap-slider.js"}
   / define angular controller
-  %body{"ng-app" => "myApp", "ng-controller" => "ctrl"}
+  %body{"ng-app" => "myApp", "ng-controller" => "ctrl", "ng-keydown" => "discardWarnings()"}
     %div{"ng-view" => ""}
+    %err#error.error {{ warnings }}

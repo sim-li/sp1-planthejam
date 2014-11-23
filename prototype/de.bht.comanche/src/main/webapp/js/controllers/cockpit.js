@@ -9,50 +9,40 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'Invite', 'restService', 'dialogMap', 'util',
-        function($scope, $location, $log, Invite, restService, dialogMap, util) {
+    .controller('cockpitCtrl', ['$scope', '$rootScope', '$location', '$log', 'restService', 'Invite', 'Group', 'util', 'invites', 'groups',
+        function($scope, $rootScope, $location, $log, restService, Invite, Group, util, invites, groups) {
 
-            $scope.logout = function() {
+            // resolving the promises passed to this route
+            $scope.invites = invites;
+            $scope.groups = groups;
+            $scope.selectedInvite = $scope.invites[0];
 
-                // *** if anything needs to be done on the server for logout, do it now ***
-
-                $log.log('Logout erfolgreich.');
-                $scope.initSession();
-                $scope.showRegisterDialog = false;
-                $location.path('/');
+            $scope.selectInvite = function(invite) {
+                $scope.selectedInvite = invite;
+                // $log.debug($scope.selectedInvite);
             };
-
 
             $scope.editUser = function() {
-                $scope.session.tempUser = angular.copy($scope.session.user);
-                $scope.session.state.isVal = dialogMap.USER_EDIT;
+                $scope.tempUser = angular.copy($scope.user);
+                // $location.path('/editUser'); // TODO
             };
-
-
-            $scope.editContacts = function() {
-                $log.warn('editContacts() not implemented');
-            };
-
 
             $scope.editInvite = function() {
-                if (!$scope.session.selectedInvite) {
+                if (!$scope.selectedInvite) {
                     $log.log('Keine Terminumfrage ausgewaehlt.');
                     return;
                 }
-                $scope.session.tempInvite = new Invite($scope.session.selectedInvite);
-                $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
-                $log.log($scope.session.user);
+                $scope.tempInvite = new Invite($scope.selectedInvite);
+                $log.log($scope.user);
             };
 
             $scope.addInvite = function() {
-                $scope.session.tempInvite = new Invite();
-                $scope.session.addingInvite = true;
-                $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
-
+                $scope.tempInvite = new Invite();
+                $scope.addingInvite = true;
             };
 
             $scope.deleteSelectedInvite = function() {
-                var _invite = $scope.session.selectedInvite;
+                var _invite = $scope.selectedInvite;
                 if (!_invite) {
                     $log.log('Keine Terminumfrage ausgewaehlt.');
                     return;
@@ -63,20 +53,16 @@ angular.module('myApp')
                     // restService.deleteInvite(_invite)
                     .then(function(success) {
                         $log.log(success);
-                        util.removeElementFrom(_invite, $scope.session.user.invites);
-                        $scope.session.selectedInvite = $scope.session.user.invites[0] || '';
-                        $scope.session.tempInvite = '';
+                        util.removeElementFrom(_invite, $scope.invites);
+                        $scope.selectedInvite = $scope.invites[0] || '';
+                        $scope.tempInvite = '';
                     }, function(error) {
                         $log.error(error);
-                        $scope.warnings.central = error;
+                        $rootScope.warnings = error;
                     }, function(notification) {
                         // $log.log(notification); // for future use
                     });
 
-                //-------------------- ***
-                console.log($scope.session.selectedInvite);
-                console.log($scope.session.user);
-                //-------------------- ***
             };
         }
     ]);

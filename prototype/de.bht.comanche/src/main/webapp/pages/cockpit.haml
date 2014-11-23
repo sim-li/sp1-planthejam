@@ -1,22 +1,22 @@
 .container
   %ptj-menu
-  
-  .container{"ng-show" => "session.state.is(dialogMap.SURVEY_SELECTION)"}
-    %span
-      %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Neue Terminumfrage erstellen"}
-      / ++++ TODO: Baustelle ++++++++++++++++++++
-      %select#surveyList{"ng-model" => "session.selectedInvite", "ng-options" => "invite.survey.name for invite in session.user.invites | filter:session.user.searchString"}
-      %select#surveyList{"ng-model" => "session.selectedInvite.survey"}
-        %option{"ng-repeat" => "survey in session.user.surveys | filter:session.user.searchString", :onselect => "console.log('hi')", :value => "survey.name"}  (Deadline: )
-      %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + session.user.searchString + '\\'')", "ng-model" => "session.user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
-      %input#editInvite.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Terminumfrage anzeigen und bearbeiten"}
-      %input#deleteInvite.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Terminumfrage löschen"}
-    %textarea{:readonly => "readonly", :rows => "5"} 
-  / survey_selection_area
-  #survey_edit_area.container{"ng-controller" => "editInviteCtrl", "ng-show" => "session.state.is(dialogMap.SURVEY_EDIT)"}
-    %span
-      %label{:for => "editSurveyName"} Name
-      / <input id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name" ng-change="$log.log(session.tempInvite.survey.name);"/>
-      %input#editSurveyName.form-control{"ng-model" => "session.tempInvite.survey.name", :type => "text"}
-      %label{:for => "editSurveyDescription"} Beschreibung
-      / <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description" ng-change="$log.log(session.tempInvite.survey.description);">
+
+  .container
+    .panel.panel-default
+      .panel-body
+        .col-md-4
+          #surveyList.list-group
+            %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"} {{invite.survey.name}}
+          / %div DEBUG selected: {{ selectedInvite }}
+        .col-md-8
+          %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+          / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+          %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Neue Terminumfrage erstellen"}
+          %input#editSurvey.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Terminumfrage anzeigen und bearbeiten"}
+          %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Terminumfrage löschen"}
+          #surveyPreview.panel.panel-default
+            .panel-body
+              %label{:for => "selectedSurveyDescription"} Beschreibung:
+              %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
+              %label{:for => "selectedSurveyDescription"} Deadline:
+              %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }}

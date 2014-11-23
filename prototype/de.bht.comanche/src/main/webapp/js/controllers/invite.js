@@ -3,8 +3,8 @@
 // Simplify, Patterns, Comment.
 
 angular.module('myApp')
-    .controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", "Type", "TimeUnit",
-        function($scope, restService, $log, Group, Type, TimeUnit) {
+    .controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", "Type", "TimeUnit", 'invites', 'groups',
+        function($scope, restService, $log, Group, Type, TimeUnit, invites, groups) {
             $scope.users = [{
                 name: 'Blackjack',
                 email: 'bj@gmail.com'
@@ -28,8 +28,10 @@ angular.module('myApp')
                 email: 'sb@gmail.com'
             }];
 
-            $scope.groups = $scope.session.user.groups;
-            $scope.invites = $scope.session.user.invites;
+            $scope.invites = invites;
+            $scope.groups = groups;
+            // $scope.invites = $scope.session.user.invites;
+            // $scope.groups = $scope.session.user.groups;
 
             console.log('Invites%o', $scope.invites);
 
@@ -38,7 +40,7 @@ angular.module('myApp')
             $scope.editedGroupName = '';
             $scope.selectedGroupName = '';
             $scope.showTrash = true;
-            $scope.addedUsers = []
+            $scope.addedUsers = [];
             $scope.isCollapsed = true;
             $scope.userSelected = undefined;
             $scope.dt = new Date();

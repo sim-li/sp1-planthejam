@@ -7,7 +7,7 @@
 
 'use strict';
 
-angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate', 'survey', 'constants', 'restModule', 'typeAugmentations', 'group', 'user'])
+angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate', 'survey', 'constants', 'restModule', 'typeAugmentations', 'invite', 'group', 'user'])
     .constant('dialogMap', { // TODO remove after routing works without it
         USER_LOGIN: 0,
         USER_REGISTER: 1,
@@ -16,6 +16,9 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
         SURVEY_EDIT: 4
     })
     .factory('util', function() {
+
+        // TODO is it still in use?
+
         var removeElementFrom = function(element, array) {
             var index = array.indexOf(element);
             if (index > -1) {
@@ -38,18 +41,35 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
             })
             .when('/cockpit', {
                 templateUrl: 'pages/cockpit.html',
-                controller: 'cockpitCtrl'
+                controller: 'cockpitCtrl',
+                resolve: {
+                    invites: function(restService, Invite) {
+                        return restService.doGetMany(Invite)
+                    },
+                    groups: function(restService, Group) {
+                        return restService.doGetMany(Group);
+                    }
+                }
             })
             .when('/invite', {
                 templateUrl: 'pages/invite.html',
                 controller: 'inviteCtrl',
+                resolve: {
+                    invites: function(restService, Invite) {
+                        return restService.doGetMany(Invite)
+                    },
+                    groups: function(restService, Group) {
+                        return restService.doGetMany(Group);
+                    }
+                }
             });
         // $locationProvider.html5Mode(true); // for prettier urls
     })
     .directive('ptjMenu', function() {
         return {
             restrict: 'E',
-            templateUrl: 'partials/menu.html'
+            templateUrl: 'partials/menu.html',
+            controller: 'menuCtrl'
         };
     })
     .directive('ptjGroups', function() {
@@ -82,7 +102,7 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
             templateUrl: 'partials/surveyselect.html'
         };
     })
-    .run(function(editableOptions, typeAugmentations, restService) {
+    .run(function(editableOptions, typeAugmentations) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
         typeAugmentations();
     });

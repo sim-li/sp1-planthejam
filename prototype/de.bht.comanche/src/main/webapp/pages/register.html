@@ -1,25 +1,24 @@
-<form class='form-signin' name='registerForm' ng-show='session.state.is(dialogMap.USER_REGISTER)' ng-submit='register()'>
+<form class='form-signin' name='registerForm' ng-submit='register(user)'>
   <h2 class='form-signin-heading'>Registrieren</h2>
   <div>
     <label for='inputName'>Benutzername</label>
-    <input class='form-control' id='inputName' name='inputName' ng-model='session.user.name' placeholder='Dein Benutzername ...' required='' type='text'>
+    <input class='form-control' id='inputName' name='inputName' ng-model='user.name' placeholder='Dein Benutzername ...' required='' type='text'>
     <label for='inputPassword'>Passwort</label>
-    <input class='form-control' id='inputPassword' name='inputPassword' ng-change='discardWarnings()' ng-hide='session.showPassword' ng-model='session.user.password' placeholder='8-20 Buchstaben' required='' type='password'>
-    <input class='form-control' id='inputPasswordPlain' name='inputPasswordPlain' ng-change='discardWarnings()' ng-model='session.user.password' ng-show='session.showPassword' placeholder='8-20 Buchstaben' required='' type='text'>
+    <input class='form-control' id='inputPassword' name='inputPassword' ng-model='user.password' placeholder='8-20 Buchstaben' required='' type='password'>
     <div class='error'></div>
   </div>
-  <input id='toggleShowPassword' ng-checked='false' ng-model='session.showPassword' type='checkbox'>
+  <input id='toggleShowPassword' ng-checked='false' ng-model='showPassword' type='checkbox'>
   <label for='toggleShowPassword'>Klartext</label>
   <div>
     <label for='inputEmail'>E-Mail</label>
-    <input class='form-control' id='inputEmail' name='inputEmail' ng-change='discardWarnings()' ng-model='session.user.email' placeholder='Deine E-Mail-Adresse ...' required='' type='text'>
+    <input class='form-control' id='inputEmail' name='inputEmail' ng-model='user.email' placeholder='Deine E-Mail-Adresse ...' required='' type='text'>
     <div class='error'></div>
     <label for='inputTel'>Telefon</label>
-    <input class='form-control' id='inputTel' name='inputTel' ng-change='discardWarnings()' ng-model='session.user.tel' placeholder='Deine Telefonnummer ...' required='' type='text'>
+    <input class='form-control' id='inputTel' name='inputTel' ng-model='user.tel' placeholder='Deine Telefonnummer ...' required='' type='text'>
     <div class='error'></div>
   </div>
   <div>
-    <a href='/' id='cancelRegisterLink' ng-click='toggleLoginDialog()'>Registrieren abbrechen</a>
+    <a href='/' id='cancelRegisterLink'>Registrieren abbrechen</a>
   </div>
   <span>
     <input class='btn btn-primary btn-block' id='registerBtn' type='submit' value='Registrieren'>

@@ -7,10 +7,9 @@
 'use strict';
 
 angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
-    .factory('restService', ['$http', '$q', '$log', function($http, $q, $log) {
+    .factory('restService', ['$http', '$q', '$log', 'User', function($http, $q, $log, User) {
 
         var LOG = true;
-        var DUMMY_LOGIN = false;
 
         // TODO the paths should best be retrieved from a config file
         var restPaths = {
@@ -20,7 +19,8 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 'login': '/login',
                 'register': '/register',
                 'delete': '/deleteUser',
-                'update': '/updateUser'
+                'update': '/updateUser',
+                'logout': '/logout'
             },
             'invite': {
                 'path': '/invite',
@@ -81,18 +81,14 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 deferred.resolve(data);
             }).error(function(data, status, header, config) {
                 // errors should always be logged
-                $log.error(data);
-                $log.error(data.stackTrace);
+                $log.log(data);
+                $log.log(data.stackTrace);
                 deferred.reject('REST: ' + url + ' failed. \n' + data.message);
             });
             return deferred.promise;
         };
 
         var login = function(user) {
-            if (DUMMY_LOGIN) {
-                user.name = 'Alice';
-                user.password = 'yousnoozeyoulose';
-            }
             return callHTTP(getPath(user, 'login'), {
                 'name': user.name,
                 'password': user.password
@@ -123,6 +119,10 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 'tel': user.tel
             });
         };
+
+        var logout = function() {
+            return callHTTP(getPath(User, 'logout'));
+        }
 
         /**
          * Gets a collection of objects of the specified model.
@@ -165,6 +165,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
             register: register,
             deleteUser: deleteUser,
             updateUser: updateUser,
+            logout: logout,
             doGetMany: doGetMany,
             doSave: doSave,
             doDelete: doDelete,
