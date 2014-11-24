@@ -70,23 +70,4 @@ public class ReGroupService extends RestService {
 			}
 		}.getResult();
 	}
-	
-//	/* TODO
-//	 * - move to ReUserService
-//	 * - implement DaUser.selectAllUsersWhereNameIsLike(String searchString)
-//	 * - provide access to selectAllUsersWhereNameIsLike from session
-//	 */
-//	@Path("findUsers")
-//	@DELETE
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgInvite findUsers(final String searchString, @Context final HttpServletRequest request) {
-//		return new LgTransaction<List<LgUser>>(request) {
-//			@Override
-//			public List<LgUser> execute() throws Exception {
-//				return startSession().selectAllUsersWhereNameIsLike(searchString);
-//			}
-//		}.getResult();
-//	}
-	
 }
