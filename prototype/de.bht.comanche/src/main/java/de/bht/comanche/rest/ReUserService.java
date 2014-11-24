@@ -98,4 +98,18 @@ public class ReUserService extends RestService {
 //			}
 //		}.getResult();
 //	}
+	
+	@Path("logout")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public Object logout(@Context final HttpServletRequest request) {
+		return new LgTransaction<Object>(request) {
+			@Override
+			public Object execute() throws Exception {
+				request.getSession().invalidate();
+				return null;
+			}
+		}.getResult();
+	}
 }
