@@ -38,6 +38,15 @@ public class LgGroup extends DaObject{
 		search(members, oid).delete();
 	}
 	
+	public void deleteUser(final long oid) {
+		for (LgMember member : members) {
+			if (member.getUser().getOid() == oid) {
+				member.getUser().remove(this);
+				members.remove(member);
+			}
+		}
+	}
+	
 	public String getName() {
 		return name;
 	}
