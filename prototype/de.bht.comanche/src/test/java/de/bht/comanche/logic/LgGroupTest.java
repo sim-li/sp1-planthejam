@@ -1,0 +1,226 @@
+package logic;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+import javax.persistence.Persistence;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
+
+import org.eclipse.jetty.server.Request;
+import org.junit.Test;
+
+//import com.jayway.restassured.path.json.JsonPath;
+
+import static com.jayway.restassured.RestAssured.expect;
+import static multex.MultexUtil.create;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import com.jayway.restassured.path.json.JsonPath;
+import de.bht.comanche.logic.LgGroup;
+import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgMember;
+import de.bht.comanche.logic.LgSession;
+import de.bht.comanche.logic.LgTransaction;
+//import com.jayway.restassured.response.Response;
+import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.logic.LgSession.LgWrongPasswordExc;
+import de.bht.comanche.persistence.*;
+import de.bht.comanche.rest.ReErrorMessage;
+import de.bht.comanche.rest.ReServerException;
+
+public class LgGroupTest {
+	static long user_oid;
+	static long group_oid;
+	
+	
+//	@BeforeClass 
+	public static void initializeDb(){
+		Map<String, String> properties = new HashMap<String, String>(1);
+		properties.put("hibernate.hbm2ddl.auto", "create");
+		Persistence.createEntityManagerFactory(DaEmProvider.persistenceUnitName, properties);
+		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
+	}
+	
+//	@BeforeClass 
+	public static void initializeUser(){
+		
+		LgSession session = new LgSession();
+		session.beginTransaction();
+		
+		//save user - it works
+		final LgUser alice = new LgUser();
+		alice.setName("Alice");
+		alice.setEmail("test@test.de");
+		alice.setPassword("testtest");
+		session.save(alice);
+		
+		//create new LgUser 
+		final LgUser bob = new LgUser();
+		bob.setName("Bob");
+		bob.setEmail("bob@test.de");
+		bob.setPassword("testtest");
+		session.save(bob);
+		
+		//create new LgUser 
+		final LgUser pit = new LgUser();
+		pit.setName("Pit");
+		pit.setEmail("pit@test.de");
+		pit.setPassword("testtest");
+		session.save(pit);
+		
+		session.endTransaction(true);	
+	}
+	
+	@Test
+	public void testSaveGroup(){
+		
+		LgSession session = new LgSession();
+		session.beginTransaction();
+		
+//"login" user Alice
+		session.startFor("Alice");
+		LgUser sessionUser = session.getUser();
+		
+		System.out.println("------- Alice Oid: " + session.getUser().getOid() + "-------------");
+
+//save group with userId - it works
+//		final LgGroup alice_group = new LgGroup();
+//		alice_group.setGroupName("Group");
+//		alice_group.setUser(sessionUser);		
+//		sessionUser.save(alice_group);
+		
+//TODO Implement - find in Groups one group by groupId: existiert schon
+		
+//change group name - it works 		
+//		List<LgGroup> lgrop = sessionUser.getGroups();
+//		//incoming updated group with changed name
+//		LgGroup tempGroup = lgrop.get(0);
+//		tempGroup.setGroupName("NewGroup");
+//		sessionUser.save(tempGroup);
+//		System.out.println( lgrop.get(0).getGroupName() + " -----------------------------");
+
+//delete group (without members) - it works
+//		List<LgGroup> lgrop = sessionUser.getGroups();
+		// worked with .getGroupOid()
+//		long oid = lgrop.get(0).getOid();
+//		sessionUser.deleteGroup(oid);
+		
+
+		
+//add new LgUser(LgMember) to LgGroup - it works
+		LgGroup aliceGroup = sessionUser.getGroups().get(0);
+//		System.out.println("------------GroupName: " + aliceGroup.getGroupName() + " -----------------");
+//		System.out.println("------------session.findByName-Bred: " + session.findByName("Pit").getName() + " -----------------");
+//		aliceGroup.save(new LgMember().setMember(session.findByName("Bred"), aliceGroup)); --> it doest't work on this way
+//		-> is ok
+		LgUser bob = session.findByName("Bob");
+//		aliceGroup.getUsers();
+//		sessionUser.getGroup(oid).addUser(Bob)
+		
+//		sessionUser.save(group)
+		LgMember lg = sessionUser.search(aliceGroup.getOid(), bob.getOid()).get(0);
+		System.out.println("------------getMembersByGroupId: " + sessionUser.search(aliceGroup.getOid(), bob.getOid()).get(0).getOid() + " -----------------");
+		sessionUser.getGroup(aliceGroup.getOid()).deleteMember(lg.getOid());
+		
+//		System.out.println("------------getMembersByGroupIdAlt: " + sessionUser.getMembers(aliceGroup.getOid()).size() + " -----------------");	
+//		System.out.println("------------getUsersByGroupId: " + sessionUser.getGroup(aliceGroup.getOid()).getUsers().size() + " -----------------");		
+		
+		
+//		sessionUser.save(new LgMember().setUser(bob, aliceGroup)); 
+//		sessionUser.save(new LgMember().setUser(session.findByName("Bob"), aliceGroup));
+//		
+
+//delete group with members	- it works
+//		System.out.println("------------GroupName: " + sessionUser.getGroups().get(0).getGroupName() + " -----------------");
+//		sessionUser.deleteGroup(sessionUser.getGroups().get(0).getOid());
+		
+
+//first way - just delete LgMember by oid - it works
+//		LgGroup aliceGroup = sessionUser.getGroups().get(0);
+//		System.out.println("------------GroupName: " + aliceGroup.getGroupName() + " -----------------");
+//		System.out.println("------------Name of User in group: " + session.findByName("Bob").getName() + " -----------------");
+//		
+//		long alice = aliceGroup.getOid();
+//		long bob = session.findByName("Bob").getOid();
+//		List<LgMember> member = sessionUser.getMember(alice, bob);
+//		System.out.println("------------Member ID " + member.get(0).getMemberId() + " -----------------");
+//		sessionUser.deleteLgMember(member.get(0));
+			
+//TODO Implement - find for one group (final long groupOid) all members (in session or LgUser)?
+			
+			
+			//------>it doesn't work on this way
+//			List<LgMember> findMemberByTwoId = aliceGroup.findMemberByTwoId(alice, bob);
+
+		
+//		System.out.println("--------new LgGroup().getMember().size(); " + new LgGroup().getMember().size() + " -----------------");
+	
+		
+//		sessionUser.deleteLgMember(findMemberByTwoId.get(0).getMemberId());
+		
+//			--> it doesn't work on this way 
+//			aliceGroup.deleteLgMember(findMemberByTwoId.get(0).getMemberId()); 
+//			sessionUser.deleteLgMember(session.findByName("Bob").getOid());
+		
+		
+		session.endTransaction(true);	
+		assertTrue("Persisting test users Alice & Bob", true);
+//		
+	}
+	
+	@Test
+	public void testDeleteGroup(){
+
+//		alice_group1.getOid();
+//		alice.deleteGroup(alice_group1.getOid());	
+	
+	
+		assertTrue("Persisting test users Alice & Bob", true);
+	}
+		
+		
+		
+		
+//		final LgInvite li = new LgInvite();
+//		
+//		 new LgTransaction<LgInvite>(rq) {
+//			public LgInvite execute() throws multex.Exc{
+//				return startSession()
+//					.save(li);
+//			}
+//		 };
+		 
+		
+		
+//		 new LgTransaction<LgGroup>(rq) {
+//			@Override
+//			public LgGroup execute() throws Exception {
+//				return startDummySession().save(new LgGroup().setName("Bier trinken"));
+//			}
+//		};	
+			
+		
+		
+//		final LgUser o_user = getSession().register(i_user);
+//		pool.
+		
+	
+	@Test
+	public void testSaveGroup1() {
+		LgUser testUser = new LgUser();
+		
+	}
+}
+

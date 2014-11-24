@@ -13,7 +13,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
 import de.bht.comanche.logic.LgGroup;
+import de.bht.comanche.logic.LgMember;
 import de.bht.comanche.logic.LgTransaction;
+import de.bht.comanche.logic.LgUser;
 
 @Path("/group/")
 public class ReGroupService extends RestService {
@@ -48,23 +50,11 @@ public class ReGroupService extends RestService {
 		return new LgTransaction<LgGroup>(request) {
 			@Override
 			public LgGroup execute() throws Exception {
-				return startSession().save(group);
+				LgGroup result = startSession().save(group);
+				return result;
 			}
 		}.getResult();
 	}
-	
-//	@Path("saveMember")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgGroup saveMember(final LgGroup group, @Context final HttpServletRequest request) {
-//		return new LgTransaction<LgGroup>(request) {
-//			@Override
-//			public LgGroup execute() throws Exception {
-//				return startSession().save(group.setMembers(member));
-//			}
-//		}.getResult();
-//	}
 	
 	@Path("delete")
 	@DELETE
@@ -76,6 +66,19 @@ public class ReGroupService extends RestService {
 			public LgGroup execute() throws multex.Exc{
 				startSession().deleteGroup(oid);
 				return null;
+			}
+		}.getResult();
+	}
+	
+	@Path("saveMember")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgMember saveMember(final LgUser user, final LgGroup group, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgMember>(request) {
+			@Override
+			public LgMember execute() throws Exception {
+				return startSession().save(new LgMember().setUser(user, group));
 			}
 		}.getResult();
 	}
