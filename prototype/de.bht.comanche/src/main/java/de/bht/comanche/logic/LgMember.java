@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -22,8 +21,6 @@ public class LgMember extends DaObject{
 	@NotNull
 	@OneToOne
 	private LgUser user;
-	
-	public LgMember(){}
 	
 	public LgUser getUser() {
 		return user;

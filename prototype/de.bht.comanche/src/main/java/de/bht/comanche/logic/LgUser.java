@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,18 +10,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.bht.comanche.persistence.DaObject;
 
-/**
- * @author Duc Tung Tong
- */
 @Entity
 @Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
 public class LgUser extends DaObject {
-
 	private static final long serialVersionUID = 1L;
 	@Column(unique=true, nullable=false)
 	private String name;
@@ -42,7 +35,6 @@ public class LgUser extends DaObject {
 	public LgInvite save(final LgInvite invite) {
 		return attach(invite).save();
 	}
-	
 	
 	public void deleteAccount() {
 		delete();
@@ -68,10 +60,6 @@ public class LgUser extends DaObject {
 		return attach(member).save();
 	}
 	
-	public List<LgMember> search(final long groupId, final long userId){
-		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
-	}
-	
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
 		if (this.password == null) {
@@ -84,16 +72,13 @@ public class LgUser extends DaObject {
 		return search(invites, oid);
 	}
 	
-	
-	
-	public void removeInvite(final LgInvite invite) {
+	public void remove(final LgInvite invite) {
 		invites.remove(invite);
 	}
 	
-	public void removeGroup(final LgGroup group) {
+	public void remove(final LgGroup group) {
 		groups.remove(group);
 	}
-	
 	
 	/**
 	 * --------------------------------------------------------------------------------------------
@@ -205,7 +190,4 @@ public class LgUser extends DaObject {
 				", invites=" + invites + "]" +
 				"OID>: " + getOid();
 	}
-
-	
-
 }

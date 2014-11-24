@@ -26,16 +26,7 @@ public class ReGroupService extends RestService {
 		return new LgTransaction<List<LgGroup>>(request) {
 			@Override
 			public List<LgGroup> execute() throws Exception {
-				
 				return startSession().getGroups();
-				
-//				// FIXME - hard coded quick hack to test communication with client
-//				List<LgGroup> dummyGroups = Arrays.asList(new LgGroup[] {
-//						new LgGroup().setName("Bier trinken"), 
-//						new LgGroup().setName("Chorprobe"), 
-//						new LgGroup().setName("Skat spielen") 
-//				});
-//				return dummyGroups;
 			}
 		}.getResult();
 	}

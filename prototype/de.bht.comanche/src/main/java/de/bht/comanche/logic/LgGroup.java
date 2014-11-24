@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,11 +38,11 @@ public class LgGroup extends DaObject{
 		search(members, oid).delete();
 	}
 	
-	public String getGroupName() {
+	public String getName() {
 		return name;
 	}
 
-	public LgGroup setGroupName(String name) {
+	public LgGroup setName(String name) {
 		this.name = name;
 		return this;
 	}
@@ -55,13 +54,5 @@ public class LgGroup extends DaObject{
 	
 	public List<LgMember> getMembers() {
 		return members;
-	}
-	
-	public List<LgUser> getUsers() {
-		List<LgUser> users = new LinkedList<LgUser>();
-		for(LgMember member : members) {
-			users.add(member.getUser());
-		}
-		return users;
 	}
 }
