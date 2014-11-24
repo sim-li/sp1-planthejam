@@ -40,7 +40,7 @@ public class ReInviteService extends RestService {
 	@Produces({ "application/json" })
 	public LgInvite save(final LgInvite invite, @Context final HttpServletRequest request) {
 		return new LgTransaction<LgInvite>(request) {
-			public LgInvite execute() {
+			public LgInvite execute() throws multex.Exc{
 				return startSession()
 					.save(invite);
 			}
@@ -53,7 +53,11 @@ public class ReInviteService extends RestService {
 	@Produces({ "application/json" })
 	public LgInvite delete(final long oid, @Context final HttpServletRequest request) {
 		return new LgTransaction <LgInvite>(request) {
-			public LgInvite execute() {
+			public LgInvite execute() throws multex.Exc{
+				startSession()
+					.getInvite(oid)
+						.delete();
+						
 				startSession()
 			    	.deleteInvite(oid);	
 				return null;

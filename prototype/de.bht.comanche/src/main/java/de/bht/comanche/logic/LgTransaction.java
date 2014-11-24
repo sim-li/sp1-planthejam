@@ -42,6 +42,6 @@ public abstract class LgTransaction<E> {
 	public LgUser startSession() {
 		return session.startFor(RestService.getUserName(request));
 	}
-
+	
 	public abstract E execute() throws Exception;
 }

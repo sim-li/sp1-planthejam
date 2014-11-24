@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaObject;
 import de.bht.comanche.persistence.DaPool;
 
@@ -108,20 +110,6 @@ public class LgInviteTest {
 //		assertTrue(pool.contains(anInvite));
 //	}
 	
-	@Test
-	public void updateWithWorks() {
-		LgInvite anotherInvite = new LgInvite()
-			.setUser(alice)
-			.setHost(true)
-			.setIgnored(true)
-			.setSurvey(new LgSurvey().setName("foo"));
-		anInvite.updateWith(anotherInvite);
-		assertEquals(anotherInvite.getUser(), anInvite.getUser());
-		assertEquals(anotherInvite.isHost(), anInvite.isHost());
-		assertEquals(anotherInvite.isIgnored(), anInvite.isIgnored());
-		assertEquals(anotherInvite.getSurvey(), anInvite.getSurvey());
-	}
-	
 	
 	private static final class MockPool implements DaPool {
 		private List<DaObject> data;
@@ -132,6 +120,11 @@ public class LgInviteTest {
 		
 		public void insert(final DaObject io_object) {
 			data.add(io_object);
+		}
+		
+		public <E extends DaObject> List<E> findManyByTwoKeys(Class<E> persistentClass, String firstKeyFieldName,
+				Object firstKey, String secondKeyFieldName, Object secondKey) {
+			return null;
 		}
 		
 		@SuppressWarnings("unchecked")
@@ -154,5 +147,13 @@ public class LgInviteTest {
 		public <E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) { throw new RuntimeException("not implemented"); }
 		public <E extends DaObject> List<E> findManyByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) { throw new RuntimeException("not implemented"); }
 		public <E extends DaObject> List<E> findManyByQuery(Class<E> resultClass, Class queryClass, String queryString, Object[] args) { throw new RuntimeException("not implemented"); }
+
+		@Override
+		public <E extends DaObject> E findOneByTwoKeys(
+				Class<E> persistentClass, String firstKeyFieldName,
+				Object firstKey, String secondKeyFieldName, Object secondKey) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 }

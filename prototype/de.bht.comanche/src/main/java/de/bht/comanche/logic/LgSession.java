@@ -18,13 +18,18 @@ public class LgSession {
 		pool = application.getPool();
 		user = null;
 	}
-
+	
 	public LgUser startFor(String userName) {
 		// throw exc when user not found
 		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
 		return user;
 	}
-
+	
+	public LgUser findByName(String userName) {
+		// throw exc when user not found
+		return pool.findOneByKey(LgUser.class, "NAME", userName);
+	}
+	
 	public LgUser save(final LgUser user) {
 		final LgUser o_user = user.attach(getPool()).save(); //can throw exception
 		this.setUser(o_user);
@@ -49,6 +54,7 @@ public class LgSession {
 		}
 		return this.user;
 	}
+	
 
 	/**
 	 * No user with name "{0}" found in the database
@@ -82,7 +88,7 @@ public class LgSession {
 	protected DaPool getPool() {
 		return pool;
 	}
-
+	
 	public LgUser getUser() {
 		return user;
 	}

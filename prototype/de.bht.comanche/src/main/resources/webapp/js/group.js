@@ -15,28 +15,15 @@ angular.module("group", [])
             config = config || {};
             this.oid = config.oid || "";
             this.name = config.name || "";
-            this.membersOids = [];  // e.g.: [1, 2, 3]
-            this.membersNames = []; // e.g.: ["Alice", "Bob", "Carla"]
+            this.members = config.members || []; // e.g.: [{oid: 1, name: "Alice"}, {oid: 2, name: "Bob"}, {oid: 3, name: "Carla"}]
         };
         
         Group.prototype.export = function(user) {
-            var that = this;
-            that.user = {
-                "oid": user.oid, 
-                "name": user.name
-            };
-            return that;
-            
-            // return {
-                // "oid": this.oid, 
-                // "name": this.name, 
-                // "host": this.membersOids, 
-                // "host": this.membersNames, 
-                // "user": {
-                    // "oid": user.oid, 
-                    // "name": user.name
-                // }
-            // }
+            return {
+                "oid": this.oid, 
+                "name": this.name, 
+                // "host": this.members
+            }
         }
         
         return (Group);

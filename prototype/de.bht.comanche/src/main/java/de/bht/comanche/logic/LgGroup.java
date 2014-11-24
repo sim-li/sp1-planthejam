@@ -1,7 +1,6 @@
 package de.bht.comanche.logic;
 
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
 
@@ -29,8 +26,26 @@ public class LgGroup extends DaObject{
 	@ManyToOne
 	private LgUser user;
 		
-	@OneToMany(mappedBy="group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="group", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	private List<LgMember> members;
+	
+	
+	public LgMember getMember(final long oid) {
+		return search(members, oid);
+	}
+	
+	public void deleteMember(final long oid) {
+		search(members, oid).delete();
+	}
+	
+	public void deleteUser(final long oid) {
+		for (LgMember member : members) {
+			if (member.getUser().getOid() == oid) {
+				member.getUser().remove(this);
+				members.remove(member);
+			}
+		}
+	}
 	
 	public String getName() {
 		return name;
@@ -41,29 +56,12 @@ public class LgGroup extends DaObject{
 		return this;
 	}
 	
-	@JsonIgnore
-	public LgUser getUser() {
-		return user;
-	}
-
 	public LgGroup setUser(LgUser user) {
 		this.user = user;
 		return this;
 	}
 	
-	public LgGroup save() {
-		return pool.save(this);
+	public List<LgMember> getMembers() {
+		return members;
 	}
-	
-	public void delete() {
-		user.remove(this);
-		pool.delete(this); //throw exc when delete errror
-	}
-	
-//	TODO How to find group by id - pool.find-getOid??
-//	public LgGroup getLgGroup(long oid){
-//		return null;
-//	}
-	
-
 }

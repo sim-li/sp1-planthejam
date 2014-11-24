@@ -82,18 +82,20 @@ public class ReUserService extends RestService {
 			}
 		}.getResult();
 	}
-	
-	@Path("logout")
-	@POST
-	@Consumes("application/json")
-	@Produces({ "application/json" })
-	public Object logout(@Context final HttpServletRequest request) {
-		return new LgTransaction<Object>(request) {
-			@Override
-			public Object execute() throws Exception {
-				request.getSession().invalidate();
-				return null;
-			}
-		}.getResult();
-	}
+//	/* TODO
+//	 * - implement DaUser.selectAllUsersWhereNameIsLike(String searchString)
+//	 * - provide access to selectAllUsersWhereNameIsLike from session
+//	 */
+//	@Path("findUsers")
+//	@DELETE
+//	@Consumes("application/json")
+//	@Produces({ "application/json" })
+//	public LgInvite findUsers(final String searchString, @Context final HttpServletRequest request) {
+//		return new LgTransaction<List<LgUser>>(request) {
+//			@Override
+//			public List<LgUser> execute() throws Exception {
+//				return startSession().selectAllUsersWhereNameIsLike(searchString);
+//			}
+//		}.getResult();
+//	}
 }

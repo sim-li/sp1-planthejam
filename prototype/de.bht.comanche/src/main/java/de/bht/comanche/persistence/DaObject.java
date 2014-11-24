@@ -11,7 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import de.bht.comanche.logic.LgGroup;
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgMember;
 import de.bht.comanche.logic.LgUser;
 
 /**
@@ -71,7 +73,16 @@ public abstract class DaObject implements Serializable {
 		}
 		return null;
 	}
-
+	
+	public <E extends DaObject> E search( E obj, long oid) {
+			if (oid == obj.getOid()) {
+				@SuppressWarnings("unchecked")
+				final E result = (E) obj.attach(getPool());
+				return result;
+		}
+		return null;
+	}
+	
 	/**
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access

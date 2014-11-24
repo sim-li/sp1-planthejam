@@ -11,14 +11,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
 
-/**
- * Describes relation of host with users.
- * 
- * @author Duc Tung Tong
- */
 @Entity
 @Table(name = "Lg_Invite")
-public class LgInvite extends DaObject {
+public class LgInvite extends DaObject{
 
 	private static final long serialVersionUID = 1L;
 
@@ -90,14 +85,6 @@ public class LgInvite extends DaObject {
 
 	public LgInvite setSurvey(LgSurvey survey) {
 		this.survey = survey;
-		return this;
-	}
-	
-	public LgInvite updateWith(LgInvite other) {
-		this.survey = other.survey;
-		this.isHost = other.isHost;
-		this.isIgnored = other.isIgnored;
-		this.user = other.user;
 		return this;
 	}
 	

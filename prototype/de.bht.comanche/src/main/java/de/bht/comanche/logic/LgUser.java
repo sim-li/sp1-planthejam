@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,20 +7,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.bht.comanche.persistence.DaObject;
 
-/**
- * @author Duc Tung Tong
- */
 @Entity
 @Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
 public class LgUser extends DaObject {
-
 	private static final long serialVersionUID = 1L;
 	@Column(unique=true, nullable=false)
 	private String name;
@@ -32,61 +26,60 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 	
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
 	private List<LgGroup> groups;
-
-
-	public LgUser() {
-		invites = new ArrayList<LgInvite>();
-		groups = new ArrayList<LgGroup>();
-	}
+	
+	@OneToOne(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
+	private LgMember member;
 	
 	public LgInvite save(final LgInvite invite) {
-		invite.setUser(this);
 		return attach(invite).save();
 	}
 	
-	public LgGroup save(final LgGroup group) {
-		group.setUser(this);
-		return attach(group).save();
-	}
-
 	public void deleteAccount() {
 		delete();
 	}
-	
+
 	public void deleteInvite(final long oid) {
 		getInvite(oid).delete();
+	}
+	
+	public LgGroup save(final LgGroup group) {
+		return attach(group).save();
 	}
 	
 	public void deleteGroup(final long oid) {
 		getGroup(oid).delete();
 	}
 	
+	public LgGroup getGroup(final long oid) {
+		return search(getGroups(), oid);
+	}
+	
+	public LgMember save(final LgMember member) {
+		return attach(member).save();
+	}
+	
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
 		if (this.password == null) {
-			return false; // TODO this should never happen - better throw an exc
+			return false;
 		}
 		return this.password.equals(password);
 	}
 
-	private LgGroup getGroup(long oid) {
-		return search(getGroups(), oid);
+	public LgInvite getInvite(final long oid) {
+		return search(invites, oid);
 	}
 	
-	public LgInvite getInvite(long oid) {
-		return search(getInvites(), oid);
-	}
-   
 	public void remove(final LgInvite invite) {
 		invites.remove(invite);
 	}
 	
 	public void remove(final LgGroup group) {
-		invites.remove(group);
+		groups.remove(group);
 	}
-
+	
 	/**
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -197,7 +190,4 @@ public class LgUser extends DaObject {
 				", invites=" + invites + "]" +
 				"OID>: " + getOid();
 	}
-
-	
-
 }

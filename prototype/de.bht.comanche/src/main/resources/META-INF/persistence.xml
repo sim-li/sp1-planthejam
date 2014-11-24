@@ -28,6 +28,13 @@
 
 	<persistence-unit name="planthejam.jpa">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<class>de.bht.comanche.logic.LgGroup</class>
+		<class>de.bht.comanche.logic.LgTimePeriod</class>
+		<class>de.bht.comanche.logic.LgInvite</class>
+		<class>de.bht.comanche.persistence.DaObject</class>
+		<class>de.bht.comanche.logic.LgMember</class>
+		<class>de.bht.comanche.logic.LgUser</class>
+		<class>de.bht.comanche.logic.LgSurvey</class>
 		
 	 	<properties>
 	 		<property name="hibernate.hbm2ddl.auto" value="update"/>
