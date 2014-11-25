@@ -20,7 +20,8 @@ import de.bht.comanche.persistence.DaEmProvider;
 //@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
-	static long user_oid;
+	static long bob_moid;
+	static long pit_moid;
 	static LgGroup aliceGroup;
 	static LgUser sessionUser;
 	static LgUser bob;
@@ -64,7 +65,8 @@ public class LgGroupTest {
 		final LgGroup alice_group = new LgGroup();
 		alice_group.setName("Group").setUser(sessionUser);
 		sessionUser.save(alice_group);
-		save();
+		end();
+		assertEquals("Group", new LgSession().startFor("Alice").getGroups().get(0).getName());
 	}
 	
 	@Test
@@ -72,7 +74,7 @@ public class LgGroupTest {
 		start();
 		sessionUser.getGroups().get(0).setName("NewGroup");
 		assertEquals("NewGroup", sessionUser.getGroups().get(0).getName());
-		save();
+		end();
 	}
 	
 	@Test
@@ -81,32 +83,39 @@ public class LgGroupTest {
 		aliceGroup = sessionUser.getGroups().get(0);
 		bob = session.findByName("Bob");
 		pit = session.findByName("Pit");
-		sessionUser.save(new LgMember().setUser(pit, aliceGroup));
 		sessionUser.save(new LgMember().setUser(bob, aliceGroup));
-		save();
+		sessionUser.save(new LgMember().setUser(pit, aliceGroup));
+		
+		bob_moid = session.getUser().
+				search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
+		pit_moid = session.getUser().
+				search(aliceGroup.getOid(), pit.getOid()).get(0).getOid();
+		end();
+		
+		assertEquals(1, bob_moid);
+		assertEquals(2, pit_moid);
+		
 	}
+//		System.out.println("-------------pit_moid " + pit_moid + "-------=------------------------");
+//		System.out.println("-------------bob_moid " + bob_moid + "-------=------------------------");
+		
 	
 	@Test
 	public void test4deleteMember(){
 		start();
-		
-		//TODO back to old school
-		final long memberOid = session.getUser().
-										search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
-		aliceGroup = sessionUser.getGroups().get(0);
 //		sessionUser.getGroup(aliceGroup.getOid()).deleteUser(memberOid);
-		sessionUser.getGroup(aliceGroup.getOid()).deleteMember(memberOid);
-		save();
+		aliceGroup = sessionUser.getGroups().get(0);
+		sessionUser.getGroup(aliceGroup.getOid()).deleteMember(bob_moid);
+		end();
+		assertEquals(null, new LgSession().startFor("Alice").getGroups().get(0).getMember(bob_moid));
 	}
 	
-//	@Test
+	@Test
 	public void test5deleteGroup(){
 		start();
 		sessionUser.deleteGroup(sessionUser.getGroups().get(0).getOid());
-		save();
-		System.out.println("------------sessionUser.getGroups().size()"  + sessionUser.getGroups().size() + " -----------------");
-		
-		assertEquals(0, sessionUser.getGroups().size());
+		end();
+		assertEquals(0, new LgSession().startFor("Alice").getGroups().size());
 	}
 	
 	public void start(){
@@ -116,7 +125,7 @@ public class LgGroupTest {
 		sessionUser = session.getUser();
 	}
 	
-	public void save(){
+	public void end(){
 		session.endTransaction(true);
 	}
 }
