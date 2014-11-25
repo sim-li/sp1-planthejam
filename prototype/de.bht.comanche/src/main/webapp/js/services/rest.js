@@ -25,6 +25,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
             'invite': {
                 'path': '/invite',
                 'getMany': '/getInvites',
+                'get': '/get',
                 'save': '/save',
                 'delete': '/delete'
             },
@@ -50,7 +51,8 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
          * @return {String}          the relative HTTP path
          */
         var getPath = function(model, opString) {
-            var getModelId = model.getModelId || new model().getModelId;
+            // var getModelId = model.getModelId || new model().getModelId;
+            var getModelId = model.getModelId || model.prototype.getModelId;
             var theModel = restPaths[getModelId()];
             return restPaths.basePath + theModel.path + theModel[opString];
         };
@@ -63,9 +65,9 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
          * @return {promise}       [description]
          */
         var callHTTP = function(url, data, method) {
-            if (LOG)  {
-                $log.log('REST: ' + url);
-            }
+            // if (LOG)  {
+            //     $log.log('REST: ' + url);
+            // }
             var deferred = $q.defer();
             $http({
                 method: method || 'POST',
@@ -76,6 +78,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 } : ''
             }).success(function(data, status, header, config) {
                 if (LOG) {
+                    $log.debug('REST: success for ' + url);
                     $log.debug(data);
                 }
                 deferred.resolve(data);
@@ -130,15 +133,24 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
          * @return {promise}           a promise for a collection of objects of the specified model type
          */
         var doGetMany = function(modelClass) {
-            // return callHTTP(getPath(new modelClass(), 'getMany'));
             return callHTTP(getPath(modelClass, 'getMany'));
+        };
+
+        /**
+         * Gets the specified object specified by model class and oid.
+         * @param  {object} modelClass needs to have a method called getModelId() that returns the model ID as a String
+         * @param  {number} oid        the object id
+         * @return {promise}           a promise for the object
+         */
+        var doGet = function(modelClass, oid) {
+            return callHTTP(getPath(modelClass, 'get'), oid);
         };
 
         /**
          * Saves a model.
          *
          * @param  {object} model needs to have a method called getModelId() that returns the model ID as a String
-         * @return {promise}      a promise for the saved objection of the specified model
+         * @return {promise}      a promise for the saved object of the specified model
          */
         var doSave = function(model) {
             return callHTTP(getPath(model, 'save'), model.export());
@@ -167,6 +179,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
             updateUser: updateUser,
             logout: logout,
             doGetMany: doGetMany,
+            doGet: doGet,
             doSave: doSave,
             doDelete: doDelete,
             sayHi: sayHi

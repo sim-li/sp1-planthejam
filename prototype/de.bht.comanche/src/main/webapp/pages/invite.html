@@ -5,23 +5,24 @@
   <div class='row'>
     <!-- search & results -->
     <!-- sidebar -->
-    <div class='col-md-2'>
-      <ptj-survey-select></ptj-survey-select>
-    </div>
+    <div id='temporary-debug-output'>selectedInvite: '{{ selectedInvite }}'</div>
+    <!-- QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route -->
+    <!-- .col-md-2 -->
+    <!-- %ptj-survey-select -->
     <div class='col-md-8'>
       <div class='row'>
         <div class='col-md-8'>
           <h2>
             <div class='item-wrapper'>
-              <a editable-text='surveyTitle' href='#'>
-                {{surveyTitle}}
+              <a editable-text='invite' href='#'>
+                {{selectedInvite.survey.name}}
               </a>
             </div>
           </h2>
           <h4>
             <div class='item-wrapper'>
               <a editable-text='surveyDescription' href='#'>
-                {{surveyDescription}}
+                {{selectedInvite.survey.description}}
               </a>
             </div>
           </h4>
@@ -29,8 +30,8 @@
         <div class='col-md-4'>
           <div class='row'>
             <div class='btn-group pull-right'>
-              <label btn-radio="'Once'" class='btn btn-primary' ng-click='repeatedly=false'>Once</label>
-              <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='repeatedly=true'>Repeatedly</label>
+              <label btn-radio="'Once'" class='btn btn-primary' ng-click='repeatedly=false' ng-model='still_needs_a_model'>Once</label>
+              <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='repeatedly=true' ng-model='still_needs_a_model'>Repeatedly</label>
             </div>
             <br>
             <br>

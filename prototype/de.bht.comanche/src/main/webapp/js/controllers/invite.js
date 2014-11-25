@@ -2,9 +2,32 @@
 // Bug: Multiple Rename fails unless select happens
 // Simplify, Patterns, Comment.
 
+'use strict';
+
 angular.module('myApp')
-    .controller('inviteCtrl', ['$scope', 'restService', "$log", "Group", "Type", "TimeUnit", 'invites', 'groups',
-        function($scope, restService, $log, Group, Type, TimeUnit, invites, groups) {
+    .controller('inviteCtrl', ['$scope', 'restService', '$log', 'Invite', 'Survey', 'Group', 'Type', 'TimeUnit', 'invites', 'groups', 'selectedInvite' /*, '$routeParams'*/ ,
+        function($scope, restService, $log, Invite, Survey, Group, Type, TimeUnit, invites, groups, selectedInvite /*, $routeParams*/ ) {
+
+            // resolve the promises passed to this route
+            $scope.selectedInvite = selectedInvite || new Invite({
+                'survey': new Survey({
+                    'name': 'Your survey',
+                    'description': 'Say what it is all about'
+                })
+            });
+            $scope.invites = invites;
+            $scope.groups = groups;
+
+            $log.log('--- HELLO --');
+            $log.log($scope.selectedInvite);
+
+            // TODO - the users should be passed when the route is called
+            //      - later there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database
+            // $scope.users = users;
+            // TODO - the selected invite should be passed when the route is called
+            // $scope.invite = invite;
+
+            // for now: some dummy users
             $scope.users = [{
                 name: 'Blackjack',
                 email: 'bj@gmail.com'
@@ -28,15 +51,8 @@ angular.module('myApp')
                 email: 'sb@gmail.com'
             }];
 
-            $scope.invites = invites;
-            $scope.groups = groups;
-            // $scope.invites = $scope.session.user.invites;
-            // $scope.groups = $scope.session.user.groups;
-
-            console.log('Invites%o', $scope.invites);
-
-            $scope.surveyTitle = 'Lets have a beer, guys';
-            $scope.surveyDescription = 'This will a a really casual get together with the uppermose style etiquette. Eventhough there' + 'will be beer involved, we will not get to the limits of our physical capacities.';
+            // $scope.surveyTitle = 'Lets have a beer, guys';
+            // $scope.surveyDescription = 'This will a a really casual get together with the uppermose style etiquette. Eventhough there' + 'will be beer involved, we will not get to the limits of our physical capacities.';
             $scope.editedGroupName = '';
             $scope.selectedGroupName = '';
             $scope.showTrash = true;
