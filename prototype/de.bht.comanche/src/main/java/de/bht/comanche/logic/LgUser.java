@@ -60,6 +60,10 @@ public class LgUser extends DaObject {
 		return attach(member).save();
 	}
 	
+	public List<LgMember> search(final long groupId, final long userId){
+		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
+	}
+	
 	public boolean passwordMatchWith(LgUser user) {
 		final String password = user.getPassword();
 		if (this.password == null) {

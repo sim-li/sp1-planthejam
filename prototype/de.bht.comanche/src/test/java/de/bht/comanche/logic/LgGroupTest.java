@@ -4,17 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 import javax.persistence.Persistence;
+
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import de.bht.comanche.logic.LgGroup;
-import de.bht.comanche.logic.LgMember;
-import de.bht.comanche.logic.LgSession;
-import de.bht.comanche.logic.LgUser;
+
 import de.bht.comanche.persistence.DaEmProvider;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

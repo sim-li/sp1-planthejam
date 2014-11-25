@@ -83,6 +83,18 @@ public abstract class DaObject implements Serializable {
 		return null;
 	}
 	
+	public <E extends DaObject> List<E> search(Class<E> persistentClass, String firstKeyFieldName,
+			Object firstKey, String secondKeyFieldName, Object secondKey) {
+		// throw exc when not found
+		List<E> result = null;
+		try{
+			result = pool.findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);
+		} catch (Exception e) {
+			multex.Msg.printReport(System.err, e);// TODO Multex exc
+		}
+		return result;
+	}
+	
 	/**
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
