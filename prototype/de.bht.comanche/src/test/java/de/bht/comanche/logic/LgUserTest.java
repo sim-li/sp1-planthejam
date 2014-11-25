@@ -4,12 +4,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Sebastian Dass&eacute;
  *
  */
+@Ignore
 public class LgUserTest {
 	
 	// TODO we need some kind of mocked JPA; then add tests for save and delete etc.

@@ -1,8 +1,7 @@
-package logic;
+package de.bht.comanche.logic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.Persistence;
@@ -13,7 +12,12 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import de.bht.comanche.persistence.DaEmProvider;
 
-@Ignore
+/**
+ * @author Maxim Novichkov;
+ *
+ */
+
+//@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	static long user_oid;
@@ -95,7 +99,7 @@ public class LgGroupTest {
 		save();
 	}
 	
-	@Test
+//	@Test
 	public void test5deleteGroup(){
 		start();
 		sessionUser.deleteGroup(sessionUser.getGroups().get(0).getOid());
