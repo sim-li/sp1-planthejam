@@ -17,7 +17,7 @@ angular.module('myApp')
                 })
             });
             $scope.invites = Invite.importMany(invites);
-            $scope.groups = groups;
+            $scope.groups = Group.importMany(groups);
             $scope.users = users;
 
             // $log.log('selectedInvite: ');
@@ -188,6 +188,14 @@ angular.module('myApp')
                     .then(function(success) {
                         $location.path('/cockpit');
                     } /*, function(error) { $log.log(error); }*/ );
+            };
+
+            // TODO rest service to save many groups
+            $scope.saveGroups = function() {
+                for (var i = 0; i < $scope.groups.length; i++) {
+                    restService.doSave($scope.groups[i]);
+                }
+                $location.path('/invite');
             };
 
             var setDefaultGroup = function() {
