@@ -90,15 +90,9 @@ public class LgGroupTest {
 		bob_moid = session.getUser().
 				search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
 		end();
-		
-		LgUser lg = getAliceGroup().getUsers().get(1);
-		System.out.println("--------------------lg.toString()" + lg.toString() + "------------");
-		System.out.println("--------------------pit.toString()" + pit.toString() + "------------");
-		
 		assertEquals("Bob", getAliceGroup().getUsers().get(0).getName());
 		assertEquals("Pit", getAliceGroup().getUsers().get(1).getName());
-//		assertEquals(true, getAliceGroup().getUsers().contains(lg));
-	}
+		}
 	
 	@Test
 	public void test4deleteMember(){
