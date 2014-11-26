@@ -1,9 +1,6 @@
 package de.bht.comanche.rest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -11,7 +8,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-
+import de.bht.comanche.logic.LgMember;
 import de.bht.comanche.logic.LgGroup;
 import de.bht.comanche.logic.LgTransaction;
 
@@ -44,18 +41,18 @@ public class ReGroupService extends RestService {
 		}.getResult();
 	}
 	
-//	@Path("saveMember")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgGroup saveMember(final LgGroup group, @Context final HttpServletRequest request) {
-//		return new LgTransaction<LgGroup>(request) {
-//			@Override
-//			public LgGroup execute() throws Exception {
-//				return startSession().save(group.setMembers(member));
-//			}
-//		}.getResult();
-//	}
+	@Path("saveMember")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgMember saveMember(final LgGroup group, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgMember>(request) {
+			@Override
+			public LgMember execute() throws Exception {
+				return startSession().save(new LgMember().setUser(getSession().getUser(), group));
+			}
+		}.getResult();
+	}
 	
 	@Path("delete")
 	@DELETE
