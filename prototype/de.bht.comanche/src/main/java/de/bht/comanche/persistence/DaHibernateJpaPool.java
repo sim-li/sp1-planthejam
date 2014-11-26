@@ -66,7 +66,7 @@ public class DaHibernateJpaPool implements DaPool {
 	@Override
 	public <E extends DaObject> List<E> findAll(Class<E> persistentClass) {
 		// TODO at try/catch
-		final Query q = entityManager.createQuery("SELECT e FROM " + persistentClass.getSimpleName() + "e", persistentClass); 
+		final Query q = entityManager.createQuery("SELECT e FROM " + persistentClass.getSimpleName() + " e", persistentClass); 
 		final List<E> results = q.getResultList();
 		for (E item : results) {
 			item.attach(this); //Test!

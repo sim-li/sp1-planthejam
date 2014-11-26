@@ -5,7 +5,9 @@
   <div class='row'>
     <!-- search & results -->
     <!-- sidebar -->
-    <div id='temporary-debug-output'>selectedInvite: '{{ selectedInvite }}'</div>
+    <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
+    <!-- %div#temporary-debug-output0 invites: '{{ invites }}' -->
+    <!-- %div#temporary-debug-output2 selectedInvite: '{{ selectedInvite }}' -->
     <!-- QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route -->
     <!-- .col-md-2 -->
     <!-- %ptj-survey-select -->
@@ -14,14 +16,14 @@
         <div class='col-md-8'>
           <h2>
             <div class='item-wrapper'>
-              <a editable-text='invite' href='#'>
+              <a editable-text='selectedInvite.survey.name' href='#'>
                 {{selectedInvite.survey.name}}
               </a>
             </div>
           </h2>
           <h4>
             <div class='item-wrapper'>
-              <a editable-text='surveyDescription' href='#'>
+              <a editable-text='selectedInvite.survey.description' href='#'>
                 {{selectedInvite.survey.description}}
               </a>
             </div>
@@ -98,9 +100,7 @@
   <div class='row'>
     <div class='col-md-2'></div>
     <div class='col-md-8'>
-      <btn class='btn btn-primary pull-right' type='button'>
-        Send
-      </btn>
+      <btn class='btn btn-primary pull-right' ng-click='saveInvite()' type='button'>Save</btn>
     </div>
   </div>
 </div>

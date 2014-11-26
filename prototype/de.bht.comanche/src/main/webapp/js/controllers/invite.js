@@ -5,21 +5,23 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('inviteCtrl', ['$scope', 'restService', '$log', 'Invite', 'Survey', 'Group', 'Type', 'TimeUnit', 'invites', 'groups', 'selectedInvite' /*, '$routeParams'*/ ,
-        function($scope, restService, $log, Invite, Survey, Group, Type, TimeUnit, invites, groups, selectedInvite /*, $routeParams*/ ) {
+    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Invite', 'Survey', 'Group', 'Type', 'TimeUnit', 'invites', 'groups', 'selectedInvite', 'users',
+        function($scope, $log, $location /*, $routeParams*/ , restService, Invite, Survey, Group, Type, TimeUnit, invites, groups, selectedInvite, users) {
 
             // resolve the promises passed to this route
-            $scope.selectedInvite = selectedInvite || new Invite({
+            $scope.selectedInvite = selectedInvite ? new Invite(selectedInvite) : new Invite({
                 'survey': new Survey({
                     'name': 'Your survey',
-                    'description': 'Say what it is all about'
+                    'description': 'Say what it is all about',
+                    'deadline': new Date()
                 })
             });
-            $scope.invites = invites;
+            $scope.invites = Invite.importMany(invites);
             $scope.groups = groups;
+            $scope.users = users;
 
-            $log.log('--- HELLO --');
-            $log.log($scope.selectedInvite);
+            // $log.log('selectedInvite: ');
+            // $log.log($scope.selectedInvite);
 
             // TODO - the users should be passed when the route is called
             //      - later there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database
@@ -28,28 +30,28 @@ angular.module('myApp')
             // $scope.invite = invite;
 
             // for now: some dummy users
-            $scope.users = [{
-                name: 'Blackjack',
-                email: 'bj@gmail.com'
-            }, {
-                name: 'Bob',
-                email: 'bob@gmail.com'
-            }, {
-                name: 'Marie',
-                email: 'marie@gmail.com'
-            }, {
-                name: 'Sarah',
-                email: 'sr@gmail.com'
-            }, {
-                name: 'Simon',
-                email: 'sm@gmail.com'
-            }, {
-                name: 'Max',
-                email: 'max@gmail.com'
-            }, {
-                name: 'Sebastian',
-                email: 'sb@gmail.com'
-            }];
+            // $scope.users = [{
+            //     name: 'Blackjack',
+            //     email: 'bj@gmail.com'
+            // }, {
+            //     name: 'Bob',
+            //     email: 'bob@gmail.com'
+            // }, {
+            //     name: 'Marie',
+            //     email: 'marie@gmail.com'
+            // }, {
+            //     name: 'Sarah',
+            //     email: 'sr@gmail.com'
+            // }, {
+            //     name: 'Simon',
+            //     email: 'sm@gmail.com'
+            // }, {
+            //     name: 'Max',
+            //     email: 'max@gmail.com'
+            // }, {
+            //     name: 'Sebastian',
+            //     email: 'sb@gmail.com'
+            // }];
 
             // $scope.surveyTitle = 'Lets have a beer, guys';
             // $scope.surveyDescription = 'This will a a really casual get together with the uppermose style etiquette. Eventhough there' + 'will be beer involved, we will not get to the limits of our physical capacities.';
@@ -132,7 +134,7 @@ angular.module('myApp')
                     return;
                 }
                 $scope.isCollapsed = false;
-            }
+            };
 
             $scope.removeMember = function(index) {
                 $scope.addedUsers.splice(index, 1);
@@ -179,6 +181,13 @@ angular.module('myApp')
                 $event.preventDefault();
                 $event.stopPropagation();
                 $scope.fromOpened = !$scope.fromOpened;
+            };
+
+            $scope.saveInvite = function() {
+                restService.doSave($scope.selectedInvite)
+                    .then(function(success) {
+                        $location.path('/cockpit');
+                    } /*, function(error) { $log.log(error); }*/ );
             };
 
             var setDefaultGroup = function() {

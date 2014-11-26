@@ -62,11 +62,15 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
                         }
                         return restService.doGet(Invite, inviteOid);
                     },
+                    // TODO maybe not necessary to get all invites for this route?
                     invites: function(restService, Invite) {
                         return restService.doGetMany(Invite);
                     },
                     groups: function(restService, Group) {
                         return restService.doGetMany(Group);
+                    },
+                    users: function(restService, User) {
+                        return restService.doGetMany(User);
                     }
                 }
             });

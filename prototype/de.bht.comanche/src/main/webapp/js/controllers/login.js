@@ -11,7 +11,7 @@ angular.module('myApp')
     .controller('loginCtrl', ['$scope', '$rootScope', '$location', '$log', 'restService', 'patterns', 'User',
         function($scope, $rootScope, $location, $log, restService, patterns, User) {
 
-            var DUMMY_LOGIN = true;
+            var DUMMY_LOGIN = false;
 
             $scope.login = function(user) {
                 if (!loginIsValidFor(user)) {

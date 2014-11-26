@@ -9,11 +9,11 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('cockpitCtrl', ['$scope', '$rootScope', '$location', '$log', 'restService', 'Invite', 'Group', 'util', 'invites', 'groups',
-        function($scope, $rootScope, $location, $log, restService, Invite, Group, util, invites, groups) {
+    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'restService', 'Invite', 'Group', 'util', 'invites', 'groups',
+        function($scope, $location, $log, restService, Invite, Group, util, invites, groups) {
 
             // resolve the promises passed to this route
-            $scope.invites = invites;
+            $scope.invites = Invite.importMany(invites);
             $scope.groups = groups;
 
             $scope.selectedInvite = $scope.invites[0];
@@ -42,27 +42,14 @@ angular.module('myApp')
             };
 
             $scope.deleteSelectedInvite = function() {
-                var _invite = $scope.selectedInvite;
-                if (!_invite) {
-                    $log.log('Keine Terminumfrage ausgewaehlt.');
-                    return;
-                }
-                $log.log('deleteSelectedInvite: ');
-                $log.log(_invite);
-                restService.deleteInvite(_invite.oid)
-                    // restService.deleteInvite(_invite)
+                // if (!$scope.selectedInvite) {
+                //     $log.log('Keine Terminumfrage ausgewaehlt.');
+                //     return;
+                // }
+                restService.doDelete($scope.selectedInvite)
                     .then(function(success) {
-                        $log.log(success);
-                        util.removeElementFrom(_invite, $scope.invites);
-                        $scope.selectedInvite = $scope.invites[0] || '';
-                        $scope.tempInvite = '';
-                    }, function(error) {
-                        $log.error(error);
-                        $rootScope.warnings = error;
-                    }, function(notification) {
-                        // $log.log(notification); // for future use
-                    });
-
+                        $location.path('/cockpit');
+                    } /*, function(error) { $log.log(error); }*/ );
             };
         }
     ]);

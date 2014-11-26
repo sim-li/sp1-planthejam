@@ -1,5 +1,7 @@
 package de.bht.comanche.rest;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -8,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
-import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 
@@ -98,6 +99,19 @@ public class ReUserService extends RestService {
 //			}
 //		}.getResult();
 //	}
+	
+	@Path("getAllUsers")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public List<LgUser> getAllUsers(@Context final HttpServletRequest request) {
+		return new LgTransaction<List<LgUser>>(request) {
+			@Override
+			public List<LgUser> execute() throws Exception {
+				return getSession().getAllUsers();
+			}
+		}.getResult();
+	}
 	
 	@Path("logout")
 	@POST
