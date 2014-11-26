@@ -86,11 +86,11 @@ frequency : Repetition
 possibleTimePeriods : List&lt;TimePeriod&gt;
 determinedTimePeriod : TimePeriod
 --
-&lt;&lt;host&gt;&gt; addParticipantToSurvey(user : User)
-&lt;&lt;host&gt;&gt; addAllUsersFromGroupToSurvey(group : Group)
-&lt;&lt;host&gt;&gt; sendInviteToAllParticipants()
+F &lt;&lt;host&gt;&gt; addParticipantToSurvey(user : User)
+F &lt;&lt;host&gt;&gt; addAllUsersFromGroupToSurvey(group : Group)
+B &lt;&lt;host&gt;&gt; sendInviteToAllParticipants()
 &lt;&lt;host&gt;&gt; editSurvey()
-&lt;&lt;host&gt;&gt; showPossibleTimePeriods() : List&lt;TimePeriod&gt;
+F &lt;&lt;host&gt;&gt; showPossibleTimePeriods() : List&lt;TimePeriod&gt;
 &lt;&lt;host&gt;&gt; chooseFromPossibleTimePeriods() : TimePeriod
 getGroupSnapshot : Group</panel_attributes>
     <additional_attributes/>
