@@ -5,8 +5,9 @@
     / search & results
     / sidebar
     / %div#temporary-debug-output1 users: '{{ users }}'
-    / %div#temporary-debug-output0 invites: '{{ invites }}'
-    / %div#temporary-debug-output2 selectedInvite: '{{ selectedInvite }}'
+    / %div#temporary-debug-output2 invites: '{{ invites }}'
+    / %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}'
+    %div#temporary-debug-output4 groups: '{{ groups }}'
     /  QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route
     / .col-md-2
     /   %ptj-survey-select
@@ -37,6 +38,7 @@
       %br/
       %ptj-search
       %ptj-members
+      %btn.pull-left{"type"=>"button", "class"=>"btn btn-primary", "ng-click" => "saveGroups()"} Save Groups
       %br
       .panel.panel-primary
         .panel-heading

@@ -6,8 +6,9 @@
     <!-- search & results -->
     <!-- sidebar -->
     <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
-    <!-- %div#temporary-debug-output0 invites: '{{ invites }}' -->
-    <!-- %div#temporary-debug-output2 selectedInvite: '{{ selectedInvite }}' -->
+    <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
+    <!-- %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}' -->
+    <div id='temporary-debug-output4'>groups: '{{ groups }}'</div>
     <!-- QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route -->
     <!-- .col-md-2 -->
     <!-- %ptj-survey-select -->
@@ -51,6 +52,7 @@
       <br>
       <ptj-search></ptj-search>
       <ptj-members></ptj-members>
+      <btn class='btn btn-primary pull-left' ng-click='saveGroups()' type='button'>Save Groups</btn>
       <br>
       <div class='panel panel-primary'>
         <div class='panel-heading'>

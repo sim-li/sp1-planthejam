@@ -24,10 +24,15 @@ angular.module('group', [])
             return 'group';
         };
 
-        Group.import = function(groups) {
-            for (var i = 0, len = groups.length; i < len; i++) {
-                groups[i] = new Group(groups[i]);
+        Group.importMany = function(rawGroups) {
+            if (!rawGroups) {
+                return rawGroups;
             }
+            var groups = [];
+            for (var i = 0; i < rawGroups.length; i++) {
+                groups[i] = new Group(rawGroups[i]);
+            }
+            // console.log("imported " + rawGroups.length)
             return groups;
         };
 
