@@ -8,8 +8,8 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('loginCtrl', ['$scope', '$rootScope', '$location', '$log', 'restService', 'patterns', 'User', 'Invite', 'Group',
-        function($scope, $rootScope, $location, $log, restService, patterns, User, Invite, Group) {
+    .controller('loginCtrl', ['$scope', '$rootScope', '$location', '$log', 'restService', 'patterns', 'User',
+        function($scope, $rootScope, $location, $log, restService, patterns, User) {
 
             var DUMMY_LOGIN = false;
 
@@ -18,12 +18,10 @@ angular.module('myApp')
                     $log.log('Login ungueltig.');
                     return;
                 }
-
                 if (DUMMY_LOGIN) {
                     user.name = 'Alice';
                     user.password = 'yousnoozeyoulose';
                 }
-
                 call(restService.login, user, '/cockpit', 'Login erfolgreich.');
             };
 
@@ -32,7 +30,6 @@ angular.module('myApp')
                     $log.log('Registrierung ungueltig.');
                     return;
                 }
-
                 call(restService.register, user, '/cockpit', 'Registrierung erfolgreich.');
             };
 
@@ -75,12 +72,13 @@ angular.module('myApp')
                 service(new User(user))
                     .then(function(_user) {
                         $log.log(successMsg);
+                        $scope.user = new User(_user);
                         $location.path(path);
                     }, function(error) {
                         $log.log(error);
                         $rootScope.warnings = error;
                     });
-            }
+            };
 
         }
     ]);

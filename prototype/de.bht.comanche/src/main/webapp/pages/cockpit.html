@@ -1,6 +1,7 @@
 <div class='container'>
   <ptj-menu></ptj-menu>
   <div class='container'>
+    <!-- %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}' -->
     <div class='panel panel-default'>
       <div class='panel-body'>
         <div class='col-md-4'>
@@ -19,8 +20,8 @@
             <div class='panel-body'>
               <label for='selectedSurveyDescription'>Beschreibung:</label>
               <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
-              <label for='selectedSurveyDescription'>Deadline:</label>
-              <div id='selectedSurveyDescription'>{{ selectedInvite.survey.deadline }}</div>
+              <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->
+              <!-- %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }} -->
             </div>
           </div>
         </div>

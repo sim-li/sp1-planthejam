@@ -4,24 +4,28 @@
   .row
     / search & results
     / sidebar
-    .col-md-2
-      %ptj-survey-select
+    / %div#temporary-debug-output1 users: '{{ users }}'
+    / %div#temporary-debug-output0 invites: '{{ invites }}'
+    / %div#temporary-debug-output2 selectedInvite: '{{ selectedInvite }}'
+    /  QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route
+    / .col-md-2
+    /   %ptj-survey-select
     .col-md-8
       .row
         .col-md-8
           %h2
             .item-wrapper
-              %a{"editable-text" => "surveyTitle", :href => "#"}
-                {{surveyTitle}}
+              %a{"editable-text" => "selectedInvite.survey.name", :href => "#"}
+                {{selectedInvite.survey.name}}
           %h4
             .item-wrapper
-              %a{"editable-text" => "surveyDescription", :href => "#"}
-                {{surveyDescription}}
+              %a{"editable-text" => "selectedInvite.survey.description", :href => "#"}
+                {{selectedInvite.survey.description}}
         .col-md-4
           .row
             .btn-group.pull-right
-              %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-click"=>"repeatedly=false"} Once
-              %label.btn.btn-primary{"btn-radio" => "'Repeatedly'",  "ng-click"=>"repeatedly=true"} Repeatedly
+              %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "still_needs_a_model", "ng-click"=>"repeatedly=false"} Once
+              %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "still_needs_a_model", "ng-click"=>"repeatedly=true"} Repeatedly
             %br/
             %br/
             %btn.btn-sm.btn-success.pull-right{"ng-click" => "showLiveButton=false", "ng-show" => "showLiveButton"}
@@ -64,6 +68,5 @@
   .row
     .col-md-2
     .col-md-8
-      %btn.pull-right{"type"=>"button", "class"=>"btn btn-primary"}
-        Send
+      %btn.pull-right{"type"=>"button", "class"=>"btn btn-primary", "ng-click" => "saveInvite()"} Save
 

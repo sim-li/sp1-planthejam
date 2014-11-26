@@ -96,5 +96,10 @@ public class LgSession {
 	public void setUser(LgUser user) {
 		this.user = user;
 	}
+	
+	public List<LgUser> getAllUsers() {
+//		return pool.findManyByQuery(LgUser.class, null, "SELECT * FROM " + LgUser.class.getSimpleName(), new Object[]{  });
+		return pool.findAll(LgUser.class);
+	}
 
 }
