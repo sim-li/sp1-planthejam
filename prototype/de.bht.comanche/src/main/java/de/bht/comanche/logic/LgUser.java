@@ -33,6 +33,7 @@ public class LgUser extends DaObject {
 	private LgMember member;
 	
 	public LgInvite save(final LgInvite invite) {
+        invite.setUser(this);
 		return attach(invite).save();
 	}
 	

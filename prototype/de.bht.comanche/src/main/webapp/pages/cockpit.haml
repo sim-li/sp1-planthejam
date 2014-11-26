@@ -2,6 +2,7 @@
   %ptj-menu
 
   .container
+    / %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}'
     .panel.panel-default
       .panel-body
         .col-md-4
@@ -18,5 +19,5 @@
             .panel-body
               %label{:for => "selectedSurveyDescription"} Beschreibung:
               %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
-              %label{:for => "selectedSurveyDescription"} Deadline:
-              %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }}
+              / %label{:for => "selectedSurveyDescription"} Deadline:
+              / %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }}

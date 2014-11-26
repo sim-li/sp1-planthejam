@@ -44,22 +44,33 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
                 controller: 'cockpitCtrl',
                 resolve: {
                     invites: function(restService, Invite) {
-                        return restService.doGetMany(Invite)
+                        return restService.doGetMany(Invite);
                     },
                     groups: function(restService, Group) {
                         return restService.doGetMany(Group);
                     }
                 }
             })
-            .when('/invite', {
+            .when('/invite/:inviteOid?', {
                 templateUrl: 'pages/invite.html',
                 controller: 'inviteCtrl',
                 resolve: {
+                    selectedInvite: function($route, restService, Invite) {
+                        var inviteOid = $route.current.params.inviteOid;
+                        if (typeof inviteOid === 'undefined') {
+                            return '';
+                        }
+                        return restService.doGet(Invite, inviteOid);
+                    },
+                    // TODO maybe not necessary to get all invites for this route?
                     invites: function(restService, Invite) {
-                        return restService.doGetMany(Invite)
+                        return restService.doGetMany(Invite);
                     },
                     groups: function(restService, Group) {
                         return restService.doGetMany(Group);
+                    },
+                    users: function(restService, User) {
+                        return restService.doGetMany(User);
                     }
                 }
             });

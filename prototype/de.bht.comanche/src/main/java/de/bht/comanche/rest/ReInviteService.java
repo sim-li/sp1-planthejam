@@ -33,6 +33,20 @@ public class ReInviteService extends RestService {
 			}
 		}.getResult();
 	}
+    
+    @POST
+	@Path("get")
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgInvite get(final long oid, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgInvite>(request) {
+			@Override
+			public LgInvite execute() throws multex.Exc {
+				return startSession()
+					.getInvite(oid);
+			}
+		}.getResult();
+	}
 	
 	@Path("save")
 	@POST
