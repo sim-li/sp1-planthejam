@@ -1,108 +1,115 @@
+<div class='row'>
+  <ptj-menu></ptj-menu>
+</div>
 <div class='container'>
-  <div class='row'>
-    <ptj-menu></ptj-menu>
-  </div>
+  <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
+  <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
+  <!-- %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}' -->
+  <div id='temporary-debug-output4'>groups: '{{ groups }}'</div>
+  <!-- QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route -->
   <div class='row'>
     <!-- search & results -->
     <!-- sidebar -->
-    <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
-    <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
-    <!-- %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}' -->
-    <div id='temporary-debug-output4'>groups: '{{ groups }}'</div>
-    <!-- QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route -->
-    <!-- .col-md-2 -->
-    <!-- %ptj-survey-select -->
+    <div class='col-md-2'>
+      <ptj-survey-select></ptj-survey-select>
+    </div>
     <div class='col-md-8'>
-      <div class='row'>
-        <div class='col-md-8'>
-          <h2>
-            <div class='item-wrapper'>
-              <a editable-text='selectedInvite.survey.name' href='#'>
-                {{selectedInvite.survey.name}}
-              </a>
-            </div>
-          </h2>
-          <h4>
-            <div class='item-wrapper'>
-              <a editable-text='selectedInvite.survey.description' href='#'>
-                {{selectedInvite.survey.description}}
-              </a>
-            </div>
-          </h4>
-        </div>
-        <div class='col-md-4'>
+      <div class='panel panel-primary'>
+        <div class='panel-heading'>Create new Event</div>
+        <div class='panel-body'>
           <div class='row'>
-            <div class='btn-group pull-right'>
-              <label btn-radio="'Once'" class='btn btn-primary' ng-click='repeatedly=false' ng-model='still_needs_a_model'>Once</label>
-              <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='repeatedly=true' ng-model='still_needs_a_model'>Repeatedly</label>
+            <div class='col-md-8'>
+              <h2>
+                <div class='item-wrapper'>
+                  <a editable-text='selectedInvite.survey.name' href='#'>
+                    {{selectedInvite.survey.name}}
+                  </a>
+                </div>
+              </h2>
+              <h4>
+                <div class='item-wrapper'>
+                  <a editable-text='selectedInvite.survey.description' href='#'>
+                    {{selectedInvite.survey.description}}
+                  </a>
+                </div>
+              </h4>
             </div>
+            <div class='col-md-4'>
+              <div class='row'>
+                <div class='btn-group pull-right'>
+                  <label btn-radio="'Once'" class='btn btn-primary' ng-click='repeatedly=false' ng-model='still_needs_a_model'>Once</label>
+                  <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='repeatedly=true' ng-model='still_needs_a_model'>Repeatedly</label>
+                </div>
+                <br>
+                <br>
+                <btn class='btn-sm btn-success pull-right' ng-click='showLiveButton=false' ng-show='showLiveButton'>
+                  Live
+                  <span class='glyphicon glyphicon-bullhorn'></span>
+                </btn>
+                <btn class='btn-sm btn-warning pull-right' ng-click='showLiveButton=true' ng-show='!showLiveButton'>
+                  Staged
+                  <span class='glyphicon glyphicon-off'></span>
+                </btn>
+              </div>
+            </div>
+          </div>
+          <div class='rpw'>
+            <ptj-search></ptj-search>
+            <ptj-members></ptj-members>
             <br>
-            <br>
-            <btn class='btn-sm btn-success pull-right' ng-click='showLiveButton=false' ng-show='showLiveButton'>
-              Live
-              <span class='glyphicon glyphicon-bullhorn'></span>
-            </btn>
-            <btn class='btn-sm btn-warning pull-right' ng-click='showLiveButton=true' ng-show='!showLiveButton'>
-              Staged
-              <span class='glyphicon glyphicon-off'></span>
-            </btn>
+          </div>
+          <div class='row'>
+            <div class='form-group'>
+              <label class='col-sm-3 control-label' for='Location'>
+                From
+              </label>
+              <div class='col-sm-5'>
+                <p class='input-group'>
+                  <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' datepicker-popup='dd-MMMM-yyyy' is-open='fromOpened' max-date="'2015-06-22'" min-date='minDate' ng-model='dt' ng-required='true' type='text'>
+                  <span class='input-group-btn'>
+                    <button class='btn btn-default' ng-click='openFrom($event)' type='button'>
+                      <i class='glyphicon glyphicon-calendar'></i>
+                    </button>
+                  </span>
+                </p>
+              </div>
+              <div class='col-sm-4'>
+                <timepicker hour-step='1' minute-step='1' ng-model='mytime1'></timepicker>
+              </div>
+            </div>
+            <div class='form-group'>
+              <label class='col-sm-3 control-label' for='Location'>
+                To
+              </label>
+              <div class='col-sm-5'>
+                <p class='input-group'>
+                  <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' datepicker-popup='dd-MMMM-yyyy' is-open='toOpened' max-date="'2015-06-22'" min-date='minDate' ng-model='dt' ng-required='true' type='text'>
+                  <span class='input-group-btn'>
+                    <button class='btn btn-default' ng-click='openTo($event)' type='button'>
+                      <i class='glyphicon glyphicon-calendar'></i>
+                    </button>
+                  </span>
+                </p>
+              </div>
+              <div class='col-sm-4'>
+                <timepicker class='pull-right' hour-step='1' minute-step='1' ng-model='mytime2'></timepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='panel-footer'>
+          <div class='col-md-offset-10'>
+            <button class='btn btn-default btn-sm' type='reset'>Reset</button>
+            <button class='btn btn-primary btn-sm' ng-click='saveInvite()' type='submit'>Create</button>
           </div>
         </div>
       </div>
-      <br>
-      <ptj-search></ptj-search>
-      <ptj-members></ptj-members>
-      <btn class='btn btn-primary pull-left' ng-click='saveGroups()' type='button'>Save Groups</btn>
-      <br>
-      <div class='panel panel-primary'>
-        <div class='panel-heading'>
-          <div class='glyphicon glyphicon-time'></div>
-          Survey Runtime
-        </div>
-        <div class='panel-body'>
-          <row>
-            <div class='col-md-9 col-md-offset-1'>
-              <div class='row'>
-                <div class='col-md-6'>
-                  <p class='input-group'>
-                    <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' datepicker-popup='dd-MMMM-yyyy' is-open='fromOpened' max-date="'2015-06-22'" min-date='minDate' ng-model='dt' ng-required='true' type='text'>
-                    <span class='input-group-btn'>
-                      <button class='btn btn-default' ng-click='openFrom($event)' type='button'>
-                        <i class='glyphicon glyphicon-calendar'></i>
-                      </button>
-                    </span>
-                  </p>
-                  <timepicker hour-step='1' minute-step='1' ng-model='mytime1'></timepicker>
-                </div>
-                <div class='col-md-6'>
-                  <p class='input-group'>
-                    <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' datepicker-popup='dd-MMMM-yyyy' is-open='toOpened' max-date="'2015-06-22'" min-date='minDate' ng-model='dt' ng-required='true' type='text'>
-                    <span class='input-group-btn'>
-                      <button class='btn btn-default' ng-click='openTo($event)' type='button'>
-                        <i class='glyphicon glyphicon-calendar'></i>
-                      </button>
-                    </span>
-                  </p>
-                  <timepicker class='pull-right' hour-step='1' minute-step='1' ng-model='mytime2'></timepicker>
-                </div>
-              </div>
-            </div>
-          </row>
-        </div>
-      </div>
-      <slider max='' min='' ng-model='sliders.sliderValue' step='' value=''></slider>
     </div>
     <div class='col-md-2'>
       <input-group ng-show='repeatedly'>
         <input class='form-control' placeholder='Frequency' type='text'>
         <input class='form-control' placeholder='Distance' type='text'>
       </input-group>
-    </div>
-  </div>
-  <div class='row'>
-    <div class='col-md-2'></div>
-    <div class='col-md-8'>
-      <btn class='btn btn-primary pull-right' ng-click='saveInvite()' type='button'>Save</btn>
     </div>
   </div>
 </div>
