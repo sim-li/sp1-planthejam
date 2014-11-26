@@ -83,6 +83,7 @@ public class ReUserService extends RestService {
 			}
 		}.getResult();
 	}
+	
 //	/* TODO
 //	 * - implement DaUser.selectAllUsersWhereNameIsLike(String searchString)
 //	 * - provide access to selectAllUsersWhereNameIsLike from session

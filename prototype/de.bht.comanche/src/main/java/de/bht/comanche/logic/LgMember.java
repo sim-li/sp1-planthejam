@@ -31,4 +31,15 @@ public class LgMember extends DaObject{
 		this.user = user;
 		return this;
 	}
+	
+	public LgMember setGroup(LgGroup group) {
+		this.group = group;
+		return this;
+	}	
+	
+	public void setUser(LgUser lgUser) {
+		this.user = lgUser;
+	}
+	
+	
 }

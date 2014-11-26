@@ -23,10 +23,23 @@ public class ReGroupService extends RestService {
 		return new LgTransaction<List<LgGroup>>(request) {
 			@Override
 			public List<LgGroup> execute() throws Exception {
-				return startSession().getGroups();
+				List<LgGroup> groups = null;
+				try {
+					groups = startSession().getGroups();
+				} catch (Exception e) {
+//					create new Multex
+				}
+				return groups;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not get group with id "{1}" and user id "{2}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgGroupNotFoundExc extends multex.Failure {}
+	
 	
 	@Path("save")
 	@POST

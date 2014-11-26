@@ -46,6 +46,7 @@ public class LgUser extends DaObject {
 	}
 	
 	public LgGroup save(final LgGroup group) {
+		group.setUser(this);
 		return attach(group).save();
 	}
 	
@@ -58,6 +59,7 @@ public class LgUser extends DaObject {
 	}
 	
 	public LgMember save(final LgMember member) {
+		member.setUser(this);
 		return attach(member).save();
 	}
 	
