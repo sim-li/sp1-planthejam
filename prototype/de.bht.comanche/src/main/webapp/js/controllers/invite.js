@@ -5,8 +5,8 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Invite', 'Survey', 'Group', 'Type', 'TimeUnit', 'invites', 'groups', 'selectedInvite', 'users',
-        function($scope, $log, $location /*, $routeParams*/ , restService, Invite, Survey, Group, Type, TimeUnit, invites, groups, selectedInvite, users) {
+    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Invite', 'Survey', 'Group', 'Member', 'User', 'Type', 'TimeUnit', 'invites', 'groups', 'selectedInvite', 'users',
+        function($scope, $log, $location /*, $routeParams*/ , restService, Invite, Survey, Group, Member, User, Type, TimeUnit, invites, groups, selectedInvite, users) {
 
             // resolve the promises passed to this route
             $scope.selectedInvite = selectedInvite ? new Invite(selectedInvite) : new Invite({
@@ -18,7 +18,7 @@ angular.module('myApp')
             });
             $scope.invites = Invite.importMany(invites);
             $scope.groups = Group.importMany(groups);
-            $scope.users = users;
+            $scope.users = User.importMany(users);
 
             // $log.log('selectedInvite: ');
             // $log.log($scope.selectedInvite);
@@ -101,10 +101,10 @@ angular.module('myApp')
                     return;
                 }
                 changeGroupName($scope.editedGroupName, $scope.selectedGroupName);
-                $scope.groups.push({
+                $scope.groups.push(new Group({
                     name: $scope.editedGroupName,
                     members: $scope.addedUsers
-                });
+                }));
                 $scope.showTrash = true;
             };
 
@@ -192,6 +192,13 @@ angular.module('myApp')
 
             // TODO rest service to save many groups
             $scope.saveGroups = function() {
+
+                // ** HACK ** hard coded adding of a user to the first group
+                $scope.groups[0].members.push(new Member({
+                    user: new User($scope.users[3])
+                }))
+
+                $log.log('Clicked save groups')
                 for (var i = 0; i < $scope.groups.length; i++) {
                     restService.doSave($scope.groups[i]);
                 }

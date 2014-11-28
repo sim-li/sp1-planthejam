@@ -2,7 +2,7 @@
   <ptj-menu></ptj-menu>
 </div>
 <div class='container'>
-  <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
+  <div id='temporary-debug-output1'>users: '{{ users }}'</div>
   <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
   <!-- %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}' -->
   <div id='temporary-debug-output4'>groups: '{{ groups }}'</div>
@@ -57,6 +57,9 @@
             <ptj-search></ptj-search>
             <ptj-members></ptj-members>
             <br>
+          </div>
+          <div class='row' id='debug-the-groups-then-throw-away'>
+            <button class='btn btn-primary btn-sm' ng-click='saveGroups()' type='submit'>Save All Groups</button>
           </div>
           <div class='row'>
             <div class='form-group'>

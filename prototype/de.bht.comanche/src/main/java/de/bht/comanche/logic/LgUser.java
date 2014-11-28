@@ -10,7 +10,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
 
 @Entity
@@ -47,6 +49,9 @@ public class LgUser extends DaObject {
 	
 	public LgGroup save(final LgGroup group) {
         group.setUser(this);
+		for (LgMember member : group.getMembers()) {
+			save(member.setGroup(group));
+		}
 		return attach(group).save();
 	}
 	

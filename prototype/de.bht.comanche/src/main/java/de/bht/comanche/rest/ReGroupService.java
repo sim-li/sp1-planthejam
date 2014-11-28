@@ -1,6 +1,7 @@
 package de.bht.comanche.rest;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -8,9 +9,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import de.bht.comanche.logic.LgMember;
+
 import de.bht.comanche.logic.LgGroup;
+import de.bht.comanche.logic.LgMember;
 import de.bht.comanche.logic.LgTransaction;
+import de.bht.comanche.logic.LgUser;
 
 @Path("/group/")
 public class ReGroupService extends RestService {
@@ -41,18 +44,22 @@ public class ReGroupService extends RestService {
 		}.getResult();
 	}
 	
-	@Path("saveMember")
-	@POST
-	@Consumes("application/json")
-	@Produces({ "application/json" })
-	public LgMember saveMember(final LgGroup group, @Context final HttpServletRequest request) {
-		return new LgTransaction<LgMember>(request) {
-			@Override
-			public LgMember execute() throws Exception {
-				return startSession().save(new LgMember().setUser(getSession().getUser(), group));
-			}
-		}.getResult();
-	}
+	// useless this way
+	// - what you do now is: you save the logged-in user as new member
+	// - if you want to save a fresh member, you should get the user oid as parameter from the client
+	// - but maybe we don't need saveMember anyway?
+//	@Path("saveMember")
+//	@POST
+//	@Consumes("application/json")
+//	@Produces({ "application/json" })
+//	public LgMember saveMember(final LgGroup group, @Context final HttpServletRequest request) {
+//		return new LgTransaction<LgMember>(request) {
+//			@Override
+//			public LgMember execute() throws Exception {
+//				return startSession().save(new LgMember().setUser(getSession().getUser()).setGroup(group));
+//			}
+//		}.getResult();
+//	}
 	
 	@Path("delete")
 	@DELETE

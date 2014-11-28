@@ -11,7 +11,7 @@ angular.module('myApp')
     .controller('loginCtrl', ['$scope', '$rootScope', '$location', '$log', 'restService', 'patterns', 'User',
         function($scope, $rootScope, $location, $log, restService, patterns, User) {
 
-            var DUMMY_LOGIN = false;
+            var DUMMY_LOGIN = true;
 
             $scope.login = function(user) {
                 if (!loginIsValidFor(user)) {
@@ -20,7 +20,8 @@ angular.module('myApp')
                 }
                 if (DUMMY_LOGIN) {
                     user.name = 'Alice';
-                    user.password = 'yousnoozeyoulose';
+                    // user.password = 'yousnoozeyoulose';
+                    user.password = 'testtest';
                 }
                 call(restService.login, user, '/cockpit', 'Login erfolgreich.');
             };

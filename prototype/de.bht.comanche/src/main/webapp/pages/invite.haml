@@ -4,7 +4,7 @@
 .row
   %ptj-menu
 .container
-  / %div#temporary-debug-output1 users: '{{ users }}'
+  %div#temporary-debug-output1 users: '{{ users }}'
   / %div#temporary-debug-output2 invites: '{{ invites }}'
   / %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}'
   %div#temporary-debug-output4 groups: '{{ groups }}'
@@ -45,6 +45,8 @@
             %ptj-search
             %ptj-members
             %br
+          .row#debug-the-groups-then-throw-away
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveGroups()"} Save All Groups
           .row
             .form-group
               %label.col-sm-3.control-label{:for => "Location"}
