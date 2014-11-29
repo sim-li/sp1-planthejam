@@ -69,33 +69,6 @@ public class ReGroupService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class  RestSaveGroupFailure extends multex.Failure {}
 	
-	
-//	@Path("saveMember")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgMember saveMember(final LgUser user, final LgGroup group, @Context final HttpServletRequest request) {
-//		return new LgTransaction<LgMember>(request) {
-//			@Override
-//			public LgMember execute() throws multex.Failure {
-//				LgMember result = null;
-//				try {
-//					result = startSession().save(new LgMember().setUser(user).setGroup(group));
-//				} catch (Exception ex) {
-//					throw create(RestSaveMemberFailure.class, ex, group.getName(), group.getOid(), getSession().getUser().getName() );
-//				}
-//				return result;
-//			}
-//		}.getResult();
-//	}
-//	
-//	/**
-//	 * Could not save member in group "{0}" with oid "{1}" for user "{2}"
-//	 */
-//	@SuppressWarnings("serial")
-//	public static final class RestSaveMemberFailure extends multex.Failure {}
-//	
-	
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")
