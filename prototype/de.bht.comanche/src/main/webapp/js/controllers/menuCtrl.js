@@ -11,13 +11,16 @@ angular.module('myApp')
     .controller('menuCtrl', ['$scope', '$location', '$log', 'restService', function($scope, $location, $log, restService) {
 
         $scope.logout = function() {
-
-            // *** call rest -> logout to disable cookies ***
-            // *** if anything else needs to be done on the server for logout, do it now ***
-
             restService.logout();
             $log.log('Logout erfolgreich.');
             $location.path('/');
+        };
+
+        // TODO -> Account
+        $scope.editUser = function() {
+            $log.warn('editUser not accessible yet --> adapt implementation from editUser.js');
+            // $scope.tempUser = angular.copy($scope.user);
+            // $location.path('/editUser');
         };
 
     }]);

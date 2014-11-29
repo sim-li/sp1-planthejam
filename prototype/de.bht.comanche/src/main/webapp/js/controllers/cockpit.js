@@ -23,12 +23,6 @@ angular.module('myApp')
                 // $log.debug($scope.selectedInvite);
             };
 
-            // TODO -> Account
-            // $scope.editUser = function() {
-            //     $scope.tempUser = angular.copy($scope.user);
-            //     // $location.path('/editUser');
-            // };
-
             $scope.editInvite = function() {
                 if (!$scope.selectedInvite) {
                     $log.log('Keine Terminumfrage ausgewaehlt.');

@@ -1,72 +1,80 @@
+
+
+
+.row
+  %ptj-menu
 .container
-  .row
-    %ptj-menu
+  %div#temporary-debug-output1 users: '{{ users }}'
+  / %div#temporary-debug-output2 invites: '{{ invites }}'
+  / %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}'
+  %div#temporary-debug-output4 groups: '{{ groups }}'
+  /  QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route
   .row
     / search & results
     / sidebar
-    / %div#temporary-debug-output1 users: '{{ users }}'
-    / %div#temporary-debug-output0 invites: '{{ invites }}'
-    / %div#temporary-debug-output2 selectedInvite: '{{ selectedInvite }}'
-    /  QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route
-    / .col-md-2
-    /   %ptj-survey-select
+    .col-md-2
+      %ptj-survey-select
     .col-md-8
-      .row
-        .col-md-8
-          %h2
-            .item-wrapper
-              %a{"editable-text" => "selectedInvite.survey.name", :href => "#"}
-                {{selectedInvite.survey.name}}
-          %h4
-            .item-wrapper
-              %a{"editable-text" => "selectedInvite.survey.description", :href => "#"}
-                {{selectedInvite.survey.description}}
-        .col-md-4
-          .row
-            .btn-group.pull-right
-              %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "still_needs_a_model", "ng-click"=>"repeatedly=false"} Once
-              %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "still_needs_a_model", "ng-click"=>"repeatedly=true"} Repeatedly
-            %br/
-            %br/
-            %btn.btn-sm.btn-success.pull-right{"ng-click" => "showLiveButton=false", "ng-show" => "showLiveButton"}
-              Live
-              %span.glyphicon.glyphicon-bullhorn
-            %btn.btn-sm.btn-warning.pull-right{"ng-click" => "showLiveButton=true", "ng-show" => "!showLiveButton"}
-              Staged
-              %span.glyphicon.glyphicon-off
-      %br/
-      %ptj-search
-      %ptj-members
-      %br
       .panel.panel-primary
-        .panel-heading
-          .glyphicon.glyphicon-time
-          Survey Runtime
+        .panel-heading Create new Event
         .panel-body
-          %row
-            .col-md-9.col-md-offset-1
+          .row
+            .col-md-8
+              %h2
+                .item-wrapper
+                  %a{"editable-text" => "selectedInvite.survey.name", :href => "#"}
+                    {{selectedInvite.survey.name}}
+              %h4
+                .item-wrapper
+                  %a{"editable-text" => "selectedInvite.survey.description", :href => "#"}
+                    {{selectedInvite.survey.description}}
+            .col-md-4
               .row
-                .col-md-6
-                  %p.input-group
-                    %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "datepicker-popup" => "dd-MMMM-yyyy", "is-open" => "fromOpened", "max-date" => "'2015-06-22'", "min-date" => "minDate", "ng-model" => "dt", "ng-required" => "true", :type => "text"}
-                    %span.input-group-btn
-                      %button.btn.btn-default{"ng-click" => "openFrom($event)", :type => "button"}
-                        %i.glyphicon.glyphicon-calendar
-                  %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime1"}
-                .col-md-6
-                  %p.input-group
-                    %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "datepicker-popup" => "dd-MMMM-yyyy", "is-open" => "toOpened", "max-date" => "'2015-06-22'", "min-date" => "minDate", "ng-model" => "dt", "ng-required" => "true", :type => "text"}
-                    %span.input-group-btn
-                      %button.btn.btn-default{"ng-click" => "openTo($event)", :type => "button"}
-                        %i.glyphicon.glyphicon-calendar
-                  %timepicker.pull-right{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime2"}
-      %slider{:max => "", :min => "", "ng-model" => "sliders.sliderValue", :step => "", :value => ""}
+                .btn-group.pull-right
+                  %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "still_needs_a_model", "ng-click"=>"repeatedly=false"} Once
+                  %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "still_needs_a_model", "ng-click"=>"repeatedly=true"} Repeatedly
+                %br/
+                %br/
+                %btn.btn-sm.btn-success.pull-right{"ng-click" => "showLiveButton=false", "ng-show" => "showLiveButton"}
+                  Live
+                  %span.glyphicon.glyphicon-bullhorn
+                %btn.btn-sm.btn-warning.pull-right{"ng-click" => "showLiveButton=true", "ng-show" => "!showLiveButton"}
+                  Staged
+                  %span.glyphicon.glyphicon-off
+          .rpw
+            %ptj-search
+            %ptj-members
+            %br
+          .row#debug-the-groups-then-throw-away
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveGroups()"} Save All Groups
+          .row
+            .form-group
+              %label.col-sm-3.control-label{:for => "Location"}
+                From
+              .col-sm-5
+                %p.input-group
+                  %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "datepicker-popup" => "dd-MMMM-yyyy", "is-open" => "fromOpened", "max-date" => "'2015-06-22'", "min-date" => "minDate", "ng-model" => "dt", "ng-required" => "true", :type => "text"}/
+                  %span.input-group-btn
+                    %button.btn.btn-default{"ng-click" => "openFrom($event)", :type => "button"}
+                      %i.glyphicon.glyphicon-calendar
+              .col-sm-4
+                %timepicker{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime1"}
+            .form-group
+              %label.col-sm-3.control-label{:for => "Location"}
+                To
+              .col-sm-5
+                %p.input-group
+                  %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "datepicker-popup" => "dd-MMMM-yyyy", "is-open" => "toOpened", "max-date" => "'2015-06-22'", "min-date" => "minDate", "ng-model" => "dt", "ng-required" => "true", :type => "text"}/
+                  %span.input-group-btn
+                    %button.btn.btn-default{"ng-click" => "openTo($event)", :type => "button"}
+                      %i.glyphicon.glyphicon-calendar
+              .col-sm-4
+                %timepicker.pull-right{"hour-step" => "1", "minute-step" => "1", "ng-model" => "mytime2"}
+        .panel-footer
+          .col-md-offset-10
+            %button.btn.btn-default.btn-sm{:type => "reset"} Reset
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveInvite()"} Create
     .col-md-2
       %input-group{"ng-show"=>"repeatedly"}
         %input.form-control{"type"=>"text", "placeholder"=>"Frequency"}
         %input.form-control{"type"=>"text", "placeholder"=>"Distance"}
-  .row
-    .col-md-2
-    .col-md-8
-      %btn.pull-right{"type"=>"button", "class"=>"btn btn-primary", "ng-click" => "saveInvite()"} Save
-

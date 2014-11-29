@@ -7,8 +7,8 @@
 
 'use strict';
 
-angular.module('group', [])
-    .factory('Group', function(Survey) {
+angular.module('group', ['member'])
+    .factory('Group', ['Member', function(Member) {
 
         var Group = function(config) {
             if (!(this instanceof Group)) {
@@ -17,17 +17,23 @@ angular.module('group', [])
             config = config || {};
             this.oid = config.oid || '';
             this.name = config.name || '';
-            this.members = config.members || []; // e.g.: [{oid: 1, name: 'Alice'}, {oid: 2, name: 'Bob'}, {oid: 3, name: 'Carla'}]
+            // this.members = config.members || []; // e.g.: [{oid: 1, name: 'Alice'}, {oid: 2, name: 'Bob'}, {oid: 3, name: 'Carla'}]
+            this.members = config.members ? Member.importMany(config.members) : [];
         };
 
         Group.prototype.getModelId = function() {
             return 'group';
         };
 
-        Group.import = function(groups) {
-            for (var i = 0, len = groups.length; i < len; i++) {
-                groups[i] = new Group(groups[i]);
+        Group.importMany = function(rawGroups) {
+            if (!rawGroups) {
+                return rawGroups;
             }
+            var groups = [];
+            for (var i = 0; i < rawGroups.length; i++) {
+                groups.push(new Group(rawGroups[i]));
+            }
+            // console.log("imported " + rawGroups.length)
             return groups;
         };
 
@@ -35,9 +41,26 @@ angular.module('group', [])
             return {
                 'oid': this.oid,
                 'name': this.name,
-                // 'host': this.members
+                // 'members': this.members
+                'members': Member.exportMany(this.members)
             };
         };
 
+        // var importMembers = function(group) {
+        //     var members = gr
+        // };
+
+        // ++ Baustelle ++
+        // var exportMembers = function(group) {
+        //     var users = group.members;
+
+        //     var members = [];
+
+        //     members.push({
+        //         // oid: undefined,
+        //         user: {}
+        //     });
+        // };
+
         return (Group);
-    });
+    }]);

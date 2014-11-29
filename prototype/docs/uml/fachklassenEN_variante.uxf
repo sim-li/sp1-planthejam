@@ -4,8 +4,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>726</x>
-      <y>550</y>
+      <x>616</x>
+      <y>770</y>
       <w>429</w>
       <h>143</h>
     </coordinates>
@@ -22,8 +22,8 @@ generalAvailability : List&lt;TimerPreiod&gt;
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>275</x>
-      <y>143</y>
+      <x>209</x>
+      <y>132</y>
       <w>209</w>
       <h>110</h>
     </coordinates>
@@ -37,8 +37,8 @@ unit: TimeUnit</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1144</x>
-      <y>99</y>
+      <x>1078</x>
+      <y>88</y>
       <w>132</w>
       <h>99</h>
     </coordinates>
@@ -52,19 +52,19 @@ _repeatedly_</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>946</x>
-      <y>374</y>
-      <w>219</w>
-      <h>54</h>
+      <x>990</x>
+      <y>187</y>
+      <w>120</w>
+      <h>131</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>33;33;198;33</additional_attributes>
+    <additional_attributes>33;33;99;110</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>594</x>
-      <y>143</y>
+      <x>528</x>
+      <y>132</y>
       <w>495</w>
       <h>187</h>
     </coordinates>
@@ -83,8 +83,8 @@ determinedTimePeriod : TimePeriod
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1144</x>
-      <y>352</y>
+      <x>1089</x>
+      <y>242</y>
       <w>297</w>
       <h>110</h>
     </coordinates>
@@ -100,36 +100,36 @@ concreteAvailability : List&lt;TimePeriod&gt;
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>770</x>
-      <y>297</y>
-      <w>56</w>
-      <h>274</h>
+      <x>693</x>
+      <y>286</y>
+      <w>65</w>
+      <h>505</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..*
 m2=1..*
 r1=Host</panel_attributes>
-    <additional_attributes>33;253;33;33</additional_attributes>
+    <additional_attributes>33;484;44;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>924</x>
-      <y>297</y>
+      <x>858</x>
+      <y>286</y>
       <w>96</w>
-      <h>274</h>
+      <h>197</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1.*
 m2=1..*
 r1=Participant</panel_attributes>
-    <additional_attributes>55;253;55;33</additional_attributes>
+    <additional_attributes>55;176;55;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>770</x>
-      <y>396</y>
+      <x>704</x>
+      <y>385</y>
       <w>230</w>
       <h>77</h>
     </coordinates>
@@ -140,8 +140,8 @@ r1=Participant</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>275</x>
-      <y>429</y>
+      <x>209</x>
+      <y>418</y>
       <w>209</w>
       <h>88</h>
     </coordinates>
@@ -156,8 +156,8 @@ durationMins : int
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>275</x>
-      <y>275</y>
+      <x>209</x>
+      <y>264</y>
       <w>209</w>
       <h>110</h>
     </coordinates>
@@ -172,8 +172,8 @@ _Month_</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>385</x>
-      <y>550</y>
+      <x>957</x>
+      <y>638</y>
       <w>220</w>
       <h>66</h>
     </coordinates>
@@ -183,23 +183,10 @@ name : String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>572</x>
-      <y>561</y>
-      <w>175</w>
-      <h>54</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
-m1=1..1
-m2=0..*</panel_attributes>
-    <additional_attributes>154;33;33;33</additional_attributes>
-  </element>
-  <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>198</x>
-      <y>22</y>
+      <x>132</x>
+      <y>11</y>
       <w>363</w>
       <h>66</h>
     </coordinates>
@@ -211,8 +198,8 @@ Team: Comanche, 26.11.2014</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>495</x>
-      <y>737</y>
+      <x>220</x>
+      <y>726</y>
       <w>187</w>
       <h>66</h>
     </coordinates>
@@ -225,8 +212,8 @@ Team: Comanche, 26.11.2014</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>550</x>
-      <y>649</y>
+      <x>275</x>
+      <y>638</y>
       <w>54</w>
       <h>109</h>
     </coordinates>
@@ -236,14 +223,59 @@ Team: Comanche, 26.11.2014</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>451</x>
-      <y>583</y>
-      <w>296</w>
+      <x>946</x>
+      <y>671</y>
+      <w>131</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-&gt;
-m1=0..*
-m2=0..*</panel_attributes>
-    <additional_attributes>33;33;33;99;275;99</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>110;33;33;99</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>792</x>
+      <y>550</y>
+      <w>153</w>
+      <h>241</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>132;33;33;220</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>946</x>
+      <y>550</y>
+      <w>142</w>
+      <h>109</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>33;33;121;88</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>858</x>
+      <y>462</y>
+      <w>220</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Participant
+--
+name : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1012</x>
+      <y>671</y>
+      <w>142</w>
+      <h>241</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>33;220;121;33</additional_attributes>
   </element>
 </diagram>

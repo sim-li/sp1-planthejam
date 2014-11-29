@@ -70,6 +70,9 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 // if (LOG)  {
                 //     $log.log('REST: ' + url);
                 // }
+
+                $log.debug(data)
+
                 var deferred = $q.defer();
                 $http({
                     method: method || 'POST',
