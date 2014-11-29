@@ -9,7 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-
+import static multex.MultexUtil.create;
 import de.bht.comanche.logic.LgGroup;
 import de.bht.comanche.logic.LgMember;
 import de.bht.comanche.logic.LgTransaction;
@@ -25,23 +25,23 @@ public class ReGroupService extends RestService {
 	public List<LgGroup> get(@Context final HttpServletRequest request) {
 		return new LgTransaction<List<LgGroup>>(request) {
 			@Override
-			public List<LgGroup> execute() throws Exception {
-				List<LgGroup> groups = null;
+			public List<LgGroup> execute() throws multex.Failure {
+				List<LgGroup> result = null;
 				try {
-					groups = startSession().getGroups();
-				} catch (Exception e) {
-//					create new Multex
+					result = startSession().getGroups();
+				} catch (Exception ex) {
+					throw create(RestGetGroupsFailure.class, ex, getSession().getUser().getName());
 				}
-				return groups;
+				return result;
 			}
 		}.getResult();
 	}
 	
 	/**
-	 * Could not get group with id "{1}" and user id "{2}"
+	 * Could not get groups for user "{0}"
 	 */
 	@SuppressWarnings("serial")
-	public static final class LgGroupNotFoundExc extends multex.Failure {}
+	public static final class RestGetGroupsFailure extends multex.Failure {}
 	
 	
 	@Path("save")
@@ -51,28 +51,50 @@ public class ReGroupService extends RestService {
 	public LgGroup save(final LgGroup group, @Context final HttpServletRequest request) {
 		return new LgTransaction<LgGroup>(request) {
 			@Override
-			public LgGroup execute() throws Exception {
-				return startSession().save(group);
+			public LgGroup execute() throws multex.Failure {
+				LgGroup result = null;
+				try {
+					result = startSession().save(group);
+				} catch (Exception ex) {
+					throw create(RestSaveGroupFailure.class, ex, group.getName(), group.getOid(), getSession().getUser().getName());
+				}
+				return result;
 			}
 		}.getResult();
 	}
 	
-	// useless this way
-	// - what you do now is: you save the logged-in user as new member
-	// - if you want to save a fresh member, you should get the user oid as parameter from the client
-	// - but maybe we don't need saveMember anyway?
-//	@Path("saveMember")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgMember saveMember(final LgGroup group, @Context final HttpServletRequest request) {
-//		return new LgTransaction<LgMember>(request) {
-//			@Override
-//			public LgMember execute() throws Exception {
-//				return startSession().save(new LgMember().setUser(getSession().getUser()).setGroup(group));
-//			}
-//		}.getResult();
-//	}
+	/**
+	 * Could not save group "{0}" with oid "{1}" for user "{2}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class  RestSaveGroupFailure extends multex.Failure {}
+	
+	
+	@Path("saveMember")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgMember saveMember(final LgUser user, final LgGroup group, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgMember>(request) {
+			@Override
+			public LgMember execute() throws multex.Failure {
+				LgMember result = null;
+				try {
+					result = startSession().save(new LgMember().setUser(user).setGroup(group));
+				} catch (Exception ex) {
+					throw create(RestSaveMemberFailure.class, ex, group.getName(), group.getOid(), getSession().getUser().getName() );
+				}
+				return result;
+			}
+		}.getResult();
+	}
+	
+	/**
+	 * Could not save member in group "{0}" with oid "{1}" for user "{2}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestSaveMemberFailure extends multex.Failure {}
+	
 	
 	@Path("delete")
 	@DELETE
@@ -82,9 +104,21 @@ public class ReGroupService extends RestService {
 		return new LgTransaction<LgGroup>(request) {
 			@Override
 			public LgGroup execute() throws multex.Exc{
-				startSession().deleteGroup(oid);
+				try {
+					startSession().deleteGroup(oid);
+				} catch (Exception ex) {
+					throw create(RestDeleteGroupFailure.class, ex, oid, getSession().getUser().getName() );
+					
+				}
 				return null;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not delete group with oid "{0}" for user "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestDeleteGroupFailure extends multex.Failure {}
+	
 }

@@ -1,11 +1,11 @@
 package de.bht.comanche.persistence;
+import static multex.MultexUtil.create;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-
 import multex.Failure;
+
 /**
  * 
  * @author Simon Lischka
@@ -76,12 +76,22 @@ public class DaHibernateJpaPool implements DaPool {
 
 	@Override
 	public <E extends DaObject> E findOneByKey(Class<E> persistentClass,
-			String keyFieldName, Object keyFieldValue) {
+			String keyFieldName, Object keyFieldValue) throws DaFindOneByKeyFailure{
 		final List<E> results = findManyByKey(persistentClass, keyFieldName, keyFieldValue);
-		final E result = results.get(0);
+		E result = null;
+		if (results.get(0) == null){
+			throw create(DaFindOneByKeyFailure.class, persistentClass, keyFieldName, keyFieldValue);
+		}
+		result = results.get(0);
 		result.attach(this);
 		return result;
 	}
+	
+	/**
+	 * Could not found entry for class "{0}" with field "{1}" and value "{2}".
+	 */
+	@SuppressWarnings("serial")
+	public static final class DaFindOneByKeyFailure extends multex.Failure {}
 	
 	public <E extends DaObject> E findOneByTwoKeys(Class<E> persistentClass, String firstKeyFieldName,
 			Object firstKey, String secondKeyFieldName, Object secondKey) {

@@ -1,5 +1,7 @@
 package de.bht.comanche.rest;
 
+import static multex.MultexUtil.create;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +11,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 
@@ -24,15 +25,24 @@ public class ReUserService extends RestService {
 	public LgUser login(final LgUser i_user, @Context final HttpServletRequest request) {
 		return new LgTransaction<LgUser>(request) {
 			@Override
-			public LgUser execute() throws multex.Exc {
-				 //throw exc when login failure
-				final LgUser o_user = getSession()
-				    .login(i_user);
-				setUserName(request, o_user.getName());
+			public LgUser execute() throws multex.Failure {
+				LgUser o_user = null;
+				try {
+					o_user = getSession().login(i_user);
+					setUserName(request, o_user.getName());
+				} catch (Exception ex) {
+					throw create(RestLoginUserFailure.class, ex, i_user.getName());
+				}
 				return o_user;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not login user with name "{0}" and given password. The user name or password is incorrect.
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestLoginUserFailure extends multex.Failure {}
 	
 	@Path("register")
 	@POST
@@ -41,14 +51,24 @@ public class ReUserService extends RestService {
 	public LgUser register(final LgUser i_user, @Context final HttpServletRequest request) {
 		return new LgTransaction<LgUser>(request) {
 			@Override
-			public LgUser execute() throws multex.Exc {
-					final LgUser o_user = getSession()
-						.register(i_user);
-					setUserName(request, o_user.getName());
+			public LgUser execute() throws multex.Failure {
+					LgUser o_user = null;
+					try {
+						o_user = getSession().register(i_user);
+						setUserName(request, o_user.getName());
+					} catch (Exception ex) {
+						throw create(RestRegisterUserFailure.class, ex, i_user.getName());
+					}
 					return o_user;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not register user with name "{0}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestRegisterUserFailure extends multex.Failure {}
 
 	@Path("delete")
 	@DELETE
@@ -57,16 +77,23 @@ public class ReUserService extends RestService {
 	public LgUser delete(@Context final HttpServletRequest request) { // TODO: Don't send OID from client
 		return new LgTransaction<LgUser>(request) {
 			@Override
-			public LgUser execute() throws multex.Exc {
-				 // throw Exception if no info in request 
-				//must throw if Exception if null or user not found
-			    startSession()
-			        .deleteAccount();
-				removeUserName(request);
+			public LgUser execute() throws multex.Failure {
+			    try {
+					startSession().deleteAccount();
+					removeUserName(request);
+				} catch (Exception ex) {
+					throw create(RestDeleteUserFailure.class, ex, getSession().getUser().getName(), getSession().getUser().getOid());
+				}
 				return null;
 			}
 		}.getResult();
-	} 
+	}
+	
+	/**
+	 * Could not delete user "{0}" with oid "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestDeleteUserFailure extends multex.Failure {}
 	
 	@Path("update")
 	@POST
@@ -75,14 +102,25 @@ public class ReUserService extends RestService {
 	public LgUser update(final LgUser i_user, @Context final HttpServletRequest request) {
 		return new LgTransaction<LgUser>(request) {
 			@Override
-			public LgUser execute() throws multex.Exc {
-				    final LgUser user = getSession() 
-				    	.save(i_user);
-				    setUserName(request, user.getName());
+			public LgUser execute() throws multex.Failure {
+				    LgUser user;
+					try {
+						user = getSession().save(i_user);
+						setUserName(request, user.getName());
+					} catch (Exception ex) {
+						throw create(RestUserUpdateFailure.class, ex, i_user.getName(), i_user.getOid());
+					}
 				return null;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not update user "{0}" with oid "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestUserUpdateFailure extends multex.Failure {}
+	
 	
 //	/* TODO
 //	 * - implement DaUser.selectAllUsersWhereNameIsLike(String searchString)
@@ -95,7 +133,7 @@ public class ReUserService extends RestService {
 //	public LgInvite findUsers(final String searchString, @Context final HttpServletRequest request) {
 //		return new LgTransaction<List<LgUser>>(request) {
 //			@Override
-//			public List<LgUser> execute() throws Exception {
+//			public List<LgUser> execute() throws multex.Failure {
 //				return startSession().selectAllUsersWhereNameIsLike(searchString);
 //			}
 //		}.getResult();
@@ -108,11 +146,24 @@ public class ReUserService extends RestService {
 	public List<LgUser> getAllUsers(@Context final HttpServletRequest request) {
 		return new LgTransaction<List<LgUser>>(request) {
 			@Override
-			public List<LgUser> execute() throws Exception {
-				return getSession().getAllUsers();
+			public List<LgUser> execute() throws multex.Failure {
+				List<LgUser> result = null;
+				try {
+					result = getSession().getAllUsers();
+				} catch (Exception ex) {
+					throw create(RestGetAllUsersFailure.class, ex);
+				}
+				return result;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not found any user
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetAllUsersFailure extends multex.Failure {}
+	
 	
 	@Path("logout")
 	@POST
@@ -121,10 +172,21 @@ public class ReUserService extends RestService {
 	public Object logout(@Context final HttpServletRequest request) {
 		return new LgTransaction<Object>(request) {
 			@Override
-			public Object execute() throws Exception {
-				request.getSession().invalidate();
+			public Object execute() throws multex.Failure {
+				try {
+					request.getSession().invalidate();
+				} catch (Exception ex) {
+					throw create(RestLogoutUserFailure.class, ex, getSession().getUser().getName(), getSession().getUser().getOid());
+				}
 				return null;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Unable to logout user "{0}" with oid "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestLogoutUserFailure extends multex.Failure {}
+	
 }
