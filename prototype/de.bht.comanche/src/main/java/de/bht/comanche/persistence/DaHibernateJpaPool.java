@@ -78,7 +78,7 @@ public class DaHibernateJpaPool implements DaPool {
 	public <E extends DaObject> E findOneByKey(Class<E> persistentClass,
 			String keyFieldName, Object keyFieldValue) throws DaFindOneByKeyFailure{
 		final List<E> results = findManyByKey(persistentClass, keyFieldName, keyFieldValue);
-		E result = null;
+		final E result;
 		if (results.get(0) == null){
 			throw create(DaFindOneByKeyFailure.class, persistentClass, keyFieldName, keyFieldValue);
 		}
