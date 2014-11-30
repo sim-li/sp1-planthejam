@@ -1,6 +1,6 @@
 #-- Table of Contents ---------------------------------------------------------
 #
-# 1.    INSTALL DEPENDENCIES FOR THE WEBAPP WITH EXISTING CONFIGURATIONS IN "bower.json" and "restPaths.json"
+# 1.    INSTALL DEPENDENCIES FOR THE WEBAPP WITH EXISTING CONFIGURATIONS IN "bower.json" and "package.json"
 #   1.1.    Install the project dependencies locally
 #   1.2.    Add new dependencies to the project locally
 #   1.3.    Install tools globally for the Debian image
@@ -10,14 +10,14 @@
 #------------------------------------------------------------------------------
 
 
-## 1. - INSTALL DEPENDENCIES FOR THE WEBAPP WITH EXISTING CONFIGURATIONS IN "bower.json" and "restPaths.json" ##
+## 1. - INSTALL DEPENDENCIES FOR THE WEBAPP WITH EXISTING CONFIGURATIONS IN "bower.json" and "package.json" ##
 
 
 ## 1.1. - Install the project dependencies locally ##
 
 cd de.bht.comanche/src/main/webapp
 
-# check, that "bower.json" and "restPaths.json" exist - all required dependencies are defined there
+# check, that "bower.json" and "package.json" exist - all required dependencies are defined there
 # be sure to have installed Node.js, npm and Bower globally -> see below
 
 npm install
@@ -65,6 +65,10 @@ wget -c https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.de
 dpkg -i google-chrome-*.deb
 apt-get install -f
 
+# install a doc generator
+
+npm install -g yuidocjs
+
 # leave root mode
 exit
 
@@ -82,7 +86,7 @@ npm install
 
 
 # should already be done and thus not necessary for our project anymore
-# - check if "bower.json" and "restPaths.json" exist inside folder de.bht.comanche/src/main/webapp 
+# - check if "bower.json" and "package.json" exist inside folder de.bht.comanche/src/main/webapp
 # -> if so, you are already set up properly and skip all steps of this chapter
 
 
