@@ -51,7 +51,6 @@ public class LgUser extends DaObject {
         group.setUser(this);
 		for (LgMember member : group.getMembers()) {
 			save(member.setGroup(group));
-//			save(member);
 		}
 		return attach(group).save();
 	}

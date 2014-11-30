@@ -5,21 +5,21 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Invite', 'Survey', 'Group', 'Member', 'User', 'Type', 'TimeUnit', 'invites', 'groups', 'selectedInvite', 'users',
-        function($scope, $log, $location /*, $routeParams*/ , restService, Invite, Survey, Group, Member, User, Type, TimeUnit, invites, groups, selectedInvite, users) {
+    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Invite', 'Survey', 'Group', 'Member', 'User', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise',
+        function($scope, $log, $location /*, $routeParams*/ , restService, Invite, Survey, Group, Member, User, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise) {
 
             // resolve the promises passed to this route
-            $scope.selectedInvite = selectedInvite ? new Invite(selectedInvite) : new Invite({
+            $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : new Invite({
                 'survey': new Survey({
                     'name': 'Your survey',
                     'description': 'Say what it is all about',
                     'deadline': new Date()
                 })
             });
-            $scope.invites = Invite.importMany(invites);
-            $scope.groups = Group.importMany(groups);
+            $scope.invites = Invite.importMany(invitesPromise);
+            $scope.groups = Group.importMany(groupsPromise);
             // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users
-            $scope.users = User.importMany(users);
+            $scope.users = User.importMany(usersPromise);
 
 
             // for now: some dummy users

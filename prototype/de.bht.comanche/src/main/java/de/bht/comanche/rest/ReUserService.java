@@ -95,6 +95,29 @@ public class ReUserService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class RestDeleteUserFailure extends multex.Failure {}
 	
+	@Path("get")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgUser get(@Context final HttpServletRequest request) {
+		return new LgTransaction<LgUser>(request) {
+			@Override
+			public LgUser execute() throws multex.Failure {
+				try {
+					return startSession();
+				} catch (Exception ex) {
+					throw create(RestGetUserFailure.class, ex);
+				}
+			}
+		}.getResult();
+	}
+	
+	/**
+	 * Could not get user
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetUserFailure extends multex.Failure {}
+	
 	@Path("update")
 	@POST
 	@Consumes("application/json")
@@ -110,7 +133,7 @@ public class ReUserService extends RestService {
 					} catch (Exception ex) {
 						throw create(RestUserUpdateFailure.class, ex, i_user.getName(), i_user.getOid());
 					}
-				return null;
+				return user;
 			}
 		}.getResult();
 	}
