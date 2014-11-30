@@ -101,12 +101,12 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
             templateUrl: 'partials/invite/surveydetails.html'
         };
     })
-    .directive('ptjMembers', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'partials/invite/members.html'
-        };
-    })
+    // .directive('ptjMembers', function() {
+    //     return {
+    //         restrict: 'E',
+    //         templateUrl: 'partials/invite/members.html'
+    //     };
+    // })
     .directive('ptjSurveySelect', function() {
         return {
             restrict: 'E',

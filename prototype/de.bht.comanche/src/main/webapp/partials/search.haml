@@ -1,16 +1,16 @@
 .input-group
-  .input-group-btn{"ng-show" => "!showTrash && !isCollapsed"}
+  .input-group-btn{"ng-show" => "!showTrash && !memberListIsCollapsed"}
     %button.btn.btn-default{"ng-click" => "addGroup()", :type => "button"}
       %span.glyphicon.glyphicon-plus
-  .input-group-btn{"ng-show" => "showTrash && !isCollapsed"}
+  .input-group-btn{"ng-show" => "showTrash && !memberListIsCollapsed"}
     %button.btn.btn-default{"ng-click" => "deleteGroup()", :type => "button"}
       %span.glyphicon.glyphicon-trash
   .input-group-addon
     %div.item-wrapper
-      %a{"editable-text" => "editedGroupName", :href => "#"}    
+      %a{"editable-text" => "selectedGroup.name", :href => "#"}
         %b
-          %span.glyphicon.glyphicon-star 
-          {{editedGroupName}}
+          %span.glyphicon.glyphicon-star
+          {{selectedGroup.name}}
   .input-group-btn
     %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
       %span.caret
@@ -19,7 +19,7 @@
         %a{"ng-click" => "selectGroup(group.name)"}
           {{group.name}}
         %li.divider
-  %input.form-control{"ng-model" => "userSelected", :placeholder => "Search user...", :type => "text", :typeahead => "user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5"}
+  %input.form-control{"ng-model" => "selectedUser", :placeholder => "Search user...", :type => "text", :typeahead => "user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5"}
   .input-group-btn
     %button.btn.btn-default{"ng-click" => "switchDetailPanel()", :type => "button"}
       %span.glyphicon.glyphicon-resize-vertical

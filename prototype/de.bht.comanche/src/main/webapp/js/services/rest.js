@@ -36,6 +36,12 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                     'getMany': '/getGroups',
                     'save': '/save',
                     'delete': '/delete'
+                },
+                'member': {
+                    'path': '/member',
+                    // 'get': '/get',
+                    // 'save': '/save',
+                    'delete': '/delete'
                 }
             };
 

@@ -2,10 +2,12 @@
   <ptj-menu></ptj-menu>
 </div>
 <div class='container'>
-  <div id='temporary-debug-output1'>users: '{{ users }}'</div>
+  <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
   <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
   <!-- %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}' -->
-  <div id='temporary-debug-output4'>groups: '{{ groups }}'</div>
+  <!-- %div#temporary-debug-output4 groups: '{{ groups }}' -->
+  <!-- %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}' -->
+  <!-- %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}' -->
   <!-- QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route -->
   <div class='row'>
     <!-- search & results -->
@@ -55,12 +57,39 @@
           </div>
           <div class='rpw'>
             <ptj-search></ptj-search>
-            <ptj-members></ptj-members>
+            <!-- %ptj-members -->
+            <div collapse='memberListIsCollapsed' id='ptj-members'>
+              <div class='well well-sm'>
+                <div class='container-fluid'>
+                  <div class='btn-group'>
+                    <span ng-repeat='member in selectedGroup.members'>
+                      <button class='btn btn-default' ng-click='removeMember($index)' type='button'>
+                        {{member.user.name}}
+                        <span class='badge'>
+                          <span class='glyphicon glyphicon-remove'></span>
+                        </span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
             <br>
           </div>
+          <!-- DEBUGGING THE GROUPS >>> -->
           <div class='row' id='debug-the-groups-then-throw-away'>
+            <div class='list-group col-md-4' id='groupList'>
+              <!-- %a.list-group-item{"ng-click" => "selectGroup(group);", :href => "", "ng-repeat" => "group in groups"} {{group.name}} -->
+              <!-- %div.list-group-item{"ng-repeat" => "group in groups"} -->
+              <!-- %a.list-group-item{"ng-click" => "selectGroup(group);", :href => ""} {{group.name}} -->
+              <!-- %div{"ng-repeat" => "member in group.members"} {{member.user}} -->
+            </div>
+            <!-- %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "addGroup()"} Clone Selected Group -->
+            <button class='btn btn-primary btn-sm' ng-click='addNewGroup()' type='submit'>Add New Group</button>
+            <button class='btn btn-primary btn-sm' ng-click='deleteSelectedGroup()' type='submit'>Delete Selected Group</button>
             <button class='btn btn-primary btn-sm' ng-click='saveGroups()' type='submit'>Save All Groups</button>
           </div>
+          <!-- <<< DEBUGGING THE GROUPS -->
           <div class='row'>
             <div class='form-group'>
               <label class='col-sm-3 control-label' for='Location'>

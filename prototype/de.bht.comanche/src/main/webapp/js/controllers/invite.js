@@ -18,16 +18,9 @@ angular.module('myApp')
             });
             $scope.invites = Invite.importMany(invites);
             $scope.groups = Group.importMany(groups);
+            // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users
             $scope.users = User.importMany(users);
 
-            // $log.log('selectedInvite: ');
-            // $log.log($scope.selectedInvite);
-
-            // TODO - the users should be passed when the route is called
-            //      - later there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database
-            // $scope.users = users;
-            // TODO - the selected invite should be passed when the route is called
-            // $scope.invite = invite;
 
             // for now: some dummy users
             // $scope.users = [{
@@ -53,93 +46,128 @@ angular.module('myApp')
             //     email: 'sb@gmail.com'
             // }];
 
-            // $scope.surveyTitle = 'Lets have a beer, guys';
-            // $scope.surveyDescription = 'This will a a really casual get together with the uppermose style etiquette. Eventhough there' + 'will be beer involved, we will not get to the limits of our physical capacities.';
-            $scope.editedGroupName = '';
-            $scope.selectedGroupName = '';
+            // $scope.selectedGroup = $scope.groups[0] || new Group();
+
+            $scope.selectedUser = {
+                name: ''
+            };
+
+            $scope.memberListIsCollapsed = true;
             $scope.showTrash = true;
-            $scope.addedUsers = [];
-            $scope.isCollapsed = true;
-            $scope.userSelected = undefined;
             $scope.dt = new Date();
             $scope.showLiveButton = true;
             $scope.repeatedly = false;
             $scope.toOpened = false;
             $scope.fromOpened = false;
 
-            $scope.$watch('editedGroupName', function() {
-                if ($scope.selectedGroupName === $scope.editedGroupName) {
-                    $scope.showTrash = true;
-                } else {
-                    $scope.showTrash = false;
-                    changeGroupName($scope.selectedGroupName, $scope.editedGroupName);
-                }
-            });
+            // $scope.$watch('selectedGroup', function() {
+            //     // if ($scope.selectedGroupName === $scope.editedGroupName) {
+            //     if ($scope.selectedGroup.name === $scope.editedGroupName) {
+            //         $scope.showTrash = true;
+            //     } else {
+            //         $scope.showTrash = false;
+            //         changeGroupName($scope.selectedGroup.name, $scope.editedGroupName);
+            //     }
+            // });
 
-            $scope.$watch('userSelected', function() {
-                if ($scope.userSelected === undefined || $scope.userSelected.name === undefined) {
+            $scope.$watch('selectedUser', function() {
+                // if ($scope.selectedUser === undefined || $scope.selectedUser.name === undefined) {
+                if (!$scope.selectedUser.name) {
                     return;
                 }
-                for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
-                    if ($scope.addedUsers[i] === $scope.userSelected) {
-                        $scope.isCollapsed = false;
+                $scope.memberListIsCollapsed = false;
+                var members = $scope.selectedGroup.members;
+                for (var i = 0, len = members.length; i < len; i++) {
+                    if (members[i].user.oid === $scope.selectedUser.oid) {
                         return;
                     }
                 }
-                $scope.addedUsers.push($scope.userSelected);
-                $scope.isCollapsed = false;
+                members.push(new Member({
+                    user: $scope.selectedUser
+                }));
             });
 
-            $scope.addGroup = function() {
-                if ($scope.groups.length <= 0) {
-                    $scope.groups.push({
-                        name: $scope.editedGroupName,
-                        members: $scope.addedUsers
-                    });
-                    $scope.selectedGroupName = $scope.editedGroupName;
-                    $scope.showTrash = true;
-                    return;
-                }
-                changeGroupName($scope.editedGroupName, $scope.selectedGroupName);
-                $scope.groups.push(new Group({
-                    name: $scope.editedGroupName,
-                    members: $scope.addedUsers
+            // $scope.addGroup = function() {
+            //     // if ($scope.groups.length > 0) {
+            //     // if ($scope.selectedGroup) {
+            //     changeGroupName($scope.editedGroupName, $scope.selectedGroup.name);
+            //     // }
+            //     $scope.groups.push(new Group({
+            //         name: 'Copy of ' + $scope.selectedGroup.name, // FIXME
+            //         members: $scope.selectedGroup.members
+            //     }));
+            //     $scope.selectedGroup = $scope.editedGroupName; // FIXME
+            //     $scope.showTrash = true;
+            // };
+
+            $scope.addNewGroup = function() {
+                restService.doSave(new Group({
+                    name: 'Your new group'
                 }));
-                $scope.showTrash = true;
+
+                restService.doGetMany(Group)
+                    .then(function(success) {
+                        $scope.groups = Group.importMany(success);
+                        selectFirstOrDefaultGroup();
+                    } /*, function(error) { $log.log(error); }*/ );
             };
 
-            $scope.deleteGroup = function() {
-                var index = find($scope.groups, 'name', $scope.selectedGroupName);
-                if (index === -1) {
+            $scope.deleteSelectedGroup = function() {
+                if (!$scope.selectedGroup) {
                     return;
                 }
-                $scope.groups.splice(index, 1);
-                setDefaultGroup();
+                for (var i in $scope.groups) {
+                    if ($scope.groups[i].oid === $scope.selectedGroup.oid) {
+                        $scope.groups.splice(i, 1);
+                    }
+                }
+
+                restService.doDelete($scope.selectedGroup)
+                    .then(function(success) {
+                        $scope.selectedGroup = $scope.groups[0] || new Group({
+                            name: 'Your new group'
+                        });
+                    } /*, function(error) { $log.log(error); }*/ );
             };
+
+            // $scope.deleteGroup = function() {
+            //     var index = find($scope.groups, 'name', $scope.selectedGroup.name);
+            //     if (index === -1) {
+            //         return;
+            //     }
+            //     $scope.groups.splice(index, 1);
+            //     selectFirstOrDefaultGroup();
+            // };
 
             $scope.hideTrash = function() {
                 $scope.showTrash = false;
             };
 
             $scope.switchDetailPanel = function() {
-                if ($scope.isCollapsed) {
+                if ($scope.memberListIsCollapsed) {
                     $scope.openDetailPanel();
                 } else {
-                    $scope.isCollapsed = true;
+                    $scope.memberListIsCollapsed = true;
                 }
             };
 
             $scope.openDetailPanel = function() {
-                if ($scope.addedUsers.length <= 0) {
-                    return;
-                }
-                $scope.isCollapsed = false;
+                // if ($scope.addedUsers.length <= 0) {
+                //     return;
+                // }
+                $scope.memberListIsCollapsed = false;
             };
 
             $scope.removeMember = function(index) {
-                $scope.addedUsers.splice(index, 1);
-                if ($scope.addedUsers.length <= 0) {
-                    $scope.isCollapsed = true;
+                var members = $scope.selectedGroup.members;
+                var member = members[index];
+                if (member.oid) {
+                    restService.doDelete(member);
+                    // .then(function(success) {} /*, function(error) { $log.log(error); }*/ );
+                }
+                members.splice(index, 1);
+                if (members.length <= 0) {
+                    $scope.memberListIsCollapsed = true;
                 }
             };
 
@@ -151,10 +179,8 @@ angular.module('myApp')
                 if (group === -1) {
                     return;
                 }
-                $scope.selectedGroupName = group.name;
+                $scope.selectedGroup = group;
                 $scope.editedGroupName = group.name;
-                $scope.addedUsers = [];
-                $scope.addedUsers = group.members;
                 $scope.showTrash = true;
                 // $scope.openDetailPanel();
             };
@@ -162,6 +188,7 @@ angular.module('myApp')
             $scope.clear = function() {
                 $scope.dt = null;
             };
+
             // Disable weekend selection
             $scope.disabled = function(date, mode) {
                 return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
@@ -193,30 +220,18 @@ angular.module('myApp')
             // TODO rest service to save many groups
             $scope.saveGroups = function() {
 
-                // ** HACK ** hard coded adding of a user to the first group
-                $scope.groups[0].members.push(new Member({
-                    user: new User($scope.users[3])
-                }))
-
-                $log.log('Clicked save groups')
+                $log.log('Saving all groups');
                 for (var i = 0; i < $scope.groups.length; i++) {
                     restService.doSave($scope.groups[i]);
                 }
                 $location.path('/invite');
             };
 
-            var setDefaultGroup = function() {
-                var hasEntries = $scope.groups.length > 0 && $scope.groups[0].name !== undefined;
-                var groupName;
-                if (hasEntries) {
-                    groupName = $scope.groups[0].name;
-                    $scope.addedUsers = $scope.groups[0].members;
-                } else {
-                    groupName = '[New group]';
-                    $scope.addedUsers = [];
-                }
-                $scope.editedGroupName = groupName;
-                return groupName;
+            var selectFirstOrDefaultGroup = function() {
+                $scope.selectedGroup = $scope.groups[0] || new Group({
+                    name: 'Your new group'
+                });
+                return $scope.selectedGroup;
             };
 
             var removeEmptyGroups = function() {
@@ -246,6 +261,7 @@ angular.module('myApp')
                 return $scope.groups[index];
             };
 
+            // TODO simplify
             var find = function(array, key, value) {
                 var i = array.length;
                 while (i--) {
@@ -258,8 +274,8 @@ angular.module('myApp')
             };
 
             $scope.toggleMin();
-            setDefaultGroup();
-            $scope.selectGroup($scope.editedGroupName);
+            selectFirstOrDefaultGroup();
+            // $scope.selectGroup($scope.editedGroupName);
 
         }
     ]);

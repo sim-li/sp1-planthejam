@@ -15,12 +15,12 @@ angular.module('member', ['user'])
                 return new Member(config);
             }
             config = config || {};
-        this.oid = config.oid /* || ''*/ ;
+            this.oid = config.oid /* || ''*/ ;
             this.user = new User(config.user);
         };
 
         Member.prototype.getModelId = function() {
-            return 'Member';
+            return 'member';
         };
 
         Member.prototype.export = function() {
