@@ -5,29 +5,29 @@ import static multex.MultexUtil.create;
 import java.util.List;
 
 import de.bht.comanche.persistence.DaApplication;
-import de.bht.comanche.persistence.DaObject;
 import de.bht.comanche.persistence.DaPool;
 
 public class LgSession {
+	
 	private final DaApplication application;
 	private final DaPool pool;
 	private LgUser user;
 
 	public LgSession() {
-		application = new DaApplication();
-		pool = application.getPool();
-		user = null;
+		this.application = new DaApplication();
+		this.pool = this.application.getPool();
+		this.user = null;
 	}
 	
-	public LgUser startFor(String userName) {
+	public LgUser startFor(final String userName) {
 		// throw exc when user not found
-		user = pool.findOneByKey(LgUser.class, "NAME", userName); 
-		return user;
+		this.user = this.pool.findOneByKey(LgUser.class, "NAME", userName); 
+		return this.user;
 	}
 	
-	public LgUser findByName(String userName) {
+	public LgUser findByName(final String userName) {
 		// throw exc when user not found
-		return pool.findOneByKey(LgUser.class, "NAME", userName);
+		return this.pool.findOneByKey(LgUser.class, "NAME", userName);
 	}
 	
 	public LgUser save(final LgUser user) {
@@ -36,16 +36,16 @@ public class LgSession {
 		return o_user; 
 	}	
 
-	public LgUser register(LgUser i_user) { // Throw exception when DB error
+	public LgUser register(final LgUser i_user) { // Throw exception when DB error
 		// or failure when user already set in class
-		pool.insert(i_user);
+		this.pool.insert(i_user);
 		this.user = i_user;
 		return this.user;
 	}
 	
-	public LgUser login(LgUser i_user) {
+	public LgUser login(final LgUser i_user) {
 		//throw failure when user already set in class
-		this.user = pool.findOneByKey(LgUser.class, "NAME", i_user.getName());
+		this.user = this.pool.findOneByKey(LgUser.class, "NAME", i_user.getName());
 		if (this.user == null) {
 			throw create(LgNoUserWithThisNameExc.class, i_user.getName());
 		}
@@ -54,7 +54,6 @@ public class LgSession {
 		}
 		return this.user;
 	}
-	
 
 	/**
 	 * No user with name "{0}" found in the database
@@ -70,15 +69,15 @@ public class LgSession {
 	}
 
 	public void beginTransaction() {
-		application.beginTransaction();
+		this.application.beginTransaction();
 	}
 
-	public void endTransaction(boolean success) {
-		application.endTransaction(success);
+	public void endTransaction(final boolean success) {
+		this.application.endTransaction(success);
 	}
 
 
-	/**
+	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
 	 * # hashCode(), toString()
@@ -86,20 +85,19 @@ public class LgSession {
 	 */
 
 	protected DaPool getPool() {
-		return pool;
+		return this.pool;
 	}
 	
 	public LgUser getUser() {
-		return user;
+		return this.user;
 	}
 	
-	public void setUser(LgUser user) {
+	public void setUser(final LgUser user) {
 		this.user = user;
 	}
 	
 	public List<LgUser> getAllUsers() {
 //		return pool.findManyByQuery(LgUser.class, null, "SELECT * FROM " + LgUser.class.getSimpleName(), new Object[]{  });
-		return pool.findAll(LgUser.class);
+		return this.pool.findAll(LgUser.class);
 	}
-
 }

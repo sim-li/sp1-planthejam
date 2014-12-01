@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,7 +19,9 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
 public class LgUser extends DaObject {
+	
 	private static final long serialVersionUID = 1L;
+	
 	@Column(unique=true, nullable=false)
 	private String name;
 	private String tel;
@@ -34,6 +37,11 @@ public class LgUser extends DaObject {
 	@OneToOne(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
 	private LgMember member;
 	
+	public LgUser() {
+		this.invites = new ArrayList<LgInvite>();
+		this.groups = new ArrayList<LgGroup>();
+	}
+	
 	public LgInvite save(final LgInvite invite) {
         invite.setUser(this);
 		return attach(invite).save();
@@ -43,28 +51,28 @@ public class LgUser extends DaObject {
 		delete();
 	}
 
-	public void deleteInvite(final long oid) {
-		getInvite(oid).delete();
+	public void deleteInvite(final long inviteOid) {
+		getInvite(inviteOid).delete();
 	}
 	
 	public LgGroup save(final LgGroup group) {
         group.setUser(this);
-		for (LgMember member : group.getMembers()) {
+		for (final LgMember member : group.getMembers()) {
 			save(member.setGroup(group));
 		}
+		// TODO maybe it is better to override save() in LgGroup and to place all the above lines of this method there
 		return attach(group).save();
 	}
 	
-	public void deleteGroup(final long oid) {
-		getGroup(oid).delete();
+	public void deleteGroup(final long groupOid) {
+		getGroup(groupOid).delete();
 	}
 	
-	public LgGroup getGroup(final long oid) {
-		return search(getGroups(), oid);
+	public LgGroup getGroup(final long groupOid) {
+		return search(getGroups(), groupOid);
 	}
 	
 	public LgMember save(final LgMember member) {
-//		member.setUser(this);
 		return attach(member).save();
 	}
 	
@@ -72,27 +80,26 @@ public class LgUser extends DaObject {
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
 	}
 	
-	public boolean passwordMatchWith(LgUser user) {
-		final String password = user.getPassword();
+	public boolean passwordMatchWith(final LgUser user) {
 		if (this.password == null) {
-			return false;
+			return false; // TODO should it be possible/allowed to have no password? if no -> should throw exception
 		}
-		return this.password.equals(password);
+		return this.password.equals(user.getPassword());
 	}
 
-	public LgInvite getInvite(final long oid) {
-		return search(invites, oid);
+	public LgInvite getInvite(final long inviteOid) {
+		return search(this.invites, inviteOid);
 	}
 	
 	public void remove(final LgInvite invite) {
-		invites.remove(invite);
+		this.invites.remove(invite);
 	}
 	
 	public void remove(final LgGroup group) {
-		groups.remove(group);
+		this.groups.remove(group);
 	}
 	
-	/**
+	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
 	 * # hashCode(), toString()
@@ -101,105 +108,55 @@ public class LgUser extends DaObject {
 
 	@JsonIgnore
 	public List<LgInvite> getInvites() {
-		return invites;
+		return this.invites;
 	}
 	
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
-		return groups;
+		return this.groups;
 	}
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public LgUser setName(String name) {
+	public LgUser setName(final String name) {
 		this.name = name;
 		return this;
 	}
 
 	public String getTel() {
-		return tel;
+		return this.tel;
 	}
 
-	public LgUser setTel(String tel) {
+	public LgUser setTel(final String tel) {
 		this.tel = tel;
 		return this;
 	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
-	public LgUser setEmail(String email) {
+	public LgUser setEmail(final String email) {
 		this.email = email;
 		return this;
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
-	public LgUser setPassword(String password) {
+	public LgUser setPassword(final String password) {
 		this.password = password;
 		return this;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((invites == null) ? 0 : invites.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LgUser other = (LgUser) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (invites == null) {
-			if (other.invites != null)
-				return false;
-		} else if (!invites.equals(other.invites))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (tel == null) {
-			if (other.tel != null)
-				return false;
-		} else if (!tel.equals(other.tel))
-			return false;
-		return true;
-	}
-
+	
 	@Override
 	public String toString() {
-		return "LgUser [name=" + name + ", tel=" + tel + ", email=" + email
-				+ ", password=" + password +
-				", invites=" + invites + "]" +
-				"OID>: " + getOid();
+		return String
+				.format("LgUser [name=%s, tel=%s, email=%s, password=%s, invites=%s, groups=%s, member=%s, oid=%s, pool=%s]",
+						name, tel, email, password, invites, groups, member,
+						oid, pool);
 	}
 }

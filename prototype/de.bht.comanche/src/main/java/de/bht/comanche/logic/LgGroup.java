@@ -1,7 +1,9 @@
 package de.bht.comanche.logic;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,9 +18,9 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "group")
 public class LgGroup extends DaObject{
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@NotNull
 	@Column
 	private String name;
@@ -26,51 +28,62 @@ public class LgGroup extends DaObject{
 	@NotNull
 	@ManyToOne
 	private LgUser user;
-		
+
 	@OneToMany(mappedBy="group", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	private List<LgMember> members;
-	
-	
+
+	public LgGroup() {
+		this.members = new ArrayList<LgMember>();
+	}
+
 	public LgMember getMember(final long oid) {
-		return search(members, oid);
+		return search(this.members, oid);
 	}
-	
+
 	public void deleteMember(final long oid) {
-		search(members, oid).delete();
+		search(this.members, oid).delete();
 	}
-	
-	public void deleteUser(final long oid) {
-		for (LgMember member : members) {
-			if (member.getUser().getOid() == oid) {
-				member.getUser().remove(this);
-				members.remove(member);
+
+	public void deleteUser(final long userOid) {
+		for (final LgMember member : this.members) {
+			final LgUser user = member.getUser();
+			if (user.getOid() == userOid) {
+				user.remove(this);
+				this.members.remove(member);
 			}
 		}
 	}
-	
+
 	public List<LgUser> getUsers() {
-		List<LgUser> users = new LinkedList<LgUser>();
-		for(LgMember member : members) {
+		final List<LgUser> users = new LinkedList<LgUser>();
+		for (final LgMember member : this.members) {
 			users.add(member.getUser());
 		}
 		return users;
 	}
-	
+
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public LgGroup setName(String name) {
+	public LgGroup setName(final String name) {
 		this.name = name;
 		return this;
 	}
-	
-	public LgGroup setUser(LgUser user) {
+
+	public LgGroup setUser(final LgUser user) {
 		this.user = user;
 		return this;
 	}
-	
+
 	public List<LgMember> getMembers() {
-		return members;
+		return this.members;
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"LgGroup [name=%s, user=%s, members=%s, oid=%s, pool=%s]",
+				name, user, members, oid, pool);
 	}
 }

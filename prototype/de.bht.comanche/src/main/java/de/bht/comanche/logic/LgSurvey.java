@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,9 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "survey")
 public class LgSurvey extends DaObject {
+	
 	private static final long serialVersionUID = 1L;
+	
 	private String name;
 	private String description;
 	private int frequencyDist;
@@ -42,7 +45,6 @@ public class LgSurvey extends DaObject {
 	@Enumerated(EnumType.STRING)
 	private LgTimeUnit frequencyTimeUnit;
 
-	//Is survey from invite class add comment
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<LgInvite> invites;
@@ -50,8 +52,13 @@ public class LgSurvey extends DaObject {
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<LgTimePeriod> possibleTimePeriods;
+	
+	public LgSurvey() {
+		this.invites = new ArrayList<LgInvite>();
+		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
+	}
 
-	/**
+	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
 	 * # hashCode(), toString()
@@ -59,79 +66,79 @@ public class LgSurvey extends DaObject {
 	 */
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public LgSurvey setName(String name) {
+	public LgSurvey setName(final String name) {
 		this.name = name;
 		return this;
 	}
 
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
-	public LgSurvey setDescription(String description) {
+	public LgSurvey setDescription(final String description) {
 		this.description = description;
 		return this;
 	}
 
 	public int getFrequencyDist() {
-		return frequencyDist;
+		return this.frequencyDist;
 	}
 
-	public LgSurvey setFrequencyDist(int frequencyDist) {
+	public LgSurvey setFrequencyDist(final int frequencyDist) {
 		this.frequencyDist = frequencyDist;
 		return this;
 	}
 
 	public Date getDeadline() {
-		return deadline;
+		return this.deadline;
 	}
 
-	public LgSurvey setDeadline(Date deadline) {
+	public LgSurvey setDeadline(final Date deadline) {
 		this.deadline = deadline;
 		return this;
 	}
 
 	public LgSurveyType getType() {
-		return type;
+		return this.type;
 	}
 
-	public LgSurvey setType(LgSurveyType type) {
+	public LgSurvey setType(final LgSurveyType type) {
 		this.type = type;
 		return this;
 	}
 
 	public LgTimeUnit getFrequencyTimeUnit() {
-		return frequencyTimeUnit;
+		return this.frequencyTimeUnit;
 	}
 
-	public LgSurvey setFrequencyTimeUnit(LgTimeUnit frequencyTimeUnit) {
+	public LgSurvey setFrequencyTimeUnit(final LgTimeUnit frequencyTimeUnit) {
 		this.frequencyTimeUnit = frequencyTimeUnit;
 		return this;
 	}
 
 	@JsonIgnore
 	public List<LgInvite> getInvites() {
-		return invites;
+		return this.invites;
 	}
 
-	public LgSurvey setInvites(List<LgInvite> invites) {
+	public LgSurvey setInvites(final List<LgInvite> invites) {
 		this.invites = invites;
 		return this;
 	}
 
 	public List<LgTimePeriod> getPossibleTimePeriods() {
-		return possibleTimePeriods;
+		return this.possibleTimePeriods;
 	}
 
-	public LgSurvey setPossibleTimePeriods(List<LgTimePeriod> possibleTimePeriods) {
+	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> possibleTimePeriods) {
 		this.possibleTimePeriods = possibleTimePeriods;
 		return this;
 	}
 
-	public void updateWith(LgSurvey other) {
+	public void updateWith(final LgSurvey other) {
 		this.name = other.name;
 		this.description = other.description;
 		this.frequencyDist = other.frequencyDist;
@@ -144,7 +151,15 @@ public class LgSurvey extends DaObject {
 
 	@Override
 	public <E extends DaObject> E save() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("LgSurvey.save() is not implemented");
+	}
+
+	@Override
+	public String toString() {
+		return String
+				.format("LgSurvey [name=%s, description=%s, frequencyDist=%s, deadline=%s, type=%s, frequencyTimeUnit=%s, invites=%s, possibleTimePeriods=%s, oid=%s, pool=%s]",
+						name, description, frequencyDist, deadline, type,
+						frequencyTimeUnit, invites, possibleTimePeriods, oid,
+						pool);
 	}
 }

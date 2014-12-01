@@ -1,6 +1,5 @@
 package de.bht.comanche.logic;
 
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -12,6 +11,7 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "member")
 public class LgMember extends DaObject{
+	
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull
@@ -23,16 +23,22 @@ public class LgMember extends DaObject{
 	private LgUser user;
 	
 	public LgUser getUser() {
-		return user;
+		return this.user;
 	}
 	
-	public LgMember setUser(LgUser user) {
+	public LgMember setUser(final LgUser user) {
 		this.user = user;
 		return this;
 	}
 	
-	public LgMember setGroup(LgGroup group) {
+	public LgMember setGroup(final LgGroup group) {
 		this.group = group;
 		return this;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return String.format("LgMember [group=%s, user=%s, oid=%s, pool=%s]",
+				group, user, oid, pool);
+	}
 }
