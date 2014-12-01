@@ -37,19 +37,19 @@ public class LgGroupTest {
 		alice.setName("Alice");
 		alice.setEmail("test@test.de");
 		alice.setPassword("testtest");
-		session.save(alice);
+		session.register(alice);
 		
 		final LgUser bob = new LgUser();
 		bob.setName("Bob");
 		bob.setEmail("bob@test.de");
 		bob.setPassword("testtest");
-		session.save(bob);
+		session.register(bob);
 		
 		final LgUser pit = new LgUser();
 		pit.setName("Pit");
 		pit.setEmail("pit@test.de");
 		pit.setPassword("testtest");
-		session.save(pit);
+		session.register(pit);
 		session.getApplication().endTransaction(true);	
 	}
 	

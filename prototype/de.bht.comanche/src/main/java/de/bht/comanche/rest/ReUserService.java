@@ -126,14 +126,14 @@ public class ReUserService extends RestService {
 		return new LgTransaction<LgUser>(request) {
 			@Override
 			public LgUser execute() throws multex.Failure {
-				    LgUser user;
+				    final LgUser o_user;
 					try {
-						user = getSession().save(i_user);
-						setUserName(request, user.getName());
+						o_user = startSession().save(i_user);
+						setUserName(request, o_user.getName());
 					} catch (Exception ex) {
 						throw create(RestUserUpdateFailure.class, ex, i_user.getName(), i_user.getOid());
 					}
-				return user;
+				return o_user;
 			}
 		}.getResult();
 	}
@@ -172,7 +172,7 @@ public class ReUserService extends RestService {
 			public List<LgUser> execute() throws multex.Failure {
 				List<LgUser> result = null;
 				try {
-					result = getSession().getAllUsers();
+					result = startSession().getAllUsers();
 				} catch (Exception ex) {
 					throw create(RestGetAllUsersFailure.class, ex);
 				}

@@ -76,6 +76,10 @@ public class LgUser extends DaObject {
 		return attach(member).save();
 	}
 	
+	public LgUser save(final LgUser user) {
+		return attach(user).save();
+	}	
+	
 	public List<LgMember> search(final long groupId, final long userId){
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
 	}
@@ -150,6 +154,10 @@ public class LgUser extends DaObject {
 	public LgUser setPassword(final String password) {
 		this.password = password;
 		return this;
+	}
+	
+	public List<LgUser> getAllUsers() {
+		return this.pool.findAll(LgUser.class);
 	}
 	
 	@Override

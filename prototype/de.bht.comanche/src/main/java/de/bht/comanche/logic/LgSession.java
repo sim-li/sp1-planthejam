@@ -7,8 +7,9 @@ import java.util.List;
 import de.bht.comanche.persistence.DaApplication;
 import de.bht.comanche.persistence.DaPool;
 /**
- * Provides all the functionality related to <code>user</code> classes before login.
- * This  
+ * Represents the operations available to a user account before 
+ * login.
+ * 
  * 
  * @author Simon Lischka
  *
@@ -31,12 +32,6 @@ public class LgSession {
 		return this.user;
 	}
 	
-	public LgUser save(final LgUser user) {
-		final LgUser o_user = user.attach(getPool()).save(); //can throw exception
-		this.setUser(o_user);
-		return o_user; 
-	}	
-
 	public LgUser register(final LgUser i_user) { // Throw exception when DB error
 		// or failure when user already set in class
 		this.pool.insert(i_user);
@@ -93,7 +88,4 @@ public class LgSession {
 		this.user = user;
 	}
 	
-	public List<LgUser> getAllUsers() {
-		return this.pool.findAll(LgUser.class);
-	}
 }
