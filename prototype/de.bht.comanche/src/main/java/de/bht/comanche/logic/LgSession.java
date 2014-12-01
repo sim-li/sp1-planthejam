@@ -6,7 +6,13 @@ import java.util.List;
 
 import de.bht.comanche.persistence.DaApplication;
 import de.bht.comanche.persistence.DaPool;
-
+/**
+ * Provides all the functionality related to <code>user</code> classes before login.
+ * This  
+ * 
+ * @author Simon Lischka
+ *
+ */
 public class LgSession {
 	
 	private final DaApplication application;
@@ -23,11 +29,6 @@ public class LgSession {
 		// throw exc when user not found
 		this.user = this.pool.findOneByKey(LgUser.class, "NAME", userName); 
 		return this.user;
-	}
-	
-	public LgUser findByName(final String userName) {
-		// throw exc when user not found
-		return this.pool.findOneByKey(LgUser.class, "NAME", userName);
 	}
 	
 	public LgUser save(final LgUser user) {
@@ -93,7 +94,6 @@ public class LgSession {
 	}
 	
 	public List<LgUser> getAllUsers() {
-//		return pool.findManyByQuery(LgUser.class, null, "SELECT * FROM " + LgUser.class.getSimpleName(), new Object[]{  });
 		return this.pool.findAll(LgUser.class);
 	}
 }

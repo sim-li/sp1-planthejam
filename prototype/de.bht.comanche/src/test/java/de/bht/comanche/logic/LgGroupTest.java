@@ -31,7 +31,7 @@ public class LgGroupTest {
 		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
 
 		LgSession session = new LgSession();
-		session.beginTransaction();
+		session.getApplication().beginTransaction();
 		
 		final LgUser alice = new LgUser();
 		alice.setName("Alice");
@@ -50,12 +50,12 @@ public class LgGroupTest {
 		pit.setEmail("pit@test.de");
 		pit.setPassword("testtest");
 		session.save(pit);
-		session.endTransaction(true);	
+		session.getApplication().endTransaction(true);	
 	}
 	
 	public LgSession start(){
 		LgSession session = new LgSession();
-		session.beginTransaction();
+		session.getApplication().beginTransaction();
 		return session;
 	}
 	
@@ -82,8 +82,9 @@ public class LgGroupTest {
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
 		final LgGroup aliceGroup = user.getGroups().get(0);
-		final LgUser bob = session.findByName("Bob");
-		final LgUser pit = session.findByName("Pit");
+		//changed findByName->startFor: same functionality
+		final LgUser bob = session.startFor("Bob"); 		
+		final LgUser pit = session.startFor("Pit");
 		user.save(new LgMember().setUser(bob).setGroup(aliceGroup));
 		user.save(new LgMember().setUser(pit).setGroup(aliceGroup));
 		end(session);
@@ -97,7 +98,7 @@ public class LgGroupTest {
 		final LgSession session = start();
 		final LgUser sessionUser = startForUser(session);
 		final LgGroup aliceGroup = sessionUser.getGroups().get(0);
-		final LgUser bob = session.findByName("Bob");
+		final LgUser bob = session.startFor("Bob");
 		final long bob_moid = session.getUser().search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
 		sessionUser.getGroup(aliceGroup.getOid()).deleteMember(bob_moid);
 		end(session);
@@ -114,7 +115,7 @@ public class LgGroupTest {
 	}
 	
 	public void end(LgSession session){
-		session.endTransaction(true);
+		session.getApplication().endTransaction(true);
 	}
 	
 	public LgUser startForUser(LgSession session){
