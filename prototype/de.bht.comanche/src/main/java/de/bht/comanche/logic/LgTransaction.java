@@ -16,7 +16,7 @@ public abstract class LgTransaction<E> {
 		this.request = request;
 	   	boolean success = false;
 		try {
-			session.beginTransaction();
+			session.getApplication().beginTransaction();
 			result = execute();
 			success = true;
 		} catch (Exception ex) {
@@ -24,7 +24,7 @@ public abstract class LgTransaction<E> {
 			throw new ReServerException(new ReErrorMessage(ex, multex.Msg.getStackTrace(ex)));
 		} finally {
 			try {
-				session.endTransaction(success);
+				session.getApplication().endTransaction(success);
 			} catch (Exception ex) {
 				multex.Msg.printReport(System.err, ex);
 			} 
