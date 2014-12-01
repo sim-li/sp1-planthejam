@@ -149,10 +149,11 @@ public class LgSurvey extends DaObject {
 		this.possibleTimePeriods = other.possibleTimePeriods;
 	}
 
-	@Override
-	public <E extends DaObject> E save() {
-		throw new UnsupportedOperationException("LgSurvey.save() is not implemented");
-	}
+	// save() is already implemented in superclass DaObject
+//	@Override
+//	public <E extends DaObject> E save() {
+//		throw new UnsupportedOperationException("LgSurvey.save() is not implemented");
+//	}
 
 	@Override
 	public String toString() {

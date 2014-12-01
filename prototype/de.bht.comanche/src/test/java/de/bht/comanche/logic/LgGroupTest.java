@@ -27,11 +27,11 @@ public class LgGroupTest {
 	public static void initializeDb(){
 		Map<String, String> properties = new HashMap<String, String>(1);
 		properties.put("hibernate.hbm2ddl.auto", "create");
-		Persistence.createEntityManagerFactory(DaEmProvider.persistenceUnitName, properties);
+		Persistence.createEntityManagerFactory(DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
 		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
 
 		LgSession session = new LgSession();
-		session.beginTransaction();
+		session.getApplication().beginTransaction();
 		
 		final LgUser alice = new LgUser();
 		alice.setName("Alice");
@@ -50,12 +50,12 @@ public class LgGroupTest {
 		pit.setEmail("pit@test.de");
 		pit.setPassword("testtest");
 		session.save(pit);
-		session.endTransaction(true);	
+		session.getApplication().endTransaction(true);	
 	}
 	
 	public LgSession start(){
 		LgSession session = new LgSession();
-		session.beginTransaction();
+		session.getApplication().beginTransaction();
 		return session;
 	}
 	
@@ -114,7 +114,7 @@ public class LgGroupTest {
 	}
 	
 	public void end(LgSession session){
-		session.endTransaction(true);
+		session.getApplication().endTransaction(true);
 	}
 	
 	public LgUser startForUser(LgSession session){

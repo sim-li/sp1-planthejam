@@ -34,9 +34,10 @@ public class LgInvite extends DaObject{
 		this.oid = oid;
 	}
 	
-	public LgInvite save() {
-		return this.pool.save(this);
-	}
+	// save() is already implemented in superclass DaObject
+//	public LgInvite save() {
+//		return this.pool.save(this);
+//	}
 	
 	public void delete() {
 		this.user.remove(this);

@@ -14,7 +14,7 @@ import javax.persistence.EntityTransaction;
  * directly using a concrete implementation. When changing the persistence framework, the reference
  * should be updated here.
  * 
- * @author Simon Lischka&eacute;
+ * @author Simon Lischka
  * 
  */
 public class DaApplication {
@@ -22,7 +22,7 @@ public class DaApplication {
 	/**
 	 * Concrete DB layer implementation wrapped in <code>DaApplication</code>
 	 */
-	private DaHibernateJpaPool pool;
+	private final DaHibernateJpaPool pool;
 	
 	/**
 	 * Failure message
@@ -65,7 +65,7 @@ public class DaApplication {
 	 * 
 	 * @param success
 	 */
-	public void endTransaction(boolean success) {
+	public void endTransaction(final boolean success) {
 		final EntityManager session = this.pool.getEntityManager();
 		final EntityTransaction transaction = session.getTransaction();
 		if (success) {
