@@ -67,22 +67,18 @@ public class LgSession {
 	@SuppressWarnings("serial")
 	public static final class LgWrongPasswordExc extends multex.Exc {
 	}
-
-	public void beginTransaction() {
-		this.application.beginTransaction();
-	}
-
-	public void endTransaction(final boolean success) {
-		this.application.endTransaction(success);
-	}
-
-
+	
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
+
+	public DaApplication getApplication() {
+		return application;
+	}
 
 	protected DaPool getPool() {
 		return this.pool;
