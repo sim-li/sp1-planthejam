@@ -15,6 +15,7 @@ import javax.persistence.EntityTransaction;
  * should be updated here.
  * 
  * @author Simon Lischka&eacute;
+ * 
  */
 public class DaApplication {
 	
