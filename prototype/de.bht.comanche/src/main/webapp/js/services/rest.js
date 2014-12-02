@@ -1,14 +1,15 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides a RESTful service.
  *
- * Module: REST service
+ * @module restModule
+ *
+ * @author Sebastian Dass&eacute;
  */
-'use strict';
-
-angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
+angular.module('restModule', ['user'])
     .factory('restService', ['$http', '$q', '$log', '$rootScope', 'User',
         function($http, $q, $log, $rootScope, User) {
+
+            'use strict';
 
             var LOG = true;
 
