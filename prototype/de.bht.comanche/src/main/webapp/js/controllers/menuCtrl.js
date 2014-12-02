@@ -16,11 +16,4 @@ angular.module('myApp')
             $location.path('/');
         };
 
-        // TODO -> Account
-        $scope.editUser = function() {
-            $log.warn('editUser not accessible yet --> adapt implementation from editUser.js');
-            // $scope.tempUser = angular.copy($scope.user);
-            // $location.path('/editUser');
-        };
-
     }]);

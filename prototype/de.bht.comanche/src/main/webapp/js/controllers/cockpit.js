@@ -9,12 +9,11 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'restService', 'Invite', 'Group', 'util', 'invites', 'groups',
-        function($scope, $location, $log, restService, Invite, Group, util, invites, groups) {
+    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'restService', 'Invite', 'util', 'invitesPromise',
+        function($scope, $location, $log, restService, Invite, util, invitesPromise) {
 
             // resolve the promises passed to this route
-            $scope.invites = Invite.importMany(invites);
-            $scope.groups = groups;
+            $scope.invites = Invite.importMany(invitesPromise);
 
             $scope.selectedInvite = $scope.invites[0];
 

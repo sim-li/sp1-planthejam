@@ -19,8 +19,9 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                     'path': '/user',
                     'login': '/login',
                     'register': '/register',
-                    'delete': '/deleteUser',
-                    'update': '/updateUser',
+                    'delete': '/delete',
+                    'get': '/get',
+                    'update': '/update',
                     'getMany': '/getAllUsers',
                     'logout': '/logout'
                 },
@@ -35,6 +36,12 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                     'path': '/group',
                     'getMany': '/getGroups',
                     'save': '/save',
+                    'delete': '/delete'
+                },
+                'member': {
+                    'path': '/member',
+                    // 'get': '/get',
+                    // 'save': '/save',
                     'delete': '/delete'
                 }
             };
@@ -120,6 +127,10 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 }, 'DELETE');
             };
 
+            // var getUser = function(user) {
+            //     return callHTTP(getPath(user, 'get'));
+            // };
+
             var updateUser = function(user) {
                 return callHTTP(getPath(user, 'update'), {
                     'oid': user.oid,
@@ -132,7 +143,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
 
             var logout = function() {
                 return callHTTP(getPath(User, 'logout'));
-            }
+            };
 
             /**
              * Gets a collection of objects of the specified model.
@@ -170,9 +181,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
              * @return {promise}      an empty (???) promise
              */
             var doDelete = function(model) {
-                return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE', {
-                    'Content-Type': 'application/json'
-                });
+                return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE');
             };
 
             var sayHi = function() {
@@ -184,6 +193,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 register: register,
                 deleteUser: deleteUser,
                 updateUser: updateUser,
+                // getUser: getUser,
                 logout: logout,
                 doGetMany: doGetMany,
                 doGet: doGet,

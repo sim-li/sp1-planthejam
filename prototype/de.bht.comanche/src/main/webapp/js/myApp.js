@@ -43,11 +43,8 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
                 templateUrl: 'pages/cockpit.html',
                 controller: 'cockpitCtrl',
                 resolve: {
-                    invites: function(restService, Invite) {
+                    invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
-                    },
-                    groups: function(restService, Group) {
-                        return restService.doGetMany(Group);
                     }
                 }
             })
@@ -55,7 +52,7 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
                 templateUrl: 'pages/invite.html',
                 controller: 'inviteCtrl',
                 resolve: {
-                    selectedInvite: function($route, restService, Invite) {
+                    selectedInvitePromise: function($route, restService, Invite) {
                         var inviteOid = $route.current.params.inviteOid;
                         if (typeof inviteOid === 'undefined') {
                             return '';
@@ -63,14 +60,23 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
                         return restService.doGet(Invite, inviteOid);
                     },
                     // TODO maybe not necessary to get all invites for this route?
-                    invites: function(restService, Invite) {
+                    invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
                     },
-                    groups: function(restService, Group) {
+                    groupsPromise: function(restService, Group) {
                         return restService.doGetMany(Group);
                     },
-                    users: function(restService, User) {
+                    usersPromise: function(restService, User) {
                         return restService.doGetMany(User);
+                    }
+                }
+            })
+            .when('/account', {
+                templateUrl: 'pages/editUser.html',
+                controller: 'editUserCtrl',
+                resolve: {
+                    userPromise: function(restService, User) {
+                        return restService.doGet(User);
                     }
                 }
             });
@@ -101,12 +107,12 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate
             templateUrl: 'partials/invite/surveydetails.html'
         };
     })
-    .directive('ptjMembers', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'partials/invite/members.html'
-        };
-    })
+    // .directive('ptjMembers', function() {
+    //     return {
+    //         restrict: 'E',
+    //         templateUrl: 'partials/invite/members.html'
+    //     };
+    // })
     .directive('ptjSurveySelect', function() {
         return {
             restrict: 'E',

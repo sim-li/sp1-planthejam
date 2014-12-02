@@ -3,6 +3,7 @@ package de.bht.comanche.persistence;
 import static multex.MultexUtil.create;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,11 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-
-import de.bht.comanche.logic.LgGroup;
-import de.bht.comanche.logic.LgInvite;
-import de.bht.comanche.logic.LgMember;
-import de.bht.comanche.logic.LgUser;
 
 /**
  * @author Simon Lischka
@@ -25,14 +21,22 @@ public abstract class DaObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(unique = true, nullable = false)
-	protected long oid = DaPool.createdOid; 
+	protected long oid = DaPool.CREATED_OID; 
 
 	protected transient DaPool pool;
 
 	public DaObject() {}
 
-	protected DaObject(DaPool pool) {
+	protected DaObject(final DaPool pool) {
 		this.pool = pool;
+	}
+
+	public DaObject attach(final DaPool pool) throws multex.Exc {
+		if (this.pool != null && pool != this.pool) {
+			throw create(OwningPoolChangedExc.class, this.getClass().getName(), this.getOid());
+		}
+		this.pool = pool;
+		return this;
 	}
 
 	/**
@@ -41,30 +45,22 @@ public abstract class DaObject implements Serializable {
 	@SuppressWarnings("serial")
 	public static final class OwningPoolChangedExc extends multex.Exc {}
 
-	public DaObject attach(DaPool pool) throws multex.Exc {
-		if (this.pool != null && pool != this.pool) {
-			throw create(OwningPoolChangedExc.class, this.getClass().getName(), this.getOid());
-		}
-		this.pool = pool;
-		return this;
-	}
-	
-	public <E extends DaObject> E attach(E item) {
+	public <E extends DaObject> E attach(final E item) {
 		@SuppressWarnings("unchecked")
 		final E result = (E) item.attach(getPool());
 		return result;
 	}
-	
+
 	public void delete() {
-		pool.delete(this);
+		this.pool.delete(this);
 	}
-	
+
 	public <E extends DaObject> E save() {
-		return pool.save(this);
+		return this.pool.save(this);
 	}
-	
-	public <E extends DaObject> E search(List <E> list, long oid) {
-		for (DaObject item : list) {
+
+	public <E extends DaObject> E search(final List <E> list, final long oid) {
+		for (final DaObject item : list) {
 			if (oid == item.getOid()) {
 				@SuppressWarnings("unchecked")
 				final E result = (E) item.attach(getPool());
@@ -73,28 +69,28 @@ public abstract class DaObject implements Serializable {
 		}
 		return null;
 	}
-	
-	public <E extends DaObject> E search( E obj, long oid) {
-			if (oid == obj.getOid()) {
-				@SuppressWarnings("unchecked")
-				final E result = (E) obj.attach(getPool());
-				return result;
+
+	public <E extends DaObject> E search(final E obj, final long oid) {
+		if (oid == obj.getOid()) {
+			@SuppressWarnings("unchecked")
+			final E result = (E) obj.attach(getPool());
+			return result;
 		}
 		return null;
 	}
-	
-	public <E extends DaObject> List<E> search(Class<E> persistentClass, String firstKeyFieldName,
-			Object firstKey, String secondKeyFieldName, Object secondKey) {
-		// throw exc when not found
-		List<E> result = null;
+
+	public <E extends DaObject> List<E> search(final Class<E> persistentClass, final String firstKeyFieldName,
+			final Object firstKey, final String secondKeyFieldName, final Object secondKey) {
+		List<E> result = new ArrayList<E>();
 		try{
-			result = pool.findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);
-		} catch (Exception e) {
-			multex.Msg.printReport(System.err, e);// TODO Multex exc
+			result = this.pool.findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);
+		} catch (final Exception ex) {
+			multex.Msg.printReport(System.err, ex);
+			// TODO throw Multex exc when not found
 		}
 		return result;
 	}
-	
+
 	/**
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -102,23 +98,23 @@ public abstract class DaObject implements Serializable {
 	 * --------------------------------------------------------------------------------------------
 	 */
 	protected DaPool getPool() {
-		return pool;
+		return this.pool;
 	}
 
 	public long getOid() {
-		return oid;
+		return this.oid;
 	}
 
-	protected void setOid(long oid) {
+	protected void setOid(final long oid) {
 		this.oid = oid;
 	}
 
 	public boolean isPersistent() {
-		return oid != DaPool.createdOid && oid > 0;
+		return this.oid != DaPool.CREATED_OID && this.oid > 0;
 	}
 
 	public boolean isDeleted() {
-		return oid == DaPool.deletedOid;
+		return this.oid == DaPool.DELETED_OID;
 	}
 
 	@Override
@@ -143,5 +139,3 @@ public abstract class DaObject implements Serializable {
 		return true;
 	}
 }
-
-

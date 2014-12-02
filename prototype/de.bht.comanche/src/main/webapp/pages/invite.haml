@@ -1,13 +1,12 @@
-
-
-
 .row
   %ptj-menu
 .container
-  %div#temporary-debug-output1 users: '{{ users }}'
+  / %div#temporary-debug-output1 users: '{{ users }}'
   / %div#temporary-debug-output2 invites: '{{ invites }}'
   / %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}'
-  %div#temporary-debug-output4 groups: '{{ groups }}'
+  / %div#temporary-debug-output4 groups: '{{ groups }}'
+  / %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}'
+  / %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}'
   /  QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route
   .row
     / search & results
@@ -43,10 +42,31 @@
                   %span.glyphicon.glyphicon-off
           .rpw
             %ptj-search
-            %ptj-members
+            / %ptj-members
+
+            %div#ptj-members{:collapse => "memberListIsCollapsed"}
+              .well.well-sm
+                .container-fluid
+                  .btn-group
+                    %span{"ng-repeat" => "member in selectedGroup.members"}
+                      %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"}
+                        {{member.user.name}}
+                        %span.badge
+                          %span.glyphicon.glyphicon-remove
+
             %br
+          / DEBUGGING THE GROUPS >>>
           .row#debug-the-groups-then-throw-away
+            #groupList.list-group.col-md-4
+              / %a.list-group-item{"ng-click" => "selectGroup(group);", :href => "", "ng-repeat" => "group in groups"} {{group.name}}
+              / %div.list-group-item{"ng-repeat" => "group in groups"}
+              /   %a.list-group-item{"ng-click" => "selectGroup(group);", :href => ""} {{group.name}}
+              /   %div{"ng-repeat" => "member in group.members"} {{member.user}}
+            / %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "addGroup()"} Clone Selected Group
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "addNewGroup()"} Add New Group
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "deleteSelectedGroup()"} Delete Selected Group
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveGroups()"} Save All Groups
+          / <<< DEBUGGING THE GROUPS
           .row
             .form-group
               %label.col-sm-3.control-label{:for => "Location"}

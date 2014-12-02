@@ -1,20 +1,20 @@
 <div class='input-group'>
-  <div class='input-group-btn' ng-show='!showTrash &amp;&amp; !isCollapsed'>
+  <div class='input-group-btn' ng-show='!showTrash &amp;&amp; !memberListIsCollapsed'>
     <button class='btn btn-default' ng-click='addGroup()' type='button'>
       <span class='glyphicon glyphicon-plus'></span>
     </button>
   </div>
-  <div class='input-group-btn' ng-show='showTrash &amp;&amp; !isCollapsed'>
+  <div class='input-group-btn' ng-show='showTrash &amp;&amp; !memberListIsCollapsed'>
     <button class='btn btn-default' ng-click='deleteGroup()' type='button'>
       <span class='glyphicon glyphicon-trash'></span>
     </button>
   </div>
   <div class='input-group-addon'>
     <div class='item-wrapper'>
-      <a editable-text='editedGroupName' href='#'>
+      <a editable-text='selectedGroup.name' href='#'>
         <b>
           <span class='glyphicon glyphicon-star'></span>
-          {{editedGroupName}}
+          {{selectedGroup.name}}
         </b>
       </a>
     </div>
@@ -32,7 +32,7 @@
       </li>
     </ul>
   </div>
-  <input class='form-control' ng-model='userSelected' placeholder='Search user...' type='text' typeahead='user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5'>
+  <input class='form-control' ng-model='selectedUser' placeholder='Search user...' type='text' typeahead='user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5'>
   <div class='input-group-btn'>
     <button class='btn btn-default' ng-click='switchDetailPanel()' type='button'>
       <span class='glyphicon glyphicon-resize-vertical'></span>
