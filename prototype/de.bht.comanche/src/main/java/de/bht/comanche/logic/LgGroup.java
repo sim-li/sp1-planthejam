@@ -54,7 +54,7 @@ public class LgGroup extends DaObject{
 		}
 	}
 	
-	public LgGroup setMember(LgGroup group){
+	public LgGroup setForMember(LgGroup group){
 			for (final LgMember member : group.getMembers()) {
 				member.setGroup(group);
 			}

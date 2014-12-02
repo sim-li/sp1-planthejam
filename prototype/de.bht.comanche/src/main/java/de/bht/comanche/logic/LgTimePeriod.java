@@ -10,20 +10,32 @@ import javax.validation.constraints.NotNull;
 import de.bht.comanche.persistence.DaObject;
 
 /**
+ * Table contains Time period data
  * Is used to describe the timeperiod of a survey or the availability of
  * users.
  * 
  * @author Duc Tung Tong
  */
+
 @Entity
 @Table(name = "TimePeriod")
 public class LgTimePeriod extends DaObject {
 
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * start time
+	 */
 	private Date startTime;
+	
+	/**
+	 * duration in minutes
+	 */
 	private int durationMinutes;
 
+	/**
+	 * survey 
+	 */
 	@NotNull
 	@ManyToOne
 	private LgSurvey survey;
