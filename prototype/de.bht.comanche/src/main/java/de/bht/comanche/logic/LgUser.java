@@ -156,10 +156,6 @@ public class LgUser extends DaObject {
 		return this;
 	}
 	
-	public List<LgUser> getAllUsers() {
-		return this.pool.findAll(LgUser.class);
-	}
-	
 	@Override
 	public String toString() {
 		return String

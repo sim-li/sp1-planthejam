@@ -50,6 +50,11 @@ public class LgSession {
 		}
 		return this.user;
 	}
+	
+	public List<LgUser> getAllUsers() {
+		return this.pool.findAll(LgUser.class);
+	}
+	
 
 	/**
 	 * No user with name "{0}" found in the database

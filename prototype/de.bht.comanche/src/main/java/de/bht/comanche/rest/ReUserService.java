@@ -29,10 +29,12 @@ public class ReUserService extends RestService {
 				LgUser o_user = null;
 				try {
 					o_user = getSession().login(i_user);
-					setUserName(request, o_user.getName());
+					setUserName(request, i_user.getName());
 				} catch (Exception ex) {
 					throw create(RestLoginUserFailure.class, ex, i_user.getName());
 				}
+				System.out.println("OID IS " + o_user.getOid());
+
 				return o_user;
 			}
 		}.getResult();
