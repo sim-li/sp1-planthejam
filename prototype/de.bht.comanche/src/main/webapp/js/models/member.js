@@ -1,15 +1,25 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides a model for invites.
  *
- * Module: member
+ * @module invite
+ * @requires user
+ *
+ * @author Sebastian Dass&eacute;
  */
-
-'use strict';
-
 angular.module('member', ['user'])
     .factory('Member', ['User', function(User) {
 
+        'use strict';
+
+        /**
+         * Represents a member of a group of users.
+         *
+         * @class Member
+         * @constructor
+         * @param {Object} [config={}] an optional configuration object
+         * @param {Number} config.oid the object id of the invite
+         * @param {User}   config.user the user that is a member
+         */
         var Member = function(config) {
             if (!(this instanceof Member)) {
                 return new Member(config);
@@ -19,10 +29,21 @@ angular.module('member', ['user'])
             this.user = new User(config.user);
         };
 
+        /**
+         * Returns this model's unique id.
+         *
+         * @method getModelId
+         * @return {String} the model's id
+         */
         Member.prototype.getModelId = function() {
             return 'member';
         };
 
+        /**
+         * Exports the member by removing any client side attributes, that the server can not handle.
+         *
+         * @return {Object} the exported member
+         */
         Member.prototype.export = function() {
             return {
                 'oid': this.oid,
@@ -30,6 +51,14 @@ angular.module('member', ['user'])
             };
         };
 
+        /**
+         * Imports an array of raw members by converting them to the member model.
+         *
+         * @method importMany
+         * @static
+         * @param  {Array}  rawMembers the members to be imported
+         * @return {Array}             the imported members
+         */
         Member.importMany = function(rawMembers) {
             if (!rawMembers) {
                 return rawMembers;
@@ -41,6 +70,12 @@ angular.module('member', ['user'])
             return members;
         };
 
+        /**
+         * Exports an array of members by removing any client side attributes, that the server can not handle.
+         *
+         * @param  {Array}  membersToExport the members to be exported
+         * @return {Array}                  the exported members
+         */
         Member.exportMany = function(membersToExport) {
             var members = [];
             for (var i = 0; i < membersToExport.length; i++) {
