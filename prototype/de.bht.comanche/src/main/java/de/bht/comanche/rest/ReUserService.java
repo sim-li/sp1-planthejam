@@ -31,10 +31,12 @@ public class ReUserService extends RestService {
 				final LgUser o_user;
 				try {
 					o_user = getSession().login(i_user);
-					setUserName(request, o_user.getName());
+					setUserName(request, i_user.getName());
 				} catch (Exception ex) {
 					throw create(RestLoginUserFailure.class, ex, i_user.getName());
 				}
+				System.out.println("OID IS " + o_user.getOid());
+
 				return o_user;
 			}
 		}.getResult();
@@ -130,7 +132,7 @@ public class ReUserService extends RestService {
 			public LgUser execute() throws Exception {
 				final LgUser user;
 				try {
-					user = getSession().save(i_user);
+					user = getSession().getUser().save(i_user);
 					setUserName(request, user.getName());
 				} catch (Exception ex) {
 					throw create(RestUserUpdateFailure.class, ex, i_user.getName(), i_user.getOid());

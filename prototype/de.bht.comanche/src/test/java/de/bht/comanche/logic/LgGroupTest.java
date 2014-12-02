@@ -37,19 +37,19 @@ public class LgGroupTest {
 		alice.setName("Alice");
 		alice.setEmail("test@test.de");
 		alice.setPassword("testtest");
-		session.save(alice);
+		session.register(alice);
 		
 		final LgUser bob = new LgUser();
 		bob.setName("Bob");
 		bob.setEmail("bob@test.de");
 		bob.setPassword("testtest");
-		session.save(bob);
+		session.register(bob);
 		
 		final LgUser pit = new LgUser();
 		pit.setName("Pit");
 		pit.setEmail("pit@test.de");
 		pit.setPassword("testtest");
-		session.save(pit);
+		session.register(pit);
 		session.getApplication().endTransaction(true);	
 	}
 	
@@ -82,8 +82,9 @@ public class LgGroupTest {
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
 		final LgGroup aliceGroup = user.getGroups().get(0);
-		final LgUser bob = session.findByName("Bob");
-		final LgUser pit = session.findByName("Pit");
+		//changed findByName->startFor: same functionality
+		final LgUser bob = session.startFor("Bob"); 		
+		final LgUser pit = session.startFor("Pit");
 		user.save(new LgMember().setUser(bob).setGroup(aliceGroup));
 		user.save(new LgMember().setUser(pit).setGroup(aliceGroup));
 		end(session);
@@ -97,7 +98,7 @@ public class LgGroupTest {
 		final LgSession session = start();
 		final LgUser sessionUser = startForUser(session);
 		final LgGroup aliceGroup = sessionUser.getGroups().get(0);
-		final LgUser bob = session.findByName("Bob");
+		final LgUser bob = session.startFor("Bob");
 		final long bob_moid = session.getUser().search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
 		sessionUser.getGroup(aliceGroup.getOid()).deleteMember(bob_moid);
 		end(session);

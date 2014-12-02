@@ -55,11 +55,14 @@ public class LgUser extends DaObject {
 		getInvite(inviteOid).delete();
 	}
 	
+<<<<<<< HEAD
 	public LgGroup save(final LgGroup group) {
 		group.setUser(this).setForMember(group);
 		return attach(group).save();
 	}
 	
+=======
+>>>>>>> d409bc506cf5e95a750ec2af1ec8190d631820e4
 	public void deleteGroup(final long groupOid) {
 		getGroup(groupOid).delete();
 	}
@@ -68,11 +71,19 @@ public class LgUser extends DaObject {
 		return search(getGroups(), groupOid);
 	}
 	
+	public LgGroup save(final LgGroup group) {
+		return attach(group).setUser(this).save();
+	}
+	
 	public LgMember save(final LgMember member) {
 		return attach(member).save();
 	}
 	
-	public List<LgMember> search(final long groupId, final long userId){
+	public LgUser save(final LgUser user) {
+		return attach(user).save();
+	}	
+	
+	public List<LgMember> search(final long groupId, final long userId) {
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
 	}
 	

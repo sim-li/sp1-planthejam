@@ -6,7 +6,14 @@ import java.util.List;
 
 import de.bht.comanche.persistence.DaApplication;
 import de.bht.comanche.persistence.DaPool;
-
+/**
+ * Represents the operations available to a user account before 
+ * login.
+ * 
+ * 
+ * @author Simon Lischka
+ *
+ */
 public class LgSession {
 	
 	private final DaApplication application;
@@ -25,17 +32,6 @@ public class LgSession {
 		return this.user;
 	}
 	
-	public LgUser findByName(final String userName) {
-		// throw exc when user not found
-		return this.pool.findOneByKey(LgUser.class, "NAME", userName);
-	}
-	
-	public LgUser save(final LgUser user) {
-		final LgUser o_user = user.attach(getPool()).save(); //can throw exception
-		this.setUser(o_user);
-		return o_user; 
-	}	
-
 	public LgUser register(final LgUser i_user) { // Throw exception when DB error
 		// or failure when user already set in class
 		this.pool.insert(i_user);
@@ -54,6 +50,11 @@ public class LgSession {
 		}
 		return this.user;
 	}
+	
+	public List<LgUser> getAllUsers() {
+		return this.pool.findAll(LgUser.class);
+	}
+	
 
 	/**
 	 * No user with name "{0}" found in the database
@@ -92,8 +93,4 @@ public class LgSession {
 		this.user = user;
 	}
 	
-	public List<LgUser> getAllUsers() {
-//		return pool.findManyByQuery(LgUser.class, null, "SELECT * FROM " + LgUser.class.getSimpleName(), new Object[]{  });
-		return this.pool.findAll(LgUser.class);
-	}
 }
