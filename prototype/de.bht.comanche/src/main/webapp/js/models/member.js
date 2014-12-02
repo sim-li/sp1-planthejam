@@ -18,7 +18,7 @@ angular.module('member', ['user'])
          * @constructor
          * @param {Object} [config={}] an optional configuration object
          * @param {Number} config.oid the object id of the invite
-         * @param {User}   config.user the user that is a member
+         * @param {Object} [config.user=new Member()] the user that is a member
          */
         var Member = function(config) {
             if (!(this instanceof Member)) {
