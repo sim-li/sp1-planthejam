@@ -56,12 +56,7 @@ public class LgUser extends DaObject {
 	}
 	
 	public LgGroup save(final LgGroup group) {
-        group.setUser(this);
-		for (final LgMember member : group.getMembers()) {
-			member.setGroup(group);
-		}
-		// TODO maybe it is better to override save() in LgGroup and to place all the above lines of this method there
-		return attach(group).save();
+		return attach(group.save(this, group)).save();
 	}
 	
 	public void deleteGroup(final long groupOid) {
