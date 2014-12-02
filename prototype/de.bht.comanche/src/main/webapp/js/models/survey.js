@@ -1,17 +1,35 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides a model for surveys.
  *
- * Module: survey
+ * @module survey
+ * @requires datePickerDate
+ * @requires constants
+ *
+ * @author Sebastian Dass&eacute;
  */
-
-
-'use strict';
-
 angular.module('survey', ['datePickerDate', 'constants'])
     .factory('Survey', ['DatePickerDate', 'TimeUnit', 'Type', function(DatePickerDate, TimeUnit, Type) {
 
+        'use strict';
+
         // TODO still lacks the list of invites !!!
+
+        /**
+         * Represents a survey.
+         *
+         * @class Sruvey
+         * @constructor
+         * @param {Object} [config={}] an optional configuration object
+         * @param {Number} [config.oid=''] the object id of the survey
+         * @param {String} [config.name=''] the name of the survey
+         * @param {String} [config.descrition=''] the description of the survey
+         * @param {String} [config.type='ONE_TIME'] the type of the survey
+         * @param {DatePickerDate} [config.deadline={now}] the deadline of the survey
+         * @param {Number} [config.frequencyDist=0] the frequency distance of the survey
+         * @param {String} [config.frequencyTimeUnit='WEEK'] the frequency time unit of the survey
+         * @param {Array} [config.possibleTimeperiods=[]] the possible time periods of the survey
+         * @param {Object} [config.determinedTimeperiod] the determined time period of the survey
+         */
         var Survey = function(config) {
             config = config || {};
             this.oid = config.oid || '';
@@ -28,6 +46,7 @@ angular.module('survey', ['datePickerDate', 'constants'])
             };
         };
 
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>> hier geht's weiter >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> doc it all!
         Survey.prototype.getModelId = function() {
             return 'survey';
         };

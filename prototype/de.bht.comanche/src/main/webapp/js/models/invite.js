@@ -1,33 +1,54 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides a model for invites.
  *
- * Module: invite
+ * @module invite
+ * @requires survey
+ *
+ * @author Sebastian Dass&eacute;
  */
-
-'use strict';
-
 angular.module('invite', ['survey'])
-    .factory('Invite', ['Survey', 'DatePickerDate', 'TimeUnit', 'Type', function(Survey, DatePickerDate, TimeUnit, Type) {
+    .factory('Invite', ['Survey' /*, 'DatePickerDate', 'TimeUnit', 'Type'*/ , function(Survey /*, DatePickerDate, TimeUnit, Type*/ ) {
 
+        'use strict';
+
+        /**
+         * Represents an invite. An invite belongs to a survey.
+         *
+         * @class Invite
+         * @constructor
+         * @param {Object}  [config={}] an optional configuration object
+         * @param {Number}  [config.oid=''] the object id of the invite
+         * @param {Boolean} config.ignored a flag that indicates if the invite is ignored
+         * @param {Boolean} config.host a flag that indicates if the owning user of the invite is host of the survey
+         * @param {Survey}  config.survey the survey
+         */
         var Invite = function(config) {
             if (!(this instanceof Invite)) {
                 return new Invite(config);
             }
             config = config || {};
-            // this.user = config.user || {
-            //     oid: 1
-            // }
             this.oid = config.oid || '';
             this.ignored = config.ignored;
             this.host = config.host;
             this.survey = new Survey(config.survey);
         };
 
+        /**
+         * Returns this model's unique id.
+         *
+         * @method getModelId
+         * @return {String} the model's id
+         */
         Invite.prototype.getModelId = function() {
             return 'invite';
         };
 
+        /**
+         * Exports the invite by removing any client side attributes, that the server can not handle.
+         *
+         * @method export
+         * @return {Object} the exported invite
+         */
         Invite.prototype.export = function() {
             return {
                 'oid': this.oid,
@@ -38,6 +59,14 @@ angular.module('invite', ['survey'])
             };
         };
 
+        /**
+         * Imports an array of raw invites by converting them to the invite model.
+         *
+         * @method importMany
+         * @static
+         * @param  {Array}  rawInvites the invites to be imported
+         * @return {Array}             the imported invites
+         */
         Invite.importMany = function(rawInvites) {
             if (!rawInvites) {
                 return rawInvites;
@@ -50,9 +79,9 @@ angular.module('invite', ['survey'])
         };
 
 
-        Invite.prototype.convertDatesToDatePickerDate = function() {
-            this.survey.convertDatesToDatePickerDate();
-        };
+        // Invite.prototype.convertDatesToDatePickerDate = function() {
+        //     this.survey.convertDatesToDatePickerDate();
+        // };
 
         // Invite.getDummyInviteList = function() {
         //     return [

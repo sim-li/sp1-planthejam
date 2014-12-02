@@ -6,6 +6,8 @@ import multex.Msg;
 
 public class ReErrorMessage {
 
+	public static final String BASE_NAME = "MessageResources";
+	
 	/**
 	 * user message
 	 */
@@ -16,42 +18,39 @@ public class ReErrorMessage {
 	 */
 	public final String stackTrace;
 	
-	public static final String BASE_NAME = "MessageResources";
-	
-	
-	public ReErrorMessage(String message, String stackTrace) {
+	public ReErrorMessage(final String message, final String stackTrace) {
 		this.message = message;
 		this.stackTrace = stackTrace;
 	}
 	
 	/**
+	 * ...
 	 * 
 	 * @param ex The exception, which has to be reported.
-	 * @param stackTrace The stacktrace, which has to be reported.
+	 * @param stackTrace The stack trace, which has to be reported.
 	 */
-	public ReErrorMessage(Throwable ex, String stackTrace) {
+	public ReErrorMessage(final Throwable ex, final String stackTrace) {
 		this(exceptionToString(ex), stackTrace);
 	}
 	
-	public ReErrorMessage(String errorMessage, StackTraceElement[] stackTrace) {
-		this(errorMessage, stackTraceToString(stackTrace));
-	}
+	// TODO not used -> remove
+//	public ReErrorMessage(final String errorMessage, final StackTraceElement[] stackTrace) {
+//		this(errorMessage, stackTraceToString(stackTrace));
+//	}
 	
-	private static String exceptionToString(Throwable ex){
+	private static String exceptionToString(final Throwable ex){
+		final ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, Locale.getDefault());
 		final StringBuffer result = new StringBuffer();
-		final Locale defaultLocale = Locale.getDefault();
-		final ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, defaultLocale);
         Msg.printMessages(result, ex, bundle);
 		return result.toString();
 	}
 
-	// TODO is it working as it should?
-	private static String stackTraceToString(StackTraceElement[] stackTrace) {
-		StringBuilder sb = new StringBuilder();
-		for (StackTraceElement s : stackTrace) {
-			sb.append(s.toString() + "\n");
-		}
-		return sb.toString();
-	}
-
+	// TODO not used -> remove
+//	private static String stackTraceToString(final StackTraceElement[] stackTrace) {
+//		final StringBuilder sb = new StringBuilder();
+//		for (final StackTraceElement s : stackTrace) {
+//			sb.append(s.toString() + "\n");
+//		}
+//		return sb.toString();
+//	}
 }

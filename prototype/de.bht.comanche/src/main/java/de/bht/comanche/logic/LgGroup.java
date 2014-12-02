@@ -29,7 +29,7 @@ public class LgGroup extends DaObject{
 	@ManyToOne
 	private LgUser user;
 
-	@OneToMany(mappedBy="group", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="group", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval=true)
 	private List<LgMember> members;
 
 	public LgGroup() {
@@ -53,7 +53,14 @@ public class LgGroup extends DaObject{
 			}
 		}
 	}
-
+	
+	public LgGroup setForMember(LgGroup group){
+			for (final LgMember member : group.getMembers()) {
+				member.setGroup(group);
+			}
+			return this;
+	}
+	
 	public List<LgUser> getUsers() {
 		final List<LgUser> users = new LinkedList<LgUser>();
 		for (final LgMember member : this.members) {

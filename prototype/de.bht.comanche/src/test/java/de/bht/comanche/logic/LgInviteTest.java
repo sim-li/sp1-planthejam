@@ -21,6 +21,7 @@ import de.bht.comanche.persistence.DaPool;
  *
  */
 @Ignore
+@SuppressWarnings("unqualified-field-access")
 public class LgInviteTest {
 	
 	// TODO we need some kind of mocked JPA to run save and delete tests
@@ -114,7 +115,7 @@ public class LgInviteTest {
 	
 	
 	private static final class MockPool implements DaPool {
-		private List<DaObject> data;
+		private final List<DaObject> data;
 		
 		public MockPool() {
 			data = new ArrayList<DaObject>();
@@ -136,26 +137,21 @@ public class LgInviteTest {
 			return (E) io_object;
 		}
 		
-		public boolean delete(DaObject io_object) {
+		public boolean delete(final DaObject io_object) {
 			return data.remove(io_object);
 		}
 		
-		public boolean contains(DaObject io_object) {
+		public boolean contains(final DaObject io_object) {
 			return data.contains(io_object);
 		}
 		
-		public <E extends DaObject> E find(Class<E> persistentClass, Long oid) { throw new RuntimeException("not implemented"); }
+		public <E extends DaObject> E find(Class<E> persistentClass, long oid) { throw new RuntimeException("not implemented"); }
 		public <E extends DaObject> List<E> findAll(Class<E> persistentClass) { throw new RuntimeException("not implemented"); }
 		public <E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) { throw new RuntimeException("not implemented"); }
 		public <E extends DaObject> List<E> findManyByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) { throw new RuntimeException("not implemented"); }
-		public <E extends DaObject> List<E> findManyByQuery(Class<E> resultClass, Class queryClass, String queryString, Object[] args) { throw new RuntimeException("not implemented"); }
-
-		@Override
-		public <E extends DaObject> E findOneByTwoKeys(
-				Class<E> persistentClass, String firstKeyFieldName,
-				Object firstKey, String secondKeyFieldName, Object secondKey) {
-			// TODO Auto-generated method stub
-			return null;
+		public <E extends DaObject> List<E> findManyByQuery(Class<E> resultClass, Class<?> queryClass, String queryString, Object[] args) { throw new RuntimeException("not implemented"); }
+		public <E extends DaObject> E findOneByTwoKeys (Class<E> persistentClass, String firstKeyFieldName, Object firstKey, String secondKeyFieldName, Object secondKey) { 
+			throw new RuntimeException("not implemented"); 
 		}
 	}
 }

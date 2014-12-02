@@ -55,21 +55,16 @@ public class LgUser extends DaObject {
 		getInvite(inviteOid).delete();
 	}
 	
-	public LgGroup save(final LgGroup group) {
-        group.setUser(this);
-		for (final LgMember member : group.getMembers()) {
-			save(member.setGroup(group));
-		}
-		// TODO maybe it is better to override save() in LgGroup and to place all the above lines of this method there
-		return attach(group).save();
-	}
-	
 	public void deleteGroup(final long groupOid) {
 		getGroup(groupOid).delete();
 	}
 	
 	public LgGroup getGroup(final long groupOid) {
 		return search(getGroups(), groupOid);
+	}
+	
+	public LgGroup save(final LgGroup group) {
+		return attach(group).setUser(this).save();
 	}
 	
 	public LgMember save(final LgMember member) {
@@ -80,7 +75,7 @@ public class LgUser extends DaObject {
 		return attach(user).save();
 	}	
 	
-	public List<LgMember> search(final long groupId, final long userId){
+	public List<LgMember> search(final long groupId, final long userId) {
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
 	}
 	

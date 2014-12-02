@@ -14,12 +14,13 @@ import javax.persistence.Persistence;
  * 
  */
 public class DaEmProvider {
+	
 	private DaEmProvider() {}
 	
 	/**
 	 * Constructs a new <code>DaEmProvider</code> singleton
 	 */
-    private static final DaEmProvider singleton = new DaEmProvider();
+    private static final DaEmProvider INSTANCE = new DaEmProvider();
     
     /**
 	 * Instance of <code>EntityManagerFactory</code>
@@ -29,18 +30,18 @@ public class DaEmProvider {
 	/**
 	 * Name of persistence unit (watch concurrency with <code>persistence.xml</code>)
 	 */
-	public static final String persistenceUnitName = "planthejam.jpa";
+	public static final String PERSISTENCE_UNIT_NAME = "planthejam.jpa";
 	
 	/**
 	 * Returns an instance of the <code>DaEmProvider</code> singleton.
 	 * 
-	 * <p> The factory may not be initialized jet.
+	 * <p> The factory may not be initialized yet.
 	 * 
 	 * @return <code>DaEmProvider</code> instance
 	 * 
 	 */
 	public static DaEmProvider getInstance() {
-		return singleton; 
+		return INSTANCE; 
 	}
     
 	/**
@@ -51,10 +52,10 @@ public class DaEmProvider {
 	 * @return Initialized <code>EntityManagerFactory</code> instance
 	 */
 	public EntityManagerFactory getEntityManagerFactory() {
-		if (emf == null) {
-			emf = Persistence.createEntityManagerFactory(persistenceUnitName);
+		if (this.emf == null) {
+			this.emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 		} 
-		return emf;
+		return this.emf;
 	}
 	
 	/**
@@ -62,9 +63,9 @@ public class DaEmProvider {
 	 * opened.
 	 */
 	public void closeEntityManagerFactory() {
-		if (emf.isOpen() && emf != null) {
-			emf.close();
-			emf = null;
+		if (this.emf != null && this.emf.isOpen()) {
+			this.emf.close();
+			this.emf = null;
 		}
 	}
 }

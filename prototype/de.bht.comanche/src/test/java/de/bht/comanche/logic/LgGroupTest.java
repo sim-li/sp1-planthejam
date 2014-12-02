@@ -24,10 +24,10 @@ import de.bht.comanche.persistence.DaEmProvider;
 public class LgGroupTest {
 	
 	@BeforeClass 
-	public static void initializeDb(){
+	public static void initializeDb() {
 		Map<String, String> properties = new HashMap<String, String>(1);
 		properties.put("hibernate.hbm2ddl.auto", "create");
-		Persistence.createEntityManagerFactory(DaEmProvider.persistenceUnitName, properties);
+		Persistence.createEntityManagerFactory(DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
 		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
 
 		LgSession session = new LgSession();
@@ -118,7 +118,7 @@ public class LgGroupTest {
 		session.getApplication().endTransaction(true);
 	}
 	
-	public LgUser startForUser(LgSession session){
+	public LgUser startForUser(final LgSession session){
 		return session.startFor("Alice");
 	}
 	
@@ -131,4 +131,3 @@ public class LgGroupTest {
 	}
 	
 }
-

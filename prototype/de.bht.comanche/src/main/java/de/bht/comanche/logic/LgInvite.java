@@ -11,19 +11,37 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
 
+/**
+ * Table contains Invite data
+ * 
+ * @author Duc Tung Tong
+ */
 @Entity
 @Table(name = "Lg_Invite")
 public class LgInvite extends DaObject{
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 *  is true if user is host from survey 
+	 */
 	private boolean isHost;
+	
+	/**
+	 *  is true if user ignored the invite
+	 */
 	private boolean isIgnored;
 
+	/**
+	 *  user who receives  invite
+	 */
 	@NotNull
 	@ManyToOne
 	private LgUser user;
 
+	/**
+	 *  Survey 
+	 */
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private LgSurvey survey;
@@ -34,14 +52,13 @@ public class LgInvite extends DaObject{
 		this.oid = oid;
 	}
 	
-	public LgInvite save() {
-		return this.pool.save(this);
-	}
-	
-	public void delete() {
-		this.user.remove(this);
-		this.pool.delete(this); //throw exc when delete errror
-	}
+	/**
+	 * 
+	 */
+//	public void delete() {
+//		this.user.remove(this);
+//		this.pool.delete(this); //throw exc when delete errror
+//	}
 	
 	/*
 	 * --------------------------------------------------------------------------------------------

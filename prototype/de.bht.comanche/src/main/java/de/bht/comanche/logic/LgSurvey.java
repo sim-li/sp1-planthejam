@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.bht.comanche.persistence.DaObject;
 
 /**
+ * Table contains Survey data
  * A survey connects the invite to the time period.
  * 
  * @author Duc Tung Tong
@@ -30,34 +31,78 @@ public class LgSurvey extends DaObject {
 	
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Survey's name
+	 */
 	private String name;
+	
+	/**
+	 * Survey's description
+	 */
 	private String description;
+	
+	/**
+	 * Survey's frequency distance
+	 */
 	private int frequencyDist;
 
+	/**
+	 * Survey's deadline. Type: Date
+	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deadline;
 
+	/**
+	 * Survey's type
+	 */
 	@Column
 	@Enumerated(EnumType.STRING)
 	private LgSurveyType type;
 
+	/**
+	 * Frequency Time Unit
+	 */
 	@Column
 	@Enumerated(EnumType.STRING)
 	private LgTimeUnit frequencyTimeUnit;
 
+	/**
+	 * Invites which are sent to members of Survey
+	 */
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<LgInvite> invites;
 
+	/**
+	 * all possible time periods
+	 */
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<LgTimePeriod> possibleTimePeriods;
 	
+	/**
+	 * Constructor 
+	 */
 	public LgSurvey() {
 		this.invites = new ArrayList<LgInvite>();
 		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
 	}
 
+	/**
+	 *  this method updates old Survey with "other" Survey
+	 * @param other The other Survey, which is needed to update old Survey
+	 */
+	public void updateWith(final LgSurvey other) {
+		this.name = other.name;
+		this.description = other.description;
+		this.frequencyDist = other.frequencyDist;
+		this.deadline = other.deadline;
+		this.type = other.type;
+		this.frequencyTimeUnit = other.frequencyTimeUnit;
+		this.invites = other.invites;
+		this.possibleTimePeriods = other.possibleTimePeriods;
+	}
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -136,22 +181,6 @@ public class LgSurvey extends DaObject {
 	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> possibleTimePeriods) {
 		this.possibleTimePeriods = possibleTimePeriods;
 		return this;
-	}
-
-	public void updateWith(final LgSurvey other) {
-		this.name = other.name;
-		this.description = other.description;
-		this.frequencyDist = other.frequencyDist;
-		this.deadline = other.deadline;
-		this.type = other.type;
-		this.frequencyTimeUnit = other.frequencyTimeUnit;
-		this.invites = other.invites;
-		this.possibleTimePeriods = other.possibleTimePeriods;
-	}
-
-	@Override
-	public <E extends DaObject> E save() {
-		throw new UnsupportedOperationException("LgSurvey.save() is not implemented");
 	}
 
 	@Override

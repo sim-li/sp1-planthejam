@@ -181,9 +181,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
              * @return {promise}      an empty (???) promise
              */
             var doDelete = function(model) {
-                return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE', {
-                    'Content-Type': 'application/json'
-                });
+                return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE');
             };
 
             var sayHi = function() {
