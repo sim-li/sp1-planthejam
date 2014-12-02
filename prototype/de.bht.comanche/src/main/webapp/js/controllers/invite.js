@@ -161,10 +161,10 @@ angular.module('myApp')
             $scope.removeMember = function(index) {
                 var members = $scope.selectedGroup.members;
                 var member = members[index];
-                if (member.oid) {
-                    restService.doDelete(member);
+                // if (member.oid) {
+                    // restService.doDelete(member);
                     // .then(function(success) {} /*, function(error) { $log.log(error); }*/ );
-                }
+                // }
                 members.splice(index, 1);
                 if (members.length <= 0) {
                     $scope.memberListIsCollapsed = true;
