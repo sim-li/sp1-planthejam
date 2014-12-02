@@ -7,6 +7,14 @@
 
 'use strict';
 
+/**
+ * Provides the webapp. Also has:
+ * - routes
+ * - directives
+ * ...
+ *
+ * @module myApp
+ */
 angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate', 'survey', 'constants', 'restModule', 'typeAugmentations', 'invite', 'group', 'user'])
     .constant('dialogMap', { // TODO remove after routing works without it
         USER_LOGIN: 0,

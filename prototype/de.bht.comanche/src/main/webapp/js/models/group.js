@@ -1,15 +1,26 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides a model for groups.
  *
- * Module: group
+ * @module group
+ * @requires member
+ *
+ * @author Sebastian Dass&eacute;
  */
-
-'use strict';
-
 angular.module('group', ['member'])
     .factory('Group', ['Member', function(Member) {
 
+        'use strict';
+
+        /**
+         * Represents a group of users.
+         *
+         * @class Group
+         * @constructor
+         * @param {Object} [config={}] an optional configuration object
+         * @param {Number} [config.oid=''] the object id of the group
+         * @param {String} [config.name=''] the name of the group
+         * @param {Array}  [config.members=[]] the members of the group
+         */
         var Group = function(config) {
             if (!(this instanceof Group)) {
                 return new Group(config);
@@ -21,10 +32,24 @@ angular.module('group', ['member'])
             this.members = config.members ? Member.importMany(config.members) : [];
         };
 
+        /**
+         * Returns this model's unique id.
+         *
+         * @method getModelId
+         * @return {String} the model's id
+         */
         Group.prototype.getModelId = function() {
             return 'group';
         };
 
+        /**
+         * Imports an array of raw groups by converting them to the group model.
+         *
+         * @method importMany
+         * @static
+         * @param  {Array}  rawGroups the groups to be imported
+         * @return {Array}            the imported groups
+         */
         Group.importMany = function(rawGroups) {
             if (!rawGroups) {
                 return rawGroups;
@@ -37,6 +62,12 @@ angular.module('group', ['member'])
             return groups;
         };
 
+        /**
+         * Exports the group by removing any client side attributes, that the server can not handle.
+         *
+         * @method export
+         * @return {Object} the exported group
+         */
         Group.prototype.export = function() {
             return {
                 'oid': this.oid,
@@ -45,22 +76,6 @@ angular.module('group', ['member'])
                 'members': Member.exportMany(this.members)
             };
         };
-
-        // var importMembers = function(group) {
-        //     var members = gr
-        // };
-
-        // ++ Baustelle ++
-        // var exportMembers = function(group) {
-        //     var users = group.members;
-
-        //     var members = [];
-
-        //     members.push({
-        //         // oid: undefined,
-        //         user: {}
-        //     });
-        // };
 
         return (Group);
     }]);
