@@ -25,7 +25,7 @@ public class ReMemberService extends RestService {
 	public LgGroup delete(final long oid, @Context final HttpServletRequest request) {
 		return new LgTransaction<LgGroup>(request) {
 			@Override
-			public LgGroup execute() throws multex.Exc{
+			public LgGroup execute() throws Exception {
 				
 				throw create(Exc.class, "TODO delete member not implented");
 				

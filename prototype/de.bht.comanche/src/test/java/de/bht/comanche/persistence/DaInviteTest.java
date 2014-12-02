@@ -14,9 +14,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import de.bht.comanche.logic.LgInvite;
-import de.bht.comanche.logic.LgLowLevelTransaction;
+//import de.bht.comanche.logic.LgLowLevelTransaction;
 import de.bht.comanche.logic.LgSurvey;
-import de.bht.comanche.logic.LgSurveyDummyFactory;
+//import de.bht.comanche.logic.LgSurveyDummyFactory;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 
