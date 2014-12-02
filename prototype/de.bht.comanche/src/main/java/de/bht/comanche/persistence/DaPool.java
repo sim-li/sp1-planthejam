@@ -1,6 +1,8 @@
 package de.bht.comanche.persistence;
 
 import java.util.List;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
+
 
 public interface DaPool {
 	
@@ -14,7 +16,7 @@ public interface DaPool {
 
 	<E extends DaObject> E find(Class<E> persistentClass, long oid);
 	<E extends DaObject> List<E> findAll(Class<E> persistentClass);
-	<E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue);
+	<E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) throws DaFindOneByKeyExc;
 	<E extends DaObject> E findOneByTwoKeys(Class<E> persistentClass, String firstKeyFieldName,	Object firstKey, String secondKeyFieldName, Object secondKey);
 	<E extends DaObject> List<E> findManyByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue);
 	<E extends DaObject> List<E> findManyByTwoKeys(Class<E> persistentClass, String firstKeyFieldName, Object firstKey, String secondKeyFieldName, Object secondKey);
