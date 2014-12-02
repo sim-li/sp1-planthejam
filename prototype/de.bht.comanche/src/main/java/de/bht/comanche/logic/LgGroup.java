@@ -54,12 +54,11 @@ public class LgGroup extends DaObject{
 		}
 	}
 	
-	public LgGroup save(LgUser user, LgGroup group){
-		 group.setUser(user);
+	public LgGroup setMember(LgGroup group){
 			for (final LgMember member : group.getMembers()) {
 				member.setGroup(group);
 			}
-			return group;
+			return this;
 	}
 	
 	public List<LgUser> getUsers() {
