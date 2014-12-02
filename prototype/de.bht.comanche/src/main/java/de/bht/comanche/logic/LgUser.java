@@ -55,14 +55,6 @@ public class LgUser extends DaObject {
 		getInvite(inviteOid).delete();
 	}
 	
-<<<<<<< HEAD
-	public LgGroup save(final LgGroup group) {
-		group.setUser(this).setForMember(group);
-		return attach(group).save();
-	}
-	
-=======
->>>>>>> d409bc506cf5e95a750ec2af1ec8190d631820e4
 	public void deleteGroup(final long groupOid) {
 		getGroup(groupOid).delete();
 	}
