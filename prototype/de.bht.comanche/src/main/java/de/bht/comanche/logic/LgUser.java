@@ -70,13 +70,6 @@ public class LgUser extends DaObject {
 		return search(getGroups(), groupOid);
 	}
 
-	//it does't work
-//	public LgGroup save(final LgGroup group) {
-//		return attach(group).setUser(this).save();
-//	}
-	
-	
-	
 	public LgMember save(final LgMember member) {
 		return attach(member).save();
 	}
