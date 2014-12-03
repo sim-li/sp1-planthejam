@@ -1,15 +1,23 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * @module myApp
  *
- * Module: menu controller
+ * @author Sebastian Dass&eacute;
  */
-
-'use strict';
-
 angular.module('myApp')
+    /**
+     * The controller for the menu directive.
+     *
+     * @class menuCtrl
+     */
     .controller('menuCtrl', ['$scope', '$location', '$log', 'restService', function($scope, $location, $log, restService) {
 
+        'use strict';
+
+        /**
+         * Does a log out and switches to the login view.
+         *
+         * @method logout
+         */
         $scope.logout = function() {
             restService.logout();
             $log.log('Logout erfolgreich.');

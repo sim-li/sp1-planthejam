@@ -2,11 +2,22 @@
 // Bug: Multiple Rename fails unless select happens
 // Simplify, Patterns, Comment.
 
-'use strict';
-
+/**
+ * @module myApp
+ *
+ * @author Simon Lischka
+ * @author Sebastian Dass&eacute;
+ */
 angular.module('myApp')
+    /**
+     * The controller for the invite edit/creation view.
+     *
+     * @class inviteCtrl
+     */
     .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Invite', 'Survey', 'Group', 'Member', 'User', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise',
         function($scope, $log, $location /*, $routeParams*/ , restService, Invite, Survey, Group, Member, User, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise) {
+
+            'use strict';
 
             // resolve the promises passed to this route
             $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : new Invite({
@@ -48,6 +59,7 @@ angular.module('myApp')
 
             // $scope.selectedGroup = $scope.groups[0] || new Group();
 
+            // preselect no user
             $scope.selectedUser = {
                 name: ''
             };
@@ -69,6 +81,7 @@ angular.module('myApp')
             //         changeGroupName($scope.selectedGroup.name, $scope.editedGroupName);
             //     }
             // });
+
 
             $scope.$watch('selectedUser', function() {
                 // if ($scope.selectedUser === undefined || $scope.selectedUser.name === undefined) {
@@ -100,6 +113,13 @@ angular.module('myApp')
             //     $scope.showTrash = true;
             // };
 
+            /**
+             * Adds a new empty group to the user's groups.
+             * The new group will immediately be persisted on the server.
+             *
+             * @method addNewGroup
+             * @protected
+             */
             $scope.addNewGroup = function() {
                 restService.doSave(new Group({
                     name: 'Your new group'
@@ -110,8 +130,17 @@ angular.module('myApp')
                         $scope.groups = Group.importMany(success);
                         selectFirstOrDefaultGroup();
                     } /*, function(error) { $log.log(error); }*/ );
+
+                // TODO the view needs a refresh after adding a new group
             };
 
+            /**
+             * Deletes the selected group from the user's groups.
+             * The group will immediately be deleted on the server.
+             *
+             * @method deleteSelectedGroup
+             * @protected
+             */
             $scope.deleteSelectedGroup = function() {
                 if (!$scope.selectedGroup) {
                     return;
@@ -139,10 +168,24 @@ angular.module('myApp')
             //     selectFirstOrDefaultGroup();
             // };
 
+            /**
+             * Hides the trash bin.
+             *
+             * @method description]
+             * @protected
+             */
             $scope.hideTrash = function() {
                 $scope.showTrash = false;
             };
 
+            // TODO -> QUESTION do we need both: switchDetailPanel and openDetailPanel?
+
+            /**
+             * Toggles the detail panel. ???
+             *
+             * @method switchDetailPanel
+             * @protected
+             */
             $scope.switchDetailPanel = function() {
                 if ($scope.memberListIsCollapsed) {
                     $scope.openDetailPanel();
@@ -151,6 +194,12 @@ angular.module('myApp')
                 }
             };
 
+            /**
+             * Opens the detail panel.
+             *
+             * @method openDetailPanel
+             * @protected
+             */
             $scope.openDetailPanel = function() {
                 // if ($scope.addedUsers.length <= 0) {
                 //     return;
@@ -158,12 +207,19 @@ angular.module('myApp')
                 $scope.memberListIsCollapsed = false;
             };
 
+            /**
+             * Removes the member with the specified index from the selected group.
+             *
+             * @method removeMember
+             * @protected
+             * @param  {Number} index the index of the selected member
+             */
             $scope.removeMember = function(index) {
                 var members = $scope.selectedGroup.members;
                 var member = members[index];
                 // if (member.oid) {
-                    // restService.doDelete(member);
-                    // .then(function(success) {} /*, function(error) { $log.log(error); }*/ );
+                // restService.doDelete(member);
+                // .then(function(success) {} /*, function(error) { $log.log(error); }*/ );
                 // }
                 members.splice(index, 1);
                 if (members.length <= 0) {
@@ -171,6 +227,13 @@ angular.module('myApp')
                 }
             };
 
+            /**
+             * Selects one of the user's groups by name.
+             *
+             * @method selectGroup
+             * @param  {String} groupName the name of the group to be selected
+             * @protected
+             */
             $scope.selectGroup = function(groupName) {
                 if (groupName === undefined || $scope.groups === undefined) {
                     return;
@@ -185,6 +248,13 @@ angular.module('myApp')
                 // $scope.openDetailPanel();
             };
 
+            // TODO -> remove if unused
+            /**
+             * Clears the date. ???
+             *
+             * @method clear
+             * @protected
+             */
             $scope.clear = function() {
                 $scope.dt = null;
             };

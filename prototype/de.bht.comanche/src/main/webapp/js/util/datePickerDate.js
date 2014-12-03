@@ -1,19 +1,21 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides a model for date/time objects.
  *
- * Module: date picker date
+ * @module datePickerDate
+ *
+ * @author Sebastian Dass&eacute;
  */
-
-
-'use strict';
-
 angular.module('datePickerDate', [])
     .factory('DatePickerDate', function($filter) {
-        /*
-         * Converts a JavaScript Date to a date format the angular datepicker understands.
-         * - toDate() converts and returns the date back to JavaScript Date
-         * - convertDates() converts and returns the given JavaScript Date array to a DatePickerDate array
+
+        'use strict';
+
+        /**
+         * A date/time class that is convenient to use in combination with date pickers.
+         *
+         * @class DatePickerDate
+         * @constructor
+         * @param {Date} jsDate a JavaScript Date
          */
         var DatePickerDate = function(jsDate) {
             if (jsDate instanceof DatePickerDate) { // safe copying of another DatePickerDate
@@ -23,10 +25,24 @@ angular.module('datePickerDate', [])
             this.time = $filter('date')(jsDate, 'HH:mm');
         };
 
+        /**
+         * Converts and returns the DatePickerDate back to a JavaScript Date.
+         *
+         * @method toDate
+         * @return {Date} this date as JavaScript Date
+         */
         DatePickerDate.prototype.toDate = function() {
             return new Date(this.date + ' ' + this.time);
         };
 
+        /**
+         * Converts and returns the given array of JavaScript Dates to an array of DatePickerDates.
+         *
+         * @method convertDates
+         * @static
+         * @param  {Array}  jsDates an array of JavaScript Dates
+         * @return {Array}          an array of DatePickerDates
+         */
         DatePickerDate.convertDates = function(jsDates) {
             var _dates = [];
             if (!jsDates) {
