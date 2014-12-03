@@ -1,19 +1,30 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides some type augmentations.
  *
- * Module: type augmentations
+ * @module typeAugmentations
+ *
+ * @author Sebastian Dass&eacute;
  */
-
-
-'use strict';
-
 angular.module('typeAugmentations', [])
+    /**
+     * Augments built-in JavaScript types with additional functions.
+     *
+     * The augmentations are applied to the types as soon as the factory method is called once.
+     *
+     * @class  typeAugmentations
+     */
     .factory('typeAugmentations', ['$log', function($log) {
+
+        'use strict';
+
         return function() {
 
             /**
-             * TODO doc comment
+             * Pushes the element to the array or updates it, if is already contained.
+             *
+             * @method updateElementWithOid
+             *
+             * @param {Object} element an element with an attribute "oid"
              */
             Array.prototype.updateElementWithOid = function(element) {
                 var oid = element && element.oid;

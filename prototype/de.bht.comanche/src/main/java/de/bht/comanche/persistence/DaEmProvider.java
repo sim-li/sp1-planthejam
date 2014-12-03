@@ -4,15 +4,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
- * Represents a single instance of <code>EntityManagerFactory</code>. 
- * 
- * Avoids reinitializing the <code> EntityManagerFactory </code> on 
- * every transaction begin.
+ * Represents a single instance of <code>EntityManagerFactory</code>
+ * for every transaction begin.
  * 
  * <p>This class is bound to JPA/Hibernate and a specific DB name.
  * When changing configuration, these dependencies must be modified.
  * 
- * @author Simon Lischka
+ * @author Simon Lischka&eacute;
  * 
  */
 public class DaEmProvider {

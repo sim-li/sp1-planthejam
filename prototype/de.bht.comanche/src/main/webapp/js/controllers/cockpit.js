@@ -1,27 +1,42 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * @module myApp
  *
- * Module: logged in controller
+ * @author Sebastian Dass&eacute;
  */
-
-
-'use strict';
-
 angular.module('myApp')
+    /**
+     * The controller for the cockpit view.
+     *
+     * @class cockpitCtrl
+     */
     .controller('cockpitCtrl', ['$scope', '$location', '$log', 'restService', 'Invite', 'util', 'invitesPromise',
         function($scope, $location, $log, restService, Invite, util, invitesPromise) {
+
+            'use strict';
 
             // resolve the promises passed to this route
             $scope.invites = Invite.importMany(invitesPromise);
 
+            // preselects the first invite in the list
             $scope.selectedInvite = $scope.invites[0];
 
+
+            /**
+             * Selects the specified invite.
+             *
+             * @method selectInvite
+             * @param  {Invite} invite the invite
+             */
             $scope.selectInvite = function(invite) {
                 $scope.selectedInvite = invite;
                 // $log.debug($scope.selectedInvite);
             };
 
+            /**
+             * Switches to the invite edit view to edit the selected invite.
+             *
+             * @method editInvite
+             */
             $scope.editInvite = function() {
                 if (!$scope.selectedInvite) {
                     $log.log('Keine Terminumfrage ausgewaehlt.');
@@ -30,10 +45,20 @@ angular.module('myApp')
                 $location.path('/invite/' + $scope.selectedInvite.oid);
             };
 
+            /**
+             * Switches to the invite creation view to create a new invite.
+             *
+             * @method addInvite
+             */
             $scope.addInvite = function() {
                 $location.path('/invite');
             };
 
+            /**
+             * Deletes the selected invite and refreshes the cockpit view.
+             *
+             * @method deleteSelectedInvite
+             */
             $scope.deleteSelectedInvite = function() {
                 // if (!$scope.selectedInvite) {
                 //     $log.log('Keine Terminumfrage ausgewaehlt.');

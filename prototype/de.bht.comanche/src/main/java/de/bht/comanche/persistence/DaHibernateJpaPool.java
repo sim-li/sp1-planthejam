@@ -19,6 +19,8 @@ import multex.Failure;
  * 
  * TODO: Handle Exceptions
  */
+// Contract: Every newly retrieved object gets this pooL!
+// Attaching should happen somewhere else!!! What if a pool gets replaced?
 public class DaHibernateJpaPool implements DaPool {
 	
 	private EntityManager entityManager;

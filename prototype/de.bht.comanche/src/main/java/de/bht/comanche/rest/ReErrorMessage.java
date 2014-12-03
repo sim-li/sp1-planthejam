@@ -4,8 +4,16 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import multex.Msg;
 
+/**
+ * This class represents an error message. Provide general user information about the error
+ * and detail stack trace for debugging.
+ * @author Maxim Novichkov
+ */
 public class ReErrorMessage {
-
+	
+	/**
+	 * The baseName for locating the exception message text resource bundle.
+	 */
 	public static final String BASE_NAME = "MessageResources";
 	
 	/**
@@ -18,13 +26,18 @@ public class ReErrorMessage {
 	 */
 	public final String stackTrace;
 	
+	/**
+	 * Construct a new simple error message.
+	 * @param message The simple message for user. 
+	 * @param stackTrace The stack trace, which has to be reported.
+	 */
 	public ReErrorMessage(final String message, final String stackTrace) {
 		this.message = message;
 		this.stackTrace = stackTrace;
 	}
 	
 	/**
-	 * ...
+	 * Construct a new error message with specified by Multex parameters and the stack trace. 
 	 * 
 	 * @param ex The exception, which has to be reported.
 	 * @param stackTrace The stack trace, which has to be reported.
@@ -33,24 +46,15 @@ public class ReErrorMessage {
 		this(exceptionToString(ex), stackTrace);
 	}
 	
-	// TODO not used -> remove
-//	public ReErrorMessage(final String errorMessage, final StackTraceElement[] stackTrace) {
-//		this(errorMessage, stackTraceToString(stackTrace));
-//	}
-	
+	/**
+	 * Construct a new error mesage from exception an specified message with additional parameters. 
+	 * @param ex The exception, which has to be reported.
+	 * @return The resulting exception message with parameters.
+	 */
 	private static String exceptionToString(final Throwable ex){
 		final ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, Locale.getDefault());
 		final StringBuffer result = new StringBuffer();
         Msg.printMessages(result, ex, bundle);
 		return result.toString();
 	}
-
-	// TODO not used -> remove
-//	private static String stackTraceToString(final StackTraceElement[] stackTrace) {
-//		final StringBuilder sb = new StringBuilder();
-//		for (final StackTraceElement s : stackTrace) {
-//			sb.append(s.toString() + "\n");
-//		}
-//		return sb.toString();
-//	}
 }

@@ -1,18 +1,29 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * @module myApp
  *
- * Module: login controller
+ * @author Sebastian Dass&eacute;
  */
-
-'use strict';
-
 angular.module('myApp')
+    /**
+     * The controller for the login view.
+     *
+     * @class loginCtrl
+     */
     .controller('loginCtrl', ['$scope', '$rootScope', '$location', '$log', 'restService', 'patterns', 'User',
         function($scope, $rootScope, $location, $log, restService, patterns, User) {
 
+            'use strict';
+
+            // turns the dummy login on/off for debugging
             var DUMMY_LOGIN = false;
 
+            /**
+             * Does a login for the specified user if his credentials are valid.
+             *
+             * @method login
+             * @param  {Object}  user the user to be logged in
+             * @return {Promise}      a promise to the logged-in user
+             */
             $scope.login = function(user) {
                 if (!loginIsValidFor(user)) {
                     $log.log('Login ungueltig.');
@@ -23,18 +34,33 @@ angular.module('myApp')
                     // user.password = 'yousnoozeyoulose';
                     user.password = 'testtest';
                 }
-                call(restService.login, user, '/cockpit', 'Login erfolgreich.');
+                callService(restService.login, user, '/cockpit', 'Login erfolgreich.');
             };
 
+            /**
+             * Registers the specified user and does a login if his credentials are valid.
+             *
+             * @method register
+             * @param  {Object}  user the user to be registered
+             * @return {Promise}      a promise toe the registered and logged-in user
+             */
             $scope.register = function(user) {
                 if (!registerIsValidFor(user)) {
                     $log.log('Registrierung ungueltig.');
                     return;
                 }
-                call(restService.register, user, '/cockpit', 'Registrierung erfolgreich.');
+                callService(restService.register, user, '/cockpit', 'Registrierung erfolgreich.');
             };
 
 
+            /**
+             * Checks if the credentials of the specified user are valid.
+             *
+             * @method loginIsValidFor
+             * @private
+             * @param  {Object}  user the user
+             * @return {Boolean}      true if the credentials are valid, otherwise false
+             */
             var loginIsValidFor = function(user) {
                 if (!user.name) {
                     $log.log('Benutzername fehlt.');
@@ -52,6 +78,14 @@ angular.module('myApp')
                 return true;
             };
 
+            /**
+             * Checks if the credentials of the specified user are valid.
+             *
+             * @method registerIsValidFor
+             * @private
+             * @param  {Object}  user the user
+             * @return {Boolean}      true if the credentials are valid, otherwise false
+             */
             var registerIsValidFor = function(user) {
                 if (!loginIsValidFor(user)) {
                     return false;
@@ -69,10 +103,23 @@ angular.module('myApp')
                 return true;
             };
 
-            var call = function(service, user, path, successMsg) {
+            /**
+             * Calls an asynchronous service at the specified relative path and passes the user as a parameter.
+             *
+             * @method callService
+             * @private
+             * @param  {Function} service    a restService
+             * @param  {Object}   user       the user
+             * @param  {String}   path       the relative path at which the RESTful service shall be called
+             * @param  {String}   [successMsg] the message to be logged for success
+             * @return {Promise}             a promise to the requested object
+             */
+            var callService = function(service, user, path, successMsg) {
                 service(new User(user))
                     .then(function(_user) {
-                        $log.log(successMsg);
+                        if (successMsg) {
+                            $log.log(successMsg);
+                        }
                         $scope.user = new User(_user);
                         $location.path(path);
                     }, function(error) {

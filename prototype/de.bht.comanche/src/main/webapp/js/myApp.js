@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
  * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
@@ -5,6 +6,8 @@
  * Module: my app -- the main module
  */
 
+=======
+>>>>>>> 183b80ed96a2ddb6fd64cec602a207d6eb9184e3
 'use strict';
 
 /**
@@ -14,15 +17,11 @@
  * ...
  *
  * @module myApp
+ * @main
+ *
+ * @author Sebastian Dass&eacute;
  */
 angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate', 'survey', 'constants', 'restModule', 'typeAugmentations', 'invite', 'group', 'user'])
-    .constant('dialogMap', { // TODO remove after routing works without it
-        USER_LOGIN: 0,
-        USER_REGISTER: 1,
-        USER_EDIT: 2,
-        SURVEY_SELECTION: 3,
-        SURVEY_EDIT: 4
-    })
     .factory('util', function() {
 
         // TODO is it still in use?

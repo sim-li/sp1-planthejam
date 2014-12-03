@@ -2,11 +2,22 @@
 // Bug: Multiple Rename fails unless select happens
 // Simplify, Patterns, Comment.
 
-'use strict';
-
+/**
+ * @module myApp
+ *
+ * @author Simon Lischka
+ * @author Sebastian Dass&eacute;
+ */
 angular.module('myApp')
+    /**
+     * The controller for the invite edit/creation view.
+     *
+     * @class inviteCtrl
+     */
     .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Invite', 'Survey', 'Group', 'Member', 'User', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise',
         function($scope, $log, $location /*, $routeParams*/ , restService, Invite, Survey, Group, Member, User, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise) {
+
+            'use strict';
 
             // resolve the promises passed to this route
             $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : new Invite({
@@ -162,8 +173,8 @@ angular.module('myApp')
                 var members = $scope.selectedGroup.members;
                 var member = members[index];
                 // if (member.oid) {
-                    // restService.doDelete(member);
-                    // .then(function(success) {} /*, function(error) { $log.log(error); }*/ );
+                // restService.doDelete(member);
+                // .then(function(success) {} /*, function(error) { $log.log(error); }*/ );
                 // }
                 members.splice(index, 1);
                 if (members.length <= 0) {

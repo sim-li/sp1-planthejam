@@ -18,9 +18,9 @@ angular.module('invite', ['survey'])
          * @constructor
          * @param {Object}  [config={}] an optional configuration object
          * @param {Number}  [config.oid=''] the object id of the invite
-         * @param {Boolean} config.ignored a flag that indicates if the invite is ignored
-         * @param {Boolean} config.host a flag that indicates if the owning user of the invite is host of the survey
-         * @param {Survey}  config.survey the survey
+         * @param {Boolean} [config.ignored] a flag that indicates if the invite is ignored
+         * @param {Boolean} [config.host] a flag that indicates if the owning user of the invite is host of the survey
+         * @param {Object}  [config.survey=new Survey()] the survey
          */
         var Invite = function(config) {
             if (!(this instanceof Invite)) {

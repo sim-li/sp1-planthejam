@@ -1,15 +1,18 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * @module myApp
  *
- * Module: main controller
+ * @author Sebastian Dass&eacute;
  */
-
-'use strict';
-
 angular.module('myApp')
-    .controller('ctrl', ['$scope', '$rootScope', '$log', 'Survey', 'TimeUnit', 'Type', 'dialogMap', 'User',
-        function($scope, $rootScope, $log, Survey, TimeUnit, Type, dialogMap, User) {
+    /**
+     * The main controller for myApp.
+     *
+     * @class menuCtrl
+     */
+    .controller('ctrl', ['$scope', '$rootScope', '$log', 'Survey', 'TimeUnit', 'Type', 'User',
+        function($scope, $rootScope, $log, Survey, TimeUnit, Type, User) {
+
+            'use strict';
 
             // make services available for the use in html
             $scope.$log = $log;
@@ -18,6 +21,11 @@ angular.module('myApp')
 
             $rootScope.warnings = '';
 
+            /**
+             * Discards all warnings from the app's main view.
+             *
+             * @method discardWarnings
+             */
             $rootScope.discardWarnings = function() {
                 $rootScope.warnings = '';
             };
