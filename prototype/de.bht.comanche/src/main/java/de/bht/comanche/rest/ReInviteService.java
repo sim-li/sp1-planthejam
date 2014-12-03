@@ -14,10 +14,23 @@ import javax.ws.rs.core.Context;
 
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgTransaction;
-
+/**
+ * This class provide a LgInvite service as a network-accessible endpoint by using Representational State Transfer (RESTful) web service (JAX-RS). 
+ * Jersey implements support for the annotations defined in the specification and used in this class. Resources are identified by URIs, 
+ * which provide a global addressing space for resource and service discovery. The @Path annotation identifies the URI path template to which the 
+ * resource responds and is specified at the class or method level of a resource. 
+ * 
+ * @author Maxim Novichkov
+ *
+ */
 @Path("/invite/")
 public class ReInviteService extends RestService {
-
+	/**
+	 * Returns the list of all LgInvites for current user.
+	 * @param request The request information from HTTP service.
+	 * @return The list of invites.
+	 * @exception Throws the RestGetInvitesFailure if it was not possible to get list of invites for current user.
+	 */
 	@POST
 	@Path("getInvites")
 	@Consumes("application/json")
@@ -43,7 +56,13 @@ public class ReInviteService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class RestGetInvitesFailure extends multex.Failure {}
 
-
+	/**
+	 * Returns the LgInvite specified by oid.
+	 * @param oid The LgInvite oid.
+	 * @param request The request information from HTTP service.
+	 * @return The LgInvite.
+	 * @exception Throws the RestGetInviteFailure if it was not possible to get invite for current user.
+	 */
 	@POST
 	@Path("get")
 	@Consumes("application/json")
@@ -69,7 +88,12 @@ public class ReInviteService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class RestGetInviteFailure extends multex.Failure {}
 
-
+	/**
+	 * Save incoming LgInvite for current user. 
+	 * @param invite The incoming LgInvite.
+	 * @param request The request information from HTTP service.
+	 * @exception Throws the RestSaveInviteFailure if it was not possible to save invite for current user.
+	 */
 	@Path("save")
 	@POST
 	@Consumes("application/json")
@@ -94,7 +118,12 @@ public class ReInviteService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class RestSaveInviteFailure extends multex.Failure {}
 
-
+	/**
+	 * Delete LgInvite by specified oid.
+	 * @param oid The LgInvite oid.
+	 * @param request The request information from HTTP service.
+	 * @exception Throws the RestDeleteInviteFailure if it was not possible to delete invite of current user.
+	 */
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")

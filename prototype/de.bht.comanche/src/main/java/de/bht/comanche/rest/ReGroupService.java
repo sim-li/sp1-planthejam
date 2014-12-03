@@ -15,9 +15,25 @@ import javax.ws.rs.core.Context;
 import de.bht.comanche.logic.LgGroup;
 import de.bht.comanche.logic.LgTransaction;
 
+/**
+ * This class provide a LgGroup service as a network-accessible endpoint by using Representational State Transfer (RESTful) web service (JAX-RS). 
+ * Jersey implements support for the annotations defined in the specification and used in this class. Resources are identified by URIs, 
+ * which provide a global addressing space for resource and service discovery. The @Path annotation identifies the URI path template to which the 
+ * resource responds and is specified at the class or method level of a resource. 
+ * 
+ * @author Maxim Novichkov
+ * 
+ *
+ */
 @Path("/group/")
 public class ReGroupService extends RestService {
-
+	
+	/**
+	 * Returns the list of groups with all groups for current user.
+	 * @param request The request information from HTTP service.
+	 * @return Returns the list of LgGroups.
+	 * @exception Throws the RestGetGroupsFailure if it was not possible to get all groups for LgUser.
+	 */
 	@Path("getGroups")
 	@POST
 	@Consumes("application/json")
@@ -43,7 +59,13 @@ public class ReGroupService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class RestGetGroupsFailure extends multex.Failure {}
 
-
+	/**
+	 * Save group for current user.
+	 * @param group The LgGroup to be save.
+	 * @param request The request information from HTTP service.
+	 * @return Returns saved LgGroup.
+	 * @exception Throws the RestSaveGroupFailure if it was not possible to save LgGroup.
+	 */
 	@Path("save")
 	@POST
 	@Consumes("application/json")
@@ -68,7 +90,13 @@ public class ReGroupService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class  RestSaveGroupFailure extends multex.Failure {}
-
+	
+	/**
+	 * Delete LgGrop specified by oid. 
+	 * @param oid 	  The LgGroup oid to be deleted.
+	 * @param request The request information from HTTP service.
+	 * @exception Throws the RestDeleteGroupFailure if it was not possible to delete LgGroup.
+	 */
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")
