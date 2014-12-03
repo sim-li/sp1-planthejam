@@ -156,10 +156,18 @@ public class LgUser extends DaObject {
 		return search(this.invites, inviteOid);
 	}
 	
+	/**
+	 * Remove invite object from the list of invites.
+	 * @param invite The LgInvite to remove.
+	 */
 	public void remove(final LgInvite invite) {
 		this.invites.remove(invite);
 	}
 	
+	/**
+	 * Remove grop object from the list of groups.
+	 * @param invite The LgGroup to remove.
+	 */
 	public void remove(final LgGroup group) {
 		this.groups.remove(group);
 	}
