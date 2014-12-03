@@ -11,22 +11,15 @@ import javax.persistence.Query;
 import multex.Failure;
 
 /**
- * ...
- * 
- * Contract: Every newly retrieved object gets this pool!
+ * This class is a concrete implementation DaPool for Hibernate/JPA
+ * and provides all basic data access operations.
  * 
  * @author Simon Lischka
- * 
- * TODO: Handle Exceptions
  */
-// Contract: Every newly retrieved object gets this pooL!
-// Attaching should happen somewhere else!!! What if a pool gets replaced?
+
 public class DaHibernateJpaPool implements DaPool {
 	
 	private EntityManager entityManager;
-	
-	//Runtime exc -> Failure
-	//checked exc -> multex exc - 
 	
 	public DaHibernateJpaPool() {
 		try {
@@ -67,7 +60,6 @@ public class DaHibernateJpaPool implements DaPool {
 		checkPersistentClass(persistentClass);
 		final E result = this.entityManager.find(persistentClass, oid);
 		if (result == null) {
-			// TODO throw create(DaOidNotFoundExc.class, i_oid);
 		}
 		result.attach(this);
 		return result;
@@ -75,7 +67,6 @@ public class DaHibernateJpaPool implements DaPool {
 
 	@Override
 	public <E extends DaObject> List<E> findAll(final Class<E> persistentClass) {
-		// TODO at try/catch
 		final Query query = this.entityManager.createQuery("SELECT e FROM " + persistentClass.getSimpleName() + " e", persistentClass); 
 		@SuppressWarnings("unchecked")
 		final List<E> results = query.getResultList();
@@ -144,7 +135,6 @@ public class DaHibernateJpaPool implements DaPool {
 			final String queryString, final Object[] args) {
 		checkPersistentClass(resultClass);
 		if (wrongArgumentCount(queryString, args)) {
-			//	throw create(DaArgumentCountExc.class, i_queryString, i_args.length); // TODO -> try out if it works, otherwise remove this check
 		}
 		final String qlString = String.format(queryString, args);
 		final Query query = this.entityManager.createQuery(qlString, resultClass);
@@ -158,7 +148,6 @@ public class DaHibernateJpaPool implements DaPool {
 
 	public <E extends DaObject> void checkPersistentClass(final Class<E> persistentClass) {
 		if (!DaObject.class.isAssignableFrom(persistentClass)) {
-//			 throw create(DaNoPersistentClassExc.class, persistentClass); // TODO -> try out if it works, otherwise remove this check 
 		}
 	}
 

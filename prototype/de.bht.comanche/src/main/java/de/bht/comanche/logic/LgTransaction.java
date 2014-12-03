@@ -5,13 +5,35 @@ import javax.servlet.http.HttpServletRequest;
 import de.bht.comanche.rest.ReErrorMessage;
 import de.bht.comanche.rest.ReServerException;
 import de.bht.comanche.rest.RestService;
-
+/**
+ * Transaction template class for exception handling. 
+ * 
+ * @author Simon Lischka
+ *
+ * @param <E> Return type
+ */
 public abstract class LgTransaction<E> {
-	
+	/**
+	 * Result of operation
+	 */
 	private final E result;
+	
+	/**
+	 * Session
+	 */
 	private final LgSession session = new LgSession();
+	
+	/**
+	 * Servelet Request
+	 */
     private final HttpServletRequest request;	
 
+    
+    /**
+     * Sandwich operations
+     * 
+     * @param request
+     */
 	public LgTransaction(final HttpServletRequest request) {
 		this.request = request;
 	   	boolean success = false;
@@ -31,6 +53,11 @@ public abstract class LgTransaction<E> {
 		}
 	}
 		
+	/**
+	 * Return result 
+	 * 
+	 * @return
+	 */
 	public E getResult() {
 		return this.result;
 	}
