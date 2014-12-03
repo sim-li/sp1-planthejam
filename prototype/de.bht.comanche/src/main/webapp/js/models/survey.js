@@ -17,7 +17,7 @@ angular.module('survey', ['datePickerDate', 'constants'])
         /**
          * Represents a survey.
          *
-         * @class Sruvey
+         * @class Survey
          * @constructor
          * @param {Object} [config={}] an optional configuration object
          * @param {Number} [config.oid=''] the object id of the survey

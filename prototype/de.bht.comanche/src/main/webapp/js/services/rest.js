@@ -1,18 +1,31 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides a RESTful service.
  *
- * Module: REST service
+ * @module restModule
+ * @requires user
+ *
+ * @author Sebastian Dass&eacute;
  */
-'use strict';
-
-angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
+angular.module('restModule', ['user'])
+    /**
+     * The RESTful service.
+     *
+     * @class restService
+     */
     .factory('restService', ['$http', '$q', '$log', '$rootScope', 'User',
         function($http, $q, $log, $rootScope, User) {
 
+            'use strict';
+
+            // turns the logging on/off
             var LOG = true;
 
-            // TODO the paths should best be retrieved from a config file
+            /**
+             * A configuration map for the server routes.
+             *
+             * @property restPaths
+             * @type {Object}
+             */
             var restPaths = {
                 'basePath': '/rest',
                 'user': {
@@ -46,6 +59,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 }
             };
 
+            //--> TODO the paths config should best be retrieved from a config file
             // $http.get('restPaths.json').success(function(data, status, header, config) {
             //     restPaths = data;
             // }).error(function(data, status, header, config) {
@@ -55,12 +69,15 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
 
             /**
              * Returns the relative HTTP path for the given model and operation from the central REST path table.
-             * @param  {object} model    needs to have a method called getModelId() that returns the model ID as a String
+             *
+             * @method getPath
+             * @private
+             * @param  {Object} model    the model, which needs to have a method called getModelId(), that returns the
+             *                               model ID as a String
              * @param  {String} opString a String that denotes the desired operation
              * @return {String}          the relative HTTP path
              */
             var getPath = function(model, opString) {
-                // var getModelId = model.getModelId || new model().getModelId;
                 var getModelId = model.getModelId || model.prototype.getModelId;
                 var theModel = restPaths[getModelId()];
                 return restPaths.basePath + theModel.path + theModel[opString];
@@ -68,18 +85,18 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
 
             /**
              * Calls the HTTP service at the specified URL with the specified data using the specified method.
-             * @param  {String} url    the URL
-             * @param  {object} data   the data to be sent to the server
-             * @param  {String} method the REST method (GET, POST, PUT, DELETE)
-             * @return {promise}       [description]
+             *
+             * @method callHTTP
+             * @private
+             * @param  {String}  url the URL (relative to the root path)
+             * @param  {Object}  [data] the data to be sent to the server
+             * @param  {String}  [method] the REST method (GET, POST, PUT or DELETE)
+             * @return {Promise}          a promise to the data received in the response
              */
             var callHTTP = function(url, data, method) {
-                // if (LOG)  {
-                //     $log.log('REST: ' + url);
-                // }
-
-                $log.debug(data)
-
+                if (LOG) {
+                    $log.debug('REST: %s %o', url, data);
+                }
                 var deferred = $q.defer();
                 $http({
                     method: method || 'POST',
@@ -90,8 +107,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                     } : ''
                 }).success(function(data, status, header, config) {
                     if (LOG) {
-                        $log.debug('REST: ' + url + ' ==>');
-                        $log.debug(data);
+                        $log.debug('REST: %s ==> % o', url, data);
                     }
                     deferred.resolve(data);
                 }).error(function(data, status, header, config) {
@@ -105,6 +121,13 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 return deferred.promise;
             };
 
+            /**
+             * Calls the login REST service for the specified user.
+             *
+             * @method login
+             * @param  {Object}  user the user to be logged in
+             * @return {Promise}      a promise to the logged-in user
+             */
             var login = function(user) {
                 return callHTTP(getPath(user, 'login'), {
                     'name': user.name,
@@ -112,6 +135,13 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 });
             };
 
+            /**
+             * Calls the register REST service for the specified user.
+             *
+             * @method register
+             * @param  {Object}  user the user to be registered
+             * @return {Promise}      a promise to the registered user
+             */
             var register = function(user) {
                 return callHTTP(getPath(user, 'register'), {
                     'name': user.name,
@@ -121,8 +151,14 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 });
             };
 
+            /**
+             * Calls the delete REST service for the specified user.
+             *
+             * @method deleteUser
+             * @param  {Object}  user the user to be deleted
+             */
             var deleteUser = function(user) {
-                return callHTTP(getPath(user, 'delete'), {
+                return callHTTP(getPath(user, 'delete'), { // TODO use generic doDelete if possible
                     'oid': user.oid
                 }, 'DELETE');
             };
@@ -131,6 +167,13 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
             //     return callHTTP(getPath(user, 'get'));
             // };
 
+            /**
+             * Calls the update REST service for the specified user.
+             *
+             * @method updateUser
+             * @param  {Object}  user the user to be updated
+             * @return {Promise}      a promise to the updated user
+             */
             var updateUser = function(user) {
                 return callHTTP(getPath(user, 'update'), {
                     'oid': user.oid,
@@ -141,34 +184,47 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 });
             };
 
+            /**
+             * Calls the logout REST service.
+             *
+             * @method logout
+             */
             var logout = function() {
                 return callHTTP(getPath(User, 'logout'));
             };
 
             /**
-             * Gets a collection of objects of the specified model.
-             * @param  {object} modelClass needs to have a method called getModelId() that returns the model ID as a String
-             * @return {promise}           a promise for a collection of objects of the specified model type
-             */
-            var doGetMany = function(modelClass) {
-                return callHTTP(getPath(modelClass, 'getMany'));
-            };
-
-            /**
-             * Gets the specified object specified by model class and oid.
-             * @param  {object} modelClass needs to have a method called getModelId() that returns the model ID as a String
-             * @param  {number} oid        the object id
-             * @return {promise}           a promise for the object
-             */
-            var doGet = function(modelClass, oid) {
-                return callHTTP(getPath(modelClass, 'get'), oid);
-            };
-
-            /**
-             * Saves a model.
+             * Gets a collection of objects of the specified model class by calling the REST service.
              *
-             * @param  {object} model needs to have a method called getModelId() that returns the model ID as a String
-             * @return {promise}      a promise for the saved object of the specified model
+             * @method doGetMany
+             * @param  {Object} ModelClass the model class, which needs to have a method called getModelId(), that
+             *                                 returns the model ID as a String
+             * @return {Promise}           a promise for a collection of objects of the specified model type
+             */
+            var doGetMany = function(ModelClass) {
+                return callHTTP(getPath(ModelClass, 'getMany'));
+            };
+
+            /**
+             * Gets the object specified by model class and oid by calling the REST service.
+             *
+             * @method doGet
+             * @param  {Object} ModelClass the model class, which needs to have a method called getModelId(), that
+             *                                 returns the model ID as a String
+             * @param  {Number} oid        the object ID
+             * @return {Promise}           a promise for the object
+             */
+            var doGet = function(ModelClass, oid) {
+                return callHTTP(getPath(ModelClass, 'get'), oid);
+            };
+
+            /**
+             * Saves a model by calling the REST service.
+             *
+             * @method doSave
+             * @param  {Object} model the model, which needs to have a method called getModelId(), that returns the
+             *                            model ID as a String
+             * @return {Promise}      a promise for the saved object of the specified model
              */
             var doSave = function(model) {
                 return callHTTP(getPath(model, 'save'), model.export());
@@ -176,16 +232,14 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
 
             // NOTE: delete is a javascript keyword, therefore the otherwise strange 'do'-prefix naming convention
             /**
-             * Deletes a model.
-             * @param  {object} model needs to have a method called getModelId() that returns the model ID as a String
-             * @return {promise}      an empty (???) promise
+             * Deletes a model by calling the REST service.
+             *
+             * @method doDelete
+             * @param  {Object} model the model, which needs to have a method called getModelId(), that returns the
+             *                            model ID as a String
              */
             var doDelete = function(model) {
                 return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE');
-            };
-
-            var sayHi = function() {
-                $log.log('HI from rest');
             };
 
             return {
@@ -198,8 +252,7 @@ angular.module('restModule', ['datePickerDate', 'constants', 'invite', 'group'])
                 doGetMany: doGetMany,
                 doGet: doGet,
                 doSave: doSave,
-                doDelete: doDelete,
-                sayHi: sayHi
+                doDelete: doDelete
             };
 
         }
