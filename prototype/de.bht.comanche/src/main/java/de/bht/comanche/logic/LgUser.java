@@ -138,7 +138,7 @@ public class LgUser extends DaObject {
 	/**
 	 * Proof key value of user name and password.
 	 * @param user The LgUser to proof.
-	 * @return If the key and value matcht.  
+	 * @return If the key and value match.  
 	 */
 	public boolean passwordMatchWith(final LgUser user) {
 		if (this.password == null) {
