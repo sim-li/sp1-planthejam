@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
  * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
@@ -6,8 +5,6 @@
  * Module: my app -- the main module
  */
 
-=======
->>>>>>> 183b80ed96a2ddb6fd64cec602a207d6eb9184e3
 'use strict';
 
 /**
