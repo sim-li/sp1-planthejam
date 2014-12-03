@@ -13,24 +13,43 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
+ * Abstract base class for all entities that will be persisted.
+ * Fulfills all basic requirements to interact with the persistence unit.
+ * This includes an object id field and a local reference to the pool.
+ * 
+ * <code>DaObject</code> provides basic operations like <code>save</code>
+ * or <code>delete</code> which should be overwritten when a different
+ * functionality is needed. The introduction of new method signatures for 
+ * these operations should be avoided when possible.
+ * 
  * @author Simon Lischka
+ * @author Max Novichkov
  */
 @MappedSuperclass
 public abstract class DaObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
+    /**
+     * Default object id of a newly created entity. Will be overwritten when
+     * persisted. 
+     */
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(unique = true, nullable = false)
 	protected long oid = DaPool.CREATED_OID; 
-
+   
+	/**
+	 * Local reference to the <code>pool</code> used for persistence operations.
+	 */
 	protected transient DaPool pool;
 
-	public DaObject() {}
-
-	protected DaObject(final DaPool pool) {
-		this.pool = pool;
-	}
-
+	/**
+	 * Links a pool to this entity. 
+	 * 
+	 * Will throw exception when a different pool is already set.
+	 * 
+	 * @param pool <code>Pool</code> to be attached to this entity
+	 * @return This object with pool reference
+	 */
 	public DaObject attach(final DaPool pool) throws multex.Exc {
 		if (this.pool != null && pool != this.pool) {
 			throw create(OwningPoolChangedExc.class, this.getClass().getName(), this.getOid());
@@ -38,28 +57,57 @@ public abstract class DaObject implements Serializable {
 		this.pool = pool;
 		return this;
 	}
-
-	/**
-	 *  Owning pool changed. Object of class "{0}" and with OID "{1}" 
-	 */
 	@SuppressWarnings("serial")
+	// @TODO Write exception text
 	public static final class OwningPoolChangedExc extends multex.Exc {}
 
-	public <E extends DaObject> E attach(final E item) {
+	/**
+	 * Links the pool of this entity to another entity.
+	 * 
+	 * @param other Receiving entity
+	 * @return Receiving entity with the attached pool
+	 */
+	public <E extends DaObject> E attach(final E other) {
 		@SuppressWarnings("unchecked")
-		final E result = (E) item.attach(getPool());
+		// @TODO Throw no pool exception when other object doesn't contain pool
+		final E result = (E) other.attach(getPool());
 		return result;
 	}
 
+	/**
+	 * Deletes this entity from its pool
+	 */
 	public void delete() {
 		this.pool.delete(this);
 	}
 
+	/**
+	 * Saves this entity to the DB. If the entity already
+	 * exists with the same id, modified fields are updated
+	 * with the new entity.
+	 * 
+	 * After saving, the object is tracked by the entity manager.
+	 * Updates to the object will be automatically executed without
+	 * the need for an additional save.
+	 * 
+	 * @return Saved entity
+	 */
+	// @TODO Testing: Check if all or only updated values are overwritten
 	public <E extends DaObject> E save() {
 		return this.pool.save(this);
 	}
 
+	/**
+	 * Searches a list of <code>DaObject</code>s by object id. 
+	 * 
+	 * Method provides a default way of retrieving internal collections.
+	 * 
+	 * @param list List of <code>DaObject</code>s to be searched
+	 * @param oid Object id value of element to search
+	 * @return Matching element or null when not found
+	 */
 	public <E extends DaObject> E search(final List <E> list, final long oid) {
+		// @TODO Check if exception when not found necessary.
 		for (final DaObject item : list) {
 			if (oid == item.getOid()) {
 				@SuppressWarnings("unchecked")
@@ -70,15 +118,21 @@ public abstract class DaObject implements Serializable {
 		return null;
 	}
 
-	public <E extends DaObject> E search(final E obj, final long oid) {
-		if (oid == obj.getOid()) {
-			@SuppressWarnings("unchecked")
-			final E result = (E) obj.attach(getPool());
-			return result;
-		}
-		return null;
-	}
-
+	/**
+	 * @deprecated In the current implementation this is not the default way of
+	 * searching for objects. In future releases, this may be implemented as the 
+	 * standard way of accessing collections though (requires redesign and integration
+	 * of direct DB operations).
+	 * 
+	 * Searches an object by primary and foreign key/value pairs. 
+	 * 
+	 * @param persistentClass Class of resulting object
+	 * @param firstKeyFieldName Primary key name
+	 * @param firstKey Primary key value
+	 * @param secondKeyFieldName Secondary key name
+	 * @param secondKey Secondary key value
+	 * @return Matching entity
+	 */
 	public <E extends DaObject> List<E> search(final Class<E> persistentClass, final String firstKeyFieldName,
 			final Object firstKey, final String secondKeyFieldName, final Object secondKey) {
 		List<E> result = new ArrayList<E>();
@@ -86,17 +140,19 @@ public abstract class DaObject implements Serializable {
 			result = this.pool.findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);
 		} catch (final Exception ex) {
 			multex.Msg.printReport(System.err, ex);
-			// TODO throw Multex exc when not found
+			// @TODO Throw MulTex exception when not found
 		}
 		return result;
 	}
 
-	/**
-	 * --------------------------------------------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
+	public boolean isPersistent() {
+		return this.oid != DaPool.CREATED_OID && this.oid > 0;
+	}
+
+	public boolean isDeleted() {
+		return this.oid == DaPool.DELETED_OID;
+	}
+	
 	protected DaPool getPool() {
 		return this.pool;
 	}
@@ -107,14 +163,6 @@ public abstract class DaObject implements Serializable {
 
 	protected void setOid(final long oid) {
 		this.oid = oid;
-	}
-
-	public boolean isPersistent() {
-		return this.oid != DaPool.CREATED_OID && this.oid > 0;
-	}
-
-	public boolean isDeleted() {
-		return this.oid == DaPool.DELETED_OID;
 	}
 
 	@Override
