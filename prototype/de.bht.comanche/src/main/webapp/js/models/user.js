@@ -1,15 +1,27 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
+/**
+ * Provides a model for users.
  *
- * Module: user
+ * @module user
+ *
+ * @author Sebastian Dass&eacute;
  */
-
-'use strict';
-
 angular.module('user', [])
     .factory('User', function() {
 
+        'use strict';
+
+        /**
+         * Represents a user.
+         *
+         * @class User
+         * @constructor
+         * @param {Object} [config={}] an optional configuration object
+         * @param {Number} [config.oid=''] the object id of the user
+         * @param {String} [config.name=''] the name of the user
+         * @param {String} [config.password=''] the password of the user
+         * @param {String} [config.email=''] the email address of the user
+         * @param {String} [config.tel=''] the telephone number of the user
+         */
         var User = function(config) {
             if (!(this instanceof User)) {
                 return new User(config);
@@ -24,10 +36,24 @@ angular.module('user', [])
             // this.groups = [];
         };
 
+        /**
+         * Returns this model's unique id.
+         *
+         * @method getModelId
+         * @return {String} the model's id
+         */
         User.prototype.getModelId = function() {
             return 'user';
         };
 
+        /**
+         * Imports an array of raw users by converting them to the user model.
+         *
+         * @method importMany
+         * @static
+         * @param  {Array}  rawUsers the users to be imported
+         * @return {Array}           the imported users
+         */
         User.importMany = function(rawUsers) {
             if (!rawUsers) {
                 return rawUsers;
@@ -39,6 +65,11 @@ angular.module('user', [])
             return users;
         };
 
+        /**
+         * Exports the user by removing any client side attributes, that the server can not handle.
+         *
+         * @return {Object} the exported user
+         */
         User.prototype.export = function() {
             return {
                 'oid': this.oid,

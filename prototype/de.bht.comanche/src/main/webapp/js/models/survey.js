@@ -17,17 +17,17 @@ angular.module('survey', ['datePickerDate', 'constants'])
         /**
          * Represents a survey.
          *
-         * @class Sruvey
+         * @class Survey
          * @constructor
          * @param {Object} [config={}] an optional configuration object
          * @param {Number} [config.oid=''] the object id of the survey
          * @param {String} [config.name=''] the name of the survey
          * @param {String} [config.descrition=''] the description of the survey
          * @param {String} [config.type='ONE_TIME'] the type of the survey
-         * @param {DatePickerDate} [config.deadline={now}] the deadline of the survey
+         * @param {Date}   [config.deadline=new Date()] the deadline of the survey
          * @param {Number} [config.frequencyDist=0] the frequency distance of the survey
          * @param {String} [config.frequencyTimeUnit='WEEK'] the frequency time unit of the survey
-         * @param {Array} [config.possibleTimeperiods=[]] the possible time periods of the survey
+         * @param {Array}  [config.possibleTimeperiods=[]] the possible time periods of the survey
          * @param {Object} [config.determinedTimeperiod] the determined time period of the survey
          */
         var Survey = function(config) {
@@ -46,11 +46,21 @@ angular.module('survey', ['datePickerDate', 'constants'])
             };
         };
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>> hier geht's weiter >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> doc it all!
+        /**
+         * Returns this model's unique id.
+         *
+         * @method getModelId
+         * @return {String} the model's id
+         */
         Survey.prototype.getModelId = function() {
             return 'survey';
         };
 
+        /**
+         * Exports the member by removing any client side attributes, that the server can not handle.
+         *
+         * @return {Object} the exported survey
+         */
         Survey.prototype.export = function() {
             return {
                 'oid': this.oid,
@@ -65,49 +75,53 @@ angular.module('survey', ['datePickerDate', 'constants'])
             };
         };
 
-        Survey.prototype.convertDatesToDatePickerDate = function() {
-            this.deadline = new DatePickerDate(this.deadline);
-            var _possibleTimeperiods = [];
-            for (var i = 0; i < this.possibleTimeperiods.length; i++) {
-                var p = this.possibleTimeperiods[i];
-                p.startTime = new DatePickerDate(p.startTime);
-                _possibleTimeperiods.push(p);
-            }
-            this.possibleTimeperiods = _possibleTimeperiods;
-            this.determinedTimeperiod.startTime = new DatePickerDate(this.determinedTimeperiod.startTime);
-        };
-
-        Survey.prototype.convertDatesToJsDate = function() {
-            this.deadline = this.deadline.toDate;
-            var _possibleTimeperiods = [];
-            for (var i = 0; i < this.possibleTimeperiods.length; i++) {
-                var _p = this.possibleTimeperiods[i];
-                _p.startTime = _p.startTime.toDate();
-                _possibleTimeperiods.push(_p);
-            }
-            this.possibleTimeperiods = _possibleTimeperiods;
-            this.determinedTimeperiod.startTime = this.determinedTimeperiod.toDate();
-        };
-
-        Survey.forSurveysConvertDatesToDatePickerDate = function(surveys) {
-            if (!surveys) {
-                return surveys;
-            }
-            for (var i = 0; i < surveys.length; i++) {
-                surveys[i].convertDatesToDatePickerDate();
-            }
-            return surveys;
-        };
-
-        Survey.forSurveysConvertDatesToJsDate = function(surveys) {
-            if (!surveys) {
-                return surveys;
-            }
-            for (var i = 0; i < surveys.length; i++) {
-                surveys[i].convertDatesToJsDate();
-            }
-            return surveys;
-        };
+        //-- Note: keep this date conversion for now, throw away when surveys have time periods -->
+        //
+        // Survey.prototype.convertDatesToDatePickerDate = function() {
+        //     this.deadline = new DatePickerDate(this.deadline);
+        //     var _possibleTimeperiods = [];
+        //     for (var i = 0; i < this.possibleTimeperiods.length; i++) {
+        //         var p = this.possibleTimeperiods[i];
+        //         p.startTime = new DatePickerDate(p.startTime);
+        //         _possibleTimeperiods.push(p);
+        //     }
+        //     this.possibleTimeperiods = _possibleTimeperiods;
+        //     this.determinedTimeperiod.startTime = new DatePickerDate(this.determinedTimeperiod.startTime);
+        // };
+        //
+        // Survey.prototype.convertDatesToJsDate = function() {
+        //     this.deadline = this.deadline.toDate;
+        //     var _possibleTimeperiods = [];
+        //     for (var i = 0; i < this.possibleTimeperiods.length; i++) {
+        //         var _p = this.possibleTimeperiods[i];
+        //         _p.startTime = _p.startTime.toDate();
+        //         _possibleTimeperiods.push(_p);
+        //     }
+        //     this.possibleTimeperiods = _possibleTimeperiods;
+        //     this.determinedTimeperiod.startTime = this.determinedTimeperiod.toDate();
+        // };
+        //
+        // Survey.forSurveysConvertDatesToDatePickerDate = function(surveys) {
+        //     if (!surveys) {
+        //         return surveys;
+        //     }
+        //     for (var i = 0; i < surveys.length; i++) {
+        //         surveys[i].convertDatesToDatePickerDate();
+        //     }
+        //     return surveys;
+        // };
+        //
+        // Survey.forSurveysConvertDatesToJsDate = function(surveys) {
+        //     if (!surveys) {
+        //         return surveys;
+        //     }
+        //     for (var i = 0; i < surveys.length; i++) {
+        //         surveys[i].convertDatesToJsDate();
+        //     }
+        //     return surveys;
+        // };
+        //
+        //  <--
 
         return (Survey);
     }]);
