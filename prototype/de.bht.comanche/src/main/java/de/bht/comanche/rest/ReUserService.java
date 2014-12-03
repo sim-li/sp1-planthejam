@@ -132,7 +132,7 @@ public class ReUserService extends RestService {
 			public LgUser execute() throws Exception {
 				final LgUser user;
 				try {
-					user = getSession().getUser().save(i_user);
+					user = getSession().save(i_user);
 					setUserName(request, user.getName());
 				} catch (Exception ex) {
 					throw create(RestUserUpdateFailure.class, ex, i_user.getName(), i_user.getOid());

@@ -136,9 +136,9 @@ public class LgSession {
 	}	
 	
 	/**
-	 * Returns all users in the system.
+	 * Returns all users registered in the system.
 	 * 
-	 * @return List of all registered users.
+	 * @return List of users.
 	 */
 	public List<LgUser> getAllUsers() {
 		// @TODO Load on demand (getNext())
