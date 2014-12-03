@@ -55,6 +55,13 @@ public class LgUser extends DaObject {
 		getInvite(inviteOid).delete();
 	}
 	
+
+	public LgGroup save(final LgGroup group) {
+		group.setUser(this).setForMember(group);
+		return attach(group).save();
+	}
+	
+
 	public void deleteGroup(final long groupOid) {
 		getGroup(groupOid).delete();
 	}
@@ -62,10 +69,13 @@ public class LgUser extends DaObject {
 	public LgGroup getGroup(final long groupOid) {
 		return search(getGroups(), groupOid);
 	}
+
+	//it does't work
+//	public LgGroup save(final LgGroup group) {
+//		return attach(group).setUser(this).save();
+//	}
 	
-	public LgGroup save(final LgGroup group) {
-		return attach(group).setUser(this).save();
-	}
+	
 	
 	public LgMember save(final LgMember member) {
 		return attach(member).save();
