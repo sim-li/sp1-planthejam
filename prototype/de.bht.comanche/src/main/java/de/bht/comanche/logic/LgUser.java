@@ -89,36 +89,69 @@ public class LgUser extends DaObject {
 		getInvite(inviteOid).delete();
 	}
 	
-
+	/**
+	 * Save LgGroup for current user.
+	 * @param group The LgGroup to save.
+	 * @return The saved LgGroup.
+	 */
 	public LgGroup save(final LgGroup group) {
 		group.setUser(this).setForMember(group);
 		return attach(group).save();
 	}
 	
-
+	/**
+	 * Delete LgGroup by provided oid.
+	 * @param groupOid The LgGroup oid.
+	 */
 	public void deleteGroup(final long groupOid) {
 		getGroup(groupOid).delete();
 	}
 	
+	/**
+	 * Returns LgGroup by ptovided oid.
+	 * @param groupOid The LgGroup oid.
+	 * @return The found LgGroup
+	 */
 	public LgGroup getGroup(final long groupOid) {
 		return search(getGroups(), groupOid);
 	}
-
+	
+	/**
+	 * Save LgMember for current user.
+	 * @param member The LgMember to save.
+	 * @return The saved LgMember.
+	 */
 	public LgMember save(final LgMember member) {
 		return attach(member).save();
 	}
 	
+	/**
+	 * Search LgMember object by group oid and user oid.
+	 * @param groupId The LgGroup oid.
+	 * @param userId The LgUser oid.
+	 * @return The found list with LgMember.
+	 */
 	public List<LgMember> search(final long groupId, final long userId) {
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
 	}
 	
+	/**
+	 * Proof key value of user name and password.
+	 * @param user The LgUser to proof.
+	 * @return If the key and value matcht.  
+	 */
 	public boolean passwordMatchWith(final LgUser user) {
 		if (this.password == null) {
 			return false; // TODO should it be possible/allowed to have no password? if no -> should throw exception
 		}
 		return this.password.equals(user.getPassword());
 	}
-
+	
+	/**
+	 * Returns LgInvite by provided oid.
+	 * @param inviteOid The LgInvite oid.
+	 * @return The found LgInvite.
+	 */
 	public LgInvite getInvite(final long inviteOid) {
 		return search(this.invites, inviteOid);
 	}
