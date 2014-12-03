@@ -1,4 +1,6 @@
 /**
+ * @module myApp
+ *
  * @author Sebastian Dass&eacute;
  */
 angular.module('myApp')

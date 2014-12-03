@@ -8,8 +8,8 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('ctrl', ['$scope', '$rootScope', '$log', 'Survey', 'TimeUnit', 'Type', 'dialogMap', 'User',
-        function($scope, $rootScope, $log, Survey, TimeUnit, Type, dialogMap, User) {
+    .controller('ctrl', ['$scope', '$rootScope', '$log', 'Survey', 'TimeUnit', 'Type', 'User',
+        function($scope, $rootScope, $log, Survey, TimeUnit, Type, User) {
 
             // make services available for the use in html
             $scope.$log = $log;

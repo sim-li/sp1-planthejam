@@ -2,18 +2,32 @@
  * Provides a RESTful service.
  *
  * @module restModule
+ * @requires user
  *
  * @author Sebastian Dass&eacute;
  */
 angular.module('restModule', ['user'])
+    /**
+     * The RESTful service.
+     *
+     * @class restService
+     */
     .factory('restService', ['$http', '$q', '$log', '$rootScope', 'User',
         function($http, $q, $log, $rootScope, User) {
 
             'use strict';
 
+            // turns the logging on/off
             var LOG = true;
 
             // TODO the paths should best be retrieved from a config file
+
+            /**
+             * A configuration map for the server routes.
+             *
+             * @property restPaths
+             * @type {Object}
+             */
             var restPaths = {
                 'basePath': '/rest',
                 'user': {
@@ -75,12 +89,7 @@ angular.module('restModule', ['user'])
              * @return {promise}       [description]
              */
             var callHTTP = function(url, data, method) {
-                // if (LOG)  {
-                //     $log.log('REST: ' + url);
-                // }
-
-                $log.debug(data)
-
+                LOG && $log.debug('REST: %s %o', url, data)
                 var deferred = $q.defer();
                 $http({
                     method: method || 'POST',
@@ -90,10 +99,7 @@ angular.module('restModule', ['user'])
                         'Content-Type': 'application/json'
                     } : ''
                 }).success(function(data, status, header, config) {
-                    if (LOG) {
-                        $log.debug('REST: ' + url + ' ==>');
-                        $log.debug(data);
-                    }
+                    LOG && $log.debug('REST: %s ==> % o', url, data);
                     deferred.resolve(data);
                 }).error(function(data, status, header, config) {
                     // errors should always be logged
