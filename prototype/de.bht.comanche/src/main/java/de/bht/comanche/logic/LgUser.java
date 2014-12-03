@@ -99,6 +99,10 @@ public class LgUser extends DaObject {
 		return attach(group).save();
 	}
 	
+//	public LgGroup save(final LgGroup group) {
+//		return attach(group).setUser(this).setForMember().save();
+//	}
+	
 	/**
 	 * Delete LgGroup by provided oid.
 	 * @param groupOid The LgGroup oid.
@@ -136,9 +140,9 @@ public class LgUser extends DaObject {
 	}
 	
 	/**
-	 * Proof key value of user name and password.
+	 * Proof key and value of user name and password.
 	 * @param user The LgUser to proof.
-	 * @return If the key and value match.  
+	 * @return If the key and value match - true.  
 	 */
 	public boolean passwordMatchWith(final LgUser user) {
 		if (this.password == null) {
