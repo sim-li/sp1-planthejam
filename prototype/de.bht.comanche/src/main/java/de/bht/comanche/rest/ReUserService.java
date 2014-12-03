@@ -14,12 +14,24 @@ import javax.ws.rs.core.Context;
 
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
-
+/**
+ * This class provide a LgUser service as a network-accessible endpoint by using Representational State Transfer (RESTful) web service (JAX-RS). 
+ * Jersey implements support for the annotations defined in the specification and used in this class. Resources are identified by URIs, 
+ * which provide a global addressing space for resource and service discovery. The @Path annotation identifies the URI path template to which the 
+ * resource responds and is specified at the class or method level of a resource. 
+ * @author Maxim Novichkov
+ *
+ */
 @Path("/user/")
 public class ReUserService extends RestService {
 	
-//	final String USER_OID = "userOid";
-
+	/**
+	 * Login a user on the platform.
+	 * @param i_user The incoming user.
+	 * @param request The request information from HTTP service.
+	 * @return The LgUser object - current user.
+	 * @exception Throws the RestLoginUserFailure if it was not possible to login the user.
+	 */
 	@Path("login")
 	@POST
 	@Consumes("application/json")
@@ -45,7 +57,14 @@ public class ReUserService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestLoginUserFailure extends multex.Failure {}
-
+	
+	/**
+	 * Register a new user on the platform.
+	 * @param i_user The incomig user.
+	 * @param request The request information from HTTP service.
+	 * @return The LgUser object - current user.
+	 * @exception Throws the RestRegisterUserFailure if it was not register the user on the platform.
+	 */
 	@Path("register")
 	@POST
 	@Consumes("application/json")
@@ -71,7 +90,12 @@ public class ReUserService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestRegisterUserFailure extends multex.Failure {}
-
+	
+	/**
+	 * Delete user from the platform by using current user name from HTTP request.
+	 * @param request The request information from HTTP service.
+	 * @exception Throws the RestDeleteUserFailure if it was not possible to delete the user from the platform.
+	 */
 	@Path("delete")
 	@DELETE
 	@Consumes("application/json")
@@ -96,7 +120,13 @@ public class ReUserService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestDeleteUserFailure extends multex.Failure {}
-
+	
+	/**
+	 * Get LgUser by using current user name from HTTP request.
+	 * @param request The request information from HTTP service.
+	 * @return The LgUser object - current user.
+	 * @exception Throws the RestGetUserFailure if it was not possible to get current user.
+	 */
 	@Path("get")
 	@POST
 	@Consumes("application/json")
@@ -119,7 +149,14 @@ public class ReUserService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestGetUserFailure extends multex.Failure {}
-
+	
+	/**
+	 * Update LgUser information.
+	 * @param i_user The incoming user.
+	 * @param request The request information from HTTP service.
+	 * @return The updated LgUser object.
+	 * @exception Throws the RestUserUpdateFailure if it was not possible to update current user.
+	 */
 	@Path("update")
 	@POST
 	@Consumes("application/json")
@@ -163,7 +200,13 @@ public class ReUserService extends RestService {
 	//			}
 	//		}.getResult();
 	//	}
-
+	
+	/**
+	 * Get the list of all registered users.
+	 * @param request The request information from HTTP service.
+	 * @return The List of LgUsers.
+	 * @exception Throws the RestGetAllUsersFailure if it was not possible to get list of users.
+	 */
 	@Path("getAllUsers")
 	@POST
 	@Consumes("application/json")
@@ -184,12 +227,16 @@ public class ReUserService extends RestService {
 	}
 
 	/**
-	 * Could not found any user
+	 * Could not get any user
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestGetAllUsersFailure extends multex.Failure {}
 
-
+	/**
+	 * Logout user from the platform by invalidating the session.
+	 * @param request The request information from HTTP service.
+	 * @exception Throws the RestLogoutUserFailure if it was not possible to logout current user.
+	 */
 	@Path("logout")
 	@POST
 	@Consumes("application/json")

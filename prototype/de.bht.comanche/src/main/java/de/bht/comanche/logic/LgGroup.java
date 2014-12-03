@@ -15,35 +15,69 @@ import javax.validation.constraints.NotNull;
 
 import de.bht.comanche.persistence.DaObject;
 
+/**
+ * This entity class represents a group and serve methods for working with 
+ * LgMember and LgGroup objects.
+ * 
+ * @author Maxim Novichkov
+ *
+ */
+
 @Entity
 @Table(name = "group")
 public class LgGroup extends DaObject{
 
 	private static final long serialVersionUID = 1L;
-
+	
+	/**
+	 * Column for a group name. Must not be null.
+	 */
 	@NotNull
 	@Column
 	private String name;
-
+	
+	/**
+	 * Column for a LgUser representation. Must not be null.
+	 */
 	@NotNull
 	@ManyToOne
 	private LgUser user;
-
+	
+	/**
+	 * Representation of a foreign key in a LgMember entity. Provide a list of members. 
+	 */
 	@OneToMany(mappedBy="group", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval=true)
 	private List<LgMember> members;
-
+	
+	/**
+	 * Construct a new LgGroup with a list of members.
+	 */
 	public LgGroup() {
 		this.members = new ArrayList<LgMember>();
 	}
-
+	
+	/**
+	 * Returns the LgMember object by oid.
+	 * 
+	 * @param oid The LgMember oid.
+	 * @return Return serched LgMember.
+	 */
 	public LgMember getMember(final long oid) {
 		return search(this.members, oid);
 	}
-
+	
+	/**
+	 * Delete LgMember by oid.
+	 * @param oid The LgMember oid.
+	 */
 	public void deleteMember(final long oid) {
 		search(this.members, oid).delete();
 	}
 
+	/**
+	 * Delete LgMember by LgUser oid.
+	 * @param userOid The LgUser oid.
+	 */
 	public void deleteUser(final long userOid) {
 		for (final LgMember member : this.members) {
 			final LgUser user = member.getUser();
@@ -54,6 +88,11 @@ public class LgGroup extends DaObject{
 		}
 	}
 	
+	/**
+	 * Sets specified LgGroup for LgMembers.
+	 * @param group The LgGroup to set.
+	 * @return Returns the LgGroup.
+	 */
 	public LgGroup setForMember(LgGroup group){
 			for (final LgMember member : group.getMembers()) {
 				member.setGroup(group);
@@ -61,6 +100,10 @@ public class LgGroup extends DaObject{
 			return this;
 	}
 	
+	/**
+	 * Returns a list of LgUsers for specified group.
+	 * @return The list of LgUsers.
+	 */
 	public List<LgUser> getUsers() {
 		final List<LgUser> users = new LinkedList<LgUser>();
 		for (final LgMember member : this.members) {
@@ -68,21 +111,39 @@ public class LgGroup extends DaObject{
 		}
 		return users;
 	}
-
+	
+	/**
+	 * Gets string name for this group.
+	 * @return The name of this group.
+	 */
 	public String getName() {
 		return this.name;
 	}
-
+	
+	/**
+	 * Sets a  name for this group.
+	 * @param name Name to set.
+	 * @return The name of this group.
+	 */
 	public LgGroup setName(final String name) {
 		this.name = name;
 		return this;
 	}
-
+	
+	/**
+	 * Sets LgUser for this LgGroup.
+	 * @param user LgUser object to set.
+	 * @return LgGroup with specified LgUser object.
+	 */
 	public LgGroup setUser(final LgUser user) {
 		this.user = user;
 		return this;
 	}
-
+	
+	/**
+	 * Returns LgMember list for specified LgGroup. 
+	 * @return The list with LgMembers.
+	 */
 	public List<LgMember> getMembers() {
 		return this.members;
 	}
