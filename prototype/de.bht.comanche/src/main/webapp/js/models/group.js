@@ -34,45 +34,22 @@ angular.module('group', ['baseModel', 'member'])
         };
 
         // Group.prototype = new Model();
+
+        /**
+         * This model's unique id.
+         *
+         * @property modelId
+         * @type {String}
+         */
         Group.prototype.modelId = 'group';
-
-        /**
-         * Returns this model's unique id.
-         *
-         * @method getModelId
-         * @return {String} the model's id
-         */
-        // Group.prototype.getModelId = function() {
-        //     return 'group';
-        // };
-
-        /**
-         * Imports an array of raw groups by converting them to the group model.
-         *
-         * @method importMany
-         * @static
-         * @param  {Array}  rawGroups the groups to be imported
-         * @return {Array}            the imported groups
-         */
-        // Group.importMany = function(rawGroups) {
-        //     if (!rawGroups) {
-        //         return rawGroups;
-        //     }
-        //     var groups = [];
-        //     for (var i = 0; i < rawGroups.length; i++) {
-        //         groups.push(new Group(rawGroups[i]));
-        //     }
-        //     // console.log("imported " + rawGroups.length)
-        //     return groups;
-        // };
 
         /**
          * Exports the group by removing any client side attributes, that the server can not handle.
          *
-         * @method export
+         * @method doExport
          * @return {Object} the exported group
          */
-        Group.prototype.export = function() {
+        Group.prototype.doExport = function() {
             return {
                 'oid': this.oid,
                 'name': this.name,

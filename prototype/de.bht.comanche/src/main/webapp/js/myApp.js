@@ -22,11 +22,11 @@
  * @requires constants
  * @requires restModule
  * @requires datePickerDate
+ * @requires baseModel
  * @requires user
  * @requires invite
  * @requires survey
  * @requires group
- * @requires baseModel
  *
  * @author Sebastian Dass&eacute;
  */

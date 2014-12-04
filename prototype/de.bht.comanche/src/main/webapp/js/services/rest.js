@@ -5,8 +5,6 @@
  * @requires baseModel
  * @requires user
  *
- * TODO change docs concerning model and model ID !!!
- *
  * @author Sebastian Dass&eacute;
  */
 angular.module('restModule', ['baseModel', 'user'])
@@ -75,8 +73,7 @@ angular.module('restModule', ['baseModel', 'user'])
              *
              * @method getPath
              * @private
-             * @param  {Object} model    the model, which needs to have a method called getModelId(), that returns the
-             *                               model ID as a String
+             * @param  {Object} model    the model or model class with a modelId
              * @param  {String} opString a String that denotes the desired operation
              * @return {String}          the relative HTTP path
              */
@@ -200,8 +197,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * Gets a collection of objects of the specified model class by calling the REST service.
              *
              * @method doGetMany
-             * @param  {Object} ModelClass the model class, which needs to have a method called getModelId(), that
-             *                                 returns the model ID as a String
+             * @param  {Object} ModelClass the model class with a modelId
              * @return {Promise}           a promise for a collection of objects of the specified model type
              */
             var doGetMany = function(ModelClass) {
@@ -212,8 +208,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * Gets the object specified by model class and oid by calling the REST service.
              *
              * @method doGet
-             * @param  {Object} ModelClass the model class, which needs to have a method called getModelId(), that
-             *                                 returns the model ID as a String
+             * @param  {Object} ModelClass the model class with a modelId
              * @param  {Number} oid        the object ID
              * @return {Promise}           a promise for the object
              */
@@ -225,12 +220,11 @@ angular.module('restModule', ['baseModel', 'user'])
              * Saves a model by calling the REST service.
              *
              * @method doSave
-             * @param  {Object} model the model, which needs to have a method called getModelId(), that returns the
-             *                            model ID as a String
+             * @param  {Object} model the model with a modelId and an export method
              * @return {Promise}      a promise for the saved object of the specified model
              */
             var doSave = function(model) {
-                return callHTTP(getPath(model, 'save'), model.export());
+                return callHTTP(getPath(model, 'save'), model.doExport());
             };
 
             // NOTE: delete is a javascript keyword, therefore the otherwise strange 'do'-prefix naming convention
@@ -238,8 +232,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * Deletes a model by calling the REST service.
              *
              * @method doDelete
-             * @param  {Object} model the model, which needs to have a method called getModelId(), that returns the
-             *                            model ID as a String
+             * @param  {Object} model the model with a modelId
              */
             var doDelete = function(model) {
                 return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE');

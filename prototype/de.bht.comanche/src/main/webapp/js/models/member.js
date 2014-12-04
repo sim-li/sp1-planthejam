@@ -30,59 +30,40 @@ angular.module('member', ['user'])
         };
 
         // Member.prototype = new Model();
-        Member.prototype.modelId = 'member';
 
         /**
-         * Returns this model's unique id.
+         * This model's unique id.
          *
-         * @method getModelId
-         * @return {String} the model's id
+         * @property modelId
+         * @type {String}
          */
-        // Member.prototype.getModelId = function() {
-        //     return 'member';
-        // };
+        Member.prototype.modelId = 'member';
 
         /**
          * Exports the member by removing any client side attributes, that the server can not handle.
          *
+         * @method doExport
          * @return {Object} the exported member
          */
-        Member.prototype.export = function() {
+        Member.prototype.doExport = function() {
             return {
                 'oid': this.oid,
-                'user': this.user.export()
+                'user': this.user.doExport()
             };
         };
 
         /**
-         * Imports an array of raw members by converting them to the member model.
-         *
-         * @method importMany
-         * @static
-         * @param  {Array}  rawMembers the members to be imported
-         * @return {Array}             the imported members
-         */
-        // Member.importMany = function(rawMembers) {
-        //     if (!rawMembers) {
-        //         return rawMembers;
-        //     }
-        //     var members = [];
-        //     for (var i = 0; i < rawMembers.length; i++) {
-        //         members.push(new Member(rawMembers[i]));
-        //     }
-        //     return members;
-        // };
-
-        /**
          * Exports an array of members by removing any client side attributes, that the server can not handle.
          *
+         * @method exportMany
+         * @static
          * @param  {Array}  membersToExport the members to be exported
          * @return {Array}                  the exported members
          */
         Member.exportMany = function(membersToExport) {
             var members = [];
             for (var i = 0; i < membersToExport.length; i++) {
-                members.push(membersToExport[i].export());
+                members.push(membersToExport[i].doExport());
             }
             return members;
         };

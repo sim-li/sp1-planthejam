@@ -15,7 +15,6 @@ angular.module('myApp')
             'use strict';
 
             // resolve the promises passed to this route
-            // $scope.invites = Invite.importMany(invitesPromise);
             $scope.invites = Model.importMany(Invite, invitesPromise);
 
             // preselects the first invite in the list
