@@ -46,15 +46,18 @@ angular.module('survey', ['datePickerDate', 'constants'])
             };
         };
 
+        // Survey.prototype = new Model();
+        Survey.prototype.modelId = 'survey';
+
         /**
          * Returns this model's unique id.
          *
          * @method getModelId
          * @return {String} the model's id
          */
-        Survey.prototype.getModelId = function() {
-            return 'survey';
-        };
+        // Survey.prototype.getModelId = function() {
+        //     return 'survey';
+        // };
 
         /**
          * Exports the member by removing any client side attributes, that the server can not handle.

@@ -36,15 +36,18 @@ angular.module('user', [])
             // this.groups = [];
         };
 
+        // User.prototype = new Model();
+        User.prototype.modelId = 'user';
+
         /**
          * Returns this model's unique id.
          *
          * @method getModelId
          * @return {String} the model's id
          */
-        User.prototype.getModelId = function() {
-            return 'user';
-        };
+        // User.prototype.getModelId = function() {
+        //     return 'user';
+        // };
 
         /**
          * Imports an array of raw users by converting them to the user model.
@@ -54,16 +57,16 @@ angular.module('user', [])
          * @param  {Array}  rawUsers the users to be imported
          * @return {Array}           the imported users
          */
-        User.importMany = function(rawUsers) {
-            if (!rawUsers) {
-                return rawUsers;
-            }
-            var users = [];
-            for (var i = 0; i < rawUsers.length; i++) {
-                users.push(new User(rawUsers[i]));
-            }
-            return users;
-        };
+        // User.importMany = function(rawUsers) {
+        //     if (!rawUsers) {
+        //         return rawUsers;
+        //     }
+        //     var users = [];
+        //     for (var i = 0; i < rawUsers.length; i++) {
+        //         users.push(new User(rawUsers[i]));
+        //     }
+        //     return users;
+        // };
 
         /**
          * Exports the user by removing any client side attributes, that the server can not handle.

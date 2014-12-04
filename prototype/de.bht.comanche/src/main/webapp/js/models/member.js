@@ -29,15 +29,18 @@ angular.module('member', ['user'])
             this.user = new User(config.user);
         };
 
+        // Member.prototype = new Model();
+        Member.prototype.modelId = 'member';
+
         /**
          * Returns this model's unique id.
          *
          * @method getModelId
          * @return {String} the model's id
          */
-        Member.prototype.getModelId = function() {
-            return 'member';
-        };
+        // Member.prototype.getModelId = function() {
+        //     return 'member';
+        // };
 
         /**
          * Exports the member by removing any client side attributes, that the server can not handle.
@@ -59,16 +62,16 @@ angular.module('member', ['user'])
          * @param  {Array}  rawMembers the members to be imported
          * @return {Array}             the imported members
          */
-        Member.importMany = function(rawMembers) {
-            if (!rawMembers) {
-                return rawMembers;
-            }
-            var members = [];
-            for (var i = 0; i < rawMembers.length; i++) {
-                members.push(new Member(rawMembers[i]));
-            }
-            return members;
-        };
+        // Member.importMany = function(rawMembers) {
+        //     if (!rawMembers) {
+        //         return rawMembers;
+        //     }
+        //     var members = [];
+        //     for (var i = 0; i < rawMembers.length; i++) {
+        //         members.push(new Member(rawMembers[i]));
+        //     }
+        //     return members;
+        // };
 
         /**
          * Exports an array of members by removing any client side attributes, that the server can not handle.

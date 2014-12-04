@@ -7,7 +7,7 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('invite', ['survey'])
-    .factory('Invite', ['Survey' /*, 'DatePickerDate', 'TimeUnit', 'Type'*/ , function(Survey /*, DatePickerDate, TimeUnit, Type*/ ) {
+    .factory('Invite', ['Survey' /*, 'baseDatePickerDate'', 'TimeUnit', 'Type'*/ , function(Survey /*, DatePickerDate, TimeUnit, Type*/ ) {
 
         'use strict';
 
@@ -33,15 +33,18 @@ angular.module('invite', ['survey'])
             this.survey = new Survey(config.survey);
         };
 
+        // Invite.prototype = new Model();
+        Invite.prototype.modelId = 'invite';
+
         /**
          * Returns this model's unique id.
          *
          * @method getModelId
          * @return {String} the model's id
          */
-        Invite.prototype.getModelId = function() {
-            return 'invite';
-        };
+        // Invite.prototype.getModelId = function() {
+        //     return 'invite';
+        // };
 
         /**
          * Exports the invite by removing any client side attributes, that the server can not handle.
@@ -67,16 +70,16 @@ angular.module('invite', ['survey'])
          * @param  {Array}  rawInvites the invites to be imported
          * @return {Array}             the imported invites
          */
-        Invite.importMany = function(rawInvites) {
-            if (!rawInvites) {
-                return rawInvites;
-            }
-            var invites = [];
-            for (var i = 0; i < rawInvites.length; i++) {
-                invites.push(new Invite(rawInvites[i]));
-            }
-            return invites;
-        };
+        // Invite.importMany = function(rawInvites) {
+        //     if (!rawInvites) {
+        //         return rawInvites;
+        //     }
+        //     var invites = [];
+        //     for (var i = 0; i < rawInvites.length; i++) {
+        //         invites.push(new Invite(rawInvites[i]));
+        //     }
+        //     return invites;
+        // };
 
 
         // Invite.prototype.convertDatesToDatePickerDate = function() {

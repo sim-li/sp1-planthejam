@@ -2,18 +2,21 @@
  * Provides a RESTful service.
  *
  * @module restModule
+ * @requires baseModel
  * @requires user
+ *
+ * TODO change docs concerning model and model ID !!!
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('restModule', ['user'])
+angular.module('restModule', ['baseModel', 'user'])
     /**
      * The RESTful service.
      *
      * @class restService
      */
-    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'User',
-        function($http, $q, $log, $rootScope, User) {
+    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Model', 'User',
+        function($http, $q, $log, $rootScope, Model, User) {
 
             'use strict';
 
@@ -78,8 +81,8 @@ angular.module('restModule', ['user'])
              * @return {String}          the relative HTTP path
              */
             var getPath = function(model, opString) {
-                var getModelId = model.getModelId || model.prototype.getModelId;
-                var theModel = restPaths[getModelId()];
+                var modelId = model.modelId || model.prototype.modelId;
+                var theModel = restPaths[modelId];
                 return restPaths.basePath + theModel.path + theModel[opString];
             };
 
@@ -95,7 +98,7 @@ angular.module('restModule', ['user'])
              */
             var callHTTP = function(url, data, method) {
                 if (LOG) {
-                    $log.debug('REST: %s %o', url, data);
+                    $log.debug('REST: %s <== %o', url, data);
                 }
                 var deferred = $q.defer();
                 $http({
@@ -107,7 +110,7 @@ angular.module('restModule', ['user'])
                     } : ''
                 }).success(function(data, status, header, config) {
                     if (LOG) {
-                        $log.debug('REST: %s ==> % o', url, data);
+                        $log.debug('REST: %s ==> %o', url, data);
                     }
                     deferred.resolve(data);
                 }).error(function(data, status, header, config) {
