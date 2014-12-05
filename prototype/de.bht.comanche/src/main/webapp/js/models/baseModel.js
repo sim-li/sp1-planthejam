@@ -17,9 +17,11 @@ angular.module('baseModel', [])
          *
          * For the future the idea would be to let all model classes inherit from the prototype of `baseModel` like this:
          *
-         * <pre><code>var ConcreteModelClass = function(config) { ... }; // the constructor
+         * <pre><code>
+         * var ConcreteModelClass = function(config) { ... }; // the constructor
          * ConcreteModelClass.prototype = new Model();
-         * ConcreteModelClass.prototype.modelId = 'concreteModelId';</pre></code>
+         * ConcreteModelClass.prototype.modelId = 'concreteModelId';
+         * </pre></code>
          *
          * It is important to have the code in this order!
          *
