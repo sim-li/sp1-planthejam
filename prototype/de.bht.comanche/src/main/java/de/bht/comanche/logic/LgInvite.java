@@ -43,7 +43,7 @@ public class LgInvite extends DaObject{
 	 *  Survey 
 	 */
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
 	private LgSurvey survey;
 
 	public LgInvite() {}

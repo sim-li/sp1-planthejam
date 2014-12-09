@@ -45,7 +45,7 @@ public class LgUser extends DaObject {
 	/**
 	 * Representation of a foreign key in a LgInvite entity. Provide a list of invites. 
 	 */
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
 	private List<LgInvite> invites;
 	/**
 	 * Representation of a foreign key in a LgGroup entity. Provide a list of groups. 
