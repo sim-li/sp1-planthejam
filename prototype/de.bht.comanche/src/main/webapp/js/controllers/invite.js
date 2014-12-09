@@ -14,8 +14,8 @@ angular.module('myApp')
      *
      * @class inviteCtrl
      */
-    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Invite', 'Survey', 'Group', 'Member', 'User', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise',
-        function($scope, $log, $location /*, $routeParams*/ , restService, Invite, Survey, Group, Member, User, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise) {
+    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Model', 'User', 'Invite', 'Survey', 'Group', 'Member', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise',
+        function($scope, $log, $location /*, $routeParams*/ , restService, Model, User, Invite, Survey, Group, Member, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise) {
 
             'use strict';
 
@@ -27,10 +27,10 @@ angular.module('myApp')
                     'deadline': new Date()
                 })
             });
-            $scope.invites = Invite.importMany(invitesPromise);
-            $scope.groups = Group.importMany(groupsPromise);
+            $scope.invites = Model.importMany(Invite, invitesPromise);
+            $scope.groups = Model.importMany(Group, groupsPromise);
             // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users
-            $scope.users = User.importMany(usersPromise);
+            $scope.users = Model.importMany(User, usersPromise);
 
 
             // for now: some dummy users
@@ -71,6 +71,12 @@ angular.module('myApp')
             $scope.repeatedly = false;
             $scope.toOpened = false;
             $scope.fromOpened = false;
+
+            var createDefaultGroup = function() {
+                return new Group({
+                    name: 'Your new group'
+                });
+            };
 
             // $scope.$watch('selectedGroup', function() {
             //     // if ($scope.selectedGroupName === $scope.editedGroupName) {
@@ -113,6 +119,14 @@ angular.module('myApp')
             //     $scope.showTrash = true;
             // };
 
+            var refreshGroupsAndShowLast = function() {
+                restService.doGetMany(Group)
+                    .then(function(success) {
+                        $scope.groups = Model.importMany(Group, success);
+                        $scope.selectedGroup = $scope.groups[$scope.groups.length - 1];
+                    } /*, function(error) { $log.log(error); }*/ );
+            };
+
             /**
              * Adds a new empty group to the user's groups.
              * The new group will immediately be persisted on the server.
@@ -121,17 +135,8 @@ angular.module('myApp')
              * @protected
              */
             $scope.addNewGroup = function() {
-                restService.doSave(new Group({
-                    name: 'Your new group'
-                }));
-
-                restService.doGetMany(Group)
-                    .then(function(success) {
-                        $scope.groups = Group.importMany(success);
-                        selectFirstOrDefaultGroup();
-                    } /*, function(error) { $log.log(error); }*/ );
-
-                // TODO the view needs a refresh after adding a new group
+                restService.doSave(createDefaultGroup())
+                    .then(refreshGroupsAndShowLast());
             };
 
             /**
@@ -145,28 +150,21 @@ angular.module('myApp')
                 if (!$scope.selectedGroup) {
                     return;
                 }
-                for (var i in $scope.groups) {
+                // delete selected on client
+                for (var i = 0, len = $scope.groups.length; i < len; i++) {
                     if ($scope.groups[i].oid === $scope.selectedGroup.oid) {
                         $scope.groups.splice(i, 1);
                     }
                 }
 
+                // delete selected on server
                 restService.doDelete($scope.selectedGroup)
                     .then(function(success) {
-                        $scope.selectedGroup = $scope.groups[0] || new Group({
-                            name: 'Your new group'
-                        });
+                        $scope.selectedGroup = $scope.groups[0] || createDefaultGroup();
                     } /*, function(error) { $log.log(error); }*/ );
-            };
 
-            // $scope.deleteGroup = function() {
-            //     var index = find($scope.groups, 'name', $scope.selectedGroup.name);
-            //     if (index === -1) {
-            //         return;
-            //     }
-            //     $scope.groups.splice(index, 1);
-            //     selectFirstOrDefaultGroup();
-            // };
+                // QUESTION maybe better to just delete on server and then refresh? - but then we have to wait for the server
+            };
 
             /**
              * Hides the trash bin.

@@ -2,12 +2,13 @@
  * Provides a model for groups.
  *
  * @module group
+ * @requires baseModel
  * @requires member
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('group', ['member'])
-    .factory('Group', ['Member', function(Member) {
+angular.module('group', ['baseModel', 'member'])
+    .factory('Group', ['Model', 'Member', function(Model, Member) {
 
         'use strict';
 
@@ -29,46 +30,26 @@ angular.module('group', ['member'])
             this.oid = config.oid || '';
             this.name = config.name || '';
             // this.members = config.members || []; // e.g.: [{oid: 1, name: 'Alice'}, {oid: 2, name: 'Bob'}, {oid: 3, name: 'Carla'}]
-            this.members = config.members ? Member.importMany(config.members) : [];
+            this.members = config.members ? Model.importMany(Member, config.members) : [];
         };
 
-        /**
-         * Returns this model's unique id.
-         *
-         * @method getModelId
-         * @return {String} the model's id
-         */
-        Group.prototype.getModelId = function() {
-            return 'group';
-        };
+        // Group.prototype = new Model();
 
         /**
-         * Imports an array of raw groups by converting them to the group model.
+         * This model's unique id.
          *
-         * @method importMany
-         * @static
-         * @param  {Array}  rawGroups the groups to be imported
-         * @return {Array}            the imported groups
+         * @property modelId
+         * @type {String}
          */
-        Group.importMany = function(rawGroups) {
-            if (!rawGroups) {
-                return rawGroups;
-            }
-            var groups = [];
-            for (var i = 0; i < rawGroups.length; i++) {
-                groups.push(new Group(rawGroups[i]));
-            }
-            // console.log("imported " + rawGroups.length)
-            return groups;
-        };
+        Group.prototype.modelId = 'group';
 
         /**
          * Exports the group by removing any client side attributes, that the server can not handle.
          *
-         * @method export
+         * @method doExport
          * @return {Object} the exported group
          */
-        Group.prototype.export = function() {
+        Group.prototype.doExport = function() {
             return {
                 'oid': this.oid,
                 'name': this.name,

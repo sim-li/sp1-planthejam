@@ -7,7 +7,7 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('invite', ['survey'])
-    .factory('Invite', ['Survey' /*, 'DatePickerDate', 'TimeUnit', 'Type'*/ , function(Survey /*, DatePickerDate, TimeUnit, Type*/ ) {
+    .factory('Invite', ['Survey' /*, 'baseDatePickerDate'', 'TimeUnit', 'Type'*/ , function(Survey /*, DatePickerDate, TimeUnit, Type*/ ) {
 
         'use strict';
 
@@ -33,49 +33,30 @@ angular.module('invite', ['survey'])
             this.survey = new Survey(config.survey);
         };
 
+        // Invite.prototype = new Model();
+
         /**
-         * Returns this model's unique id.
+         * This model's unique id.
          *
-         * @method getModelId
-         * @return {String} the model's id
+         * @property modelId
+         * @type {String}
          */
-        Invite.prototype.getModelId = function() {
-            return 'invite';
-        };
+        Invite.prototype.modelId = 'invite';
 
         /**
          * Exports the invite by removing any client side attributes, that the server can not handle.
          *
-         * @method export
+         * @method doExport
          * @return {Object} the exported invite
          */
-        Invite.prototype.export = function() {
+        Invite.prototype.doExport = function() {
             return {
                 'oid': this.oid,
                 'ignored': this.ignored,
                 'host': this.host,
                 // 'user': this.user,
-                'survey': this.survey.export()
+                'survey': this.survey.doExport()
             };
-        };
-
-        /**
-         * Imports an array of raw invites by converting them to the invite model.
-         *
-         * @method importMany
-         * @static
-         * @param  {Array}  rawInvites the invites to be imported
-         * @return {Array}             the imported invites
-         */
-        Invite.importMany = function(rawInvites) {
-            if (!rawInvites) {
-                return rawInvites;
-            }
-            var invites = [];
-            for (var i = 0; i < rawInvites.length; i++) {
-                invites.push(new Invite(rawInvites[i]));
-            }
-            return invites;
         };
 
 

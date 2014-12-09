@@ -9,13 +9,13 @@ angular.module('myApp')
      *
      * @class cockpitCtrl
      */
-    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'restService', 'Invite', 'util', 'invitesPromise',
-        function($scope, $location, $log, restService, Invite, util, invitesPromise) {
+    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'restService', 'Invite', 'util', 'invitesPromise', 'Model',
+        function($scope, $location, $log, restService, Invite, util, invitesPromise, Model) {
 
             'use strict';
 
             // resolve the promises passed to this route
-            $scope.invites = Invite.importMany(invitesPromise);
+            $scope.invites = Model.importMany(Invite, invitesPromise);
 
             // preselects the first invite in the list
             $scope.selectedInvite = $scope.invites[0];

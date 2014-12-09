@@ -2,18 +2,19 @@
  * Provides a RESTful service.
  *
  * @module restModule
+ * @requires baseModel
  * @requires user
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('restModule', ['user'])
+angular.module('restModule', ['baseModel', 'user'])
     /**
      * The RESTful service.
      *
      * @class restService
      */
-    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'User',
-        function($http, $q, $log, $rootScope, User) {
+    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Model', 'User',
+        function($http, $q, $log, $rootScope, Model, User) {
 
             'use strict';
 
@@ -72,14 +73,13 @@ angular.module('restModule', ['user'])
              *
              * @method getPath
              * @private
-             * @param  {Object} model    the model, which needs to have a method called getModelId(), that returns the
-             *                               model ID as a String
+             * @param  {Object} model    the model or model class with a modelId
              * @param  {String} opString a String that denotes the desired operation
              * @return {String}          the relative HTTP path
              */
             var getPath = function(model, opString) {
-                var getModelId = model.getModelId || model.prototype.getModelId;
-                var theModel = restPaths[getModelId()];
+                var modelId = model.modelId || model.prototype.modelId;
+                var theModel = restPaths[modelId];
                 return restPaths.basePath + theModel.path + theModel[opString];
             };
 
@@ -95,7 +95,7 @@ angular.module('restModule', ['user'])
              */
             var callHTTP = function(url, data, method) {
                 if (LOG) {
-                    $log.debug('REST: %s %o', url, data);
+                    $log.debug('REST: %s <== %o', url, data);
                 }
                 var deferred = $q.defer();
                 $http({
@@ -107,7 +107,7 @@ angular.module('restModule', ['user'])
                     } : ''
                 }).success(function(data, status, header, config) {
                     if (LOG) {
-                        $log.debug('REST: %s ==> % o', url, data);
+                        $log.debug('REST: %s ==> %o', url, data);
                     }
                     deferred.resolve(data);
                 }).error(function(data, status, header, config) {
@@ -197,8 +197,7 @@ angular.module('restModule', ['user'])
              * Gets a collection of objects of the specified model class by calling the REST service.
              *
              * @method doGetMany
-             * @param  {Object} ModelClass the model class, which needs to have a method called getModelId(), that
-             *                                 returns the model ID as a String
+             * @param  {Object} ModelClass the model class with a modelId
              * @return {Promise}           a promise for a collection of objects of the specified model type
              */
             var doGetMany = function(ModelClass) {
@@ -209,8 +208,7 @@ angular.module('restModule', ['user'])
              * Gets the object specified by model class and oid by calling the REST service.
              *
              * @method doGet
-             * @param  {Object} ModelClass the model class, which needs to have a method called getModelId(), that
-             *                                 returns the model ID as a String
+             * @param  {Object} ModelClass the model class with a modelId
              * @param  {Number} oid        the object ID
              * @return {Promise}           a promise for the object
              */
@@ -222,12 +220,11 @@ angular.module('restModule', ['user'])
              * Saves a model by calling the REST service.
              *
              * @method doSave
-             * @param  {Object} model the model, which needs to have a method called getModelId(), that returns the
-             *                            model ID as a String
+             * @param  {Object} model the model with a modelId and an export method
              * @return {Promise}      a promise for the saved object of the specified model
              */
             var doSave = function(model) {
-                return callHTTP(getPath(model, 'save'), model.export());
+                return callHTTP(getPath(model, 'save'), model.doExport());
             };
 
             // NOTE: delete is a javascript keyword, therefore the otherwise strange 'do'-prefix naming convention
@@ -235,8 +232,7 @@ angular.module('restModule', ['user'])
              * Deletes a model by calling the REST service.
              *
              * @method doDelete
-             * @param  {Object} model the model, which needs to have a method called getModelId(), that returns the
-             *                            model ID as a String
+             * @param  {Object} model the model with a modelId
              */
             var doDelete = function(model) {
                 return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE');

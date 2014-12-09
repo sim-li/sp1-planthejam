@@ -15,10 +15,22 @@
  *
  * @module myApp
  * @main
+ * @requires ui.bootstrap
+ * @requires xeditable
+ * @requires ngRoute
+ * @requires typeAugmentations
+ * @requires constants
+ * @requires restModule
+ * @requires datePickerDate
+ * @requires baseModel
+ * @requires user
+ * @requires invite
+ * @requires survey
+ * @requires group
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'datePickerDate', 'survey', 'constants', 'restModule', 'typeAugmentations', 'invite', 'group', 'user'])
+angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentations', 'constants', 'restModule', 'datePickerDate', 'user', 'invite', 'survey', 'group', 'baseModel'])
     .factory('util', function() {
 
         // TODO is it still in use?
