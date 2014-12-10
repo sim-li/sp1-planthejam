@@ -1,14 +1,15 @@
-.navbar.navbar-inverse
-  .navbar-left
-    %ui.nav.navbar-nav.navbar-right
-      .navbar-header
-        %a.navbar-brand{:href => ""} COMANCHE
-      %li.nav
-        %a{:href => "#/cockpit"} Cockpit
-      %li.nav
-        %a{:href => "#/invite"} Create Invite
-      %li.nav
-        %a{:href => "#/account"} Account
-      %li.nav.navbar-right
-        %a#logout{:href => "", "ng-click" => "logout()"} Logout
-      / TODO should trigger logout via REST
+.navbar.navbar-default
+  %ul.nav.nav-pills
+    %li.navbar-header
+      %a.navbar-brand{:href => ""} COMANCHE
+    %li
+      %a{:href => "#/cockpit"}
+        Cockpit
+        %span.badge
+    %li
+      %a{:href => "#/invite"} Create Invite
+    %li
+      %a{:href => "#/account"} Account
+    %li
+      %a#logout{:href => "", "ng-click" => "logout()"} Logout
+    / TODO should trigger logout via REST

@@ -1,6 +1,4 @@
-<div class='row'>
-  <ptj-menu></ptj-menu>
-</div>
+<ptj-menu></ptj-menu>
 <div class='container'>
   <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
   <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
@@ -93,10 +91,10 @@
           <div class='row'>
             <div class='col-lg-3'>
               Avalibility
-              <button ng-click='addNewTimePicker()'>
+              <button ng-click='addNewTimePeriod()'>
                 <i class='glyphicon glyphicon-plus'></i>
               </button>
-              <button ng-click='removeTimePicker()'>
+              <button ng-click='removeTimePeriod()'>
                 <i class='glyphicon glyphicon-minus'></i>
               </button>
             </div>
@@ -104,17 +102,28 @@
           <div class='row'>
             possibleTimeperiods
             <code>{{ selectedInvite.survey.possibleTimeperiods | json }}</code>
-            <div ng-repeat='p in selectedInvite.survey.possibleTimeperiods'>
+            <div ng-repeat='timePeriod in selectedInvite.survey.possibleTimeperiods'>
               <div class='col-lg-10 col-lg-offset-1'>
                 <div class='panel panel-default'>
                   <div class='panel-body'>
                     <div class='col-md-8'>
-                      <datetimepicker date-format='dd.MM.yyyy' date-options='dateOptions' hour-step='1' minute-step='15' ng-model='p.startTime'></datetimepicker>
+                      <!-- %datetimepicker{"date-format" => "dd.MM.yyyy", "date-options" => "dateOptions", "hour-step" => "1", "minute-step" => "15", "ng-model" => "timePeriod.startTime"} -->
+                      <div class='dropdown'>
+                        <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
+                          <div class='input-group'>
+                            <input class='form-control' data-ng-model='timePeriod.startTime' type='text'>
+                            <span class='input-group-addon'>
+                              <i class='glyphicon glyphicon-calendar'></i>
+                            </span>
+                          </div>
+                        </a>
+                        <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                          <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='timePeriod.startTime'></datetimepicker>
+                        </ul>
+                      </div>
                     </div>
-                    <div class='col-md-4'>
-                      <div>Duration</div>
-                      <div>{{p.duration}}h</div>
-                      <input max='24' min='0' ng-model='p.duration' step='1' type='range' value='1'>
+                    <div class='col-md-3'>
+                      <input max='24' min='0' ng-model='timePeriod.duration' step='1' type='range' value='1'>
                     </div>
                   </div>
                 </div>
