@@ -28,6 +28,8 @@
     %script{:src => "bower_components/angular-bootstrap/ui-bootstrap-tpls.js"}
     %script{:src => "bower_components/angular-route/angular-route.js"}
     %script{:src => "bower_components/jquery/dist/jquery.min.js"}
+    %script{:src => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js"}
+    %link{:href => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.css", :rel => "stylesheet", :type => "text/css"}
     / May be unwise to mix normal bootstrap with angular ui bootstrap
     %script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"}
     %script{:src => "bower_components/angular-xeditable/dist/js/xeditable.js"}
@@ -49,9 +51,7 @@
     %script{:src => "js/util/datePickerDate.js"}
     %script{:src => "js/util/typeAugmentations.js"}
     %script{:src => "js/services/rest.js"}
-    / TODO comment back in if really used -> get dependencies using bower -> use directory 'bower_components'
-    / %script{:src => "lib/angular-slider.min.js"}
-    / %script{:src => "lib/bootstrap-slider.js"}
+
   / define angular controller
   %body{"ng-app" => "myApp", "ng-controller" => "ctrl", "ng-keydown" => "discardWarnings()"}
     %div{"ng-view" => ""}
