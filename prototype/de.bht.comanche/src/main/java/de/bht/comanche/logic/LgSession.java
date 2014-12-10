@@ -112,13 +112,13 @@ public class LgSession {
 		return this.user;
 	}
 	/**
-	 * No user with name "{0}" found in the database
+	 * No user with name "{0}" found in the database.
 	 */
 	@SuppressWarnings("serial")
 	public static final class LgNoUserWithThisNameExc extends multex.Exc {
 	}
 	/**
-	 * Wrong password for user with name "{0}"
+	 * The email or password you entered is incorrect. 
 	 */
 	@SuppressWarnings("serial")
 	public static final class LgWrongPasswordExc extends multex.Exc {

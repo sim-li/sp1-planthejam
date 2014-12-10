@@ -55,7 +55,7 @@ public class LgUser extends DaObject {
 	/**
 	 * Representation of a foreign key in a LgMember entity. Provide a member. 
 	 */
-	@OneToOne(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private LgMember member;
 	
 	/**

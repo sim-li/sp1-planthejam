@@ -6,8 +6,8 @@
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('invite', ['survey'])
-    .factory('Invite', ['Survey' /*, 'baseDatePickerDate'', 'TimeUnit', 'Type'*/ , function(Survey /*, DatePickerDate, TimeUnit, Type*/ ) {
+angular.module('invite', ['survey', 'user'])
+    .factory('Invite', ['Survey', 'User' /*, 'baseDatePickerDate'', 'TimeUnit', 'Type'*/ , function(Survey, User /*, DatePickerDate, TimeUnit, Type*/ ) {
 
         'use strict';
 
@@ -30,6 +30,7 @@ angular.module('invite', ['survey'])
             this.oid = config.oid || '';
             this.ignored = config.ignored;
             this.host = config.host;
+            this.user = new User(config.user);
             this.survey = new Survey(config.survey);
         };
 
@@ -54,7 +55,7 @@ angular.module('invite', ['survey'])
                 'oid': this.oid,
                 'ignored': this.ignored,
                 'host': this.host,
-                // 'user': this.user,
+                'user': this.user.doExport(),
                 'survey': this.survey.doExport()
             };
         };

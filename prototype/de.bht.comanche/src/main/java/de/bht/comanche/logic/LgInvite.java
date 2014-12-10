@@ -48,9 +48,10 @@ public class LgInvite extends DaObject{
 
 	public LgInvite() {}
 	
-	public LgInvite(final long oid) {
-		this.oid = oid;
-	}
+	//remove
+//	public LgInvite(final long oid) {
+//		this.oid = oid;
+//	}
 	
 	/**
 	 * 

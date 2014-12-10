@@ -19,7 +19,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-//@Ignore
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
@@ -94,7 +94,15 @@ public class LgGroupTest {
 		}
 	
 //	@Test
-	public void test4deleteMember(){
+	public void test4deleteUser(){
+		final LgSession session = start();
+		final LgUser bob = session.startFor("Bob");
+		bob.deleteAccount();
+//		assertEquals(0, startFor().getGroups().size());
+	}
+	
+//	@Test
+	public void test5deleteMember(){
 		final LgSession session = start();
 		final LgUser sessionUser = startForUser(session);
 		final LgGroup aliceGroup = sessionUser.getGroups().get(0);
@@ -106,7 +114,7 @@ public class LgGroupTest {
 	}
 	
 //	@Test
-	public void test5deleteGroup(){
+	public void test6deleteGroup(){
 		final LgSession session = start();
 		final LgUser sessionUser = startForUser(session);
 		sessionUser.deleteGroup(sessionUser.getGroups().get(0).getOid());
