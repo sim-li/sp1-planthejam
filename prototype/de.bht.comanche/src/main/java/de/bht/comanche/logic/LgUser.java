@@ -59,6 +59,12 @@ public class LgUser extends DaObject {
 	private LgMember member;
 	
 	/**
+	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of general user's availablity. 
+	 */
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LgTimePeriod> timePeriods = new ArrayList<LgTimePeriod>();
+	
+	/**
 	 * Construct a new LgUser object with a list of groups and members.
 	 */
 	public LgUser() {

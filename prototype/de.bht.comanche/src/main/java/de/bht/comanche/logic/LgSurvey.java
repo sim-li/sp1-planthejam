@@ -74,18 +74,17 @@ public class LgSurvey extends DaObject {
 	private List<LgInvite> invites;
 
 	/**
-	 * all possible time periods
+	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
-	private List<LgTimePeriod> possibleTimePeriods;
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LgTimePeriod> possibleTimePeriods = new ArrayList<LgTimePeriod>();
 	
 	/**
 	 * Constructor 
 	 */
 	public LgSurvey() {
 		this.invites = new ArrayList<LgInvite>();
-		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
 	}
 
 	/**

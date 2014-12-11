@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import de.bht.comanche.persistence.DaObject;
@@ -26,6 +28,7 @@ public class LgTimePeriod extends DaObject {
 	/**
 	 * start time
 	 */
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
 	
 	/**
@@ -34,16 +37,20 @@ public class LgTimePeriod extends DaObject {
 	private int durationMinutes;
 
 	/**
-	 * survey 
+	 * Column for LgSurvey foreign key 
 	 */
-	@NotNull
 	@ManyToOne
 	private LgSurvey survey;
 	
 	/**
-	 * invite 
+	 * Column for LgUser foreign key
 	 */
-	@NotNull
+	@ManyToOne
+	private LgUser user;
+	
+	/**
+	 * Column for LgInvite foreign key
+	 */
 	@ManyToOne
 	private LgInvite invite;
 
