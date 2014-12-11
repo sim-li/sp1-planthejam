@@ -4,9 +4,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
@@ -45,21 +48,14 @@ public class LgInvite extends DaObject{
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
 	private LgSurvey survey;
-
-	public LgInvite() {}
-	
-	//remove
-//	public LgInvite(final long oid) {
-//		this.oid = oid;
-//	}
 	
 	/**
-	 * 
+	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
 	 */
-//	public void delete() {
-//		this.user.remove(this);
-//		this.pool.delete(this); //throw exc when delete errror
-//	}
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LgTimePeriod> timePeriods;
+	
+	public LgInvite() {}
 	
 	/*
 	 * --------------------------------------------------------------------------------------------

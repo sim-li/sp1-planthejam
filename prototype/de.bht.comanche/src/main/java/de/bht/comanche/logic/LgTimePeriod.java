@@ -39,6 +39,13 @@ public class LgTimePeriod extends DaObject {
 	@NotNull
 	@ManyToOne
 	private LgSurvey survey;
+	
+	/**
+	 * invite 
+	 */
+	@NotNull
+	@ManyToOne
+	private LgInvite invite;
 
 	/*
 	 * --------------------------------------------------------------------------------------------
