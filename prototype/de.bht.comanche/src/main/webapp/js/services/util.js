@@ -11,38 +11,84 @@ angular.module('util', [])
      *
      * @class  arrayUtil
      */
-    .factory('arrayUtil', ['$log', function($log) {
+    .factory('arrayUtil', ['$log', 'modelUtil', function($log, modelUtil) {
 
         'use strict';
 
         var arrayUtil = {};
 
-        arrayUtil.forEach = function() {
-
+        arrayUtil.forEach = function(arr, callback) {
+            for (var i = 0, len = arr.length; i < len; i++) {
+                callback(arr[i], i, arr);
+            }
         };
 
-        arrayUtil.merge = function() {
+        // arrayUtil.forEach = function(arr, callback, context) {
+        //     context = context || {};
+        //     context.callback = callback;
+        //     for (var i = 0, len = arr.length; i < len; i++) {
+        //         context.callback(arr[i], i, arr);
+        //     }
+        //     delete context.callback;
+        // };
 
+        /*
+         * Note: use Array.prototype.concat()
+         */
+        // arrayUtil.merge = function(arr1, arr2) {
+        //     return arr1.concat(arr2);
+        // };
+
+        /*
+         * Note: use Array.prototype.push()
+         */
+        // arrayUtil.addElement = function(arr, ele) {
+        //     arr.push(ele);
+        // };
+
+        arrayUtil.findByKey = function(arr, key, value) {
+            for (var i = 0, len = arr.length; i < len; i++) {
+                var ele = arr[i];
+                if (ele[key] == value) {
+                    return ele;
+                }
+            }
         };
 
-        arrayUtil.addElement = function() {
-
+        arrayUtil.removeByKey = function(arr, key, value) {
+            for (var i = 0, len = arr.length; i < len; i++) {
+                var ele = arr[i];
+                if (ele[key] == value) {
+                    arr.splice(i, 1);
+                    return arr;
+                }
+            }
         };
 
-        arrayUtil.findByKey = function() {
-
+        arrayUtil.removeElement = function(arr, ele) {
+            for (var i = 0, len = arr.length; i < len; i++) {
+                if (modelUtil.areEqual(arr[i], ele)) {
+                    arr.splice(i, 1);
+                    return arr;
+                }
+            }
+            return "not found + " + ele.id;
         };
 
-        arrayUtil.removeByKey = function() {
-
+        arrayUtil.contains = function(arr, ele) {
+            var i = arr.length;
+            while (i--) {
+                if (arr[i] == ele) {
+                    return true;
+                }
+            }
         };
 
-        arrayUtil.removeElement = function() {
-
-        };
-
-        arrayUtil.removeDuplicatesByKey = function() {
-
+        arrayUtil.removeDuplicatesByKey = function(arr, key) {
+            var callback = function(ele, idx, arr) {
+                // if (ele[key])
+            };
+            arrayUtil.forEach(arr, callback);
         };
 
         /**
@@ -71,23 +117,28 @@ angular.module('util', [])
         //     }
         // };
 
-        return {
-            arrayUtil: arrayUtil
-        };
+        return arrayUtil;
     }])
     /**
      * TODO comment it!
      *
      * @class  otherUtil
      */
-    .factory('otherUtil', ['$log', function($log) {
+    .factory('modelUtil', ['$log', function($log) {
 
         'use strict';
 
-        var otherUtil = {};
+        var modelUtil = {};
 
-
-        return {
-            otherUtil: otherUtil
+        modelUtil.areEqual = function(obj1, obj2) {
+            for (var attr in obj1) {
+                if (obj1[attr] != obj2[attr]) {
+                    return false;
+                }
+            }
+            return true;
         };
+
+
+        return modelUtil;
     }]);
