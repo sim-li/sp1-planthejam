@@ -65,12 +65,6 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentati
                 templateUrl: 'pages/cockpit.html',
                 controller: 'cockpitCtrl',
                 resolve: {
-                    /**
-                     *  get all invite promises
-                     * @param  {rest} restService   rest service
-                     * @param  {invite} Invite      invite model
-                     * @return {promise}
-                     */
                     invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
                     }
@@ -80,45 +74,21 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentati
                 templateUrl: 'pages/invite.html',
                 controller: 'inviteCtrl',
                 resolve: {
-                    /**
-                     * get the invite promise with oid
-                     * @param  {} $route      [description]
-                     * @param  {rest} restService   rest service
-                     * @param  {invite} Invite      invite model
-                     * @return {promise}            a promise for the invite object
-                     */
                     selectedInvitePromise: function($route, restService, Invite) {
                         var inviteOid = $route.current.params.inviteOid;
-                        if (typeof inviteOid === 'undefined') {
-                            return '';
-                        }
-                        return restService.doGet(Invite, inviteOid);
+                        console.log("inviteOid = " + inviteOid)
+                        return (inviteOid === undefined) ? '' : restService.doGet(Invite, inviteOid);
+                    },
+                    currentUserPromise: function($route, restService, User) {
+                        return ($route.current.params.inviteOid !== undefined) ? '' : restService.doGet(User);
                     },
                     // TODO maybe not necessary to get all invites for this route?
-                    /**
-                     *  get all invite promises
-                     * @param  {rest} restService   rest service
-                     * @param  {invite} Invite      invite model
-                     * @return {promise}
-                     */
                     invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
                     },
-                    /**
-                     * get all group promises
-                     * @param  {rest} restService    rest service
-                     * @param  {group} Group         group model
-                     * @return {promise}
-                     */
                     groupsPromise: function(restService, Group) {
                         return restService.doGetMany(Group);
                     },
-                    /**
-                     * get all user promises
-                     * @param  {rest} restService   rest service
-                     * @param  {user} User          user model
-                     * @return {promise}
-                     */
                     usersPromise: function(restService, User) {
                         return restService.doGetMany(User);
                     }
@@ -128,12 +98,6 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentati
                 templateUrl: 'pages/editUser.html',
                 controller: 'editUserCtrl',
                 resolve: {
-                    /**
-                     * get one user promise
-                     * @param  {rest} restService   rest service
-                     * @param  {user} User          user model
-                     * @return {promise}
-                     */
                     userPromise: function(restService, User) {
                         return restService.doGet(User);
                     }
@@ -172,7 +136,7 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentati
             templateUrl: 'partials/surveyselect.html'
         };
     })
-    .run(function(editableOptions, typeAugmentations) {
+    .run(function(editableOptions /*, typeAugmentations*/ ) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-        typeAugmentations();
+        // typeAugmentations();
     });
