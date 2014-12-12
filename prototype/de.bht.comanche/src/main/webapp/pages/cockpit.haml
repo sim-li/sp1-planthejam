@@ -22,7 +22,10 @@
               %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"} {{invite.survey.name}}
             #inviteTab.tab-pane
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
-              %h4 all invites
+              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"}
+                .col-sm-3 {{invite.survey.name}}
+                %button.btn.btn-success.btn-sm.col-sm-offset-4 accept
+                %button.btn.btn-danger.btn-sm ignore
         / %div DEBUG selected: {{ selectedInvite }}
       .col-md-8
         / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}

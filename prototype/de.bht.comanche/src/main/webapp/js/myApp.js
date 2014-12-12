@@ -30,7 +30,7 @@
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentations', 'constants', 'restModule', 'datePickerDate', 'user', 'invite', 'survey', 'group', 'baseModel', 'ui.bootstrap.datetimepicker'])
+angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentations', 'constants', 'restModule', 'datePickerDate', 'user', 'invite', 'survey', 'group', 'baseModel', 'ui.bootstrap.datetimepicker', 'timePeriod'])
     .factory('util', function() {
 
         // TODO is it still in use?

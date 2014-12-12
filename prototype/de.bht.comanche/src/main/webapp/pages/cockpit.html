@@ -27,7 +27,11 @@
             </div>
             <div class='tab-pane' id='inviteTab'>
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
-              <h4>all invites</h4>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>
+                <div class='col-sm-3'>{{invite.survey.name}}</div>
+                <button class='btn btn-success btn-sm col-sm-offset-4'>accept</button>
+                <button class='btn btn-danger btn-sm'>ignore</button>
+              </a>
             </div>
           </div>
         </div>

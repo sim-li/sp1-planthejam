@@ -14,8 +14,8 @@ angular.module('myApp')
      *
      * @class inviteCtrl
      */
-    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Model', 'User', 'Invite', 'Survey', 'Group', 'Member', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise',
-        function($scope, $log, $location /*, $routeParams*/ , restService, Model, User, Invite, Survey, Group, Member, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise) {
+    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Model', 'User', 'Invite', 'Survey', 'Group', 'Member', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise', 'TimePeriod',
+        function($scope, $log, $location /*, $routeParams*/ , restService, Model, User, Invite, Survey, Group, Member, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise, TimePeriod) {
 
             'use strict';
 
@@ -32,27 +32,30 @@ angular.module('myApp')
             // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users
             $scope.users = Model.importMany(User, usersPromise);
 
-            $scope.selectedTimePeriod = $scope.selectedInvite.survey.possibleTimeperiods[0] || {
+            //============== TimePeriod =============//
+            $scope.dummyTimePeriods = TimePeriod.dummyTimePeriods();
+            $scope.selectedTimePeriod = $scope.dummyTimePeriods[0] || {
                 'startTime': new Date(),
                 'duration': '0'
             };
-            $scope.selectTimePeriod = function(value) {
-                $scope.selectedTimePeriod = value;
+
+            $scope.selectTimePeriod = function(timeperiod) {
+                $scope.selectedTimePeriod = timeperiod;
             }
+
             $scope.addNewTimePeriod = function() {
-                $scope.selectedInvite.survey.possibleTimeperiods.push({
+                $scope.dummyTimePeriods.push({
                     'startTime': $scope.selectedTimePeriod.startTime,
                     'duration': $scope.selectedTimePeriod.duration
                 });
             };
 
             $scope.removeTimePeriod = function(index) {
-                $scope.selectedInvite.survey.possibleTimeperiods.splice(index, 1);
+                $scope.dummyTimePeriods.splice($scope.dummyTimePeriods.indexOf($scope.selectedTimePeriod), 1);
             };
 
+            //============== TimePeriod =============//
 
-            $scope.min = 0;
-            $scope.max = 100;
             // for now: some dummy users
             // $scope.users = [{
             //     name: 'Blackjack',
