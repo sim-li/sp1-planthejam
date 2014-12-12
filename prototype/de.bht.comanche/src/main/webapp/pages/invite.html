@@ -89,21 +89,29 @@
           </div>
           <!-- <<< DEBUGGING THE GROUPS -->
           <div class='row'>
-            <div class='col-lg-3'>
-              Avalibility
-              <button ng-click='addNewTimePeriod()'>
+            <div class='col-lg-2'>
+              <button class='btn btn-primary' ng-click='addNewTimePeriod()'>
+                add new
                 <i class='glyphicon glyphicon-plus'></i>
               </button>
-              <button ng-click='removeTimePeriod()'>
-                <i class='glyphicon glyphicon-minus'></i>
+            </div>
+            <div class='col-lg-2'>
+              <button class='btn btn-primary' ng-click='removeTimePeriod()'>
+                remove
+                <i class='glyphicon glyphicon-remove'></i>
               </button>
             </div>
           </div>
           <div class='row'>
-            possibleTimeperiods
-            <code>{{ selectedInvite.survey.possibleTimeperiods | json }}</code>
-            <div ng-repeat='timePeriod in selectedInvite.survey.possibleTimeperiods'>
-              <div class='col-lg-10 col-lg-offset-5'>
+            <!-- possibleTimeperiods -->
+            <!-- %code {{ selectedInvite.survey.possibleTimeperiods | json }} -->
+            <div class='col-lg-3'>
+              <tabset type='pills' vertical='true'>
+                <tab heading="{{timePeriod.startTime | date:'yyyy-MM-dd HH:mm'}}" ng-repeat='timePeriod in selectedInvite.survey.possibleTimeperiods'></tab>
+              </tabset>
+            </div>
+            <div class='col-md-offset-1' ng-repeat='timePeriod in selectedInvite.survey.possibleTimeperiods'>
+              <div class='row'>
                 <div class='dropdown col-md-4'>
                   <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
                     <div class='input-group'>
@@ -114,10 +122,10 @@
                     </div>
                   </a>
                   <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
-                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='timePeriod.startTime'></datetimepicker>
+                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='timePeriod.startTime' date='yyyy-MM-dd HH:mm'></datetimepicker>
                   </ul>
                 </div>
-                <div class='col-md-4'>
+                <div class='col-md-3'>
                   <input max='24' min='0' ng-model='timePeriod.duration' step='1' type='range' value='1'>
                 </div>
                 <!-- .panel.panel-default -->

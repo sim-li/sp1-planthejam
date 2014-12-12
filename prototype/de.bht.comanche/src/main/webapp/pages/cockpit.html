@@ -7,24 +7,30 @@
         <div class='tabbable'>
           <ul class='nav nav-tabs'>
             <li class='active'>
-              <a data-toggle='tab' href='#surveyTab'>Survey</a>
+              <a data-toggle='tab' href='#surveyTab' onclick='return false;'>
+                Survey
+                <span class='badge'>{{invites.length}}</span>
+              </a>
             </li>
             <li>
-              <a data-toggle='tab' href='#inviteTab'>Einladung</a>
+              <a data-toggle='tab' href='#inviteTab' onclick='return false;'>
+                Invite
+                <span class='badge'>{{invites.length}}</span>
+              </a>
             </li>
           </ul>
           <div class='tab-content'>
             <div class='tab-pane active' id='surveyTab'>
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
-              <ptj-survey-select></ptj-survey-select>
+              <div class='list-group' id='surveyList'></div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>{{invite.survey.name}}</a>
             </div>
             <div class='tab-pane' id='inviteTab'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
               <h4>all invites</h4>
             </div>
           </div>
         </div>
-        <!-- #surveyList.list-group -->
-        <!-- %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"} {{invite.survey.name}} -->
         <!-- %div DEBUG selected: {{ selectedInvite }} -->
       </div>
       <div class='col-md-8'>

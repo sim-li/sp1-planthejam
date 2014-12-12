@@ -32,11 +32,17 @@ angular.module('myApp')
             // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users
             $scope.users = Model.importMany(User, usersPromise);
 
-            $scope.timePeriod = $scope.selectedInvite.survey.possibleTimeperiods;
+            $scope.selectedTimePeriod = $scope.selectedInvite.survey.possibleTimeperiods[0] || {
+                'startTime': new Date(),
+                'duration': '0'
+            };
+            $scope.selectTimePeriod = function(value) {
+                $scope.selectedTimePeriod = value;
+            }
             $scope.addNewTimePeriod = function() {
                 $scope.selectedInvite.survey.possibleTimeperiods.push({
-                    'startTime': $scope.timePeriod.startTime,
-                    'duration': $scope.timePeriod.duration
+                    'startTime': $scope.selectedTimePeriod.startTime,
+                    'duration': $scope.selectedTimePeriod.duration
                 });
             };
 
