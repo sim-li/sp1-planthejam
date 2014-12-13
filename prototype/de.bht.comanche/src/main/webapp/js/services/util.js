@@ -7,7 +7,20 @@
  */
 angular.module('util', [])
     /**
-     * TODO comment it!
+     * A utility class providing basic array operations.
+     *
+     * __Note:__ be sure to use the following native JavaScript array operations:
+     *
+     * - to add an element to an array simply use Array.prototype.push(), for example:
+     *         var arr = [1, 2, 3].push(4);             // arr == [1, 2, 3, 4]
+     * - to merge two arrays simply use Array.prototype.concat(), for example:
+     *         var arr = [1, 2, 3].concat([4, 5, 6]);   // arr == [1, 2, 3, 4, 5, 6]
+     * - to filter an array use Array.prototype.filter(callback), for example:
+     *         var arr = [1, 2, 3];
+     *         var callback = function(val, idx, arr) {
+     *             return val <= 2;
+     *             };
+     *         var res = arr.filter(callback);          // arr == [1, 2]
      *
      * @class  arrayUtil
      */
@@ -17,12 +30,27 @@ angular.module('util', [])
 
         var arrayUtil = {};
 
+        /**
+         * Executes the specified callback function for each element of the array.
+         *
+         * @method forEach
+         * @static
+         * @param  {Array}    arr      the array
+         * @param  {Function} callback the function to be executed for each
+         * element, taking three arguments:
+         * - element - the current element being processed
+         * - index   - the index of the current element
+         * - arrays  - the array itself
+         * @return {Array}             a reference to the array
+         */
         arrayUtil.forEach = function(arr, callback) {
             for (var i = 0, len = arr.length; i < len; i++) {
                 callback(arr[i], i, arr);
             }
+            return arr;
         };
 
+        //---- forEach with context -- if we have use for it?
         // arrayUtil.forEach = function(arr, callback, context) {
         //     context = context || {};
         //     context.callback = callback;
@@ -32,97 +60,136 @@ angular.module('util', [])
         //     delete context.callback;
         // };
 
-        /*
-         * Note: use Array.prototype.concat()
+        /**
+         * Returns the first array element with the specified attribute
+         * matching the specified value, or undefined if no matching element
+         * was found.
+         *
+         * @method findByAttribute
+         * @static
+         * @param  {Array}  arr   the array
+         * @param  {String} attr  the attribute name
+         * @param  {Object} value the attribute value to be searched for
+         * @return {Object}       the found object or undefined
          */
-        // arrayUtil.merge = function(arr1, arr2) {
-        //     return arr1.concat(arr2);
-        // };
-
-        /*
-         * Note: use Array.prototype.push()
-         */
-        // arrayUtil.addElement = function(arr, ele) {
-        //     arr.push(ele);
-        // };
-
-        arrayUtil.findByKey = function(arr, key, value) {
+        arrayUtil.findByAttribute = function(arr, attr, value) {
             for (var i = 0, len = arr.length; i < len; i++) {
                 var ele = arr[i];
-                if (ele[key] == value) {
+                if (ele[attr] == value) {
                     return ele;
                 }
             }
         };
 
-        arrayUtil.removeByKey = function(arr, key, value) {
+        /**
+         * Removes the first array element with the specified attribute
+         * matching the specified value.
+         *
+         * @method removeByAttribute
+         * @static
+         * @param  {Array}  arr   the array
+         * @param  {String} attr  the attribute name
+         * @param  {Object} value the attribute value to be searched for
+         * @return {Array}        a reference to the array
+         */
+        arrayUtil.removeByAttribute = function(arr, attr, value) {
             for (var i = 0, len = arr.length; i < len; i++) {
                 var ele = arr[i];
-                if (ele[key] == value) {
+                if (ele[attr] == value) {
                     arr.splice(i, 1);
                     return arr;
                 }
             }
-        };
-
-        arrayUtil.removeElement = function(arr, ele) {
-            for (var i = 0, len = arr.length; i < len; i++) {
-                if (modelUtil.areEqual(arr[i], ele)) {
-                    arr.splice(i, 1);
-                    return arr;
-                }
-            }
-            return "not found + " + ele.id;
-        };
-
-        arrayUtil.contains = function(arr, ele) {
-            var i = arr.length;
-            while (i--) {
-                if (arr[i] == ele) {
-                    return true;
-                }
-            }
-        };
-
-        arrayUtil.removeDuplicatesByKey = function(arr, key) {
-            var callback = function(ele, idx, arr) {
-                // if (ele[key])
-            };
-            arrayUtil.forEach(arr, callback);
+            return arr;
         };
 
         /**
-         * Pushes the element to the array or updates it, if is already contained.
+         * Removes the first occurrence of the specified element from the array.
          *
-         * @method updateElementWithOid
-         *
-         * @param {Object} element an element with an attribute "oid"
+         * @method remove
+         * @static
+         * @param  {Array}    arr      the array
+         * @param  {Object}   obj      the element to be removed
+         * @param  {Function} [areEqual=modelUtil.areEqual] an optional
+         * function that returns true, if two objects are considered equal; the
+         * default considers two objects to be equal, if all their attributes
+         * are equal
+         * @return {Array}             a reference to the array
          */
-        // Array.prototype.updateElementWithOid = function(element) {
-        //     var oid = element && element.oid;
-        //     if (!oid) {
-        //         return;
-        //     }
-        //     var foundIndex = -1;
-        //     for (var i = 0, len = this.length; i < len; i++) {
-        //         var sel = this[i];
-        //         if (sel.oid && sel.oid === oid) {
-        //             foundIndex = i;
-        //         }
-        //     }
-        //     if (foundIndex > 0) {
-        //         this[foundIndex] = element;
-        //     } else {
-        //         this.push(element);
-        //     }
-        // };
+        arrayUtil.remove = function(arr, obj, areEqual) {
+            areEqual = areEqual || modelUtil.areEqual;
+            for (var i = 0, len = arr.length; i < len; i++) {
+                if (areEqual(arr[i], obj)) {
+                    arr.splice(i, 1);
+                    return arr;
+                }
+            }
+            return arr;
+        };
+
+        /**
+         * Returns true if the array contains the specified element.
+         *
+         * @method contains
+         * @static
+         * @param  {Array}    arr      the array
+         * @param  {Object}   obj      the object to be searched for
+         * @param  {Function} [areEqual=modelUtil.areEqual] an optional
+         * function that returns true, if two objects are considered equal; the
+         * default considers two objects to be equal, if all their attributes
+         * are equal
+         * @return {Boolean}          true if the array contains the element
+         */
+        arrayUtil.contains = function(arr, obj, areEqual) {
+            areEqual = areEqual || modelUtil.areEqual;
+            var i = arr.length;
+            while (i--) {
+                if (modelUtil.areEqual(arr[i], obj)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        /**
+         * Removes all duplicate elements based on the specified attribute.
+         * More particularly, it forbids duplicate values for the specified
+         * attribute and thus removes all but the first occurrence.
+         *
+         * @method removeDuplicatesByAttribute
+         * @static
+         * @param  {Array}  arr  the array
+         * @param  {String} attr the attribute name
+         * @return {Array}       a reference to the array
+         */
+        arrayUtil.removeDuplicatesByAttribute = function(arr, attr) {
+            var map = {};
+            arrayUtil.forEach(arr, function(ele) {
+                var key = ele[attr];
+                if (!map[key]) {
+                    map[key] = ele;
+                }
+            });
+            arr.splice(0);
+            for (var key in map) {
+                arr.push(map[key]);
+            }
+            return arr;
+        };
+
+        arrayUtil.filterByAttribute = function(arr, attr, value) {
+            var cond = function(val, idx, arr) {
+                return val['a'] == 2
+            };
+            return arr;
+        };
 
         return arrayUtil;
     }])
     /**
-     * TODO comment it!
+     * A utility class providing basic operations for models/objects.
      *
-     * @class  otherUtil
+     * @class  modelUtil
      */
     .factory('modelUtil', ['$log', function($log) {
 
@@ -130,6 +197,15 @@ angular.module('util', [])
 
         var modelUtil = {};
 
+        /**
+         * Compares two specified objects for equality by their attributes.
+         *
+         * @method areEqual
+         * @static
+         * @param  {Object}  obj1 an object
+         * @param  {Object}  obj2 another object
+         * @return {Boolean}      true if the all the attributes are equal
+         */
         modelUtil.areEqual = function(obj1, obj2) {
             for (var attr in obj1) {
                 if (obj1[attr] != obj2[attr]) {

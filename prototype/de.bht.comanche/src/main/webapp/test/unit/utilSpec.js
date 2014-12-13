@@ -1,7 +1,5 @@
-'use strict';
-
-/* jasmine specs for the util module go here */
 describe('util', function() {
+    'use strict';
 
     var arrayUtil,
         modelUtil;
@@ -18,10 +16,10 @@ describe('util', function() {
         it('should should exist', function() {
             expect(arrayUtil).toBeDefined();
             expect(arrayUtil.forEach).toBeDefined();
-            expect(arrayUtil.findByKey).toBeDefined();
-            expect(arrayUtil.removeByKey).toBeDefined();
-            expect(arrayUtil.removeElement).toBeDefined();
-            expect(arrayUtil.removeDuplicatesByKey).toBeDefined();
+            expect(arrayUtil.findByAttribute).toBeDefined();
+            expect(arrayUtil.removeByAttribute).toBeDefined();
+            expect(arrayUtil.remove).toBeDefined();
+            expect(arrayUtil.removeDuplicatesByAttribute).toBeDefined();
         });
 
         describe('forEach', function() {
@@ -38,31 +36,46 @@ describe('util', function() {
 
         });
 
-        describe('findByKey', function() {
+        describe('findByAttribute', function() {
 
-            it('should return the first element with a key matching the specified value', function() {
-                var arr = [{
-                        id: '#1',
-                        name: 'foo'
-                    }, {
-                        id: '#2',
-                        name: 'bar'
-                    }, {
-                        id: '#3',
-                        name: 'bar'
-                    }],
-                    key = 'name',
+            var arr = [{
+                id: '#1',
+                name: 'foo'
+            }, {
+                id: '#2',
+                name: 'bar'
+            }, {
+                id: '#3',
+                name: 'bar'
+            }];
+
+            it('should return the first array element with the specified key matching the specified value', function() {
+                var key = 'name',
                     value = 'bar';
-                var actual = arrayUtil.findByKey(arr, key, value);
+                var actual = arrayUtil.findByAttribute(arr, key, value);
                 expect(actual).toEqual({
                     id: '#2',
                     name: 'bar'
                 });
             });
 
+            it('should return undefined if no element with the specified key matches the specified value', function() {
+                var key = 'name',
+                    value = 'baz';
+                var actual = arrayUtil.findByAttribute(arr, key, value);
+                expect(actual).toBeUndefined();
+            });
+
+            it('should return undefined for an inexistent key', function() {
+                var key = 'inexistent',
+                    value = 'foo';
+                var actual = arrayUtil.findByAttribute(arr, key, value);
+                expect(actual).toBeUndefined();
+            });
+
         });
 
-        describe('removeByKey', function() {
+        describe('removeByAttribute', function() {
 
             it('should remove the first element with a key matching the specified value from the array', function() {
                 var arr = [{
@@ -77,10 +90,6 @@ describe('util', function() {
                     }],
                     key = 'name',
                     value = 'bar',
-                    // removed = {
-                    //     id: '#2',
-                    //     name: 'bar'
-                    // },
                     expected = [{
                         id: '#1',
                         name: 'foo'
@@ -88,16 +97,46 @@ describe('util', function() {
                         id: '#3',
                         name: 'bar'
                     }];
-                var returned = arrayUtil.removeByKey(arr, key, value);
-                // expect(arr).not.toContain(removed);
-                // expect(returned).not.toContain(removed);
+                var returned = arrayUtil.removeByAttribute(arr, key, value);
+                expect(arr).toEqual(expected);
+                expect(returned).toEqual(expected);
+            });
+
+            it('should not change an array with no key matching the specified value', function() {
+                var arr = [{
+                        id: '#1',
+                        name: 'foo'
+                    }],
+                    key = 'name',
+                    value = 'bar',
+                    expected = [{
+                        id: '#1',
+                        name: 'foo'
+                    }];
+                var returned = arrayUtil.removeByAttribute(arr, key, value);
+                expect(arr).toEqual(expected);
+                expect(returned).toEqual(expected);
+            });
+
+            it('should not change an array for an inexistent key', function() {
+                var arr = [{
+                        id: '#1',
+                        name: 'foo'
+                    }],
+                    key = 'inexistent',
+                    value = 'foo',
+                    expected = [{
+                        id: '#1',
+                        name: 'foo'
+                    }];
+                var returned = arrayUtil.removeByAttribute(arr, key, value);
                 expect(arr).toEqual(expected);
                 expect(returned).toEqual(expected);
             });
 
         });
 
-        describe('removeElement', function() {
+        describe('remove', function() {
 
             it('should remove the first element equal to the specified object from the array', function() {
                 var arr = [{
@@ -127,7 +166,25 @@ describe('util', function() {
                         id: '#1',
                         name: 'foo'
                     }];
-                var returned = arrayUtil.removeElement(arr, ele);
+                var returned = arrayUtil.remove(arr, ele);
+                expect(arr).toEqual(expected);
+                expect(returned).toEqual(expected);
+            });
+
+            it('should not change an array containing no element equal to the specified object', function() {
+                var arr = [{
+                        id: '#1',
+                        name: 'foo'
+                    }],
+                    ele = {
+                        id: '#2',
+                        name: 'bar'
+                    },
+                    expected = [{
+                        id: '#1',
+                        name: 'foo'
+                    }];
+                var returned = arrayUtil.remove(arr, ele);
                 expect(arr).toEqual(expected);
                 expect(returned).toEqual(expected);
             });
@@ -136,7 +193,75 @@ describe('util', function() {
 
         describe('contains', function() {
 
+            var arr = [{
+                id: '#1',
+                name: 'foo'
+            }, {
+                id: '#2',
+                name: 'bar'
+            }];
+
             it('should return true if the array contains an object equal to the specified object', function() {
+                var ele = {
+                    id: '#2',
+                    name: 'bar'
+                };
+                expect(arrayUtil.contains(arr, ele)).toBe(true);
+            });
+
+            it('should return false if the array does not contain an object equal to the specified object', function() {
+                var ele = {
+                    id: '#3',
+                    name: 'baz'
+                };
+                expect(arrayUtil.contains(arr, ele)).toBe(false);
+            });
+
+        });
+
+        describe('removeDuplicatesByAttribute', function() {
+
+            it('should ...', function() {
+                var arr = [{
+                        id: '#1',
+                        name: 'foo'
+                    }, {
+                        id: '#2',
+                        name: 'bar'
+                    }, {
+                        id: '#3',
+                        name: 'foo'
+                    }, {
+                        id: '#4',
+                        name: 'baz'
+                    }, {
+                        id: '#5',
+                        name: 'baz'
+                    }, {
+                        id: '#6',
+                        name: 'fum'
+                    }],
+                    expected = [{
+                        id: '#1',
+                        name: 'foo'
+                    }, {
+                        id: '#2',
+                        name: 'bar'
+                    }, {
+                        id: '#4',
+                        name: 'baz'
+                    }, {
+                        id: '#6',
+                        name: 'fum'
+                    }];
+
+                var returned = arrayUtil.removeDuplicatesByAttribute(arr, 'name');
+                expect(arr).toEqual(expected);
+                expect(returned).toEqual(expected);
+            });
+
+
+            it('should not change an array with no duplicates', function() {
                 var arr = [{
                         id: '#1',
                         name: 'foo'
@@ -146,25 +271,20 @@ describe('util', function() {
                     }, {
                         id: '#3',
                         name: 'baz'
-                    }, {
-                        id: '#1',
-                        name: 'foo'
                     }],
-                    ele = {
+                    key = 'name',
+                    expected = [{
                         id: '#1',
                         name: 'foo'
-                    },
-                    expected = [{
+                    }, {
                         id: '#2',
                         name: 'bar'
                     }, {
                         id: '#3',
                         name: 'baz'
-                    }, {
-                        id: '#1',
-                        name: 'foo'
                     }];
-                var returned = arrayUtil.removeElement(arr, ele);
+
+                var returned = arrayUtil.removeDuplicatesByAttribute(arr, key);
                 expect(arr).toEqual(expected);
                 expect(returned).toEqual(expected);
             });
