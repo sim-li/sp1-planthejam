@@ -22,6 +22,8 @@
     <!-- TODO clean up duplicate or orphan CSS -> -->
     <link href='css/style.css' rel='stylesheet' type='text/css'>
     <link href='css/ptj.css' rel='stylesheet' type='text/css'>
+    <!-- %link{:href => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.css", :rel => "stylesheet", :type => "text/css"} -->
+    <link href='bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css' rel='stylesheet' type='text/css'>
     <!-- for production -->
     <!-- MINIFIED VERSION OF THE LIBRARIES GO HERE -->
     <!-- for development -->
@@ -29,31 +31,30 @@
     <script src='bower_components/angular-bootstrap/ui-bootstrap-tpls.js'></script>
     <script src='bower_components/angular-route/angular-route.js'></script>
     <script src='bower_components/jquery/dist/jquery.min.js'></script>
+    <!-- %script{:src => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js"} -->
+    <script src='bower_components/moment/moment.js'></script>
+    <script src='bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js'></script>
     <!-- May be unwise to mix normal bootstrap with angular ui bootstrap -->
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js'></script>
     <script src='bower_components/angular-xeditable/dist/js/xeditable.js'></script>
     <script src='js/myApp.js'></script>
     <script src='js/controllers/ctrl.js'></script>
-    <script src='js/controllers/login.js'></script>
     <script src='js/controllers/cockpit.js'></script>
     <script src='js/controllers/editUser.js'></script>
-    <script src='js/controllers/editInvite.js'></script>
     <script src='js/controllers/invite.js'></script>
+    <script src='js/controllers/login.js'></script>
     <script src='js/controllers/menuCtrl.js'></script>
-    <script src='js/models/user.js'></script>
-    <script src='js/models/invite.js'></script>
-    <script src='js/models/survey.js'></script>
-    <script src='js/models/group.js'></script>
-    <script src='js/models/member.js'></script>
     <script src='js/models/baseModel.js'></script>
     <script src='js/models/datePickerDate.js'></script>
+    <script src='js/models/group.js'></script>
+    <script src='js/models/member.js'></script>
+    <script src='js/models/invite.js'></script>
+    <script src='js/models/survey.js'></script>
+    <script src='js/models/timePeriod.js'></script>
+    <script src='js/models/user.js'></script>
     <script src='js/services/rest.js'></script>
     <script src='js/services/util.js'></script>
     <script src='js/util/constants.js'></script>
-    <script src='js/util/typeAugmentations.js'></script>
-    <!-- TODO comment back in if really used -> get dependencies using bower -> use directory 'bower_components' -->
-    <!-- %script{:src => "lib/angular-slider.min.js"} -->
-    <!-- %script{:src => "lib/bootstrap-slider.js"} -->
   </head>
   <!-- define angular controller -->
   <body ng-app='myApp' ng-controller='ctrl' ng-keydown='discardWarnings()'>

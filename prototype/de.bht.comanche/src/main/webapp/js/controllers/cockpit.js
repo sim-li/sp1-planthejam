@@ -9,8 +9,8 @@ angular.module('myApp')
      *
      * @class cockpitCtrl
      */
-    .controller('cockpitCtrl', ['$scope', '$location', '$log', 'restService', 'Invite', 'util', 'invitesPromise', 'Model',
-        function($scope, $location, $log, restService, Invite, util, invitesPromise, Model) {
+    .controller('cockpitCtrl', ['$location', '$log', '$scope', 'Invite', 'invitesPromise', 'Model', 'restService',
+        function($location, $log, $scope, Invite, invitesPromise, Model, restService) {
 
             'use strict';
 

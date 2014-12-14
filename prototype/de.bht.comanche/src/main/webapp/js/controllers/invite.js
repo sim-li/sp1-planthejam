@@ -14,27 +14,45 @@ angular.module('myApp')
      *
      * @class inviteCtrl
      */
-    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Model', 'User', 'Invite', 'Survey', 'Group', 'Member', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'currentUserPromise', 'usersPromise',
-        function($scope, $log, $location /*, $routeParams*/ , restService, Model, User, Invite, Survey, Group, Member, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, currentUserPromise, usersPromise) {
+    .controller('inviteCtrl', ['$location', '$log', '$scope', 'currentUserPromise', 'Group', 'groupsPromise', 'Invite',
+        'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise', 'Survey', 'TimePeriod',
+        'TimeUnit', 'Type', 'User', 'usersPromise',
+        function($location, $log, $scope, currentUserPromise, Group, groupsPromise, Invite,
+            invitesPromise, Member, Model, restService, selectedInvitePromise, Survey, TimePeriod,
+            TimeUnit, Type, User, usersPromise) {
 
             'use strict';
 
             // resolve the promises passed to this route
-            $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : new Invite({
-                'ignored': false,
-                'host': true,
-                'user': currentUserPromise,
-                'survey': new Survey({
-                    'name': 'Your survey',
-                    'description': 'Say what it is all about',
-                    'deadline': new Date()
-                })
-            });
+            $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
             $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.groups = Model.importMany(Group, groupsPromise);
             // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users
             $scope.users = Model.importMany(User, usersPromise);
 
+            //============== TimePeriod =============//
+            $scope.dummyTimePeriods = TimePeriod.dummyTimePeriods();
+            $scope.selectedTimePeriod = $scope.dummyTimePeriods[0] || {
+                'startTime': new Date(),
+                'duration': '0'
+            };
+
+            $scope.selectTimePeriod = function(timeperiod) {
+                $scope.selectedTimePeriod = timeperiod;
+            };
+
+            $scope.addNewTimePeriod = function() {
+                $scope.dummyTimePeriods.push({
+                    'startTime': $scope.selectedTimePeriod.startTime,
+                    'duration': $scope.selectedTimePeriod.duration
+                });
+            };
+
+            $scope.removeTimePeriod = function(index) {
+                $scope.dummyTimePeriods.splice($scope.dummyTimePeriods.indexOf($scope.selectedTimePeriod), 1);
+            };
+
+            //============== TimePeriod =============//
 
             // for now: some dummy users
             // $scope.users = [{
@@ -74,12 +92,6 @@ angular.module('myApp')
             $scope.repeatedly = false;
             $scope.toOpened = false;
             $scope.fromOpened = false;
-
-            var createDefaultGroup = function() {
-                return new Group({
-                    name: 'Your new group'
-                });
-            };
 
             // $scope.$watch('selectedGroup', function() {
             //     // if ($scope.selectedGroupName === $scope.editedGroupName) {
@@ -138,7 +150,7 @@ angular.module('myApp')
              * @protected
              */
             $scope.addNewGroup = function() {
-                restService.doSave(createDefaultGroup())
+                restService.doSave(new Group())
                     .then(refreshGroupsAndShowLast());
             };
 
@@ -163,7 +175,7 @@ angular.module('myApp')
                 // delete selected on server
                 restService.doDelete($scope.selectedGroup)
                     .then(function(success) {
-                        $scope.selectedGroup = $scope.groups[0] || createDefaultGroup();
+                        $scope.selectedGroup = $scope.groups[0] || new Group();
                     } /*, function(error) { $log.log(error); }*/ );
 
                 // QUESTION maybe better to just delete on server and then refresh? - but then we have to wait for the server

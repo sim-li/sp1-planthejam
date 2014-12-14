@@ -15,42 +15,25 @@
  *
  * @module myApp
  * @main
- * @requires ui.bootstrap
- * @requires xeditable
  * @requires ngRoute
- * @requires typeAugmentations
- * @requires constants
- * @requires restModule
- * @requires datePickerDate
+ * @requires ui.bootstrap
+ * @requires ui.bootstrap.datetimepicker
+ * @requires xeditable
  * @requires baseModel
- * @requires user
- * @requires invite
- * @requires survey
+ * @requires constants
+ * @requires datePickerDate
  * @requires group
+ * @requires invite
+ * @requires restModule
+ * @requires survey
+ * @requires timePeriod
+ * @requires user
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentations', 'constants', 'restModule', 'datePickerDate', 'user', 'invite', 'survey', 'group', 'baseModel'])
-    .factory('util', function() {
-
-        // TODO is it still in use?
-
-        /**
-         * this method removes an element from array
-         * @param  {object} element An element from array
-         * @param  {array} Array
-         * @return {array}          Array after removing element
-         */
-        var removeElementFrom = function(element, array) {
-            var index = array.indexOf(element);
-            if (index > -1) {
-                array.splice(index, 1);
-            }
-        };
-        return {
-            removeElementFrom: removeElementFrom
-        };
-    })
+angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
+        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user'
+    ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
             .when('/', {

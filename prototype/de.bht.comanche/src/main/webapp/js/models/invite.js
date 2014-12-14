@@ -70,6 +70,27 @@ angular.module('invite', ['survey', 'user'])
             this.ignored = ignored;
         };
 
+        /**
+         * A factory method that creates a default invite for the specified user.
+         *
+         * @method createFor
+         * @static
+         * @param  {User}   user the host of the invite
+         * @return {Invite}      a default invite
+         */
+        Invite.createFor = function(user) {
+            return new Invite({
+                'ignored': false,
+                'host': true,
+                'user': user,
+                'survey': new Survey({
+                    'name': 'Your survey',
+                    'description': 'Say what it is all about',
+                    'deadline': new Date()
+                })
+            });
+        };
+
 
         // Invite.prototype.convertDatesToDatePickerDate = function() {
         //     this.survey.convertDatesToDatePickerDate();

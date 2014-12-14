@@ -1,6 +1,4 @@
-<div class='row'>
-  <ptj-menu></ptj-menu>
-</div>
+<ptj-menu></ptj-menu>
 <div class='container'>
   <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
   <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
@@ -77,54 +75,94 @@
             <br>
           </div>
           <!-- DEBUGGING THE GROUPS >>> -->
-          <div class='row' id='debug-the-groups-then-throw-away'>
-            <div class='list-group col-md-4' id='groupList'>
-              <!-- %a.list-group-item{"ng-click" => "selectGroup(group);", :href => "", "ng-repeat" => "group in groups"} {{group.name}} -->
-              <!-- %div.list-group-item{"ng-repeat" => "group in groups"} -->
-              <!-- %a.list-group-item{"ng-click" => "selectGroup(group);", :href => ""} {{group.name}} -->
-              <!-- %div{"ng-repeat" => "member in group.members"} {{member.user}} -->
-            </div>
-            <!-- %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "addGroup()"} Clone Selected Group -->
+          <div class='row col-lg-offset-3' id='debug-the-groups-then-throw-away'>
             <button class='btn btn-primary btn-sm' ng-click='addNewGroup()' type='submit'>Add New Group</button>
             <button class='btn btn-primary btn-sm' ng-click='deleteSelectedGroup()' type='submit'>Delete Selected Group</button>
             <button class='btn btn-primary btn-sm' ng-click='saveGroups()' type='submit'>Save All Groups</button>
           </div>
+          <br>
           <!-- <<< DEBUGGING THE GROUPS -->
           <div class='row'>
-            <div class='form-group'>
-              <label class='col-sm-3 control-label' for='Location'>
-                From
-              </label>
-              <div class='col-sm-5'>
-                <p class='input-group'>
-                  <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' datepicker-popup='dd-MMMM-yyyy' is-open='fromOpened' max-date="'2015-06-22'" min-date='minDate' ng-model='dt' ng-required='true' type='text'>
-                  <span class='input-group-btn'>
-                    <button class='btn btn-default' ng-click='openFrom($event)' type='button'>
-                      <i class='glyphicon glyphicon-calendar'></i>
+            <!-- possibleTimeperiods -->
+            <!-- %code {{ dummyTimePeriods | json }} -->
+            <!-- %code {{ selectedTimePeriod | json }} -->
+            <div class='col-lg-5'>
+              <div class='panel-group' id='accordion'></div>
+              <div class='panel panel-info'>
+                <div class='panel-heading'>
+                  <div class='panel-title'>
+                    <a data-parent='#accordion' data-toggle='collapse' href='#collapseOne' onclick='return false;'>
+                      Avaibility
+                      <span class='col-md-offset-7 glyphicon glyphicon-resize-vertical'></span>
+                    </a>
+                  </div>
+                </div>
+                <div class='panel-collapse collapse in' id='collapseOne'>
+                  <div class='panel-body'>
+                    <tabset type='pills' vertical='true'>
+                      <tab heading="{{timePeriod.startTime | date:'yyyy-MM-dd HH:mm' }} in {{timePeriod.duration}}h" ng-click='selectTimePeriod(timePeriod);' ng-repeat='timePeriod in dummyTimePeriods'></tab>
+                    </tabset>
+                  </div>
+                </div>
+                <div class='panel-footer'>
+                  <div class='col-md-offset-5'>
+                    <button class='btn btn-primary btn-sm' ng-click='addNewTimePeriod()'>
+                      <i class='glyphicon glyphicon-plus'></i>
                     </button>
-                  </span>
-                </p>
-              </div>
-              <div class='col-sm-4'>
-                <timepicker hour-step='1' minute-step='1' ng-model='mytime1'></timepicker>
+                    <button class='btn btn-primary btn-sm' ng-click='removeTimePeriod()'>
+                      <i class='glyphicon glyphicon-minus'></i>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class='form-group'>
-              <label class='col-sm-3 control-label' for='Location'>
-                To
-              </label>
-              <div class='col-sm-5'>
-                <p class='input-group'>
-                  <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' datepicker-popup='dd-MMMM-yyyy' is-open='toOpened' max-date="'2015-06-22'" min-date='minDate' ng-model='dt' ng-required='true' type='text'>
-                  <span class='input-group-btn'>
-                    <button class='btn btn-default' ng-click='openTo($event)' type='button'>
-                      <i class='glyphicon glyphicon-calendar'></i>
-                    </button>
-                  </span>
-                </p>
+            <div class='col-lg-7'>
+              <div class='row'>
+                <div class='col-lg-2'>
+                  Deadline
+                </div>
+                <div class='col-lg-8 dropdown'>
+                  <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
+                    <div class='input-group'>
+                      <input class='form-control' data-ng-model='selectedTimePeriod.startTime' type='text'>
+                      <span class='input-group-addon'>
+                        <i class='glyphicon glyphicon-calendar'></i>
+                      </span>
+                    </div>
+                  </a>
+                  <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='selectedTimePeriod.startTime' date='yyyy-MM-dd HH:mm'></datetimepicker>
+                  </ul>
+                </div>
+                <br>
               </div>
-              <div class='col-sm-4'>
-                <timepicker class='pull-right' hour-step='1' minute-step='1' ng-model='mytime2'></timepicker>
+              <hr>
+              <div class='row'>
+                <div class='col-lg-2'>
+                  Start Time
+                </div>
+                <div class='col-lg-8 dropdown'>
+                  <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
+                    <div class='input-group'>
+                      <input class='form-control' data-ng-model='selectedTimePeriod.startTime' type='text'>
+                      <span class='input-group-addon'>
+                        <i class='glyphicon glyphicon-calendar'></i>
+                      </span>
+                    </div>
+                  </a>
+                  <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='selectedTimePeriod.startTime' date='yyyy-MM-dd HH:mm'></datetimepicker>
+                  </ul>
+                </div>
+              </div>
+              <br>
+              <div class='row'>
+                <div class='col-lg-2'>
+                  Duration
+                </div>
+                <div class='col-lg-6'>
+                  <input max='24' min='0' ng-model='selectedTimePeriod.duration' step='1' type='range' value='1'>
+                </div>
               </div>
             </div>
           </div>

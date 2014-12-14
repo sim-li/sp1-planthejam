@@ -9,7 +9,7 @@ angular.module('myApp')
      *
      * @class menuCtrl
      */
-    .controller('menuCtrl', ['$scope', '$location', '$log', 'restService', function($scope, $location, $log, restService) {
+    .controller('menuCtrl', ['$location', '$log', '$scope', 'restService', function($location, $log, $scope, restService) {
 
         'use strict';
 

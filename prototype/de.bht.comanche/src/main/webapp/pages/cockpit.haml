@@ -1,23 +1,41 @@
-.container
-  %ptj-menu
+%ptj-menu
 
-  .container
-    / %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}'
-    .panel.panel-default
-      .panel-body
-        .col-md-4
-          #surveyList.list-group
-            %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"} {{invite.survey.name}}
-          / %div DEBUG selected: {{ selectedInvite }}
-        .col-md-8
-          %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
-          / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
-          %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Neue Terminumfrage erstellen"}
-          %input#editSurvey.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Terminumfrage anzeigen und bearbeiten"}
-          %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Terminumfrage löschen"}
-          #surveyPreview.panel.panel-default
-            .panel-body
-              %label{:for => "selectedSurveyDescription"} Beschreibung:
-              %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
-              / %label{:for => "selectedSurveyDescription"} Deadline:
-              / %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }}
+.container
+  / %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}'
+  .panel.panel-default
+    .panel-body
+      .col-md-4
+        .tabbable
+          %ul.nav.nav-tabs
+            %li.active
+              %a{"data-toggle" => "tab", :href => "#surveyTab", "onclick" => "return false;"}
+                Survey
+                %span.badge {{invites.length}}
+            %li
+              %a{"data-toggle" => "tab", :href => "#inviteTab", "onclick" => "return false;"}
+                Invite
+                %span.badge {{invites.length}}
+          .tab-content
+            #surveyTab.tab-pane.active
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+              #surveyList.list-group
+              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"} {{invite.survey.name}}
+            #inviteTab.tab-pane
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"}
+                .col-sm-3 {{invite.survey.name}}
+                %button.btn.btn-success.btn-sm.col-sm-offset-4 accept
+                %button.btn.btn-danger.btn-sm ignore
+        / %div DEBUG selected: {{ selectedInvite }}
+      .col-md-8
+        / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+        / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+        %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Neue Terminumfrage erstellen"}
+        %input#editSurvey.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Terminumfrage anzeigen und bearbeiten"}
+        %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Terminumfrage löschen"}
+        #surveyPreview.panel.panel-default
+          .panel-body
+            %label{:for => "selectedSurveyDescription"} Beschreibung:
+            %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
+            / %label{:for => "selectedSurveyDescription"} Deadline:
+            / %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }}

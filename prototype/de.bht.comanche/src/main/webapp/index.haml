@@ -21,6 +21,8 @@
     / TODO clean up duplicate or orphan CSS ->
     %link{:href => "css/style.css", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "css/ptj.css", :rel => "stylesheet", :type => "text/css"}
+    / %link{:href => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href  => "bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css", :rel => "stylesheet", :type => "text/css"}
     / for production
     / MINIFIED VERSION OF THE LIBRARIES GO HERE
     / for development
@@ -28,31 +30,32 @@
     %script{:src => "bower_components/angular-bootstrap/ui-bootstrap-tpls.js"}
     %script{:src => "bower_components/angular-route/angular-route.js"}
     %script{:src => "bower_components/jquery/dist/jquery.min.js"}
+
+    / %script{:src => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js"}
+    %script{:src => "bower_components/moment/moment.js"}
+    %script{:src => "bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"}
     / May be unwise to mix normal bootstrap with angular ui bootstrap
     %script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"}
     %script{:src => "bower_components/angular-xeditable/dist/js/xeditable.js"}
     %script{:src => "js/myApp.js"}
     %script{:src => "js/controllers/ctrl.js"}
-    %script{:src => "js/controllers/login.js"}
     %script{:src => "js/controllers/cockpit.js"}
     %script{:src => "js/controllers/editUser.js"}
-    %script{:src => "js/controllers/editInvite.js"}
     %script{:src => "js/controllers/invite.js"}
+    %script{:src => "js/controllers/login.js"}
     %script{:src => "js/controllers/menuCtrl.js"}
-    %script{:src => "js/models/user.js"}
-    %script{:src => "js/models/invite.js"}
-    %script{:src => "js/models/survey.js"}
-    %script{:src => "js/models/group.js"}
-    %script{:src => "js/models/member.js"}
     %script{:src => "js/models/baseModel.js"}
     %script{:src => "js/models/datePickerDate.js"}
+    %script{:src => "js/models/group.js"}
+    %script{:src => "js/models/member.js"}
+    %script{:src => "js/models/invite.js"}
+    %script{:src => "js/models/survey.js"}
+    %script{:src => "js/models/timePeriod.js"}
+    %script{:src => "js/models/user.js"}
     %script{:src => "js/services/rest.js"}
     %script{:src => "js/services/util.js"}
     %script{:src => "js/util/constants.js"}
-    %script{:src => "js/util/typeAugmentations.js"}
-    / TODO comment back in if really used -> get dependencies using bower -> use directory 'bower_components'
-    / %script{:src => "lib/angular-slider.min.js"}
-    / %script{:src => "lib/bootstrap-slider.js"}
+
   / define angular controller
   %body{"ng-app" => "myApp", "ng-controller" => "ctrl", "ng-keydown" => "discardWarnings()"}
     %div{"ng-view" => ""}

@@ -9,8 +9,8 @@ angular.module('myApp')
      *
      * @class loginCtrl
      */
-    .controller('loginCtrl', ['$scope', '$rootScope', '$location', '$log', 'restService', 'patterns', 'User',
-        function($scope, $rootScope, $location, $log, restService, patterns, User) {
+    .controller('loginCtrl', ['$location', '$log', '$rootScope', '$scope', 'patterns', 'restService', 'User',
+        function($location, $log, $rootScope, $scope, patterns, restService, User) {
 
             'use strict';
 
