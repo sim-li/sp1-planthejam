@@ -14,13 +14,16 @@ angular.module('myApp')
      *
      * @class inviteCtrl
      */
-    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Model', 'User', 'Invite', 'Survey', 'Group', 'Member', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise',
-        function($scope, $log, $location /*, $routeParams*/ , restService, Model, User, Invite, Survey, Group, Member, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise) {
+    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Model', 'User', 'Invite', 'Survey', 'Group', 'Member', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'currentUserPromise', 'usersPromise',
+        function($scope, $log, $location /*, $routeParams*/ , restService, Model, User, Invite, Survey, Group, Member, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, currentUserPromise, usersPromise) {
 
             'use strict';
 
             // resolve the promises passed to this route
             $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : new Invite({
+                'ignored': false,
+                'host': true,
+                'user': currentUserPromise,
                 'survey': new Survey({
                     'name': 'Your survey',
                     'description': 'Say what it is all about',

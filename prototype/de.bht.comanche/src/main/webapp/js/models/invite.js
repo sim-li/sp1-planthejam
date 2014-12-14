@@ -60,6 +60,16 @@ angular.module('invite', ['survey', 'user'])
             };
         };
 
+        /**
+         * Sets the ignored flag, which, if set to true, indicates that the invite is ignored by the user.
+         *
+         * @method setIgnored
+         * @param {Boolean} ignored a flag that indicates, whether or not the invite is ignored by the user
+         */
+        Invite.prototype.setIgnored = function(ignored) {
+            this.ignored = ignored;
+        };
+
 
         // Invite.prototype.convertDatesToDatePickerDate = function() {
         //     this.survey.convertDatesToDatePickerDate();

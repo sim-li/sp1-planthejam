@@ -76,6 +76,34 @@ angular.module('survey', ['datePickerDate', 'constants'])
             };
         };
 
+        /**
+         * ...
+         *
+         * @method addParticipant
+         * @param {User} user the user to be added as participant
+         */
+        Survey.prototype.addParticipant = function(user) {
+            this.invites.push(new Invite({
+                user: user /*, host: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
+            }));
+        };
+
+        /**
+         * ...
+         *
+         * @method addParticipants
+         * @param {Group} group the group, which members shall be added as participants
+         */
+        Survey.prototype.addParticipantsFromGroup = function(group) {
+            if (group.modelId !== 'group') {
+                return;
+            }
+            group.members.forEach(function(member) {
+                this.addParticipant(member.user);
+            }, this);
+        };
+
+
         //-- Note: keep this date conversion for now, throw away when surveys have time periods -->
         //
         // Survey.prototype.convertDatesToDatePickerDate = function() {
