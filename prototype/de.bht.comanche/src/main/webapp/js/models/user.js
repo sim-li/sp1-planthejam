@@ -53,7 +53,7 @@ angular.module('user', [])
          * @return {Object} the exported user
          */
         User.prototype.doExport = function() {
-            var exp = {
+            return {
                 'oid': this.oid,
                 'name': this.name,
                 'password': this.password,
@@ -62,9 +62,6 @@ angular.module('user', [])
                     /*,'invites': this.invites,
                     'groups': this.groups*/
             };
-            console.log("exporting user: -----------------")
-            console.log(exp)
-            return exp;
         };
 
         return (User);

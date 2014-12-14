@@ -305,6 +305,7 @@ angular.module('myApp')
                 return $scope.selectedGroup;
             };
 
+            // TODO check: unused?
             var removeEmptyGroups = function() {
                 var i = $scope.groups.length;
                 while (i--) {
@@ -315,6 +316,7 @@ angular.module('myApp')
                 }
             };
 
+            // TODO check: unused?
             var changeGroupName = function(oldName, newName) {
                 var index = find($scope.groups, 'name', oldName);
                 if (index === -1) {
@@ -324,6 +326,7 @@ angular.module('myApp')
                 return newName;
             };
 
+            // TODO check: unused?
             var getGroup = function(name) {
                 var index = find($scope.groups, 'name', name);
                 if (index === -1) {
@@ -332,7 +335,7 @@ angular.module('myApp')
                 return $scope.groups[index];
             };
 
-            // TODO simplify
+            // TODO check: unused?
             var find = function(array, key, value) {
                 var i = array.length;
                 while (i--) {
