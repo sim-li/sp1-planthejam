@@ -23,6 +23,5 @@
     "jquery": "~2.1.1",
     "moment": "^2.8.3",
     "angular-bootstrap-datetimepicker": "latest"
-      // "angular-ui-bootstrap-datetimepicker": "latest"
   }
 }
