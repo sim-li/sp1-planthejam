@@ -32,7 +32,7 @@ public class ReGroupService extends RestService {
 	 * Returns the list of groups with all groups for current user.
 	 * @param request The request information from HTTP service.
 	 * @return Returns the list of LgGroups.
-	 * @exception Throws the RestGetGroupsFailure if it was not possible to get all groups for LgUser.
+	 * @exception RestGetGroupsFailure if it was not possible to get all groups for LgUser.
 	 */
 	@Path("getGroups")
 	@POST
@@ -64,7 +64,7 @@ public class ReGroupService extends RestService {
 	 * @param group The LgGroup to be save.
 	 * @param request The request information from HTTP service.
 	 * @return Returns saved LgGroup.
-	 * @exception Throws the RestSaveGroupFailure if it was not possible to save LgGroup.
+	 * @exception RestSaveGroupFailure if it was not possible to save LgGroup.
 	 */
 	@Path("save")
 	@POST
@@ -95,7 +95,7 @@ public class ReGroupService extends RestService {
 	 * Delete LgGrop specified by oid. 
 	 * @param oid 	  The LgGroup oid to be deleted.
 	 * @param request The request information from HTTP service.
-	 * @exception Throws the RestDeleteGroupFailure if it was not possible to delete LgGroup.
+	 * @exception RestDeleteGroupFailure if it was not possible to delete LgGroup.
 	 */
 	@Path("delete")
 	@DELETE

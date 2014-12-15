@@ -78,7 +78,6 @@ public class LgUser extends DaObject {
 	 * @return The saved LgInvite.
 	 */
 	public LgInvite save(final LgInvite invite) {
-        invite.setUser(this);
 		return attach(invite).save();
 	}
 	/**

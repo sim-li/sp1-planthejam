@@ -1,28 +1,54 @@
+<ptj-menu></ptj-menu>
 <div class='container'>
-  <ptj-menu></ptj-menu>
-  <div class='container'>
-    <!-- %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}' -->
-    <div class='panel panel-default'>
-      <div class='panel-body'>
-        <div class='col-md-4'>
-          <div class='list-group' id='surveyList'>
-            <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>{{invite.survey.name}}</a>
-          </div>
-          <!-- %div DEBUG selected: {{ selectedInvite }} -->
-        </div>
-        <div class='col-md-8'>
-          <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
-          <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
-          <input class='btn btn-primary' id='addSurvey' ng-click='addInvite()' type='button' value='Neue Terminumfrage erstellen'>
-          <input class='btn btn-primary' id='editSurvey' ng-click='editInvite()' type='button' value='Terminumfrage anzeigen und bearbeiten'>
-          <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedInvite()' type='button' value='Terminumfrage löschen'>
-          <div class='panel panel-default' id='surveyPreview'>
-            <div class='panel-body'>
-              <label for='selectedSurveyDescription'>Beschreibung:</label>
-              <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
-              <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->
-              <!-- %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }} -->
+  <!-- %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}' -->
+  <div class='panel panel-default'>
+    <div class='panel-body'>
+      <div class='col-md-4'>
+        <div class='tabbable'>
+          <ul class='nav nav-tabs'>
+            <li class='active'>
+              <a data-toggle='tab' href='#surveyTab' onclick='return false;'>
+                Survey
+                <span class='badge'>{{invites.length}}</span>
+              </a>
+            </li>
+            <li>
+              <a data-toggle='tab' href='#inviteTab' onclick='return false;'>
+                Invite
+                <span class='badge'>{{invites.length}}</span>
+              </a>
+            </li>
+          </ul>
+          <div class='tab-content'>
+            <div class='tab-pane active' id='surveyTab'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+              <div class='list-group' id='surveyList'></div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>{{invite.survey.name}}</a>
             </div>
+            <div class='tab-pane' id='inviteTab'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>
+                <div class='col-sm-3'>{{invite.survey.name}}</div>
+                <button class='btn btn-success btn-sm col-sm-offset-4'>accept</button>
+                <button class='btn btn-danger btn-sm'>ignore</button>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- %div DEBUG selected: {{ selectedInvite }} -->
+      </div>
+      <div class='col-md-8'>
+        <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
+        <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
+        <input class='btn btn-primary' id='addSurvey' ng-click='addInvite()' type='button' value='Neue Terminumfrage erstellen'>
+        <input class='btn btn-primary' id='editSurvey' ng-click='editInvite()' type='button' value='Terminumfrage anzeigen und bearbeiten'>
+        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedInvite()' type='button' value='Terminumfrage löschen'>
+        <div class='panel panel-default' id='surveyPreview'>
+          <div class='panel-body'>
+            <label for='selectedSurveyDescription'>Beschreibung:</label>
+            <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
+            <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->
+            <!-- %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }} -->
           </div>
         </div>
       </div>

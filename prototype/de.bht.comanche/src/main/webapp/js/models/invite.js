@@ -60,6 +60,64 @@ angular.module('invite', ['survey', 'user'])
             };
         };
 
+        /**
+         * Sets the ignored flag, which, if set to true, indicates that the invite is ignored by the user.
+         *
+         * @method setIgnored
+         * @param {Boolean} ignored a flag that indicates, whether or not the invite is ignored by the user
+         */
+        Invite.prototype.setIgnored = function(ignored) {
+            this.ignored = ignored;
+        };
+
+        /**
+         * A factory method that creates a default invite for the specified user.
+         *
+         * @method createFor
+         * @static
+         * @param  {User}   user the host of the invite
+         * @return {Invite}      a default invite
+         */
+        Invite.createFor = function(user) {
+            return new Invite({
+                'ignored': false,
+                'host': true,
+                'user': user,
+                'survey': new Survey({
+                    'name': 'Your survey',
+                    'description': 'Say what it is all about',
+                    'deadline': new Date()
+                })
+            });
+        };
+
+        /**
+         * ...
+         *
+         * @method addParticipant
+         * @param {User} user the user to be added as participant
+         */
+        Invite.prototype.addParticipant = function(user) {
+            this.survey.invites.push(new Invite({
+                user: user /*, host: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
+            }));
+        };
+
+        /**
+         * ...
+         *
+         * @method addParticipants
+         * @param {Group} group the group, which members shall be added as participants
+         */
+        Invite.prototype.addParticipantsFromGroup = function(group) {
+            if (group.modelId !== 'group') {
+                return;
+            }
+            group.members.forEach(function(member) {
+                this.addParticipant(member.user);
+            }, this);
+        };
+
 
         // Invite.prototype.convertDatesToDatePickerDate = function() {
         //     this.survey.convertDatesToDatePickerDate();

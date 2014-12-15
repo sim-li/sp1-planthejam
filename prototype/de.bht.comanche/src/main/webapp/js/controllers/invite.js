@@ -14,24 +14,48 @@ angular.module('myApp')
      *
      * @class inviteCtrl
      */
-    .controller('inviteCtrl', ['$scope', '$log', '$location' /*, '$routeParams'*/ , 'restService', 'Model', 'User', 'Invite', 'Survey', 'Group', 'Member', 'Type', 'TimeUnit', 'invitesPromise', 'groupsPromise', 'selectedInvitePromise', 'usersPromise',
-        function($scope, $log, $location /*, $routeParams*/ , restService, Model, User, Invite, Survey, Group, Member, Type, TimeUnit, invitesPromise, groupsPromise, selectedInvitePromise, usersPromise) {
+    .controller('inviteCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'currentUserPromise', 'Group',
+        'groupsPromise', 'Invite', 'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise',
+        'selectedInviteSurveyInvitesPromise', // <<<<<<<<<<<<< TODO
+        'Survey', 'TimePeriod', 'TimeUnit', 'Type', 'User', 'usersPromise',
+        function($location, $log, $scope, arrayUtil, currentUserPromise, Group,
+            groupsPromise, Invite, invitesPromise, Member, Model, restService, selectedInvitePromise,
+            selectedInviteSurveyInvitesPromise, // <<<<<<<<<<<<< TODO
+            Survey, TimePeriod, TimeUnit, Type, User, usersPromise) {
 
             'use strict';
 
             // resolve the promises passed to this route
-            $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : new Invite({
-                'survey': new Survey({
-                    'name': 'Your survey',
-                    'description': 'Say what it is all about',
-                    'deadline': new Date()
-                })
-            });
+            $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
+            $scope.selectedInvite.survey.invites = Model.importMany(Invite, selectedInviteSurveyInvitesPromise); // <<<<<<<<<<<<< TODO
             $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.groups = Model.importMany(Group, groupsPromise);
             // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users
             $scope.users = Model.importMany(User, usersPromise);
 
+            //============== TimePeriod =============//
+            $scope.dummyTimePeriods = TimePeriod.dummyTimePeriods();
+            $scope.selectedTimePeriod = $scope.dummyTimePeriods[0] || {
+                'startTime': new Date(),
+                'duration': '0'
+            };
+
+            $scope.selectTimePeriod = function(timeperiod) {
+                $scope.selectedTimePeriod = timeperiod;
+            };
+
+            $scope.addNewTimePeriod = function() {
+                $scope.dummyTimePeriods.push({
+                    'startTime': $scope.selectedTimePeriod.startTime,
+                    'duration': $scope.selectedTimePeriod.duration
+                });
+            };
+
+            $scope.removeTimePeriod = function(index) {
+                $scope.dummyTimePeriods.splice($scope.dummyTimePeriods.indexOf($scope.selectedTimePeriod), 1);
+            };
+
+            //============== TimePeriod =============//
 
             // for now: some dummy users
             // $scope.users = [{
@@ -71,12 +95,6 @@ angular.module('myApp')
             $scope.repeatedly = false;
             $scope.toOpened = false;
             $scope.fromOpened = false;
-
-            var createDefaultGroup = function() {
-                return new Group({
-                    name: 'Your new group'
-                });
-            };
 
             // $scope.$watch('selectedGroup', function() {
             //     // if ($scope.selectedGroupName === $scope.editedGroupName) {
@@ -135,7 +153,7 @@ angular.module('myApp')
              * @protected
              */
             $scope.addNewGroup = function() {
-                restService.doSave(createDefaultGroup())
+                restService.doSave(new Group())
                     .then(refreshGroupsAndShowLast());
             };
 
@@ -160,7 +178,7 @@ angular.module('myApp')
                 // delete selected on server
                 restService.doDelete($scope.selectedGroup)
                     .then(function(success) {
-                        $scope.selectedGroup = $scope.groups[0] || createDefaultGroup();
+                        $scope.selectedGroup = $scope.groups[0] || new Group();
                     } /*, function(error) { $log.log(error); }*/ );
 
                 // QUESTION maybe better to just delete on server and then refresh? - but then we have to wait for the server
@@ -283,16 +301,28 @@ angular.module('myApp')
                     .then(function(success) {
                         $location.path('/cockpit');
                     } /*, function(error) { $log.log(error); }*/ );
+
+                // arrayUtil.forEach($scope.selectedInviteSurveyInvites, function(invite) { // <<<<<<<<<<<<< TODO
+                //     restService.saveSurveyInvite($scope.selectedInvite, invite);
+                // });
             };
 
             // TODO rest service to save many groups
             $scope.saveGroups = function() {
 
                 $log.log('Saving all groups');
-                for (var i = 0; i < $scope.groups.length; i++) {
-                    restService.doSave($scope.groups[i]);
-                }
+                arrayUtil.forEach($scope.groups, function(group) {
+                    restService.doSave(group);
+                });
                 $location.path('/invite');
+            };
+
+            //____________________________________________________________________ aktuelle Baustelle _______________________
+            $scope.attachSelectedGroupToInvite = function() {
+                // $log.log($scope.selectedInviteSurveyInvites)
+                $scope.selectedInvite.addParticipantsFromGroup($scope.selectedGroup);
+                $log.log($scope.selectedInvite.survey)
+                    // inv.addParticipantsFromGroup($scope.selectedGroup)
             };
 
             var selectFirstOrDefaultGroup = function() {
@@ -302,6 +332,7 @@ angular.module('myApp')
                 return $scope.selectedGroup;
             };
 
+            // TODO check: unused?
             var removeEmptyGroups = function() {
                 var i = $scope.groups.length;
                 while (i--) {
@@ -312,6 +343,7 @@ angular.module('myApp')
                 }
             };
 
+            // TODO check: unused?
             var changeGroupName = function(oldName, newName) {
                 var index = find($scope.groups, 'name', oldName);
                 if (index === -1) {
@@ -321,6 +353,7 @@ angular.module('myApp')
                 return newName;
             };
 
+            // TODO check: unused?
             var getGroup = function(name) {
                 var index = find($scope.groups, 'name', name);
                 if (index === -1) {
@@ -329,7 +362,7 @@ angular.module('myApp')
                 return $scope.groups[index];
             };
 
-            // TODO simplify
+            // TODO check: unused?
             var find = function(array, key, value) {
                 var i = array.length;
                 while (i--) {

@@ -4,10 +4,11 @@
  * @module survey
  * @requires datePickerDate
  * @requires constants
+ * @requires invite
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('survey', ['datePickerDate', 'constants'])
+angular.module('survey', ['constants', 'datePickerDate'])
     .factory('Survey', ['DatePickerDate', 'TimeUnit', 'Type', function(DatePickerDate, TimeUnit, Type) {
 
         'use strict';
@@ -36,6 +37,7 @@ angular.module('survey', ['datePickerDate', 'constants'])
             this.name = config.name || '';
             this.description = config.description || '';
             this.type = config.type || Type.ONE_TIME;
+            this.invites = []; // the invites have to be imported seperately
             this.deadline = new DatePickerDate(config.deadline) || new DatePickerDate(new Date());
             this.frequencyDist = config.frequencyDist || 0;
             this.frequencyTimeUnit = TimeUnit[config.frequencyTimeUnit] || TimeUnit.WEEK;
@@ -75,6 +77,36 @@ angular.module('survey', ['datePickerDate', 'constants'])
                     // 'determinedTimeperiod': this.determinedTimeperiod
             };
         };
+
+        // TODO maybe not used -> to be implemented inviteCtrl?
+        // /**
+        //  * ...
+        //  *
+        //  * @method addParticipant
+        //  * @param {User} user the user to be added as participant
+        //  */
+        // Survey.prototype.addParticipant = function(user) {
+        //     this.invites.push(new Invite({
+        //         user: user /*, host: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
+        //     }));
+        // };
+
+        // TODO maybe not used -> to be implemented inviteCtrl?
+        // /**
+        //  * ...
+        //  *
+        //  * @method addParticipants
+        //  * @param {Group} group the group, which members shall be added as participants
+        //  */
+        // Survey.prototype.addParticipantsFromGroup = function(group) {
+        //     if (group.modelId !== 'group') {
+        //         return;
+        //     }
+        //     group.members.forEach(function(member) {
+        //         this.addParticipant(member.user);
+        //     }, this);
+        // };
+
 
         //-- Note: keep this date conversion for now, throw away when surveys have time periods -->
         //

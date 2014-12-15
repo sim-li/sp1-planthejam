@@ -30,7 +30,7 @@ public class ReUserService extends RestService {
 	 * @param i_user The incoming user.
 	 * @param request The request information from HTTP service.
 	 * @return The LgUser object - current user.
-	 * @exception Throws the RestLoginUserFailure if it was not possible to login the user.
+	 * @exception RestLoginUserFailure if it was not possible to login the user.
 	 */
 	@Path("login")
 	@POST
@@ -65,7 +65,7 @@ public class ReUserService extends RestService {
 	 * @param i_user The incomig user.
 	 * @param request The request information from HTTP service.
 	 * @return The LgUser object - current user.
-	 * @exception Throws the RestRegisterUserFailure if it was not register the user on the platform.
+	 * @exception RestRegisterUserFailure if it was not register the user on the platform.
 	 */
 	@Path("register")
 	@POST
@@ -96,7 +96,7 @@ public class ReUserService extends RestService {
 	/**
 	 * Delete user from the platform by using current user name from HTTP request.
 	 * @param request The request information from HTTP service.
-	 * @exception Throws the RestDeleteUserFailure if it was not possible to delete the user from the platform.
+	 * @exception RestDeleteUserFailure if it was not possible to delete the user from the platform.
 	 */
 	@Path("delete")
 	@DELETE
@@ -127,7 +127,7 @@ public class ReUserService extends RestService {
 	 * Get LgUser by using current user name from HTTP request.
 	 * @param request The request information from HTTP service.
 	 * @return The LgUser object - current user.
-	 * @exception Throws the RestGetUserFailure if it was not possible to get current user.
+	 * @exception RestGetUserFailure if it was not possible to get current user.
 	 */
 	@Path("get")
 	@POST
@@ -157,7 +157,7 @@ public class ReUserService extends RestService {
 	 * @param i_user The incoming user.
 	 * @param request The request information from HTTP service.
 	 * @return The updated LgUser object.
-	 * @exception Throws the RestUserUpdateFailure if it was not possible to update current user.
+	 * @exception RestUserUpdateFailure if it was not possible to update current user.
 	 */
 	@Path("update")
 	@POST
@@ -207,7 +207,7 @@ public class ReUserService extends RestService {
 	 * Get the list of all registered users.
 	 * @param request The request information from HTTP service.
 	 * @return The List of LgUsers.
-	 * @exception Throws the RestGetAllUsersFailure if it was not possible to get list of users.
+	 * @exception RestGetAllUsersFailure if it was not possible to get list of users.
 	 */
 	@Path("getAllUsers")
 	@POST
@@ -237,7 +237,7 @@ public class ReUserService extends RestService {
 	/**
 	 * Logout user from the platform by invalidating the session.
 	 * @param request The request information from HTTP service.
-	 * @exception Throws the RestLogoutUserFailure if it was not possible to logout current user.
+	 * @exception RestLogoutUserFailure if it was not possible to logout current user.
 	 */
 	@Path("logout")
 	@POST

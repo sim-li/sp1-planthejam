@@ -19,7 +19,7 @@ angular.module('group', ['baseModel', 'member'])
          * @constructor
          * @param {Object} [config={}] an optional configuration object
          * @param {Number} [config.oid=''] the object id of the group
-         * @param {String} [config.name=''] the name of the group
+         * @param {String} [config.name='Your new group'] the name of the group
          * @param {Array}  [config.members=[]] the members of the group
          */
         var Group = function(config) {
@@ -28,7 +28,7 @@ angular.module('group', ['baseModel', 'member'])
             }
             config = config || {};
             this.oid = config.oid || '';
-            this.name = config.name || '';
+            this.name = config.name || 'Your new group';
             // this.members = config.members || []; // e.g.: [{oid: 1, name: 'Alice'}, {oid: 2, name: 'Bob'}, {oid: 3, name: 'Carla'}]
             this.members = config.members ? Model.importMany(Member, config.members) : [];
         };
@@ -57,6 +57,8 @@ angular.module('group', ['baseModel', 'member'])
                 'members': Member.exportMany(this.members)
             };
         };
+
+        Group.create
 
         return (Group);
     }]);

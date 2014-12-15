@@ -55,7 +55,7 @@ angular.module('baseModel', [])
             for (var i = 0, len = rawModels.length; i < len; i++) {
                 models.push(new ModelClass(rawModels[i]));
             }
-            console.log('imported many ' + ModelClass.prototype.modelId + 's');
+            // console.log('imported many ' + ModelClass.prototype.modelId + 's');
             return models;
         };
 

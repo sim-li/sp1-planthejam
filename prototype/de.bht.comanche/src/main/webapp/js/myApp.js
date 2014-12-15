@@ -15,42 +15,26 @@
  *
  * @module myApp
  * @main
- * @requires ui.bootstrap
- * @requires xeditable
  * @requires ngRoute
- * @requires typeAugmentations
- * @requires constants
- * @requires restModule
- * @requires datePickerDate
+ * @requires ui.bootstrap
+ * @requires ui.bootstrap.datetimepicker
+ * @requires xeditable
  * @requires baseModel
- * @requires user
- * @requires invite
- * @requires survey
+ * @requires constants
+ * @requires datePickerDate
  * @requires group
+ * @requires invite
+ * @requires restModule
+ * @requires survey
+ * @requires timePeriod
+ * @requires user
+ * @requires util
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentations', 'constants', 'restModule', 'datePickerDate', 'user', 'invite', 'survey', 'group', 'baseModel'])
-    .factory('util', function() {
-
-        // TODO is it still in use?
-
-        /**
-         * this method removes an element from array
-         * @param  {object} element An element from array
-         * @param  {array} Array
-         * @return {array}          Array after removing element
-         */
-        var removeElementFrom = function(element, array) {
-            var index = array.indexOf(element);
-            if (index > -1) {
-                array.splice(index, 1);
-            }
-        };
-        return {
-            removeElementFrom: removeElementFrom
-        };
-    })
+angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
+        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util'
+    ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
             .when('/', {
@@ -65,12 +49,6 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentati
                 templateUrl: 'pages/cockpit.html',
                 controller: 'cockpitCtrl',
                 resolve: {
-                    /**
-                     *  get all invite promises
-                     * @param  {rest} restService   rest service
-                     * @param  {invite} Invite      invite model
-                     * @return {promise}
-                     */
                     invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
                     }
@@ -80,45 +58,25 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentati
                 templateUrl: 'pages/invite.html',
                 controller: 'inviteCtrl',
                 resolve: {
-                    /**
-                     * get the invite promise with oid
-                     * @param  {} $route      [description]
-                     * @param  {rest} restService   rest service
-                     * @param  {invite} Invite      invite model
-                     * @return {promise}            a promise for the invite object
-                     */
                     selectedInvitePromise: function($route, restService, Invite) {
                         var inviteOid = $route.current.params.inviteOid;
-                        if (typeof inviteOid === 'undefined') {
-                            return '';
-                        }
-                        return restService.doGet(Invite, inviteOid);
+                        // console.log("inviteOid = " + inviteOid)
+                        return (inviteOid === undefined) ? '' : restService.doGet(Invite, inviteOid);
+                    },
+                    selectedInviteSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
+                        var inviteOid = $route.current.params.inviteOid;
+                        return (inviteOid === undefined) ? [] : restService.getSurveyInvites(inviteOid);
+                    },
+                    currentUserPromise: function($route, restService, User) {
+                        return ($route.current.params.inviteOid !== undefined) ? '' : restService.doGet(User);
                     },
                     // TODO maybe not necessary to get all invites for this route?
-                    /**
-                     *  get all invite promises
-                     * @param  {rest} restService   rest service
-                     * @param  {invite} Invite      invite model
-                     * @return {promise}
-                     */
                     invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
                     },
-                    /**
-                     * get all group promises
-                     * @param  {rest} restService    rest service
-                     * @param  {group} Group         group model
-                     * @return {promise}
-                     */
                     groupsPromise: function(restService, Group) {
                         return restService.doGetMany(Group);
                     },
-                    /**
-                     * get all user promises
-                     * @param  {rest} restService   rest service
-                     * @param  {user} User          user model
-                     * @return {promise}
-                     */
                     usersPromise: function(restService, User) {
                         return restService.doGetMany(User);
                     }
@@ -128,12 +86,6 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentati
                 templateUrl: 'pages/editUser.html',
                 controller: 'editUserCtrl',
                 resolve: {
-                    /**
-                     * get one user promise
-                     * @param  {rest} restService   rest service
-                     * @param  {user} User          user model
-                     * @return {promise}
-                     */
                     userPromise: function(restService, User) {
                         return restService.doGet(User);
                     }
@@ -172,7 +124,7 @@ angular.module('myApp', ['ui.bootstrap', 'xeditable', 'ngRoute', 'typeAugmentati
             templateUrl: 'partials/surveyselect.html'
         };
     })
-    .run(function(editableOptions, typeAugmentations) {
+    .run(function(editableOptions /*, typeAugmentations*/ ) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-        typeAugmentations();
+        // typeAugmentations();
     });
