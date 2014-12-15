@@ -2,6 +2,8 @@ package de.bht.comanche.logic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.Persistence;
@@ -19,7 +21,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-//@Ignore
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
@@ -60,7 +62,7 @@ public class LgGroupTest {
 	}
 	
 	@Test
-	public void test1SaveGroup(){
+	public void test1SaveTimePeriod(){
 		final LgSession session = start();
 		startForUser(session).save(new LgGroup().setName("Group").setUser(session.getUser()));
 		end(session);
@@ -68,7 +70,7 @@ public class LgGroupTest {
 		assertEquals("Group", getAliceGroup(aliceGroup.getOid()).getName());
 	}
 	
-	@Test
+//	@Test
 	public void test2changeGroupName(){
 		final LgSession session = start();
 		startForUser(session).getGroups().get(0).setName("NewGroup");
@@ -77,7 +79,7 @@ public class LgGroupTest {
 		assertEquals("NewGroup", getAliceGroup(aliceGroup.getOid()).getName());
 	}
 
-	@Test
+//	@Test
 	public void test3addMember(){
 		final LgSession session = start();
 		final LgUser user = startForUser(session);

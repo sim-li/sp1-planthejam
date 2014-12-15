@@ -105,9 +105,11 @@ public class LgUser extends DaObject {
 		return attach(group).save();
 	}
 	
-//	public LgGroup save(final LgGroup group) {
-//		return attach(group).setUser(this).setForMember().save();
-//	}
+	public List<LgInvite> getInvites(boolean isHost , LgUser oid){
+		search(LgInvite.class, "ISHOST", isHost, "USER_OID", oid);
+		return invites;	
+	}
+	
 	
 	/**
 	 * Delete LgGroup by provided oid.
@@ -164,6 +166,17 @@ public class LgUser extends DaObject {
 	 */
 	public LgInvite getInvite(final long inviteOid) {
 		return search(this.invites, inviteOid);
+	}
+	
+	//TODO improve it
+	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
+		invite.setTimePeriod(invite);
+		return attach(invite).save();
+	}
+	
+	//for DB test only
+	public <E extends DaObject> E saveObj(final E other) {
+		return attach(other).save();
 	}
 	
 	/**

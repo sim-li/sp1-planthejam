@@ -53,10 +53,12 @@ public class LgInvite extends DaObject{
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
 	 */
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<LgTimePeriod> timePeriods = new ArrayList<LgTimePeriod>();
+	private List<LgTimePeriod> timePeriods;
 	
 	
-	public LgInvite() {}
+	public LgInvite() {
+		timePeriods = new ArrayList<LgTimePeriod>();
+	}
 	
 	/*
 	 * --------------------------------------------------------------------------------------------
@@ -100,6 +102,19 @@ public class LgInvite extends DaObject{
 	public LgInvite setSurvey(final LgSurvey survey) {
 		this.survey = survey;
 		return this;
+	}
+	
+	/**
+	 * Sets specified LgInvite for LgTimePeriod.
+	 * @param invite The LgInvite to set.
+	 * @return Returns The LgInvite.
+	 */ 
+	//not clear, how it will be used
+	public LgInvite setTimePeriod(LgInvite invite){
+			for (final LgTimePeriod period : this.timePeriods) {
+				period.setInvite(invite);
+			}
+			return this;
 	}
 
 	@Override
