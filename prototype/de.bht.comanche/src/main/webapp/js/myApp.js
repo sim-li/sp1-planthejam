@@ -28,11 +28,12 @@
  * @requires survey
  * @requires timePeriod
  * @requires user
+ * @requires util
  *
  * @author Sebastian Dass&eacute;
  */
 angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
-        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user'
+        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util'
     ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
@@ -62,6 +63,10 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                         console.log("inviteOid = " + inviteOid)
                         return (inviteOid === undefined) ? '' : restService.doGet(Invite, inviteOid);
                     },
+            // selectedInviteSurveyInvitesPromise: function($route, restService, Invite) { // <<<<<<<<<<<<<
+            //     var inviteOid = $route.current.params.inviteOid;
+            //     return (inviteOid === undefined) ? [] : restService.getSurveyInvites(Invite, inviteOid);
+            // },
                     currentUserPromise: function($route, restService, User) {
                         return ($route.current.params.inviteOid !== undefined) ? '' : restService.doGet(User);
                     },

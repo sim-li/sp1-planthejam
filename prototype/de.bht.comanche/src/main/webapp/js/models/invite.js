@@ -91,6 +91,33 @@ angular.module('invite', ['survey', 'user'])
             });
         };
 
+        /**
+         * ...
+         *
+         * @method addParticipant
+         * @param {User} user the user to be added as participant
+         */
+        Invite.prototype.addParticipant = function(user) {
+            this.survey.invites.push(new Invite({
+                user: user /*, host: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
+            }));
+        };
+
+        /**
+         * ...
+         *
+         * @method addParticipants
+         * @param {Group} group the group, which members shall be added as participants
+         */
+        Invite.prototype.addParticipantsFromGroup = function(group) {
+            if (group.modelId !== 'group') {
+                return;
+            }
+            group.members.forEach(function(member) {
+                this.addParticipant(member.user);
+            }, this);
+        };
+
 
         // Invite.prototype.convertDatesToDatePickerDate = function() {
         //     this.survey.convertDatesToDatePickerDate();

@@ -59,6 +59,7 @@
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "addNewGroup()"} Add New Group
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "deleteSelectedGroup()"} Delete Selected Group
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveGroups()"} Save All Groups
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "attachSelectedGroupToInvite()"} Attach Selected Group To Invite
           %br
           / <<< DEBUGGING THE GROUPS
           .row
@@ -117,7 +118,7 @@
         .panel-footer
           .col-md-offset-10
             %button.btn.btn-default.btn-sm{:type => "reset"} Reset
-            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveInvite()"} Create
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveInvite()"} Save
     .col-md-2
       %input-group{"ng-show"=>"repeatedly"}
         %input.form-control{"type"=>"text", "placeholder"=>"Frequency"}

@@ -14,17 +14,20 @@ angular.module('myApp')
      *
      * @class inviteCtrl
      */
-    .controller('inviteCtrl', ['$location', '$log', '$scope', 'currentUserPromise', 'Group', 'groupsPromise', 'Invite',
-        'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise', 'Survey', 'TimePeriod',
-        'TimeUnit', 'Type', 'User', 'usersPromise',
-        function($location, $log, $scope, currentUserPromise, Group, groupsPromise, Invite,
-            invitesPromise, Member, Model, restService, selectedInvitePromise, Survey, TimePeriod,
-            TimeUnit, Type, User, usersPromise) {
+    .controller('inviteCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'currentUserPromise', 'Group',
+        'groupsPromise', 'Invite', 'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise',
+        // 'selectedInviteSurveyInvitesPromise', // <<<<<<<<<<<<< TODO
+        'Survey', 'TimePeriod', 'TimeUnit', 'Type', 'User', 'usersPromise',
+        function($location, $log, $scope, arrayUtil, currentUserPromise, Group,
+            groupsPromise, Invite, invitesPromise, Member, Model, restService, selectedInvitePromise,
+            // selectedInviteSurveyInvitesPromise, // <<<<<<<<<<<<< TODO
+            Survey, TimePeriod, TimeUnit, Type, User, usersPromise) {
 
             'use strict';
 
             // resolve the promises passed to this route
             $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
+            // $scope.selectedInvite.survey.invites = Model.importMany(Invite, selectedInviteSurveyInvitesPromise); // <<<<<<<<<<<<< TODO
             $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.groups = Model.importMany(Group, groupsPromise);
             // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users
@@ -298,16 +301,28 @@ angular.module('myApp')
                     .then(function(success) {
                         $location.path('/cockpit');
                     } /*, function(error) { $log.log(error); }*/ );
+
+                // arrayUtil.forEach($scope.selectedInviteSurveyInvites, function(invite) { // <<<<<<<<<<<<< TODO
+                //     restService.saveSurveyInvite($scope.selectedInvite, invite);
+                // });
             };
 
             // TODO rest service to save many groups
             $scope.saveGroups = function() {
 
                 $log.log('Saving all groups');
-                for (var i = 0; i < $scope.groups.length; i++) {
-                    restService.doSave($scope.groups[i]);
-                }
+                arrayUtil.forEach($scope.groups, function(group) {
+                    restService.doSave(group);
+                });
                 $location.path('/invite');
+            };
+
+            //____________________________________________________________________ aktuelle Baustelle _______________________
+            $scope.attachSelectedGroupToInvite = function() {
+                // $log.log($scope.selectedInviteSurveyInvites)
+                $scope.selectedInvite.addParticipantsFromGroup($scope.selectedGroup);
+                $log.log($scope.selectedInvite.survey)
+                    // inv.addParticipantsFromGroup($scope.selectedGroup)
             };
 
             var selectFirstOrDefaultGroup = function() {

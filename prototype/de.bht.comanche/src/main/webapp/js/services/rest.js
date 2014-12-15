@@ -18,6 +18,8 @@ angular.module('restModule', ['baseModel', 'user'])
 
             'use strict';
 
+            var restService = {};
+
             // turns the logging on/off
             var LOG = true;
 
@@ -44,7 +46,10 @@ angular.module('restModule', ['baseModel', 'user'])
                     'getMany': '/getInvites',
                     'get': '/get',
                     'save': '/save',
-                    'delete': '/delete'
+                    'delete': '/delete',
+                    'getSurveyInvites': '/getSurveyInvites', // TODO -> REST service on  server side
+                    'saveSurveyInvite': '/saveSurveyInvite' //
+                        // 'saveSurveyInvites': '/saveSurveyInvites' //
                 },
                 'group': {
                     'path': '/group',
@@ -128,7 +133,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object}  user the user to be logged in
              * @return {Promise}      a promise to the logged-in user
              */
-            var login = function(user) {
+            restService.login = function(user) {
                 return callHTTP(getPath(user, 'login'), {
                     'name': user.name,
                     'password': user.password
@@ -142,7 +147,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object}  user the user to be registered
              * @return {Promise}      a promise to the registered user
              */
-            var register = function(user) {
+            restService.register = function(user) {
                 return callHTTP(getPath(user, 'register'), {
                     'name': user.name,
                     'password': user.password,
@@ -157,7 +162,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * @method deleteUser
              * @param  {Object}  user the user to be deleted
              */
-            var deleteUser = function(user) {
+            restService.deleteUser = function(user) {
                 return callHTTP(getPath(user, 'delete'), { // TODO use generic doDelete if possible
                     'oid': user.oid
                 }, 'DELETE');
@@ -174,7 +179,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object}  user the user to be updated
              * @return {Promise}      a promise to the updated user
              */
-            var updateUser = function(user) {
+            restService.updateUser = function(user) {
                 return callHTTP(getPath(user, 'update'), {
                     'oid': user.oid,
                     'name': user.name,
@@ -189,9 +194,24 @@ angular.module('restModule', ['baseModel', 'user'])
              *
              * @method logout
              */
-            var logout = function() {
+            restService.logout = function() {
                 return callHTTP(getPath(User, 'logout'));
             };
+
+            // TODO
+            restService.getSurveyInvites = function(invite) {
+                return callHTTP(getPath(invite, 'getSurveyInvites'), invite.oid);
+            };
+
+            // TODO
+            restService.saveSurveyInvite = function(invite, inviteToSave) {
+                return callHTTP(getPath(invite, 'saveSurveyInvite'), invite.oid, inviteToSave);
+            };
+
+            // TODO
+            // restService.saveSurveyInvites = function(invite, invitesToSave) {
+            //     return callHTTP(getPath(invite, 'saveSurveyInvites'), invite.oid, invitesToSave);
+            // };
 
             /**
              * Gets a collection of objects of the specified model class by calling the REST service.
@@ -200,7 +220,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object} ModelClass the model class with a modelId
              * @return {Promise}           a promise for a collection of objects of the specified model type
              */
-            var doGetMany = function(ModelClass) {
+            restService.doGetMany = function(ModelClass) {
                 return callHTTP(getPath(ModelClass, 'getMany'));
             };
 
@@ -212,7 +232,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Number} oid        the object ID
              * @return {Promise}           a promise for the object
              */
-            var doGet = function(ModelClass, oid) {
+            restService.doGet = function(ModelClass, oid) {
                 return callHTTP(getPath(ModelClass, 'get'), oid);
             };
 
@@ -223,7 +243,7 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object} model the model with a modelId and an export method
              * @return {Promise}      a promise for the saved object of the specified model
              */
-            var doSave = function(model) {
+            restService.doSave = function(model) {
                 return callHTTP(getPath(model, 'save'), model.doExport());
             };
 
@@ -234,22 +254,24 @@ angular.module('restModule', ['baseModel', 'user'])
              * @method doDelete
              * @param  {Object} model the model with a modelId
              */
-            var doDelete = function(model) {
+            restService.doDelete = function(model) {
                 return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE');
             };
 
-            return {
-                login: login,
-                register: register,
-                deleteUser: deleteUser,
-                updateUser: updateUser,
-                // getUser: getUser,
-                logout: logout,
-                doGetMany: doGetMany,
-                doGet: doGet,
-                doSave: doSave,
-                doDelete: doDelete
-            };
 
+            // return {
+            //     login: login,
+            //     register: register,
+            //     deleteUser: deleteUser,
+            //     updateUser: updateUser,
+            //     // getUser: getUser,
+            //     logout: logout,
+            //     doGetMany: doGetMany,
+            //     doGet: doGet,
+            //     doSave: doSave,
+            //     doDelete: doDelete
+            // };
+
+            return restService;
         }
     ]);
