@@ -60,13 +60,13 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                 resolve: {
                     selectedInvitePromise: function($route, restService, Invite) {
                         var inviteOid = $route.current.params.inviteOid;
-                        console.log("inviteOid = " + inviteOid)
+                        // console.log("inviteOid = " + inviteOid)
                         return (inviteOid === undefined) ? '' : restService.doGet(Invite, inviteOid);
                     },
-            // selectedInviteSurveyInvitesPromise: function($route, restService, Invite) { // <<<<<<<<<<<<<
-            //     var inviteOid = $route.current.params.inviteOid;
-            //     return (inviteOid === undefined) ? [] : restService.getSurveyInvites(Invite, inviteOid);
-            // },
+                    selectedInviteSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
+                        var inviteOid = $route.current.params.inviteOid;
+                        return (inviteOid === undefined) ? [] : restService.getSurveyInvites(inviteOid);
+                    },
                     currentUserPromise: function($route, restService, User) {
                         return ($route.current.params.inviteOid !== undefined) ? '' : restService.doGet(User);
                     },

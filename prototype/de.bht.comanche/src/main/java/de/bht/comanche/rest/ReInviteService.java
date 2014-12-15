@@ -29,7 +29,7 @@ public class ReInviteService extends RestService {
 	 * Returns the list of all LgInvites for current user.
 	 * @param request The request information from HTTP service.
 	 * @return The list of invites.
-	 * @exception Throws the RestGetInvitesFailure if it was not possible to get list of invites for current user.
+	 * @exception RestGetInvitesFailure if it was not possible to get list of invites for current user.
 	 */
 	@POST
 	@Path("getInvites")
@@ -61,7 +61,7 @@ public class ReInviteService extends RestService {
 	 * @param oid The LgInvite oid.
 	 * @param request The request information from HTTP service.
 	 * @return The LgInvite.
-	 * @exception Throws the RestGetInviteFailure if it was not possible to get invite for current user.
+	 * @exception RestGetInviteFailure if it was not possible to get invite for current user.
 	 */
 	@POST
 	@Path("get")
@@ -92,7 +92,7 @@ public class ReInviteService extends RestService {
 	 * Save incoming LgInvite for current user. 
 	 * @param invite The incoming LgInvite.
 	 * @param request The request information from HTTP service.
-	 * @exception Throws the RestSaveInviteFailure if it was not possible to save invite for current user.
+	 * @exception RestSaveInviteFailure if it was not possible to save invite for current user.
 	 */
 	@Path("save")
 	@POST
@@ -122,7 +122,7 @@ public class ReInviteService extends RestService {
 	 * Delete LgInvite by specified oid.
 	 * @param oid The LgInvite oid.
 	 * @param request The request information from HTTP service.
-	 * @exception Throws the RestDeleteInviteFailure if it was not possible to delete invite of current user.
+	 * @exception RestDeleteInviteFailure if it was not possible to delete invite of current user.
 	 */
 	@Path("delete")
 	@DELETE
@@ -146,5 +146,39 @@ public class ReInviteService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestDeleteInviteFailure extends multex.Failure {}
+	
+	/**
+	 * Returns a list of all invites that belong to the specified invite's survey.
+	 * 
+	 * @param oid The invite oid.
+	 * @param request The request information from HTTP service.
+	 * @return The list of invites.
+	 * @exception RestGetInvitesFailure if it was not possible to get list of invites for current user.
+	 */
+	@POST
+	@Path("getSurveyInvites")
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public List<LgInvite> getSurveyInvites(final long oid, @Context final HttpServletRequest request) {
+		return new LgTransaction<List<LgInvite>>(request) {
+			@Override
+			public List<LgInvite> execute() throws Exception {
+				final List<LgInvite> result;
+				try {
+					result = startSession().getInvite(oid).getSurvey().getInvites();
+					System.err.printf("############### number of invites for survey #%d = %d%n", oid, result.size());
+				} catch (Exception ex) {
+					throw create(RestGetSurveyInvitesFailure.class, ex, oid, getSession().getUser().getName());
+				}
+				return result;
+			}
+		}.getResult();
+	}
+
+	/**
+	 * Could not get invites of survey of invite with oid "{0}" for user "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetSurveyInvitesFailure extends multex.Failure {}
 
 }

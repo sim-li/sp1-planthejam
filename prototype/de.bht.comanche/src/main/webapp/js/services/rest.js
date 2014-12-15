@@ -13,8 +13,8 @@ angular.module('restModule', ['baseModel', 'user'])
      *
      * @class restService
      */
-    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Model', 'User',
-        function($http, $q, $log, $rootScope, Model, User) {
+    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Invite', 'Model', 'User',
+        function($http, $q, $log, $rootScope, Invite, Model, User) {
 
             'use strict';
 
@@ -199,8 +199,8 @@ angular.module('restModule', ['baseModel', 'user'])
             };
 
             // TODO
-            restService.getSurveyInvites = function(invite) {
-                return callHTTP(getPath(invite, 'getSurveyInvites'), invite.oid);
+            restService.getSurveyInvites = function(inviteOid) {
+                return callHTTP(getPath(Invite, 'getSurveyInvites'), inviteOid);
             };
 
             // TODO

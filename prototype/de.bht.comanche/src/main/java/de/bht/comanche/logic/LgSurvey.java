@@ -69,7 +69,7 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Invites which are sent to members of Survey
 	 */
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // SEB: changed to fetch eager to get ReInviteService.getSurveyInvites working
 	@JsonIgnore
 	private List<LgInvite> invites;
 
