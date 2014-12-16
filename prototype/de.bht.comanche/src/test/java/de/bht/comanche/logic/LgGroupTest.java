@@ -2,6 +2,8 @@ package de.bht.comanche.logic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.Persistence;
@@ -19,7 +21,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-//@Ignore
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
@@ -60,27 +62,29 @@ public class LgGroupTest {
 	}
 	
 	@Test
-	public void test1SaveGroup(){
+	public void test1SaveTimePeriod(){
 		final LgSession session = start();
-		startForUser(session).save(new LgGroup().setName("Group").setUser(session.getUser()));
+		startForAlice(session).save(new LgGroup().setName("Group").setUser(session.getUser()));
 		end(session);
 		final LgGroup aliceGroup = startFor().getGroups().get(0);
 		assertEquals("Group", getAliceGroup(aliceGroup.getOid()).getName());
 	}
 	
+	@Ignore
 	@Test
 	public void test2changeGroupName(){
 		final LgSession session = start();
-		startForUser(session).getGroups().get(0).setName("NewGroup");
+		startForAlice(session).getGroups().get(0).setName("NewGroup");
 		end(session);
 		final LgGroup aliceGroup = startFor().getGroups().get(0);
 		assertEquals("NewGroup", getAliceGroup(aliceGroup.getOid()).getName());
 	}
 
+	@Ignore
 	@Test
 	public void test3addMember(){
 		final LgSession session = start();
-		final LgUser user = startForUser(session);
+		final LgUser user = startForAlice(session);
 		final LgGroup aliceGroup = user.getGroups().get(0);
 		//changed findByName->startFor: same functionality
 		final LgUser bob = session.startFor("Bob"); 		
@@ -93,7 +97,8 @@ public class LgGroupTest {
 		assertEquals("Pit", getAliceGroup(aliceGroup.getOid()).getUsers().get(1).getName());
 		}
 	
-//	@Test
+	@Ignore
+	@Test
 	public void test4deleteUser(){
 		final LgSession session = start();
 		final LgUser bob = session.startFor("Bob");
@@ -101,10 +106,11 @@ public class LgGroupTest {
 //		assertEquals(0, startFor().getGroups().size());
 	}
 	
-//	@Test
+	@Ignore
+	@Test
 	public void test5deleteMember(){
 		final LgSession session = start();
-		final LgUser sessionUser = startForUser(session);
+		final LgUser sessionUser = startForAlice(session);
 		final LgGroup aliceGroup = sessionUser.getGroups().get(0);
 		final LgUser bob = session.startFor("Bob");
 		final long bob_moid = session.getUser().search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
@@ -113,10 +119,11 @@ public class LgGroupTest {
 		assertEquals(null, getAliceGroup(aliceGroup.getOid()).getMember(bob_moid));
 	}
 	
-//	@Test
+	@Ignore
+	@Test
 	public void test6deleteGroup(){
 		final LgSession session = start();
-		final LgUser sessionUser = startForUser(session);
+		final LgUser sessionUser = startForAlice(session);
 		sessionUser.deleteGroup(sessionUser.getGroups().get(0).getOid());
 		end(session);
 		assertEquals(0, startFor().getGroups().size());
@@ -126,7 +133,7 @@ public class LgGroupTest {
 		session.getApplication().endTransaction(true);
 	}
 	
-	public LgUser startForUser(final LgSession session){
+	public LgUser startForAlice(final LgSession session){
 		return session.startFor("Alice");
 	}
 	

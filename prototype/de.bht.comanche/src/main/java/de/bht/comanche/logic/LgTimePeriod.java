@@ -82,7 +82,24 @@ public class LgTimePeriod extends DaObject {
 	public LgSurvey getSurvey() {
 		return this.survey;
 	}
-
+	
+	/*
+	 * --------------------------------------------------------------------------------------------
+	 * # foreign key setters
+	 * # 
+	 * --------------------------------------------------------------------------------------------
+	 */
+		
+	public LgTimePeriod setUser(final LgUser user){
+		this.user = user;
+		return this;
+	}
+	
+	public LgTimePeriod setInvite(final LgInvite invite){
+		this.invite = invite;
+		return this;
+	}
+	
 	public LgTimePeriod setSurvey(final LgSurvey survey) {
 		this.survey = survey;
 		return this;
