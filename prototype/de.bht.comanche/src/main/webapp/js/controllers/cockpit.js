@@ -69,5 +69,17 @@ angular.module('myApp')
                         $location.path('/cockpit');
                     } /*, function(error) { $log.log(error); }*/ );
             };
+
+            /**
+             * Sets the ignored status of the selected invite according to the
+             * specified boolean value. Finally saves the invite on the server.
+             *
+             * @method setSelectedInviteIgnored
+             * @param {Boolean} ignored the status of the invite
+             */
+            $scope.setSelectedInviteIgnored = function(ignored) {
+                $scope.selectedInvite.setIgnored(ignored);
+                restService.doSave($scope.selectedInvite);
+            }
         }
     ]);

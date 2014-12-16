@@ -16,18 +16,18 @@ angular.module('myApp')
      */
     .controller('inviteCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'currentUserPromise', 'Group',
         'groupsPromise', 'Invite', 'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise',
-        'selectedInviteSurveyInvitesPromise', // <<<<<<<<<<<<< TODO
+        // 'selectedInviteSurveyInvitesPromise', // <<<<<<<<<<<<< TODO
         'Survey', 'TimePeriod', 'TimeUnit', 'Type', 'User', 'usersPromise',
         function($location, $log, $scope, arrayUtil, currentUserPromise, Group,
             groupsPromise, Invite, invitesPromise, Member, Model, restService, selectedInvitePromise,
-            selectedInviteSurveyInvitesPromise, // <<<<<<<<<<<<< TODO
+            // selectedInviteSurveyInvitesPromise, // <<<<<<<<<<<<< TODO
             Survey, TimePeriod, TimeUnit, Type, User, usersPromise) {
 
             'use strict';
 
             // resolve the promises passed to this route
             $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
-            $scope.selectedInvite.survey.invites = Model.importMany(Invite, selectedInviteSurveyInvitesPromise); // <<<<<<<<<<<<< TODO
+            // $scope.selectedInvite.survey.invites = Model.importMany(Invite, selectedInviteSurveyInvitesPromise); // <<<<<<<<<<<<< TODO
             $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.groups = Model.importMany(Group, groupsPromise);
             // TODO - later on there sould be a REST-call like getTheFirstTenMatchingUsers for searching users from the database instead of getting all users

@@ -29,8 +29,10 @@
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
               <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>
                 <div class='col-sm-3'>{{invite.survey.name}}</div>
-                <button class='btn btn-success btn-sm col-sm-offset-4'>accept</button>
-                <button class='btn btn-danger btn-sm'>ignore</button>
+                <button class='btn btn-success btn-sm col-sm-offset-4' ng-click='setSelectedInviteIgnored(false)'>accept</button>
+                <button class='btn btn-danger btn-sm' ng-click='setSelectedInviteIgnored(true)'>ignore</button>
+                <!-- %button.btn.btn-success.btn-sm.col-sm-offset-4{"ng-click" => "invite.setIgnored(false)"} accept -->
+                <!-- %button.btn.btn-danger.btn-sm{"ng-click" => "invite.setIgnored(true)"} ignore -->
               </a>
             </div>
           </div>
@@ -47,6 +49,8 @@
           <div class='panel-body'>
             <label for='selectedSurveyDescription'>Beschreibung:</label>
             <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
+            <label for='selectedSurveyDescription'>Status:</label>
+            <div id='selectedSurveyStatus'>wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}</div>
             <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->
             <!-- %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }} -->
           </div>
