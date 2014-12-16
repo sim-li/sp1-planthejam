@@ -70,7 +70,8 @@ public class LgGroupTest {
 		assertEquals("Group", getAliceGroup(aliceGroup.getOid()).getName());
 	}
 	
-//	@Test
+	@Ignore
+	@Test
 	public void test2changeGroupName(){
 		final LgSession session = start();
 		startForUser(session).getGroups().get(0).setName("NewGroup");
@@ -79,7 +80,8 @@ public class LgGroupTest {
 		assertEquals("NewGroup", getAliceGroup(aliceGroup.getOid()).getName());
 	}
 
-//	@Test
+	@Ignore
+	@Test
 	public void test3addMember(){
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
@@ -95,7 +97,8 @@ public class LgGroupTest {
 		assertEquals("Pit", getAliceGroup(aliceGroup.getOid()).getUsers().get(1).getName());
 		}
 	
-//	@Test
+	@Ignore
+	@Test
 	public void test4deleteUser(){
 		final LgSession session = start();
 		final LgUser bob = session.startFor("Bob");
@@ -103,7 +106,8 @@ public class LgGroupTest {
 //		assertEquals(0, startFor().getGroups().size());
 	}
 	
-//	@Test
+	@Ignore
+	@Test
 	public void test5deleteMember(){
 		final LgSession session = start();
 		final LgUser sessionUser = startForUser(session);
@@ -115,7 +119,8 @@ public class LgGroupTest {
 		assertEquals(null, getAliceGroup(aliceGroup.getOid()).getMember(bob_moid));
 	}
 	
-//	@Test
+	@Ignore
+	@Test
 	public void test6deleteGroup(){
 		final LgSession session = start();
 		final LgUser sessionUser = startForUser(session);
