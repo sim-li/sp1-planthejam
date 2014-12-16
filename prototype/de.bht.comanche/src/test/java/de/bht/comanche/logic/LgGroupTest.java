@@ -64,7 +64,7 @@ public class LgGroupTest {
 	@Test
 	public void test1SaveTimePeriod(){
 		final LgSession session = start();
-		startForUser(session).save(new LgGroup().setName("Group").setUser(session.getUser()));
+		startForAlice(session).save(new LgGroup().setName("Group").setUser(session.getUser()));
 		end(session);
 		final LgGroup aliceGroup = startFor().getGroups().get(0);
 		assertEquals("Group", getAliceGroup(aliceGroup.getOid()).getName());
@@ -74,7 +74,7 @@ public class LgGroupTest {
 	@Test
 	public void test2changeGroupName(){
 		final LgSession session = start();
-		startForUser(session).getGroups().get(0).setName("NewGroup");
+		startForAlice(session).getGroups().get(0).setName("NewGroup");
 		end(session);
 		final LgGroup aliceGroup = startFor().getGroups().get(0);
 		assertEquals("NewGroup", getAliceGroup(aliceGroup.getOid()).getName());
@@ -84,7 +84,7 @@ public class LgGroupTest {
 	@Test
 	public void test3addMember(){
 		final LgSession session = start();
-		final LgUser user = startForUser(session);
+		final LgUser user = startForAlice(session);
 		final LgGroup aliceGroup = user.getGroups().get(0);
 		//changed findByName->startFor: same functionality
 		final LgUser bob = session.startFor("Bob"); 		
@@ -110,7 +110,7 @@ public class LgGroupTest {
 	@Test
 	public void test5deleteMember(){
 		final LgSession session = start();
-		final LgUser sessionUser = startForUser(session);
+		final LgUser sessionUser = startForAlice(session);
 		final LgGroup aliceGroup = sessionUser.getGroups().get(0);
 		final LgUser bob = session.startFor("Bob");
 		final long bob_moid = session.getUser().search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
@@ -123,7 +123,7 @@ public class LgGroupTest {
 	@Test
 	public void test6deleteGroup(){
 		final LgSession session = start();
-		final LgUser sessionUser = startForUser(session);
+		final LgUser sessionUser = startForAlice(session);
 		sessionUser.deleteGroup(sessionUser.getGroups().get(0).getOid());
 		end(session);
 		assertEquals(0, startFor().getGroups().size());
@@ -133,7 +133,7 @@ public class LgGroupTest {
 		session.getApplication().endTransaction(true);
 	}
 	
-	public LgUser startForUser(final LgSession session){
+	public LgUser startForAlice(final LgSession session){
 		return session.startFor("Alice");
 	}
 	
