@@ -77,6 +77,7 @@ angular.module('myApp')
              * @method setSelectedInviteIgnored
              * @param {Boolean} ignored the status of the invite
              */
+            // $scope.radioModel = $scope.selectedInvite.ignored ? 'ignore' : 'accept';
             $scope.setSelectedInviteIgnored = function(ignored) {
                 $scope.selectedInvite.setIgnored(ignored);
                 restService.doSave($scope.selectedInvite);

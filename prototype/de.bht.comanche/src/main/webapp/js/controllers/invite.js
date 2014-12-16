@@ -27,6 +27,10 @@ angular.module('myApp')
 
             // resolve the promises passed to this route
             $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
+            $scope.selectInvite = function(invite) {
+                $scope.selectedInvite = invite;
+                // $log.debug($scope.selectedInvite);
+            };
             // $scope.selectedInvite.survey.invites = Model.importMany(Invite, selectedInviteSurveyInvitesPromise); // <<<<<<<<<<<<< TODO
             $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.groups = Model.importMany(Group, groupsPromise);
