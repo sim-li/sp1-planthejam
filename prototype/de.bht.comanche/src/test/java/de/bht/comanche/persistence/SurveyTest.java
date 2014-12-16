@@ -24,19 +24,16 @@ public class SurveyTest {
 		assertTrue("Initialized JPA Database -> Pre Test Cleannup", true);
 		LgSession session = new LgSession();
 		session.getApplication().beginTransaction();
-		
 		final LgUser alice = new LgUser();
 		alice.setName(ALICE_USER_NAME);
 		alice.setEmail("test@test.de");
 		alice.setPassword("testtest");
 		session.register(alice);
-		
 		final LgUser bob = new LgUser();
 		bob.setName("Bob");
 		bob.setEmail("bob@test.de");
 		bob.setPassword("testtest");
 		session.register(bob);
-		
 		final LgUser pit = new LgUser();
 		pit.setName("Pit");
 		pit.setEmail("pit@test.de");
