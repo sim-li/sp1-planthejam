@@ -86,10 +86,30 @@ public class LgSurvey extends DaObject {
 	public LgSurvey() {
 		this.invites = new ArrayList<LgInvite>();
 	}
-
+	
+	public LgInvite getInviteByParticipantName(final String name) {
+		for (LgInvite invite: invites) {
+			if (invite.getUser().getName() == name) {
+				return invite;
+			}
+		}
+		return null; 
+		//@TODO Throw multex exception
+	}
+	
+	public void inviteOtherUser(final LgUser user) {
+		final LgInvite invite = new LgInvite();
+		invite.setHost(false);
+		invite.setIgnored(false);
+		invite.setSurvey(this);
+		invite.setUser(user);
+		attach(invite).save();
+	}
+	
 	/**
 	 *  this method updates old Survey with "other" Survey
 	 * @param other The other Survey, which is needed to update old Survey
+	 * @deprecated Unefficient pattern
 	 */
 	public void updateWith(final LgSurvey other) {
 		this.name = other.name;
@@ -181,7 +201,7 @@ public class LgSurvey extends DaObject {
 		this.possibleTimePeriods = possibleTimePeriods;
 		return this;
 	}
-
+	
 	@Override
 	public String toString() {
 		return String

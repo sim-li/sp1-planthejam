@@ -52,6 +52,9 @@ public class SurveyTest {
 		session.getApplication().endTransaction(true);	
 	}
 	
+	/**
+	 * FOR IMPLEMENTATION: call saveSurveyAsHost in rest-service
+	 */
 	@Test
 	public void saveSingleSurveyAsHost() {
 		final LgUser bob = new LgUser();
@@ -65,15 +68,15 @@ public class SurveyTest {
 		pit.setPassword("testtest");
 	
 		LgSession sessionForCreate = createSessionAndStartTransaction();
-		sessionForCreate.startFor(ALICE_USER_NAME);
+		LgUser alice = sessionForCreate.startFor(ALICE_USER_NAME);
 		
 		final LgSurvey demoSurvey = new LgSurvey();
 		demoSurvey.setName("DemoSurvey");
 		
+		alice.saveSurveyAsHost(demoSurvey);
+		
 		demoSurvey.inviteOtherUser(bob);
 		demoSurvey.inviteOtherUser(pit);
-
-		alice.saveSurveyAsHost(demoSurvey);
 
 		endTranscation(sessionForCreate);
 		
@@ -93,6 +96,15 @@ public class SurveyTest {
 	    assertEquals("Pit's invite has status 'participant'", false, bobsInvite.isHost());
 	    assertEquals("Pit is user of the invite", pit.getName(), pitsInvite.getUser().getName());
 	    assertEquals("Pit's invite is not set to isIgnored", false, pitsInvite.isIgnored());
+	    
+	    LgInvite alicesInviteFromDemoSurvey =
+    			sessionForValidation
+				.getUser()
+					.getInviteBySurveyName(demoSurvey.getName());
+	    
+	    assertEquals("Alice has an invite containing DemoSurvey", demoSurvey.getName(), alicesInviteFromDemoSurvey.getSurvey().getName());
+	    assertEquals("Alice's has status 'host' of her invite", true, alicesInviteFromDemoSurvey.isHost());
+	    assertEquals("Alice's invite is not ignored", false, alicesInviteFromDemoSurvey.isIgnored());
 	}
 	
 	@Ignore
