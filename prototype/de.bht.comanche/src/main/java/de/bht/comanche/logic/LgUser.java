@@ -72,6 +72,39 @@ public class LgUser extends DaObject {
 		this.groups = new ArrayList<LgGroup>();
 	}
 	
+	public void saveSurveyAsHost(final LgSurvey survey) {
+		
+		final LgInvite invite = new LgInvite();
+		final LgSurvey attachedSurvey = attach(survey);
+		attachedSurvey.save();
+		
+		invite.setHost(true);
+		invite.setIgnored(false);
+		invite.setSurvey(attachedSurvey);
+		attach(invite).save();
+	}
+	
+	public LgInvite getInviteBySurveyName(final String name) {
+		for (LgInvite invite: invites) {
+			if (invite.getSurvey().getName() == name) {
+				return invite;
+			}
+		}
+		return null; 
+		//@TODO Throw Multex Exception
+	}
+	
+	public LgSurvey getSurveyByName(final String name) {
+		for (LgInvite invite: invites) {
+			final LgSurvey survey = invite.getSurvey();
+			if (survey.getName() == name) {
+				return survey;
+			}
+		}
+		return null; 
+		//@TODO Throw Multex Exception
+	}
+	
 	/**
 	 * Save Invite for current user.
 	 * @param invite The LgInvite to save.

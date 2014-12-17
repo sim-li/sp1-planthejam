@@ -11,7 +11,9 @@
     / search & results
     / sidebar
     .col-md-2
-      %ptj-survey-select
+      / %ptj-survey-select
+      %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites"}
+        {{invite.survey.name}}
     .col-md-8
       .panel.panel-primary
         .panel-heading Create new Event
