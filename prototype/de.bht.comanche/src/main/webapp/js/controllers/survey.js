@@ -10,11 +10,11 @@
  */
 angular.module('myApp')
     /**
-     * The controller for the invite edit/creation view.
+     * The controller for the survey edit/creation view.
      *
-     * @class inviteCtrl
+     * @class surveyCtrl
      */
-    .controller('inviteCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'currentUserPromise', 'Group',
+    .controller('surveyCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'currentUserPromise', 'Group',
         'groupsPromise', 'Invite', 'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise',
         // 'selectedInviteSurveyInvitesPromise', // <<<<<<<<<<<<< TODO
         'Survey', 'TimePeriod', 'TimeUnit', 'Type', 'User', 'usersPromise',

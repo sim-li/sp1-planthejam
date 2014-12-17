@@ -36,12 +36,12 @@
       .col-md-8
         / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
         / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
-        %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Neue Terminumfrage erstellen"}
-        %input#editSurvey.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Terminumfrage anzeigen und bearbeiten"}
-        %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Terminumfrage löschen"}
+        %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Create a survey"}
+        %input#editSurvey.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Show and edit selected survey"}
+        %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Delete selected survey"}
         #surveyPreview.panel.panel-default
           .panel-body
-            %label{:for => "selectedSurveyDescription"} Beschreibung:
+            %label{:for => "selectedSurveyDescription"} Description:
             %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
             %label{:for => "selectedSurveyDescription"} Status:
             %div#selectedSurveyStatus{} wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}

@@ -54,9 +54,9 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                     }
                 }
             })
-            .when('/invite/:inviteOid?', {
-                templateUrl: 'pages/invite.html',
-                controller: 'inviteCtrl',
+            .when('/survey/:inviteOid?', {
+                templateUrl: 'pages/survey.html',
+                controller: 'surveyCtrl',
                 resolve: {
                     selectedInvitePromise: function($route, restService, Invite) {
                         var inviteOid = $route.current.params.inviteOid;
