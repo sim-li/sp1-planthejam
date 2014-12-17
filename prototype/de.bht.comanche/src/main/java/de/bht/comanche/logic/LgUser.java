@@ -78,6 +78,7 @@ public class LgUser extends DaObject {
 	 * @return The saved LgInvite.
 	 */
 	public LgInvite save(final LgInvite invite) {
+        invite.setUser(this);
 		return attach(invite).save();
 	}
 	/**
@@ -108,6 +109,7 @@ public class LgUser extends DaObject {
 		search(LgInvite.class, "ISHOST", isHost, "USER_OID", oid);
 		return invites;	
 	}
+	
 	
 	
 	/**
