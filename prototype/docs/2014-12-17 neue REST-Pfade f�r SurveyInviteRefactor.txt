@@ -1,0 +1,46 @@
+//-- ReSurveyService --
+
+//  /survey
+
+// /get/:oid
+@GET
+get(surveyOid)
+    ==> from Server: survey
+
+// /get
+@GET
+getAll() // user specific
+    ==> from Server: surveyArray
+
+// /save
+@POST
+save(survey)
+    <== to Server: survey
+
+// /delete/:oid
+@DELETE
+delete(surveyOid)
+
+
+//-- ReInviteService --
+
+// /invite
+
+// /get/:oid
+@GET
+get(inviteOid)
+    ==> from Server: invite
+
+// /get
+@GET
+getAll() // user specific
+    ==> from Server: inviteArray
+
+// /save
+@POST
+save(invite)
+<== to Server: invite
+
+// /delete/:oid
+@DELETE
+delete(inviteOid) /* not allowed */

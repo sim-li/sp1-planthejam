@@ -1,10 +1,3 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * (C)opyright Duc Tung Tong, Mat.-Nr. 798029, s51488@beuth-hochschule.de
- * Module: my app -- the main module
- */
-
 'use strict';
 
 /**
@@ -31,6 +24,7 @@
  * @requires util
  *
  * @author Sebastian Dass&eacute;
+ * @author Duc Tung Tong
  */
 angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
         'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util'
@@ -49,6 +43,9 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                 templateUrl: 'pages/cockpit.html',
                 controller: 'cockpitCtrl',
                 resolve: {
+                    surveysPromise: function(restService, Survey) {
+                        return restService.doGetMany(Survey);
+                    },
                     invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
                     }
