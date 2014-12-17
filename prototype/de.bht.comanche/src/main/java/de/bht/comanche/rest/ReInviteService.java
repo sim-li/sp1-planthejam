@@ -27,36 +27,6 @@ import de.bht.comanche.logic.LgTransaction;
  */
 @Path("/invite/")
 public class ReInviteService extends RestService {
-	/**
-	 * Returns the list of all LgInvites for current user.
-	 * @param request The request information from HTTP service.
-	 * @return The list of invites.
-	 * @exception RestGetInvitesFailure if it was not possible to get list of invites for current user.
-	 */
-	@GET
-	@Path("get")
-	@Consumes("application/json")
-	@Produces({ "application/json" })
-	public List<LgInvite> get(@Context final HttpServletRequest request) {
-		return new LgTransaction<List<LgInvite>>(request) {
-			@Override
-			public List<LgInvite> execute() throws Exception {
-				final List<LgInvite> result;
-				try {
-					result = startSession().getInvites();//TODO change the method
-				} catch (Exception ex) {
-					throw create(RestGetInvitesFailure.class, ex, getSession().getUser().getName());
-				}
-				return result;
-			}
-		}.getResult();
-	}
-
-	/**
-	 * Could not get invites for user "{0}"
-	 */
-	@SuppressWarnings("serial")
-	public static final class RestGetInvitesFailure extends multex.Failure {}
 
 	/**
 	 * Returns the LgInvite specified by oid.
@@ -90,6 +60,37 @@ public class ReInviteService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class RestGetInviteFailure extends multex.Failure {}
 
+	/**
+	 * Returns the list of all LgInvites for current user.
+	 * @param request The request information from HTTP service.
+	 * @return The list of invites.
+	 * @exception RestGetInvitesFailure if it was not possible to get list of invites for current user.
+	 */
+	@GET
+	@Path("get")
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public List<LgInvite> get(@Context final HttpServletRequest request) {
+		return new LgTransaction<List<LgInvite>>(request) {
+			@Override
+			public List<LgInvite> execute() throws Exception {
+				final List<LgInvite> result;
+				try {
+					result = startSession().getInvites();//TODO change the method
+				} catch (Exception ex) {
+					throw create(RestGetInvitesFailure.class, ex, getSession().getUser().getName());
+				}
+				return result;
+			}
+		}.getResult();
+	}
+	
+	/**
+	 * Could not get invites for user "{0}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetInvitesFailure extends multex.Failure {}
+	
 	/**
 	 * Save incoming LgInvite for current user. 
 	 * @param invite The incoming LgInvite.
