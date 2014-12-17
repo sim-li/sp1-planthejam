@@ -22,7 +22,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-@Ignore
+//@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgTimePeriodTest {
 	
@@ -64,12 +64,22 @@ public class LgTimePeriodTest {
 		return session;
 	}
 	
+//	@Test
+//	public void test1CreateSurvey(){
+//		final LgSession session = start();
+//		final LgUser user = startForUser(session);
+//		List<LgInvite> lg = new ArrayList<LgInvite>();
+//		LgSurvey Dbsurvey = new LgSurvey().setName("NewTest").setInvites(lg);
+//		user.saveObj(Dbsurvey);
+//		end(session);
+//	}
+	
 	@Test
-	public void test2CreateSurveywithInvite(){
+	public void test2CreateInvite(){
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
-		LgSurvey dBsurvey = new LgSurvey().setName("NewTest");
-		LgInvite invite = new LgInvite().setHost(true).setIgnored(false).setUser(user).setSurvey(dBsurvey);
+		LgSurvey Dbsurvey = new LgSurvey().setName("NewTest");
+		LgInvite invite = new LgInvite().setHost(true).setIgnored(false).setUser(user).setSurvey(Dbsurvey);
 		user.save(invite);
 		end(session);
 	}
@@ -80,7 +90,7 @@ public class LgTimePeriodTest {
 		final LgUser user = startForUser(session);
 		LgInvite inviteDb = user.getInvites().get(0);
 		LgTimePeriod tp = new LgTimePeriod().setDurationMinutes(10).setStartTime(new Date(8099)).setInvite(inviteDb);
-		user.saveObj(tp);
+		session.getUser().saveObj(tp);
 		end(session);
 	}
 	
@@ -88,10 +98,13 @@ public class LgTimePeriodTest {
 	public void test4CreateSurveyWithInvite(){
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
+
 		List<LgInvite> lg = new ArrayList<LgInvite>();
 		lg.add(user.getInvites().get(0));
 		LgSurvey survey = new LgSurvey().setName("NewTest").setInvites(lg);
 		user.saveObj(survey);
+		
+		
 		end(session);
 	}
 	
@@ -102,21 +115,9 @@ public class LgTimePeriodTest {
 		System.out.println(user.getInvites().get(0).getOid() + " 2====================================");
 		LgSurvey survey = user.getInvites().get(0).getSurvey();
 		LgTimePeriod tp = new LgTimePeriod().setDurationMinutes(10).setStartTime(new Date(8099)).setSurvey(survey);
-		user.saveObj(tp);
+		session.getUser().saveObj(tp);
 		end(session);
 		}
-	
-	@Test //TODO Save list of TP for user
-	public void test5SaveTPforUser(){
-		final LgSession session = start();
-		final LgUser user = startForUser(session);
-		LgTimePeriod tp = new LgTimePeriod().setDurationMinutes(10).setStartTime(new Date(8099)).setSurvey(survey);
-		List<LgTimePeriod> listTP = new ArrayList<LgTimePeriod>();
-		listTP.add(tp);
-		user.setTPforUser(listTP);
-//		user.saveObj(listTP);
-		end(session);
-	}
 	
 //	@Test
 	public void test4deleteUser(){

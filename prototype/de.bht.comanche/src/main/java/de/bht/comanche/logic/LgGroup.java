@@ -100,15 +100,6 @@ public class LgGroup extends DaObject{
 			return this;
 	}
 	
-//	//entry 5,6 -> delete 5, than add 7 = as a result 6 will be resaved as 7, 7 as 8
-//	public LgGroup setForMember(){
-//		for (final LgMember member : this.getMembers()) {
-//			member.setGroup(this);
-//		}
-////		this.save();
-//		return this;
-//	}
-	
 	/**
 	 * Returns a list of LgUsers for specified group.
 	 * @return The list of LgUsers.

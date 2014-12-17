@@ -62,14 +62,15 @@ public class LgUser extends DaObject {
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of general user's availablity. 
 	 */
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<LgTimePeriod> timePeriods = new ArrayList<LgTimePeriod>();
+	private List<LgTimePeriod> timePeriods;
 	
 	/**
-	 * Construct a new LgUser object with a list of groups and members.
+	 * Construct a new LgUser object with a list of ivites, groups and general availability time.
 	 */
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
 		this.groups = new ArrayList<LgGroup>();
+		this.timePeriods = new ArrayList<LgTimePeriod>();
 	}
 	
 	public void saveSurveyAsHost(final LgSurvey survey) {
@@ -138,13 +139,6 @@ public class LgUser extends DaObject {
 		return attach(group).save();
 	}
 	
-	public List<LgInvite> getInvites(boolean isHost , LgUser oid){
-		search(LgInvite.class, "ISHOST", isHost, "USER_OID", oid);
-		return invites;	
-	}
-	
-	
-	
 	/**
 	 * Delete LgGroup by provided oid.
 	 * @param groupOid The LgGroup oid.
@@ -212,6 +206,23 @@ public class LgUser extends DaObject {
 	public <E extends DaObject> E saveObj(final E other) {
 		return attach(other).save();
 	}
+	
+	//TODO
+	public List<LgTimePeriod> setTPforUser(List<LgTimePeriod> periods){
+//			for (final LgTimePeriod timePeriod : timePeriods.) {
+//				timePeriods.setUser(this);
+//			}
+			return null;
+	}
+	
+	/**
+	 * Returns LgTimePeriods list for current user. 
+	 * @return The list with LgTimePeriods.
+	 */
+	public List<LgTimePeriod> getTimePeriods() {
+		return this.timePeriods;
+	}
+	
 	
 	/**
 	 * Remove invite object from the list of invites.
