@@ -73,10 +73,14 @@ public class LgUser extends DaObject {
 	}
 	
 	public void saveSurveyAsHost(final LgSurvey survey) {
+		
 		final LgInvite invite = new LgInvite();
+		final LgSurvey attachedSurvey = attach(survey);
+		attachedSurvey.save();
+		
 		invite.setHost(true);
 		invite.setIgnored(false);
-		invite.setSurvey(survey);
+		invite.setSurvey(attachedSurvey);
 		attach(invite).save();
 	}
 	
@@ -92,8 +96,9 @@ public class LgUser extends DaObject {
 	
 	public LgSurvey getSurveyByName(final String name) {
 		for (LgInvite invite: invites) {
-			if (invite.getSurvey().getName() == name) {
-				return invite.getSurvey();
+			final LgSurvey survey = invite.getSurvey();
+			if (survey.getName() == name) {
+				return survey;
 			}
 		}
 		return null; 

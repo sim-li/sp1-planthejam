@@ -69,9 +69,18 @@ public abstract class DaObject implements Serializable {
 	 * @param other Receiving entity
 	 * @return Receiving entity with the attached pool
 	 */
+	/**
+	 * Attaching pool of "{0}" to object "{1}" failed. Pool is NULL.
+	 */
+	@SuppressWarnings("serial")
+	public static final class DaObjectUndefinedPoolWhileAttachingFailure extends multex.Failure {}
 	public <E extends DaObject> E attach(final E other) {
-		@SuppressWarnings("unchecked")
+
+		if (this.pool == null) {
+			throw create(DaObjectUndefinedPoolWhileAttachingFailure.class, this, other);
+		}
 		// @TODO Throw no pool exception when other object doesn't contain pool
+		@SuppressWarnings("unchecked")
 		final E result = (E) other.attach(getPool());
 		return result;
 	}

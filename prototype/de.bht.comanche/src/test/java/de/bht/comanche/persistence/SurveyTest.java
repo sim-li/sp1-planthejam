@@ -78,7 +78,7 @@ public class SurveyTest {
 		demoSurvey.inviteOtherUser(bob);
 		demoSurvey.inviteOtherUser(pit);
 
-		endTranscation(sessionForCreate);
+		endTransaction(sessionForCreate);
 		
 		LgSession sessionForValidation = createSessionAndStartTransaction();
 		sessionForValidation.startFor(ALICE_USER_NAME);
@@ -140,7 +140,7 @@ public class SurveyTest {
 		return session;
 	}
 	
-	public void endTranscation(LgSession session){
+	public void endTransaction(LgSession session){
 		session.getApplication().endTransaction(true);
 	}
 	
