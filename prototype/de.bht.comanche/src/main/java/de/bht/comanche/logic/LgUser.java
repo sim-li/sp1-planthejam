@@ -1,6 +1,9 @@
 package de.bht.comanche.logic;
 
+import static multex.MultexUtil.create;
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,7 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
 /**
  * This entity class represents a user and serve methods for working with 
@@ -73,36 +78,50 @@ public class LgUser extends DaObject {
 	}
 	
 	public void saveSurveyAsHost(final LgSurvey survey) {
-		
 		final LgInvite invite = new LgInvite();
-		final LgSurvey attachedSurvey = attach(survey);
-		attachedSurvey.save();
-		
 		invite.setHost(true);
 		invite.setIgnored(false);
-		invite.setSurvey(attachedSurvey);
+		invite.setSurvey(survey);
+		invite.setUser(this);
+		survey.addInvite(invite);
 		attach(invite).save();
 	}
 	
+	/**
+	 * No invite with name "{0}" found. "{1}" invites in list.
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgNoInviteFoundFailure extends multex.Failure {}
 	public LgInvite getInviteBySurveyName(final String name) {
 		for (LgInvite invite: invites) {
 			if (invite.getSurvey().getName() == name) {
 				return invite;
 			}
 		}
-		return null; 
-		//@TODO Throw Multex Exception
+		throw create(LgNoInviteFoundFailure.class, name, invites.size());
 	}
 	
+	/**
+	 * No survey with name "{0}" found. "{1}" invites with 'host' role in list.
+	 * Checked these names: "{2}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgNoSurveyFoundFailure extends multex.Failure {}
 	public LgSurvey getSurveyByName(final String name) {
+		final List<String> namesCheckedInLoop = new LinkedList<String>();
+		int numberOfSurveys = 0;
 		for (LgInvite invite: invites) {
 			final LgSurvey survey = invite.getSurvey();
+			if (!invite.isHost()) {
+				continue;
+			}
+			numberOfSurveys++;
+			namesCheckedInLoop.add(survey.getName());
 			if (survey.getName() == name) {
-				return survey;
+				return attach(survey);
 			}
 		}
-		return null; 
-		//@TODO Throw Multex Exception
+		throw create(LgNoSurveyFoundFailure.class, name, numberOfSurveys, namesCheckedInLoop);
 	}
 	
 	/**
@@ -201,7 +220,7 @@ public class LgUser extends DaObject {
 	}
 	
 	//TODO improve it
-	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
+	public LgTimePeriod saveTimePeriodForInvite(final LgInvite invite) {
 		invite.setTimePeriod(invite);
 		return attach(invite).save();
 	}

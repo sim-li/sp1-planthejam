@@ -1,5 +1,7 @@
 package de.bht.comanche.logic;
 
+import static multex.MultexUtil.create;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +19,7 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.bht.comanche.logic.LgUser.LgNoInviteFoundFailure;
 import de.bht.comanche.persistence.DaObject;
 
 /**
@@ -87,6 +90,29 @@ public class LgSurvey extends DaObject {
 		this.invites = new ArrayList<LgInvite>();
 	}
 	
+	/**
+	 * No host for survey with name {0} found. Number of invites is {1}.
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgNoHostFoundFailure extends multex.Failure {}
+	/**
+	 * No user was set in invite for survey {0}. 
+	 */
+	@SuppressWarnings("serial")
+	public static final class LgNoUserSetForInviteFailure extends multex.Failure {}
+	public LgUser getHost() {
+		for (LgInvite invite: invites) {
+			if(invite.isHost() == true) {
+				if (invite.getUser() == null) {
+					throw create(LgNoUserSetForInviteFailure.class, name);
+				}
+				return invite.getUser();
+			}
+		}
+		throw create(LgNoHostFoundFailure.class, name, invites.size());
+	}
+	
+	
 	public LgInvite getInviteByParticipantName(final String name) {
 		for (LgInvite invite: invites) {
 			if (invite.getUser().getName() == name) {
@@ -103,7 +129,11 @@ public class LgSurvey extends DaObject {
 		invite.setIgnored(false);
 		invite.setSurvey(this);
 		invite.setUser(user);
-		attach(invite).save();
+		this.invites.add(invite);
+	}
+	
+	public void addInvite(final LgInvite invite) {
+		this.invites.add(invite);
 	}
 	
 	/**

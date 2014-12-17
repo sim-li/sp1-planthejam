@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.persistence.Persistence;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -50,16 +51,22 @@ public class SurveyTest {
 		pit.setPassword("testtest");
 		session.register(pit);
 		
+		LgUser aliceLoggedIn = session.startFor(ALICE_USER_NAME);
 		final LgSurvey demoSurvey = new LgSurvey();
 		demoSurvey.setName(DEMO_SURVEY_NAME);
-		alice.saveSurveyAsHost(demoSurvey);
 		demoSurvey.inviteOtherUser(bob);
 		demoSurvey.inviteOtherUser(pit);
-
+		aliceLoggedIn.saveSurveyAsHost(demoSurvey);
+		assertEquals("Demo survey has three invites", 3, demoSurvey.getInvites().size());
+		assertEquals("Demo survey has reference to host", demoSurvey.getHost().getName(), aliceLoggedIn.getName());
 		session.getApplication().endTransaction(true);
 	}
 	
-
+	@Before
+	public void addDemoSurvey() {
+		//
+	}
+	
 	/**
 	 * FOR IMPLEMENTATION: call saveSurveyAsHost in rest-service
 	 */
@@ -67,7 +74,7 @@ public class SurveyTest {
 	public void saveSingleSurveyAsHost() {
 		LgSession sessionForValidation = createSessionAndStartTransaction();
 		sessionForValidation.startFor(ALICE_USER_NAME);
-		
+		assertEquals("Alice is logged in", ALICE_USER_NAME, sessionForValidation.getUser().getName());
 		LgSurvey persistedSurvey = sessionForValidation
 			.getUser()
 				.getSurveyByName(DEMO_SURVEY_NAME);
@@ -84,8 +91,8 @@ public class SurveyTest {
 	    
 	    LgInvite alicesInviteFromDemoSurvey =
     			sessionForValidation
-				.getUser()
-					.getInviteBySurveyName(DEMO_SURVEY_NAME);
+					.getUser()
+						.getInviteBySurveyName(DEMO_SURVEY_NAME);
 	    
 	    assertEquals("Alice has an invite containing DemoSurvey", DEMO_SURVEY_NAME, alicesInviteFromDemoSurvey.getSurvey().getName());
 	    assertEquals("Alice's has status 'host' of her invite", true, alicesInviteFromDemoSurvey.isHost());
