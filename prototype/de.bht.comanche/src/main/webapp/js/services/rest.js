@@ -41,14 +41,21 @@ angular.module('restModule', ['baseModel', 'user'])
                     'getMany': '/getAllUsers',
                     'logout': '/logout'
                 },
-                'invite': {
-                    'path': '/invite',
-                    'getMany': '/getInvites',
+                'survey': {
+                    'path': '/survey',
                     'get': '/get',
+                    'getMany': '/getMany',
                     'save': '/save',
                     'delete': '/delete',
-                    'getSurveyInvites': '/getSurveyInvites', // TODO -> REST service on  server side
-                    'saveSurveyInvite': '/saveSurveyInvite' //
+                },
+                'invite': {
+                    'path': '/invite',
+                    'get': '/get',
+                    'getMany': '/getInvites',
+                    'save': '/save',
+                    'delete': '/delete' /*not necessary?*/ /*,*/
+                        // 'getSurveyInvites': '/getSurveyInvites', // TODO -> REST service on  server side
+                        // 'saveSurveyInvite': '/saveSurveyInvite' //
                         // 'saveSurveyInvites': '/saveSurveyInvites' //
                 },
                 'group': {
@@ -106,6 +113,9 @@ angular.module('restModule', ['baseModel', 'user'])
                 $http({
                     method: method || 'POST',
                     url: url,
+                    params: {
+                        'oid': 123
+                    },
                     data: data,
                     headers: (method === 'DELETE') ? {
                         'Content-Type': 'application/json'
