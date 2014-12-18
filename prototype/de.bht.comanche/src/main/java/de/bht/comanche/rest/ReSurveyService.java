@@ -3,17 +3,16 @@ package de.bht.comanche.rest;
 import static multex.MultexUtil.create;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
@@ -22,11 +21,11 @@ import de.bht.comanche.rest.ReInviteService.RestGetInvitesFailure;
 import de.bht.comanche.rest.ReInviteService.RestSaveInviteFailure;
 
 
-@Path("/survey/")
+@Path("/surveys/")
 public class ReSurveyService {
 	
 	@GET
-	@Path("get/{oid}")
+	@Path("/{oid}")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgSurvey get(@PathParam("oid") final long oid, @Context final HttpServletRequest request) {
@@ -35,7 +34,7 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().getSurvey(oid);//TODO change the method
+					result = startSession().getSurvey(oid);//TODO change and implement the method
 				} catch (Exception ex) {
 //					throw create(RestGetInviteFailure.class, ex, oid, getSession().getUser().getName());
 				}
@@ -45,7 +44,7 @@ public class ReSurveyService {
 	}
 	
 	@GET
-	@Path("get")
+	@Path("/")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public List<LgSurvey> get(@Context final HttpServletRequest request) {
@@ -54,7 +53,7 @@ public class ReSurveyService {
 			public List<LgSurvey> execute() throws Exception {
 				final List<LgSurvey> result;
 				try {
-					result = startSession().getInvites();//TODO change the method
+					result = startSession().getInvites();//TODO change and implement the method
 				} catch (Exception ex) {
 //					throw create(RestGetInvitesFailure.class, ex, getSession().getUser().getName());
 				}
@@ -63,7 +62,7 @@ public class ReSurveyService {
 		}.getResult();
 	}
 	
-	@Path("save")
+	@Path("/")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
@@ -72,7 +71,7 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().save(survey);//TODO change the method
+					result = startSession().save(survey);//TODO change and implement the method
 				} catch (Exception ex) {
 //					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
 				}
@@ -81,15 +80,33 @@ public class ReSurveyService {
 		}.getResult();
 	}
 	
-	@Path("delete")
+	@Path("/{oid}")
+	@PUT
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgSurvey update(@PathParam("oid") final long oid, final LgSurvey survey, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgSurvey>(request) {
+			public LgSurvey execute() throws Exception {
+				final LgSurvey result;
+				try {
+					result = startSession().update(oid, survey);//TODO change and implement the method
+				} catch (Exception ex) {
+//					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
+				}
+				return result;
+			}
+		}.getResult();
+	}
+	
+	@Path("/{oid}")
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgSurvey delete(final long oid, @Context final HttpServletRequest request) {
+	public LgSurvey delete(@PathParam("oid") final long oid, @Context final HttpServletRequest request) {
 		return new LgTransaction <LgSurvey>(request) {
 			public LgSurvey execute() throws Exception {
 				try {
-					startSession().deleteSurvey(oid);//TODO change the method
+					startSession().deleteSurvey(oid);//TODO change and implement the method
 				} catch (Exception ex) {
 //					throw create(RestDeleteInviteFailure.class, ex, oid, getSession().getUser().getName());
 				}
