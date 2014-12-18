@@ -1,46 +1,61 @@
 //-- ReSurveyService --
 
-//  /survey
-
-// /get/:oid
+"/surveys/:oid"
 @GET
-get(surveyOid)
-    ==> from Server: survey
+    ==> from server: survey
 
-// /get
+"/surveys"
 @GET
-getAll() // user specific
-    ==> from Server: surveyArray
+    ==> from server: surveyArray
 
-// /save
+"/surveys"
 @POST
-save(survey)
-    <== to Server: survey
+    <== to server: survey
+    server generates oid
+    ==> from server: survey // created survey with fresh oid from DB
 
-// /delete/:oid
+"/surveys/:oid"
+@PUT
+    <== to server: survey
+    server uses oid from the path parameter to search the survey in the DB
+    ==> from server: survey
+
+"/surveys/:oid"
 @DELETE
-delete(surveyOid)
 
 
 //-- ReInviteService --
 
-// /invite
-
-// /get/:oid
+"/invites/:oid"
 @GET
-get(inviteOid)
-    ==> from Server: invite
+    ==> from server: invite
 
-// /get
+"/invites"
 @GET
-getAll() // user specific
-    ==> from Server: inviteArray
+    ==> from server: inviteArray
 
-// /save
+"/invites"
 @POST
-save(invite)
-<== to Server: invite
+    <== to server: invite
+    server generates oid
+    ==> from server: invite // created invite with fresh oid from DB
 
-// /delete/:oid
+"/invites/:oid"
+@PUT
+    <== to server: invite
+    server uses oid from the path parameter to search the invite in the DB
+    ==> from server: invite
+
+// /invites/:oid
 @DELETE
-delete(inviteOid) /* not allowed */
+/* not allowed! */
+
+
+
+
+
+// evtl. später ändern?
+//-- Users --
+
+@GET
+/users/?all
