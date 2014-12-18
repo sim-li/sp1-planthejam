@@ -14,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
@@ -108,7 +107,7 @@ public class ReInviteService extends RestService {
 			public LgInvite execute() throws Exception {
 				final LgInvite result;
 				try {
-					result = startSession().save(invite);//TODO change and implement the method
+					result = startSession().saveInvite(invite);//TODO change and implement the method
 				} catch (Exception ex) {
 					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
 				}
@@ -132,9 +131,9 @@ public class ReInviteService extends RestService {
 			public LgInvite execute() throws Exception {
 				final LgInvite result;
 				try {
-					result = startSession().update(oid, invite);//TODO change and implement the method
+					result = startSession().updateInvite(oid, invite);//TODO change and implement the method
 				} catch (Exception ex) {
-//					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
+					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
 				}
 				return result;
 			}

@@ -21,7 +21,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-@Ignore
+//@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
@@ -103,7 +103,7 @@ public class LgGroupTest {
 		final LgSession session = start();
 		final LgUser bob = session.startFor("Bob");
 		bob.deleteAccount();
-//		assertEquals(0, startFor().getGroups().size());
+		assertEquals(0, startFor().getGroups().size());
 	}
 	
 	@Ignore

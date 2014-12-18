@@ -187,14 +187,7 @@ public class LgUser extends DaObject {
 		return this.password.equals(user.getPassword());
 	}
 	
-	/**
-	 * Returns LgInvite by provided oid.
-	 * @param inviteOid The LgInvite oid.
-	 * @return The found LgInvite.
-	 */
-	public LgInvite getInvite(final long inviteOid) {
-		return search(this.invites, inviteOid);
-	}
+	
 	
 	//TODO improve it
 	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
@@ -244,6 +237,50 @@ public class LgUser extends DaObject {
 		this.groups.remove(group);
 	}
 	
+	//------------------METHODS FOR REST SERVICE-------
+	
+	public LgSurvey getSurvey(final long oid){
+		return null;
+	}
+	
+	public List<LgSurvey> getSurveys(){
+		return null;
+	}
+	
+	public LgSurvey saveSurvey(final LgSurvey survey){
+		return null;
+	}
+	
+	public LgSurvey updateSurvey(final long oid, LgSurvey survey){
+		return null;
+	}
+	public void deleteSurvey(final long oid){
+		
+	}
+	
+	@JsonIgnore
+	public List<LgInvite> getInvites() {
+		return this.invites;
+	}
+	
+	/**
+	 * Returns LgInvite by provided oid.
+	 * @param inviteOid The LgInvite oid.
+	 * @return The found LgInvite.
+	 */
+	public LgInvite getInvite(final long inviteOid) {
+		return search(this.invites, inviteOid);
+	}
+	
+	
+	public LgInvite saveInvite(final LgInvite invite){
+		return null;
+	}
+	public LgInvite updateInvite(final long oid, LgInvite invite){
+		return null;
+	}
+	
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -251,10 +288,7 @@ public class LgUser extends DaObject {
 	 * --------------------------------------------------------------------------------------------
 	 */
 
-	@JsonIgnore
-	public List<LgInvite> getInvites() {
-		return this.invites;
-	}
+	
 	
 	@JsonIgnore
 	public List<LgGroup> getGroups() {

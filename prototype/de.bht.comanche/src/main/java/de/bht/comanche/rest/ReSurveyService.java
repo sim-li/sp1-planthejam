@@ -13,12 +13,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
-import de.bht.comanche.rest.ReInviteService.RestGetInviteFailure;
-import de.bht.comanche.rest.ReInviteService.RestGetInvitesFailure;
-import de.bht.comanche.rest.ReInviteService.RestSaveInviteFailure;
 
 
 @Path("/surveys/")
@@ -36,7 +32,7 @@ public class ReSurveyService {
 				try {
 					result = startSession().getSurvey(oid);//TODO change and implement the method
 				} catch (Exception ex) {
-//					throw create(RestGetInviteFailure.class, ex, oid, getSession().getUser().getName());
+					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
 				return result;
 			}
@@ -53,9 +49,9 @@ public class ReSurveyService {
 			public List<LgSurvey> execute() throws Exception {
 				final List<LgSurvey> result;
 				try {
-					result = startSession().getInvites();//TODO change and implement the method
+					result = startSession().getSurveys();//TODO change and implement the method
 				} catch (Exception ex) {
-//					throw create(RestGetInvitesFailure.class, ex, getSession().getUser().getName());
+					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
 				return result;
 			}
@@ -71,9 +67,9 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().save(survey);//TODO change and implement the method
+					result = startSession().saveSurvey(survey);//TODO change and implement the method
 				} catch (Exception ex) {
-//					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
+					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
 				return result;
 			}
@@ -89,9 +85,9 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().update(oid, survey);//TODO change and implement the method
+					result = startSession().updateSurvey(oid, survey);//TODO change and implement the method
 				} catch (Exception ex) {
-//					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
+					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
 				return result;
 			}
@@ -108,11 +104,18 @@ public class ReSurveyService {
 				try {
 					startSession().deleteSurvey(oid);//TODO change and implement the method
 				} catch (Exception ex) {
-//					throw create(RestDeleteInviteFailure.class, ex, oid, getSession().getUser().getName());
+					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
 				return null;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Temp failure
+	 */
+	@SuppressWarnings("serial")
+	public static final class TempFailure extends multex.Failure {}
+	
 
 }
