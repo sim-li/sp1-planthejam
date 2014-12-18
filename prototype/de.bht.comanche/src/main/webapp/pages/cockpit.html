@@ -15,7 +15,13 @@
             <li>
               <a data-toggle='tab' href='#inviteTab' onclick='return false;'>
                 Invite
-                <span class='badge'>{{invites.length}}</span>
+                <span class='badge'>{{(invites | filter: {ignored : false}).length}}</span>
+              </a>
+            </li>
+            <li>
+              <a data-toggle='tab' href='#ignoredInviteTab' onclick='return false;'>
+                ignored
+                <span class='badge'>{{(invites | filter: {ignored : true}).length}}</span>
               </a>
             </li>
           </ul>
@@ -34,10 +40,14 @@
                   <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteIgnored(false)' ng-model='radioModel'>accept</label>
                   <label btn-radio="'ignore'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteIgnored(true)' ng-model='radioModel'>ignore</label>
                 </div>
-                <!-- %button.btn.btn-success.btn-sm.col-sm-offset-1{"ng-click" => "setSelectedInviteIgnored(false)"} accept -->
-                <!-- %button.btn.btn-danger.btn-sm{"ng-click" => "setSelectedInviteIgnored(true)"} ignore -->
-                <!-- %button.btn.btn-success.btn-sm.col-sm-offset-4{"ng-click" => "invite.setIgnored(false)"} accept -->
-                <!-- %button.btn.btn-danger.btn-sm{"ng-click" => "invite.setIgnored(true)"} ignore -->
+              </a>
+            </div>
+            <div class='tab-pane' id='ignoredInviteTab'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+              <div class='list-group' id='surveyList'></div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter: searchString '>
+                <div class='col-sm-9'>{{invite.survey.name}}</div>
+                <label btn-radio="'reaccept'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteIgnored(false)' ng-model='radioModel'>reaccept</label>
               </a>
             </div>
           </div>
@@ -54,6 +64,7 @@
           <div class='panel-body'>
             <label for='selectedSurveyDescription'>Beschreibung:</label>
             <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
+            <div>Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}</div>
             <label for='selectedSurveyDescription'>Status:</label>
             <div id='selectedSurveyStatus'>wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}</div>
             <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->

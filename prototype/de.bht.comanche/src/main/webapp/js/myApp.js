@@ -33,7 +33,7 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
-        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util'
+        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util', 'ui.calendar',
     ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
@@ -79,7 +79,10 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                     },
                     usersPromise: function(restService, User) {
                         return restService.doGetMany(User);
-                    }
+                    },
+                    // timePeriodPromies: function(restService, timePeriod) {
+                    //     return restService.doGetMany(timePeriod);
+                    // }
                 }
             })
             .when('/account', {

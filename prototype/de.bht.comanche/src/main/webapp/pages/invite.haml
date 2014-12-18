@@ -65,16 +65,13 @@
           %br
           / <<< DEBUGGING THE GROUPS
           .row
-            / possibleTimeperiods
-            / %code {{ dummyTimePeriods | json }}
-            / %code {{ selectedTimePeriod | json }}
             .col-lg-5
               #accordion.panel-group
               .panel.panel-info
                 .panel-heading
                   .panel-title
                     %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne", :onclick => "return false;"}
-                      Avaibility
+                      Possible timeperiods
                       %span.col-md-offset-7.glyphicon.glyphicon-resize-vertical
                 #collapseOne.panel-collapse.collapse.in
                   .panel-body
@@ -93,11 +90,11 @@
                 .col-lg-8.dropdown
                   %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button"}
                     .input-group
-                      %input.form-control{"data-ng-model" => "selectedTimePeriod.startTime", :type => "text"}/
+                      %input.form-control{"ng-model" => "selectedInvite.survey.deadline", :type => "text"}/
                       %span.input-group-addon
                         %i.glyphicon.glyphicon-calendar
                   %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
-                    %datetimepicker{"date" => "yyyy-MM-dd HH:mm", "data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedTimePeriod.startTime"}
+                    %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "ng-model" => "selectedInvite.survey.deadline"}
                 %br
               %hr
               .row
@@ -106,11 +103,11 @@
                 .col-lg-8.dropdown
                   %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button"}
                     .input-group
-                      %input.form-control{"data-ng-model" => "selectedTimePeriod.startTime", :type => "text"}/
+                      %input.form-control{"ng-model" => "selectedTimePeriod.startTime", :type => "text"}/
                       %span.input-group-addon
                         %i.glyphicon.glyphicon-calendar
                   %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
-                    %datetimepicker{"date" => "yyyy-MM-dd HH:mm", "data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedTimePeriod.startTime"}
+                    %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "ng-model" => "selectedTimePeriod.startTime"}
               %br
               .row
                 .col-lg-2
@@ -125,3 +122,4 @@
       %input-group{"ng-show"=>"repeatedly"}
         %input.form-control{"type"=>"text", "placeholder"=>"Frequency"}
         %input.form-control{"type"=>"text", "placeholder"=>"Distance"}
+/ .calendar{:calendar => "myCalendar1", "ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"}

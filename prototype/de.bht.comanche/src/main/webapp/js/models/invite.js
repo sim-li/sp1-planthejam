@@ -7,7 +7,7 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('invite', ['survey', 'user'])
-    .factory('Invite', ['Survey', 'User' /*, 'baseDatePickerDate'', 'TimeUnit', 'Type'*/ , function(Survey, User /*, DatePickerDate, TimeUnit, Type*/ ) {
+    .factory('Invite', ['Survey', 'User' /*, 'baseDatePickerDate'', 'TimeUnit', 'Type'*/ , function(Survey, User /*, DatePickerDate , TimeUnit, Type*/ ) {
 
         'use strict';
 

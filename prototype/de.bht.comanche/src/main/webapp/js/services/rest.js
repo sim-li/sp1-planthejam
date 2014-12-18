@@ -13,8 +13,8 @@ angular.module('restModule', ['baseModel', 'user'])
      *
      * @class restService
      */
-    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Invite', 'Model', 'User',
-        function($http, $q, $log, $rootScope, Invite, Model, User) {
+    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Invite', 'Model', 'User', 'TimePeriod',
+        function($http, $q, $log, $rootScope, Invite, Model, User, TimePeriod) {
 
             'use strict';
 
@@ -63,6 +63,14 @@ angular.module('restModule', ['baseModel', 'user'])
                     // 'save': '/save',
                     'delete': '/delete'
                 }
+        // ,
+        // 'timePeriod': {
+        //     'path': '/timeperiods',
+                    // 'getMany': '/gettimeperiods'
+                    // ,
+                    // 'save': '/save',
+                    // 'delete': '/delete'
+                // }
             };
 
             //--> TODO the paths config should best be retrieved from a config file

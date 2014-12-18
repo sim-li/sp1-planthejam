@@ -87,16 +87,13 @@
           <br>
           <!-- <<< DEBUGGING THE GROUPS -->
           <div class='row'>
-            <!-- possibleTimeperiods -->
-            <!-- %code {{ dummyTimePeriods | json }} -->
-            <!-- %code {{ selectedTimePeriod | json }} -->
             <div class='col-lg-5'>
               <div class='panel-group' id='accordion'></div>
               <div class='panel panel-info'>
                 <div class='panel-heading'>
                   <div class='panel-title'>
                     <a data-parent='#accordion' data-toggle='collapse' href='#collapseOne' onclick='return false;'>
-                      Avaibility
+                      Possible timeperiods
                       <span class='col-md-offset-7 glyphicon glyphicon-resize-vertical'></span>
                     </a>
                   </div>
@@ -128,14 +125,14 @@
                 <div class='col-lg-8 dropdown'>
                   <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
                     <div class='input-group'>
-                      <input class='form-control' data-ng-model='selectedTimePeriod.startTime' type='text'>
+                      <input class='form-control' ng-model='selectedInvite.survey.deadline' type='text'>
                       <span class='input-group-addon'>
                         <i class='glyphicon glyphicon-calendar'></i>
                       </span>
                     </div>
                   </a>
                   <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
-                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='selectedTimePeriod.startTime' date='yyyy-MM-dd HH:mm'></datetimepicker>
+                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" ng-model='selectedInvite.survey.deadline'></datetimepicker>
                   </ul>
                 </div>
                 <br>
@@ -148,14 +145,14 @@
                 <div class='col-lg-8 dropdown'>
                   <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
                     <div class='input-group'>
-                      <input class='form-control' data-ng-model='selectedTimePeriod.startTime' type='text'>
+                      <input class='form-control' ng-model='selectedTimePeriod.startTime' type='text'>
                       <span class='input-group-addon'>
                         <i class='glyphicon glyphicon-calendar'></i>
                       </span>
                     </div>
                   </a>
                   <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
-                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='selectedTimePeriod.startTime' date='yyyy-MM-dd HH:mm'></datetimepicker>
+                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" ng-model='selectedTimePeriod.startTime'></datetimepicker>
                   </ul>
                 </div>
               </div>
@@ -187,3 +184,4 @@
     </div>
   </div>
 </div>
+<!-- .calendar{:calendar => "myCalendar1", "ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"} -->
