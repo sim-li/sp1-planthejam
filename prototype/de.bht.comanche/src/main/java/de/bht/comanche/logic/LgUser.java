@@ -74,15 +74,15 @@ public class LgUser extends DaObject {
 	}
 	
 	public void saveSurveyAsHost(final LgSurvey survey) {
-		
 		final LgInvite invite = new LgInvite();
+//		this.save(survey);
 		final LgSurvey attachedSurvey = attach(survey);
-		attachedSurvey.save();
-		
-		invite.setHost(true);
-		invite.setIgnored(false);
-		invite.setSurvey(attachedSurvey);
-		attach(invite).save();
+		attachedSurvey.save(); // COVER IN TEST: Is this save neccessary?
+		invite.setHost(true)
+			.setIgnored(false)
+			.setSurvey(attachedSurvey)
+			.setUser(this);	// COVER IN TEST: Was user set?
+		this.updateInvite(invite);
 	}
 	
 	public LgInvite getInviteBySurveyName(final String name) {
@@ -106,13 +106,32 @@ public class LgUser extends DaObject {
 		//@TODO Throw Multex Exception
 	}
 	
+
 	/**
 	 * Save Invite for current user.
 	 * @param invite The LgInvite to save.
 	 * @return The saved LgInvite.
 	 */
-	public LgInvite save(final LgInvite invite) {
+	// RENAME to updateInvite
+	public LgInvite updateInvite(final LgInvite invite) {
         invite.setUser(this);
+        
+        saveUnattached(invite);
+//        	->
+//        		attach(invite); // -> to setPool?
+//        		invite.save();
+//        		
+//        invite
+//        	->
+//        		overwrite save:
+//        			public LgInvite save() {
+//        	//check condition
+//        	//check condition
+//        			super.save();
+//        			}
+//        // FORCE check condition, gets called in super save()
+//        }
+//        }
 		return attach(invite).save();
 	}
 	/**
@@ -157,15 +176,6 @@ public class LgUser extends DaObject {
 	}
 	
 	/**
-	 * Save LgMember for current user.
-	 * @param member The LgMember to save.
-	 * @return The saved LgMember.
-	 */
-	public LgMember save(final LgMember member) {
-		return attach(member).save();
-	}
-	
-	/**
 	 * Search LgMember object by group oid and user oid.
 	 * @param groupId The LgGroup oid.
 	 * @param userId The LgUser oid.
@@ -200,11 +210,6 @@ public class LgUser extends DaObject {
 	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
 		invite.setTimePeriod(invite);
 		return attach(invite).save();
-	}
-	
-	//for DB test only
-	public <E extends DaObject> E saveObj(final E other) {
-		return attach(other).save();
 	}
 	
 	/**

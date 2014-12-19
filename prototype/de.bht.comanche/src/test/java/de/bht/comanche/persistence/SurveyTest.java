@@ -32,8 +32,8 @@ public class SurveyTest {
 		LgSession session = new LgSession();
 		session.getApplication().beginTransaction();
 		
-		final LgUser alice = new LgUser();
-		alice.setName(ALICE_USER_NAME);
+		final LgUser alice = new LgUser(); //--> @Before Precondition
+		alice.setName(ALICE_USER_NAME); // JUnit Test Grouping for precond possible?
 		alice.setEmail("test@test.de");
 		alice.setPassword("testtest");
 		session.register(alice);
@@ -49,7 +49,7 @@ public class SurveyTest {
 		pit.setEmail("pit@test.de");
 		pit.setPassword("testtest");
 		session.register(pit);
-		session.getApplication().endTransaction(true);	
+		session.getApplication().endTransaction(true); //--> @After Postcondition: Delete users + assertion
 	}
 	
 	/**
@@ -65,16 +65,20 @@ public class SurveyTest {
 		final LgUser pit = new LgUser();
 		pit.setName("Pit");
 		pit.setEmail("pit@test.de");
-		pit.setPassword("testtest");
+		pit.setPassword("testtest");     // --> Remove, only use precondition
 	
-		LgSession sessionForCreate = createSessionAndStartTransaction();
-		LgUser alice = sessionForCreate.startFor(ALICE_USER_NAME);
+		// Refactor to submethods
+		// --> Instance vars for test objs
+		// One concept per test
+		LgSession sessionForCreate = createSessionAndStartTransaction(); // Move to precondition, save in instance variable
+		LgUser alice = sessionForCreate.startFor(ALICE_USER_NAME); // Move to precondition, save in instance variable
 		
-		final LgSurvey demoSurvey = new LgSurvey();
+		final LgSurvey demoSurvey = new LgSurvey(); 
 		demoSurvey.setName("DemoSurvey");
 		
 		alice.saveSurveyAsHost(demoSurvey);
 		
+		// Domain specific language? addUsersToSurvey()
 		demoSurvey.inviteOtherUser(bob);
 		demoSurvey.inviteOtherUser(pit);
 
@@ -90,6 +94,7 @@ public class SurveyTest {
 	    LgInvite bobsInvite = persistedSurvey.getInviteByParticipantName(bob.getName());
 		LgInvite pitsInvite = persistedSurvey.getInviteByParticipantName(pit.getName());
 		
+		//ASSERT FALSE
 		assertEquals("Bob's invite has status 'participant'", false, bobsInvite.isHost());
 		assertEquals("Bob is user of his invite", bob.getName(), bobsInvite.getUser().getName());
 		assertEquals("Bob's invite is not set to isIgnored", false, bobsInvite.isIgnored());
