@@ -19,6 +19,7 @@ import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
 
+@Ignore
 public class SurveyTest {
 	final static String ALICE_USER_NAME = "Alice";
 	final static String BOB_USER_NAME = "Bob";
