@@ -12,8 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-import de.bht.comanche.rest.ReInviteService.RestGetInviteFailure;
-
 /**
  * Abstract base class for all entities that will be persisted.
  * Fulfills all basic requirements to interact with the persistence unit.
@@ -59,6 +57,13 @@ public abstract class DaObject implements Serializable {
 		this.pool = pool;
 		return this;
 	}
+	
+	//for DB test only
+	public <E extends DaObject> E saveUnattached(final E unattachedObject) {
+		return attachPoolTo(unattachedObject).save();
+	}
+
+	
 	@SuppressWarnings("serial")
 	// @TODO Write exception text
 	public static final class OwningPoolChangedExc extends multex.Exc {}
@@ -74,14 +79,14 @@ public abstract class DaObject implements Serializable {
 	 */
 	@SuppressWarnings("serial")
 	public static final class DaObjectUndefinedPoolWhileAttachingFailure extends multex.Failure {}
-	public <E extends DaObject> E attach(final E other) {
+	public <E extends DaObject> E attachPoolTo(final E other) {
 
 		if (this.pool == null) {
 			throw create(DaObjectUndefinedPoolWhileAttachingFailure.class, this, other);
 		}
 		// @TODO Throw no pool exception when other object doesn't contain pool
 		@SuppressWarnings("unchecked")
-		final E result = (E) other.attach(getPool());
+		final E result = (E) other.attach(this.pool);
 		return result;
 	}
 

@@ -42,11 +42,11 @@ public class LgGroup extends DaObject{
 	@NotNull
 	@ManyToOne
 	private LgUser user;
-	
-	/**
-	 * Representation of a foreign key in a LgMember entity. Provide a list of members. 
-	 */
-	@OneToMany(mappedBy="group", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval=true)
+		
+	private String iconurl;
+
+	@OneToMany(mappedBy="group", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+
 	private List<LgMember> members;
 	
 	/**
@@ -136,6 +136,8 @@ public class LgGroup extends DaObject{
 	 */
 	public LgGroup setName(final String name) {
 		this.name = name;
+		final LgGravatarUtils utils = new LgGravatarUtils();
+		this.setIconurl(utils.getGroupUrl(name));
 		return this;
 	}
 	
@@ -162,5 +164,15 @@ public class LgGroup extends DaObject{
 		return String.format(
 				"LgGroup [name=%s, user=%s, members=%s, oid=%s, pool=%s]",
 				name, user, members, oid, pool);
+	}
+
+	public String getIconurl() {
+		final LgGravatarUtils utils = new LgGravatarUtils();
+		iconurl = utils.getGroupUrl(name);
+		return iconurl;
+	}
+
+	public void setIconurl(String iconurl) {
+		this.iconurl = iconurl;
 	}
 }
