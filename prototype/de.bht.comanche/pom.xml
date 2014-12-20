@@ -121,8 +121,21 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-
         <plugins>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+                <version>${jetty.plugin.version}</version>
+                <configuration>
+                    <webAppConfig>
+                        <contextPath>/</contextPath>
+                        <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
+                    </webAppConfig>
+                    <contextPath>${jetty.context.path}</contextPath>
+                    <scanIntervalSeconds>${jetty.scanInterval}</scanIntervalSeconds>
+                    <stopPort>${jetty.stop.port}</stopPort>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
@@ -143,20 +156,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-                <version>${jetty.plugin.version}</version>
-                <configuration>
-                    <webAppConfig>
-                        <contextPath>/</contextPath>
-                        <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
-                    </webAppConfig>
-                    <contextPath>${jetty.context.path}</contextPath>
-                    <scanIntervalSeconds>${jetty.scanInterval}</scanIntervalSeconds>
-                    <stopPort>${jetty.stop.port}</stopPort>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -193,7 +192,6 @@
                   </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -292,7 +290,6 @@
     </build>
     <repositories>
         <repository>
-            <!-- Für MulTEx: -->
             <id>tfh-knabe-repository</id>
             <name>BHT Knabe Maven 2 repository</name>
             <url>http://public.beuth-hochschule.de/~knabe/mvn-repo/</url>
