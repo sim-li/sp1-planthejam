@@ -4,3 +4,5 @@ node_modules/
 apidocs/
 .DS_Store
 *.log
+node/
+src/main/webapp/node/
