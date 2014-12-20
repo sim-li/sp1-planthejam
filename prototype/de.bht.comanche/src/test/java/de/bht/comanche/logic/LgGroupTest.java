@@ -21,7 +21,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-@Ignore
+//@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
@@ -80,30 +80,30 @@ public class LgGroupTest {
 		assertEquals("NewGroup", getAliceGroup(aliceGroup.getOid()).getName());
 	}
 
-	@Ignore
-	@Test
-	public void test3addMember(){
-		final LgSession session = start();
-		final LgUser user = startForAlice(session);
-		final LgGroup aliceGroup = user.getGroups().get(0);
-		//changed findByName->startFor: same functionality
-		final LgUser bob = session.startFor("Bob"); 		
-		final LgUser pit = session.startFor("Pit");
-		user.save(new LgMember().setUser(bob).setGroup(aliceGroup));
-		user.save(new LgMember().setUser(pit).setGroup(aliceGroup));
-		end(session);
-		
-		assertEquals("Bob", getAliceGroup(aliceGroup.getOid()).getUsers().get(0).getName());
-		assertEquals("Pit", getAliceGroup(aliceGroup.getOid()).getUsers().get(1).getName());
-		}
-	
+//	@Ignore
+//	@Test
+//	public void test3addMember(){
+//		final LgSession session = start();
+//		final LgUser user = startForAlice(session);
+//		final LgGroup aliceGroup = user.getGroups().get(0);
+//		//changed findByName->startFor: same functionality
+//		final LgUser bob = session.startFor("Bob"); 		
+//		final LgUser pit = session.startFor("Pit");
+//		user.save(new LgMember().setUser(bob).setGroup(aliceGroup));
+//		user.save(new LgMember().setUser(pit).setGroup(aliceGroup));
+//		end(session);
+//		
+//		assertEquals("Bob", getAliceGroup(aliceGroup.getOid()).getUsers().get(0).getName());
+//		assertEquals("Pit", getAliceGroup(aliceGroup.getOid()).getUsers().get(1).getName());
+//		}
+//	
 	@Ignore
 	@Test
 	public void test4deleteUser(){
 		final LgSession session = start();
 		final LgUser bob = session.startFor("Bob");
 		bob.deleteAccount();
-//		assertEquals(0, startFor().getGroups().size());
+		assertEquals(0, startFor().getGroups().size());
 	}
 	
 	@Ignore
