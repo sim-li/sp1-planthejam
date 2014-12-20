@@ -166,7 +166,8 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-                    <execution>
+                    <!-- Goal not known to eirslett. -->
+                    <!-- <execution>
                         <id>bower install</id>
                         <goals>
                             <goal>bower</goal>
@@ -175,7 +176,7 @@
                              <workingDirectory>${project.basedir}/src/main/webapp</workingDirectory>
                             <arguments>install</arguments>
                         </configuration>
-                    </execution>
+                    </execution> -->
                     <execution>
                         <id>javascript tests</id>
                     <goals>
