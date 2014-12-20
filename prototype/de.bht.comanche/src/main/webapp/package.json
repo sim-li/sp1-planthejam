@@ -5,7 +5,6 @@
   "main": "index.html",
   "scripts": {
     "postinstall": "bower install",
-
     "pretest": "npm install",
     "test": "node node_modules/karma/bin/karma start test/karma.conf.js",
     "test-single-run": "node node_modules/karma/bin/karma start test/karma.conf.js  --single-run"
@@ -21,6 +20,7 @@
     "karma": "^0.12.25",
     "karma-chrome-launcher": "^0.1.5",
     "karma-jasmine": "^0.2.3",
+    "karma-phantomjs-launcher": "^0.1.4",
     "protractor": "^1.4.0"
   }
 }
