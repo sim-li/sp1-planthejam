@@ -268,10 +268,9 @@ public class LgUser extends DaObject {
 	 * @param inviteOid The LgInvite oid.
 	 * @return The found LgInvite.
 	 */
-	public LgInvite getInvite(final long inviteOid) {
-		return search(this.invites, inviteOid);
+	public LgInvite getInvite(final long oid) {
+		return search(this.invites, oid);
 	}
-	
 	
 	public LgInvite saveInvite(final LgInvite invite){
 		return null;
