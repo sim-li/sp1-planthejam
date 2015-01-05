@@ -87,7 +87,7 @@ public class LgUser extends DaObject {
 			.setIgnored(false)
 			.setSurvey(savedSurvey)
 			.setUser(this);	// COVER IN TEST: Was user set (probably not)?
-		this.updateInvite(invite);
+		this.updateInvite(invite); // What is that??
 	}
 	
 	public LgInvite getInviteBySurveyName(final String name) {
