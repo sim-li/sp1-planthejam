@@ -62,7 +62,7 @@ public abstract class DaObject implements Serializable {
 	
 	//for DB test only
 	public <E extends DaObject> E saveUnattached(final E other) {
-		attachPoolFor(other).save();
+		return attachPoolFor(other).save();
 	}
 
 	

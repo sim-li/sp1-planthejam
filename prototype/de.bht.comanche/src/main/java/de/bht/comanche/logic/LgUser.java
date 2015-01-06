@@ -75,12 +75,10 @@ public class LgUser extends DaObject {
 	
 	public void saveSurveyAsHost(final LgSurvey survey) {
 		final LgInvite invite = new LgInvite();
-//		this.save(survey);
-		final LgSurvey attachedSurvey = attach(survey);
-		attachedSurvey.save(); // COVER IN TEST: Is this save neccessary?
+		final LgSurvey savedSurvey = saveUnattached(survey); //Saving 
 		invite.setHost(true)
 			.setIgnored(false)
-			.setSurvey(attachedSurvey)
+			.setSurvey(savedSurvey)
 			.setUser(this);	// COVER IN TEST: Was user set?
 		this.updateInvite(invite);
 	}
@@ -112,11 +110,8 @@ public class LgUser extends DaObject {
 	 * @param invite The LgInvite to save.
 	 * @return The saved LgInvite.
 	 */
-	// RENAME to updateInvite
 	public LgInvite updateInvite(final LgInvite invite) {
         invite.setUser(this);
-        
-        saveUnattached(invite);
 //        	->
 //        		attach(invite); // -> to setPool?
 //        		invite.save();
@@ -132,7 +127,7 @@ public class LgUser extends DaObject {
 //        // FORCE check condition, gets called in super save()
 //        }
 //        }
-		return attach(invite).save();
+		return saveUnattached(invite);
 	}
 	/**
 	 * Complete deleting of a user accout.
@@ -155,7 +150,7 @@ public class LgUser extends DaObject {
 	 */
 	public LgGroup save(final LgGroup group) {
 		group.setUser(this).setForMember(group);
-		return attach(group).save();
+		return saveUnattached(group);
 	}
 	
 	/**
@@ -198,12 +193,14 @@ public class LgUser extends DaObject {
 	}
 	
 	
-	
+	/**
+	 * @author Simon Lischka: Commented this out, return type was conflicting
+	 */
 	//TODO improve it
-	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
-		invite.setTimePeriod(invite);
-		return attach(invite).save();
-	}
+//	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
+//		invite.setTimePeriod(invite);
+//		return saveUnattached(invite);
+//	}
 	
 	/**
 	 * Set current user for incoming list of time periods

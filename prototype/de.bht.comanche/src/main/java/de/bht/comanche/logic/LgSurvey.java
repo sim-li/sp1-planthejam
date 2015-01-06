@@ -103,7 +103,7 @@ public class LgSurvey extends DaObject {
 		invite.setIgnored(false);
 		invite.setSurvey(this);
 		invite.setUser(user);
-		attach(invite).save();
+		saveUnattached(invite);
 	}
 	
 	/**
