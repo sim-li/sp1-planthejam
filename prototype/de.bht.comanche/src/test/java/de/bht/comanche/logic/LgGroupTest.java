@@ -21,6 +21,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
@@ -61,7 +62,7 @@ public class LgGroupTest {
 	}
 	
 	@Test
-	public void test1SaveTimePeriod(){
+	public void test1SaveGroup(){
 		final LgSession session = start();
 		startForAlice(session).save(new LgGroup().setName("Group").setUser(session.getUser()));
 		end(session);
