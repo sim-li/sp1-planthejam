@@ -37,7 +37,6 @@ angular.module('survey', ['constants', 'datePickerDate'])
             this.name = config.name || '';
             this.description = config.description || '';
             this.type = config.type || Type.ONE_TIME;
-            this.invites = []; // the invites have to be imported seperately
             this.deadline = new DatePickerDate(config.deadline) || new DatePickerDate(new Date());
             this.frequencyDist = config.frequencyDist || 0;
             this.frequencyTimeUnit = TimeUnit[config.frequencyTimeUnit] || TimeUnit.WEEK;
@@ -46,6 +45,7 @@ angular.module('survey', ['constants', 'datePickerDate'])
                 'startTime': new DatePickerDate(),
                 'durationInMins': 0
             };
+            this.invites = config.invites || []; // the invites have to be imported seperately
         };
 
         // Survey.prototype = new Model();
@@ -72,9 +72,10 @@ angular.module('survey', ['constants', 'datePickerDate'])
                 'type': this.type,
                 'deadline': this.deadline.toDate(),
                 'frequencyDist': this.frequencyDist,
-                'frequencyTimeUnit': this.frequencyTimeUnit
-                    //, 'possibleTimeperiods': this.possibleTimeperiods,
-                    // 'determinedTimeperiod': this.determinedTimeperiod
+                'frequencyTimeUnit': this.frequencyTimeUnit,
+                // 'possibleTimeperiods': this.possibleTimeperiods,
+                // 'determinedTimeperiod': this.determinedTimeperiod,
+                'invites': Invite.exportMany(this.invites)
             };
         };
 

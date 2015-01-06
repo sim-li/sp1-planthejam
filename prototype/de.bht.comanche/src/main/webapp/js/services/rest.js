@@ -30,45 +30,45 @@ angular.module('restModule', ['baseModel', 'user'])
              * @type {Object}
              */
             var restPaths = {
-                'basePath': '/rest',
+                'basePath': '/rest/',
                 'user': {
-                    'path': '/user',
-                    'login': '/login',
-                    'register': '/register',
-                    'delete': '/delete',
-                    'get': '/get',
-                    'update': '/update',
-                    'getMany': '/getAllUsers',
-                    'logout': '/logout'
+                    'path': 'user/',
+                    'login': 'login',
+                    'register': 'register',
+                    'delete': 'delete',
+                    'get': 'get',
+                    'update': 'update',
+                    'getMany': 'getAllUsers',
+                    'logout': 'logout'
                 },
                 'survey': {
-                    'path': '/survey',
-                    'get': '/get',
-                    'getMany': '/getMany',
-                    'save': '/save',
-                    'delete': '/delete',
+                    'path': 'surveys/' /*,*/
+                        // 'get': 'get',
+                        // 'getMany': 'getMany',
+                        // 'save': 'save',
+                        // 'delete': 'delete',
                 },
                 'invite': {
-                    'path': '/invite',
-                    'get': '/get',
-                    'getMany': '/getInvites',
-                    'save': '/save',
-                    'delete': '/delete' /*not necessary?*/ /*,*/
-                        // 'getSurveyInvites': '/getSurveyInvites', // TODO -> REST service on  server side
-                        // 'saveSurveyInvite': '/saveSurveyInvite' //
-                        // 'saveSurveyInvites': '/saveSurveyInvites' //
+                    'path': 'invites/' /*,*/
+                        // 'get': 'get',
+                        // 'getMany': 'getInvites',
+                        // 'save': 'save',
+                        // 'delete': 'delete' /*not necessary?*/ /*,*/
+                        // 'getSurveyInvites': 'getSurveyInvites', // TODO -> REST service on  server side
+                        // 'saveSurveyInvite': 'saveSurveyInvite' //
+                        // 'saveSurveyInvites': 'saveSurveyInvites' //
                 },
                 'group': {
-                    'path': '/group',
-                    'getMany': '/getGroups',
-                    'save': '/save',
-                    'delete': '/delete'
+                    'path': 'groups/' /*,*/
+                        // 'getMany': 'getGroups',
+                        // 'save': 'save',
+                        // 'delete': 'delete'
                 },
                 'member': {
-                    'path': '/member',
-                    // 'get': '/get',
-                    // 'save': '/save',
-                    'delete': '/delete'
+                    'path': 'members/' /*,*/
+                        // 'get': 'get',
+                        // 'save': 'save',
+                        // 'delete': 'delete'
                 }
             };
 
@@ -81,61 +81,60 @@ angular.module('restModule', ['baseModel', 'user'])
             // });
 
             /**
-             * Returns the relative HTTP path for the given model and operation from the central REST path table.
+             * Returns the relative URL for the given model from the central REST path table.
+             * Either an oid or an operation may be specified, but never both.
              *
-             * @method getPath
+             * @method getUrlFor
              * @private
              * @param  {Object} model    the model or model class with a modelId
-             * @param  {String} opString a String that denotes the desired operation
+             * @param  {Number} [oid]    the oid of the model
+             * @param  {String} [opString] a String that denotes the desired operation
              * @return {String}          the relative HTTP path
              */
-            var getPath = function(model, opString) {
+            var getUrlFor = function(model, oid, opString) {
                 var modelId = model.modelId || model.prototype.modelId;
                 var theModel = restPaths[modelId];
-                return restPaths.basePath + theModel.path + theModel[opString];
+                return restPaths.basePath + theModel.path + (oid || '') + (theModel[opString] || '');
             };
 
             /**
              * Calls the HTTP service at the specified URL with the specified data using the specified method.
              *
-             * @method callHTTP
+             * @method callHttp
              * @private
+             * @param  {String}  method the REST method (GET, POST, PUT or DELETE)
              * @param  {String}  url the URL (relative to the root path)
-             * @param  {Object}  [params] a map of strings containing the parameters with which the url will be called
              * @param  {Object}  [data] the data to be sent to the server
-             * @param  {String}  [method] the REST method (GET, POST, PUT or DELETE)
              * @return {Promise}          a promise to the data received in the response
              */
-            // var callHTTP = function(url, data, params, method) {
-            var callHTTP = function(cfg) {
-                if (LOG) {
-                    $log.debug('REST: %s <== %o', cfg.url, cfg.data);
-                }
-                var deferred = $q.defer();
-                $http({
-                    // method: method || 'POST',
-                    method: cfg.method,
-                    url: cfg.url,
-                    params: cfg.params,
-                    data: cfg.data /*,*/
-                        // TODO do we still send data with the body for DELETE?
-                        // headers: (method === 'DELETE') ? {
-                        //     'Content-Type': 'application/json'
-                        // } : ''
-                }).success(function(data, status, header, config) {
+            var callHttp = function(method) {
+                return function(url, data) {
                     if (LOG) {
-                        $log.debug('REST: %s ==> %o', cfg.url, cfg.data);
+                        $log.debug('%s %s <== %o', method, url, data);
                     }
-                    deferred.resolve(data);
-                }).error(function(data, status, header, config) {
-                    // errors should always be logged
-                    var errMsg = 'REST: ' + cfg.url + ' failed. ==> ';
-                    $rootScope.warnings = errMsg + data.message;
-                    $log.log(errMsg);
-                    $log.log(data.stackTrace);
-                    // deferred.reject(errMsg);
-                });
-                return deferred.promise;
+                    var deferred = $q.defer();
+                    $http({
+                        method: method,
+                        url: url,
+                        data: data /*,*/
+                            // headers: {
+                            //     'Content-Type': 'application/json'
+                            // } : ''
+                    }).success(function(data, status, header, config) {
+                        if (LOG) {
+                            $log.debug('%s %s ==> %o', method, url, data);
+                        }
+                        deferred.resolve(data);
+                    }).error(function(data, status, header, config) {
+                        // errors should always be logged
+                        var errMsg = method + ' ' + url + ' failed. ==> ';
+                        $rootScope.warnings = errMsg + data.message;
+                        $log.log(errMsg);
+                        $log.log(data.stackTrace);
+                        deferred.reject(errMsg);
+                    });
+                    return deferred.promise;
+                };
             };
 
             /**
@@ -146,14 +145,12 @@ angular.module('restModule', ['baseModel', 'user'])
              * @return {Promise}      a promise to the logged-in user
              */
             restService.login = function(user) {
-                return callHTTP({
-                    method: 'POST',
-                    url: getPath(user, 'login'),
-                    data: {
+                var url = getUrlFor(user, null, 'login'),
+                    data = {
                         'name': user.name,
                         'password': user.password
-                    }
-                });
+                    };
+                return callHttp('POST')(url, data);
             };
 
             /**
@@ -164,16 +161,14 @@ angular.module('restModule', ['baseModel', 'user'])
              * @return {Promise}      a promise to the registered user
              */
             restService.register = function(user) {
-                return callHTTP({
-                    method: 'POST',
-                    url: getPath(user, 'register'),
-                    data: {
+                var url = getUrlFor(user, null, 'register'),
+                    data = {
                         'name': user.name,
                         'password': user.password,
                         'email': user.email,
                         'tel': user.tel
-                    }
-                });
+                    };
+                return callHttp('POST')(url, data);
             };
 
             /**
@@ -183,17 +178,12 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object}  user the user to be deleted
              */
             restService.deleteUser = function(user) { // TODO use generic doDelete if possible
-                return callHTTP({
-                    method: 'DELETE',
-                    url: getPath(user, 'delete'),
-                    data: {
-                        'oid': user.oid
-                    }
-                });
+                var url = getUrlFor(user, null, 'delete');
+                return callHttp('DELETE')(url);
             };
 
             // var getUser = function(user) {
-            //     return callHTTP(getPath(user, 'get'));
+            //     return callHttp('GET')(getUrlFor(user, null, 'get'));
             // };
 
             /**
@@ -203,18 +193,16 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object}  user the user to be updated
              * @return {Promise}      a promise to the updated user
              */
-            restService.updateUser = function(user) {
-                return callHTTP({
-                    method: 'POST',
-                    path: getPath(user, 'update'),
-                    data: {
+            restService.updateUser = function(user) { // TODO use generic doUpdate if possible
+                var url = getUrlFor(user, null, 'update'),
+                    data = {
                         'oid': user.oid,
                         'name': user.name,
                         'password': user.password,
                         'email': user.email,
                         'tel': user.tel
-                    }
-                });
+                    };
+                return callHttp('POST')(url, data);
             };
 
             /**
@@ -223,26 +211,9 @@ angular.module('restModule', ['baseModel', 'user'])
              * @method logout
              */
             restService.logout = function() {
-                return callHTTP({
-                    method: 'POST',
-                    url: getPath(User, 'logout')
-                });
+                var url = getUrlFor(User, null, 'logout');
+                return callHttp('POST')(url);
             };
-
-            // // TODO
-            // restService.getSurveyInvites = function(inviteOid) {
-            //     return callHTTP(getPath(Invite, 'getSurveyInvites'), inviteOid);
-            // };
-
-            // // TODO
-            // restService.saveSurveyInvite = function(invite, inviteToSave) {
-            //     return callHTTP(getPath(invite, 'saveSurveyInvite'), invite.oid, inviteToSave);
-            // };
-
-            // TODO
-            // restService.saveSurveyInvites = function(invite, invitesToSave) {
-            //     return callHTTP(getPath(invite, 'saveSurveyInvites'), invite.oid, invitesToSave);
-            // };
 
             /**
              * Gets a collection of objects of the specified model class by calling the REST service.
@@ -252,10 +223,8 @@ angular.module('restModule', ['baseModel', 'user'])
              * @return {Promise}           a promise for a collection of objects of the specified model type
              */
             restService.doGetMany = function(ModelClass) {
-                return callHTTP({
-                    method: 'GET',
-                    url: getPath(ModelClass, 'getMany')
-                });
+                var url = getUrlFor(ModelClass);
+                return callHttp('GET')(url);
             };
 
             /**
@@ -267,13 +236,8 @@ angular.module('restModule', ['baseModel', 'user'])
              * @return {Promise}           a promise for the object
              */
             restService.doGet = function(ModelClass, oid) {
-                return callHTTP({
-                    method: 'GET',
-                    url: getPath(ModelClass, 'get'),
-                    params: {
-                        'oid': oid
-                    }
-                });
+                var url = getUrlFor(ModelClass, oid);
+                return callHttp('GET')(url);
             };
 
             /**
@@ -284,11 +248,10 @@ angular.module('restModule', ['baseModel', 'user'])
              * @return {Promise}      a promise for the saved object of the specified model
              */
             restService.doSave = function(model) {
-                return callHTTP({
-                    method: 'POST',
-                    url: getPath(model, 'save'),
-                    data: model.doExport()
-                });
+                var method = (model.oid) ? 'PUT' : 'POST',
+                    url = getUrlFor(model, model.oid),
+                    data = model.doExport();
+                return callHttp(method)(url, data);
             };
 
             // NOTE: delete is a javascript keyword, therefore the otherwise strange 'do'-prefix naming convention
@@ -299,28 +262,9 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object} model the model with a modelId
              */
             restService.doDelete = function(model) {
-                return callHTTP({
-                    method: 'DELETE',
-                    url: getPath(model, 'delete'),
-                    params: {
-                        oid: model.oid
-                    }
-                });
+                var url = getUrlFor(model, model.oid);
+                return callHttp('DELETE')(url);
             };
-
-
-            // return {
-            //     login: login,
-            //     register: register,
-            //     deleteUser: deleteUser,
-            //     updateUser: updateUser,
-            //     // getUser: getUser,
-            //     logout: logout,
-            //     doGetMany: doGetMany,
-            //     doGet: doGet,
-            //     doSave: doSave,
-            //     doDelete: doDelete
-            // };
 
             return restService;
         }

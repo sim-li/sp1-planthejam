@@ -2,11 +2,12 @@
  * Provides a base model.
  *
  * @module baseModel
+ * @requires util
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('baseModel', [])
-    .factory('Model', function() {
+angular.module('baseModel', ['util'])
+    .factory('Model', ['arrayUtil', function(arrayUtil) {
 
         'use strict';
 
@@ -51,13 +52,24 @@ angular.module('baseModel', [])
             if (!rawModels) {
                 return rawModels;
             }
+            // console.log('importing many ' + ModelClass.prototype.modelId + 's');
             var models = [];
-            for (var i = 0, len = rawModels.length; i < len; i++) {
-                models.push(new ModelClass(rawModels[i]));
-            }
-            // console.log('imported many ' + ModelClass.prototype.modelId + 's');
-            return models;
+            return arrayUtil.forEach(rawModels, function(rawModel) {
+                models.push(new ModelClass(rawModel));
+            });
         };
+
+        // Model.importMany = function(ModelClass, rawModels) {
+        //     if (!rawModels) {
+        //         return rawModels;
+        //     }
+        //     var models = [];
+        //     for (var i = 0, len = rawModels.length; i < len; i++) {
+        //         models.push(new ModelClass(rawModels[i]));
+        //     }
+        //     // console.log('imported many ' + ModelClass.prototype.modelId + 's');
+        //     return models;
+        // };
 
         /* ---
          * it is very likely that exporting cannot be done for our models, at least when they themselves have their
@@ -91,4 +103,4 @@ angular.module('baseModel', [])
         // };
 
         return (Model);
-    });
+    }]);

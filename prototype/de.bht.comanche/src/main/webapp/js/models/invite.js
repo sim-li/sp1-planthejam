@@ -3,11 +3,13 @@
  *
  * @module invite
  * @requires survey
+ * @requires user
+ * @requires util
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('invite', ['survey', 'user'])
-    .factory('Invite', ['Survey', 'User' /*, 'baseDatePickerDate'', 'TimeUnit', 'Type'*/ , function(Survey, User /*, DatePickerDate, TimeUnit, Type*/ ) {
+angular.module('invite', ['survey', 'user', 'util'])
+    .factory('Invite', ['Survey', 'User', 'arrayUtil' /*, 'baseDatePickerDate'', 'TimeUnit', 'Type'*/ , function(Survey, User, arrayUtil /*, DatePickerDate, TimeUnit, Type*/ ) {
 
         'use strict';
 
@@ -113,10 +115,35 @@ angular.module('invite', ['survey', 'user'])
             if (group.modelId !== 'group') {
                 return;
             }
-            group.members.forEach(function(member) {
-                this.addParticipant(member.user);
-            }, this);
+            var self = this;
+            arrayUtil.forEach(group.members, function(member) {
+                self.addParticipant(member.user);
+            });
         };
+
+        // Invite.prototype.addParticipantsFromGroup = function(group) {
+        //     if (group.modelId !== 'group') {
+        //         return;
+        //     }
+        //     group.members.forEach(function(member) {
+        //         this.addParticipant(member.user);
+        //     }, this);
+        // };
+
+        Invite.exportMany = function(invitesToExport) {
+            var invites = [];
+            return arrayUtil.forEach(invitesToExport, function(ele) {
+                invites.push(ele.doExport());
+            });
+        };
+
+        // Invite.exportMany = function(invitesToExport) {
+        //     var invites = [];
+        //     for (var i = 0; i < invitesToExport.length; i++) {
+        //         invites.push(invitesToExport[i].doExport());
+        //     }
+        //     return invites;
+        // };
 
 
         // Invite.prototype.convertDatesToDatePickerDate = function() {
