@@ -1,6 +1,22 @@
 //------- HOST -------
 
-// get(surveyOid)
+
+
+//rest/surveys/:surveyOid
+// ==> from Server:
+var survey = {
+    oid: 345,
+    name: ...,
+    description: ...,
+    ...,
+ //  invites: [{
+ //       oid: 123,
+ //       isHost: false,
+ //       isIgnored...,
+ //       ...
+ //   }, ...]
+}
+//rest/surveys/:surveyOid/invites
 // ==> from Server:
 var survey = {
     oid: 345,
