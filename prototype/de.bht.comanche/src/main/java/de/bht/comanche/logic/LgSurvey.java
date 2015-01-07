@@ -76,9 +76,9 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-//	@JsonIgnore
-//	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//	private List<LgTimePeriod> possibleTimePeriods = new ArrayList<LgTimePeriod>();
+	@JsonIgnore
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LgTimePeriod> possibleTimePeriods = new ArrayList<LgTimePeriod>();
 	
 	/**
 	 * Constructor 
@@ -119,7 +119,7 @@ public class LgSurvey extends DaObject {
 		this.type = other.type;
 		this.frequencyTimeUnit = other.frequencyTimeUnit;
 		this.invites = other.invites;
-//		this.possibleTimePeriods = other.possibleTimePeriods;
+		this.possibleTimePeriods = other.possibleTimePeriods;
 	}
 	
 	/*
@@ -193,14 +193,14 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 
-//	public List<LgTimePeriod> getPossibleTimePeriods() {
-//		return this.possibleTimePeriods;
-//	}
+	public List<LgTimePeriod> getPossibleTimePeriods() {
+		return this.possibleTimePeriods;
+	}
 
-//	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> possibleTimePeriods) {
-//		this.possibleTimePeriods = possibleTimePeriods;
-//		return this;
-//	}
+	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> possibleTimePeriods) {
+		this.possibleTimePeriods = possibleTimePeriods;
+		return this;
+	}
 	
 	@Override
 	public String toString() {
@@ -208,7 +208,7 @@ public class LgSurvey extends DaObject {
 				.format("LgSurvey [name=%s, description=%s, frequencyDist=%s, deadline=%s, type=%s, frequencyTimeUnit=%s, invites=%s, possibleTimePeriods=%s, oid=%s, pool=%s]",
 						name, description, frequencyDist, deadline, type,
 						frequencyTimeUnit, invites, 
-//						possibleTimePeriods, 
+						possibleTimePeriods, 
 						oid,
 						pool);
 	}

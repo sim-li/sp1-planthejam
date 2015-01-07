@@ -52,12 +52,12 @@ public class LgInvite extends DaObject{
 	/**
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
 	 */
-//	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//	private List<LgTimePeriod> timePeriods;
-//	
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LgTimePeriod> timePeriods;
+	
 	
 	public LgInvite() {
-//		timePeriods = new ArrayList<LgTimePeriod>();
+		timePeriods = new ArrayList<LgTimePeriod>();
 	}
 	
 	/*
