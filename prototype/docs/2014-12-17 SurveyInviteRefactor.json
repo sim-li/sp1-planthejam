@@ -16,6 +16,7 @@ var survey = {
  //       ...
  //   }, ...]
 }
+
 //rest/surveys/:surveyOid/invites
 // ==> from Server:
 var survey = {
@@ -45,11 +46,16 @@ var survey = {
         description: ...,
         ...,
         invites: [{
-            oid: 123,
+            oid: 1,
+            isHost: true,
+            isIgnored...},
+        invites: [{
+            oid: 3,
             isHost: false,
             isIgnored...,
             ...
-        }, ...]
+        },
+        ...]
     }
     // on Server:
     // - wrap Invite(Survey, isHost: true)

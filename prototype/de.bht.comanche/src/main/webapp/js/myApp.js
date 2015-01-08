@@ -74,8 +74,8 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                     groupsPromise: function(restService, Group) {
                         return restService.doGetMany(Group);
                     },
-                    usersPromise: function(restService, User) {
-                        return restService.doGetMany(User);
+                    usersPromise: function(restService) {
+                        return restService.getAllUsers();
                     }
                 }
             })

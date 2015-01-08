@@ -38,7 +38,7 @@ angular.module('restModule', ['baseModel', 'user'])
                     'delete': 'delete',
                     'get': 'get',
                     'update': 'update',
-                    'getMany': 'getAllUsers',
+                    'getAll': 'getAllUsers',
                     'logout': 'logout'
                 },
                 'survey': {
@@ -214,6 +214,11 @@ angular.module('restModule', ['baseModel', 'user'])
                 var url = getUrlFor(User, null, 'logout');
                 return callHttp('POST')(url);
             };
+
+            restService.getAllUsers = function() {
+                var url = getUrlFor(User, null, 'getAll');
+                return callHttp('GET')(url);
+            }
 
             /**
              * Gets a collection of objects of the specified model class by calling the REST service.

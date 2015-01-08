@@ -10,9 +10,9 @@ angular.module('myApp')
      * @class cockpitCtrl
      */
     .controller('cockpitCtrl', ['$location', '$log', '$scope', 'Invite', 'invitesPromise', 'Model', 'restService',
-        'surveysPromise',
+        'surveysPromise', 'Survey',
         function($location, $log, $scope, Invite, invitesPromise, Model, restService,
-            surveysPromise) {
+            surveysPromise, Survey) {
 
             'use strict';
 

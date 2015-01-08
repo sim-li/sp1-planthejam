@@ -44,6 +44,7 @@ public class ReUserService extends RestService {
 				final LgUser o_user;
 				try {
 					o_user = getSession().login(i_user);
+					System.out.println("-----------------------------------------------------------------------");
 					setUserName(request, i_user.getName());
 				} catch (Exception ex) {
 					throw create(RestLoginUserFailure.class, ex, i_user.getName());
@@ -211,7 +212,7 @@ public class ReUserService extends RestService {
 	 * @exception RestGetAllUsersFailure if it was not possible to get list of users.
 	 */
 	@Path("getAllUsers")
-	@POST
+	@GET
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public List<LgUser> getAllUsers(@Context final HttpServletRequest request) {
@@ -221,6 +222,7 @@ public class ReUserService extends RestService {
 				final List<LgUser> result;
 				try {
 					result = getSession().getAllUsers();
+					System.out.println("-----------------------------------------------------------------------");
 				} catch (Exception ex) {
 					throw create(RestGetAllUsersFailure.class, ex);
 				}

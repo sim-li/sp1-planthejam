@@ -21,7 +21,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-@Ignore
+//@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
@@ -54,13 +54,14 @@ public class LgGroupTest {
 		session.register(pit);
 		session.getApplication().endTransaction(true);	
 	}
-	
+
 	public LgSession start(){
 		LgSession session = new LgSession();
 		session.getApplication().beginTransaction();
 		return session;
 	}
 	
+	@Ignore
 	@Test
 	public void test1SaveGroup(){
 		final LgSession session = start();
