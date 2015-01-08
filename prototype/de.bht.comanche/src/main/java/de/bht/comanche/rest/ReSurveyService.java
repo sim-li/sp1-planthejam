@@ -40,6 +40,26 @@ public class ReSurveyService {
 	}
 	
 	@GET
+	@Path("/{oid}/invites")
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgSurvey getInvitesFor(@PathParam("oid") final long surveyOid, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgSurvey>(request) {
+			@Override
+			public LgSurvey execute() throws Exception {
+				final LgSurvey result;
+				try {
+					result = startSession().getSurvey(surveyOid);
+//							.getInvites();//TODO change and implement the method
+				} catch (Exception ex) {
+					throw create(TempFailure.class, ex);//TODO change and implement the failure
+				}
+				return result;
+			}
+		}.getResult();
+	}
+	
+	@GET
 	@Path("/")
 	@Consumes("application/json")
 	@Produces({ "application/json" })

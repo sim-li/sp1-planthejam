@@ -1,3 +1,12 @@
+---------TimePeriods-----
+
+user/periods
+
+surveys/:oid/periods
+
+invites/:oid/periods
+
+
 //------- HOST -------
 
 
@@ -19,18 +28,17 @@ var survey = {
 
 //rest/surveys/:surveyOid/invites
 // ==> from Server:
-var survey = {
-    oid: 345,
-    name: ...,
-    description: ...,
-    ...,
-    invites: [{
-        oid: 123,
-        isHost: false,
+var invites: [{
+        oid: 1,
+        isHost: true,<-----!!!
         isIgnored...,
         ...
-    }, ...]
-}
+    }, 
+		oid: 3,
+        isHost: false,<----!!!
+        isIgnored...,
+        ...
+    },...]
 
 
 // get()
