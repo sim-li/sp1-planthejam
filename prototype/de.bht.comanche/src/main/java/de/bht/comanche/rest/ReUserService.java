@@ -44,7 +44,6 @@ public class ReUserService extends RestService {
 				final LgUser o_user;
 				try {
 					o_user = getSession().login(i_user);
-					System.out.println("-----------------------------------------------------------------------");
 					setUserName(request, i_user.getName());
 				} catch (Exception ex) {
 					throw create(RestLoginUserFailure.class, ex, i_user.getName());
@@ -222,8 +221,7 @@ public class ReUserService extends RestService {
 				final List<LgUser> result;
 				try {
 					result = getSession().getAllUsers();
-					System.out.println("-----------------------------------------------------------------------");
-				} catch (Exception ex) {
+					} catch (Exception ex) {
 					throw create(RestGetAllUsersFailure.class, ex);
 				}
 				return result;
