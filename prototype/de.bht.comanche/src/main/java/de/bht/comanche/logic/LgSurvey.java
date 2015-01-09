@@ -44,7 +44,7 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Survey's frequency distance
 	 */
-	private int frequencyDist;
+	private LgRepetition frequency;
 
 	/**
 	 * Survey's deadline. Type: Date
@@ -103,7 +103,7 @@ public class LgSurvey extends DaObject {
 		invite.setIgnored(false);
 		invite.setSurvey(this);
 		invite.setUser(user);
-		attach(invite).save();
+		saveUnattached(invite);
 	}
 	
 	/**
@@ -114,7 +114,7 @@ public class LgSurvey extends DaObject {
 	public void updateWith(final LgSurvey other) {
 		this.name = other.name;
 		this.description = other.description;
-		this.frequencyDist = other.frequencyDist;
+//		this.frequency = other.frequency;
 		this.deadline = other.deadline;
 		this.type = other.type;
 		this.frequencyTimeUnit = other.frequencyTimeUnit;
@@ -147,14 +147,14 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 
-	public int getFrequencyDist() {
-		return this.frequencyDist;
-	}
+//	public Repetition getFrequencyDist() {
+//		return this.frequency;
+//	}
 
-	public LgSurvey setFrequencyDist(final int frequencyDist) {
-		this.frequencyDist = frequencyDist;
-		return this;
-	}
+//	public LgSurvey setFrequencyDist(final Repetition frequencyDist) {
+//		this.frequency = frequencyDist;
+//		return this;
+//	}
 
 	public Date getDeadline() {
 		return this.deadline;
@@ -206,8 +206,12 @@ public class LgSurvey extends DaObject {
 	public String toString() {
 		return String
 				.format("LgSurvey [name=%s, description=%s, frequencyDist=%s, deadline=%s, type=%s, frequencyTimeUnit=%s, invites=%s, possibleTimePeriods=%s, oid=%s, pool=%s]",
-						name, description, frequencyDist, deadline, type,
-						frequencyTimeUnit, invites, possibleTimePeriods, oid,
+						name, description, 
+//						frequency, 
+						deadline, type,
+						frequencyTimeUnit, invites, 
+						possibleTimePeriods, 
+						oid,
 						pool);
 	}
 }

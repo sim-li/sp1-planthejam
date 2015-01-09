@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -129,8 +130,8 @@ public class ReUserService extends RestService {
 	 * @return The LgUser object - current user.
 	 * @exception RestGetUserFailure if it was not possible to get current user.
 	 */
-	@Path("get")
-	@POST
+	@Path("/")
+	@GET
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgUser get(@Context final HttpServletRequest request) {
@@ -210,7 +211,7 @@ public class ReUserService extends RestService {
 	 * @exception RestGetAllUsersFailure if it was not possible to get list of users.
 	 */
 	@Path("getAllUsers")
-	@POST
+	@GET
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public List<LgUser> getAllUsers(@Context final HttpServletRequest request) {
@@ -220,7 +221,7 @@ public class ReUserService extends RestService {
 				final List<LgUser> result;
 				try {
 					result = getSession().getAllUsers();
-				} catch (Exception ex) {
+					} catch (Exception ex) {
 					throw create(RestGetAllUsersFailure.class, ex);
 				}
 				return result;

@@ -61,6 +61,7 @@ public class LgUser extends DaObject {
 	/**
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of general user's availablity. 
 	 */
+	@JsonIgnore
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<LgTimePeriod> timePeriods;
 	
@@ -74,15 +75,13 @@ public class LgUser extends DaObject {
 	}
 	
 	public void saveSurveyAsHost(final LgSurvey survey) {
-		
 		final LgInvite invite = new LgInvite();
-		final LgSurvey attachedSurvey = attach(survey);
-		attachedSurvey.save();
-		
-		invite.setHost(true);
-		invite.setIgnored(false);
-		invite.setSurvey(attachedSurvey);
-		attach(invite).save();
+		final LgSurvey savedSurvey = saveUnattached(survey); //Saving 
+		invite.setHost(true)
+			.setIgnored(false)
+			.setSurvey(savedSurvey)
+			.setUser(this);	// COVER IN TEST: Was user set?
+		this.updateInvite(invite);
 	}
 	
 	public LgInvite getInviteBySurveyName(final String name) {
@@ -106,14 +105,30 @@ public class LgUser extends DaObject {
 		//@TODO Throw Multex Exception
 	}
 	
+
 	/**
 	 * Save Invite for current user.
 	 * @param invite The LgInvite to save.
 	 * @return The saved LgInvite.
 	 */
-	public LgInvite save(final LgInvite invite) {
+	public LgInvite updateInvite(final LgInvite invite) {
         invite.setUser(this);
-		return attach(invite).save();
+//        	->
+//        		attach(invite); // -> to setPool?
+//        		invite.save();
+//        		
+//        invite
+//        	->
+//        		overwrite save:
+//        			public LgInvite save() {
+//        	//check condition
+//        	//check condition
+//        			super.save();
+//        			}
+//        // FORCE check condition, gets called in super save()
+//        }
+//        }
+		return saveUnattached(invite);
 	}
 	/**
 	 * Complete deleting of a user accout.
@@ -136,7 +151,7 @@ public class LgUser extends DaObject {
 	 */
 	public LgGroup save(final LgGroup group) {
 		group.setUser(this).setForMember(group);
-		return attach(group).save();
+		return saveUnattached(group);
 	}
 	
 	/**
@@ -154,15 +169,6 @@ public class LgUser extends DaObject {
 	 */
 	public LgGroup getGroup(final long groupOid) {
 		return search(getGroups(), groupOid);
-	}
-	
-	/**
-	 * Save LgMember for current user.
-	 * @param member The LgMember to save.
-	 * @return The saved LgMember.
-	 */
-	public LgMember save(final LgMember member) {
-		return attach(member).save();
 	}
 	
 	/**
@@ -187,32 +193,26 @@ public class LgUser extends DaObject {
 		return this.password.equals(user.getPassword());
 	}
 	
+	
 	/**
-	 * Returns LgInvite by provided oid.
-	 * @param inviteOid The LgInvite oid.
-	 * @return The found LgInvite.
+	 * @author Simon Lischka: Commented this out, return type was conflicting
 	 */
-	public LgInvite getInvite(final long inviteOid) {
-		return search(this.invites, inviteOid);
-	}
-	
 	//TODO improve it
-	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
-		invite.setTimePeriod(invite);
-		return attach(invite).save();
-	}
+//	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
+//		invite.setTimePeriod(invite);
+//		return saveUnattached(invite);
+//	}
 	
-	//for DB test only
-	public <E extends DaObject> E saveObj(final E other) {
-		return attach(other).save();
-	}
-	
-	//TODO
+	/**
+	 * Set current user for incoming list of time periods
+	 * @param periods The list of time periods
+	 * @return The 
+	 */
 	public List<LgTimePeriod> setTPforUser(List<LgTimePeriod> periods){
-//			for (final LgTimePeriod timePeriod : timePeriods.) {
-//				timePeriods.setUser(this);
-//			}
-			return null;
+			for (final LgTimePeriod timePeriod : this.timePeriods) {
+				timePeriod.setUser(this);
+			}
+			return periods;
 	}
 	
 	/**
@@ -221,8 +221,7 @@ public class LgUser extends DaObject {
 	 */
 	public List<LgTimePeriod> getTimePeriods() {
 		return this.timePeriods;
-	}
-	
+	}	
 	
 	/**
 	 * Remove invite object from the list of invites.
@@ -240,6 +239,49 @@ public class LgUser extends DaObject {
 		this.groups.remove(group);
 	}
 	
+	//------------------METHODS FOR REST SERVICE-------
+	
+	public LgSurvey getSurvey(final long oid){
+		return null;
+	}
+	
+	public List<LgSurvey> getSurveys(){
+		return null;
+	}
+	
+	public LgSurvey saveSurvey(final LgSurvey survey){
+		return null;
+	}
+	
+	public LgSurvey updateSurvey(final long oid, LgSurvey survey){
+		return null;
+	}
+	public void deleteSurvey(final long oid){
+		
+	}
+	
+	@JsonIgnore
+	public List<LgInvite> getInvites() {
+		return this.invites;
+	}
+	
+	/**
+	 * Returns LgInvite by provided oid.
+	 * @param inviteOid The LgInvite oid.
+	 * @return The found LgInvite.
+	 */
+	public LgInvite getInvite(final long oid) {
+		return search(this.invites, oid);
+	}
+	
+	public LgInvite saveInvite(final LgInvite invite){
+		return null;
+	}
+	public LgInvite updateInvite(final long oid, LgInvite invite){
+		return null;
+	}
+	
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -247,10 +289,7 @@ public class LgUser extends DaObject {
 	 * --------------------------------------------------------------------------------------------
 	 */
 
-	@JsonIgnore
-	public List<LgInvite> getInvites() {
-		return this.invites;
-	}
+	
 	
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
