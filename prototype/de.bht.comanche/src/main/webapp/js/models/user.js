@@ -32,6 +32,7 @@ angular.module('user', [])
             this.password = config.password || '';
             this.email = config.email || '';
             this.tel = config.tel || '';
+            this.iconurl = config.iconurl || '';
             // this.invites = [];
             // this.groups = [];
         };
