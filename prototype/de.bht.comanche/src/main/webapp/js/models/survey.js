@@ -41,10 +41,12 @@ angular.module('survey', ['constants', 'datePickerDate'])
             this.frequencyDist = config.frequencyDist || 0;
             this.frequencyTimeUnit = TimeUnit[config.frequencyTimeUnit] || TimeUnit.WEEK;
             this.possibleTimeperiods = config.possibleTimeperiods || [];
-            this.determinedTimeperiod = config.determinedTimeperiod || {
-                'startTime': new DatePickerDate(),
-                'durationInMins': 0
-            };
+            this.determinedTimeperiod = config.determinedTimeperiod
+                /*|| {
+                               'startTime': new DatePickerDate(),
+                               'durationInMins': 0
+                           }*/
+            ;
             this.invites = config.invites || []; // the invites have to be imported seperately
         };
 
@@ -156,6 +158,42 @@ angular.module('survey', ['constants', 'datePickerDate'])
         // };
         //
         //  <--
+
+        var randomChar = function() {
+            return String.fromCharCode('a'.charCodeAt(0) + Math.round(Math.random() * 25));
+        };
+
+        var randomString = function(len) {
+            var str = '';
+            while (len--) {
+                str += randomChar();
+            }
+            return str;
+        };
+
+        Survey.getDummy = function() {
+            return new Survey({
+                oid: Math.round(Math.random() * 100),
+                name: randomString(5 + Math.round(Math.random() * 15)),
+                description: randomString(10 + Math.round(Math.random() * 30)),
+                type: Type.options_[Math.round(Math.random() * (Type.options_.length - 1))],
+                deadline: new DatePickerDate(new Date()),
+                // frequency: new Repetition(...),
+                frequencyDist: 1 + Math.round(Math.random() * 30),
+                frequencyTimeUnit: TimeUnit.options_[Math.round(Math.random() * (TimeUnit.options_.length - 1))],
+                possibleTimeperiods: [],
+                determinedTimeperiod: null
+            });
+        };
+
+        Survey.getDummies = function(num) {
+            var dummies = [];
+            for (var i = 0; i < num; i++) {
+                var dummy = Survey.getDummy();
+                dummies.push(dummy);
+            }
+            return dummies;
+        };
 
         return (Survey);
     }]);

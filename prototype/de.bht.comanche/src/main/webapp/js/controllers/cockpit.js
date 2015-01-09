@@ -18,7 +18,8 @@ angular.module('myApp')
 
             // resolve the promises passed to this route
             $scope.invites = Model.importMany(Invite, invitesPromise);
-            $scope.surveys = Model.importMany(Survey, surveysPromise);
+            // $scope.surveys = Model.importMany(Survey, surveysPromise);
+            $scope.surveys = Survey.getDummies(3);
 
             // preselects the first survey and invite in the list
             $scope.selectedInvite = $scope.invites[0];

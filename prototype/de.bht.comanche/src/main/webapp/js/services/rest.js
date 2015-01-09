@@ -138,7 +138,7 @@ angular.module('restModule', ['baseModel', 'user'])
             };
 
             /**
-             * Calls the login REST service for the specified user.
+             * Does a login for the specified user.
              *
              * @method login
              * @param  {Object}  user the user to be logged in
@@ -154,7 +154,7 @@ angular.module('restModule', ['baseModel', 'user'])
             };
 
             /**
-             * Calls the register REST service for the specified user.
+             * Registers the specified user.
              *
              * @method register
              * @param  {Object}  user the user to be registered
@@ -172,7 +172,7 @@ angular.module('restModule', ['baseModel', 'user'])
             };
 
             /**
-             * Calls the delete REST service for the specified user.
+             * Deletes the specified user.
              *
              * @method deleteUser
              * @param  {Object}  user the user to be deleted
@@ -187,7 +187,7 @@ angular.module('restModule', ['baseModel', 'user'])
             // };
 
             /**
-             * Calls the update REST service for the specified user.
+             * Updates the specified user.
              *
              * @method updateUser
              * @param  {Object}  user the user to be updated
@@ -206,7 +206,7 @@ angular.module('restModule', ['baseModel', 'user'])
             };
 
             /**
-             * Calls the logout REST service.
+             * Does a logout for the user that is currently logged-in.
              *
              * @method logout
              */
@@ -215,6 +215,12 @@ angular.module('restModule', ['baseModel', 'user'])
                 return callHttp('POST')(url);
             };
 
+            /**
+             * Gets all users.
+             *
+             * @method getAllUsers
+             * @return {Promise} a promise to an array of all users
+             */
             restService.getAllUsers = function() {
                 var url = getUrlFor(User, null, 'getAll');
                 return callHttp('GET')(url);
