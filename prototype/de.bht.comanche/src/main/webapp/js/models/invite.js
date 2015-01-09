@@ -132,9 +132,10 @@ angular.module('invite', ['survey', 'user', 'util'])
 
         Invite.exportMany = function(invitesToExport) {
             var invites = [];
-            return arrayUtil.forEach(invitesToExport, function(ele) {
+            arrayUtil.forEach(invitesToExport, function(ele) {
                 invites.push(ele.doExport());
             });
+            return invites;
         };
 
         // Invite.exportMany = function(invitesToExport) {

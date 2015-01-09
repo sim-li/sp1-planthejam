@@ -27,7 +27,7 @@
  * @author Duc Tung Tong
  */
 angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
-        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util'
+        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util', 'ui.calendar',
     ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
@@ -77,6 +77,9 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                     usersPromise: function(restService) {
                         return restService.getAllUsers();
                     }
+                    //, timePeriodPromise: function(restService, timePeriod) {
+                    //     return restService.doGetMany(timePeriod);
+                    // }
                 }
             })
             .when('/account', {

@@ -37,16 +37,16 @@ angular.module('survey', ['constants', 'datePickerDate'])
             this.name = config.name || '';
             this.description = config.description || '';
             this.type = config.type || Type.ONE_TIME;
-            this.deadline = new DatePickerDate(config.deadline) || new DatePickerDate(new Date());
+            this.deadline = new Date(config.deadline) || new Date();
+            // this.deadline = new DatePickerDate(config.deadline) || new DatePickerDate(new Date());
             this.frequencyDist = config.frequencyDist || 0;
             this.frequencyTimeUnit = TimeUnit[config.frequencyTimeUnit] || TimeUnit.WEEK;
             this.possibleTimeperiods = config.possibleTimeperiods || [];
-            this.determinedTimeperiod = config.determinedTimeperiod
-                /*|| {
-                               'startTime': new DatePickerDate(),
-                               'durationInMins': 0
-                           }*/
-            ;
+            this.determinedTimeperiod = config.determinedTimeperiod;
+            // this.determinedTimeperiod = config.determinedTimeperiod || {
+            // 'startTime': new Date(),
+            // 'durationInMins': 0
+            // };
             this.invites = config.invites || []; // the invites have to be imported seperately
         };
 
@@ -72,12 +72,12 @@ angular.module('survey', ['constants', 'datePickerDate'])
                 'name': this.name,
                 'description': this.description,
                 'type': this.type,
-                'deadline': this.deadline.toDate(),
+                'deadline': this.deadline,
                 'frequencyDist': this.frequencyDist,
                 'frequencyTimeUnit': this.frequencyTimeUnit,
                 // 'possibleTimeperiods': this.possibleTimeperiods,
                 // 'determinedTimeperiod': this.determinedTimeperiod,
-                'invites': Invite.exportMany(this.invites)
+                // 'invites': Invite.exportMany(this.invites) // FIXME <<=======================================================
             };
         };
 

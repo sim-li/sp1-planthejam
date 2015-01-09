@@ -54,9 +54,10 @@ angular.module('baseModel', ['util'])
             }
             // console.log('importing many ' + ModelClass.prototype.modelId + 's');
             var models = [];
-            return arrayUtil.forEach(rawModels, function(rawModel) {
+            arrayUtil.forEach(rawModels, function(rawModel) {
                 models.push(new ModelClass(rawModel));
             });
+            return models;
         };
 
         // Model.importMany = function(ModelClass, rawModels) {

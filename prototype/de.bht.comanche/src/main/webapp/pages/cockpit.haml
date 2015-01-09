@@ -14,7 +14,11 @@
             %li
               %a{"data-toggle" => "tab", :href => "#inviteTab", "onclick" => "return false;"}
                 Invite
-                %span.badge {{invites.length}}
+                %span.badge {{(invites | filter: {ignored : false}).length}}
+            %li
+              %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "onclick" => "return false;"}
+                ignored
+                %span.badge {{(invites | filter: {ignored : true}).length}}
           .tab-content
             #surveyTab.tab-pane.active
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
@@ -28,10 +32,12 @@
                 .btn-group
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnored(false)"} accept
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnored(true)"} ignore
-                / %button.btn.btn-success.btn-sm.col-sm-offset-1{"ng-click" => "setSelectedInviteIgnored(false)"} accept
-                / %button.btn.btn-danger.btn-sm{"ng-click" => "setSelectedInviteIgnored(true)"} ignore
-                / %button.btn.btn-success.btn-sm.col-sm-offset-4{"ng-click" => "invite.setIgnored(false)"} accept
-                / %button.btn.btn-danger.btn-sm{"ng-click" => "invite.setIgnored(true)"} ignore
+            #ignoredInviteTab.tab-pane
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+              #surveyList.list-group
+              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: searchString "}
+                .col-sm-9 {{invite.survey.name}}
+                %label.btn.btn-primary.btn-sm{"btn-radio" => "'reaccept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnored(false)"} reaccept
         / %div DEBUG selected: {{ selectedInvite }}
       .col-md-8
         / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
@@ -43,6 +49,7 @@
           .panel-body
             %label{:for => "selectedSurveyDescription"} Description:
             %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
+            %div Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}
             %label{:for => "selectedSurveyDescription"} Status:
             %div#selectedSurveyStatus{} wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}
             / %label{:for => "selectedSurveyDescription"} Deadline:
