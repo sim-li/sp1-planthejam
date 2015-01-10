@@ -103,7 +103,8 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
     .directive('ptjGroups', function() {
         return {
             restrict: 'E',
-            templateUrl: 'partials/invite/groups.html'
+            templateUrl: 'partials/invite/groups.html',
+            controller: 'groupsCtrl'
         };
     })
     .directive('ptjSearch', function() {
