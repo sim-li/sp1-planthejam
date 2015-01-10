@@ -58,44 +58,9 @@ angular.module('myApp')
             $scope.removeTimePeriod = function(index) {
                 $scope.dummyTimePeriods.splice($scope.dummyTimePeriods.indexOf($scope.selectedTimePeriod), 1);
             };
-            // $scope.selectedTimePeriod = $scope.selectedInvite.survey.possibleTimeperiods[0] || {
-            //     'startTime': new Date(),
-            //     'duration': '0'
-            // };
 
-            // $scope.selectTimePeriod = function(timeperiod) {
-            //     $scope.selectedTimePeriod = timeperiod;
-            // };
+            //============== TimePeriod =============//
 
-            // $scope.addNewTimePeriod = function() {
-            //     $scope.selectedInvite.survey.possibleTimeperiods.push({
-            //         'startTime': $scope.selectedTimePeriod.startTime,
-            //         'duration': $scope.selectedTimePeriod.duration
-            //     });
-            // };
-
-            // $scope.removeTimePeriod = function(index) {
-            //     $scope.selectedInvite.survey.possibleTimeperiods.splice($scope.selectedInvite.survey.possibleTimeperiods.indexOf($scope.selectedTimePeriod), 1);
-            // };
-
-            //============== calendar =============//
-            $scope.uiConfig = {
-                calendar: {
-                    height: 450,
-                    editable: true,
-                    header: {
-                        left: 'month basicWeek basicDay agendaWeek agendaDay',
-                        center: 'title',
-                        right: 'today prev,next'
-                    },
-                    // dayClick: $scope.alertEventOnClick,
-                    // eventDrop: $scope.alertOnDrop,
-                    // eventResize: $scope.alertOnResize
-                }
-            };
-
-
-            //============== calendar =============//
             // for now: some dummy users
             // $scope.users = [{
             //     name: 'Blackjack',
@@ -416,5 +381,6 @@ angular.module('myApp')
             $scope.toggleMin();
             selectFirstOrDefaultGroup();
             // $scope.selectGroup($scope.editedGroupName);
+
         }
     ]);
