@@ -9,11 +9,6 @@ angular.module('myApp')
 
             $scope.isCollapsed = true;
 
-            var collapseSwitcher = new uiHelpers.StateSwitcher({
-                'condition': function() {
-                    return $scope.addedUsers.length > 0;
-                }
-            }).bindTo($scope.isCollapsed);
 
             arrayOperations.test('Hello');
 

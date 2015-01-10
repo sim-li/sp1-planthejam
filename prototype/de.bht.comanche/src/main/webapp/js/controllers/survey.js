@@ -17,38 +17,32 @@ angular.module('myApp')
             groupsPromise, Invite, invitesPromise, Member, Model, restService, selectedInvitePromise,
             Survey, TimePeriod, TimeUnit, Type, User, usersPromise) {
 
+            /**
+             * Retrieves all data loaded by the REST-service on page load.
+             * $scope vars for directives and their controllers should be declared here
+             * to be included in the REST operations for this page.
+             */
             'use strict';
-
             (function resolvePromises() {
                 $scope.selectedInvite = selectedInvitePromise ?
                     new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
                 $scope.invites = Model.importMany(Invite, invitesPromise);
                 $scope.groups = Model.importMany(Group, groupsPromise);
                 $scope.users = Model.importMany(User, usersPromise);
+                // No connection to REST jet (widget will probably be discarded)
+                $scope.timePeriods = TimePeriod.dummyTimePeriods();
             })();
 
+            /**
+             * Create simple variables needed to store UI states for components
+             * that aren't refacotered to directives.
+             *
+             */
+            (function createSimpleUIStateVariables() {
+                $scope.repeatedly = false;
+                $scope.showLiveButton = true;
+            })();
 
-            //============== TimePeriod =============//
-            $scope.dummyTimePeriods = TimePeriod.dummyTimePeriods();
-            $scope.selectedTimePeriod = $scope.dummyTimePeriods[0] || {
-                'startTime': new Date(),
-                'duration': '0'
-            };
-
-            $scope.selectTimePeriod = function(timeperiod) {
-                $scope.selectedTimePeriod = timeperiod;
-            };
-
-            $scope.addNewTimePeriod = function() {
-                $scope.dummyTimePeriods.push({
-                    'startTime': $scope.selectedTimePeriod.startTime,
-                    'duration': $scope.selectedTimePeriod.duration
-                });
-            };
-
-            $scope.removeTimePeriod = function(index) {
-                $scope.dummyTimePeriods.splice($scope.dummyTimePeriods.indexOf($scope.selectedTimePeriod), 1);
-            };
 
             $scope.selectedUser = {
                 name: ''
@@ -57,10 +51,6 @@ angular.module('myApp')
             $scope.memberListIsCollapsed = true;
             $scope.showTrash = true;
             $scope.dt = new Date();
-            $scope.showLiveButton = true;
-            $scope.repeatedly = false;
-            $scope.toOpened = false;
-            $scope.fromOpened = false;
 
             // $scope.$watch('selectedGroup', function() {
             //     // if ($scope.selectedGroupName === $scope.editedGroupName) {

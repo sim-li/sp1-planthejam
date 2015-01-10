@@ -1,4 +1,5 @@
 target/
+node/
 bower_components/
 node_modules/
 apidocs/

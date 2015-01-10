@@ -27,7 +27,7 @@
  * @author Duc Tung Tong
  */
 angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
-        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util', 'ui.calendar',
+        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util', 'ui.calendar'
     ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
@@ -75,11 +75,11 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                         return restService.doGetMany(Group);
                     },
                     usersPromise: function(restService) {
-                        return restService.getAllUsers();
-                    }
-                    //, timePeriodPromise: function(restService, timePeriod) {
-                    //     return restService.doGetMany(timePeriod);
-                    // }
+                            return restService.getAllUsers();
+                        }
+                        //, timePeriodPromise: function(restService, timePeriod) {
+                        //     return restService.doGetMany(timePeriod);
+                        // }
                 }
             })
             .when('/account', {
@@ -122,6 +122,13 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
         return {
             restrict: 'E',
             templateUrl: 'partials/surveyselect.html'
+        };
+    })
+    .directive('ptjTimeperiodSelector', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/timeperiodSelector.html',
+            controller: 'timeperiodSelectorCtrl'
         };
     })
     .run(function(editableOptions /*, typeAugmentations*/ ) {
