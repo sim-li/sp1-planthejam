@@ -12,25 +12,21 @@ angular.module('myApp')
      */
     .controller('surveyCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'currentUserPromise', 'Group',
         'groupsPromise', 'Invite', 'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise',
-        // 'selectedInviteSurveyInvitesPromise', // <<<<<<<<<<<<< TODO
         'Survey', 'TimePeriod', 'TimeUnit', 'Type', 'User', 'usersPromise',
         function($location, $log, $scope, arrayUtil, currentUserPromise, Group,
             groupsPromise, Invite, invitesPromise, Member, Model, restService, selectedInvitePromise,
-            // selectedInviteSurveyInvitesPromise, // <<<<<<<<<<<<< TODO
             Survey, TimePeriod, TimeUnit, Type, User, usersPromise) {
 
             'use strict';
 
-            // resolve the promises passed to this route
-            $scope.selectedInvite = selectedInvitePromise ? new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
-            $scope.selectInvite = function(invite) {
-                $scope.selectedInvite = invite;
-                // $log.debug($scope.selectedInvite);
-            };
-            // $scope.selectedInvite.survey.invites = Model.importMany(Invite, selectedInviteSurveyInvitesPromise); // <<<<<<<<<<<<< TODO
-            $scope.invites = Model.importMany(Invite, invitesPromise);
-            $scope.groups = Model.importMany(Group, groupsPromise);
-            $scope.users = Model.importMany(User, usersPromise);
+            (function resolvePromises() {
+                $scope.selectedInvite = selectedInvitePromise ?
+                    new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
+                $scope.invites = Model.importMany(Invite, invitesPromise);
+                $scope.groups = Model.importMany(Group, groupsPromise);
+                $scope.users = Model.importMany(User, usersPromise);
+            })();
+
 
             //============== TimePeriod =============//
             $scope.dummyTimePeriods = TimePeriod.dummyTimePeriods();
@@ -54,35 +50,6 @@ angular.module('myApp')
                 $scope.dummyTimePeriods.splice($scope.dummyTimePeriods.indexOf($scope.selectedTimePeriod), 1);
             };
 
-            //============== TimePeriod =============//
-
-            // for now: some dummy users
-            // $scope.users = [{
-            //     name: 'Blackjack',
-            //     email: 'bj@gmail.com'
-            // }, {
-            //     name: 'Bob',
-            //     email: 'bob@gmail.com'
-            // }, {
-            //     name: 'Marie',
-            //     email: 'marie@gmail.com'
-            // }, {
-            //     name: 'Sarah',
-            //     email: 'sr@gmail.com'
-            // }, {
-            //     name: 'Simon',
-            //     email: 'sm@gmail.com'
-            // }, {
-            //     name: 'Max',
-            //     email: 'max@gmail.com'
-            // }, {
-            //     name: 'Sebastian',
-            //     email: 'sb@gmail.com'
-            // }];
-
-            // $scope.selectedGroup = $scope.groups[0] || new Group();
-
-            // preselect no user
             $scope.selectedUser = {
                 name: ''
             };
