@@ -28,63 +28,64 @@ angular.module('myApp')
             });
         };
 
-    // // REFACTOR THIS
-    // $scope.isCollapsed = true;
 
-    // // State vars  $scope.isCollapsed = true;
-    // $scope.elementSelected = '';
-    // $scope.addedUsers = [];
+        // // REFACTOR THIS
+        // $scope.isCollapsed = true;
 
-    // var checkIfValidSelection = function() {
-    //     if (!($scope.userSelected && $scope.userSelected.name)) {
-    //         return;
-    //     }
-    // }
+        // // State vars  $scope.isCollapsed = true;
+        // $scope.elementSelected = '';
+        // $scope.addedUsers = [];
 
-    // var checkForDuplicates = function() {
-    //         for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
-    //             if ($scope.addedUsers[i] === $scope.userSelected) {
-    //                 $scope.isCollapsed = false;
-    //                 return;
-    //             }
-    //         }
-    //     }
-    //     // These two have dependencies
-    //     //
-    // var addSelectionToModel = function(modelReference) {
-    //     $scope.addedUsers.push($scope.userSelected);
-    // }
+        // var checkIfValidSelection = function() {
+        //     if (!($scope.userSelected && $scope.userSelected.name)) {
+        //         return;
+        //     }
+        // }
 
-    // $scope.$watch('userSelected', function() {
-    //     checkIfValidSelection();
-    //     checkForDuplicates();
-    //     // addSelectionToModel(modelReference);
-    //     collapseSwitcher.on();
-    // });
+        // var checkForDuplicates = function() {
+        //         for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
+        //             if ($scope.addedUsers[i] === $scope.userSelected) {
+        //                 $scope.isCollapsed = false;
+        //                 return;
+        //             }
+        //         }
+        //     }
+        //     // These two have dependencies
+        //     //
+        // var addSelectionToModel = function(modelReference) {
+        //     $scope.addedUsers.push($scope.userSelected);
+        // }
+
+        // $scope.$watch('userSelected', function() {
+        //     checkIfValidSelection();
+        //     checkForDuplicates();
+        //     // addSelectionToModel(modelReference);
+        //     collapseSwitcher.on();
+        // });
 
 
-    // $scope.removeMember = function(index) {
-    //     $scope.addedUsers.splice(index, 1);
-    //     if ($scope.addedUsers.length <= 0) {
-    //         $scope.isCollapsed = true;
-    //     }
-    // };
+        // $scope.removeMember = function(index) {
+        //     $scope.addedUsers.splice(index, 1);
+        //     if ($scope.addedUsers.length <= 0) {
+        //         $scope.isCollapsed = true;
+        //     }
+        // };
 
-    // $scope.selectGroup = function(groupName) {
-    //     if (groupName === undefined || $scope.groups === undefined) {
-    //         return;
-    //     }
-    //     var group = getGroup(groupName);
-    //     if (group === -1) {
-    //         return;
-    //     }
-    //     $scope.selectedGroupName = group.name;
-    //     $scope.editedGroupName = group.name;
-    //     $scope.addedUsers = [];
-    //     $scope.addedUsers = group.members;
-    //     $scope.showTrash = true;
-    //     // $scope.openDetailPanel();
-    // };
+        // $scope.selectGroup = function(groupName) {
+        //     if (groupName === undefined || $scope.groups === undefined) {
+        //         return;
+        //     }
+        //     var group = getGroup(groupName);
+        //     if (group === -1) {
+        //         return;
+        //     }
+        //     $scope.selectedGroupName = group.name;
+        //     $scope.editedGroupName = group.name;
+        //     $scope.addedUsers = [];
+        //     $scope.addedUsers = group.members;
+        //     $scope.showTrash = true;
+        //     // $scope.openDetailPanel();
+        // };
     }]);
 
 // Please note that $modalInstance represents a modal window (instance) dependency.
