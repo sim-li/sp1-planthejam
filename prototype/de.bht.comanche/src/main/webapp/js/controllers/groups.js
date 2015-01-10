@@ -5,7 +5,6 @@ angular.module('myApp')
         $scope.test = 'My test!';
         $scope.items = ['item1', 'item2', 'item3'];
         $scope.open = function(size) {
-            console.log('OPEN called. ');
             var modalInstance = $modal.open({
                 templateUrl: 'groupsModalContent.html',
                 controller: 'groupsModalCtrl',

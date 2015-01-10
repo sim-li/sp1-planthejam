@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('groupsCtrl', ['$scope', '$log', '$location', 'restService', 'Invite', 'Survey',
-        'Group', 'Type', 'TimeUnit', 'invites', 'groups', 'selectedInvite', 'users', 'uiHelpers', 'arrays',
+    .controller('groupsCtrl', ['$scope', '$log', '$location', 'uiHelpers', 'restService',
+        'Group', 'User', 'arrays',
 
         function($scope, $log, $location, restService, Invite, Survey, Group,
             Type, TimeUnit, invites, groups, selectedInvite, users, uiHelpers, arrays) {

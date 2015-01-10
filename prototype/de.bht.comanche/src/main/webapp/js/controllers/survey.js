@@ -17,12 +17,13 @@ angular.module('myApp')
             groupsPromise, Invite, invitesPromise, Member, Model, restService, selectedInvitePromise,
             Survey, TimePeriod, TimeUnit, Type, User, usersPromise) {
 
+            'use strict';
+
             /**
              * Retrieves all data loaded by the REST-service on page load.
              * $scope vars for directives and their controllers should be declared here
              * to be included in the REST operations for this page.
              */
-            'use strict';
             (function resolvePromises() {
                 $scope.selectedInvite = selectedInvitePromise ?
                     new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
@@ -35,7 +36,7 @@ angular.module('myApp')
 
             /**
              * Create simple variables needed to store UI states for components
-             * that aren't refactored to directives.
+             * that aren't grouped in directives.
              */
             (function createSimpleUIStateVariables() {
                 $scope.repeatedly = false;
