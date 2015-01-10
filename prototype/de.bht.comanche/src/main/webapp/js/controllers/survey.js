@@ -35,14 +35,12 @@ angular.module('myApp')
 
             /**
              * Create simple variables needed to store UI states for components
-             * that aren't refacotered to directives.
-             *
+             * that aren't refactored to directives.
              */
             (function createSimpleUIStateVariables() {
                 $scope.repeatedly = false;
                 $scope.showLiveButton = true;
             })();
-
 
             $scope.selectedUser = {
                 name: ''
