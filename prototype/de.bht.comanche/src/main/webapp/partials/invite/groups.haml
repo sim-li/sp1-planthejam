@@ -55,7 +55,7 @@
     %b To:
   / * Type ahead Search Field
   %input.form-control{"ng-model" => "lastElementSelected", :placeholder => "+ Add user or group",                        |
-   :type => "text", :typeahead => "user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5", |
+   :type => "text", :typeahead => "element as element.name for element in elements | filter: {name:$viewValue} | limitTo: 5", |
    "typeahead-template-url" => "itemTpl.html"}
   / CAUTION: Changed controller for one button event, rest of file uses invite controller
   .input-group-btn

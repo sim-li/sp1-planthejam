@@ -33,16 +33,6 @@ angular.module('myApp')
             };
 
             /**
-             * Retrieves users and groups form promise of
-             * parent controller (using current $scope)
-             */
-            var users, groups;
-            (function resolvePromises() {
-                users = $scope.users;
-                groups = $scope.groups;
-            })(users, groups);
-
-            /**
              * Create simple variables needed to store UI states for components
              * that aren't grouped in directives.
              */
@@ -50,9 +40,10 @@ angular.module('myApp')
                 $scope.panelOpened = false;
             })();
 
-            (function createSimpleModelVariables() {
+            (function createDataModels() {
                 $scope.lastElementSelected = '';
                 $scope.allElementsSelected = [];
+                $scope.elements = $scope.users.concat($scope.groups);
             })();
 
             $scope.$watch('allElementsSelected', function() {
