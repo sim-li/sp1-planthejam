@@ -28,6 +28,9 @@ angular.module('myApp')
                 $scope.selectedInvite = selectedInvitePromise ?
                     new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
                 $scope.invites = Model.importMany(Invite, invitesPromise);
+                // IMPELMENT HERE
+                //$scope.usersOfSurvey...
+
                 $scope.groups = Model.importMany(Group, groupsPromise);
                 $scope.users = Model.importMany(User, usersPromise);
                 // No connection to REST jet (widget will probably be discarded)
@@ -43,6 +46,7 @@ angular.module('myApp')
                 $scope.showLiveButton = true;
             })();
 
+            // NO!!!
             var refreshGroupsAndShowLast = function() {
                 restService.doGetMany(Group)
                     .then(function(success) {
