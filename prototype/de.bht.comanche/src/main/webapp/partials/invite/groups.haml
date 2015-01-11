@@ -66,15 +66,15 @@
     %button.btn.btn-default{"ng-click" => "panelOpener.toggle()", :type => "button"}
       %span.glyphicon.glyphicon-resize-vertical
 / * User pills section
-{{panelOpened}}
-/ {:collapse => "false"}
-%div
+
+/ SET panelOpened var here when state switcher is implemented
+%div{:collapse => "false"}
   .well.well-sm
     .container-fluid
       .btn-group{"ng-repeat" => "element in allElementsSelected"}
         %label.btn.btn-default{:type => "button"}
           %img.pull-left{"ng-src" => "{{element.iconurl}}&s=20", "style" => "padding-right:2px;"}
           %b {{element.name}}
-        %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"}
+        %button.btn.btn-default{:type => "button", "ng-click" => "removeElementFromSelection($index)"}
           %b
           %span.glyphicon.glyphicon-remove

@@ -56,17 +56,15 @@ angular.module('myApp')
             })();
 
             $scope.$watch('allElementsSelected', function() {
-                // TODO: Implement "switch according to condition" in state switcher
-                if ($scope.allElementsSelected <= 0) {
-                    panelOpener.off();
-                }
+                // TRACK CHANGES HERE and OPEN Accordingly
+                // TODO: Implement "switch according to condition in stateswitcher"
             });
 
             $scope.$watch('lastElementSelected', function() {
                 addElementToSelection();
-                console.log('HELLO');
             });
 
+            // CURRENTLY not connected to UI ( collapse flag set to FALSE )
             var panelOpener = new StateSwitcher({
                 switchOnAction: function() {
                     $scope.panelOpened = true;
@@ -75,7 +73,7 @@ angular.module('myApp')
                     $scope.panelOpened = false;
                 },
                 condition: function() {
-                    $scope.allElementsSelected > 0;
+                    return $scope.allElementsSelected > 0;
                 }
             });
 
@@ -83,10 +81,7 @@ angular.module('myApp')
                 if (isNoValidSelection() || isDuplicate()) {
                     return;
                 }
-                console.log('Added that one allright');
                 $scope.allElementsSelected.push($scope.lastElementSelected);
-                console.log('ELs are now ', $scope.allElementsSelected);
-                panelOpener.on();
             }
 
             var isNoValidSelection = function() {

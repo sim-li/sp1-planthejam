@@ -93,9 +93,8 @@
   </div>
 </div>
 <!-- * User pills section -->
-{{panelOpened}}
-<!-- {:collapse => "false"} -->
-<div>
+<!-- SET panelOpened var here when state switcher is implemented -->
+<div collapse='false'>
   <div class='well well-sm'>
     <div class='container-fluid'>
       <div class='btn-group' ng-repeat='element in allElementsSelected'>
@@ -103,7 +102,7 @@
           <img class='pull-left' ng-src='{{element.iconurl}}&amp;s=20' style='padding-right:2px;'>
           <b>{{element.name}}</b>
         </label>
-        <button class='btn btn-default' ng-click='removeMember($index)' type='button'>
+        <button class='btn btn-default' ng-click='removeElementFromSelection($index)' type='button'>
           <b></b>
           <span class='glyphicon glyphicon-remove'></span>
         </button>
