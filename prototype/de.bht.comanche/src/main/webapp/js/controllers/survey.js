@@ -27,10 +27,8 @@ angular.module('myApp')
             (function resolvePromises() {
                 $scope.selectedInvite = selectedInvitePromise ?
                     new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
-                $scope.invites = Model.importMany(Invite, invitesPromise);
-                // IMPELMENT HERE
-                //$scope.usersOfSurvey...
-
+                $scope.usersOfSurvey =
+                    console.log($scope.selectedInvite);
                 $scope.groups = Model.importMany(Group, groupsPromise);
                 $scope.users = Model.importMany(User, usersPromise);
                 // No connection to REST jet (widget will probably be discarded)
