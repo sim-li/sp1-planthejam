@@ -105,6 +105,14 @@ angular.module('invite', ['survey', 'user', 'util'])
             }));
         };
 
+        Invite.prototype.getAllParticipants = function() {
+            var allParticipants = [];
+            arrayUtil.foreach(this.survey.invites, function(invite) {
+                allParticipants.push(invite.user);
+            });
+            return allParticipants;
+        };
+
         /**
          * ...
          *
@@ -130,7 +138,7 @@ angular.module('invite', ['survey', 'user', 'util'])
          */
         Invite.prototype.updateParticipantsFromMixedList = function(mixedList) {
             this.survey.invites = [];
-            arrayUtil.foreach(mixedList, function(element) {
+            arrayUtil.forEach(mixedList, function(element) {
                 switch (element.modelId) {
                     case 'user':
                         addParticipant(element);
@@ -143,6 +151,9 @@ angular.module('invite', ['survey', 'user', 'util'])
                 }
             });
         }
+
+        // TODO Should match users + groups against participants and return mixed list
+        Invite.prototype.getMixedListFromParticipants = function() {}
 
 
         // Invite.prototype.addParticipantsFromGroup = function(group) {

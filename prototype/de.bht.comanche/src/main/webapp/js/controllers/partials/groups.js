@@ -42,22 +42,17 @@ angular.module('myApp')
             (function createDataModels() {
                 $scope.lastElementSelected = '';
                 //IMPL THIS
-                $scope.allElementsSelected = convertToMixedList($scope.usersOfSurvey);
+                $scope.allElementsSelected = [];
                 $scope.elements = $scope.users.concat($scope.groups);
             })();
 
             $scope.$watch('allElementsSelected', function() {
                 // TODO: Implement "switch according to condition in stateswitcher" + add here.
-                refreshUserListOfelectedInvite();
+                refreshUserListOfSelectedInvite();
             });
 
             var refreshUserListOfSelectedInvite = function() {
-                $scope.selectedInvite.addParticipant();
-                $scope.selectedInvite.addParticipantFromGroup();
-            }
-
-            var convertAllToUsers = function() {
-
+                $scope.selectedInvite.updateParticipantsFromMixedList($scope.allElementsSelected);
             }
 
             $scope.$watch('lastElementSelected', function() {
