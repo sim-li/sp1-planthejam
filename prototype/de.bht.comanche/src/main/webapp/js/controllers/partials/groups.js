@@ -4,7 +4,6 @@ angular.module('myApp')
     .controller('groupsCtrl', ['$scope', '$modal', '$log', 'restService', 'StateSwitcher',
         function($scope, $modal, $log, restService, StateSwitcher) {
 
-
             /**
              * Creates a new modal instance and opens it.
              * TODO: Improve doc
@@ -18,10 +17,10 @@ angular.module('myApp')
                     size: 'lg',
                     resolve: {
                         groups: function() {
-                            return groups;
+                            return $scope.groups;
                         },
                         users: function() {
-                            return users;
+                            return $scope.users;
                         }
                     }
                 });
@@ -42,13 +41,16 @@ angular.module('myApp')
 
             (function createDataModels() {
                 $scope.lastElementSelected = '';
-                $scope.allElementsSelected = [];
+                //IMPL THIS
+                $scope.allElementsSelected = convertToMixedList($scope.usersOfSurvey);
                 $scope.elements = $scope.users.concat($scope.groups);
             })();
 
             $scope.$watch('allElementsSelected', function() {
                 // TRACK CHANGES HERE and OPEN Accordingly
                 // TODO: Implement "switch according to condition in stateswitcher"
+                // IMPL THIS
+                $scope.usersOfSurvey = convertToListOfUsers($scope.allElementsSelected);
             });
 
             $scope.$watch('lastElementSelected', function() {
