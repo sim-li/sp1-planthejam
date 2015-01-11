@@ -47,11 +47,18 @@ angular.module('myApp')
             })();
 
             $scope.$watch('allElementsSelected', function() {
-                // TRACK CHANGES HERE and OPEN Accordingly
-                // TODO: Implement "switch according to condition in stateswitcher"
-                // IMPL THIS
-                $scope.usersOfSurvey = convertToListOfUsers($scope.allElementsSelected);
+                // TODO: Implement "switch according to condition in stateswitcher" + add here.
+                refreshUserListOfelectedInvite();
             });
+
+            var refreshUserListOfSelectedInvite = function() {
+                $scope.selectedInvite.addParticipant();
+                $scope.selectedInvite.addParticipantFromGroup();
+            }
+
+            var convertAllToUsers = function() {
+
+            }
 
             $scope.$watch('lastElementSelected', function() {
                 addElementToSelection();

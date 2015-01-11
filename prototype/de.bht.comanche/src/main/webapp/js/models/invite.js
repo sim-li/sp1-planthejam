@@ -121,6 +121,30 @@ angular.module('invite', ['survey', 'user', 'util'])
             });
         };
 
+        /**
+         * Replaces all participants from a list that can contain
+         * users or groups.
+         *
+         * @param  {List} mixedList Mixed list of groups and users
+         * @return {[type]}           [description]
+         */
+        Invite.prototype.updateParticipantsFromMixedList = function(mixedList) {
+            this.survey.invites = [];
+            arrayUtil.foreach(mixedList, function(element) {
+                switch (element.modelId) {
+                    case 'user':
+                        addParticipant(element);
+                        break;
+                    case 'group':
+                        addParticipantsFromGroup(element);
+                        break;
+                    default:
+                        console.log('Faulty element in your collection');
+                }
+            });
+        }
+
+
         // Invite.prototype.addParticipantsFromGroup = function(group) {
         //     if (group.modelId !== 'group') {
         //         return;
