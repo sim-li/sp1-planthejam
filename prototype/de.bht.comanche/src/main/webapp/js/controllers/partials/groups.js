@@ -85,6 +85,7 @@ angular.module('myApp')
                 }
                 console.log('Added that one allright');
                 $scope.allElementsSelected.push($scope.lastElementSelected);
+                console.log('ELs are now ', $scope.allElementsSelected);
                 panelOpener.on();
             }
 

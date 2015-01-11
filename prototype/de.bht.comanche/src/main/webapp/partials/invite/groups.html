@@ -93,11 +93,13 @@
   </div>
 </div>
 <!-- * User pills section -->
-<div collapse='!panelOpened'>
+{{panelOpened}}
+<!-- {:collapse => "false"} -->
+<div>
   <div class='well well-sm'>
     <div class='container-fluid'>
       <div class='btn-group' ng-repeat='element in allElementsSelected'>
-        <label class='btn btn-default' popover-title='{{element.name}}' popover='e-mail: {{user.email}}&#x000A;tel: {{user.tel}}' type='button'>
+        <label class='btn btn-default' type='button'>
           <img class='pull-left' ng-src='{{element.iconurl}}&amp;s=20' style='padding-right:2px;'>
           <b>{{element.name}}</b>
         </label>
