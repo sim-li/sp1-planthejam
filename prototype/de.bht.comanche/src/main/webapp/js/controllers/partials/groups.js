@@ -42,18 +42,9 @@ angular.module('myApp')
             (function createDataModels() {
                 $scope.lastElementSelected = '';
                 //IMPL THIS
-                $scope.allElementsSelected = [];
+                $scope.allElementsSelected = $scope.selectedInvite.getAllParticipants() ||  [];
                 $scope.elements = $scope.users.concat($scope.groups);
             })();
-
-            $scope.$watch('allElementsSelected', function() {
-                // TODO: Implement "switch according to condition in stateswitcher" + add here.
-                refreshUserListOfSelectedInvite();
-            });
-
-            var refreshUserListOfSelectedInvite = function() {
-                $scope.selectedInvite.updateParticipantsFromMixedList($scope.allElementsSelected);
-            }
 
             $scope.$watch('lastElementSelected', function() {
                 addElementToSelection();
@@ -77,6 +68,13 @@ angular.module('myApp')
                     return;
                 }
                 $scope.allElementsSelected.push($scope.lastElementSelected);
+                refreshUserListOfSelectedInvite();
+                // TODO: Implement "switch according to condition in stateswitcher" + add here.
+                console.log('Pushed that bia');
+            }
+
+            var refreshUserListOfSelectedInvite = function() {
+                $scope.selectedInvite.updateParticipantsFromMixedList($scope.allElementsSelected);
             }
 
             var isNoValidSelection = function() {

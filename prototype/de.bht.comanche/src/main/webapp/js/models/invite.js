@@ -34,6 +34,7 @@ angular.module('invite', ['survey', 'user', 'util'])
             this.host = config.host;
             this.user = new User(config.user);
             this.survey = new Survey(config.survey);
+            this.survey.invites = this.survey.invites ||  [];
         };
 
         // Invite.prototype = new Model();
@@ -107,7 +108,10 @@ angular.module('invite', ['survey', 'user', 'util'])
 
         Invite.prototype.getAllParticipants = function() {
             var allParticipants = [];
-            arrayUtil.foreach(this.survey.invites, function(invite) {
+            if (!this.survey.invites) {
+                return;
+            }
+            arrayUtil.forEach(this.survey.invites, function(invite) {
                 allParticipants.push(invite.user);
             });
             return allParticipants;
@@ -138,18 +142,20 @@ angular.module('invite', ['survey', 'user', 'util'])
          */
         Invite.prototype.updateParticipantsFromMixedList = function(mixedList) {
             this.survey.invites = [];
+            var self = this;
             arrayUtil.forEach(mixedList, function(element) {
                 switch (element.modelId) {
                     case 'user':
-                        addParticipant(element);
+                        self.addParticipant(element);
                         break;
                     case 'group':
-                        addParticipantsFromGroup(element);
+                        self.addParticipantsFromGroup(element);
                         break;
                     default:
                         console.log('Faulty element in your collection');
                 }
             });
+            console.log("ALL PARTS", this.getAllParticipants());
         }
 
         // TODO Should match users + groups against participants and return mixed list
