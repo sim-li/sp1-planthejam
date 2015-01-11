@@ -96,10 +96,10 @@
 <div collapse='!panelOpened'>
   <div class='well well-sm'>
     <div class='container-fluid'>
-      <div class='btn-group' ng-repeat='user in addedUsers'>
-        <label class='btn btn-default' popover-title='{{user.name}}' popover='e-mail: {{user.email}}&#x000A;tel: {{user.tel}}' type='button'>
-          <img class='pull-left' ng-src='{{user.iconurl}}&amp;s=20' style='padding-right:2px;'>
-          <b>{{user.name}}</b>
+      <div class='btn-group' ng-repeat='element in allElementsSelected'>
+        <label class='btn btn-default' popover-title='{{element.name}}' popover='e-mail: {{user.email}}&#x000A;tel: {{user.tel}}' type='button'>
+          <img class='pull-left' ng-src='{{element.iconurl}}&amp;s=20' style='padding-right:2px;'>
+          <b>{{element.name}}</b>
         </label>
         <button class='btn btn-default' ng-click='removeMember($index)' type='button'>
           <b></b>

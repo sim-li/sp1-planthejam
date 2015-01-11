@@ -18,7 +18,6 @@ angular.module('myApp')
                     size: 'lg',
                     resolve: {
                         groups: function() {
-                            console.log(groups);
                             return groups;
                         },
                         users: function() {
@@ -58,9 +57,14 @@ angular.module('myApp')
 
             $scope.$watch('allElementsSelected', function() {
                 // TODO: Implement "switch according to condition" in state switcher
-                if (allElementsSelected <= 0) {
+                if ($scope.allElementsSelected <= 0) {
                     panelOpener.off();
                 }
+            });
+
+            $scope.$watch('lastElementSelected', function() {
+                addElementToSelection();
+                console.log('HELLO');
             });
 
             var panelOpener = new StateSwitcher({
@@ -71,32 +75,33 @@ angular.module('myApp')
                     $scope.panelOpened = false;
                 },
                 condition: function() {
-                    allElementsSelected > 0;
+                    $scope.allElementsSelected > 0;
                 }
             });
 
-            var addCurrentElementToSelection = function() {
+            var addElementToSelection = function() {
                 if (isNoValidSelection() || isDuplicate()) {
                     return;
                 }
-                $scope.allElementsSelected.push(lastElementSelected);
+                console.log('Added that one allright');
+                $scope.allElementsSelected.push($scope.lastElementSelected);
                 panelOpener.on();
             }
 
             var isNoValidSelection = function() {
                 if (!($scope.lastElementSelected && $scope.lastElementSelected.name)) {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
 
             var isDuplicate = function() {
-                for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
-                    if ($scope.addedUsers[i] === $scope.userSelected) {
-                        return false;
+                for (var i = 0, len = $scope.allElementsSelected.length; i < len; i++) {
+                    if ($scope.allElementsSelected[i] === $scope.lastElementSelected) {
+                        return true;
                     }
                 }
-                return true;
+                return false;
             }
 
             $scope.removeElementFromSelection = function(index) {

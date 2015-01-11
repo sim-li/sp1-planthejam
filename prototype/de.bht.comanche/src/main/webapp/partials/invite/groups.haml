@@ -69,11 +69,11 @@
 %div{:collapse => "!panelOpened"}
   .well.well-sm
     .container-fluid
-      .btn-group{"ng-repeat" => "user in addedUsers"}
+      .btn-group{"ng-repeat" => "element in allElementsSelected"}
         %label.btn.btn-default{:type => "button", "popover" => "e-mail: {{user.email}}\ntel: {{user.tel}}",         |
-        "popover-title" => "{{user.name}}"}
-          %img.pull-left{"ng-src" => "{{user.iconurl}}&s=20", "style" => "padding-right:2px;"}
-          %b {{user.name}}
+        "popover-title" => "{{element.name}}"}
+          %img.pull-left{"ng-src" => "{{element.iconurl}}&s=20", "style" => "padding-right:2px;"}
+          %b {{element.name}}
         %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"}
           %b
           %span.glyphicon.glyphicon-remove
