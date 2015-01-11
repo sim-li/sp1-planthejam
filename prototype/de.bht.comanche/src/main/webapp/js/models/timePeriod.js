@@ -12,7 +12,7 @@ angular.module('models')
 
 		TimePeriod.prototype.modelId = 'timePeriod';
 
-		TimePeriod.doExport = function() {
+		TimePeriod.prototype.doExport = function() {
 			return {
 				'startTime': this.startTime,
 				'durationMins': this.durationMins

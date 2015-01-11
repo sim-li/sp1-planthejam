@@ -1,20 +1,15 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
   <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
-  <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
   <!-- %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}' -->
   <!-- %div#temporary-debug-output4 groups: '{{ groups }}' -->
   <!-- %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}' -->
   <!-- %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}' -->
-  <!-- QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route -->
   <div class='row'>
     <!-- search & results -->
     <!-- sidebar -->
     <div class='col-md-2'>
       <!-- %ptj-survey-select -->
-      <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites'>
-        {{invite.survey.name}}
-      </a>
     </div>
     <div class='col-md-8'>
       <div class='panel panel-primary'>
@@ -57,7 +52,7 @@
             </div>
           </div>
           <div class='rpw'>
-            <ptj-search></ptj-search>
+            <ptj-groups></ptj-groups>
             <!-- %ptj-members -->
             <div collapse='memberListIsCollapsed' id='ptj-members'>
               <div class='well well-sm'>
@@ -88,34 +83,7 @@
           <!-- <<< DEBUGGING THE GROUPS -->
           <div class='row'>
             <div class='col-lg-5'>
-              <div class='panel-group' id='accordion'></div>
-              <div class='panel panel-info'>
-                <div class='panel-heading'>
-                  <div class='panel-title'>
-                    <a data-parent='#accordion' data-toggle='collapse' href='#collapseOne' onclick='return false;'>
-                      Possible time periods
-                      <span class='col-md-offset-7 glyphicon glyphicon-resize-vertical'></span>
-                    </a>
-                  </div>
-                </div>
-                <div class='panel-collapse collapse in' id='collapseOne'>
-                  <div class='panel-body'>
-                    <tabset type='pills' vertical='true'>
-                      <tab heading="{{timePeriod.startTime | date:'yyyy-MM-dd HH:mm' }} in {{timePeriod.duration}}h" ng-click='selectTimePeriod(timePeriod);' ng-repeat='timePeriod in dummyTimePeriods'></tab>
-                    </tabset>
-                  </div>
-                </div>
-                <div class='panel-footer'>
-                  <div class='col-md-offset-5'>
-                    <button class='btn btn-primary btn-sm' ng-click='addNewTimePeriod()'>
-                      <i class='glyphicon glyphicon-plus'></i>
-                    </button>
-                    <button class='btn btn-primary btn-sm' ng-click='removeTimePeriod()'>
-                      <i class='glyphicon glyphicon-minus'></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <ptj-timeperiod-selector></ptj-timeperiod-selector>
             </div>
             <div class='col-lg-7'>
               <div class='row'>

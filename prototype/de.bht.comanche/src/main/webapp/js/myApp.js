@@ -16,7 +16,9 @@
  * @author Sebastian Dass&eacute;
  * @author Duc Tung Tong
  */
-angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ui.calendar', 'util', 'xeditable'])
+angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap', 'ui.bootstrap.datetimepicker',
+        'ui.calendar', 'uiUtilsModule', 'util', 'xeditable'
+    ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
             .when('/', {
@@ -91,7 +93,8 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
     .directive('ptjGroups', function() {
         return {
             restrict: 'E',
-            templateUrl: 'partials/invite/groups.html'
+            templateUrl: 'partials/invite/groups.html',
+            controller: 'groupsCtrl'
         };
     })
     .directive('ptjSearch', function() {
@@ -112,7 +115,13 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
             templateUrl: 'partials/surveyselect.html'
         };
     })
-    .run(function(editableOptions /*, typeAugmentations*/ ) {
+    .directive('ptjTimeperiodSelector', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/timeperiodSelector.html',
+            controller: 'timeperiodSelectorCtrl'
+        };
+    })
+    .run(function(editableOptions) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-        // typeAugmentations();
     });

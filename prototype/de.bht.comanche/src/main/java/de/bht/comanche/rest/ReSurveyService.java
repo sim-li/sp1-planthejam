@@ -19,7 +19,7 @@ import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
 
 
-@Path("/surveys/")
+@Path("/surveys")
 public class ReSurveyService {
 	
 	@GET

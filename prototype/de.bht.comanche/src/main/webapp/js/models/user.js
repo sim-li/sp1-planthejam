@@ -60,10 +60,10 @@ angular.module('models')
                 'name': this.name,
                 'password': this.password,
                 'email': this.email,
-                'tel': this.tel,
-                /*'invites': this.invites,
-                'groups': this.groups,*/
-                'messages': this.messages
+                'tel': this.tel
+                    /*,'invites': this.invites,
+                    'groups': this.groups*/
+                    //, 'messages': this.messages // FIXME temporarily commented out
             };
         };
 

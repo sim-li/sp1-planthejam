@@ -42,7 +42,7 @@ angular.module('models')
          * @method doExport
          * @return {Object} the exported invite
          */
-        Repetition.doExport = function() {
+        Repetition.prototype.doExport = function() {
             return {
                 'oid': this.oid,
                 'distance': this.distance,

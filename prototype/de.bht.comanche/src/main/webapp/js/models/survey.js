@@ -47,7 +47,7 @@ angular.module('models')
                 this.determinedTimeperiod = config.determinedTimeperiod;
                 this.success = config.success || Status.UNDECIDED;
                 this.algoCheck = config.algoCheck || false;
-                this.invites = config.invites || []; // the invites have to be imported seperately
+                this.invites = config.invites || []; // FIXME the invites have to be imported seperately (right?)
             };
 
             // Survey.prototype = new Model();
@@ -73,14 +73,16 @@ angular.module('models')
                     'description': this.description,
                     'type': this.type,
                     'deadline': this.deadline,
-                    'frequency': this.frequency.doExport(),
+                    // 'frequency': this.frequency.doExport(), // FIXME temporarily commented out
+
                     // 'frequencyDist': this.frequencyDist,
                     // 'frequencyTimeUnit': this.frequencyTimeUnit,
 
-                    // 'possibleTimeperiods': this.possibleTimeperiods,
-                    // 'determinedTimeperiod': this.determinedTimeperiod,
-                    'success': this.success,
-                    'algoCheck': this.algoCheck,
+                    // 'possibleTimeperiods': this.possibleTimeperiods, // FIXME temporarily commented out
+                    // 'determinedTimeperiod': this.determinedTimeperiod, // FIXME temporarily commented out
+
+                    // 'success': this.success, // FIXME temporarily commented out
+                    // 'algoCheck': this.algoCheck, // FIXME temporarily commented out
                     // 'invites': Invite.exportMany(this.invites) // FIXME <<=======================================================
                 };
             };
@@ -180,11 +182,11 @@ angular.module('models')
                     oid: Math.round(Math.random() * 100),
                     name: randomString(5 + Math.round(Math.random() * 15)),
                     description: randomString(10 + Math.round(Math.random() * 30)),
-                    type: SurveyType.options_[Math.round(Math.random() * (SurveyType.options_.length - 1))],
+                    type: SurveyType._options[Math.round(Math.random() * (SurveyType._options.length - 1))],
                     deadline: new DatePickerDate(new Date()),
                     // frequency: new Repetition(...),
                     frequencyDist: 1 + Math.round(Math.random() * 30),
-                    frequencyTimeUnit: TimeUnit.options_[Math.round(Math.random() * (TimeUnit.options_.length - 1))],
+                    frequencyTimeUnit: TimeUnit._options[Math.round(Math.random() * (TimeUnit._options.length - 1))],
                     possibleTimeperiods: [],
                     determinedTimeperiod: null
                 });

@@ -1,19 +1,15 @@
 %ptj-menu
 .container
   / %div#temporary-debug-output1 users: '{{ users }}'
-  / %div#temporary-debug-output2 invites: '{{ invites }}'
   / %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}'
   / %div#temporary-debug-output4 groups: '{{ groups }}'
   / %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}'
   / %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}'
-  /  QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route
   .row
     / search & results
     / sidebar
     .col-md-2
       / %ptj-survey-select
-      %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites"}
-        {{invite.survey.name}}
     .col-md-8
       .panel.panel-primary
         .panel-heading Create new Event
@@ -42,7 +38,7 @@
                   Staged
                   %span.glyphicon.glyphicon-off
           .rpw
-            %ptj-search
+            %ptj-groups
             / %ptj-members
 
             %div#ptj-members{:collapse => "memberListIsCollapsed"}
@@ -66,23 +62,7 @@
           / <<< DEBUGGING THE GROUPS
           .row
             .col-lg-5
-              #accordion.panel-group
-              .panel.panel-info
-                .panel-heading
-                  .panel-title
-                    %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne", :onclick => "return false;"}
-                      Possible time periods
-                      %span.col-md-offset-7.glyphicon.glyphicon-resize-vertical
-                #collapseOne.panel-collapse.collapse.in
-                  .panel-body
-                    %tabset{:type => "pills", :vertical => "true"}
-                      %tab{:heading => "{{timePeriod.startTime | date:'yyyy-MM-dd HH:mm' }} in {{timePeriod.duration}}h", "ng-repeat" => "timePeriod in dummyTimePeriods", "ng-click" => "selectTimePeriod(timePeriod);"}
-                .panel-footer
-                  .col-md-offset-5
-                    %button.btn.btn-primary.btn-sm{"ng-click" => "addNewTimePeriod()"}
-                      %i.glyphicon.glyphicon-plus
-                    %button.btn.btn-primary.btn-sm{"ng-click" => "removeTimePeriod()"}
-                      %i.glyphicon.glyphicon-minus
+              %ptj-timeperiod-selector
             .col-lg-7
               .row
                 .col-lg-2

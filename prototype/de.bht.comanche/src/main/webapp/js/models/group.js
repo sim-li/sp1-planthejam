@@ -27,6 +27,7 @@ angular.module('models')
             this.name = config.name || 'Your new group';
             // this.members = config.members || []; // e.g.: [{oid: 1, name: 'Alice'}, {oid: 2, name: 'Bob'}, {oid: 3, name: 'Carla'}]
             this.members = config.members ? Model.importMany(Member, config.members) : [];
+            this.iconurl = config.iconurl || '';
         };
 
         // Group.prototype = new Model();

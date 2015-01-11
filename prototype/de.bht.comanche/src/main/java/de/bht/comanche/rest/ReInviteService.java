@@ -26,7 +26,7 @@ import de.bht.comanche.logic.LgTransaction;
  * @author Maxim Novichkov
  *
  */
-@Path("/invites/")
+@Path("/invites")
 public class ReInviteService extends RestService {
 
 	/**
@@ -146,7 +146,7 @@ public class ReInviteService extends RestService {
 //	 * @param request The request information from HTTP service.
 //	 * @exception RestDeleteInviteFailure if it was not possible to delete invite of current user.
 //	 */
-//	@Path("delete")
+//	@Path("/delete")
 //	@DELETE
 //	@Consumes("application/json")
 //	@Produces({ "application/json" })
@@ -178,7 +178,7 @@ public class ReInviteService extends RestService {
 //	 * @exception RestGetInvitesFailure if it was not possible to get list of invites for current user.
 //	 */
 //	@POST
-//	@Path("getSurveyInvites")
+//	@Path("/getSurveyInvites")
 //	@Consumes("application/json")
 //	@Produces({ "application/json" })
 //	public List<LgInvite> getSurveyInvites(final long oid, @Context final HttpServletRequest request) {
