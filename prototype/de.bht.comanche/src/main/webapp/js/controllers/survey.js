@@ -102,7 +102,6 @@ angular.module('myApp')
 
             // TODO rest service to save many groups
             $scope.saveGroups = function() {
-
                 $log.log('Saving all groups');
                 arrayUtil.forEach($scope.groups, function(group) {
                     restService.doSave(group);

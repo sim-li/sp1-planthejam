@@ -3,9 +3,6 @@
 angular.module('myApp')
     .controller('groupsCtrl', ['$scope', '$modal', '$log', 'restService', function($scope, $modal, $log, restService) {
 
-        $scope.test = 'My test!';
-        $scope.items = ['item1', 'item2', 'item3'];
-
         $scope.open = function(size) {
             console.log('Open got called');
             var modalInstance = $modal.open({
@@ -28,6 +25,7 @@ angular.module('myApp')
             });
         };
 
+        // -> UI BEHAVIOUR
 
         // // REFACTOR THIS
         // $scope.isCollapsed = true;
@@ -96,6 +94,7 @@ angular.module('myApp')
         $scope.test = 'My test!';
         $scope.groups = groups;
         $scope.users = users;
+        console.log('GRAV URL', groups);
         $scope.selectedGroup = '';
         $scope.userSelected = '';
 
