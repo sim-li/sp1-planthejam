@@ -55,19 +55,19 @@
   .input-group-addon
     %b To:
   / * Type ahead Search Field
-  %input.form-control{"ng-model" => "userSelected", :placeholder => "+ Add user or group",                        |
+  %input.form-control{"ng-model" => "lastElementSelected", :placeholder => "+ Add user or group",                        |
    :type => "text", :typeahead => "user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5", |
    "typeahead-template-url" => "itemTpl.html"}
   / CAUTION: Changed controller for one button event, rest of file uses invite controller
   .input-group-btn
-    %button.btn.btn-default{"aria-label" => "Left Align", :type => "button", "ng-click" => "open('lg')"}
+    %button.btn.btn-default{"aria-label" => "Left Align", :type => "button", "ng-click" => "openGroupModal()"}
       %span.glyphicon.glyphicon-user{"aria-hidden" => "true"}
       Edit groups
   .input-group-btn
-    %button.btn.btn-default{"ng-click" => "switchDetailPanel()", :type => "button"}
+    %button.btn.btn-default{"ng-click" => "panelOpener.toggle()", :type => "button"}
       %span.glyphicon.glyphicon-resize-vertical
 / * User pills section
-%div{:collapse => "isCollapsed"}
+%div{:collapse => "!panelOpened"}
   .well.well-sm
     .container-fluid
       .btn-group{"ng-repeat" => "user in addedUsers"}

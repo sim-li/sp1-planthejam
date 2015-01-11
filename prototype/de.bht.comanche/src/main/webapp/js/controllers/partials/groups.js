@@ -22,16 +22,62 @@ angular.module('myApp')
                 $scope.panelOpened = false;
             })();
 
+            (function createSimpleModelVariables() {
+                $scope.lastElementSelected = '';
+                $scope.allElementsSelected = [];
+            })();
+
+            var panelOpener = new StateSwitcher({
+                switchOnAction: function() {
+                    addSelectionToModel(modelReference);
+                    $scope.panelOpened = true;
+                    console.log('Got called');
+
+                },
+                switchOffAction: function() {
+                    $scope.panelOpened = false;
+                },
+                condition: function() {
+                    return checkIfValidSelection() && checkForDuplicates();
+                }
+            });
+
+            $scope.$watch('userSelected', function() {
+                panelOpener.toggle();
+            });
+
+
+            var checkIfValidSelection = function() {
+                if (!($scope.userSelected && $scope.userSelected.name)) {
+                    return;
+                }
+            }
+
+            var checkForDuplicates = function() {
+                    for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
+                        if ($scope.addedUsers[i] === $scope.userSelected) {
+                            $scope.isCollapsed = false;
+                            return;
+                        }
+                    }
+                }
+                // These two have dependencies
+                //
+            var addSelectionToModel = function(modelReference) {
+                $scope.addedUsers.push($scope.userSelected);
+            }
+
             /**
-             * Creates a new modal instance
+             * Creates a new modal instance and opens it.
+             * TODO: Improve doc
              * @param  {[type]} size [description]
              * @return {[type]}      [description]
              */
-            $scope.open = function(size) {
+            $scope.openGroupModal = function() {
                 var modalInstance = $modal.open({
                     templateUrl: 'groupsModalContent.html',
                     controller: 'groupsModalCtrl',
-                    size: size,
+                    size: 'lg',
                     resolve: {
                         groups: function() {
                             console.log(groups);
@@ -49,59 +95,7 @@ angular.module('myApp')
                 });
             };
 
-            var test;
-            var panelOpened = new StateSwitcher({
-                switchOnAction: function() {
-                    test = 'ON';
-                    console.log('ON');
-                },
-                switchOffAction: function() {
-                    console.log('OFF');
-                },
-                condition: function() {
-                    return true;
-                }
-            });
 
-            panelOpened.on();
-            panelOpened.off();
-            console.log(test);
-
-            // $scope.$watch('userSelected', function() {
-            //     checkIfValidSelection();
-            //     checkForDuplicates();
-            //     // addSelectionToModel(modelReference);
-            //     collapseSwitcher.on();
-            // });
-
-            // -> UI BEHAVIOUR
-
-            // // REFACTOR THIS
-            // $scope.isCollapsed = true;
-
-            // // State vars  $scope.isCollapsed = true;
-            // $scope.elementSelected = '';
-            // $scope.addedUsers = [];
-
-            // var checkIfValidSelection = function() {
-            //     if (!($scope.userSelected && $scope.userSelected.name)) {
-            //         return;
-            //     }
-            // }
-
-            // var checkForDuplicates = function() {
-            //         for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
-            //             if ($scope.addedUsers[i] === $scope.userSelected) {
-            //                 $scope.isCollapsed = false;
-            //                 return;
-            //             }
-            //         }
-            //     }
-            //     // These two have dependencies
-            //     //
-            // var addSelectionToModel = function(modelReference) {
-            //     $scope.addedUsers.push($scope.userSelected);
-            // }
 
             // $scope.$watch('userSelected', function() {
             //     checkIfValidSelection();

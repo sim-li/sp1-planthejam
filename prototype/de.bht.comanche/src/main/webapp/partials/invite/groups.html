@@ -78,22 +78,22 @@
     <b>To:</b>
   </div>
   <!-- * Type ahead Search Field -->
-  <input class='form-control' ng-model='userSelected' placeholder='+ Add user or group' type='text' typeahead-template-url='itemTpl.html' typeahead='user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5'>
+  <input class='form-control' ng-model='lastElementSelected' placeholder='+ Add user or group' type='text' typeahead-template-url='itemTpl.html' typeahead='user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5'>
   <!-- CAUTION: Changed controller for one button event, rest of file uses invite controller -->
   <div class='input-group-btn'>
-    <button aria-label='Left Align' class='btn btn-default' ng-click="open('lg')" type='button'>
+    <button aria-label='Left Align' class='btn btn-default' ng-click='openGroupModal()' type='button'>
       <span aria-hidden='true' class='glyphicon glyphicon-user'></span>
       Edit groups
     </button>
   </div>
   <div class='input-group-btn'>
-    <button class='btn btn-default' ng-click='switchDetailPanel()' type='button'>
+    <button class='btn btn-default' ng-click='panelOpener.toggle()' type='button'>
       <span class='glyphicon glyphicon-resize-vertical'></span>
     </button>
   </div>
 </div>
 <!-- * User pills section -->
-<div collapse='isCollapsed'>
+<div collapse='!panelOpened'>
   <div class='well well-sm'>
     <div class='container-fluid'>
       <div class='btn-group' ng-repeat='user in addedUsers'>
