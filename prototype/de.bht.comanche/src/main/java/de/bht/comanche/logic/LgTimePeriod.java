@@ -34,7 +34,7 @@ public class LgTimePeriod extends DaObject {
 	/**
 	 * duration in minutes
 	 */
-	private int durationMinutes;
+	private int durationMins;
 
 	/**
 	 * Column for LgSurvey foreign key 
@@ -70,12 +70,12 @@ public class LgTimePeriod extends DaObject {
 		return this;
 	}
 
-	public int getDurationMinutes() {
-		return this.durationMinutes;
+	public int getDurationMins() {
+		return this.durationMins;
 	}
 
-	public LgTimePeriod setDurationMinutes(final int durationMinutes) {
-		this.durationMinutes = durationMinutes;
+	public LgTimePeriod setDurationMins(final int durationMins) {
+		this.durationMins = durationMins;
 		return this;
 	}
 
@@ -116,7 +116,7 @@ public class LgTimePeriod extends DaObject {
 	@Override
 	public String toString() {
 		return String
-				.format("LgTimePeriod [startTime=%s, durationMinutes=%s, survey=%s, oid=%s, pool=%s]",
-						startTime, durationMinutes, survey, oid, pool);
+				.format("LgTimePeriod [startTime=%s, durationMines=%s, survey=%s, oid=%s, pool=%s]",
+						startTime, durationMins, survey, oid, pool);
 	}
 }

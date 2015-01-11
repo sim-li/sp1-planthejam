@@ -24,7 +24,7 @@ angular.module('util', [])
      *
      * @class  arrayUtil
      */
-    .factory('arrayUtil', ['$log', 'modelUtil', function($log, modelUtil) {
+    .factory('arrayUtil', ['modelUtil', function(modelUtil) {
 
         'use strict';
 
@@ -177,13 +177,6 @@ angular.module('util', [])
             return arr;
         };
 
-        arrayUtil.filterByAttribute = function(arr, attr, value) {
-            var cond = function(val, idx, arr) {
-                return val['a'] == 2
-            };
-            return arr;
-        };
-
         return arrayUtil;
     }])
     /**
@@ -191,7 +184,7 @@ angular.module('util', [])
      *
      * @class  modelUtil
      */
-    .factory('modelUtil', ['$log', function($log) {
+    .factory('modelUtil', function() {
 
         'use strict';
 
@@ -217,4 +210,4 @@ angular.module('util', [])
 
 
         return modelUtil;
-    }]);
+    });

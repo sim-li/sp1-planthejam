@@ -8,27 +8,15 @@
  *
  * @module myApp
  * @main
- * @requires ngRoute
- * @requires ui.bootstrap
- * @requires ui.bootstrap.datetimepicker
- * @requires xeditable
- * @requires baseModel
  * @requires constants
- * @requires datePickerDate
- * @requires group
- * @requires invite
- * @requires restModule
- * @requires survey
- * @requires timePeriod
- * @requires user
+ * @requires models
+ * @requires rest
  * @requires util
  *
  * @author Sebastian Dass&eacute;
  * @author Duc Tung Tong
  */
-angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
-        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util', 'ui.calendar',
-    ])
+angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ui.calendar', 'util', 'xeditable'])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
             .when('/', {
@@ -75,11 +63,11 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                         return restService.doGetMany(Group);
                     },
                     usersPromise: function(restService) {
-                        return restService.getAllUsers();
-                    }
-                    //, timePeriodPromise: function(restService, timePeriod) {
-                    //     return restService.doGetMany(timePeriod);
-                    // }
+                            return restService.getAllUsers();
+                        }
+                        //, timePeriodPromise: function(restService, timePeriod) {
+                        //     return restService.doGetMany(timePeriod);
+                        // }
                 }
             })
             .when('/account', {

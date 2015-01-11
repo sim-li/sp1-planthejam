@@ -1,12 +1,14 @@
 /**
- * Provides a base model.
+ * Provides the model classes.
  *
- * @module baseModel
+ * @module models
+ * @main
+ * @requires constants
  * @requires util
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('baseModel', ['util'])
+angular.module('models', ['constants', 'util'])
     .factory('Model', ['arrayUtil', function(arrayUtil) {
 
         'use strict';

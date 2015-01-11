@@ -2,13 +2,11 @@ describe('restModule', function() {
 
     'use strict';
 
-    // beforeEach(module('restModule'));
+    // beforeEach(module('rest'));
 
     beforeEach(function() {
-        module('restModule');
-        module('invite');
-        // module('baseModel');
-        // module('user');
+        module('rest');
+        module('models');
     });
 
     describe('restService', function() {

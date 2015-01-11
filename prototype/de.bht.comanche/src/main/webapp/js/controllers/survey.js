@@ -17,11 +17,11 @@ angular.module('myApp')
     .controller('surveyCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'currentUserPromise', 'Group',
         'groupsPromise', 'Invite', 'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise',
         // 'selectedInviteSurveyInvitesPromise', // <<<<<<<<<<<<< TODO
-        'Survey', 'TimePeriod', 'TimeUnit', 'Type', 'User', 'usersPromise',
+        'Survey', 'TimePeriod', 'TimeUnit', 'SurveyType', 'User', 'usersPromise',
         function($location, $log, $scope, arrayUtil, currentUserPromise, Group,
             groupsPromise, Invite, invitesPromise, Member, Model, restService, selectedInvitePromise,
             // selectedInviteSurveyInvitesPromise, // <<<<<<<<<<<<< TODO
-            Survey, TimePeriod, TimeUnit, Type, User, usersPromise) {
+            Survey, TimePeriod, TimeUnit, SurveyType, User, usersPromise) {
 
             'use strict';
 

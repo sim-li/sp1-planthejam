@@ -83,7 +83,7 @@ public class LgTimePeriodTest {
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
 		LgInvite inviteDb = user.getInvites().get(0);
-		LgTimePeriod tp = new LgTimePeriod().setDurationMinutes(10).setStartTime(new Date(8099)).setInvite(inviteDb);
+		LgTimePeriod tp = new LgTimePeriod().setDurationMins(10).setStartTime(new Date(8099)).setInvite(inviteDb);
 		//		session.getUser().saveTp(tp);
 		end(session);
 	}
@@ -113,7 +113,7 @@ public class LgTimePeriodTest {
 		final LgUser user = startForUser(session);
 		System.out.println(user.getInvites().get(0).getOid() + " 2====================================");
 		LgSurvey survey = user.getInvites().get(0).getSurvey();
-		LgTimePeriod tp = new LgTimePeriod().setDurationMinutes(10).setStartTime(new Date(8099)).setSurvey(survey);
+		LgTimePeriod tp = new LgTimePeriod().setDurationMins(10).setStartTime(new Date(8099)).setSurvey(survey);
 //		session.getUser().saveObj(tp);
 		end(session);
     }

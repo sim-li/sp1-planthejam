@@ -1,11 +1,9 @@
 /**
- * Provides a model for date/time objects.
- *
- * @module datePickerDate
+ * @module models
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('datePickerDate', [])
+angular.module('models')
     .factory('DatePickerDate', function($filter) {
 
         'use strict';

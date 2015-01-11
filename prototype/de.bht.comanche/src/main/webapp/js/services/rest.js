@@ -1,13 +1,12 @@
 /**
  * Provides a RESTful service.
  *
- * @module restModule
- * @requires baseModel
- * @requires user
+ * @module rest
+ * @requires models
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('restModule', ['baseModel', 'user'])
+angular.module('rest', ['models'])
     /**
      * The RESTful service.
      *
@@ -70,13 +69,13 @@ angular.module('restModule', ['baseModel', 'user'])
                         // 'save': 'save',
                         // 'delete': 'delete'
                 }
-        // ,
-        // 'timePeriod': {
-        //     'path': '/timeperiods',
-                    // 'getMany': '/gettimeperiods'
-                    // ,
-                    // 'save': '/save',
-                    // 'delete': '/delete'
+                // ,
+                // 'timePeriod': {
+                //     'path': '/timeperiods',
+                // 'getMany': '/gettimeperiods'
+                // ,
+                // 'save': '/save',
+                // 'delete': '/delete'
                 // }
             };
 

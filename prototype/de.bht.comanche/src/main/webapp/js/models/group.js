@@ -1,13 +1,9 @@
 /**
- * Provides a model for groups.
- *
- * @module group
- * @requires baseModel
- * @requires member
+ * @module models
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('group', ['baseModel', 'member'])
+angular.module('models')
     .factory('Group', ['Model', 'Member', function(Model, Member) {
 
         'use strict';

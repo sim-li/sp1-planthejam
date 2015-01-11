@@ -1,4 +1,4 @@
-angular.module('timePeriod', [])
+angular.module('models')
 	.factory('TimePeriod', function() {
 		'use strict';
 
@@ -7,7 +7,7 @@ angular.module('timePeriod', [])
 				return new TimePeriod(config);
 			}
 			this.startTime = config.startTime || new Date();
-			this.duration = config.duration || 0;
+			this.durationMins = config.durationMins || 0;
 		};
 
 		TimePeriod.prototype.modelId = 'timePeriod';
@@ -15,20 +15,20 @@ angular.module('timePeriod', [])
 		TimePeriod.doExport = function() {
 			return {
 				'startTime': this.startTime,
-				'duration': this.duration
+				'durationMins': this.durationMins
 			};
 		};
 
 		TimePeriod.dummyTimePeriods = function() {
 			return [{
 				'startTime': new Date(),
-				'duration': '3'
+				'durationMins': '3'
 			}, {
 				'startTime': new Date(),
-				'duration': '4'
+				'durationMins': '4'
 			}, {
 				'startTime': new Date(),
-				'duration': '5'
+				'durationMins': '5'
 			}];
 		};
 

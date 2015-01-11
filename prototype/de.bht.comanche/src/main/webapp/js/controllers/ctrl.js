@@ -9,15 +9,15 @@ angular.module('myApp')
      *
      * @class menuCtrl
      */
-    .controller('ctrl', ['$scope', '$rootScope', '$log', 'Survey', 'TimeUnit', 'Type', 'User',
-        function($scope, $rootScope, $log, Survey, TimeUnit, Type, User) {
+    .controller('ctrl', ['$scope', '$rootScope', /*'$log', */ 'Survey', /*'TimeUnit', 'SurveyType', */ 'User',
+        function($scope, $rootScope, /*$log, */ Survey, /*TimeUnit, SurveyType, */ User) {
 
             'use strict';
 
             // make services available for the use in html
-            $scope.$log = $log;
-            $scope.TimeUnit = TimeUnit;
-            $scope.Type = Type;
+            // $scope.$log = $log;
+            // $scope.TimeUnit = TimeUnit;
+            // $scope.Type = Type;
 
             $rootScope.warnings = '';
 

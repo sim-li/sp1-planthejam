@@ -1,12 +1,9 @@
 /**
- * Provides a model for invites.
- *
- * @module invite
- * @requires user
+ * @module models
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('member', ['user'])
+angular.module('models')
     .factory('Member', ['User', function(User) {
 
         'use strict';

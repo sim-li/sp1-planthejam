@@ -1,11 +1,9 @@
 /**
- * Provides a model for users.
- *
- * @module user
+ * @module models
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('user', [])
+angular.module('models')
     .factory('User', function() {
 
         'use strict';
@@ -21,6 +19,8 @@ angular.module('user', [])
          * @param {String} [config.password=''] the password of the user
          * @param {String} [config.email=''] the email address of the user
          * @param {String} [config.tel=''] the telephone number of the user
+         * @param {String} [config.iconurl=''] the icon URL of the user
+         * @param {Array}  [config.messages=[]] the messages of the user
          */
         var User = function(config) {
             if (!(this instanceof User)) {
@@ -35,6 +35,7 @@ angular.module('user', [])
             this.iconurl = config.iconurl || '';
             // this.invites = [];
             // this.groups = [];
+            this.messages = config.messages || [];
         };
 
         // User.prototype = new Model();
@@ -59,9 +60,10 @@ angular.module('user', [])
                 'name': this.name,
                 'password': this.password,
                 'email': this.email,
-                'tel': this.tel
-                    /*,'invites': this.invites,
-                    'groups': this.groups*/
+                'tel': this.tel,
+                /*'invites': this.invites,
+                'groups': this.groups,*/
+                'messages': this.messages
             };
         };
 
