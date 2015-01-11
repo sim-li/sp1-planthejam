@@ -27,7 +27,7 @@
  * @author Duc Tung Tong
  */
 angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
-        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util', 'ui.calendar'
+        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util', 'uiUtilsModule', 'ui.calendar'
     ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider

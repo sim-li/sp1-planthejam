@@ -113,7 +113,7 @@ public class LgGroup extends DaObject{
      */
     public String getIconurl() {
         final LgGravatarUtils utils = new LgGravatarUtils();
-        iconurl = utils
+        iconurl = utils.getGroupUrl(name);
         return iconurl;
     }
 
