@@ -45,8 +45,8 @@ unit: TimeUnit</panel_attributes>
     <panel_attributes>«enumeration»
 SurveyType
 --
-_once_
-_repeatedly_</panel_attributes>
+_ONE_TIME_
+_RECURRING_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -66,18 +66,20 @@ _repeatedly_</panel_attributes>
       <x>594</x>
       <y>143</y>
       <w>495</w>
-      <h>187</h>
+      <h>231</h>
     </coordinates>
     <panel_attributes>Survey
 --
 name : String
 description : String
 type : SurveyType
+durationMins: int
 deadline : Date
 frequency : Repetition
 possibleTimePeriods : List&lt;TimePeriod&gt;
 determinedTimePeriod : TimePeriod
-</panel_attributes>
+success: Status = UNDECIDED
+algoCheck: boolean = false</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -92,7 +94,7 @@ determinedTimePeriod : TimePeriod
 
 --
 isHost : boolean = false
-isIgnored : boolean = false
+isIgnored : Status = UNDECIDED
 concreteAvailability : List&lt;TimePeriod&gt;
 </panel_attributes>
     <additional_attributes/>
@@ -101,29 +103,29 @@ concreteAvailability : List&lt;TimePeriod&gt;
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>770</x>
-      <y>297</y>
+      <y>341</y>
       <w>56</w>
-      <h>274</h>
+      <h>230</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..*
 m2=1..*
 r1=Host</panel_attributes>
-    <additional_attributes>33;253;33;33</additional_attributes>
+    <additional_attributes>33;209;33;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>924</x>
-      <y>297</y>
+      <y>341</y>
       <w>96</w>
-      <h>274</h>
+      <h>230</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1.*
 m2=1..*
 r1=Participant</panel_attributes>
-    <additional_attributes>55;253;55;33</additional_attributes>
+    <additional_attributes>55;209;55;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -164,9 +166,9 @@ durationMins : int
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
 TimeUnit
 --
-_Day_
-_Week_
-_Month_</panel_attributes>
+_DAY_
+_WEEK_
+_MONTH_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -205,7 +207,7 @@ m2=0..*</panel_attributes>
     </coordinates>
     <panel_attributes>Entwurfs-Fachklassendiagramm
 Terminfindungs-App "Plan The Jam"
-Team: Comanche, 26.11.2014</panel_attributes>
+Team: Comanche, 11.01.2015</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -245,5 +247,21 @@ Team: Comanche, 26.11.2014</panel_attributes>
 m1=0..*
 m2=0..*</panel_attributes>
     <additional_attributes>33;33;33;99;275;99</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1320</x>
+      <y>99</y>
+      <w>132</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>«enumeration»
+Status
+--
+_UNDECIDED_
+_YES_
+_NO_</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
