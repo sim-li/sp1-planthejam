@@ -22,17 +22,23 @@ angular.module('myApp')
                 $scope.panelOpened = false;
             })();
 
+            /**
+             * Creates a new modal instance
+             * @param  {[type]} size [description]
+             * @return {[type]}      [description]
+             */
             $scope.open = function(size) {
                 var modalInstance = $modal.open({
                     templateUrl: 'groupsModalContent.html',
                     controller: 'groupsModalCtrl',
                     size: size,
                     resolve: {
-                        groups: function(restService, Group) {
-                            return restService.doGetMany(Group);
+                        groups: function() {
+                            console.log(groups);
+                            return groups;
                         },
-                        users: function(restService, User) {
-                            return restService.doGetMany(User);
+                        users: function() {
+                            return users;
                         }
                     }
                 });

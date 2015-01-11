@@ -70,13 +70,13 @@ angular.module('restModule', ['baseModel', 'user'])
                         // 'save': 'save',
                         // 'delete': 'delete'
                 }
-        // ,
-        // 'timePeriod': {
-        //     'path': '/timeperiods',
-                    // 'getMany': '/gettimeperiods'
-                    // ,
-                    // 'save': '/save',
-                    // 'delete': '/delete'
+                // ,
+                // 'timePeriod': {
+                //     'path': '/timeperiods',
+                // 'getMany': '/gettimeperiods'
+                // ,
+                // 'save': '/save',
+                // 'delete': '/delete'
                 // }
             };
 
