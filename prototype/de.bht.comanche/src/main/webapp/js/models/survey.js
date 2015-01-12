@@ -4,8 +4,8 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('Survey', ['DatePickerDate', 'Repetition', 'Status', 'SurveyType', 'TimeUnit',
-        function(DatePickerDate, Repetition, Status, SurveyType, TimeUnit) {
+    .factory('Survey', ['Status', 'SurveyType', 'TimeUnit',
+        function(Status, SurveyType, TimeUnit) {
 
             'use strict';
 
@@ -21,15 +21,14 @@ angular.module('models')
              * @param {String}  [config.type='ONE_TIME'] the type of the survey
              * @param {Number}  [config.durationMins=0] the duration of the survey in minutes
              * @param {Date}    [config.deadline=new Date()] the deadline of the survey
-             *
              * @param {Number}  [config.frequencyDist=0] the frequency distance of the survey
-             * @param {String}  [config.frequencyTimeUnit='WEEK'] the frequency time unit of the survey
-             *
+             * @param {String}  [config.frequencyUnit='WEEK'] the frequency time unit of the survey
              * @param {Array}   [config.possibleTimeperiods=[]] the possible time periods of the survey
              * @param {Object}  [config.determinedTimeperiod] the determined time period of the survey
              * @param {Status}  [config.success='UNDECIDED'] the status of the service, which can be one of the options [UNDECIDED, YES, NO]
-             * @param {Boolean} [config.algoCheck=false] indicates whether or not the survey was already checked by the determination algorithm
-             * @param {Array}   [config.invites=[]] the invites of the survey
+             * @param {Boolean} [config.algoChecked=false] indicates whether or not the survey was already checked by the determination algorithm
+             *
+             *          @param {Array}   [config.invites=[]] the invites of the survey           ==> TODO ==> delete this line if attribute was removed
              */
             var Survey = function(config) {
                 config = config || {};
@@ -39,15 +38,13 @@ angular.module('models')
                 this.type = config.type || SurveyType.ONE_TIME;
                 this.durationMins = config.durationMins || 0;
                 this.deadline = new Date(config.deadline) || new Date();
-                // this.deadline = new DatePickerDate(config.deadline) || new DatePickerDate(new Date());
-                this.frequency = new Repetition(config.frequency);
-                // this.frequency = config.frequencyDist || 0;
-                // this.frequencyTimeUnit = TimeUnit[config.frequencyTimeUnit] || TimeUnit.WEEK;
+                this.frequencyDist = config.frequencyDist || 0;
+                this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
                 this.possibleTimeperiods = config.possibleTimeperiods || [];
                 this.determinedTimeperiod = config.determinedTimeperiod;
                 this.success = config.success || Status.UNDECIDED;
-                this.algoCheck = config.algoCheck || false;
-                this.invites = config.invites || []; // FIXME the invites have to be imported seperately (right?)
+                this.algoChecked = config.algoChecked || false;
+                // this.invites = config.invites || [];     // -- remove ON PURPOSE --> the invites shall be imported seperately
             };
 
             // Survey.prototype = new Model();
@@ -61,7 +58,7 @@ angular.module('models')
             Survey.prototype.modelId = 'survey';
 
             /**
-             * Exports the member by removing any client side attributes, that the server can not handle.
+             * Exports the survey by removing any client side attributes, that the server can not handle.
              *
              * @method doExport
              * @return {Object} the exported survey
@@ -72,18 +69,14 @@ angular.module('models')
                     'name': this.name,
                     'description': this.description,
                     'type': this.type,
+                    'durationMins': this.durationMins,
                     'deadline': this.deadline,
-                    // 'frequency': this.frequency.doExport(), // FIXME temporarily commented out
-
-                    // 'frequencyDist': this.frequencyDist,
-                    // 'frequencyTimeUnit': this.frequencyTimeUnit,
-
-                    // 'possibleTimeperiods': this.possibleTimeperiods, // FIXME temporarily commented out
-                    // 'determinedTimeperiod': this.determinedTimeperiod, // FIXME temporarily commented out
-
-                    // 'success': this.success, // FIXME temporarily commented out
-                    // 'algoCheck': this.algoCheck, // FIXME temporarily commented out
-                    // 'invites': Invite.exportMany(this.invites) // FIXME <<=======================================================
+                    // 'frequencyDist': this.frequencyDist,                         // FIXME temporarily commented out
+                    // 'frequencyUnit': this.frequencyUnit,                         // FIXME temporarily commented out
+                    // 'possibleTimePeriods': this.possibleTimePeriods,             // FIXME temporarily commented out
+                    // 'determinedTimePeriod': this.determinedTimePeriod,           // FIXME temporarily commented out
+                    // 'success': this.success,                                     // FIXME temporarily commented out
+                    // 'algoChecked': this.algoChecked                              // FIXME temporarily commented out
                 };
             };
 
@@ -116,55 +109,6 @@ angular.module('models')
             //     }, this);
             // };
 
-
-            //-- Note: keep this date conversion for now, throw away when surveys have time periods -->
-            //
-            // Survey.prototype.convertDatesToDatePickerDate = function() {
-            //     this.deadline = new DatePickerDate(this.deadline);
-            //     var _possibleTimeperiods = [];
-            //     for (var i = 0; i < this.possibleTimeperiods.length; i++) {
-            //         var p = this.possibleTimeperiods[i];
-            //         p.startTime = new DatePickerDate(p.startTime);
-            //         _possibleTimeperiods.push(p);
-            //     }
-            //     this.possibleTimeperiods = _possibleTimeperiods;
-            //     this.determinedTimeperiod.startTime = new DatePickerDate(this.determinedTimeperiod.startTime);
-            // };
-            //
-            // Survey.prototype.convertDatesToJsDate = function() {
-            //     this.deadline = this.deadline.toDate;
-            //     var _possibleTimeperiods = [];
-            //     for (var i = 0; i < this.possibleTimeperiods.length; i++) {
-            //         var _p = this.possibleTimeperiods[i];
-            //         _p.startTime = _p.startTime.toDate();
-            //         _possibleTimeperiods.push(_p);
-            //     }
-            //     this.possibleTimeperiods = _possibleTimeperiods;
-            //     this.determinedTimeperiod.startTime = this.determinedTimeperiod.toDate();
-            // };
-            //
-            // Survey.forSurveysConvertDatesToDatePickerDate = function(surveys) {
-            //     if (!surveys) {
-            //         return surveys;
-            //     }
-            //     for (var i = 0; i < surveys.length; i++) {
-            //         surveys[i].convertDatesToDatePickerDate();
-            //     }
-            //     return surveys;
-            // };
-            //
-            // Survey.forSurveysConvertDatesToJsDate = function(surveys) {
-            //     if (!surveys) {
-            //         return surveys;
-            //     }
-            //     for (var i = 0; i < surveys.length; i++) {
-            //         surveys[i].convertDatesToJsDate();
-            //     }
-            //     return surveys;
-            // };
-            //
-            //  <--
-
             var randomChar = function() {
                 return String.fromCharCode('a'.charCodeAt(0) + Math.round(Math.random() * 25));
             };
@@ -177,21 +121,35 @@ angular.module('models')
                 return str;
             };
 
+            /**
+             * Provides a dummy survey.
+             *
+             * @method getDummy
+             * @return {Object} a dummy survey
+             */
             Survey.getDummy = function() {
                 return new Survey({
                     oid: Math.round(Math.random() * 100),
                     name: randomString(5 + Math.round(Math.random() * 15)),
                     description: randomString(10 + Math.round(Math.random() * 30)),
                     type: SurveyType._options[Math.round(Math.random() * (SurveyType._options.length - 1))],
-                    deadline: new DatePickerDate(new Date()),
-                    // frequency: new Repetition(...),
+                    durationMins: Math.round(Math.random() * 240),
+                    deadline: new Date(),
                     frequencyDist: 1 + Math.round(Math.random() * 30),
-                    frequencyTimeUnit: TimeUnit._options[Math.round(Math.random() * (TimeUnit._options.length - 1))],
+                    frequencyUnit: TimeUnit._options[Math.round(Math.random() * (TimeUnit._options.length - 1))],
                     possibleTimeperiods: [],
+                    determinedTimeperiods: [],
                     determinedTimeperiod: null
                 });
             };
 
+            /**
+             * Provides an array of dummy surveys.
+             *
+             * @method getDummies
+             * @param  {Number} num the number of dummies
+             * @return {Array}     an array of dummie surveys
+             */
             Survey.getDummies = function(num) {
                 var dummies = [];
                 for (var i = 0; i < num; i++) {

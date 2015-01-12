@@ -4,8 +4,8 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('Invite', ['Survey', 'User', 'arrayUtil' /*, 'DatePickerDate'', 'TimeUnit', 'SurveyType'*/ ,
-        function(Survey, User, arrayUtil /*, DatePickerDate, TimeUnit, SurveyType*/ ) {
+    .factory('Invite', ['arrayUtil', 'Status', 'Survey' /*, 'SurveyType', 'TimeUnit'*/ , 'User',
+        function(arrayUtil, Status, Survey /*, SurveyType, TimeUnit*/ , User) {
 
             'use strict';
 
@@ -16,9 +16,12 @@ angular.module('models')
              * @constructor
              * @param {Object}  [config={}] an optional configuration object
              * @param {Number}  [config.oid=''] the object id of the invite
-             * @param {Boolean} [config.ignored] a flag that indicates if the invite is ignored
              * @param {Boolean} [config.host] a flag that indicates if the owning user of the invite is host of the survey
-             * @param {Object}  [config.survey=new Survey()] the survey
+             * @param {Status}  [config.ignored] a flag that indicates if the invite is ignored
+             * @param {Object}  [config.user=new User()] the user that owns the invite
+             * @param {Object}  [config.survey=new Survey()] the survey to which the invite belongs
+             *
+             * @param {Array}   [config.concreteAvailability=[]] the available time periods of the participant for this survey
              */
             var Invite = function(config) {
                 if (!(this instanceof Invite)) {
@@ -26,11 +29,10 @@ angular.module('models')
                 }
                 config = config || {};
                 this.oid = config.oid || '';
-                this.ignored = config.ignored;
                 this.host = config.host;
+                this.ignored = config.ignored || Status.UNDECIDED;
                 this.user = new User(config.user);
                 this.survey = new Survey(config.survey);
-                // this.survey.invites = this.survey.invites ||  []; // not necessary -> new Survey() does that
             };
 
             // Invite.prototype = new Model();
@@ -52,8 +54,8 @@ angular.module('models')
             Invite.prototype.doExport = function() {
                 return {
                     'oid': this.oid,
-                    'ignored': this.ignored,
                     'host': this.host,
+                    'ignored': this.ignored,
                     'user': this.user.doExport(),
                     'survey': this.survey.doExport()
                 };
@@ -181,11 +183,6 @@ angular.module('models')
             //         invites.push(invitesToExport[i].doExport());
             //     }
             //     return invites;
-            // };
-
-
-            // Invite.prototype.convertDatesToDatePickerDate = function() {
-            //     this.survey.convertDatesToDatePickerDate();
             // };
 
             // Invite.getDummyInviteList = function() {
