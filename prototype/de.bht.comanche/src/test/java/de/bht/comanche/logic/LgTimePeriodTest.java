@@ -69,7 +69,7 @@ public class LgTimePeriodTest {
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
 		LgSurvey dBsurvey = new LgSurvey().setName("NewTest");
-		LgInvite invite = new LgInvite().setHost(true).setIgnored(false).setUser(user).setSurvey(dBsurvey);
+		LgInvite invite = new LgInvite().setHost(true).setIgnored(LgStatus.UNDECIDED).setUser(user).setSurvey(dBsurvey);
 		// user.save(invite); // <-------- FIXME --------- commented out by Seb, otherwise the server wouldn't start
 		end(session);
 	}

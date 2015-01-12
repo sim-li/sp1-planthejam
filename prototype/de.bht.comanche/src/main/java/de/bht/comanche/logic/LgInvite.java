@@ -31,19 +31,19 @@ public class LgInvite extends DaObject{
 	private boolean isHost;
 	
 	/**
-	 *  is true if user ignored the invite
+	 * A tribool flag indicating whether the participant has marked the invite as ignored or not or if he is still undecided.
 	 */
-	private boolean isIgnored;
+	private LgStatus isIgnored;
 
 	/**
-	 *  user who receives  invite
+	 * The user who receives this invite.
 	 */
 	@NotNull
 	@ManyToOne
 	private LgUser user;
 
 	/**
-	 *  Survey 
+	 * The survey to which this invite belongs.
 	 */
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -57,7 +57,7 @@ public class LgInvite extends DaObject{
 	
 	
 	public LgInvite() {
-		timePeriods = new ArrayList<LgTimePeriod>();
+		this.timePeriods = new ArrayList<LgTimePeriod>();
 	}
 	
 	/*
@@ -71,11 +71,11 @@ public class LgInvite extends DaObject{
 		return this.isHost;
 	}
 
-	public boolean isIgnored() {
+	public LgStatus isIgnored() {
 		return this.isIgnored;
 	}
 
-	public LgInvite setIgnored(final boolean isIgnored) {
+	public LgInvite setIgnored(final LgStatus isIgnored) {
 		this.isIgnored = isIgnored;
 		return this;
 	}

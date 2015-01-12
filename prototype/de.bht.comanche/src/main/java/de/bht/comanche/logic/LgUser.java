@@ -82,7 +82,7 @@ public class LgUser extends DaObject {
         final LgInvite invite = new LgInvite();
         final LgSurvey savedSurvey = saveUnattached(survey); //Saving
         invite.setHost(true)
-            .setIgnored(false)
+            .setIgnored(LgStatus.UNDECIDED)
             .setSurvey(savedSurvey)
             .setUser(this); // COVER IN TEST: Was user set?
         this.updateInvite(invite);
