@@ -259,6 +259,7 @@ public class LgUser extends DaObject {
 
     //------------------METHODS FOR REST SERVICE-------
 
+    // HOST ROLES
     public LgSurvey getSurvey(final long oid){
         return null;
     }
@@ -267,29 +268,27 @@ public class LgUser extends DaObject {
         return null;
     }
 
-    public LgSurvey saveSurvey(final LgSurvey survey){
+    public LgSurvey saveSurvey(final LgSurvey survey) {
         return null;
     }
 
     public LgSurvey updateSurvey(final long oid, LgSurvey survey){
         return null;
     }
+    
     public void deleteSurvey(final long oid){
-
     }
-
+    
+    // PARTICIPANT ROLES
+    
+    // maybe unused
+    public LgInvite getInvite(final long oid) {
+        return search(this.invites, oid);
+    }
+  
     @JsonIgnore
     public List<LgInvite> getInvites() {
         return this.invites;
-    }
-
-    /**
-     * Returns LgInvite by provided oid.
-     * @param inviteOid The LgInvite oid.
-     * @return The found LgInvite.
-     */
-    public LgInvite getInvite(final long oid) {
-        return search(this.invites, oid);
     }
 
     public LgInvite saveInvite(final LgInvite invite){
@@ -299,7 +298,15 @@ public class LgUser extends DaObject {
         return null;
     }
 
+   
+    /**
+     * Returns LgInvite by provided oid.
+     * @param inviteOid The LgInvite oid.
+     * @return The found LgInvite.
+     */
+   
 
+  
     /*
      * --------------------------------------------------------------------------------------------
      * # get(), set() methods for data access
