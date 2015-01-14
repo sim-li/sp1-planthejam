@@ -253,11 +253,13 @@ public class LgUser extends DaObject {
           return saveUnattached(invite).getSurvey();
     }
 
-    public LgSurvey updateSurvey(final long oid, LgSurvey survey){
+    public LgSurvey updateSurvey(final long oid, LgSurvey survey) {
+   	 	//REDUNDANT
     	return saveSurvey(survey);
     }
     
     public void deleteSurvey(final long oid) {
+    	this.getSurvey(oid).delete();
     }
     
     // PARTICIPANT ROLES
@@ -269,17 +271,27 @@ public class LgUser extends DaObject {
   
     @JsonIgnore
     public List<LgInvite> getInvites() {
-        return this.invites;
+    	List<LgInvite> invites = new ArrayList<LgInvite>();
+    	for (LgInvite invite : getInvites()) {
+    		if (!invite.isHost()) {
+    			invites.add(invite);
+    		}
+    	}
+        return invites;
+    }
+    
+    public List<LgInvite> getInvitesForSurvey(final long oid) {
+    	return this.getSurvey(oid).getInvites();
     }
 
     public LgInvite saveInvite(final LgInvite invite){
-        return null;
+        return saveUnattached(invite);
     }
     
-    public LgInvite updateInvite(final long oid, LgInvite invite){
-        return null;
+    public LgInvite updateInvite(final long oid, LgInvite invite) {
+    	 //REDUNDANT
+    	 return saveInvite(invite);
     }
-
    
     /**
      * Returns LgInvite by provided oid.
@@ -287,17 +299,6 @@ public class LgUser extends DaObject {
      * @return The found LgInvite.
      */
    
-
-  
-    /*
-     * --------------------------------------------------------------------------------------------
-     * # get(), set() methods for data access
-     * # hashCode(), toString()
-     * --------------------------------------------------------------------------------------------
-     */
-
-
-
     @JsonIgnore
     public List<LgGroup> getGroups() {
         return this.groups;
