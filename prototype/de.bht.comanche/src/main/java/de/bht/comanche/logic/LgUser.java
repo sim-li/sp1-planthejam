@@ -225,30 +225,39 @@ public class LgUser extends DaObject {
     //------------------METHODS FOR REST SERVICE-------
 
     // HOST ROLES
-    public LgSurvey getSurvey(final long oid){
-        return null;
+    public LgSurvey getSurvey(final long oid) {
+    	for (LgInvite invite : getInvites()) {
+    		if (invite.isHost() && invite.getOid() == oid) {
+    			return invite.getSurvey();
+    		}
+    	}
+        return null; // TODO: Throw MULTEX exception
     }
 
     public List<LgSurvey> getSurveys() {
-        return null;
+    	List<LgSurvey> surveys = new ArrayList<LgSurvey>();
+    	for (LgInvite invite : getInvites()) {
+    		if (invite.isHost()) {
+    			surveys.add(invite.getSurvey());
+    		}
+    	}
+        return surveys;
     }
 
     public LgSurvey saveSurvey(final LgSurvey survey) {
-//          final LgSurvey savedSurvey = saveUnattached(survey); //Saving
           final LgInvite invite = new LgInvite();
           invite.setHost(true)
               .setIgnored(LgStatus.UNDECIDED)
               .setSurvey(survey)
-              .setUser(this); // COVER IN TEST: Was user set?
-          saveUnattached(invite);
-          return invite.getSurvey();
+              .setUser(this);
+          return saveUnattached(invite).getSurvey();
     }
 
     public LgSurvey updateSurvey(final long oid, LgSurvey survey){
     	return saveSurvey(survey);
     }
     
-    public void deleteSurvey(final long oid){
+    public void deleteSurvey(final long oid) {
     }
     
     // PARTICIPANT ROLES
