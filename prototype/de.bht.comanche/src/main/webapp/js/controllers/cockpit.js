@@ -43,7 +43,7 @@ angular.module('myApp')
              */
             $scope.selectSurvey = function(survey) {
                 $scope.selectedSurvey = survey;
-                // $log.debug($scope.selectedSurvey);
+                $log.debug($scope.selectedSurvey);
             };
 
             /**

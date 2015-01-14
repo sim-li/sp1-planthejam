@@ -238,8 +238,14 @@ public class LgUser extends DaObject {
           invite.setHost(true)
               .setIgnored(LgStatus.UNDECIDED)
               .setSurvey(survey)
+<<<<<<< HEAD
               .setUser(this);
           return saveUnattached(invite).getSurvey();
+=======
+              .setUser(this); // COVER IN TEST: Was user set?
+          saveUnattached(invite);
+          return invite.getSurvey();
+>>>>>>> 530eaded9b2e0aa7ca5f8c19f465b2ffb1dcb7ce
     }
 
     public LgSurvey updateSurvey(final long oid, LgSurvey survey){
