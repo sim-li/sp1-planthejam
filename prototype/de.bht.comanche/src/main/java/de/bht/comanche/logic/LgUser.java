@@ -234,14 +234,12 @@ public class LgUser extends DaObject {
     }
 
     public LgSurvey saveSurvey(final LgSurvey survey) {
-//          final LgSurvey savedSurvey = saveUnattached(survey); //Saving
           final LgInvite invite = new LgInvite();
           invite.setHost(true)
               .setIgnored(LgStatus.UNDECIDED)
               .setSurvey(survey)
-              .setUser(this); // COVER IN TEST: Was user set?
-          saveUnattached(invite);
-          return survey;
+              .setUser(this);
+          return saveUnattached(invite).getSurvey();
     }
 
     public LgSurvey updateSurvey(final long oid, LgSurvey survey){
