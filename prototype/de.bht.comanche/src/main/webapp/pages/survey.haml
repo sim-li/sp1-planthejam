@@ -1,7 +1,7 @@
 %ptj-menu
 .container
   / %div#temporary-debug-output1 users: '{{ users }}'
-  / %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}'
+  %div#temporary-debug-output3 selectedSurvey: '{{ selectedSurvey }}'
   / %div#temporary-debug-output4 groups: '{{ groups }}'
   / %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}'
   / %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}'
@@ -18,12 +18,12 @@
             .col-md-8
               %h2
                 .item-wrapper
-                  %a{"editable-text" => "selectedInvite.survey.name", :href => "#"}
-                    {{selectedInvite.survey.name}}
+                  %a{"editable-text" => "selectedSurvey.name", :href => "#"}
+                    {{selectedSurvey.name}}
               %h4
                 .item-wrapper
-                  %a{"editable-text" => "selectedInvite.survey.description", :href => "#"}
-                    {{selectedInvite.survey.description}}
+                  %a{"editable-text" => "selectedSurvey.description", :href => "#"}
+                    {{selectedSurvey.description}}
             .col-md-4
               .row
                 .btn-group.pull-right
@@ -97,7 +97,7 @@
         .panel-footer
           .col-md-offset-10
             %button.btn.btn-default.btn-sm{:type => "reset"} Reset
-            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveInvite()"} Save
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveSurvey()"} Save
     .col-md-2
       %input-group{"ng-show"=>"isRecurring()"}
         %input.form-control{"type"=>"text", "placeholder"=>"Frequency"}

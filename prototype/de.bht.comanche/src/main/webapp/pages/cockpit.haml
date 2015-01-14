@@ -44,7 +44,7 @@
         / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
         %input#addSurvey.btn.btn-primary{"ng-click" => "addSurvey()", :type => "button", :value => "Create a survey"}
         %input#editSurvey.btn.btn-primary{"ng-click" => "editSurvey()", :type => "button", :value => "Show and edit selected survey"}
-        %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Delete selected survey"}
+        %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedSurvey()", :type => "button", :value => "Delete selected survey"}
         #surveyPreview.panel.panel-default
           .panel-body
             %label{:for => "selectedSurveyDescription"} Description:

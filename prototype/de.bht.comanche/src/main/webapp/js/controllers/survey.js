@@ -26,6 +26,7 @@ angular.module('myApp')
              * All $scope variables for directives and their controllers should be declared here.
              */
             $scope.selectedSurvey = new Survey(selectedSurveyPromise);
+            $log.log($scope.selectedSurvey)
             $scope.selectedSurveyInvites = Model.importMany(Invite, selectedSurveyInvitesPromise);
             // For group widget
             $scope.groups = Model.importMany(Group, groupsPromise);
@@ -85,8 +86,9 @@ angular.module('myApp')
                 // QUESTION maybe better to just delete on server and then refresh? - but then we have to wait for the server
             };
 
-            $scope.saveInvite = function() {
-                restService.doSave($scope.selectedInvite)
+            $scope.saveSurvey = function() {
+                $log.log($scope.selectedSurvey)
+                restService.doSave($scope.selectedSurvey)
                     .then(function(success) {
                         $location.path('/cockpit');
                     } /*, function(error) { $log.log(error); }*/ );

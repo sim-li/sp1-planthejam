@@ -59,7 +59,7 @@
         <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
         <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
         <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
-        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedInvite()' type='button' value='Delete selected survey'>
+        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedSurvey()' type='button' value='Delete selected survey'>
         <div class='panel panel-default' id='surveyPreview'>
           <div class='panel-body'>
             <label for='selectedSurveyDescription'>Description:</label>
