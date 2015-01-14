@@ -265,9 +265,9 @@ public class LgUser extends DaObject {
           return saveUnattached(invite).getSurvey();
     }
 
-    public LgSurvey updateSurvey(final long oid, LgSurvey survey) {
+    public LgSurvey updateSurvey(final LgSurvey survey) {
    	 	//REDUNDANT
-    	return saveSurvey(survey);
+    	return saveSurvey(survey); // FIXME saveSurvey() creates a new invite for the host each time it is called; this must be avoided!!
     }
     
     public void deleteSurvey(final long oid) {
