@@ -241,7 +241,7 @@ public class LgUser extends DaObject {
               .setSurvey(survey)
               .setUser(this); // COVER IN TEST: Was user set?
           saveUnattached(invite);
-          return survey;
+          return invite.getSurvey();
     }
 
     public LgSurvey updateSurvey(final long oid, LgSurvey survey){

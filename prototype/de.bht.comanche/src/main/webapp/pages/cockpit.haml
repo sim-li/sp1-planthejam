@@ -23,7 +23,7 @@
             #surveyTab.tab-pane.active
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
-              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"}{{invite.survey.name}}
+              %a.list-group-item{"ng-click" => "selectSurvey(survey);", :href => "", "ng-repeat" => "survey in surveys | filter:searchString"}{{survey.name}}
             #inviteTab.tab-pane
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Filter invites ...", :type => "search"}
               #surveyList.list-group
