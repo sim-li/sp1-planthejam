@@ -9,7 +9,7 @@
             <li class='active'>
               <a data-toggle='tab' href='#surveyTab' onclick='return false;'>
                 Survey
-                <span class='badge'>{{invites.length}}</span>
+                <span class='badge'>{{surveys.length}}</span>
               </a>
             </li>
             <li>
@@ -29,7 +29,7 @@
             <div class='tab-pane active' id='surveyTab'>
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'></div>
-              <a class='list-group-item' href='' ng-click='selectSurvey(survey);' ng-repeat='survey in surveys | filter:searchString'>{{survey.name}}</a>
+              <a class='list-group-item' href='' ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter:searchString'>{{survey.name}}</a>
             </div>
             <div class='tab-pane' id='inviteTab'>
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Filter invites ...' type='search'>
