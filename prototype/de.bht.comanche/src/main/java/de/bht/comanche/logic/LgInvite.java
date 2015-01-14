@@ -117,13 +117,6 @@ public class LgInvite extends DaObject{
 	 * @param invite The LgInvite to set.
 	 * @return Returns The LgInvite.
 	 */ 
-	//not clear, how it will be used
-//	public LgInvite setTimePeriod(LgInvite invite){
-//			for (final LgTimePeriod period : this.timePeriods) {
-//				period.setInvite(invite);
-//			}
-//			return this;
-//	}
 
 	@Override
 	public String toString() {
