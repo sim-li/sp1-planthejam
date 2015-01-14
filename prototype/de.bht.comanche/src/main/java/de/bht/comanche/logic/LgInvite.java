@@ -79,7 +79,7 @@ public class LgInvite extends DaObject{
 		return this.isHost;
 	}
 
-	public LgStatus isIgnored() {
+	public LgStatus getIgnored() {
 		return this.isIgnored;
 	}
 
