@@ -114,9 +114,12 @@ public class LgInvite extends DaObject{
 		this.user = user;
 		return this;
 	}
-
+	/**
+	 * Returns PossibleTimePeriod with nulled db-flags
+	 * @return
+	 */
 	public LgSurvey getSurvey() {
-		return this.survey;
+		return this.survey.withNormalizedTP();
 	}
 
 	public LgInvite setSurvey(final LgSurvey survey) {
