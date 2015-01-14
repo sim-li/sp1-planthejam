@@ -226,7 +226,7 @@ public class LgUser extends DaObject {
 
     // HOST ROLES
     public LgSurvey getSurvey(final long oid) {
-    	for (LgInvite invite : getInvitesAsParticipant()) {
+    	for (LgInvite invite : this.invites) {
     		if (invite.isHost() && invite.getOid() == oid) {
     			return invite.getSurvey();
     		}
