@@ -78,16 +78,6 @@ public class LgUser extends DaObject {
         this.timePeriods = new ArrayList<LgTimePeriod>();
     }
 
-    public void saveSurveyAsHost(final LgSurvey survey) {
-        final LgInvite invite = new LgInvite();
-        final LgSurvey savedSurvey = saveUnattached(survey); //Saving
-        invite.setHost(true)
-            .setIgnored(LgStatus.UNDECIDED)
-            .setSurvey(savedSurvey)
-            .setUser(this); // COVER IN TEST: Was user set?
-        this.updateInvite(invite);
-    }
-
     public LgInvite getInviteBySurveyName(final String name) {
         for (LgInvite invite: invites) {
             if (invite.getSurvey().getName() == name) {
@@ -108,32 +98,7 @@ public class LgUser extends DaObject {
         return null;
         //@TODO Throw Multex Exception
     }
-
-
-    /**
-     * Save Invite for current user.
-     * @param invite The LgInvite to save.
-     * @return The saved LgInvite.
-     */
-    public LgInvite updateInvite(final LgInvite invite) {
-        invite.setUser(this);
-//          ->
-//              attach(invite); // -> to setPool?
-//              invite.save();
-//
-//        invite
-//          ->
-//              overwrite save:
-//                  public LgInvite save() {
-//          //check condition
-//          //check condition
-//                  super.save();
-//                  }
-//        // FORCE check condition, gets called in super save()
-//        }
-//        }
-        return saveUnattached(invite);
-    }
+    
     /**
      * Complete deleting of a user accout.
      */
@@ -259,47 +224,61 @@ public class LgUser extends DaObject {
 
     //------------------METHODS FOR REST SERVICE-------
 
+    // HOST ROLES
     public LgSurvey getSurvey(final long oid){
         return null;
     }
 
-    public List<LgSurvey> getSurveys(){
+    public List<LgSurvey> getSurveys() {
         return null;
     }
 
-    public LgSurvey saveSurvey(final LgSurvey survey){
-        return null;
+    public LgSurvey saveSurvey(final LgSurvey survey) {
+    	  final LgInvite invite = new LgInvite();
+          final LgSurvey savedSurvey = saveUnattached(survey); //Saving
+          invite.setHost(true)
+              .setIgnored(LgStatus.UNDECIDED)
+              .setSurvey(savedSurvey)
+              .setUser(this); // COVER IN TEST: Was user set?
+          return savedSurvey;
     }
 
     public LgSurvey updateSurvey(final long oid, LgSurvey survey){
         return null;
     }
+    
     public void deleteSurvey(final long oid){
-
     }
-
+    
+    // PARTICIPANT ROLES
+    
+    // maybe unused
+    public LgInvite getInvite(final long oid) {
+        return search(this.invites, oid);
+    }
+  
     @JsonIgnore
     public List<LgInvite> getInvites() {
         return this.invites;
     }
 
+    public LgInvite saveInvite(final LgInvite invite){
+        return null;
+    }
+    
+    public LgInvite updateInvite(final long oid, LgInvite invite){
+        return null;
+    }
+
+   
     /**
      * Returns LgInvite by provided oid.
      * @param inviteOid The LgInvite oid.
      * @return The found LgInvite.
      */
-    public LgInvite getInvite(final long oid) {
-        return search(this.invites, oid);
-    }
+   
 
-    public LgInvite saveInvite(final LgInvite invite){
-        return null;
-    }
-    public LgInvite updateInvite(final long oid, LgInvite invite){
-        return null;
-    }
-
-
+  
     /*
      * --------------------------------------------------------------------------------------------
      * # get(), set() methods for data access
