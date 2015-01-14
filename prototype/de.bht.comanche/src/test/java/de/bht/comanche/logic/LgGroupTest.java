@@ -21,7 +21,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-@Ignore
+//@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
