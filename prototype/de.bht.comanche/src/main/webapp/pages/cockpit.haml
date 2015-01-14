@@ -14,18 +14,18 @@
             %li
               %a{"data-toggle" => "tab", :href => "#inviteTab", "onclick" => "return false;"}
                 Invite
-                %span.badge {{(invites | filter: {ignored : false}).length}}
+                %span.badge {{(invites | filter: {ignored : !"YES"}).length}}
             %li
               %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "onclick" => "return false;"}
-                ignored
-                %span.badge {{(invites | filter: {ignored : true}).length}}
+                Ignored
+                %span.badge {{(invites | filter: {ignored : "YES"}).length}}
           .tab-content
             #surveyTab.tab-pane.active
-              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
               %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"}{{invite.survey.name}}
             #inviteTab.tab-pane
-              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Filter invites ...", :type => "search"}
               #surveyList.list-group
               %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter:searchString"}
                 .col-sm-7 {{invite.survey.name}}
@@ -33,7 +33,7 @@
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnored(false)"} accept
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnored(true)"} ignore
             #ignoredInviteTab.tab-pane
-              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Filter ignored invites ...", :type => "search"}
               #surveyList.list-group
               %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: searchString "}
                 .col-sm-9 {{invite.survey.name}}
@@ -42,8 +42,8 @@
       .col-md-8
         / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
         / %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"}
-        %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Create a survey"}
-        %input#editSurvey.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Show and edit selected survey"}
+        %input#addSurvey.btn.btn-primary{"ng-click" => "addSurvey()", :type => "button", :value => "Create a survey"}
+        %input#editSurvey.btn.btn-primary{"ng-click" => "editSurvey()", :type => "button", :value => "Show and edit selected survey"}
         %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Delete selected survey"}
         #surveyPreview.panel.panel-default
           .panel-body

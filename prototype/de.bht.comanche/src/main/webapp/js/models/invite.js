@@ -16,8 +16,8 @@ angular.module('models')
              * @constructor
              * @param {Object}  [config={}] an optional configuration object
              * @param {Number}  [config.oid=''] the object id of the invite
-             * @param {Boolean} [config.host] a flag that indicates if the owning user of the invite is host of the survey
-             * @param {Status}  [config.ignored] a flag that indicates if the invite is ignored
+             * @param {Boolean} [config.host='false'] a flag that indicates if the owning user of the invite is host of the survey
+             * @param {Status}  [config.ignored='UNDECIDED'] a flag that indicates if the invite is ignored
              * @param {Object}  [config.user=new User()] the user that owns the invite
              * @param {Object}  [config.survey=new Survey()] the survey to which the invite belongs
              *
@@ -29,7 +29,7 @@ angular.module('models')
                 }
                 config = config || {};
                 this.oid = config.oid || '';
-                this.host = config.host;
+                this.host = config.host || false;
                 this.ignored = config.ignored || Status.UNDECIDED;
                 this.user = new User(config.user);
                 this.survey = new Survey(config.survey);
@@ -72,6 +72,8 @@ angular.module('models')
             };
 
             /**
+             * NOT USED ANYMORE???
+             *
              * A factory method that creates a default invite for the specified user.
              *
              * @method createFor
@@ -91,6 +93,26 @@ angular.module('models')
                     })
                 });
             };
+
+            Invite.exportMany = function(invitesToExport) {
+                var invites = [];
+                arrayUtil.forEach(invitesToExport, function(ele) {
+                    invites.push(ele.doExport());
+                });
+                return invites;
+            };
+
+
+            //--------------------------------------------------------------------
+            // IMPORTANT NOTE!
+            //
+            // Surveys do not not know their invites on client side.
+            // In the survey-controller there is:
+            // - $scope.selectedSurvey        -> the survey
+            // - $scope.selectedSurveyInvites -> the invites of the survey -- add participants here
+            // Therefore in the survey-controller we need some methods to handle add/remove of participants.
+            // Some of the methods might as well belong to the invite-model.
+            //--------------------------------------------------------------------
 
             /**
              * ...
@@ -159,7 +181,6 @@ angular.module('models')
             // TODO Should match users + groups against participants and return mixed list
             Invite.prototype.getMixedListFromParticipants = function() {}
 
-
             // Invite.prototype.addParticipantsFromGroup = function(group) {
             //     if (group.modelId !== 'group') {
             //         return;
@@ -169,21 +190,8 @@ angular.module('models')
             //     }, this);
             // };
 
-            Invite.exportMany = function(invitesToExport) {
-                var invites = [];
-                arrayUtil.forEach(invitesToExport, function(ele) {
-                    invites.push(ele.doExport());
-                });
-                return invites;
-            };
+            //--------------------------------------------------------------------
 
-            // Invite.exportMany = function(invitesToExport) {
-            //     var invites = [];
-            //     for (var i = 0; i < invitesToExport.length; i++) {
-            //         invites.push(invitesToExport[i].doExport());
-            //     }
-            //     return invites;
-            // };
 
             // Invite.getDummyInviteList = function() {
             //     return [

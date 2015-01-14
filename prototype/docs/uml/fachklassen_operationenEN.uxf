@@ -7,7 +7,7 @@
       <x>660</x>
       <y>517</y>
       <w>429</w>
-      <h>297</h>
+      <h>330</h>
     </coordinates>
     <panel_attributes>User
 --
@@ -16,6 +16,7 @@ password : String
 tel : String
 email : String
 generalAvailability : List&lt;TimePeriod&gt;
+iconurl: String
 messages : List&lt;String&gt;
 --
 &lt;&lt;host&gt;&gt; addSurvey(survey : Survey)
@@ -74,7 +75,7 @@ frequencyUnit : TimeUnit
 possibleTimePeriods : List&lt;TimePeriod&gt;
 determinedTimePeriod : TimePeriod
 success: Status = UNDECIDED
-algoCheck: boolean = false
+algoChecked: boolean = false
 --
 F &lt;&lt;host&gt;&gt; addParticipantToSurvey(user : User)
 F &lt;&lt;host&gt;&gt; addAllUsersFromGroupToSurvey(group : Group)
@@ -91,7 +92,7 @@ getGroupSnapshot : Group</panel_attributes>
       <x>1144</x>
       <y>363</y>
       <w>297</w>
-      <h>132</h>
+      <h>143</h>
     </coordinates>
     <panel_attributes>Invite
 

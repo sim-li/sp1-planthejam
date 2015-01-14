@@ -7,7 +7,7 @@
       <x>649</x>
       <y>550</y>
       <w>429</w>
-      <h>143</h>
+      <h>176</h>
     </coordinates>
     <panel_attributes>User
 --
@@ -16,6 +16,7 @@ password : String
 tel : String
 email : String
 generalAvailability : List&lt;TimePeriod&gt;
+iconurl: String
 messages: List&lt;String&gt;
 </panel_attributes>
     <additional_attributes/>
@@ -66,7 +67,7 @@ frequencyUnit : TimeUnit
 possibleTimePeriods : List&lt;TimePeriod&gt;
 determinedTimePeriod : TimePeriod
 success: Status = UNDECIDED
-algoCheck: boolean = false</panel_attributes>
+algoChecked: boolean = false</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

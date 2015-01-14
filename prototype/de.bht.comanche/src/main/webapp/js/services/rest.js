@@ -12,8 +12,8 @@ angular.module('rest', ['models'])
      *
      * @class restService
      */
-    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Invite', 'Model', 'User', 'TimePeriod',
-        function($http, $q, $log, $rootScope, Invite, Model, User, TimePeriod) {
+    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Invite', 'Model', 'Survey', /*'TimePeriod', */ 'User',
+        function($http, $q, $log, $rootScope, Invite, Model, Survey, /*TimePeriod, */ User) {
 
             'use strict';
 
@@ -41,33 +41,17 @@ angular.module('rest', ['models'])
                     'logout': 'logout'
                 },
                 'survey': {
-                    'path': 'surveys/' /*,*/
-                        // 'get': 'get',
-                        // 'getMany': 'getMany',
-                        // 'save': 'save',
-                        // 'delete': 'delete',
+                    'path': 'surveys/',
+                    'invites': 'invites' // TODO -> REST service on server side: GET and PUT surveys/:oid/invites
                 },
                 'invite': {
-                    'path': 'invites/' /*,*/
-                        // 'get': 'get',
-                        // 'getMany': 'getInvites',
-                        // 'save': 'save',
-                        // 'delete': 'delete' /*not necessary?*/ /*,*/
-                        // 'getSurveyInvites': 'getSurveyInvites', // TODO -> REST service on  server side
-                        // 'saveSurveyInvite': 'saveSurveyInvite' //
-                        // 'saveSurveyInvites': 'saveSurveyInvites' //
+                    'path': 'invites/'
                 },
                 'group': {
-                    'path': 'groups/' /*,*/
-                        // 'getMany': 'getGroups',
-                        // 'save': 'save',
-                        // 'delete': 'delete'
+                    'path': 'groups/'
                 },
                 'member': {
-                    'path': 'members/' /*,*/
-                        // 'get': 'get',
-                        // 'save': 'save',
-                        // 'delete': 'delete'
+                    'path': 'members/'
                 }
                 // ,
                 // 'timePeriod': {
@@ -89,7 +73,8 @@ angular.module('rest', ['models'])
 
             /**
              * Returns the relative URL for the given model from the central REST path table.
-             * Either an oid or an operation may be specified, but never both.
+             * An oid or an operation or both may be specified. For example: `getUrlFor(Survey, 123, invites)` will
+             * result in the url: `/rest/surveys/123/invites`.
              *
              * @method getUrlFor
              * @private
@@ -101,7 +86,7 @@ angular.module('rest', ['models'])
             var getUrlFor = function(model, oid, opString) {
                 var modelId = model.modelId || model.prototype.modelId;
                 var theModel = restPaths[modelId];
-                return restPaths.basePath + theModel.path + (oid || '') + (theModel[opString] || '');
+                return restPaths.basePath + theModel.path + (oid || '') + ((oid && opString) ? '/' : '') + (theModel[opString] || '');
             };
 
             /**
@@ -233,6 +218,12 @@ angular.module('rest', ['models'])
                 return callHttp('GET')(url);
             }
 
+            restService.getSurveyInvites = function(oid) {
+                // var url = 'surveys/';
+                var url = getUrlFor(Survey, oid, 'invites');
+                return callHttp('GET')(url);
+            };
+
             /**
              * Gets a collection of objects of the specified model class by calling the REST service.
              *
@@ -272,7 +263,6 @@ angular.module('rest', ['models'])
                 return callHttp(method)(url, data);
             };
 
-            // NOTE: delete is a javascript keyword, therefore the otherwise strange 'do'-prefix naming convention
             /**
              * Deletes a model by calling the REST service.
              *

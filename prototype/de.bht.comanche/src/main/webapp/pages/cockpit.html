@@ -15,24 +15,24 @@
             <li>
               <a data-toggle='tab' href='#inviteTab' onclick='return false;'>
                 Invite
-                <span class='badge'>{{(invites | filter: {ignored : false}).length}}</span>
+                <span class='badge'>{{(invites | filter: {ignored : !"YES"}).length}}</span>
               </a>
             </li>
             <li>
               <a data-toggle='tab' href='#ignoredInviteTab' onclick='return false;'>
-                ignored
-                <span class='badge'>{{(invites | filter: {ignored : true}).length}}</span>
+                Ignored
+                <span class='badge'>{{(invites | filter: {ignored : "YES"}).length}}</span>
               </a>
             </li>
           </ul>
           <div class='tab-content'>
             <div class='tab-pane active' id='surveyTab'>
-              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>{{invite.survey.name}}</a>
             </div>
             <div class='tab-pane' id='inviteTab'>
-              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>
                 <div class='col-sm-7'>{{invite.survey.name}}</div>
@@ -43,7 +43,7 @@
               </a>
             </div>
             <div class='tab-pane' id='ignoredInviteTab'>
-              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Filter ignored invites ...' type='search'>
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter: searchString '>
                 <div class='col-sm-9'>{{invite.survey.name}}</div>
@@ -57,8 +57,8 @@
       <div class='col-md-8'>
         <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
         <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
-        <input class='btn btn-primary' id='addSurvey' ng-click='addInvite()' type='button' value='Create a survey'>
-        <input class='btn btn-primary' id='editSurvey' ng-click='editInvite()' type='button' value='Show and edit selected survey'>
+        <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
+        <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
         <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedInvite()' type='button' value='Delete selected survey'>
         <div class='panel panel-default' id='surveyPreview'>
           <div class='panel-body'>

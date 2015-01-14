@@ -42,7 +42,7 @@ angular.module('myApp')
             (function createDataModels() {
                 $scope.lastElementSelected = '';
                 //IMPL THIS
-                $scope.allElementsSelected = $scope.selectedInvite.getAllParticipants() ||  [];
+                $scope.allElementsSelected = $scope.selectedSurvey.getAllParticipants() ||  []; /////////////////////////////////////////
                 $scope.elements = $scope.users.concat($scope.groups);
             })();
 
@@ -68,21 +68,21 @@ angular.module('myApp')
                     return;
                 }
                 $scope.allElementsSelected.push($scope.lastElementSelected);
-                refreshUserListOfSelectedInvite();
+                refreshUserListOfSelectedSurvey();
                 // TODO: Implement "switch according to condition in stateswitcher" + add here.
                 console.log('Pushed that bia');
-            }
+            };
 
-            var refreshUserListOfSelectedInvite = function() {
-                $scope.selectedInvite.updateParticipantsFromMixedList($scope.allElementsSelected);
-            }
+            var refreshUserListOfSelectedSurvey = function() {
+                $scope.selectedSurvey.updateParticipantsFromMixedList($scope.allElementsSelected); /////////////////////////////////////////
+            };
 
             var isNoValidSelection = function() {
                 if (!($scope.lastElementSelected && $scope.lastElementSelected.name)) {
                     return true;
                 }
                 return false;
-            }
+            };
 
             var isDuplicate = function() {
                 for (var i = 0, len = $scope.allElementsSelected.length; i < len; i++) {
@@ -91,11 +91,11 @@ angular.module('myApp')
                     }
                 }
                 return false;
-            }
+            };
 
             $scope.removeElementFromSelection = function(index) {
                 $scope.allElementsSelected.splice(index, 1);
-            }
+            };
         }
     ]);
 // Please note that $modalInstance represents a modal window (instance) dependency.
