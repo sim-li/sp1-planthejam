@@ -44,7 +44,7 @@ angular.module('models')
                 this.determinedTimeperiod = config.determinedTimeperiod;
                 this.success = config.success || Status.UNDECIDED;
                 this.algoChecked = config.algoChecked || false;
-                // this.invites = config.invites || [];     // -- removed ON PURPOSE --> the invites shall be imported seperately
+                this.invites = config.invites || []; // ??? -- removed ON PURPOSE --> the invites shall be imported seperately
             };
 
             // Survey.prototype = new Model();

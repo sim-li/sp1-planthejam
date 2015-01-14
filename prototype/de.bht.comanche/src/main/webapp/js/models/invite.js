@@ -32,7 +32,7 @@ angular.module('models')
                 this.host = config.host || false;
                 this.ignored = config.ignored || Status.UNDECIDED;
                 this.user = new User(config.user);
-                this.survey = new Survey(config.survey);
+                this.survey = config.survey ? new Survey(config.survey) : ''; // ???
             };
 
             // Invite.prototype = new Model();
