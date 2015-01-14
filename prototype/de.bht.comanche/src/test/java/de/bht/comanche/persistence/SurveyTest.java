@@ -77,7 +77,7 @@ public class SurveyTest {
 		final LgSurvey demoSurvey = new LgSurvey(); 
 		demoSurvey.setName("DemoSurvey");
 		
-		alice.saveSurveyAsHost(demoSurvey);
+		alice.saveSurvey(demoSurvey);
 		
 		// Domain specific language? addUsersToSurvey()
 		demoSurvey.inviteOtherUser(bob);

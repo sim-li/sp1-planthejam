@@ -234,8 +234,8 @@ public class LgUser extends DaObject {
     }
 
     public LgSurvey saveSurvey(final LgSurvey survey) {
-    	  final LgInvite invite = new LgInvite();
           final LgSurvey savedSurvey = saveUnattached(survey); //Saving
+          final LgInvite invite = new LgInvite();
           invite.setHost(true)
               .setIgnored(LgStatus.UNDECIDED)
               .setSurvey(savedSurvey)
@@ -244,7 +244,7 @@ public class LgUser extends DaObject {
     }
 
     public LgSurvey updateSurvey(final long oid, LgSurvey survey){
-        return null;
+    	return saveSurvey(survey);
     }
     
     public void deleteSurvey(final long oid){
