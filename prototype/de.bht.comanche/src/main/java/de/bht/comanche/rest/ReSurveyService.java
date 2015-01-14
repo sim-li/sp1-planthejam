@@ -89,7 +89,7 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().saveSurvey(survey);//TODO change and implement the method
+					result = startSession().saveSurvey(survey);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
@@ -107,7 +107,7 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().updateSurvey(oid, survey);//TODO change and implement the method
+					result = startSession().updateSurvey(survey);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
