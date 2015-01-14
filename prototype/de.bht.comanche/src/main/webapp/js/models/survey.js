@@ -4,8 +4,8 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('Survey', ['Status', 'SurveyType', 'TimeUnit',
-        function(Status, SurveyType, TimeUnit) {
+    .factory('Survey', ['arrayUtil', 'Status', 'SurveyType', 'TimeUnit',
+        function(arrayUtil, Status, SurveyType, TimeUnit) {
 
             'use strict';
 
@@ -44,7 +44,7 @@ angular.module('models')
                 this.determinedTimeperiod = config.determinedTimeperiod;
                 this.success = config.success || Status.UNDECIDED;
                 this.algoChecked = config.algoChecked || false;
-                // this.invites = config.invites || [];     // -- remove ON PURPOSE --> the invites shall be imported seperately
+                // this.invites = config.invites || [];     // -- removed ON PURPOSE --> the invites shall be imported seperately
             };
 
             // Survey.prototype = new Model();
@@ -80,6 +80,28 @@ angular.module('models')
                 };
             };
 
+
+            //--------------------------------------------------------------------
+            // IMPORTANT NOTE!
+            //
+            // Surveys do not not know their invites on client side.
+            // In the survey-controller there is:
+            // - $scope.selectedSurvey        -> the survey
+            // - $scope.selectedSurveyInvites -> the invites of the survey -- add participants here
+            // Therefore in the survey-controller we need some methods to handle add/remove of participants.
+            // Some of the methods might as well belong to the invite-model.
+            //--------------------------------------------------------------------
+
+
+            // Invite.prototype.addParticipantsFromGroup = function(group) {
+            //     if (group.modelId !== 'group') {
+            //         return;
+            //     }
+            //     group.members.forEach(function(member) {
+            //         this.addParticipant(member.user);
+            //     }, this);
+            // };
+
             // TODO maybe not used -> to be implemented inviteCtrl?
             // /**
             //  * ...
@@ -108,6 +130,9 @@ angular.module('models')
             //         this.addParticipant(member.user);
             //     }, this);
             // };
+
+            //--------------------------------------------------------------------
+
 
             var randomChar = function() {
                 return String.fromCharCode('a'.charCodeAt(0) + Math.round(Math.random() * 25));

@@ -41,25 +41,18 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
                     }
                 }
             })
-            .when('/survey/:inviteOid?', {
+            .when('/survey/:surveyOid?', {
                 templateUrl: 'pages/survey.html',
                 controller: 'surveyCtrl',
                 resolve: {
-                    selectedInvitePromise: function($route, restService, Invite) {
-                        var inviteOid = $route.current.params.inviteOid;
-                        // console.log("inviteOid = " + inviteOid)
-                        return (inviteOid === undefined) ? '' : restService.doGet(Invite, inviteOid);
+                    selectedSurveyPromise: function($route, restService, Survey) {
+                        var surveyOid = $route.current.params.surveyOid;
+                        // console.log("surveyOid = " + surveyOid)
+                        return (surveyOid === undefined) ? '' : restService.doGet(Survey, surveyOid);
                     },
-                    // selectedInviteSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
-                    //     var inviteOid = $route.current.params.inviteOid;
-                    //     return (inviteOid === undefined) ? [] : restService.getSurveyInvites(inviteOid);
-                    // },
-                    currentUserPromise: function($route, restService, User) {
-                        return ($route.current.params.inviteOid !== undefined) ? '' : restService.doGet(User);
-                    },
-                    // TODO maybe not necessary to get all invites for this route?
-                    invitesPromise: function(restService, Invite) {
-                        return restService.doGetMany(Invite);
+                    selectedSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
+                        var surveyOid = $route.current.params.surveyOid;
+                        return (surveyOid === undefined) ? [] : restService.getSurveyInvites(surveyOid);
                     },
                     groupsPromise: function(restService, Group) {
                         return restService.doGetMany(Group);

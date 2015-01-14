@@ -10,40 +10,35 @@ angular.module('myApp')
      *
      * @class surveyCtrl
      */
-    .controller('surveyCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'currentUserPromise', 'Group',
-        'groupsPromise', 'Invite', 'invitesPromise', 'Member', 'Model', 'restService', 'selectedInvitePromise',
-        'Survey', 'TimePeriod', 'TimeUnit', 'SurveyType', 'User', 'usersPromise',
-        function($location, $log, $scope, arrayUtil, currentUserPromise, Group,
-            groupsPromise, Invite, invitesPromise, Member, Model, restService, selectedInvitePromise,
-            Survey, TimePeriod, TimeUnit, SurveyType, User, usersPromise) {
+    .controller('surveyCtrl', ['$location', '$log', '$scope', 'arrayUtil', /*'currentUserPromise', */ 'Group',
+        'groupsPromise', 'Invite', /*'invitesPromise', */ 'Member', 'Model', 'restService', /*'selectedInvitePromise',*/
+        'selectedSurveyPromise', 'selectedSurveyInvitesPromise', 'Survey', 'TimePeriod', 'TimeUnit', 'SurveyType',
+        'User', 'usersPromise',
+        function($location, $log, $scope, arrayUtil, /*currentUserPromise, */ Group,
+            groupsPromise, Invite, /*invitesPromise, */ Member, Model, restService, /*selectedInvitePromise,*/
+            selectedSurveyPromise, selectedSurveyInvitesPromise, Survey, TimePeriod, TimeUnit, SurveyType,
+            User, usersPromise) {
 
             'use strict';
 
-            /**
-             * Retrieves all data loaded by the REST-service on page load.
-             * $scope vars for directives and their controllers should be declared here
-             * to be included in the REST operations for this page.
+            /*
+             * Retrieve all data loaded by the REST-service before page load.
+             * All $scope variables for directives and their controllers should be declared here.
              */
-            (function resolvePromises() {
-                $scope.selectedInvite = selectedInvitePromise ?
-                    new Invite(selectedInvitePromise) : Invite.createFor(currentUserPromise);
-                // For group widget
-                $scope.groups = Model.importMany(Group, groupsPromise);
-                $scope.users = Model.importMany(User, usersPromise);
-                // No connection to REST jet (widget will probably be discarded)
-                $scope.timePeriods = TimePeriod.dummyTimePeriods();
-            })();
+            $scope.selectedSurvey = new Survey(selectedSurveyPromise);
+            $scope.selectedSurveyInvites = Model.importMany(Invite, selectedSurveyInvitesPromise);
+            // For group widget
+            $scope.groups = Model.importMany(Group, groupsPromise);
+            $scope.users = Model.importMany(User, usersPromise);
+            // No connection to REST yet (widget will probably be discarded)
+            $scope.timePeriods = TimePeriod.dummyTimePeriods();
 
             /**
-             * Create simple variables needed to store UI states for components
-             * that aren't grouped in directives.
+             * Create simple variables needed to store UI states for components that aren't grouped in directives.
              */
-            (function createSimpleUIStateVariables() {
-                $scope.repeatedly = false;
-                $scope.showLiveButton = true;
-            })();
+            $scope.showLiveButton = true;
 
-            // NO!!!
+            // NO!!! the group widget shall take care of all this
             var refreshGroupsAndShowLast = function() {
                 restService.doGetMany(Group)
                     .then(function(success) {
@@ -123,6 +118,18 @@ angular.module('myApp')
                     name: 'Your new group'
                 });
                 return $scope.selectedGroup;
+            };
+
+            $scope.isRecurring = function() {
+                return $scope.selectedSurvey.type == SurveyType.RECURRING;
+            };
+
+            $scope.setRecurring = function() {
+                $scope.selectedSurvey.type = SurveyType.RECURRING;
+            };
+
+            $scope.setOneTime = function() {
+                $scope.selectedSurvey.type = SurveyType.ONE_TIME;
             };
         }
     ]);

@@ -35,8 +35,8 @@
             <div class='col-md-4'>
               <div class='row'>
                 <div class='btn-group pull-right'>
-                  <label btn-radio="'Once'" class='btn btn-primary' ng-click='repeatedly=false' ng-model='still_needs_a_model'>Once</label>
-                  <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='repeatedly=true' ng-model='still_needs_a_model'>Repeatedly</label>
+                  <label btn-radio="'Once'" class='btn btn-primary' ng-click='setOneTime()' ng-model='still_needs_a_model'>Once</label>
+                  <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='setRecurring()' ng-model='still_needs_a_model'>Repeatedly</label>
                 </div>
                 <br>
                 <br>
@@ -145,7 +145,7 @@
       </div>
     </div>
     <div class='col-md-2'>
-      <input-group ng-show='repeatedly'>
+      <input-group ng-show='isRecurring()'>
         <input class='form-control' placeholder='Frequency' type='text'>
         <input class='form-control' placeholder='Distance' type='text'>
       </input-group>
