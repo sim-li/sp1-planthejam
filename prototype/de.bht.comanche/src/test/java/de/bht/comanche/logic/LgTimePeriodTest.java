@@ -83,8 +83,9 @@ public class LgTimePeriodTest {
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
 		LgInvite inviteDb = user.getInvites().get(0);
-		LgTimePeriod tp = new LgTimePeriod().setDurationMins(10).setStartTime(new Date(8099)).setInvite(inviteDb);
-		//		session.getUser().saveTp(tp);
+		LgTimePeriod tp = new LgTimePeriod().setDurationMins(10).
+								setStartTime(new Date(8099)).setInvite(inviteDb);
+//		session.getUser().saveTp(tp);
 		end(session);
 	}
 	
@@ -128,19 +129,6 @@ public class LgTimePeriodTest {
 		final LgUser bob = session.startFor("Bob");
 		bob.deleteAccount();
 //		assertEquals(0, startFor().getGroups().size());
-	}
-	
-	@Ignore
-	@Test
-	public void test5deleteMember() {
-		final LgSession session = start();
-		final LgUser sessionUser = startForUser(session);
-		final LgGroup aliceGroup = sessionUser.getGroups().get(0);
-		final LgUser bob = session.startFor("Bob");
-		final long bob_moid = session.getUser().search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
-		sessionUser.getGroup(aliceGroup.getOid()).deleteMember(bob_moid);
-		end(session);
-		assertEquals(null, getAliceGroup(aliceGroup.getOid()).getMember(bob_moid));
 	}
 		
 	public void end(LgSession session) {

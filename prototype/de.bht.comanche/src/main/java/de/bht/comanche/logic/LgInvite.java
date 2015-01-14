@@ -1,15 +1,20 @@
 package de.bht.comanche.logic;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
@@ -28,11 +33,14 @@ public class LgInvite extends DaObject{
 	/**
 	 *  is true if user is host from survey 
 	 */
+	@Column
 	private boolean isHost;
 	
 	/**
 	 * A tribool flag indicating whether the participant has marked the invite as ignored or not or if he is still undecided.
 	 */
+	@Column
+	@Enumerated(EnumType.STRING)
 	private LgStatus isIgnored;
 
 	/**
