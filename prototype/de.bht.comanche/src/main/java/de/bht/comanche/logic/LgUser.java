@@ -226,7 +226,7 @@ public class LgUser extends DaObject {
 
     // HOST ROLES
     public LgSurvey getSurvey(final long oid) {
-    	for (LgInvite invite : getInvites()) {
+    	for (LgInvite invite : getInvitesAsParticipant()) {
     		if (invite.isHost() && invite.getOid() == oid) {
     			return invite.getSurvey();
     		}
@@ -236,7 +236,7 @@ public class LgUser extends DaObject {
 
     public List<LgSurvey> getSurveys() {
     	List<LgSurvey> surveys = new ArrayList<LgSurvey>();
-    	for (LgInvite invite : getInvites()) {
+    	for (LgInvite invite : getInvitesAsParticipant()) {
     		if (invite.isHost()) {
     			surveys.add(invite.getSurvey());
     		}
@@ -270,9 +270,9 @@ public class LgUser extends DaObject {
     }
   
     @JsonIgnore
-    public List<LgInvite> getInvites() {
-    	List<LgInvite> invites = new ArrayList<LgInvite>();
-    	for (LgInvite invite : getInvites()) {
+    public List<LgInvite> getInvitesAsParticipant() {
+    	List<LgInvite> invitesFiltered = new ArrayList<LgInvite>();
+    	for (LgInvite invite : this.invites) {
     		if (!invite.isHost()) {
     			invites.add(invite);
     		}
@@ -334,7 +334,7 @@ public class LgUser extends DaObject {
     public String getPassword() {
         return this.password;
     }
-
+    
     public LgUser setPassword(final String password) {
         this.password = password;
         return this;

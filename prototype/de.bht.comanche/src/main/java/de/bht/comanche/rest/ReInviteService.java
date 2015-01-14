@@ -77,7 +77,7 @@ public class ReInviteService extends RestService {
 			public List<LgInvite> execute() throws Exception {
 				final List<LgInvite> result;
 				try {
-					result = startSession().getInvites();//TODO change and implement the method
+					result = startSession().getInvitesAsParticipant();//TODO change and implement the method
 				} catch (Exception ex) {
 					throw create(RestGetInvitesFailure.class, ex, getSession().getUser().getName());
 				}

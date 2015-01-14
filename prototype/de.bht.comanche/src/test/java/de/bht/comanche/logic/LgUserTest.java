@@ -20,7 +20,7 @@ public class LgUserTest {
 	public void createAnEmptyUser() {
 		final LgUser user = new LgUser();
 		assertTrue(user != null);
-		assertNotNull(user.getInvites());
+		assertNotNull(user.getInvitesAsParticipant());
 		assertNotNull(user.getGroups());
 	}
 	

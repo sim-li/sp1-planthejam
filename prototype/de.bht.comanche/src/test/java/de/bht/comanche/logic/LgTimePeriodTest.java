@@ -82,7 +82,7 @@ public class LgTimePeriodTest {
 	public void test3SaveTPforInvite() {
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
-		LgInvite inviteDb = user.getInvites().get(0);
+		LgInvite inviteDb = user.getInvitesAsParticipant().get(0);
 		LgTimePeriod tp = new LgTimePeriod().setDurationMins(10).
 								setStartTime(new Date(8099)).setInvite(inviteDb);
 //		session.getUser().saveTp(tp);
@@ -98,7 +98,7 @@ public class LgTimePeriodTest {
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
 		List<LgInvite> lg = new ArrayList<LgInvite>();
-		lg.add(user.getInvites().get(0));
+		lg.add(user.getInvitesAsParticipant().get(0));
 		LgSurvey survey = new LgSurvey().setName("NewTest").setInvites(lg);
 //		user.saveObj(survey);
 		end(session);
@@ -112,8 +112,8 @@ public class LgTimePeriodTest {
 	public void test5SaveTPforInvite() {
 		final LgSession session = start();
 		final LgUser user = startForUser(session);
-		System.out.println(user.getInvites().get(0).getOid() + " 2====================================");
-		LgSurvey survey = user.getInvites().get(0).getSurvey();
+		System.out.println(user.getInvitesAsParticipant().get(0).getOid() + " 2====================================");
+		LgSurvey survey = user.getInvitesAsParticipant().get(0).getSurvey();
 		LgTimePeriod tp = new LgTimePeriod().setDurationMins(10).setStartTime(new Date(8099)).setSurvey(survey);
 //		session.getUser().saveObj(tp);
 		end(session);
