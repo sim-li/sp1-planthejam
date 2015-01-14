@@ -16,8 +16,8 @@ angular.module('models')
              * @constructor
              * @param {Object}  [config={}] an optional configuration object
              * @param {Number}  [config.oid=''] the object id of the survey
-             * @param {String}  [config.name=''] the name of the survey
-             * @param {String}  [config.descrition=''] the description of the survey
+             * @param {String}  [config.name='Your survey'] the name of the survey
+             * @param {String}  [config.descrition='Say what it is all about'] the description of the survey
              * @param {String}  [config.type='ONE_TIME'] the type of the survey
              * @param {Number}  [config.durationMins=0] the duration of the survey in minutes
              * @param {Date}    [config.deadline=new Date()] the deadline of the survey
@@ -33,8 +33,8 @@ angular.module('models')
             var Survey = function(config) {
                 config = config || {};
                 this.oid = config.oid || '';
-                this.name = config.name || '';
-                this.description = config.description || '';
+                this.name = config.name || 'Your survey';
+                this.description = config.description || 'Say what it is all about';
                 this.type = config.type || SurveyType.ONE_TIME;
                 this.durationMins = config.durationMins || 0;
                 this.deadline = new Date(config.deadline) || new Date();

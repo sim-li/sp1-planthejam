@@ -1,7 +1,7 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
   <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
-  <!-- %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}' -->
+  <div id='temporary-debug-output3'>selectedSurvey: '{{ selectedSurvey }}'</div>
   <!-- %div#temporary-debug-output4 groups: '{{ groups }}' -->
   <!-- %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}' -->
   <!-- %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}' -->
@@ -19,15 +19,15 @@
             <div class='col-md-8'>
               <h2>
                 <div class='item-wrapper'>
-                  <a editable-text='selectedInvite.survey.name' href='#'>
-                    {{selectedInvite.survey.name}}
+                  <a editable-text='selectedSurvey.name' href='#'>
+                    {{selectedSurvey.name}}
                   </a>
                 </div>
               </h2>
               <h4>
                 <div class='item-wrapper'>
-                  <a editable-text='selectedInvite.survey.description' href='#'>
-                    {{selectedInvite.survey.description}}
+                  <a editable-text='selectedSurvey.description' href='#'>
+                    {{selectedSurvey.description}}
                   </a>
                 </div>
               </h4>
@@ -139,7 +139,7 @@
         <div class='panel-footer'>
           <div class='col-md-offset-10'>
             <button class='btn btn-default btn-sm' type='reset'>Reset</button>
-            <button class='btn btn-primary btn-sm' ng-click='saveInvite()' type='submit'>Save</button>
+            <button class='btn btn-primary btn-sm' ng-click='saveSurvey()' type='submit'>Save</button>
           </div>
         </div>
       </div>

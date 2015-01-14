@@ -81,18 +81,18 @@ angular.module('models')
              * @param  {User}   user the host of the invite
              * @return {Invite}      a default invite
              */
-            Invite.createFor = function(user) {
-                return new Invite({
-                    'ignored': false,
-                    'host': true,
-                    'user': user,
-                    'survey': new Survey({
-                        'name': 'Your survey',
-                        'description': 'Say what it is all about',
-                        'deadline': new Date()
-                    })
-                });
-            };
+            // Invite.createFor = function(user) {
+            //     return new Invite({
+            //         'ignored': false,
+            //         'host': true,
+            //         'user': user,
+            //         'survey': new Survey({
+            //             'name': 'Your survey',
+            //             'description': 'Say what it is all about',
+            //             'deadline': new Date()
+            //         })
+            //     });
+            // };
 
             Invite.exportMany = function(invitesToExport) {
                 var invites = [];
