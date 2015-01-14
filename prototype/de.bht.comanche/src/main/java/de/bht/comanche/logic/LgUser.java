@@ -1,6 +1,7 @@
 package de.bht.comanche.logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,8 +12,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
+import de.bht.comanche.logic.LgInvite;
 /**
  * This entity class represents a user and serve methods for working with
  * all objects LgClasses.
@@ -227,7 +231,7 @@ public class LgUser extends DaObject {
     // HOST ROLES
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {
-    		if (invite.isHost() && invite.getOid() == oid) {
+    		if (invite.isHost() && invite.getSurvey().getOid() == oid) {
     			return invite.getSurvey();
     		}
     	}
@@ -244,6 +248,14 @@ public class LgUser extends DaObject {
         return surveys;
     }
 
+    public List<LgInvite> getInvitesForSurvey(final long oid) {
+    	List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
+    	for (LgInvite invite : this.getSurvey(oid).getInvites()) {
+    		filteredInvites.add(new LgInvite(invite).setSurvey(null));
+    	}
+    	return filteredInvites;
+    }
+    
     public LgSurvey saveSurvey(final LgSurvey survey) {
           final LgInvite invite = new LgInvite();
           invite.setHost(true)
@@ -278,10 +290,6 @@ public class LgUser extends DaObject {
     		}
     	}
         return filteredInvites;
-    }
-    
-    public List<LgInvite> getInvitesForSurvey(final long oid) {
-    	return this.getSurvey(oid).getInvites();
     }
 
     public LgInvite saveInvite(final LgInvite invite){

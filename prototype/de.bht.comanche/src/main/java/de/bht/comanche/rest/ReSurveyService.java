@@ -15,6 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
+import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
 
@@ -32,7 +33,7 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().getSurvey(oid);//TODO change and implement the method
+					result = startSession().getSurvey(oid);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
@@ -45,14 +46,13 @@ public class ReSurveyService {
 	@Path("/{oid}/invites")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgSurvey getInvitesFor(@PathParam("oid") final long surveyOid, @Context final HttpServletRequest request) {
-		return new LgTransaction<LgSurvey>(request) {
+	public List<LgInvite> getInvitesFor(@PathParam("oid") final long surveyOid, @Context final HttpServletRequest request) {
+		return new LgTransaction<List<LgInvite>>(request) {
 			@Override
-			public LgSurvey execute() throws Exception {
-				final LgSurvey result;
+			public List<LgInvite> execute() throws Exception {
+				final List<LgInvite> result;
 				try {
-					result = startSession().getSurvey(surveyOid);
-//							.getInvites();//TODO change and implement the method
+					result = startSession().getInvitesForSurvey(surveyOid);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
