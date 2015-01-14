@@ -236,7 +236,7 @@ public class LgUser extends DaObject {
 
     public List<LgSurvey> getSurveys() {
     	List<LgSurvey> surveys = new ArrayList<LgSurvey>();
-    	for (LgInvite invite : getInvitesAsParticipant()) {
+    	for (LgInvite invite : this.invites) {
     		if (invite.isHost()) {
     			surveys.add(invite.getSurvey());
     		}
