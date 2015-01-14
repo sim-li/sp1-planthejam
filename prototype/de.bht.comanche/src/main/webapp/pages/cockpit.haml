@@ -10,7 +10,7 @@
             %li.active
               %a{"data-toggle" => "tab", :href => "#surveyTab", "onclick" => "return false;"}
                 Survey
-                %span.badge {{invites.length}}
+                %span.badge {{surveys.length}}
             %li
               %a{"data-toggle" => "tab", :href => "#inviteTab", "onclick" => "return false;"}
                 Invite
@@ -23,7 +23,7 @@
             #surveyTab.tab-pane.active
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
-              %a.list-group-item{"ng-click" => "selectSurvey(survey);", :href => "", "ng-repeat" => "survey in surveys | filter:searchString"}{{survey.name}}
+              %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter:searchString"}{{survey.name}}
             #inviteTab.tab-pane
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Filter invites ...", :type => "search"}
               #surveyList.list-group
