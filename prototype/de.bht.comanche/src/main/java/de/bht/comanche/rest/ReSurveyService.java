@@ -71,7 +71,7 @@ public class ReSurveyService {
 			public List<LgSurvey> execute() throws Exception {
 				final List<LgSurvey> result;
 				try {
-					result = startSession().getSurveys();//TODO change and implement the method
+					result = startSession().getSurveys();
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
