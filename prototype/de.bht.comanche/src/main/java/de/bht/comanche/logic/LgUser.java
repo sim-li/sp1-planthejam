@@ -271,13 +271,13 @@ public class LgUser extends DaObject {
   
     @JsonIgnore
     public List<LgInvite> getInvitesAsParticipant() {
-    	List<LgInvite> invitesFiltered = new ArrayList<LgInvite>();
+    	List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
     	for (LgInvite invite : this.invites) {
     		if (!invite.isHost()) {
-    			invites.add(invite);
+    			filteredInvites.add(invite);
     		}
     	}
-        return invites;
+        return filteredInvites;
     }
     
     public List<LgInvite> getInvitesForSurvey(final long oid) {
