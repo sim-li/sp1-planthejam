@@ -18,27 +18,27 @@
     %link{:href => "bower_components/bootstrap/dist/css/bootstrap.css", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "bower_components/angular-xeditable/dist/css/xeditable.css", :rel => "stylesheet"}
     %link{:href => "css/slider.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "bower_components/fullcalendar/dist/fullcalendar.css", :rel => "stylesheet", :type => "text/css"}
     / TODO clean up duplicate or orphan CSS ->
     %link{:href => "css/style.css", :rel => "stylesheet", :type => "text/css"}
     %link{:href => "css/ptj.css", :rel => "stylesheet", :type => "text/css"}
     / %link{:href => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.css", :rel => "stylesheet", :type => "text/css"}
     %link{:href  => "bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css", :rel => "stylesheet", :type => "text/css"}
-    %link{:href => "bower_components/fullcalendar/dist/fullcalendar.css"}
     / for production
     / MINIFIED VERSION OF THE LIBRARIES GO HERE
     / for development
+    %script{:src => "bower_components/jquery/dist/jquery.min.js"}
+    %script{:src => "bower_components/jquery-ui/jquery-ui.min.js"}
     %script{:src => "bower_components/angular/angular.js"}
     %script{:src => "bower_components/angular-bootstrap/ui-bootstrap-tpls.js"}
     %script{:src => "bower_components/angular-route/angular-route.js"}
-    %script{:src => "bower_components/jquery/dist/jquery.min.js"}
-    %script{:src => "bower_components/jquery-ui/jquery-ui.min.js"}
 
     / %script{:src => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js"}
     %script{:src => "bower_components/moment/moment.js"}
     %script{:src => "bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"}
     %script{:src => "bower_components/angular-ui-calendar/src/calendar.js"}
     %script{:src => "bower_components/fullcalendar/dist/fullcalendar.js"}
-    %script{:src => "bower_components/fullcalendar/dist/gcal.js"}
+    %script{:src => "bower_components/angular-ui-calendar/src/calendar.js"}
     / May be unwise to mix normal bootstrap with angular ui bootstrap
     %script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"}
     %script{:src => "bower_components/angular-xeditable/dist/js/xeditable.js"}
@@ -51,6 +51,7 @@
     %script{:src => "js/controllers/survey.js"}
     %script{:src => "js/controllers/partials/timeperiodSelector.js"}
     %script{:src => "js/controllers/partials/groups.js"}
+    %script{:src => "js/controllers/calendar.js"}
     %script{:src => "js/models/baseModel.js"}
     %script{:src => "js/models/group.js"}
     %script{:src => "js/models/member.js"}
