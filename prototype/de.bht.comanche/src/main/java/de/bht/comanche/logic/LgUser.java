@@ -193,9 +193,9 @@ public class LgUser extends DaObject {
     /**
      * Set current user for incoming list of time periods
      * @param periods The list of time periods
-     * @return The
+     * @return 
      */
-    public List<LgTimePeriod> setTPforUser(List<LgTimePeriod> periods){
+    public List<LgTimePeriod> setTP(List<LgTimePeriod> periods){
             for (final LgTimePeriod timePeriod : this.timePeriods) {
                 timePeriod.setUser(this);
             }
@@ -206,7 +206,8 @@ public class LgUser extends DaObject {
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
-    public List<LgTimePeriod> getTimePeriods() {
+    @JsonIgnore
+    public List<LgTimePeriod> getTP() {
         return this.timePeriods;
     }
 
@@ -260,7 +261,7 @@ public class LgUser extends DaObject {
           final LgInvite invite = new LgInvite();
           invite.setHost(true)
               .setIgnored(LgStatus.UNDECIDED)
-              .setSurvey(survey)
+              .setSurvey(survey.flagPossibleTimePeriod())
               .setUser(this);
           return saveUnattached(invite).getSurvey();
     }

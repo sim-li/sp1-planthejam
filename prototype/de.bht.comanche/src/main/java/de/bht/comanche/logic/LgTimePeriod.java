@@ -9,6 +9,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
 
 /**
@@ -60,6 +62,17 @@ public class LgTimePeriod extends DaObject {
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
+	
+	public LgTimePeriod (){}
+	
+	public LgTimePeriod (final LgTimePeriod other){
+		this.oid = other.oid;
+		this.startTime = other.startTime;
+		this.durationMins = other.durationMins;
+		this.survey = other.survey;
+		this.user = other.user;
+		this.invite = other.invite;
+	}
 
 	public Date getStartTime() {
 		return this.startTime;
@@ -97,7 +110,15 @@ public class LgTimePeriod extends DaObject {
 	 * # 
 	 * --------------------------------------------------------------------------------------------
 	 */
-		
+	
+	public LgTimePeriod normalized(){
+		LgTimePeriod tp = new LgTimePeriod();
+		tp.oid = this.oid;
+		tp.startTime = this.startTime;
+		tp.durationMins = this.durationMins;
+		return tp;
+	}
+	
 	public LgTimePeriod setUser(final LgUser user){
 		this.user = user;
 		return this;
