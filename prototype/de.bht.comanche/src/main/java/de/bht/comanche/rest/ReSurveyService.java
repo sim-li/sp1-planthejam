@@ -52,6 +52,13 @@ public class ReSurveyService {
 			public List<LgInvite> execute() throws Exception {
 				final List<LgInvite> result;
 				try {
+					/* 
+					 * TODO comment back in when timeperiods an invites etc. work.
+					 * Kicks off survey evaluation and determination algorithm
+					 */
+//					getSession().getUser().evaluateAllSurveys();
+					//<<----
+					
 					result = startSession().getInvitesForSurvey(surveyOid);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
