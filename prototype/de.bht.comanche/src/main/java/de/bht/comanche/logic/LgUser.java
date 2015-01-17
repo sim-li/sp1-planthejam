@@ -260,20 +260,20 @@ public class LgUser extends DaObject {
 	public LgSurvey saveSurvey(final LgSurvey survey) {
 		LgSurvey persistedSurvey = null;
 		try {
-			 survey.flagPossibleTimePeriod();
+			 List<LgInvite> dirtyInvites = survey.getInvites();
+			 survey.setInvites(new ArrayList<LgInvite>());
+			 persistedSurvey = saveUnattached(survey);
+			 persistedSurvey.flagPossibleTimePeriod();
 			 final LgInvite invite = new LgInvite();
 			 invite.setHost(true)
 			 .setIgnored(LgStatus.UNDECIDED)
 			 .setUser(this);
-			 survey.addInvite(invite);
-			List<LgInvite> persistedInvites = new ArrayList<LgInvite>();
-			for (int i = 0; i < survey.getInvites().size(); i++) {
-				final LgInvite dirtyInvite = survey.getInvites().get(i);
-				dirtyInvite.setSurvey(survey);
-				persistedInvites.add(saveUnattached(dirtyInvite));
+			 dirtyInvites.add(invite);
+			for (int i = 0; i < dirtyInvites.size(); i++) {
+				final LgInvite dirtyInvite = dirtyInvites.get(i);
+				dirtyInvite.setSurvey(persistedSurvey);
+				persistedSurvey.addInvite(saveUnattached(dirtyInvite));
 			}
-			survey.setInvites(persistedInvites);
-			persistedSurvey = saveUnattached(survey);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
