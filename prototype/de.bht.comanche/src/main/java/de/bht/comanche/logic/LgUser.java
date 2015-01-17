@@ -1,7 +1,6 @@
 package de.bht.comanche.logic;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,9 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.bht.comanche.persistence.DaObject;
 /**
  * This entity class represents a user and serve methods for working with
@@ -192,22 +189,36 @@ public class LgUser extends DaObject {
     /**
      * Set current user for incoming list of time periods
      * @param periods The list of time periods
-     * @return 
+     * @return The
      */
+<<<<<<< HEAD
 //    public List<LgTimePeriod> setTP(List<LgTimePeriod> periods){
 //            for (final LgTimePeriod timePeriod : this.generalAvailability) {
 //                generalAvailability.setUser(this);
 //            }
 //            return periods;
 //    }
+=======
+    public List<LgTimePeriod> setTPforUser(List<LgTimePeriod> periods){
+            for (final LgTimePeriod timePeriod : this.timePeriods) {
+                timePeriod.setUser(this);
+            }
+            return periods;
+    }
+>>>>>>> 02fa7c073418a854daa5d35b760fec2c576d1bc5
 
     /**
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
+<<<<<<< HEAD
     @JsonIgnore
     public List<LgTimePeriod> getTP() {
         return this.generalAvailability;
+=======
+    public List<LgTimePeriod> getTimePeriods() {
+        return this.timePeriods;
+>>>>>>> 02fa7c073418a854daa5d35b760fec2c576d1bc5
     }
 
     /**
@@ -227,12 +238,17 @@ public class LgUser extends DaObject {
     }
 
     //------------------METHODS FOR REST SERVICE-------
+<<<<<<< HEAD
     
     // HOST ROLES
 
+=======
+
+    // HOST ROLES
+>>>>>>> 02fa7c073418a854daa5d35b760fec2c576d1bc5
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {
-    		if (invite.isHost() && invite.getSurvey().getOid() == oid) {
+    		if (invite.isHost() && invite.getOid() == oid) {
     			return invite.getSurvey();
     		}
     	}
@@ -249,32 +265,25 @@ public class LgUser extends DaObject {
         return surveys;
     }
 
-    public List<LgInvite> getInvitesForSurvey(final long oid) {
-    	List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
-    	for (LgInvite invite : this.getSurvey(oid).getInvites()) {
-    		filteredInvites.add(new LgInvite(invite).setSurvey(null));
-    	}
-    	return filteredInvites;
-    }
-    
     public LgSurvey saveSurvey(final LgSurvey survey) {
           final LgInvite invite = new LgInvite();
           invite.setHost(true)
               .setIgnored(LgStatus.UNDECIDED)
-              .setSurvey(survey.flagPossibleTimePeriod())
+              .setSurvey(survey)
               .setUser(this);
           return saveUnattached(invite).getSurvey();
     }
 
-    public LgSurvey updateSurvey(final LgSurvey survey) {
-    	return saveUnattached(survey);
+    public LgSurvey updateSurvey(final long oid, LgSurvey survey) {
+   	 	//REDUNDANT
+    	return saveSurvey(survey);
     }
     
     public void deleteSurvey(final long oid) {
     	this.getSurvey(oid).delete();
     }
     
-    //-- PARTICIPANT ROLES
+    // PARTICIPANT ROLES
     
     // maybe unused
     public LgInvite getInvite(final long oid) {
@@ -291,6 +300,10 @@ public class LgUser extends DaObject {
     	}
         return filteredInvites;
     }
+    
+    public List<LgInvite> getInvitesForSurvey(final long oid) {
+    	return this.getSurvey(oid).getInvites();
+    }
 
     public LgInvite saveInvite(final LgInvite invite){
         return saveUnattached(invite);
@@ -300,29 +313,12 @@ public class LgUser extends DaObject {
     	 //REDUNDANT
     	 return saveInvite(invite);
     }
-    
-    //------------------ METHODS FOR SURVEY EVALUATION -------
-    
-    public void evaluateAllSurveys() {
-    	List<LgSurvey> surveysOfThisUser = getSurveys();
-        for (final LgSurvey survey : surveysOfThisUser) {
-            if (survey.isReadyForEvaluation()) {
-            	survey.determine();
-                sendMessageToHost(survey);
-            }
-        }
-    }
-    
-    // ** TODO **
-    private void sendMessageToHost(LgSurvey survey) {
-    	Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
-    	String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
-    	
-    	// TODO implementation missing of LgUser.messages
-//        this.messages.add(message);
-    }
-    
-    //--------------------------------------------------------
+   
+    /**
+     * Returns LgInvite by provided oid.
+     * @param inviteOid The LgInvite oid.
+     * @return The found LgInvite.
+     */
    
     @JsonIgnore
     public List<LgGroup> getGroups() {
