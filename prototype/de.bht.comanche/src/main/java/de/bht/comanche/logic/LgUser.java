@@ -71,7 +71,7 @@ public class LgUser extends DaObject {
      */
     @JsonIgnore
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<LgTimePeriod> timePeriods;
+    private List<LgTimePeriod> generalAvailability;
 
     /**
      * Construct a new LgUser object with a list of ivites, groups and general availability time.
@@ -79,7 +79,7 @@ public class LgUser extends DaObject {
     public LgUser() {
         this.invites = new ArrayList<LgInvite>();
         this.groups = new ArrayList<LgGroup>();
-        this.timePeriods = new ArrayList<LgTimePeriod>();
+        this.generalAvailability = new ArrayList<LgTimePeriod>();
     }
 
     public LgInvite getInviteBySurveyName(final String name) {
@@ -186,7 +186,7 @@ public class LgUser extends DaObject {
      */
     //TODO improve it
 //  public LgTimePeriod saveTpforInvite(final LgInvite invite) {
-//      invite.setTimePeriod(invite);
+//      invite.generalAvailability(invite);
 //      return saveUnattached(invite);
 //  }
 
@@ -195,12 +195,12 @@ public class LgUser extends DaObject {
      * @param periods The list of time periods
      * @return 
      */
-    public List<LgTimePeriod> setTP(List<LgTimePeriod> periods){
-            for (final LgTimePeriod timePeriod : this.timePeriods) {
-                timePeriod.setUser(this);
-            }
-            return periods;
-    }
+//    public List<LgTimePeriod> setTP(List<LgTimePeriod> periods){
+//            for (final LgTimePeriod timePeriod : this.generalAvailability) {
+//                generalAvailability.setUser(this);
+//            }
+//            return periods;
+//    }
 
     /**
      * Returns LgTimePeriods list for current user.
@@ -208,7 +208,7 @@ public class LgUser extends DaObject {
      */
     @JsonIgnore
     public List<LgTimePeriod> getTP() {
-        return this.timePeriods;
+        return this.generalAvailability;
     }
 
     /**
@@ -228,7 +228,7 @@ public class LgUser extends DaObject {
     }
 
     //------------------METHODS FOR REST SERVICE-------
-
+    
     // HOST ROLES
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {

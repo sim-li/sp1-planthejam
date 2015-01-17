@@ -75,8 +75,8 @@ public class LgSurvey extends DaObject {
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
 	//if tests are not working, set to lazy 
-	@JsonIgnore
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@JsonIgnore
+	@OneToMany(mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private List<LgTimePeriod> possibleTimePeriods;
 	
 	/**
@@ -222,7 +222,7 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 	
-	//getter
+//	getter
 	public List<LgTimePeriod> getPossibleTimePeriods(){
 		return this.possibleTimePeriods;
 	}
@@ -232,16 +232,45 @@ public class LgSurvey extends DaObject {
 		this.possibleTimePeriods = period;
 		return this;
 	}
-	
+
 	public LgSurvey withNormalizedTP() {
-		List<LgTimePeriod> result = new ArrayList<LgTimePeriod>();
-		for(LgTimePeriod period: this.possibleTimePeriods){
-			result.add(period.normalized());
+		List<LgTimePeriod> result = new ArrayList<LgTimePeriod>(this.possibleTimePeriods);
+		System.out.println("withNormalizedTP==================");
+		for(LgTimePeriod period: result){
+			period.setInvite(null);
+			period.setSurvey(null);
+			period.setUser(null);
+			result.add(period);
+			System.out.println("===" + result);
+//			this.attachPoolFor(period); // not working
+//			this.attachPoolFor(period); //not working
 //			if(period.getSurvey().getOid() == this.getOid()){
-//				result.add(period);
+//			result.add(period.normalized());//not working - array is empty
 //			}
 		}
 		return setPossibleTimePeriods(result);
+		//not set to setPossibleTimePeriods, attach result
+//		return this.setPossibleTimePeriods.result);
+	}
+	
+	public List<LgTimePeriod> normilaze(List<LgTimePeriod> period) {
+		List<LgTimePeriod> result = new ArrayList<LgTimePeriod>();
+		System.out.println("withNormalizedTP==================");
+		for(LgTimePeriod time: period){
+			time.setInvite(null);
+			time.setSurvey(null);
+			time.setUser(null);
+			result.add(time);
+			System.out.println("===" + result);
+//			this.attachPoolFor(period); // not working
+//			this.attachPoolFor(period); //not working
+//			if(period.getSurvey().getOid() == this.getOid()){
+//			result.add(period.normalized());//not working - array is empty
+//			}
+		}
+		return result;
+		//not set to setPossibleTimePeriods, attach result
+//		return this.setPossibleTimePeriods.result);
 	}
 	
 	public LgSurvey flagPossibleTimePeriod() {

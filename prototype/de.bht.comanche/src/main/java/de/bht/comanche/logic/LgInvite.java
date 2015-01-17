@@ -119,7 +119,7 @@ public class LgInvite extends DaObject{
 	 * @return
 	 */
 	public LgSurvey getSurvey() {
-		return this.survey.withNormalizedTP();
+		return this.survey;
 	}
 
 	public LgInvite setSurvey(final LgSurvey survey) {

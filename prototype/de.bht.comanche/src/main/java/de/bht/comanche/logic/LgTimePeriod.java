@@ -41,18 +41,21 @@ public class LgTimePeriod extends DaObject {
 	/**
 	 * Column for LgSurvey foreign key 
 	 */
+	@JsonIgnore
 	@ManyToOne
 	private LgSurvey survey;
 	
 	/**
 	 * Column for LgUser foreign key
 	 */
+	@JsonIgnore
 	@ManyToOne
 	private LgUser user;
 	
 	/**
 	 * Column for LgInvite foreign key
 	 */
+	@JsonIgnore
 	@ManyToOne
 	private LgInvite invite;
 
@@ -112,11 +115,15 @@ public class LgTimePeriod extends DaObject {
 	 */
 	
 	public LgTimePeriod normalized(){
-		LgTimePeriod tp = new LgTimePeriod();
-		tp.oid = this.oid;
-		tp.startTime = this.startTime;
-		tp.durationMins = this.durationMins;
-		return tp;
+		LgTimePeriod result = new LgTimePeriod();
+		result.oid = this.oid;
+		result.startTime = this.startTime;
+		result.durationMins = this.durationMins;
+		result.survey = null;
+		result.user = null;
+		result.invite = null;
+		return result;
+//		return this.attachPoolFor(tp); not works
 	}
 	
 	public LgTimePeriod setUser(final LgUser user){
