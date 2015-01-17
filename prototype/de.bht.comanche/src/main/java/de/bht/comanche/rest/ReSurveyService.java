@@ -17,7 +17,6 @@ import javax.ws.rs.core.Context;
 
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
-import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgTransaction;
 
 
@@ -115,7 +114,7 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().updateSurvey(survey);
+					result = startSession().updateSurvey(-1, survey);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
