@@ -9,10 +9,10 @@ angular.module('myApp')
      *
      * @class cockpitCtrl
      */
-    .controller('cockpitCtrl', ['$location', '$log', '$scope', 'Invite', 'invitesPromise', 'Model', 'restService',
-        'surveysPromise', 'Survey',
-        function($location, $log, $scope, Invite, invitesPromise, Model, restService,
-            surveysPromise, Survey) {
+    .controller('cockpitCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'Invite', 'invitesPromise', 'Model',
+        'restService', 'surveysPromise', 'Status', 'Survey',
+        function($location, $log, $scope, arrayUtil, Invite, invitesPromise, Model,
+            restService, surveysPromise, Status, Survey) {
 
             'use strict';
 
@@ -103,6 +103,38 @@ angular.module('myApp')
                 // TODO rename to ==>  $scope.setSelectedInviteStatus = function(status) {
                 $scope.selectedInvite.setIgnored(ignored);
                 restService.doSave($scope.selectedInvite);
+            };
+
+            var sendMessagesToParticipant = function() {
+
+                /* FRAGE oder lieber Server-Methode ???
+                --> restService.sendMessagesToParticipant($scope.selectedSurvey);
+                */
+
+                var selectedSurvey = $scope.selectedSurvey,
+                    invites = selectedSurvey.invites,
+                    message = 'For ' + selectedSurvey.name;
+                if (selectedSurvey.success == Status.YES) {
+                    message += 'the following date was determined: ' + selectedSurvey.determinedTimePeriod; // some extra formatting here?
+                } else {
+                    message += 'no date could be determined.';
+                }
+                arrayUtil.forEach(invites, function(invite) {
+                    invite.user.messages.push(message);
+                });
+            };
+
+            $scope.confirm = function() {
+                $scope.selectedSurvey.success = Status.YES;
+                sendMessagesToParticipant();
+                restService.save($scope.selectedSurvey);
+            };
+
+            $scope.reject = function() {
+                $scope.selectedSurvey.success = Status.NO;
+                $scope.selectedSurvey.determinedTimePeriod = null;
+                sendMessagesToParticipant();
+                restService.save($scope.selectedSurvey);
             };
         }
     ]);
