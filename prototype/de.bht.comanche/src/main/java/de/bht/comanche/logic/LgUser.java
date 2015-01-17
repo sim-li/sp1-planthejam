@@ -258,32 +258,63 @@ public class LgUser extends DaObject {
     }
     
 	public LgSurvey saveSurvey(final LgSurvey survey) {
-		LgSurvey persistedSurvey = null;
-		try {
-			 List<LgInvite> dirtyInvites = survey.getInvites();
-			 survey.setInvites(new ArrayList<LgInvite>());
-			 persistedSurvey = saveUnattached(survey);
-			 persistedSurvey.flagPossibleTimePeriod();
-			 final LgInvite invite = new LgInvite();
-			 invite.setHost(true)
-			 .setIgnored(LgStatus.UNDECIDED)
-			 .setUser(this);
-			 dirtyInvites.add(invite);
-			for (int i = 0; i < dirtyInvites.size(); i++) {
-				final LgInvite dirtyInvite = dirtyInvites.get(i);
-				dirtyInvite.setSurvey(persistedSurvey);
-				persistedSurvey.addInvite(saveUnattached(dirtyInvite));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		List<LgInvite> dirtyInvites = survey.getInvites();
+		addHostInvite(dirtyInvites);
+		
+		survey.setInvites(new ArrayList<LgInvite>());
+		
+		final LgSurvey persistedSurvey = saveUnattached(survey);
+		persistedSurvey.flagPossibleTimePeriod();
+		
+		persistInvitesAndAddToSurvey(persistedSurvey, dirtyInvites);
 		return persistedSurvey;
 	}
+	
+	 public LgSurvey updateSurvey(final LgSurvey survey) {
+		final LgSurvey surveyOnDb = this.findOneByKey(LgSurvey.class, "oid", survey.getOid()); // May throw EXC
+		final List<LgInvite> clientSideInvites = survey.getInvites();
+		
+		
+		for (final LgInvite clientInvite: clientSideInvites) {
+			for (final LgInvite persistedInvite : surveyOnDb.getInvites()) {
+				if (clientInvite.getUser().getOid() == persistedInvite.getUser().getOid()) {
+					clientSideInvites.remove(clientInvite);
+					clientSideInvites.add(persistedInvite);
+				} else {
+					clientSideInvites.add(clientInvite);
+				}
+			}
+		}
+		
+		
+		survey.setInvites(new ArrayList<LgInvite>());
+		
+		final LgSurvey persistedSurvey = saveUnattached(survey);
+		persistedSurvey.flagPossibleTimePeriod();
+		
+		persistInvitesAndAddToSurvey(persistedSurvey, clientSideInvites);
+		return persistedSurvey;
+	 }
+	    
+	
 
-    public LgSurvey updateSurvey(final LgSurvey survey) {
-    	return saveUnattached(survey);
-    }
-    
+	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
+			List<LgInvite> dirtyInvites) {
+		for (int i = 0; i < dirtyInvites.size(); i++) {
+			final LgInvite dirtyInvite = dirtyInvites.get(i);
+			dirtyInvite.setSurvey(persistedSurvey);
+			persistedSurvey.addInvite(saveUnattached(dirtyInvite));
+		}
+	}
+
+	private void addHostInvite(List<LgInvite> dirtyInvites) {
+		final LgInvite invite = new LgInvite();
+		 invite.setHost(true)
+		 .setIgnored(LgStatus.UNDECIDED)
+		 .setUser(this);
+		 dirtyInvites.add(invite);
+	}
+
     public void deleteSurvey(final long oid) {
     	this.getSurvey(oid).delete();
     }
