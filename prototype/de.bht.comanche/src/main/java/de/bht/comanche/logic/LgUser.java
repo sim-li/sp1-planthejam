@@ -11,9 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.bht.comanche.persistence.DaObject;
 /**
  * This entity class represents a user and serve methods for working with
@@ -230,7 +228,6 @@ public class LgUser extends DaObject {
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {
     		if (invite.isHost() && invite.getOid() == oid) {
-    			
     			return invite.getSurvey();
     		}
     	}
@@ -349,13 +346,5 @@ public class LgUser extends DaObject {
                 .format("LgUser [name=%s, tel=%s, email=%s, password=%s, invites=%s, groups=%s, member=%s, oid=%s, pool=%s]",
                         name, tel, email, password, invites, groups, member,
                         oid, pool);
-    }
-    
-    public static void main(String[] args) {
-    	LgInvite invite = new LgInvite();
-    	invite.setIgnored(LgStatus.UNDECIDED);
-    	LgInvite invite2 = invite;
-    	invite.setIgnored(LgStatus.YES);
-    	System.out.println(invite2.getIgnored());
     }
 }

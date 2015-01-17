@@ -68,6 +68,18 @@ public class LgInvite extends DaObject{
 		this.timePeriods = new ArrayList<LgTimePeriod>();
 	}
 	
+	public LgInvite(LgInvite other) {
+		this.oid = other.oid;
+		this.isHost = other.isHost;
+		this.isIgnored = other.isIgnored;
+		this.user = other.user;
+		this.survey = other.survey;
+		this.timePeriods = new ArrayList<LgTimePeriod>();
+		for (final LgTimePeriod timePeriod : other.timePeriods) {
+			this.timePeriods.add(timePeriod);
+		}
+	}
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -102,9 +114,12 @@ public class LgInvite extends DaObject{
 		this.user = user;
 		return this;
 	}
-
+	/**
+	 * Returns PossibleTimePeriod with nulled db-flags
+	 * @return
+	 */
 	public LgSurvey getSurvey() {
-		return this.survey;
+		return this.survey.withNormalizedTP();
 	}
 
 	public LgInvite setSurvey(final LgSurvey survey) {

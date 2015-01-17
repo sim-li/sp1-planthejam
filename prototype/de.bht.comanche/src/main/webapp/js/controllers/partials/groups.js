@@ -42,8 +42,10 @@ angular.module('myApp')
             (function createDataModels() {
                 $scope.lastElementSelected = '';
                 //IMPL THIS
-                $scope.allElementsSelected = $scope.selectedSurvey.getAllParticipants() ||  []; /////////////////////////////////////////
+                //$scope.allElementsSelected = $scope.selectedSurvey.getAllParticipants() ||  []; /////////////////////////////////////////
+                $scope.allElementsSelected = [];
                 $scope.elements = $scope.users.concat($scope.groups);
+                console.log('Got datamodel $scope')
             })();
 
             $scope.$watch('lastElementSelected', function() {

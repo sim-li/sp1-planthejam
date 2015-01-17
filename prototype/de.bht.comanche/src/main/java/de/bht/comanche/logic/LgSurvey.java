@@ -74,8 +74,9 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
+	//if tests are not working, set to lazy 
 	@JsonIgnore
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgTimePeriod> possibleTimePeriods;
 	
 	/**
@@ -151,6 +152,37 @@ public class LgSurvey extends DaObject {
 		this.invites = other.invites;
 	}
 	
+	private Date now() {
+		return new Date();
+	}
+	
+	public boolean isReadyForEvaluation() {
+		return (this.deadline.compareTo(now()) > 0) && !this.algoChecked && this.success == LgStatus.UNDECIDED;
+	}
+	
+	/**
+	 * A very simple algorithm that just filters out the intersection of the
+	 * possibleTimePeriods of the survey and all availableTimePeriods of the
+	 * invites. The determinedTimePeriod is simply the first LgTimePeriod in
+	 * the filtered list or null if the list was empty.
+	 */
+	public void determine() {
+		List<LgTimePeriod> filtered = new ArrayList<LgTimePeriod>(this.possibleTimePeriods);
+        for (LgInvite invite : this.invites) {
+
+        	// *** IMPORTANT NOTE:  List<E>.retainAll(List<E>) needs E to implement hashCode and equals ***
+        	
+        	// TODO implementation missing of: Invite.getAvailableTimePeriods()
+        	// then comment back in: -->
+//        	filtered.retainAll(invite.getAvailableTimePeriods);
+        	// <--
+        }
+        if (filtered.size() > 0) {
+        	this.determinedTimePeriod = filtered.get(0);
+        }
+        this.algoChecked = true;
+	}
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -221,12 +253,32 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 	
-	public List<LgTimePeriod> getPossibleTimePeriods() {
+	//getter
+	public List<LgTimePeriod> getPossibleTimePeriods(){
 		return this.possibleTimePeriods;
 	}
 	
-	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> possibleTimePeriods) {
-		this.possibleTimePeriods = possibleTimePeriods;
+//	setter
+	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> period){
+		this.possibleTimePeriods = period;
+		return this;
+	}
+	
+	public LgSurvey withNormalizedTP() {
+		List<LgTimePeriod> result = new ArrayList<LgTimePeriod>();
+		for(LgTimePeriod period: this.possibleTimePeriods){
+			result.add(period.normalized());
+//			if(period.getSurvey().getOid() == this.getOid()){
+//				result.add(period);
+//			}
+		}
+		return setPossibleTimePeriods(result);
+	}
+	
+	public LgSurvey flagPossibleTimePeriod() {
+		for(LgTimePeriod period : this.possibleTimePeriods) {
+			period.setSurvey(this);
+		}
 		return this;
 	}
 	
