@@ -191,36 +191,16 @@ public class LgUser extends DaObject {
      * @param periods The list of time periods
      * @return The
      */
-<<<<<<< HEAD
-//    public List<LgTimePeriod> setTP(List<LgTimePeriod> periods){
-//            for (final LgTimePeriod timePeriod : this.generalAvailability) {
-//                generalAvailability.setUser(this);
-//            }
-//            return periods;
-//    }
-=======
-    public List<LgTimePeriod> setTPforUser(List<LgTimePeriod> periods){
-            for (final LgTimePeriod timePeriod : this.timePeriods) {
-                timePeriod.setUser(this);
-            }
-            return periods;
-    }
->>>>>>> 02fa7c073418a854daa5d35b760fec2c576d1bc5
+
 
     /**
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
-<<<<<<< HEAD
     @JsonIgnore
     public List<LgTimePeriod> getTP() {
         return this.generalAvailability;
-=======
-    public List<LgTimePeriod> getTimePeriods() {
-        return this.timePeriods;
->>>>>>> 02fa7c073418a854daa5d35b760fec2c576d1bc5
     }
-
     /**
      * Remove invite object from the list of invites.
      * @param invite The LgInvite to remove.
@@ -238,14 +218,8 @@ public class LgUser extends DaObject {
     }
 
     //------------------METHODS FOR REST SERVICE-------
-<<<<<<< HEAD
-    
     // HOST ROLES
 
-=======
-
-    // HOST ROLES
->>>>>>> 02fa7c073418a854daa5d35b760fec2c576d1bc5
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {
     		if (invite.isHost() && invite.getOid() == oid) {
