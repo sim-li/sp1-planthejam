@@ -257,14 +257,28 @@ public class LgUser extends DaObject {
     	return filteredInvites;
     }
     
-    public LgSurvey saveSurvey(final LgSurvey survey) {
-          final LgInvite invite = new LgInvite();
-          invite.setHost(true)
-              .setIgnored(LgStatus.UNDECIDED)
-              .setSurvey(survey.flagPossibleTimePeriod())
-              .setUser(this);
-          return saveUnattached(invite).getSurvey();
-    }
+	public LgSurvey saveSurvey(final LgSurvey survey) {
+		LgSurvey persistedSurvey = null;
+		try {
+			 survey.flagPossibleTimePeriod();
+			 final LgInvite invite = new LgInvite();
+			 invite.setHost(true)
+			 .setIgnored(LgStatus.UNDECIDED)
+			 .setUser(this);
+			 survey.addInvite(invite);
+			List<LgInvite> persistedInvites = new ArrayList<LgInvite>();
+			for (int i = 0; i < survey.getInvites().size(); i++) {
+				final LgInvite dirtyInvite = survey.getInvites().get(i);
+				dirtyInvite.setSurvey(survey);
+				persistedInvites.add(saveUnattached(dirtyInvite));
+			}
+			survey.setInvites(persistedInvites);
+			persistedSurvey = saveUnattached(survey);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return persistedSurvey;
+	}
 
     public LgSurvey updateSurvey(final LgSurvey survey) {
     	return saveUnattached(survey);

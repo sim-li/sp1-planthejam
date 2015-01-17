@@ -57,7 +57,7 @@ angular.module('models')
                     'host': this.host,
                     'ignored': this.ignored,
                     'user': this.user.doExport(),
-                    'survey': this.survey.doExport()
+                    'survey': this.survey ? this.survey.doExport() : null
                 };
             };
 

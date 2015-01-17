@@ -87,7 +87,9 @@ angular.module('myApp')
             };
 
             $scope.saveSurvey = function() {
-                $log.log($scope.selectedSurvey)
+                $log.log($scope.selectedSurvey);
+                // HACK -> Move to survey class when possible.
+                $scope.selectedSurvey.invites = Invite.exportMany($scope.selectedSurvey.invites);
                 restService.doSave($scope.selectedSurvey)
                     .then(function(success) {
                         $location.path('/cockpit');

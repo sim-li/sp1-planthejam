@@ -72,12 +72,13 @@ angular.module('models')
                     'type': this.type,
                     'durationMins': this.durationMins,
                     'deadline': this.deadline,
-                    // 'frequencyDist': this.frequencyDist,                         // FIXME temporarily commented out
-                    // 'frequencyUnit': this.frequencyUnit,                         // FIXME temporarily commented out
-                    // 'possibleTimePeriods': this.possibleTimePeriods,             // FIXME temporarily commented out
-                    // 'determinedTimePeriod': this.determinedTimePeriod,           // FIXME temporarily commented out
-                    // 'success': this.success,                                     // FIXME temporarily commented out
-                    // 'algoChecked': this.algoChecked                              // FIXME temporarily commented out
+                    'invites': this.invites
+                        // 'frequencyDist': this.frequencyDist,                         // FIXME temporarily commented out
+                        // 'frequencyUnit': this.frequencyUnit,                         // FIXME temporarily commented out
+                        // 'possibleTimePeriods': this.possibleTimePeriods,             // FIXME temporarily commented out
+                        // 'determinedTimePeriod': this.determinedTimePeriod,           // FIXME temporarily commented out
+                        // 'success': this.success,                                     // FIXME temporarily commented out
+                        // 'algoChecked': this.algoChecked                              // FIXME temporarily commented out
                 };
             };
 

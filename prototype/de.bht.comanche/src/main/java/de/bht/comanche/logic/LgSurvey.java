@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.bht.comanche.persistence.DaObject;
 
@@ -102,7 +103,6 @@ public class LgSurvey extends DaObject {
 	 * Invites which are sent to participants of the survey
 	 */
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // SEB: changed to fetch eager to get ReInviteService.getSurveyInvites working
-	@JsonIgnore
 	private List<LgInvite> invites;
 	
 	/**
@@ -312,6 +312,7 @@ public class LgSurvey extends DaObject {
 		return this.invites;
 	}
 
+	@JsonProperty
 	public LgSurvey setInvites(final List<LgInvite> invites) {
 		this.invites = invites;
 		return this;
@@ -325,5 +326,9 @@ public class LgSurvey extends DaObject {
 						frequencyDist, frequencyUnit, possibleTimePeriods,
 						determinedTimePeriod, success, algoChecked, invites, oid,
 						pool);
+	}
+
+	public void addInvite(LgInvite invite) {
+		invites.add(invite);
 	}
 }
