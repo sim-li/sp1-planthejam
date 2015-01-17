@@ -1,7 +1,8 @@
 package de.bht.comanche.logic;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -342,11 +343,27 @@ public class LgUser extends DaObject {
     	 return saveInvite(invite);
     }
    
-    /**
-     * Returns LgInvite by provided oid.
-     * @param inviteOid The LgInvite oid.
-     * @return The found LgInvite.
-     */
+    //------------------ METHODS FOR SURVEY EVALUATION -------
+    
+    public void evaluateAllSurveys() {
+    	List<LgSurvey> surveysOfThisUser = getSurveys();
+        for (final LgSurvey survey : surveysOfThisUser) {
+            if (survey.isReadyForEvaluation()) {
+            	survey.determine();
+                sendMessageToHost(survey);
+            }
+        }
+    }
+    
+    // ** TODO **
+    private void sendMessageToHost(LgSurvey survey) {
+    	Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
+    	String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
+    	// TODO implementation missing of LgUser.messages
+//        this.messages.add(message);
+    }
+
+    //--------------------------------------------------------
    
     @JsonIgnore
     public List<LgGroup> getGroups() {
