@@ -5,6 +5,7 @@
  */
 angular.module('models')
     .factory('Survey', ['arrayUtil', 'Status', 'SurveyType', 'TimeUnit',
+
         function(arrayUtil, Status, SurveyType, TimeUnit) {
 
             'use strict';
@@ -80,6 +81,14 @@ angular.module('models')
                 };
             };
 
+            // Invite.prototype.addParticipantsFromGroup = function(group) {
+            //     if (group.modelId !== 'group') {
+            //         return;
+            //     }
+            //     group.members.forEach(function(member) {
+            //         this.addParticipant(member.user);
+            //     }, this);
+            // };
 
             //--------------------------------------------------------------------
             // IMPORTANT NOTE!

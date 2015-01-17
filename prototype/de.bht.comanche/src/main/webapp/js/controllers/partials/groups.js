@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('groupsCtrl', ['$scope', '$modal', '$log', 'restService', 'StateSwitcher',
-        function($scope, $modal, $log, restService, StateSwitcher) {
+    .controller('groupsCtrl', ['$scope', '$modal', '$log', 'restService', 'StateSwitcher', 'arrayUtil', 'Invite',
+
+        function($scope, $modal, $log, restService, StateSwitcher, arrayUtil, Invite) {
 
             /**
              * Creates a new modal instance and opens it.
@@ -71,13 +72,13 @@ angular.module('myApp')
                 }
                 $scope.allElementsSelected.push($scope.lastElementSelected);
                 refreshUserListOfSelectedSurvey();
+                console.log('Current state of survey (after add-update)', $scope.selectedSurvey);
                 // TODO: Implement "switch according to condition in stateswitcher" + add here.
-                console.log('Pushed that bia');
             };
 
             var refreshUserListOfSelectedSurvey = function() {
-                $scope.selectedSurvey.updateParticipantsFromMixedList($scope.allElementsSelected); /////////////////////////////////////////
-            };
+                updateParticipantsFromMixedList($scope.allElementsSelected);
+            }
 
             var isNoValidSelection = function() {
                 if (!($scope.lastElementSelected && $scope.lastElementSelected.name)) {
@@ -97,7 +98,73 @@ angular.module('myApp')
 
             $scope.removeElementFromSelection = function(index) {
                 $scope.allElementsSelected.splice(index, 1);
+                console.log('Calling update');
+                updateParticipantsFromMixedList($scope.allElementsSelected);
+                console.log('Current state of survey (after remove-update)', $scope.selectedSurvey);
             };
+            /**
+             * ...
+             *
+             * @method addParticipant
+             * @param {User} user the user to be added as participant
+             */
+            var addParticipant = function(user) {
+                $scope.selectedSurvey.invites.push(new Invite({
+                    user: user
+                }));
+            };
+
+            var getAllParticipants = function() {
+                var allParticipants = [];
+                if (!this.invites) {
+                    return;
+                }
+                arrayUtil.forEach($scope.selectedSurvey.invites, function(invite) {
+                    allParticipants.push(invite.user);
+                });
+                return allParticipants;
+            };
+            /**
+             * ...
+             *
+             * @method addParticipants
+             * @param {Group} group the group, which members shall be added as participants
+             */
+            var addParticipantsFromGroup = function(group) {
+                if (group.modelId !== 'group') {
+                    return;
+                }
+
+                arrayUtil.forEach(group.members, function(member) {
+                    addParticipant(member.user);
+                });
+            };
+
+            /**
+             * Replaces all participants from a list that can contain
+             * users or groups.
+             *
+             * @param  {List} mixedList Mixed list of groups and users
+             * @return {[type]}           [description]
+             */
+            var updateParticipantsFromMixedList = function(mixedList) {
+                $scope.selectedSurvey.invites = [];
+                arrayUtil.forEach(mixedList, function(element) {
+                    switch (element.modelId) {
+                        case 'user':
+                            addParticipant(element);
+                            break;
+                        case 'group':
+                            addParticipantsFromGroup(element);
+                            break;
+                        default:
+                            console.log('Faulty element in your collection');
+                    }
+                });
+            }
+
+            // TODO Should match users + groups against participants and return mixed list
+            var getMixedListFromParticipants = function() {}
         }
     ]);
 // Please note that $modalInstance represents a modal window (instance) dependency.

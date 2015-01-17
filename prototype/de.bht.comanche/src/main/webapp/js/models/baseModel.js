@@ -9,7 +9,7 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models', ['constants', 'util'])
-    .factory('Model', ['arrayUtil', function(arrayUtil) {
+    .factory('Model', ['arrayUtil', 'Invite', 'Survey', function(arrayUtil) {
 
         'use strict';
 

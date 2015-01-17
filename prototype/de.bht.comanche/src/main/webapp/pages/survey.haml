@@ -1,10 +1,5 @@
 %ptj-menu
 .container
-  / %div#temporary-debug-output1 users: '{{ users }}'
-  %div#temporary-debug-output3 selectedSurvey: '{{ selectedSurvey }}'
-  / %div#temporary-debug-output4 groups: '{{ groups }}'
-  / %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}'
-  / %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}'
   .row
     / search & results
     / sidebar
@@ -41,15 +36,15 @@
             %ptj-groups
             / %ptj-members
 
-            %div#ptj-members{:collapse => "memberListIsCollapsed"}
-              .well.well-sm
-                .container-fluid
-                  .btn-group
-                    %span{"ng-repeat" => "member in selectedGroup.members"}
-                      %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"}
-                        {{member.user.name}}
-                        %span.badge
-                          %span.glyphicon.glyphicon-remove
+            / %div#ptj-members{:collapse => "memberListIsCollapsed"}
+            /   .well.well-sm
+            /     .container-fluid
+            /       .btn-group
+            /         %span{"ng-repeat" => "member in selectedGroup.members"}
+            /           %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"}
+            /             {{member.user.name}}
+            /             %span.badge
+            /               %span.glyphicon.glyphicon-remove
 
             %br
           / DEBUGGING THE GROUPS >>>

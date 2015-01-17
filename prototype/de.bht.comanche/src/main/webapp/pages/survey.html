@@ -1,10 +1,5 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
-  <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
-  <div id='temporary-debug-output3'>selectedSurvey: '{{ selectedSurvey }}'</div>
-  <!-- %div#temporary-debug-output4 groups: '{{ groups }}' -->
-  <!-- %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}' -->
-  <!-- %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}' -->
   <div class='row'>
     <!-- search & results -->
     <!-- sidebar -->
@@ -54,22 +49,15 @@
           <div class='rpw'>
             <ptj-groups></ptj-groups>
             <!-- %ptj-members -->
-            <div collapse='memberListIsCollapsed' id='ptj-members'>
-              <div class='well well-sm'>
-                <div class='container-fluid'>
-                  <div class='btn-group'>
-                    <span ng-repeat='member in selectedGroup.members'>
-                      <button class='btn btn-default' ng-click='removeMember($index)' type='button'>
-                        {{member.user.name}}
-                        <span class='badge'>
-                          <span class='glyphicon glyphicon-remove'></span>
-                        </span>
-                      </button>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- %div#ptj-members{:collapse => "memberListIsCollapsed"} -->
+            <!-- .well.well-sm -->
+            <!-- .container-fluid -->
+            <!-- .btn-group -->
+            <!-- %span{"ng-repeat" => "member in selectedGroup.members"} -->
+            <!-- %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"} -->
+            <!-- {{member.user.name}} -->
+            <!-- %span.badge -->
+            <!-- %span.glyphicon.glyphicon-remove -->
             <br>
           </div>
           <!-- DEBUGGING THE GROUPS >>> -->
