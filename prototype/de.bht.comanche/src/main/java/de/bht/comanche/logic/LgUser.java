@@ -270,28 +270,25 @@ public class LgUser extends DaObject {
 	 public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
 		final LgSurvey surveyOnDb = this.findOneByKey(LgSurvey.class, "oid", surveyFromClient.getOid()); // May throw EXC
 		final List<LgInvite> invitesFromDb = surveyOnDb.getInvites();
-		final List<LgInvite> invitesForPersist = new ArrayList<LgInvite>();
+		final List<LgInvite> unpersistedInvites = new ArrayList<LgInvite>();
 		// Collect fresh invites, and persisted invites that come from client with OID
-		for (final LgInvite clientInvite: surveyFromClient.getInvites()) {
+		for (final LgInvite inv: surveyFromClient.getInvites()) {
 			for (final LgInvite persistedInvite : surveyOnDb.getInvites()) {
-				if (clientInvite.getUser().getOid() == persistedInvite.getUser().getOid()) {
-					invitesForPersist.add(persistedInvite);
-				} else {
-					invitesForPersist.add(clientInvite);
-				}
+				if (inv.getUser().getOid() == persistedInvite.getUser().getOid()) {
+					surveyFromClient.getInvites().remove(inv);
+					surveyFromClient.addInvite(persistedInvite);
+				} 
 			}
 		}
-		// Delete unused invites
-//		for (LgInvite inv : invitesFromDb) {
-//			LgInvite attachedInvite = (LgInvite) inv.attach(this.pool);
-//			attachedInvite.delete();
-//		}
-		// Save survey without invites first
-		surveyFromClient.setInvites(new ArrayList<LgInvite>());
+		for (LgInvite inv : invitesFromDb) {
+			if (!surveyFromClient.getInvites().contains(inv)) {
+				inv.delete();
+			}
+		}
 		final LgSurvey persistedSurvey = saveUnattached(surveyFromClient);
 		persistedSurvey.flagPossibleTimePeriod();
 		// Finally, save all invites that have to be saved.
-		persistInvitesAndAddToSurvey(persistedSurvey, invitesForPersist);
+		persistInvitesAndAddToSurvey(persistedSurvey, unpersistedInvites);
 		return persistedSurvey;
 	 }
 	    
