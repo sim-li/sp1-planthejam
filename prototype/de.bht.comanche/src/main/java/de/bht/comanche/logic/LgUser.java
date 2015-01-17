@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,8 +13,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
+import de.bht.comanche.logic.LgInvite;
 /**
  * This entity class represents a user and serve methods for working with
  * all objects LgClasses.
@@ -190,9 +194,14 @@ public class LgUser extends DaObject {
     /**
      * Set current user for incoming list of time periods
      * @param periods The list of time periods
-     * @return The
+     * @return 
      */
-
+//    public List<LgTimePeriod> setTP(List<LgTimePeriod> periods){
+//            for (final LgTimePeriod timePeriod : this.generalAvailability) {
+//                generalAvailability.setUser(this);
+//            }
+//            return periods;
+//    }
 
     /**
      * Returns LgTimePeriods list for current user.
@@ -202,6 +211,7 @@ public class LgUser extends DaObject {
     public List<LgTimePeriod> getTP() {
         return this.generalAvailability;
     }
+
     /**
      * Remove invite object from the list of invites.
      * @param invite The LgInvite to remove.
@@ -219,11 +229,11 @@ public class LgUser extends DaObject {
     }
 
     //------------------METHODS FOR REST SERVICE-------
+    
     // HOST ROLES
-
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {
-    		if (invite.isHost() && invite.getOid() == oid) {
+    		if (invite.isHost() && invite.getSurvey().getOid() == oid) {
     			return invite.getSurvey();
     		}
     	}
@@ -240,18 +250,26 @@ public class LgUser extends DaObject {
         return surveys;
     }
 
+    public List<LgInvite> getInvitesForSurvey(final long oid) {
+    	List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
+    	for (LgInvite invite : this.getSurvey(oid).getInvites()) {
+    		filteredInvites.add(new LgInvite(invite).setSurvey(null));
+    	}
+    	return filteredInvites;
+    }
+    
     public LgSurvey saveSurvey(final LgSurvey survey) {
           final LgInvite invite = new LgInvite();
           invite.setHost(true)
               .setIgnored(LgStatus.UNDECIDED)
-              .setSurvey(survey)
+              .setSurvey(survey.flagPossibleTimePeriod())
               .setUser(this);
           return saveUnattached(invite).getSurvey();
     }
 
-    public LgSurvey updateSurvey(final long oid, LgSurvey survey) {
+    public LgSurvey updateSurvey(final LgSurvey survey) {
    	 	//REDUNDANT
-    	return saveSurvey(survey);
+    	return saveSurvey(survey); // FIXME saveSurvey() creates a new invite for the host each time it is called; this must be avoided!!
     }
     
     public void deleteSurvey(final long oid) {
@@ -274,10 +292,6 @@ public class LgUser extends DaObject {
     		}
     	}
         return filteredInvites;
-    }
-    
-    public List<LgInvite> getInvitesForSurvey(final long oid) {
-    	return this.getSurvey(oid).getInvites();
     }
 
     public LgInvite saveInvite(final LgInvite invite){

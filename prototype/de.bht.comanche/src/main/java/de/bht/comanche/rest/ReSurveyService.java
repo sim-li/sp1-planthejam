@@ -17,6 +17,7 @@ import javax.ws.rs.core.Context;
 
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgTransaction;
 
 
@@ -52,13 +53,6 @@ public class ReSurveyService {
 			public List<LgInvite> execute() throws Exception {
 				final List<LgInvite> result;
 				try {
-					/* 
-					 * TODO comment back in when timeperiods an invites etc. work.
-					 * Kicks off survey evaluation and determination algorithm
-					 */
-//					getSession().getUser().evaluateAllSurveys();
-					//<<----
-					
 					result = startSession().getInvitesForSurvey(surveyOid);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
@@ -114,7 +108,7 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().updateSurvey(-1, survey);
+					result = startSession().updateSurvey(survey);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
