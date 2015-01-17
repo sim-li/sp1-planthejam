@@ -1,7 +1,7 @@
 package de.bht.comanche.logic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,7 +16,6 @@ import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
-import de.bht.comanche.logic.LgInvite;
 /**
  * This entity class represents a user and serve methods for working with
  * all objects LgClasses.
@@ -230,6 +229,7 @@ public class LgUser extends DaObject {
     //------------------METHODS FOR REST SERVICE-------
     
     // HOST ROLES
+
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {
     		if (invite.isHost() && invite.getSurvey().getOid() == oid) {
@@ -267,15 +267,14 @@ public class LgUser extends DaObject {
     }
 
     public LgSurvey updateSurvey(final LgSurvey survey) {
-   	 	//REDUNDANT
-    	return saveSurvey(survey); // FIXME saveSurvey() creates a new invite for the host each time it is called; this must be avoided!!
+    	return saveUnattached(survey);
     }
     
     public void deleteSurvey(final long oid) {
     	this.getSurvey(oid).delete();
     }
     
-    // PARTICIPANT ROLES
+    //-- PARTICIPANT ROLES
     
     // maybe unused
     public LgInvite getInvite(final long oid) {
@@ -301,12 +300,29 @@ public class LgUser extends DaObject {
     	 //REDUNDANT
     	 return saveInvite(invite);
     }
-   
-    /**
-     * Returns LgInvite by provided oid.
-     * @param inviteOid The LgInvite oid.
-     * @return The found LgInvite.
-     */
+    
+    //------------------ METHODS FOR SURVEY EVALUATION -------
+    
+    public void evaluateAllSurveys() {
+    	List<LgSurvey> surveysOfThisUser = getSurveys();
+        for (final LgSurvey survey : surveysOfThisUser) {
+            if (survey.isReadyForEvaluation()) {
+            	survey.determine();
+                sendMessageToHost(survey);
+            }
+        }
+    }
+    
+    // ** TODO **
+    private void sendMessageToHost(LgSurvey survey) {
+    	Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
+    	String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
+    	
+    	// TODO implementation missing of LgUser.messages
+//        this.messages.add(message);
+    }
+    
+    //--------------------------------------------------------
    
     @JsonIgnore
     public List<LgGroup> getGroups() {
