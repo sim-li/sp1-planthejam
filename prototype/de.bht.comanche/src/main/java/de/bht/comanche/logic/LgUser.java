@@ -260,39 +260,38 @@ public class LgUser extends DaObject {
 	public LgSurvey saveSurvey(final LgSurvey survey) {
 		List<LgInvite> dirtyInvites = survey.getInvites();
 		addHostInvite(dirtyInvites);
-		
 		survey.setInvites(new ArrayList<LgInvite>());
-		
 		final LgSurvey persistedSurvey = saveUnattached(survey);
 		persistedSurvey.flagPossibleTimePeriod();
-		
 		persistInvitesAndAddToSurvey(persistedSurvey, dirtyInvites);
 		return persistedSurvey;
 	}
 	
-	 public LgSurvey updateSurvey(final LgSurvey survey) {
-		final LgSurvey surveyOnDb = this.findOneByKey(LgSurvey.class, "oid", survey.getOid()); // May throw EXC
-		final List<LgInvite> clientSideInvites = survey.getInvites();
-		
-		
-		for (final LgInvite clientInvite: clientSideInvites) {
+	 public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
+		final LgSurvey surveyOnDb = this.findOneByKey(LgSurvey.class, "oid", surveyFromClient.getOid()); // May throw EXC
+		final List<LgInvite> invitesFromDb = surveyOnDb.getInvites();
+		final List<LgInvite> invitesForPersist = new ArrayList<LgInvite>();
+		// Collect fresh invites, and persisted invites that come from client with OID
+		for (final LgInvite clientInvite: surveyFromClient.getInvites()) {
 			for (final LgInvite persistedInvite : surveyOnDb.getInvites()) {
 				if (clientInvite.getUser().getOid() == persistedInvite.getUser().getOid()) {
-					clientSideInvites.remove(clientInvite);
-					clientSideInvites.add(persistedInvite);
+					invitesForPersist.add(persistedInvite);
 				} else {
-					clientSideInvites.add(clientInvite);
+					invitesForPersist.add(clientInvite);
 				}
 			}
 		}
-		
-		
-		survey.setInvites(new ArrayList<LgInvite>());
-		
-		final LgSurvey persistedSurvey = saveUnattached(survey);
+		// Delete unused invites
+//		for (LgInvite inv : invitesFromDb) {
+//			LgInvite attachedInvite = (LgInvite) inv.attach(this.pool);
+//			attachedInvite.delete();
+//		}
+		// Save survey without invites first
+		surveyFromClient.setInvites(new ArrayList<LgInvite>());
+		final LgSurvey persistedSurvey = saveUnattached(surveyFromClient);
 		persistedSurvey.flagPossibleTimePeriod();
-		
-		persistInvitesAndAddToSurvey(persistedSurvey, clientSideInvites);
+		// Finally, save all invites that have to be saved.
+		persistInvitesAndAddToSurvey(persistedSurvey, invitesForPersist);
 		return persistedSurvey;
 	 }
 	    
