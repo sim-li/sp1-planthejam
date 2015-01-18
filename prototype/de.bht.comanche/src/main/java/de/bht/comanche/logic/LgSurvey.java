@@ -133,9 +133,8 @@ public class LgSurvey extends DaObject {
 	}
 	
 	/**
-	 *  this method updates old Survey with "other" Survey
-	 * @param other The other Survey, which is needed to update old Survey
-	 * @deprecated Unefficient pattern
+	 * Updates a Survey with values form another one and saves
+	 * @param other Other survey
 	 */
 	public void updateWith(final LgSurvey other) {
 		this.name = other.name;
@@ -152,12 +151,104 @@ public class LgSurvey extends DaObject {
 		this.invites = other.invites;
 	}
 	
+//	public void updateInvitesWith(List<LgInvite> invites) {
+//		for (LgInvite inv : this.invites) {
+//			for (LgInvite invDirty : invites) {
+//				if (inv.getUser().getOid() == )
+//					
+//				}
+//		}
+//	}
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + (algoChecked ? 1231 : 1237);
+		result = prime * result
+				+ ((deadline == null) ? 0 : deadline.hashCode());
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime
+				* result
+				+ ((determinedTimePeriod == null) ? 0 : determinedTimePeriod
+						.hashCode());
+		result = prime * result + durationMins;
+		result = prime * result + frequencyDist;
+		result = prime * result
+				+ ((frequencyUnit == null) ? 0 : frequencyUnit.hashCode());
+		result = prime * result + ((invites == null) ? 0 : invites.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime
+				* result
+				+ ((possibleTimePeriods == null) ? 0 : possibleTimePeriods
+						.hashCode());
+		result = prime * result + ((success == null) ? 0 : success.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		LgSurvey other = (LgSurvey) obj;
+		// This is the trick!
+		if (this.oid != 0L && other.oid != 0L && this.oid != other.oid)
+			return false;
+		if (algoChecked != other.algoChecked)
+			return false;
+		if (deadline == null) {
+			if (other.deadline != null)
+				return false;
+		} else if (!deadline.equals(other.deadline))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (determinedTimePeriod == null) {
+			if (other.determinedTimePeriod != null)
+				return false;
+		} else if (!determinedTimePeriod.equals(other.determinedTimePeriod))
+			return false;
+		if (durationMins != other.durationMins)
+			return false;
+		if (frequencyDist != other.frequencyDist)
+			return false;
+		if (frequencyUnit != other.frequencyUnit)
+			return false;
+		if (invites == null) {
+			if (other.invites != null)
+				return false;
+		} else if (!invites.equals(other.invites))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (possibleTimePeriods == null) {
+			if (other.possibleTimePeriods != null)
+				return false;
+		} else if (!possibleTimePeriods.equals(other.possibleTimePeriods))
+			return false;
+		if (success != other.success)
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
 
 	public String getName() {
 		return this.name;
@@ -253,7 +344,7 @@ public class LgSurvey extends DaObject {
 //		return this.setPossibleTimePeriods.result);
 	}
 	
-	public List<LgTimePeriod> normilaze(List<LgTimePeriod> period) {
+	public List<LgTimePeriod> normalize(List<LgTimePeriod> period) {
 		List<LgTimePeriod> result = new ArrayList<LgTimePeriod>();
 		System.out.println("withNormalizedTP==================");
 		for(LgTimePeriod time: period){

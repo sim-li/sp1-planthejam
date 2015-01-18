@@ -191,7 +191,7 @@ public abstract class DaObject implements Serializable {
 		return this.oid;
 	}
 
-	protected void setOid(final long oid) {
+	public void setOid(final long oid) {
 		this.oid = oid;
 	}
 

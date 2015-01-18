@@ -38,6 +38,9 @@ public class LgTimePeriod extends DaObject {
 	 */
 	private int durationMins;
 
+	// QUESTION: Do we need to define back-refs? 
+	// Can't LgUser/LgSurvey have an array list & ManyToOne
+	
 	/**
 	 * Column for LgSurvey foreign key 
 	 */

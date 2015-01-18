@@ -271,6 +271,7 @@ public class LgUser extends DaObject {
 	 public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
 		final LgSurvey surveyOnDb = this.findOneByKey(LgSurvey.class, "oid", surveyFromClient.getOid()); // May throw EXC
 		final List<LgInvite> invitesFromDb = surveyOnDb.getInvites();
+		
 		final List<LgInvite> unpersistedInvites = new ArrayList<LgInvite>();
 		// Collect fresh invites, and persisted invites that come from client with OID
 		for (final LgInvite inv: surveyFromClient.getInvites()) {
@@ -345,16 +346,16 @@ public class LgUser extends DaObject {
    
     //------------------ METHODS FOR SURVEY EVALUATION -------
     
-    public void evaluateAllSurveys() {
-    	List<LgSurvey> surveysOfThisUser = getSurveys();
-        for (final LgSurvey survey : surveysOfThisUser) {
-            if (survey.isReadyForEvaluation()) {
-            	survey.determine();
-                sendMessageToHost(survey);
-            }
-        }
-    }
-    
+//    public void evaluateAllSurveys() {
+//    	List<LgSurvey> surveysOfThisUser = getSurveys();
+//        for (final LgSurvey survey : surveysOfThisUser) {
+//            if (survey.isReadyForEvaluation()) {
+//            	survey.determine();
+//                sendMessageToHost(survey);
+//            }
+//        }
+//    }
+//    
     // ** TODO **
     private void sendMessageToHost(LgSurvey survey) {
     	Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
