@@ -107,8 +107,12 @@ public class LgUser extends DaObject {
     /**
      * Complete deleting of a user accout.
      */
-    public void deleteAccount() {
+    public void deleteThisAccount() {
         delete();
+    }
+    
+    public void deleteOtherUserAccount(final LgUser user) {
+    	this.findOneByKey(LgUser.class, "oid", user.getOid()).delete();
     }
     /**
      * Delete LgInvite by provided oid.
@@ -239,7 +243,6 @@ public class LgUser extends DaObject {
 		addHostInvite(dirtyInvites);
 		survey.setInvites(new ArrayList<LgInvite>());
 		final LgSurvey persistedSurvey = saveUnattached(survey);
-		persistedSurvey.flagPossibleTimePeriod();
 		persistInvitesAndAddToSurvey(persistedSurvey, dirtyInvites);
 		return persistedSurvey;
 	}
@@ -263,7 +266,6 @@ public class LgUser extends DaObject {
 			}
 		}
 		final LgSurvey persistedSurvey = saveUnattached(surveyFromClient);
-		persistedSurvey.flagPossibleTimePeriod();
 		// Finally, save all invites that have to be saved.
 		persistInvitesAndAddToSurvey(persistedSurvey, unpersistedInvites);
 		return persistedSurvey;
