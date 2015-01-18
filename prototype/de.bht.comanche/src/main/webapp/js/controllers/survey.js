@@ -32,7 +32,7 @@ angular.module('myApp')
             $scope.groups = Model.importMany(Group, groupsPromise);
             $scope.users = Model.importMany(User, usersPromise);
             // No connection to REST yet (widget will probably be discarded)
-            $scope.timePeriods = TimePeriod.dummyTimePeriods();
+            // $scope.timePeriods = TimePeriod.dummyTimePeriods();
 
             /**
              * Create simple variables needed to store UI states for components that aren't grouped in directives.
@@ -135,5 +135,41 @@ angular.module('myApp')
             $scope.setOneTime = function() {
                 $scope.selectedSurvey.type = SurveyType.ONE_TIME;
             };
+
+            /**********************************************************************************************/
+            $scope.possibleTimePeriods = [];
+
+            /* config object */
+            $scope.uiConfig = {
+                calendar: {
+                    height: 450,
+                    defaultView: 'agendaWeek',
+                    header: {
+                        left: 'month,agendaWeek,agendaDay',
+                        center: 'title',
+                        right: 'today prev,next'
+                    },
+                    editable: true,
+                    selectable: true,
+                    select: function(startDate, endDate) {
+                        /* correct timezoneoffset */
+                        var timeZoneOffset = new Date().getTimezoneOffset();
+                        var start = new Date(startDate + timeZoneOffset * 60000);
+                        var end = new Date(endDate + timeZoneOffset * 60000);
+
+                        $scope.possibleTimePeriods.push({
+                            start: start,
+                            end: end
+                        });
+                    },
+                    events: $scope.possibleTimePeriods
+                }
+            };
+
+            $scope.eventSources = [];
+
+            $scope.renderCalendar = function() {
+                $scope.surveyCalendar.fullCalendar('render');
+            }
         }
     ]);
