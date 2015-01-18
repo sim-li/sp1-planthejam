@@ -159,6 +159,44 @@ public class LgSurvey extends DaObject {
 		persistedList.addAll(freshList); // Requires PL tracking too
 	}
 	
+	//-- METHODS FOR SURVEY EVALUATION ----------------------------------------
+	
+	private Date now() {
+		return new Date();
+	}
+	
+	@JsonIgnore
+	public boolean isReadyForEvaluation() {
+		return this.deadline.compareTo(now()) > 0 && this.algoChecked && this.success == LgStatus.UNDECIDED;
+	}
+	
+	/**
+	 * A very simple algorithm that just filters out the intersection of the
+	 * possibleTimePeriods of the survey and all availableTimePeriods of the
+	 * invites. The determinedTimePeriod is simply the first LgTimePeriod in
+	 * the filtered list or null if the list was empty.
+	 */
+	public void determine() {
+		final List<LgTimePeriod> filtered = new ArrayList<LgTimePeriod>();
+		
+		for (final LgInvite invite : this.invites) {
+			/* TODO
+			 * - LgTimePeriod needs hashCode and equals
+			 * - implementation missing of: Invite.getAvailableTimePeriods()
+			 */
+			// then comment back in: -->
+//			filtered.retainAll(invite.getAvailableTimePeriods());
+			// <--
+		}
+		
+		if (filtered.size() > 0) {
+			this.determinedTimePeriod = filtered.get(0);
+		}
+		this.algoChecked = true;
+	}
+	
+	//-------------------------------------------------------------------------
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access

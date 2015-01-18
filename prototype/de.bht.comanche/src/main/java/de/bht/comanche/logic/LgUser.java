@@ -210,7 +210,7 @@ public class LgUser extends DaObject {
         this.groups.remove(group);
     }
 
-    // HOST ROLES
+    //-- HOST ROLES --
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {
     		if (invite.isHost() && invite.getSurvey().getOid() == oid) {
@@ -292,7 +292,7 @@ public class LgUser extends DaObject {
     	this.getSurvey(oid).delete();
     }
     
-    // PARTICIPANT ROLES
+    //-- PARTICIPANT ROLES --
     @JsonIgnore
     public List<LgInvite> getInvitesAsParticipant() {
     	List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
@@ -313,24 +313,27 @@ public class LgUser extends DaObject {
     	 return saveInvite(invite);
     }
    
-    //------------------ TODO: METHODS FOR SURVEY EVALUATION -------
-	// public void evaluateAllSurveys() {
-	//     List<LgSurvey> surveysOfThisUser = getSurveys();
-	//        for (final LgSurvey survey : surveysOfThisUser) {
-	//            if (survey.isReadyForEvaluation()) {
-	//             	  survey.determine();
-	//                sendMessageToHost(survey);
-	//            }
-	//        }
-	//    }
-	//    
-    private void sendMessageToHost(LgSurvey survey) {
-    	Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
-    	String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
-    	// TODO implementation missing of LgUser.messages
+    //------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
+
+    public void evaluateAllSurveys() {
+    	final List<LgSurvey> surveysOfThisUser = getSurveys();
+    	for (final LgSurvey survey : surveysOfThisUser) {
+    		if (survey.isReadyForEvaluation()) {
+    			survey.determine();
+    			sendMessageToHost(survey);
+    		}
+    	}
+    }
+
+    private void sendMessageToHost(final LgSurvey survey) {
+    	final Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
+    	final String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
+    	// IMPORTANT TODO implementation missing of LgUser.messages
     	// this.messages.add(message);
     }
-    
+
+    //-------------------------------------------------------------------------
+
     public LgInvite getInvite(final long oid) {
         return search(this.invites, oid);
     }
