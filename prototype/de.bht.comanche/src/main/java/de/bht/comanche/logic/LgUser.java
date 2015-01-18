@@ -181,34 +181,12 @@ public class LgUser extends DaObject {
         return this.password.equals(user.getPassword());
     }
 
-
-    /**
-     * @author Simon Lischka: Commented this out, return type was conflicting
-     */
-    //TODO improve it
-//  public LgTimePeriod saveTpforInvite(final LgInvite invite) {
-//      invite.generalAvailability(invite);
-//      return saveUnattached(invite);
-//  }
-
-    /**
-     * Set current user for incoming list of time periods
-     * @param periods The list of time periods
-     * @return 
-     */
-//    public List<LgTimePeriod> setTP(List<LgTimePeriod> periods){
-//            for (final LgTimePeriod timePeriod : this.generalAvailability) {
-//                generalAvailability.setUser(this);
-//            }
-//            return periods;
-//    }
-
     /**
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
     @JsonIgnore
-    public List<LgTimePeriod> getTP() {
+    public List<LgTimePeriod> getTimePeriod() {
         return this.generalAvailability;
     }
 
@@ -228,8 +206,6 @@ public class LgUser extends DaObject {
         this.groups.remove(group);
     }
 
-    //------------------METHODS FOR REST SERVICE-------
-    
     // HOST ROLES
     public LgSurvey getSurvey(final long oid) {
     	for (LgInvite invite : this.invites) {
@@ -271,7 +247,6 @@ public class LgUser extends DaObject {
 	 public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
 		final LgSurvey surveyOnDb = this.findOneByKey(LgSurvey.class, "oid", surveyFromClient.getOid()); // May throw EXC
 		final List<LgInvite> invitesFromDb = surveyOnDb.getInvites();
-		
 		final List<LgInvite> unpersistedInvites = new ArrayList<LgInvite>();
 		// Collect fresh invites, and persisted invites that come from client with OID
 		for (final LgInvite inv: surveyFromClient.getInvites()) {
@@ -294,8 +269,6 @@ public class LgUser extends DaObject {
 		return persistedSurvey;
 	 }
 	    
-	
-
 	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
 			List<LgInvite> dirtyInvites) {
 		for (int i = 0; i < dirtyInvites.size(); i++) {
@@ -318,12 +291,6 @@ public class LgUser extends DaObject {
     }
     
     // PARTICIPANT ROLES
-    
-    // maybe unused
-    public LgInvite getInvite(final long oid) {
-        return search(this.invites, oid);
-    }
-  
     @JsonIgnore
     public List<LgInvite> getInvitesAsParticipant() {
     	List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
@@ -344,28 +311,28 @@ public class LgUser extends DaObject {
     	 return saveInvite(invite);
     }
    
-    //------------------ METHODS FOR SURVEY EVALUATION -------
-    
-//    public void evaluateAllSurveys() {
-//    	List<LgSurvey> surveysOfThisUser = getSurveys();
-//        for (final LgSurvey survey : surveysOfThisUser) {
-//            if (survey.isReadyForEvaluation()) {
-//            	survey.determine();
-//                sendMessageToHost(survey);
-//            }
-//        }
-//    }
-//    
-    // ** TODO **
+    //------------------ TODO: METHODS FOR SURVEY EVALUATION -------
+	// public void evaluateAllSurveys() {
+	//     List<LgSurvey> surveysOfThisUser = getSurveys();
+	//        for (final LgSurvey survey : surveysOfThisUser) {
+	//            if (survey.isReadyForEvaluation()) {
+	//             	  survey.determine();
+	//                sendMessageToHost(survey);
+	//            }
+	//        }
+	//    }
+	//    
     private void sendMessageToHost(LgSurvey survey) {
     	Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
     	String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
     	// TODO implementation missing of LgUser.messages
-//        this.messages.add(message);
+    	// this.messages.add(message);
     }
-
-    //--------------------------------------------------------
-   
+    
+    public LgInvite getInvite(final long oid) {
+        return search(this.invites, oid);
+    }
+  
     @JsonIgnore
     public List<LgGroup> getGroups() {
         return this.groups;

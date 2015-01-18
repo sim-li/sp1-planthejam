@@ -75,7 +75,6 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-	//if tests are not working, set to lazy 
 //	@JsonIgnore
 	@OneToMany(mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private List<LgTimePeriod> possibleTimePeriods;
