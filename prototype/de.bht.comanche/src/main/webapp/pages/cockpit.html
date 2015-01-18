@@ -37,8 +37,8 @@
               <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>
                 <div class='col-sm-7'>{{invite.survey.name}}</div>
                 <div class='btn-group'>
-                  <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteIgnored(false)' ng-model='radioModel'>accept</label>
-                  <label btn-radio="'ignore'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteIgnored(true)' ng-model='radioModel'>ignore</label>
+                  <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteStatus(Status.NO)' ng-model='radioModel'>accept</label>
+                  <label btn-radio="'ignore'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteStatus(Status.YES)' ng-model='radioModel'>ignore</label>
                 </div>
               </a>
             </div>
@@ -47,7 +47,7 @@
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter: searchString '>
                 <div class='col-sm-9'>{{invite.survey.name}}</div>
-                <label btn-radio="'reaccept'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteIgnored(false)' ng-model='radioModel'>reaccept</label>
+                <label btn-radio="'reaccept'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteStatus(Status.NO)' ng-model='radioModel'>reaccept</label>
               </a>
             </div>
           </div>
@@ -66,7 +66,7 @@
             <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
             <div>Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}</div>
             <label for='selectedSurveyDescription'>Status:</label>
-            <div id='selectedSurveyStatus'>wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}</div>
+            <div id='selectedSurveyStatus'>ignored {{ selectedInvite.ignored }}</div>
             <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->
             <!-- %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }} -->
           </div>

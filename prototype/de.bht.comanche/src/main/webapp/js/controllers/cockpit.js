@@ -26,6 +26,8 @@ angular.module('myApp')
             $scope.selectedInvite = $scope.invites[0];
             $scope.selectedSurvey = $scope.surveys[0];
 
+            $scope.Status = Status;
+
 
             /**
              * Switches to the survey creation view to create a new survey.
@@ -99,7 +101,7 @@ angular.module('myApp')
              * @param {Boolean} ignored the status of the invite
              */
             // $scope.radioModel = $scope.selectedInvite.ignored ? 'ignore' : 'accept';
-            $scope.setSelectedInviteIgnored = function(ignored) {
+            $scope.setSelectedInviteStatus = function(ignored) {
                 // TODO rename to ==>  $scope.setSelectedInviteStatus = function(status) {
                 $scope.selectedInvite.setIgnored(ignored);
                 restService.doSave($scope.selectedInvite);
