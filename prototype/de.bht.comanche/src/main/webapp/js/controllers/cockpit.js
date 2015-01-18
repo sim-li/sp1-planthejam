@@ -10,9 +10,9 @@ angular.module('myApp')
      * @class cockpitCtrl
      */
     .controller('cockpitCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'Invite', 'invitesPromise', 'Model',
-        'restService', 'surveysPromise', 'Status', 'Survey',
+        'restService', 'surveysPromise', 'Status', 'Survey', 'TimePeriod',
         function($location, $log, $scope, arrayUtil, Invite, invitesPromise, Model,
-            restService, surveysPromise, Status, Survey) {
+            restService, surveysPromise, Status, Survey, TimePeriod) {
 
             'use strict';
 
@@ -138,9 +138,23 @@ angular.module('myApp')
                 restService.save($scope.selectedSurvey);
             };
 
-            // $scope.resultingTimePeriods = [];
+            //-- some dummies
+            $scope.possibleTimePeriods = [
+                new TimePeriod({
+                    startTime: new Date('2014-11-10T11:00:00'),
+                    durationMins: 120
+                }), new TimePeriod({
+                    startTime: new Date('2014-11-11T05:00:00'),
+                    durationMins: 240
+                }), new TimePeriod({
+                    startTime: new Date('2014-11-13T10:00:00'),
+                    durationMins: 360
+                })
+            ];
+            $scope.resultingTimePeriods = [];
+
             $scope.saveAvailabilities = function() {
-                // $log.log($scope.resultingTimePeriods);
+                $log.log($scope.resultingTimePeriods);
                 // $scope.selectedInvite.possibleTimePeriods = ...
             };
         }
