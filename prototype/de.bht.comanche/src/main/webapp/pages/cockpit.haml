@@ -7,28 +7,34 @@
       .col-md-4
         .tabbable
           %ul.nav.nav-tabs
-            %li.active
+            / %li.active
+            %li
               %a{"data-toggle" => "tab", :href => "#surveyTab", "onclick" => "return false;"}
                 Survey
                 %span.badge {{surveys.length}}
-            %li
+            / %li
+            %li.active
               %a{"data-toggle" => "tab", :href => "#inviteTab", "onclick" => "return false;"}
                 Invite
-                %span.badge {{(invites | filter: {isIgnored : "!YES"}).length}}
+                %span.badge {{(invites | filter: {ignored: "!YES"}).length}}
             %li
               %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "onclick" => "return false;"}
                 Ignored
-                %span.badge {{(invites | filter: {isIgnored : "YES"}).length}}
+                %span.badge {{(invites | filter: {ignored: "YES"}).length}}
           .tab-content
-            #surveyTab.tab-pane.active
+            / #surveyTab.tab-pane.active
+            #surveyTab.tab-pane
+              SURV Hallo
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
-              %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter:searchSurvey"} {{survey.name}}
-            #inviteTab.tab-pane
+              %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"} {{survey.name}}
+            / #inviteTab.tab-pane
+            #inviteTab.tab-pane.active
+              INV Hallo
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
               #surveyList.list-group
-              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {name: searchInvite, isIgnored : '!YES'} "}
-                .col-sm-8 {{invite.survey.name}}
+              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES', name: searchInvite} "}
+                .col-sm-8 {{invite.survey.name}} {{invite.ignored}}
                 .btn-group
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;"}
                     %span.glyphicon.glyphicon-question-sign
@@ -42,17 +48,18 @@
                             %span{"aria-hidden" => "true"} ×
                           %h4.modal-title Please choose your Avaibilities
                         .modal-body
-                          .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"}
+                          %ptj-calendar
                         .modal-footer
                           %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
                           %button.btn.btn-primary{:type => "button"} Save changes
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('YES')"}
                     %span.glyphicon.glyphicon-remove
             #ignoredInviteTab.tab-pane
+              IGNORE Hallo
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
               #surveyList.list-group
-              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {name: searchIgnored, isIgnored : 'YES'} "}
-                .col-sm-9 {{invite.survey.name}}
+              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored : 'YES', name: searchIgnored} "}
+                .col-sm-9 {{invite.survey.name}} {{invite.ignored}}
                 %label.btn.btn-primary.btn-sm{"btn-radio" => "'reaccept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')"}
                   reaccept
         / %div DEBUG selected: {{ selectedInvite }}
@@ -71,17 +78,16 @@
             %div#selectedSurveyStatus{} wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}
             / %label{:for => "selectedSurveyDescription"} Deadline:
             / %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }}
-  %button.btn.btn-primary{"data-target" => "#calendarModal", "data-toggle" => "modal", :type => "button"}
-    demo calendar modal
-  #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"}
-    .modal-dialog.modal-lg
-      .modal-content
-        .modal-header
-          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-            %span{"aria-hidden" => "true"} ×
-          %h4.modal-title Please choose your Avaibilities
-        .modal-body
-          .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"}
-        .modal-footer
-          %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
-          %button.btn.btn-primary{:type => "button"} Save changes
+  / %button.btn.btn-primary{"data-target" => "#calendarModal", "data-toggle" => "modal", :type => "button"}
+  /   demo calendar modal
+  / #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"}
+  /   .modal-dialog.modal-lg
+  /     .modal-content
+  /       .modal-header
+  /         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+  /           %span{"aria-hidden" => "true"} ×
+  /         %h4.modal-title Please choose your Avaibilities
+  /       .modal-body
+  /         .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"}
+  /       .modal-footer
+  /         %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close

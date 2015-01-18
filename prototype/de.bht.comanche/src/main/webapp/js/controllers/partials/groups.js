@@ -1,9 +1,9 @@
-'use strict';
-
 angular.module('myApp')
     .controller('groupsCtrl', ['$scope', '$modal', '$log', 'restService', 'StateSwitcher', 'arrayUtil', 'Invite',
 
         function($scope, $modal, $log, restService, StateSwitcher, arrayUtil, Invite) {
+
+            'use strict';
 
             /**
              * Creates a new modal instance and opens it.

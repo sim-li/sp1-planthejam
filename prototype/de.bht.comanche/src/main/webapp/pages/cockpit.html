@@ -6,36 +6,42 @@
       <div class='col-md-4'>
         <div class='tabbable'>
           <ul class='nav nav-tabs'>
-            <li class='active'>
+            <!-- %li.active -->
+            <li>
               <a data-toggle='tab' href='#surveyTab' onclick='return false;'>
                 Survey
                 <span class='badge'>{{surveys.length}}</span>
               </a>
             </li>
-            <li>
+            <!-- %li -->
+            <li class='active'>
               <a data-toggle='tab' href='#inviteTab' onclick='return false;'>
                 Invite
-                <span class='badge'>{{(invites | filter: {isIgnored : "!YES"}).length}}</span>
+                <span class='badge'>{{(invites | filter: {ignored: "!YES"}).length}}</span>
               </a>
             </li>
             <li>
               <a data-toggle='tab' href='#ignoredInviteTab' onclick='return false;'>
                 Ignored
-                <span class='badge'>{{(invites | filter: {isIgnored : "YES"}).length}}</span>
+                <span class='badge'>{{(invites | filter: {ignored: "YES"}).length}}</span>
               </a>
             </li>
           </ul>
           <div class='tab-content'>
-            <div class='tab-pane active' id='surveyTab'>
+            <!-- #surveyTab.tab-pane.active -->
+            <div class='tab-pane' id='surveyTab'>
+              SURV Hallo
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'></div>
-              <a class='list-group-item' href='' ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter:searchSurvey'>{{survey.name}}</a>
+              <a class='list-group-item' href='' ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>{{survey.name}}</a>
             </div>
-            <div class='tab-pane' id='inviteTab'>
+            <!-- #inviteTab.tab-pane -->
+            <div class='tab-pane active' id='inviteTab'>
+              INV Hallo
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='surveyList'></div>
-              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {name: searchInvite, isIgnored : '!YES'} ">
-                <div class='col-sm-8'>{{invite.survey.name}}</div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES', name: searchInvite} ">
+                <div class='col-sm-8'>{{invite.survey.name}} {{invite.ignored}}</div>
                 <div class='btn-group'>
                   <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteStatus('UNDECIDED')" ng-model='radioModel' onclick='return false;'>
                     <span class='glyphicon glyphicon-question-sign'></span>
@@ -53,7 +59,7 @@
                           <h4 class='modal-title'>Please choose your Avaibilities</h4>
                         </div>
                         <div class='modal-body'>
-                          <div class='calendar' ng-model='eventSources' ui-calendar='uiConfig.calendar'></div>
+                          <ptj-calendar></ptj-calendar>
                         </div>
                         <div class='modal-footer'>
                           <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
@@ -69,10 +75,11 @@
               </a>
             </div>
             <div class='tab-pane' id='ignoredInviteTab'>
+              IGNORE Hallo
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchIgnored' placeholder='Filter ignored invites ...' type='search'>
               <div class='list-group' id='surveyList'></div>
-              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {name: searchIgnored, isIgnored : 'YES'} ">
-                <div class='col-sm-9'>{{invite.survey.name}}</div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored : 'YES', name: searchIgnored} ">
+                <div class='col-sm-9'>{{invite.survey.name}} {{invite.ignored}}</div>
                 <label btn-radio="'reaccept'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteStatus('NO')" ng-model='radioModel'>
                   reaccept
                 </label>
@@ -102,26 +109,17 @@
       </div>
     </div>
   </div>
-  <button class='btn btn-primary' data-target='#calendarModal' data-toggle='modal' type='button'>
-    demo calendar modal
-  </button>
-  <div aria-hidden='true' class='modal fade bs-example-modal-lg' data-target='.bs-example-modal-lg' id='calendarModal' role='dialog' tabindex='-1'>
-    <div class='modal-dialog modal-lg'>
-      <div class='modal-content'>
-        <div class='modal-header'>
-          <button aria-label='Close' class='close' data-dismiss='modal' type='button'>
-            <span aria-hidden='true'>×</span>
-          </button>
-          <h4 class='modal-title'>Please choose your Avaibilities</h4>
-        </div>
-        <div class='modal-body'>
-          <div class='calendar' ng-model='eventSources' ui-calendar='uiConfig.calendar'></div>
-        </div>
-        <div class='modal-footer'>
-          <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
-          <button class='btn btn-primary' type='button'>Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- %button.btn.btn-primary{"data-target" => "#calendarModal", "data-toggle" => "modal", :type => "button"} -->
+  <!-- demo calendar modal -->
+  <!-- #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"} -->
+  <!-- .modal-dialog.modal-lg -->
+  <!-- .modal-content -->
+  <!-- .modal-header -->
+  <!-- %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"} -->
+  <!-- %span{"aria-hidden" => "true"} × -->
+  <!-- %h4.modal-title Please choose your Avaibilities -->
+  <!-- .modal-body -->
+  <!-- .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"} -->
+  <!-- .modal-footer -->
+  <!-- %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close -->
 </div>

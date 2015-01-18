@@ -115,6 +115,13 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
             controller: 'timeperiodSelectorCtrl'
         };
     })
+    .directive('ptjCalendar', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/calendar.html',
+            controller: 'calendarCtrl'
+        };
+    })
     .run(function(editableOptions) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
     });
