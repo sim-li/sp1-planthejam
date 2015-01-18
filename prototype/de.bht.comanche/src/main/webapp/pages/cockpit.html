@@ -1,106 +1,66 @@
-<div class="container">        
-    <ptj-menu></ptj-menu>
-    
-    <form name="editUserForm" ng-controller="editUserCtrl" ng-show="session.state.is(dialogMap.USER_EDIT)" class="list-group col-md-4">
-        <div>
-            <label for="inputName">Benutzername</label>
-            <input class="form-control" id="inputName" name="inputName" type="text" ng-model="session.tempUser.name" placeholder="Dein Benutzername ..." required />
-            <label for="inputPassword">Passwort</label>
-            <input class="form-control" id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.tempUser.password" 
-            placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
-            <input class="form-control" id="inputPasswordPlain" name="inputPasswordPlain" ng-show="session.showPassword" type="text" ng-model="session.tempUser.password" 
-            placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
-            <div class="error">{{ warnings.password }}</div>
-        </div>
-        <input id="toggleShowPassword" type="checkbox" ng-model="session.showPassword" ng-checked="false" />
-        <label for="toggleShowPassword">Klartext</label>
-        <div>
-            <label for="inputEmail">E-Mail</label>
-            <input class="form-control" id="inputEmail" name="inputEmail" type="text" ng-model="session.tempUser.email" placeholder="Deine E-Mail-Adresse ..." ng-change="discardWarnings()" required />
-            <div class="error">{{ warnings.email }}</div>
-            <label for="inputTel">Telefon</label>
-            <input class="form-control" id="inputTel" name="inputTel" type="text" ng-model="session.tempUser.tel" placeholder="Deine Telefonnummer ..." ng-change="discardWarnings()" required />
-            <div class="error">{{ warnings.tel }}</div>
-        </div>
-        <span>
-            <input class="btn btn-primary" id="cancelUserEditBtn" type="button" value="Abbrechen" ng-click="cancelEditUser()" />
-            <input class="btn btn-primary" id="saveUserEditBtn" type="submit" value="Speichern" ng-click="saveEditedUser()" />
-            <input class="btn btn-primary" id="deleteUserBtn" type="button" value="L&ouml;schen" ng-click="deleteUser()" />
-        </span>
-    </form><!-- editUserForm -->
-    <!-- TerminUmfrage -->
-    <div class="container" ng-show="session.state.is(dialogMap.SURVEY_SELECTION)">
-        <span>
-            <input class="btn btn-primary" id="addSurvey" type="button" value="Neue Terminumfrage erstellen" ng-click="addInvite()" />
-            <!--++++ TODO: Baustelle ++++++++++++++++++++-->
-            <select id="surveyList" ng-model="session.selectedInvite" ng-options="invite.survey.name for invite in session.user.invites | filter:session.user.searchString"></select>
-                <select id="surveyList" ng-model="session.selectedInvite.survey">
-                    <option ng-repeat="survey in session.user.surveys | filter:session.user.searchString" value="survey.name" onselect="console.log('hi')">{{ survey.name }} (Deadline: {{ survey.deadline.toDateString() }})</option>
-                </select>
-                <input class="form-control" id="filter" type="search" placeholder="Terminumfragen durchsuchen ..." ng-model="session.user.searchString" ng-keyup="$log.log('searchString: \'' + session.user.searchString + '\'')" ng-change="updateSelection()"/>
-                <input class="btn btn-primary" id="editInvite" type="button" value="Terminumfrage anzeigen und bearbeiten" ng-click="editInvite()" />
-                <input class="btn btn-primary" id="deleteInvite" type="button" value="Terminumfrage l&ouml;schen" ng-click="deleteSelectedInvite()" />
-            </span>
-            <textarea rows="5" readonly>{{ session.selectedInvite.survey.description }}</textarea>
-        </div><!-- survey_selection_area -->
-
-
-
-        <div class="container" id="survey_edit_area" ng-controller="editInviteCtrl" ng-show="session.state.is(dialogMap.SURVEY_EDIT)">
-            <span>
-
-                <label for="editSurveyName">Name</label>
-                <!-- <input id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name" ng-change="$log.log(session.tempInvite.survey.name);"/> -->
-                <input class="form-control" id="editSurveyName" type="text" ng-model="session.tempInvite.survey.name"/>
-
-                <label for="editSurveyDescription">Beschreibung</label>
-                <!-- <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description" ng-change="$log.log(session.tempInvite.survey.description);"></textarea> -->
-                <textarea id="editSurveyDescription" rows="5" ng-model="session.tempInvite.survey.description"></textarea>
-                
-                <label for="editSurveyType">Typ</label>
-                <select id="editSurveyType" ng-model="session.tempInvite.survey.type" ng-options="type for type in Type.options_" ng-change="$log.log(session.tempInvite.survey.type);"></select>
-                
-                <label for="editSurveyDeadlineDate">Deadline</label>
-                <input id="editSurveyDeadlineDate" type="date" ng-model="session.tempInvite.survey.deadline.date" ng-change="$log.log(session.tempInvite.survey.deadline.toDate())" required />
-                <input id="editSurveyDeadlineTime" type="time" ng-model="session.tempInvite.survey.deadline.time" ng-change="$log.log(session.tempInvite.survey.deadline.toDate())" required />
-
-
-                <label for="editSurveyFrequencyDistance">Frequenz - Abstand</label>
-                <input id="editSurveyFrequencyDistance" type="number" min="0" ng-model="session.tempInvite.survey.frequencyDist" ng-change="$log.log(session.tempInvite.survey.frequencyDist);"/>
-                
-                <label for="editSurveyFrequencyTimeUnit">Frequenz - Zeiteinheit</label>
-                <select id="editSurveyFrequencyTimeUnit" ng-model="session.tempInvite.survey.frequencyTimeUnit" ng-options="timeunit for timeunit in TimeUnit.options_" ng-change="$log.log(session.tempInvite.survey.frequencyTimeUnit);"></select>
-
-
-                <label for="editSurveyPossibleTimeperiods">M&ouml;gliche Zeitr&auml;ume</label>
-                <div class="container" id="editSurveyPossibleTimeperiods">
-                    <ul>
-                        <li ng-repeat="timeperiod in session.tempInvite.survey.possibleTimeperiods">
-                            <label for="editSurveyDeterminedTimeperiodDuration">Startzeitpunkt</label>
-                            <input id="timeperiodStartDate" type="date" ng-model="timeperiod.startTime.date" ng-change="$log.log(timeperiod.startTime.toDate())" required />
-                            <input id="timeperiodStartTime" type="time" ng-model="timeperiod.startTime.time" ng-change="$log.log(timeperiod.startTime.toDate())" required />
-
-                            <label id="timeperiodDuration" for="editSurveyDeterminedTimeperiodDuration">Dauer in Minuten</label>
-                            <input type="number" min="0" ng-model="timeperiod.durationInMins" ng-change="$log.log(timeperiod.durationInMins)" required />
-                            [ <a href="" ng-click="removeTimeperiodFromTempInvite(timeperiod)">L&ouml;schen</a> ]
-                        </li>
-                        <li>[ <a href="" ng-click="addTimeperiodToTempInvite()">Hinzuf&uuml;gen</a> ]</li>
-                    </ul>
+<ptj-menu></ptj-menu>
+<div class='container'>
+  <!-- %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}' -->
+  <div class='panel panel-default'>
+    <div class='panel-body'>
+      <div class='col-md-4'>
+        <div class='tabbable'>
+          <ul class='nav nav-tabs'>
+            <li class='active'>
+              <a data-toggle='tab' href='#surveyTab' onclick='return false;'>
+                Survey
+                <span class='badge'>{{invites.length}}</span>
+              </a>
+            </li>
+            <li>
+              <a data-toggle='tab' href='#inviteTab' onclick='return false;'>
+                Invite
+                <span class='badge'>{{invites.length}}</span>
+              </a>
+            </li>
+          </ul>
+          <div class='tab-content'>
+            <div class='tab-pane active' id='surveyTab'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+              <div class='list-group' id='surveyList'></div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>{{invite.survey.name}}</a>
+            </div>
+            <div class='tab-pane' id='inviteTab'>
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+              <div class='list-group' id='surveyList'></div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>
+                <div class='col-sm-7'>{{invite.survey.name}}</div>
+                <div class='btn-group'>
+                  <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteIgnored(false)' ng-model='radioModel'>accept</label>
+                  <label btn-radio="'ignore'" class='btn btn-primary btn-sm' ng-click='setSelectedInviteIgnored(true)' ng-model='radioModel'>ignore</label>
                 </div>
-
-
-                <label for="editSurveyDeterminedTimeperiodStartDate">Ermittelter Zeitraum - Startzeitpunkt</label>
-                <input id="editSurveyDeterminedTimeperiodStartDate" type="date" ng-model="session.tempInvite.survey.determinedTimeperiod.startTime.date" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.startTime.toDate())" />
-                <input id="editSurveyDeterminedTimeperiodStartTime" type="time" ng-model="session.tempInvite.survey.determinedTimeperiod.startTime.time" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.startTime.toDate())" />
-
-                <label for="editSurveyDeterminedTimeperiodDuration">Ermittelter Zeitraum - Dauer in Minuten</label>
-                <input id="editSurveyDeterminedTimeperiodDuration" type="number" min="0" ng-model="session.tempInvite.survey.determinedTimeperiod.durationInMins" ng-change="$log.log(session.tempInvite.survey.determinedTimeperiod.durationInMins);"/>
-
-
-                <input id="cancelInviteEdit" type="button" value="Abbrechen" ng-click="cancelEditInvite()" />
-                <input id="saveInviteEdit" type="button" value="Speichern" ng-click="saveInvite()" />
-            </span>
-        </div><!-- survey_edit_area -->
-
-
-    </div><!-- logged_in_area -->
+                <!-- %button.btn.btn-success.btn-sm.col-sm-offset-1{"ng-click" => "setSelectedInviteIgnored(false)"} accept -->
+                <!-- %button.btn.btn-danger.btn-sm{"ng-click" => "setSelectedInviteIgnored(true)"} ignore -->
+                <!-- %button.btn.btn-success.btn-sm.col-sm-offset-4{"ng-click" => "invite.setIgnored(false)"} accept -->
+                <!-- %button.btn.btn-danger.btn-sm{"ng-click" => "invite.setIgnored(true)"} ignore -->
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- %div DEBUG selected: {{ selectedInvite }} -->
+      </div>
+      <div class='col-md-8'>
+        <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
+        <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
+        <input class='btn btn-primary' id='addSurvey' ng-click='addInvite()' type='button' value='Neue Terminumfrage erstellen'>
+        <input class='btn btn-primary' id='editSurvey' ng-click='editInvite()' type='button' value='Terminumfrage anzeigen und bearbeiten'>
+        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedInvite()' type='button' value='Terminumfrage löschen'>
+        <div class='panel panel-default' id='surveyPreview'>
+          <div class='panel-body'>
+            <label for='selectedSurveyDescription'>Beschreibung:</label>
+            <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
+            <label for='selectedSurveyDescription'>Status:</label>
+            <div id='selectedSurveyStatus'>wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}</div>
+            <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->
+            <!-- %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }} -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,18 +1,11 @@
-
-    <div collapse="isCollapsed">
-        <div class="well well-sm">
-            <div class="container-fluid">
-                <div class="btn-group">
-                    <span ng-repeat="user in addedUsers">
-                        <button class="btn btn-default" type="button" >
-                        {{user.name}}
-                    <!-- - {{user.email}} -->
-                            <span class="badge" ng-click="removeMember($index)"><span class="glyphicon glyphicon-remove"></span></span>
-                        </button> 
-                    </span>
-                </div>
-            
-            </div> 
-        </div>
-    </div>
-    
+<!-- %div {{selectedGroup}} -->
+<!-- %div{:collapse => "isCollapsed"} -->
+<!-- .well.well-sm -->
+<!-- .container-fluid -->
+<!-- .btn-group -->
+<!-- %span{"ng-repeat" => "member in selectedGroup.members"} -->
+<!-- %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"} -->
+<!-- / hi: {{member.user.name}} -->
+<!-- HI -->
+<!-- %span.badge -->
+<!-- %span.glyphicon.glyphicon-remove -->

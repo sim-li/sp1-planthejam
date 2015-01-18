@@ -4,15 +4,18 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
 
 /**
- * Describes relation of host with users.
+ * Table contains Invite data
  * 
  * @author Duc Tung Tong
  */
@@ -22,33 +25,42 @@ public class LgInvite extends DaObject{
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 *  is true if user is host from survey 
+	 */
 	private boolean isHost;
+	
+	/**
+	 *  is true if user ignored the invite
+	 */
 	private boolean isIgnored;
 
+	/**
+	 *  user who receives  invite
+	 */
 	@NotNull
 	@ManyToOne
 	private LgUser user;
 
+	/**
+	 *  Survey 
+	 */
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
 	private LgSurvey survey;
-
-	public LgInvite() {}
-	
-	public LgInvite(final long oid) {
-		this.oid = oid;
-	}
-	
-	public LgInvite save() {
-		return pool.save(this);
-	}
-	
-	public void delete() {
-		user.remove(this);
-		pool.delete(this); //throw exc when delete errror
-	}
 	
 	/**
+	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
+	 */
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LgTimePeriod> timePeriods;
+	
+	
+	public LgInvite() {
+		timePeriods = new ArrayList<LgTimePeriod>();
+	}
+	
+	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
 	 * # hashCode(), toString()
@@ -56,87 +68,59 @@ public class LgInvite extends DaObject{
 	 */
 
 	public boolean isHost() {
-		return isHost;
+		return this.isHost;
 	}
-
 
 	public boolean isIgnored() {
-		return isIgnored;
+		return this.isIgnored;
 	}
 
-	public LgInvite setIgnored(boolean isIgnored) {
+	public LgInvite setIgnored(final boolean isIgnored) {
 		this.isIgnored = isIgnored;
 		return this;
 	}
 
-	public LgInvite setHost(boolean isHost) {
+	public LgInvite setHost(final boolean isHost) {
 		this.isHost = isHost;
 		return this;
 	}
 
 	@JsonIgnore
 	public LgUser getUser() {
-		return user;
+		return this.user;
 	}
 
-	public LgInvite setUser(LgUser user) {
+	public LgInvite setUser(final LgUser user) {
 		this.user = user;
 		return this;
 	}
 
 	public LgSurvey getSurvey() {
-		return survey;
+		return this.survey;
 	}
 
-	public LgInvite setSurvey(LgSurvey survey) {
+	public LgInvite setSurvey(final LgSurvey survey) {
 		this.survey = survey;
 		return this;
 	}
 	
-	public LgInvite updateWith(LgInvite other) {
-		this.survey = other.survey;
-		this.isHost = other.isHost;
-		this.isIgnored = other.isIgnored;
-		this.user = other.user;
-		return this;
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((survey == null) ? 0 : survey.hashCode());
-		result = prime * result + (isHost ? 1231 : 1237);
-		result = prime * result + (isIgnored ? 1231 : 1237);
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
-		return result;
+	/**
+	 * Sets specified LgInvite for LgTimePeriod.
+	 * @param invite The LgInvite to set.
+	 * @return Returns The LgInvite.
+	 */ 
+	//not clear, how it will be used
+	public LgInvite setTimePeriod(LgInvite invite){
+			for (final LgTimePeriod period : this.timePeriods) {
+				period.setInvite(invite);
+			}
+			return this;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LgInvite other = (LgInvite) obj;
-		if (survey == null) {
-			if (other.survey != null)
-				return false;
-		} else if (!survey.equals(other.survey))
-			return false;
-		if (isHost != other.isHost)
-			return false;
-		if (isIgnored != other.isIgnored)
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		return true;
-	}	
-
+	public String toString() {
+		return String
+				.format("LgInvite [isHost=%s, isIgnored=%s, user=%s, survey=%s, oid=%s, pool=%s]",
+						isHost, isIgnored, user, survey, oid, pool);
+	}
 }

@@ -1,4 +1,5 @@
 package de.bht.comanche.rest;
+//package de.bht.comanche.rest;
 
 import static com.jayway.restassured.RestAssured.given;
 

@@ -1,80 +1,86 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * 
- * Module: logged in controller
+/**
+ * @module myApp
+ *
+ * @author Sebastian Dass&eacute;
  */
+angular.module('myApp')
+    /**
+     * The controller for the cockpit view.
+     *
+     * @class cockpitCtrl
+     */
+    .controller('cockpitCtrl', ['$location', '$log', '$scope', 'Invite', 'invitesPromise', 'Model', 'restService',
+        function($location, $log, $scope, Invite, invitesPromise, Model, restService) {
+
+            'use strict';
+
+            // resolve the promises passed to this route
+            $scope.invites = Model.importMany(Invite, invitesPromise);
+
+            // preselects the first invite in the list
+            $scope.selectedInvite = $scope.invites[0];
 
 
-"use strict";
+            /**
+             * Selects the specified invite.
+             *
+             * @method selectInvite
+             * @param  {Invite} invite the invite
+             */
+            $scope.selectInvite = function(invite) {
+                $scope.selectedInvite = invite;
+                // $log.debug($scope.selectedInvite);
+            };
 
-angular.module("myApp")
-    .controller("cockpitCtrl", ["$scope", "$location", "$log", "Invite", "restService", "dialogMap", "util", 
-        function($scope, $location, $log, Invite, restService, dialogMap, util) {
+            /**
+             * Switches to the invite edit view to edit the selected invite.
+             *
+             * @method editInvite
+             */
+            $scope.editInvite = function() {
+                if (!$scope.selectedInvite) {
+                    $log.log('Keine Terminumfrage ausgewaehlt.');
+                    return;
+                }
+                $location.path('/invite/' + $scope.selectedInvite.oid);
+            };
 
-        $scope.logout = function() {
+            /**
+             * Switches to the invite creation view to create a new invite.
+             *
+             * @method addInvite
+             */
+            $scope.addInvite = function() {
+                $location.path('/invite');
+            };
 
-            // *** if anything needs to be done on the server for logout, do it now ***
+            /**
+             * Deletes the selected invite and refreshes the cockpit view.
+             *
+             * @method deleteSelectedInvite
+             */
+            $scope.deleteSelectedInvite = function() {
+                // if (!$scope.selectedInvite) {
+                //     $log.log('Keine Terminumfrage ausgewaehlt.');
+                //     return;
+                // }
+                restService.doDelete($scope.selectedInvite)
+                    .then(function(success) {
+                        $location.path('/cockpit');
+                    } /*, function(error) { $log.log(error); }*/ );
+            };
 
-            $log.log("Logout erfolgreich.");
-            $scope.initSession();
-            $scope.showRegisterDialog = false;
-            $location.path('/');
-        };
-
-        
-        $scope.editUser = function() {
-            $scope.session.tempUser = angular.copy($scope.session.user);
-            $scope.session.state.isVal = dialogMap.USER_EDIT;
-        };
-
-
-        $scope.editContacts = function() {
-            $log.warn("editContacts() not implemented");
-        };
-
-
-        $scope.editInvite = function() {
-            if (!$scope.session.selectedInvite) {
-                $log.log("Keine Terminumfrage ausgewaehlt.");
-                return;
+            /**
+             * Sets the ignored status of the selected invite according to the
+             * specified boolean value. Finally saves the invite on the server.
+             *
+             * @method setSelectedInviteIgnored
+             * @param {Boolean} ignored the status of the invite
+             */
+            // $scope.radioModel = $scope.selectedInvite.ignored ? 'ignore' : 'accept';
+            $scope.setSelectedInviteIgnored = function(ignored) {
+                $scope.selectedInvite.setIgnored(ignored);
+                restService.doSave($scope.selectedInvite);
             }
-            $scope.session.tempInvite = new Invite($scope.session.selectedInvite);
-            $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
-            $log.log($scope.session.user);
-        };
-
-        $scope.addInvite = function() {
-            $scope.session.tempInvite = new Invite();
-            $scope.session.addingInvite = true;
-            $scope.session.state.isVal = dialogMap.SURVEY_EDIT;
-        };
-        
-        $scope.deleteSelectedInvite = function() {
-            var _invite = $scope.session.selectedInvite;
-            if (!_invite) {
-                $log.log("Keine Terminumfrage ausgewaehlt.");
-                return;
-            }
-            $log.log("deleteSelectedInvite: ");
-            $log.log(_invite);
-            restService.deleteInvite(_invite.oid)
-            // restService.deleteInvite(_invite)
-                .then(function(success) {
-                    $log.log(success);
-                    util.removeElementFrom(_invite, $scope.session.user.invites);
-                    $scope.session.selectedInvite = $scope.session.user.invites[0] || "";
-                    $scope.session.tempInvite = "";
-                }, function(error) {
-                    $log.error(error);
-                    $scope.warnings.central = error;
-                }, function(notification) {
-                    // $log.log(notification); // for future use
-                });
-
-            //-------------------- ***
-            console.log($scope.session.selectedInvite);
-            console.log($scope.session.user);
-            //-------------------- ***
-        };
-    }]);
+        }
+    ]);

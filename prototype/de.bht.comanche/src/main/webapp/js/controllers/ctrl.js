@@ -1,12 +1,20 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * 
- * Module: main controller
+/**
+ * @module myApp
+ *
+ * @author Sebastian Dass&eacute;
  */
+angular.module('myApp')
+    /**
+     * The main controller for myApp.
+     *
+     * @class menuCtrl
+     */
+    .controller('ctrl', ['$scope', '$rootScope', '$log', 'Survey', 'TimeUnit', 'Type', 'User',
+        function($scope, $rootScope, $log, Survey, TimeUnit, Type, User) {
 
-"use strict";
+            'use strict';
 
+<<<<<<< HEAD
 angular.module("myApp")
     .controller("ctrl", ["$scope", "$log", "Survey", "TimeUnit", "Type", "patterns", "dialogMap", "typeAugmentations", 
         function($scope, $log, Survey, TimeUnit, Type, patterns, dialogMap, typeAugmentations) {
@@ -67,7 +75,23 @@ angular.module("myApp")
             $scope.toggleLoginDialog = function() {
                 $scope.session.state.isVal = ($scope.session.state.is(dialogMap.USER_LOGIN)) ? dialogMap.USER_REGISTER : dialogMap.USER_LOGIN;
                 $log.debug($scope.session)
+=======
+            // make services available for the use in html
+            $scope.$log = $log;
+            $scope.TimeUnit = TimeUnit;
+            $scope.Type = Type;
+
+            $rootScope.warnings = '';
+
+            /**
+             * Discards all warnings from the app's main view.
+             *
+             * @method discardWarnings
+             */
+            $rootScope.discardWarnings = function() {
+                $rootScope.warnings = '';
+>>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135
             };
 
-    }]);
-    
+        }
+    ]);

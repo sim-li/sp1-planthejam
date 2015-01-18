@@ -4,8 +4,18 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import multex.Msg;
 
+/**
+ * This class represents an error message. Provide general user information about the error
+ * and detail stack trace for debugging.
+ * @author Maxim Novichkov
+ */
 public class ReErrorMessage {
-
+	
+	/**
+	 * The baseName for locating the exception message text resource bundle.
+	 */
+	public static final String BASE_NAME = "MessageResources";
+	
 	/**
 	 * user message
 	 */
@@ -16,42 +26,35 @@ public class ReErrorMessage {
 	 */
 	public final String stackTrace;
 	
-	public static final String BASE_NAME = "MessageResources";
-	
-	
-	public ReErrorMessage(String message, String stackTrace) {
+	/**
+	 * Construct a new simple error message.
+	 * @param message The simple message for user. 
+	 * @param stackTrace The stack trace, which has to be reported.
+	 */
+	public ReErrorMessage(final String message, final String stackTrace) {
 		this.message = message;
 		this.stackTrace = stackTrace;
 	}
 	
 	/**
+	 * Construct a new error message with specified by Multex parameters and the stack trace. 
 	 * 
 	 * @param ex The exception, which has to be reported.
-	 * @param stackTrace The stacktrace, which has to be reported.
+	 * @param stackTrace The stack trace, which has to be reported.
 	 */
-	public ReErrorMessage(Throwable ex, String stackTrace) {
+	public ReErrorMessage(final Throwable ex, final String stackTrace) {
 		this(exceptionToString(ex), stackTrace);
 	}
 	
-	public ReErrorMessage(String errorMessage, StackTraceElement[] stackTrace) {
-		this(errorMessage, stackTraceToString(stackTrace));
-	}
-	
-	private static String exceptionToString(Throwable ex){
+	/**
+	 * Construct a new error mesage from exception an specified message with additional parameters. 
+	 * @param ex The exception, which has to be reported.
+	 * @return The resulting exception message with parameters.
+	 */
+	private static String exceptionToString(final Throwable ex){
+		final ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, Locale.getDefault());
 		final StringBuffer result = new StringBuffer();
-		final Locale defaultLocale = Locale.getDefault();
-		final ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, defaultLocale);
         Msg.printMessages(result, ex, bundle);
 		return result.toString();
 	}
-
-	// TODO is it working as it should?
-	private static String stackTraceToString(StackTraceElement[] stackTrace) {
-		StringBuilder sb = new StringBuilder();
-		for (StackTraceElement s : stackTrace) {
-			sb.append(s.toString() + "\n");
-		}
-		return sb.toString();
-	}
-
 }

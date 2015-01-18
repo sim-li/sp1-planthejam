@@ -1,0 +1,21 @@
+%form.form-signin{:name => "registerForm", "ng-submit" => "register(user)"}
+  %h2.form-signin-heading Registrieren
+  %div
+    %label{:for => "inputName"} Benutzername
+    %input#inputName.form-control{:name => "inputName", "ng-model" => "user.name", :placeholder => "Dein Benutzername ...", :required => "", :type => "text"}
+    %label{:for => "inputPassword"} Passwort
+    %input#inputPassword.form-control{:name => "inputPassword", "ng-model" => "user.password", :placeholder => "8-20 Buchstaben", :required => "", :type => "password"}
+    .error
+  %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "showPassword", :type => "checkbox"}
+  %label{:for => "toggleShowPassword"} Klartext
+  %div
+    %label{:for => "inputEmail"} E-Mail
+    %input#inputEmail.form-control{:name => "inputEmail", "ng-model" => "user.email", :placeholder => "Deine E-Mail-Adresse ...", :required => "", :type => "text"}/
+    .error
+    %label{:for => "inputTel"} Telefon
+    %input#inputTel.form-control{:name => "inputTel", "ng-model" => "user.tel", :placeholder => "Deine Telefonnummer ...", :required => "", :type => "text"}/
+    .error
+  %div
+    %a#cancelRegisterLink{:href => "/", } Registrieren abbrechen
+  %span
+    %input#registerBtn.btn.btn-primary.btn-block{:type => "submit", :value => "Registrieren"}/

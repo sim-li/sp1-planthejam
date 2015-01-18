@@ -1,126 +1,132 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * 
- * Module: login controller
+/**
+ * @module myApp
+ *
+ * @author Sebastian Dass&eacute;
  */
+angular.module('myApp')
+    /**
+     * The controller for the login view.
+     *
+     * @class loginCtrl
+     */
+    .controller('loginCtrl', ['$location', '$log', '$rootScope', '$scope', 'patterns', 'restService', 'User',
+        function($location, $log, $rootScope, $scope, patterns, restService, User) {
+
+            'use strict';
+
+            // turns the dummy login on/off for debugging
+            var DUMMY_LOGIN = false;
+
+            /**
+             * Does a login for the specified user if his credentials are valid.
+             *
+             * @method login
+             * @param  {Object}  user the user to be logged in
+             * @return {Promise}      a promise to the logged-in user
+             */
+            $scope.login = function(user) {
+                if (!loginIsValidFor(user)) {
+                    $log.log('Login ungueltig.');
+                    return;
+                }
+                if (DUMMY_LOGIN) {
+                    user.name = 'Alice';
+                    // user.password = 'yousnoozeyoulose';
+                    user.password = 'testtest';
+                }
+                callService(restService.login, user, '/cockpit', 'Login erfolgreich.');
+            };
+
+            /**
+             * Registers the specified user and does a login if his credentials are valid.
+             *
+             * @method register
+             * @param  {Object}  user the user to be registered
+             * @return {Promise}      a promise toe the registered and logged-in user
+             */
+            $scope.register = function(user) {
+                if (!registerIsValidFor(user)) {
+                    $log.log('Registrierung ungueltig.');
+                    return;
+                }
+                callService(restService.register, user, '/cockpit', 'Registrierung erfolgreich.');
+            };
 
 
-"use strict";
+            /**
+             * Checks if the credentials of the specified user are valid.
+             *
+             * @method loginIsValidFor
+             * @private
+             * @param  {Object}  user the user
+             * @return {Boolean}      true if the credentials are valid, otherwise false
+             */
+            var loginIsValidFor = function(user) {
+                if (!user.name) {
+                    $log.log('Benutzername fehlt.');
+                    return false;
+                }
+                if (!user.password) {
+                    $log.log('Passwort fehlt.');
+                    return false;
+                }
+                if (!patterns.password.test(user.password)) {
+                    $rootScope.warnings = 'Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!';
+                    $log.log($rootScope.warnings);
+                    return false;
+                }
+                return true;
+            };
 
-angular.module("myApp")
-    .controller("loginCtrl", ["$scope", "$location", "$log", "patterns", "restService", "dialogMap", 
-        function($scope, $location, $log, patterns, restService, dialogMap) {
-       
-        var loginIsValidFor = function(user) {
-            if (!user.name) {
-                $log.log("Benutzername fehlt.");
-                return false;
-            }
-            if (!user.password) {
-                $log.log("Passwort fehlt.");
-                return false;
-            }
-            if (!$scope.patterns.password.test(user.password)) {
-                $scope.warnings.password = "Das Passwort muss 8-20 Zeichen lang sein und darf keine Leerzeichen enthalten!";
-                $log.log($scope.warnings.password);
-                return false;
-            }
-            return true;
-        };
+            /**
+             * Checks if the credentials of the specified user are valid.
+             *
+             * @method registerIsValidFor
+             * @private
+             * @param  {Object}  user the user
+             * @return {Boolean}      true if the credentials are valid, otherwise false
+             */
+            var registerIsValidFor = function(user) {
+                if (!loginIsValidFor(user)) {
+                    return false;
+                }
+                if (!patterns.email.test(user.email)) {
+                    $rootScope.warnings = 'Bitte gib eine gueltige E-Mail-Adresse ein!';
+                    $log.log($rootScope.warnings);
+                    return false;
+                }
+                if (!patterns.tel.test(user.tel)) {
+                    $rootScope.warnings = 'Bitte gib eine gueltige Telefonnummer ein!';
+                    $log.log($rootScope.warnings);
+                    return false;
+                }
+                return true;
+            };
 
-        var registerIsValidFor = function(user) {
-            if (!loginIsValidFor(user)) {
-                return false;
-            }
-            // if (!user.email || !$scope.patterns.email.test(user.email)) {
-            if (!$scope.patterns.email.test(user.email)) {
-                $scope.warnings.email = "Bitte gib eine gueltige E-Mail-Adresse ein!";
-                $log.log($scope.warnings.email);
-                return false;
-            }
-            // if (!user.tel || !$scope.patterns.tel.test(user.tel)) {
-            if (!$scope.patterns.tel.test(user.tel)) {
-                $scope.warnings.tel = "Bitte gib eine gueltige Telefonnummer ein!";
-                $log.log($scope.warnings.tel);
-                return false;
-            }
-            return true;
-        };
-        
+            /**
+             * Calls an asynchronous service at the specified relative path and passes the user as a parameter.
+             *
+             * @method callService
+             * @private
+             * @param  {Function} service    a restService
+             * @param  {Object}   user       the user
+             * @param  {String}   path       the relative path at which the RESTful service shall be called
+             * @param  {String}   [successMsg] the message to be logged for success
+             * @return {Promise}             a promise to the requested object
+             */
+            var callService = function(service, user, path, successMsg) {
+                service(new User(user))
+                    .then(function(_user) {
+                        if (successMsg) {
+                            $log.log(successMsg);
+                        }
+                        $scope.user = new User(_user);
+                        $location.path(path);
+                    }, function(error) {
+                        $log.log(error);
+                        $rootScope.warnings = error;
+                    });
+            };
 
-        $scope.login = function() {
-            var _user = $scope.session.user;
-            if (!loginIsValidFor(_user)) {
-                $log.log("Login ungueltig.");
-                return;
-            }
-            restService.login(_user)
-                .then(function(user) {
-
-                    $scope.session.user = user;
-                    $scope.session.state.isLoggedIn = true;
-                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
-                    $location.path('/cockpit');
-                    $log.log("Login erfolgreich.");
-                    $log.log($scope.session);
-                    console.log(user);
-                    // <<<<<<<<<<<<<<<<<<<< BAUSTELLE: Invites holen ------------------- TODO
-                    restService.getInvites(user.oid)
-                        .then(function(invites) {
-                            $log.debug(invites);
-
-                            var _invites = [];
-                            for (var i in invites) {
-                                _invites.push(invites[i]);
-                            }
-                            $scope.session.user.invites  = _invites;
-                            $scope.session.selectedInvite = $scope.session.user.invites[0] || "";
-                            $log.debug($scope.session.user.invites);
-                            $log.debug($scope.session.selectedInvite.survey);
-                            $log.debug("---------");
-
-                        }, function(error) {
-                            $log.error(error);
-                            $scope.warnings.central = error;
-                            
-                        }, function(notification) {
-                            // $log.log(notification); // for future use
-                        });
-
-
-                }, function(error) {
-                    $log.error(error);
-                    $scope.warnings.central = error;
-                    $scope.initSession();
-                }, function(notification) {
-                    // $log.log(notification); // for future use
-                });
-        };
-
-        $scope.register = function() {
-            var _user = $scope.session.user;
-            if (!registerIsValidFor(_user)) {
-                $log.log("Registrierung ungueltig.");
-                return;
-            }
-            restService.register(_user)
-                .then(function(user) {
-                    $scope.session.user = user;
-                    $scope.session.state.isLoggedIn = true;
-                    $scope.session.state.isVal = dialogMap.SURVEY_SELECTION;
-                    $log.log("Registrierung erfolgreich.");
-                    $log.log("Login erfolgreich.");
-                    $log.log($scope.session);
-                    $location.path('/'); // come back to login seite when register succesful
-                }, function(error) {
-                    $log.error(error);
-                    $scope.warnings.central = error;
-                    $scope.initSession();
-                }, function(notification) {
-                    // $log.log(notification); // for future use
-                });
-        };
-
-    }]);
-
+        }
+    ]);
