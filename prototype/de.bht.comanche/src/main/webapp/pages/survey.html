@@ -48,49 +48,26 @@
           </div>
           <div class='rpw'>
             <ptj-groups></ptj-groups>
-            <!-- %ptj-members -->
-            <!-- %div#ptj-members{:collapse => "memberListIsCollapsed"} -->
-            <!-- .well.well-sm -->
-            <!-- .container-fluid -->
-            <!-- .btn-group -->
-            <!-- %span{"ng-repeat" => "member in selectedGroup.members"} -->
-            <!-- %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"} -->
-            <!-- {{member.user.name}} -->
-            <!-- %span.badge -->
-            <!-- %span.glyphicon.glyphicon-remove -->
-            <br>
           </div>
-          <!-- DEBUGGING THE GROUPS >>> -->
-          <div class='row col-lg-offset-3' id='debug-the-groups-then-throw-away'>
-            <button class='btn btn-primary btn-sm' ng-click='addNewGroup()' type='submit'>Add New Group</button>
-            <button class='btn btn-primary btn-sm' ng-click='deleteSelectedGroup()' type='submit'>Delete Selected Group</button>
-            <button class='btn btn-primary btn-sm' ng-click='saveGroups()' type='submit'>Save All Groups</button>
-            <button class='btn btn-primary btn-sm' ng-click='attachSelectedGroupToInvite()' type='submit'>Attach Selected Group To Invite</button>
+          <div class='row'>
+            <div class='col-lg-11 dropdown'>
+              <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
+                <div class='input-group'>
+                  <input class='form-control' ng-model='selectedInvite.survey.deadline' type='text'>
+                  <span class='input-group-addon'>
+                    Deadline
+                    <i class='glyphicon glyphicon-calendar'></i>
+                  </span>
+                </div>
+              </a>
+              <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                <datetimepicker bs-datepicker='' data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" date-format='MM/dd/yyyy' date-type='string' ng-model='selectedInvite.survey.deadline'></datetimepicker>
+              </ul>
+            </div>
           </div>
           <br>
-          <!-- <<< DEBUGGING THE GROUPS -->
           <div class='row'>
-            <div class='col-lg-6'>
-              <ptj-timeperiod-selector></ptj-timeperiod-selector>
-            </div>
-            <div class='col-lg-6'>
-              <div class='row'>
-                <div class='col-lg-11 dropdown'>
-                  <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
-                    <div class='input-group'>
-                      <input class='form-control' ng-model='selectedInvite.survey.deadline' type='text'>
-                      <span class='input-group-addon'>
-                        Deadline
-                        <i class='glyphicon glyphicon-calendar'></i>
-                      </span>
-                    </div>
-                  </a>
-                  <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
-                    <datetimepicker bs-datepicker='' data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" date-format='MM/dd/yyyy' date-type='string' ng-model='selectedInvite.survey.deadline'></datetimepicker>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <ptj-calendar></ptj-calendar>
           </div>
         </div>
         <div class='panel-footer'>

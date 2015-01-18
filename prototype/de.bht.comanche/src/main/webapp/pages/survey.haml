@@ -34,41 +34,22 @@
                   %span.glyphicon.glyphicon-off
           .rpw
             %ptj-groups
-            / %ptj-members
 
-            / %div#ptj-members{:collapse => "memberListIsCollapsed"}
-            /   .well.well-sm
-            /     .container-fluid
-            /       .btn-group
-            /         %span{"ng-repeat" => "member in selectedGroup.members"}
-            /           %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"}
-            /             {{member.user.name}}
-            /             %span.badge
-            /               %span.glyphicon.glyphicon-remove
-
-            %br
-          / DEBUGGING THE GROUPS >>>
-          .row#debug-the-groups-then-throw-away.col-lg-offset-3
-            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "addNewGroup()"} Add New Group
-            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "deleteSelectedGroup()"} Delete Selected Group
-            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveGroups()"} Save All Groups
-            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "attachSelectedGroupToInvite()"} Attach Selected Group To Invite
-          %br
-          / <<< DEBUGGING THE GROUPS
           .row
-            .col-lg-6
-              %ptj-timeperiod-selector
-            .col-lg-6
-              .row
-                .col-lg-11.dropdown
-                  %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button"}
-                    .input-group
-                      %input.form-control{"ng-model" => "selectedInvite.survey.deadline", :type => "text"}/
-                      %span.input-group-addon
-                        Deadline
-                        %i.glyphicon.glyphicon-calendar
-                  %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
-                    %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "ng-model" => "selectedInvite.survey.deadline", "date-format"=>"MM/dd/yyyy", "date-type" => "string", "bs-datepicker" => ""}
+            .col-lg-11.dropdown
+              %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button"}
+                .input-group
+                  %input.form-control{"ng-model" => "selectedInvite.survey.deadline", :type => "text"}/
+                  %span.input-group-addon
+                    Deadline
+                    %i.glyphicon.glyphicon-calendar
+              %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
+                %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "ng-model" => "selectedInvite.survey.deadline", "date-format"=>"MM/dd/yyyy", "date-type" => "string", "bs-datepicker" => ""}
+
+          %br
+          .row
+            %ptj-calendar
+
         .panel-footer
           .col-md-offset-10
             %button.btn.btn-default.btn-sm{:type => "reset"} Reset
