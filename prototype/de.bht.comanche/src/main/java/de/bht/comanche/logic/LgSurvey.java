@@ -75,7 +75,6 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-//	@JsonIgnore
 	@OneToMany(mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private List<LgTimePeriod> possibleTimePeriods;
 	
@@ -121,16 +120,6 @@ public class LgSurvey extends DaObject {
 		return null; 
 		//@TODO Throw multex exception
 	}
-	
-	public void inviteOtherUser(final LgUser user) {
-		final LgInvite invite = new LgInvite();
-		invite.setHost(false);
-		invite.setIgnored(LgStatus.UNDECIDED);
-		invite.setSurvey(this);
-		invite.setUser(user);
-		saveUnattached(invite);
-	}
-	
 	/**
 	 * Updates a Survey with values form another one and saves
 	 * @param other Other survey
@@ -147,7 +136,8 @@ public class LgSurvey extends DaObject {
 		this.determinedTimePeriod = other.determinedTimePeriod;
 		this.success = other.success;
 		this.algoChecked = other.algoChecked;
-		this.invites = other.invites;
+		// Check this, implement Equals method for other classes
+		updateList(this.invites, other.invites);
 	}
 	
 	/**
@@ -330,38 +320,6 @@ public class LgSurvey extends DaObject {
 		this.possibleTimePeriods = period;
 		return this;
 	}
-
-	// # This would become unnecessary if reference to INV / SURV / USER removed.
-	// ( see comment in TP )
-	public LgSurvey normalizePossibleTPs() {
-		List<LgTimePeriod> result = new ArrayList<LgTimePeriod>(this.possibleTimePeriods);
-		for(LgTimePeriod period: result){
-			period.setInvite(null);
-			period.setSurvey(null);
-			period.setUser(null);
-			result.add(period);
-		}
-		return setPossibleTimePeriods(result);
-	}
-	
-	public List<LgTimePeriod> normalizeTimePeriod(List<LgTimePeriod> period) {
-		List<LgTimePeriod> result = new ArrayList<LgTimePeriod>();
-		// Rename necessary, totally confusing [time / period]
-		for(LgTimePeriod time: period){
-			time.setInvite(null);
-			time.setSurvey(null);
-			time.setUser(null);
-			result.add(time);
-		}
-		return result;
-	}
-	
-	public LgSurvey flagPossibleTimePeriod() {
-		for(LgTimePeriod period : this.possibleTimePeriods) {
-			period.setSurvey(this);
-		}
-		return this;
-	}
 	
 	public LgTimePeriod getDeterminedTimePeriod() {
 		return this.determinedTimePeriod;
@@ -411,7 +369,8 @@ public class LgSurvey extends DaObject {
 						pool);
 	}
 
-	public void addInvite(LgInvite invite) {
+	public LgSurvey addInvite(LgInvite invite) {
 		invites.add(invite);
+		return this;
 	}
 }

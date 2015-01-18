@@ -108,7 +108,7 @@ public class ReUserService extends RestService {
 			@Override
 			public LgUser execute() throws Exception {
 				try {
-					startSession().deleteAccount();
+					startSession().deleteThisAccount();
 					removeUserName(request);
 				} catch (Exception ex) {
 					throw create(RestDeleteUserFailure.class, ex, getSession().getUser().getName(), getSession().getUser().getOid());
