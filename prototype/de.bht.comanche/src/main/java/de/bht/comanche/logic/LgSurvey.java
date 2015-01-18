@@ -150,6 +150,25 @@ public class LgSurvey extends DaObject {
 		this.invites = other.invites;
 	}
 	
+	/**
+	 * Elements not present in the freshList are removed from the one persisted on server.
+	 * All elements that already exist on server are removed from freshList,
+	 * to save the rest one by one and add to pers. list.
+	 * 
+	 * @param persistedList
+	 * @param freshList
+	 */
+	public <E extends DaObject> void updateList(List<E> persistedList, List<E> freshList) {
+		
+		persistedList.retainAll(freshList); // PL & its objs must be tracked for this method to work
+										    // (cascade must be activated?)
+		freshList.removeAll(persistedList); // ELs already saved
+		for (E el : freshList) {
+			saveUnattached(el); // Fresh list are never tracked
+		}
+		persistedList.addAll(freshList); // Requires PL tracking too
+	}
+	
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
