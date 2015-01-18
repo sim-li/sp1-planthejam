@@ -137,5 +137,11 @@ angular.module('myApp')
                 sendMessagesToParticipant();
                 restService.save($scope.selectedSurvey);
             };
+
+            // $scope.resultingTimePeriods = [];
+            $scope.saveAvailabilities = function() {
+                // $log.log($scope.resultingTimePeriods);
+                // $scope.selectedInvite.possibleTimePeriods = ...
+            };
         }
     ]);

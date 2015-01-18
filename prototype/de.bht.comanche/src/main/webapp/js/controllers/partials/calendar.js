@@ -17,19 +17,27 @@ angular.module('myApp')
                 end: '2014-11-13T16:00:00'
             }];
 
+            //--
+
+            // <-- Datumskonvertierung hier für Input ***
+
+            $scope.possibleTimePeriods = $scope.possibleTimePeriods || [];
             $scope.resultingTimePeriods = [];
 
             // placeholder all events for rendering ui-calendar
-            $scope.backgroundTimePeriods = [];
-            // copy all elements of possibleTimePeriods to backgroundTimePeriods
+            $scope.uiTimePeriods = [];
+            // copy all elements of possibleTimePeriods to uiTimePeriods
             for (var i = 0; i < $scope.possibleTimePeriods.length; i++) {
-                $scope.backgroundTimePeriods.push({
+                $scope.uiTimePeriods.push({
                     id: 'possible',
                     rendering: 'background',
                     start: $scope.possibleTimePeriods[i].start,
                     end: $scope.possibleTimePeriods[i].end
                 });
             }
+            // for (var j = 0, len = $scope.uiTimePeriods.length; j < len; j++) {
+            //     $log.log($scope.uiTimePeriods[j])
+            // };
 
             /* config object */
             $scope.uiConfig = {
@@ -49,20 +57,27 @@ angular.module('myApp')
                         var start = new Date(startDate + timeZoneOffset * 60000);
                         var end = new Date(endDate + timeZoneOffset * 60000);
 
+                        // <-- Datumskonvertierung hier für Output ***
                         $scope.resultingTimePeriods.push({
                             start: start,
                             end: end
                         });
-                        $scope.backgroundTimePeriods.push({
+                        $scope.uiTimePeriods.push({
                             start: start,
                             end: end,
                             editable: true,
                             durationEditable: true,
                             constraint: 'possible'
                         });
+
+                        // var start = $scope.resultingTimePeriods[$scope.resultingTimePeriods.length - 1].start;
+                        // var end = $scope.resultingTimePeriods[$scope.resultingTimePeriods.length - 1].end;
+                        // $log.log(moment(end).diff(moment(start), 'minutes'))
+
+
                     },
-                    selectConstraint: 'possible',
-                    events: $scope.backgroundTimePeriods
+                    selectConstraint: $scope.possibleTimePeriods.length ? 'possible' : null,
+                    events: $scope.uiTimePeriods
                 }
             };
 

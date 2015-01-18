@@ -170,6 +170,11 @@ angular.module('myApp')
 
             $scope.renderCalendar = function() {
                 $scope.surveyCalendar.fullCalendar('render');
-            }
+            };
+
+            $scope.saveAvailabilities = function() {
+                // $log.log($scope.resultingTimePeriods);
+                // $scope.selectedInvite.possibleTimePeriods = ...
+            };
         }
     ]);
