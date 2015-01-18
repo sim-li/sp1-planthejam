@@ -24,8 +24,8 @@ angular.module('models')
              * @param {Date}    [config.deadline=new Date()] the deadline of the survey
              * @param {Number}  [config.frequencyDist=0] the frequency distance of the survey
              * @param {String}  [config.frequencyUnit='WEEK'] the frequency time unit of the survey
-             * @param {Array}   [config.possibleTimeperiods=[]] the possible time periods of the survey
-             * @param {Object}  [config.determinedTimeperiod] the determined time period of the survey
+             * @param {Array}   [config.possibleTimePeriods=[]] the possible time periods of the survey
+             * @param {Object}  [config.determinedTimePeriod] the determined time period of the survey
              * @param {Status}  [config.success='UNDECIDED'] the status of the service, which can be one of the options [UNDECIDED, YES, NO]
              * @param {Boolean} [config.algoChecked=false] indicates whether or not the survey was already checked by the determination algorithm
              *
@@ -41,8 +41,8 @@ angular.module('models')
                 this.deadline = new Date(config.deadline) || new Date();
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
-                this.possibleTimeperiods = config.possibleTimeperiods || [];
-                this.determinedTimeperiod = config.determinedTimeperiod;
+                this.possibleTimePeriods = config.possibleTimePeriods || [];
+                this.determinedTimePeriod = config.determinedTimePeriod;
                 this.success = config.success || Status.UNDECIDED;
                 this.algoChecked = config.algoChecked || false;
                 this.invites = config.invites || []; // ??? -- removed ON PURPOSE --> the invites shall be imported seperately
@@ -172,9 +172,9 @@ angular.module('models')
                     deadline: new Date(),
                     frequencyDist: 1 + Math.round(Math.random() * 30),
                     frequencyUnit: TimeUnit._options[Math.round(Math.random() * (TimeUnit._options.length - 1))],
-                    possibleTimeperiods: [],
-                    determinedTimeperiods: [],
-                    determinedTimeperiod: null
+                    possibleTimePeriods: [],
+                    determinedTimePeriods: [],
+                    determinedTimePeriod: null
                 });
             };
 

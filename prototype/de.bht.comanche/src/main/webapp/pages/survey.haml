@@ -48,7 +48,8 @@
 
           %br
           .row
-            %ptj-calendar
+            {{selectedSurvey}}
+            %ptj-calendar{"possible" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
 
         .panel-footer
           .col-md-offset-10
@@ -56,5 +57,5 @@
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveSurvey()"} Save
     .col-md-2
       %input-group{"ng-show"=>"isRecurring()"}
-        %input.form-control{"type"=>"text", "placeholder"=>"Frequency"}
-        %input.form-control{"type"=>"text", "placeholder"=>"Distance"}
+      %select.form-control{"ng-model" => "selectedSurvey.frequencyUnit", "ng-options" => "opt for opt in TimeUnit._options"}
+        %input.form-control{"type" => "number", "ng-model" => "selectedSurvey.frequencyDist", "placeholder" => "Distance", "min" => 0, "required" => "true"}

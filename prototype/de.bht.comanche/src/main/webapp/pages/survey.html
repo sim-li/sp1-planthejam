@@ -67,7 +67,8 @@
           </div>
           <br>
           <div class='row'>
-            <ptj-calendar></ptj-calendar>
+            {{selectedSurvey}}
+            <ptj-calendar possible='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
           </div>
         </div>
         <div class='panel-footer'>
@@ -79,10 +80,10 @@
       </div>
     </div>
     <div class='col-md-2'>
-      <input-group ng-show='isRecurring()'>
-        <input class='form-control' placeholder='Frequency' type='text'>
-        <input class='form-control' placeholder='Distance' type='text'>
-      </input-group>
+      <input-group ng-show='isRecurring()'></input-group>
+      <select class='form-control' ng-model='selectedSurvey.frequencyUnit' ng-options='opt for opt in TimeUnit._options'>
+        <input class='form-control' min='0' ng-model='selectedSurvey.frequencyDist' placeholder='Distance' required='true' type='number'>
+      </select>
     </div>
   </div>
 </div>

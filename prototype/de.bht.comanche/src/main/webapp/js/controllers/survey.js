@@ -31,6 +31,7 @@ angular.module('myApp')
             // For group widget
             $scope.groups = Model.importMany(Group, groupsPromise);
             $scope.users = Model.importMany(User, usersPromise);
+            $scope.TimeUnit = TimeUnit;
             // No connection to REST yet (widget will probably be discarded)
             // $scope.timePeriods = TimePeriod.dummyTimePeriods();
 
@@ -137,36 +138,33 @@ angular.module('myApp')
             };
 
             /**********************************************************************************************/
-            $scope.possibleTimePeriods = [];
 
             /* config object */
-            $scope.uiConfig = {
-                calendar: {
-                    height: 450,
-                    defaultView: 'agendaWeek',
-                    header: {
-                        left: 'month,agendaWeek,agendaDay',
-                        center: 'title',
-                        right: 'today prev,next'
-                    },
-                    editable: true,
-                    selectable: true,
-                    select: function(startDate, endDate) {
-                        /* correct timezoneoffset */
-                        var timeZoneOffset = new Date().getTimezoneOffset();
-                        var start = new Date(startDate + timeZoneOffset * 60000);
-                        var end = new Date(endDate + timeZoneOffset * 60000);
+            // $scope.uiConfig = {
+            //     calendar: {
+            //         height: 450,
+            //         defaultView: 'agendaWeek',
+            //         header: {
+            //             left: 'month,agendaWeek,agendaDay',
+            //             center: 'title',
+            //             right: 'today prev,next'
+            //         },
+            //         editable: true,
+            //         selectable: true,
+            //         select: function(startDate, endDate) {
+            //             /* correct timezoneoffset */
+            //             var timeZoneOffset = new Date().getTimezoneOffset();
+            //             var start = new Date(startDate + timeZoneOffset * 60000);
+            //             var end = new Date(endDate + timeZoneOffset * 60000);
 
-                        $scope.possibleTimePeriods.push({
-                            start: start,
-                            end: end
-                        });
-                    },
-                    events: $scope.possibleTimePeriods
-                }
-            };
-
-            $scope.eventSources = [];
+            //             $scope.possibleTimePeriods.push({
+            //                 start: start,
+            //                 end: end
+            //             });
+            //         },
+            //         events: $scope.possibleTimePeriods
+            //     }
+            // };
 
             $scope.renderCalendar = function() {
                 $scope.surveyCalendar.fullCalendar('render');
