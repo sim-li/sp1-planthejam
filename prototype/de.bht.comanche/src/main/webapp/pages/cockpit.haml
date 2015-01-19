@@ -8,28 +8,28 @@
         .tabbable
           %ul.nav.nav-tabs
             %li.active
-              %a{"data-toggle" => "tab", :href => "#surveyTab", "ng-click" => "showSurveyDetails = true; showInviteDetails = false", "onclick" => "return false;"}
+              %a{"data-toggle" => "tab", :href => "#surveyTab", "ng-click" => "showSurveyDetails = true", "onclick" => "return false;"}
                 Survey
                 %span.badge {{surveys.length}}
             %li
-              %a{"data-toggle" => "tab", "href" => "#inviteTab", "ng-click" => "showSurveyDetails = false; showInviteDetails = true;", "onclick" => "return false;"}
+              %a{"data-toggle" => "tab", "href" => "#inviteTab", "ng-click" => "showSurveyDetails = false", "onclick" => "return false;"}
                 Invite
                 %span.badge {{(invites | filter: {ignored: "!YES"}).length}}
             %li
-              %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "onclick" => "return false;"}
+              %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "ng-click" => "showSurveyDetails = false", "onclick" => "return false;"}
                 Ignored
                 %span.badge {{(invites | filter: {ignored: "YES"}).length}}
           .tab-content
 
             / #surveyTab.tab-pane.active
-            #surveyTab.tab-pane
+            #surveyTab.tab-pane.active
               SURV Hallo
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
               %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"} {{survey.name}}
 
             / #inviteTab.tab-pane
-            #inviteTab.tab-pane.active
+            #inviteTab.tab-pane
               INV Hallo
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
               #surveyList.list-group
@@ -78,7 +78,7 @@
             %label{:for => "selectedSurveyDescription"} algo check:
             %div#selectedSurveyStatus{} wird {{ selectedInvite.algoCheck ? "ermittelt" : "nicht ermittelt" }}
 
-      #inviteDetails.col-md-8{"ng-show" => "showInviteDetails"}
+      #inviteDetails.col-md-8{"ng-hide" => "showSurveyDetails"}
         Invite Details
         %input#addSurvey.btn.btn-primary{"ng-click" => "addSurvey()", :type => "button", :value => "Create a survey"}
         %input#editSurvey.btn.btn-primary{"ng-click" => "editSurvey()", :type => "button", :value => "Show and edit selected survey"}

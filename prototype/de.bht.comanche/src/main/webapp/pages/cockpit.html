@@ -7,19 +7,19 @@
         <div class='tabbable'>
           <ul class='nav nav-tabs'>
             <li class='active'>
-              <a data-toggle='tab' href='#surveyTab' ng-click='showSurveyDetails = true; showInviteDetails = false' onclick='return false;'>
+              <a data-toggle='tab' href='#surveyTab' ng-click='showSurveyDetails = true' onclick='return false;'>
                 Survey
                 <span class='badge'>{{surveys.length}}</span>
               </a>
             </li>
             <li>
-              <a data-toggle='tab' href='#inviteTab' ng-click='showSurveyDetails = false; showInviteDetails = true;' onclick='return false;'>
+              <a data-toggle='tab' href='#inviteTab' ng-click='showSurveyDetails = false' onclick='return false;'>
                 Invite
                 <span class='badge'>{{(invites | filter: {ignored: "!YES"}).length}}</span>
               </a>
             </li>
             <li>
-              <a data-toggle='tab' href='#ignoredInviteTab' onclick='return false;'>
+              <a data-toggle='tab' href='#ignoredInviteTab' ng-click='showSurveyDetails = false' onclick='return false;'>
                 Ignored
                 <span class='badge'>{{(invites | filter: {ignored: "YES"}).length}}</span>
               </a>
@@ -27,14 +27,14 @@
           </ul>
           <div class='tab-content'>
             <!-- #surveyTab.tab-pane.active -->
-            <div class='tab-pane' id='surveyTab'>
+            <div class='tab-pane active' id='surveyTab'>
               SURV Hallo
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>{{survey.name}}</a>
             </div>
             <!-- #inviteTab.tab-pane -->
-            <div class='tab-pane active' id='inviteTab'>
+            <div class='tab-pane' id='inviteTab'>
               INV Hallo
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='surveyList'></div>
@@ -102,7 +102,7 @@
           </div>
         </div>
       </div>
-      <div class='col-md-8' id='inviteDetails' ng-show='showInviteDetails'>
+      <div class='col-md-8' id='inviteDetails' ng-hide='showSurveyDetails'>
         Invite Details
         <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
         <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>

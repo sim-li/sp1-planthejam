@@ -28,6 +28,8 @@ angular.module('myApp')
             $scope.selectedInvite = $scope.invites[0];
             $scope.selectedSurvey = $scope.surveys[0];
 
+            $scope.showSurveyDetails = true;
+
 
             /**
              * Switches to the survey creation view to create a new survey.
@@ -160,15 +162,16 @@ angular.module('myApp')
                 // $scope.selectedInvite.possibleTimePeriods = ...
             };
 
-            $scope.showSurveyDetails = true;
+
+
             $scope.toggleSurveyDetails = function() {
                 $scope.showSurveyDetails = true;
                 return false;
             };
 
-            $scope.toggleInviteDetails = function() {
-                $scope.showSurveyDetails = false;
-                return false;
-            };
+    $scope.toggleInviteDetails = function() {
+        $scope.showSurveyDetails = false;
+        return false;
+    };
         }
     ]);
