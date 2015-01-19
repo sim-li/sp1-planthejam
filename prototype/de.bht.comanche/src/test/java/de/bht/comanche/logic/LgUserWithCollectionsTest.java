@@ -41,21 +41,17 @@ public class LgUserWithCollectionsTest {
     @Before
     public void buildUp() {
         beginTransaction();
-        intializeUsers();
-        registerUsers(session);
+        registerAlice();
         alice = session.startFor("Alice");
         timePeriod = new LgTimePeriod()
             .setDurationMins(10)
             .setStartTime(new Date(8099));
     }
 
-    private void registerUsers(final LgSession sessionForRegistration) {
-        sessionForRegistration.register(alice);
-    }
-
-    private void intializeUsers() {
+    private void registerAlice() {
         alice = new LgUser().setName("Alice").setEmail("test@test.de")
                 .setPassword("testtest");
+        session.register(alice);
     }
 
     /**
