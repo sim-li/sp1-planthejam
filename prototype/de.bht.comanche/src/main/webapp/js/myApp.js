@@ -38,6 +38,9 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
                     },
                     invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
+                    },
+                    messagesPromise: function(restService) {
+                        return restService.getMessages();
                     }
                 }
             })

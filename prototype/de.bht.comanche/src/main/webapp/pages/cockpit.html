@@ -122,4 +122,7 @@
   <!-- .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"} -->
   <!-- .modal-footer -->
   <!-- %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close -->
+  <ul ng-model='messages'>
+    <li ng-repeat='message in messages'>{{ message }}</li>
+  </ul>
 </div>

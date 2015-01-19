@@ -22,12 +22,14 @@
                 Ignored
                 %span.badge {{(invites | filter: {ignored: "YES"}).length}}
           .tab-content
+
             / #surveyTab.tab-pane.active
             #surveyTab.tab-pane
               SURV Hallo
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
               %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"} {{survey.name}}
+
             / #inviteTab.tab-pane
             #inviteTab.tab-pane.active
               INV Hallo
@@ -54,6 +56,7 @@
                           %button.btn.btn-primary{:type => "button", "ng-click" => "saveAvailabilities()"} Save changes
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('YES')"}
                     %span.glyphicon.glyphicon-remove
+
             #ignoredInviteTab.tab-pane
               IGNORE Hallo
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
@@ -91,3 +94,6 @@
   /         .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"}
   /       .modal-footer
   /         %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
+
+  %ul{"ng-model" => "messages"}
+    %li{"ng-repeat" => "message in messages"} {{ message }}

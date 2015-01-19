@@ -38,6 +38,7 @@ angular.module('rest', ['models'])
                     'get': 'get',
                     'update': 'update',
                     'getAll': 'getAllUsers',
+                    'messages': 'messages',
                     'logout': 'logout'
                 },
                 'survey': {
@@ -216,11 +217,16 @@ angular.module('rest', ['models'])
             restService.getAllUsers = function() {
                 var url = getUrlFor(User, null, 'getAll');
                 return callHttp('GET')(url);
-            }
+            };
 
             restService.getSurveyInvites = function(oid) {
-                // var url = 'surveys/';
                 var url = getUrlFor(Survey, oid, 'invites');
+                return callHttp('GET')(url);
+            };
+
+            restService.getMessages = function() {
+                var url = getUrlFor(User, null, 'messages');
+                $log.debug(url)
                 return callHttp('GET')(url);
             };
 

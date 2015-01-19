@@ -9,17 +9,19 @@ angular.module('myApp')
      *
      * @class cockpitCtrl
      */
-    .controller('cockpitCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'Invite', 'invitesPromise', 'Model',
-        'restService', 'surveysPromise', 'Status', 'Survey', 'TimePeriod',
-        function($location, $log, $scope, arrayUtil, Invite, invitesPromise, Model,
-            restService, surveysPromise, Status, Survey, TimePeriod) {
+    .controller('cockpitCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'Invite', 'invitesPromise',
+        'messagesPromise', 'Model', 'restService', 'surveysPromise', 'Status', 'Survey', 'TimePeriod',
+        function($location, $log, $scope, arrayUtil, Invite, invitesPromise,
+            messagesPromise, Model, restService, surveysPromise, Status, Survey, TimePeriod) {
 
             'use strict';
 
             // resolve the promises passed to this route
             $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.surveys = Model.importMany(Survey, surveysPromise);
-            $log.log($scope.surveys)
+            $scope.messages = messagesPromise;
+            $log.log('messages: ', $scope.messages)
+            $log.log('surveys: ', $scope.surveys)
                 // $scope.surveys = Survey.getDummies(3);
 
             // preselects the first survey and invite in the list
