@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -75,7 +76,8 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-	@OneToMany(mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @ElementCollection 
+    @Column(name="possible_timeperiods") 
 	private List<LgTimePeriod> possibleTimePeriods;
 	
 	/**

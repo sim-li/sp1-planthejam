@@ -137,10 +137,9 @@
                     <stopPort>${jetty.stop.port}</stopPort>
                 </configuration>
             </plugin>
-            <plugin>
+   <!--          <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <!-- NB! Set <version> to the latest released version of frontend-maven-plugin, like in README.md -->
                 <version>${eirslett.frontend.plugin.version}</version>
                 <configuration>
                     <workingDirectory>${project.basedir}/src/main/webapp</workingDirectory>
@@ -161,22 +160,10 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- Optional configuration which provides for running any npm command -->
                         <configuration>
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-                    <!-- Goal not known to eirslett. -->
-                    <!-- <execution>
-                        <id>bower install</id>
-                        <goals>
-                            <goal>bower</goal>
-                        </goals>
-                        <configuration>
-                             <workingDirectory>${project.basedir}/src/main/webapp</workingDirectory>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution> -->
                     <execution>
                         <id>javascript tests</id>
                     <goals>
@@ -187,7 +174,7 @@
                     </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>

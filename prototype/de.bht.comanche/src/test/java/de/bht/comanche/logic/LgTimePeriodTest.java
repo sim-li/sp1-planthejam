@@ -38,23 +38,17 @@ public class LgTimePeriodTest {
 	
 	@BeforeClass 
 	public static void resetDatabase() {
-		Map<String, String> properties = new HashMap<String, String>(1);
-		properties.put("hibernate.hbm2ddl.auto", "create");
-		Persistence.createEntityManagerFactory(DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
-		LgSession session = new LgSession();
-		session.getApplication().endTransaction(true);	
+//		Map<String, String> properties = new HashMap<String, String>(1);
+//		properties.put("hibernate.hbm2ddl.auto", "create");
 	}
 	
 	@Before
 	public void buildUp() {
 		beginTransaction();
-		final LgSession sessionForRegistration = new LgSession();
-		
 		intializeUsers();
+		registerUsers(session);
 		
-		registerUsers(sessionForRegistration);
-		
-		alice = sessionForRegistration.startFor("Alice");
+		alice = session.startFor("Alice");
 		
 		invite = new LgInvite()
 			.setUser(alice)
@@ -84,6 +78,10 @@ public class LgTimePeriodTest {
 				.setPassword("testtest");
 	}
 	
+	/**
+	 * This test actually includes the checking of data, thus the part before the commit 
+	 * is what would be called in a Rest Service. 
+	 */
 	@Test
 	public void addPossibleTimePeriodToSurveyTest() {
 		final List<LgTimePeriod> possibleTimePeriods = new ArrayList<LgTimePeriod>();
@@ -102,13 +100,15 @@ public class LgTimePeriodTest {
 	
 	@After
 	public void tearDown() {
+		commit();
 		alice.deleteOtherUserAccount(bob);
 		alice.deleteOtherUserAccount(pit);
 		alice.deleteThisAccount();
-		session.getApplication().endTransaction(true);	
+		endTransaction();
 	}
 				
 	private void beginTransaction() {
+		session = new LgSession();
 		session.getApplication().beginTransaction();
 	}
 	
