@@ -1,5 +1,6 @@
 %ptj-menu
 .container
+  deadline: {{selectedSurvey.deadline___}}
   .row
     / search & results
     / sidebar
@@ -7,7 +8,7 @@
       / %ptj-survey-select
     .col-md-8
       .panel.panel-primary
-        .panel-heading Create new Event
+        .panel-heading Edit a survey for an event
         .panel-body
           .row
             .col-md-8
@@ -39,16 +40,19 @@
             .col-lg-11.dropdown
               %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button"}
                 .input-group
-                  %input.form-control{"ng-model" => "selectedInvite.survey.deadline", :type => "text"}/
+                  %input.form-control{"ng-model" => "selectedSurvey.deadline___", :type => "text"}/
                   %span.input-group-addon
                     Deadline
                     %i.glyphicon.glyphicon-calendar
               %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
-                %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "ng-model" => "selectedInvite.survey.deadline", "date-format"=>"MM/dd/yyyy", "date-type" => "string", "bs-datepicker" => ""}
+                %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "ng-model" => "selectedSurvey.deadline___", "date-format"=>"MM/dd/yyyy", "date-type" => "string", "bs-datepicker" => ""}
 
           %br
           .row
-            {{selectedSurvey}}
+            Participants:
+            %ul
+              %li{"ng-repeat" => "invite in selectedSurvey.invites"} {{invite.user.name}}
+
             %ptj-calendar{"possible" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
 
         .panel-footer
@@ -57,5 +61,5 @@
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveSurvey()"} Save
     .col-md-2
       %input-group{"ng-show"=>"isRecurring()"}
-      %select.form-control{"ng-model" => "selectedSurvey.frequencyUnit", "ng-options" => "opt for opt in TimeUnit._options"}
+        %select.form-control{"ng-model" => "selectedSurvey.frequencyUnit", "ng-options" => "opt for opt in TimeUnit._options"}
         %input.form-control{"type" => "number", "ng-model" => "selectedSurvey.frequencyDist", "placeholder" => "Distance", "min" => 0, "required" => "true"}

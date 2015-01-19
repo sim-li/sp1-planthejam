@@ -26,13 +26,11 @@
             </li>
           </ul>
           <div class='tab-content'>
-            <!-- #surveyTab.tab-pane.active -->
             <div class='tab-pane active' id='surveyTab'>
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>{{survey.name}}</a>
             </div>
-            <!-- #inviteTab.tab-pane -->
             <div class='tab-pane' id='inviteTab'>
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='surveyList'></div>
@@ -97,7 +95,7 @@
             <span id='deadline'>{{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}</span>
             <div id='selectedSurveyStatus' ng-if='selectedSurvey.algoChecked'>
               <label for='determinedTimePeriod'>Determined Time Period:</label>
-              <span id='determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod }}</span>
+              <span id='determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod ? selectedSurvey.determinedTimePeriod : "None" }}</span>
             </div>
           </div>
         </div>
@@ -111,6 +109,7 @@
             <label for='deadline'>Deadline:</label>
             <span id='deadline'>{{ selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}</span>
             <div id='selectedInviteStatus' ng-if="selectedInvite.survey.success != 'UNDECIDED'">
+              <div id='selectedInviteStatus' ng-if="selectedInvite.survey.success == 'NO'"></div>
               <label for='determinedTimePeriod'>Determined Time Period:</label>
               <div id='determinedTimePeriod'>
                 <div>{{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}</div>

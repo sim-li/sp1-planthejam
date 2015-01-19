@@ -21,13 +21,11 @@
                 %span.badge {{(invites | filter: {ignored: "YES"}).length}}
           .tab-content
 
-            / #surveyTab.tab-pane.active
             #surveyTab.tab-pane.active
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
               %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"} {{survey.name}}
 
-            / #inviteTab.tab-pane
             #inviteTab.tab-pane
               %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
               #surveyList.list-group
@@ -75,7 +73,7 @@
             %span#deadline{} {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}
             %div#selectedSurveyStatus{"ng-if" => "selectedSurvey.algoChecked"}
               %label{:for => "determinedTimePeriod"}  Determined Time Period:
-              %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod }}
+              %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod ? selectedSurvey.determinedTimePeriod : "None" }}
 
       #inviteDetails.col-md-8{"ng-hide" => "showSurveyDetails"}
         .panel.panel-default
@@ -86,6 +84,7 @@
             %label{:for => "deadline"} Deadline:
             %span#deadline{} {{ selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}
             %div#selectedInviteStatus{"ng-if" => "selectedInvite.survey.success != 'UNDECIDED'"}
+              %div#selectedInviteStatus{"ng-if" => "selectedInvite.survey.success == 'NO'"}
               %label{:for => "determinedTimePeriod"}  Determined Time Period:
               %div#determinedTimePeriod{}
                 %div{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}

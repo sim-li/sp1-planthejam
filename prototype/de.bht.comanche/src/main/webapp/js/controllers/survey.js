@@ -26,8 +26,11 @@ angular.module('myApp')
              * All $scope variables for directives and their controllers should be declared here.
              */
             $scope.selectedSurvey = new Survey(selectedSurveyPromise);
+            $scope.selectedSurvey.invites = Model.importMany(Invite, selectedSurveyInvitesPromise);
             $log.debug('selected survey: ', $scope.selectedSurvey)
-            $scope.selectedSurveyInvites = Model.importMany(Invite, selectedSurveyInvitesPromise);
+                // $scope.selectedSurveyInvites = Model.importMany(Invite, selectedSurveyInvitesPromise);
+                // $log.debug('selected survey invites: ', $scope.selectedSurveyInvites);
+
             // For group widget
             $scope.groups = Model.importMany(Group, groupsPromise);
             $scope.users = Model.importMany(User, usersPromise);

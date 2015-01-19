@@ -1,5 +1,6 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
+  deadline: {{selectedSurvey.deadline___}}
   <div class='row'>
     <!-- search & results -->
     <!-- sidebar -->
@@ -8,7 +9,7 @@
     </div>
     <div class='col-md-8'>
       <div class='panel panel-primary'>
-        <div class='panel-heading'>Create new Event</div>
+        <div class='panel-heading'>Edit a survey for an event</div>
         <div class='panel-body'>
           <div class='row'>
             <div class='col-md-8'>
@@ -53,7 +54,7 @@
             <div class='col-lg-11 dropdown'>
               <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
                 <div class='input-group'>
-                  <input class='form-control' ng-model='selectedInvite.survey.deadline' type='text'>
+                  <input class='form-control' ng-model='selectedSurvey.deadline___' type='text'>
                   <span class='input-group-addon'>
                     Deadline
                     <i class='glyphicon glyphicon-calendar'></i>
@@ -61,13 +62,16 @@
                 </div>
               </a>
               <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
-                <datetimepicker bs-datepicker='' data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" date-format='MM/dd/yyyy' date-type='string' ng-model='selectedInvite.survey.deadline'></datetimepicker>
+                <datetimepicker bs-datepicker='' data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" date-format='MM/dd/yyyy' date-type='string' ng-model='selectedSurvey.deadline___'></datetimepicker>
               </ul>
             </div>
           </div>
           <br>
           <div class='row'>
-            {{selectedSurvey}}
+            Participants:
+            <ul>
+              <li ng-repeat='invite in selectedSurvey.invites'>{{invite.user.name}}</li>
+            </ul>
             <ptj-calendar possible='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
           </div>
         </div>
@@ -80,10 +84,10 @@
       </div>
     </div>
     <div class='col-md-2'>
-      <input-group ng-show='isRecurring()'></input-group>
-      <select class='form-control' ng-model='selectedSurvey.frequencyUnit' ng-options='opt for opt in TimeUnit._options'>
+      <input-group ng-show='isRecurring()'>
+        <select class='form-control' ng-model='selectedSurvey.frequencyUnit' ng-options='opt for opt in TimeUnit._options'></select>
         <input class='form-control' min='0' ng-model='selectedSurvey.frequencyDist' placeholder='Distance' required='true' type='number'>
-      </select>
+      </input-group>
     </div>
   </div>
 </div>
