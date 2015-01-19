@@ -1,6 +1,7 @@
 package de.bht.comanche.logic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -66,18 +67,17 @@ public class LgUser extends DaObject {
     @OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
     private LgMember member;
 
-    @ElementCollection
-    @Column(name="general_availability") 
-    private List<LgTimePeriod> generalAvailability;
+    @ElementCollection(targetClass=LgTimePeriod.class)
+    @Column(name="general_availability")
+    private Collection<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
 
-    @ElementCollection 
+    @ElementCollection(targetClass=String.class)
     @Column(name="messages") 
-    private List<String> messages;
-    
+    private List<String> messages = new ArrayList<String>();
+
     public LgUser() {
         this.invites = new ArrayList<LgInvite>();
         this.groups = new ArrayList<LgGroup>();
-        this.generalAvailability = new ArrayList<LgTimePeriod>();
     }
 
     public LgInvite getInviteBySurveyName(final String name) {
@@ -186,8 +186,16 @@ public class LgUser extends DaObject {
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
-    public List<LgTimePeriod> getTimePeriod() {
+    public Collection<LgTimePeriod> getGeneralAvailability() {
         return this.generalAvailability;
+    }
+    
+    /**
+     * Returns LgTimePeriods list for current user.
+     * @return The list with LgTimePeriods.
+     */
+    public void setGeneralAvailability(Collection<LgTimePeriod>  generalAvailability) {
+        this.generalAvailability = generalAvailability;
     }
 
     public List<String> getMessages() {
