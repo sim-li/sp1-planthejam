@@ -159,5 +159,16 @@ angular.module('myApp')
                 $log.log($scope.resultingTimePeriods);
                 // $scope.selectedInvite.possibleTimePeriods = ...
             };
+
+            $scope.showSurveyDetails = true;
+            $scope.toggleSurveyDetails = function() {
+                $scope.showSurveyDetails = true;
+                return false;
+            };
+
+            $scope.toggleInviteDetails = function() {
+                $scope.showSurveyDetails = false;
+                return false;
+            };
         }
     ]);
