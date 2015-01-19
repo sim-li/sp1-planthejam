@@ -1,20 +1,19 @@
 /**
  * Provides a RESTful service.
  *
- * @module restModule
- * @requires baseModel
- * @requires user
+ * @module rest
+ * @requires models
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('restModule', ['baseModel', 'user'])
+angular.module('rest', ['models'])
     /**
      * The RESTful service.
      *
      * @class restService
      */
-    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Invite', 'Model', 'User',
-        function($http, $q, $log, $rootScope, Invite, Model, User) {
+    .factory('restService', ['$http', '$q', '$log', '$rootScope', 'Invite', 'Model', 'Survey', /*'TimePeriod', */ 'User',
+        function($http, $q, $log, $rootScope, Invite, Model, Survey, /*TimePeriod, */ User) {
 
             'use strict';
 
@@ -30,39 +29,39 @@ angular.module('restModule', ['baseModel', 'user'])
              * @type {Object}
              */
             var restPaths = {
-                'basePath': '/rest',
+                'basePath': '/rest/',
                 'user': {
-                    'path': '/user',
-                    'login': '/login',
-                    'register': '/register',
-                    'delete': '/delete',
-                    'get': '/get',
-                    'update': '/update',
-                    'getMany': '/getAllUsers',
-                    'logout': '/logout'
+                    'path': 'user/',
+                    'login': 'login',
+                    'register': 'register',
+                    'delete': 'delete',
+                    'get': 'get',
+                    'update': 'update',
+                    'getAll': 'getAllUsers',
+                    'messages': 'messages',
+                    'logout': 'logout'
+                },
+                'survey': {
+                    'path': 'surveys/',
+                    'invites': 'invites' // TODO -> REST service on server side: GET and PUT surveys/:oid/invites
                 },
                 'invite': {
-                    'path': '/invite',
-                    'getMany': '/getInvites',
-                    'get': '/get',
-                    'save': '/save',
-                    'delete': '/delete',
-                    'getSurveyInvites': '/getSurveyInvites', // TODO -> REST service on  server side
-                    'saveSurveyInvite': '/saveSurveyInvite' //
-                        // 'saveSurveyInvites': '/saveSurveyInvites' //
+                    'path': 'invites/'
                 },
                 'group': {
-                    'path': '/group',
-                    'getMany': '/getGroups',
-                    'save': '/save',
-                    'delete': '/delete'
+                    'path': 'groups/'
                 },
                 'member': {
-                    'path': '/member',
-                    // 'get': '/get',
-                    // 'save': '/save',
-                    'delete': '/delete'
+                    'path': 'members/'
                 }
+                // ,
+                // 'timePeriod': {
+                //     'path': '/timeperiods',
+                // 'getMany': '/gettimeperiods'
+                // ,
+                // 'save': '/save',
+                // 'delete': '/delete'
+                // }
             };
 
             //--> TODO the paths config should best be retrieved from a config file
@@ -74,144 +73,162 @@ angular.module('restModule', ['baseModel', 'user'])
             // });
 
             /**
-             * Returns the relative HTTP path for the given model and operation from the central REST path table.
+             * Returns the relative URL for the given model from the central REST path table.
+             * An oid or an operation or both may be specified. For example: `getUrlFor(Survey, 123, invites)` will
+             * result in the url: `/rest/surveys/123/invites`.
              *
-             * @method getPath
+             * @method getUrlFor
              * @private
              * @param  {Object} model    the model or model class with a modelId
-             * @param  {String} opString a String that denotes the desired operation
+             * @param  {Number} [oid]    the oid of the model
+             * @param  {String} [opString] a String that denotes the desired operation
              * @return {String}          the relative HTTP path
              */
-            var getPath = function(model, opString) {
+            var getUrlFor = function(model, oid, opString) {
                 var modelId = model.modelId || model.prototype.modelId;
                 var theModel = restPaths[modelId];
-                return restPaths.basePath + theModel.path + theModel[opString];
+                return restPaths.basePath + theModel.path + (oid || '') + ((oid && opString) ? '/' : '') + (theModel[opString] || '');
             };
 
             /**
              * Calls the HTTP service at the specified URL with the specified data using the specified method.
              *
-             * @method callHTTP
+             * @method callHttp
              * @private
+             * @param  {String}  method the REST method (GET, POST, PUT or DELETE)
              * @param  {String}  url the URL (relative to the root path)
              * @param  {Object}  [data] the data to be sent to the server
-             * @param  {String}  [method] the REST method (GET, POST, PUT or DELETE)
              * @return {Promise}          a promise to the data received in the response
              */
-            var callHTTP = function(url, data, method) {
-                if (LOG) {
-                    $log.debug('REST: %s <== %o', url, data);
-                }
-                var deferred = $q.defer();
-                $http({
-                    method: method || 'POST',
-                    url: url,
-                    data: data,
-                    headers: (method === 'DELETE') ? {
-                        'Content-Type': 'application/json'
-                    } : ''
-                }).success(function(data, status, header, config) {
+            var callHttp = function(method) {
+                return function(url, data) {
                     if (LOG) {
-                        $log.debug('REST: %s ==> %o', url, data);
+                        $log.debug('%s %s <== %o', method, url, data);
                     }
-                    deferred.resolve(data);
-                }).error(function(data, status, header, config) {
-                    // errors should always be logged
-                    var errMsg = 'REST: ' + url + ' failed. ==> ';
-                    $rootScope.warnings = errMsg + data.message;
-                    $log.log(errMsg);
-                    $log.log(data.stackTrace);
-                    // deferred.reject(errMsg);
-                });
-                return deferred.promise;
+                    var deferred = $q.defer();
+                    $http({
+                        method: method,
+                        url: url,
+                        data: data /*,*/
+                            // headers: {
+                            //     'Content-Type': 'application/json'
+                            // } : ''
+                    }).success(function(data, status, header, config) {
+                        if (LOG) {
+                            $log.debug('%s %s ==> %o', method, url, data);
+                        }
+                        deferred.resolve(data);
+                    }).error(function(data, status, header, config) {
+                        // errors should always be logged
+                        var errMsg = method + ' ' + url + ' failed. ==> ';
+                        $rootScope.warnings = errMsg + data.message;
+                        $log.log(errMsg);
+                        $log.log(data.stackTrace);
+                        deferred.reject(errMsg);
+                    });
+                    return deferred.promise;
+                };
             };
 
             /**
-             * Calls the login REST service for the specified user.
+             * Does a login for the specified user.
              *
              * @method login
              * @param  {Object}  user the user to be logged in
              * @return {Promise}      a promise to the logged-in user
              */
             restService.login = function(user) {
-                return callHTTP(getPath(user, 'login'), {
-                    'name': user.name,
-                    'password': user.password
-                });
+                var url = getUrlFor(user, null, 'login'),
+                    data = {
+                        'name': user.name,
+                        'password': user.password
+                    };
+                return callHttp('POST')(url, data);
             };
 
             /**
-             * Calls the register REST service for the specified user.
+             * Registers the specified user.
              *
              * @method register
              * @param  {Object}  user the user to be registered
              * @return {Promise}      a promise to the registered user
              */
             restService.register = function(user) {
-                return callHTTP(getPath(user, 'register'), {
-                    'name': user.name,
-                    'password': user.password,
-                    'email': user.email,
-                    'tel': user.tel
-                });
+                var url = getUrlFor(user, null, 'register'),
+                    data = {
+                        'name': user.name,
+                        'password': user.password,
+                        'email': user.email,
+                        'tel': user.tel
+                    };
+                return callHttp('POST')(url, data);
             };
 
             /**
-             * Calls the delete REST service for the specified user.
+             * Deletes the specified user.
              *
              * @method deleteUser
              * @param  {Object}  user the user to be deleted
              */
-            restService.deleteUser = function(user) {
-                return callHTTP(getPath(user, 'delete'), { // TODO use generic doDelete if possible
-                    'oid': user.oid
-                }, 'DELETE');
+            restService.deleteUser = function(user) { // TODO use generic doDelete if possible
+                var url = getUrlFor(user, null, 'delete');
+                return callHttp('DELETE')(url);
             };
 
             // var getUser = function(user) {
-            //     return callHTTP(getPath(user, 'get'));
+            //     return callHttp('GET')(getUrlFor(user, null, 'get'));
             // };
 
             /**
-             * Calls the update REST service for the specified user.
+             * Updates the specified user.
              *
              * @method updateUser
              * @param  {Object}  user the user to be updated
              * @return {Promise}      a promise to the updated user
              */
-            restService.updateUser = function(user) {
-                return callHTTP(getPath(user, 'update'), {
-                    'oid': user.oid,
-                    'name': user.name,
-                    'password': user.password,
-                    'email': user.email,
-                    'tel': user.tel
-                });
+            restService.updateUser = function(user) { // TODO use generic doUpdate if possible
+                var url = getUrlFor(user, null, 'update'),
+                    data = {
+                        'oid': user.oid,
+                        'name': user.name,
+                        'password': user.password,
+                        'email': user.email,
+                        'tel': user.tel
+                    };
+                return callHttp('POST')(url, data);
             };
 
             /**
-             * Calls the logout REST service.
+             * Does a logout for the user that is currently logged-in.
              *
              * @method logout
              */
             restService.logout = function() {
-                return callHTTP(getPath(User, 'logout'));
+                var url = getUrlFor(User, null, 'logout');
+                return callHttp('POST')(url);
             };
 
-            // TODO
-            restService.getSurveyInvites = function(inviteOid) {
-                return callHTTP(getPath(Invite, 'getSurveyInvites'), inviteOid);
+            /**
+             * Gets all users.
+             *
+             * @method getAllUsers
+             * @return {Promise} a promise to an array of all users
+             */
+            restService.getAllUsers = function() {
+                var url = getUrlFor(User, null, 'getAll');
+                return callHttp('GET')(url);
             };
 
-            // TODO
-            restService.saveSurveyInvite = function(invite, inviteToSave) {
-                return callHTTP(getPath(invite, 'saveSurveyInvite'), invite.oid, inviteToSave);
+            restService.getSurveyInvites = function(oid) {
+                var url = getUrlFor(Survey, oid, 'invites');
+                return callHttp('GET')(url);
             };
 
-            // TODO
-            // restService.saveSurveyInvites = function(invite, invitesToSave) {
-            //     return callHTTP(getPath(invite, 'saveSurveyInvites'), invite.oid, invitesToSave);
-            // };
+            restService.getMessages = function() {
+                var url = getUrlFor(User, null, 'messages');
+                $log.debug(url)
+                return callHttp('GET')(url);
+            };
 
             /**
              * Gets a collection of objects of the specified model class by calling the REST service.
@@ -221,7 +238,8 @@ angular.module('restModule', ['baseModel', 'user'])
              * @return {Promise}           a promise for a collection of objects of the specified model type
              */
             restService.doGetMany = function(ModelClass) {
-                return callHTTP(getPath(ModelClass, 'getMany'));
+                var url = getUrlFor(ModelClass);
+                return callHttp('GET')(url);
             };
 
             /**
@@ -233,7 +251,8 @@ angular.module('restModule', ['baseModel', 'user'])
              * @return {Promise}           a promise for the object
              */
             restService.doGet = function(ModelClass, oid) {
-                return callHTTP(getPath(ModelClass, 'get'), oid);
+                var url = getUrlFor(ModelClass, oid);
+                return callHttp('GET')(url);
             };
 
             /**
@@ -244,10 +263,12 @@ angular.module('restModule', ['baseModel', 'user'])
              * @return {Promise}      a promise for the saved object of the specified model
              */
             restService.doSave = function(model) {
-                return callHTTP(getPath(model, 'save'), model.doExport());
+                var method = (model.oid) ? 'PUT' : 'POST',
+                    url = getUrlFor(model, model.oid),
+                    data = model.doExport();
+                return callHttp(method)(url, data);
             };
 
-            // NOTE: delete is a javascript keyword, therefore the otherwise strange 'do'-prefix naming convention
             /**
              * Deletes a model by calling the REST service.
              *
@@ -255,22 +276,9 @@ angular.module('restModule', ['baseModel', 'user'])
              * @param  {Object} model the model with a modelId
              */
             restService.doDelete = function(model) {
-                return callHTTP(getPath(model, 'delete'), model.oid, 'DELETE');
+                var url = getUrlFor(model, model.oid);
+                return callHttp('DELETE')(url);
             };
-
-
-            // return {
-            //     login: login,
-            //     register: register,
-            //     deleteUser: deleteUser,
-            //     updateUser: updateUser,
-            //     // getUser: getUser,
-            //     logout: logout,
-            //     doGetMany: doGetMany,
-            //     doGet: doGet,
-            //     doSave: doSave,
-            //     doDelete: doDelete
-            // };
 
             return restService;
         }

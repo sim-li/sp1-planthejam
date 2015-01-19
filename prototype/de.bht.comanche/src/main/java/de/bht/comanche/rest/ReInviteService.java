@@ -26,7 +26,7 @@ import de.bht.comanche.logic.LgTransaction;
  * @author Maxim Novichkov
  *
  */
-@Path("/invites/")
+@Path("/invites")
 public class ReInviteService extends RestService {
 
 	/**
@@ -77,7 +77,7 @@ public class ReInviteService extends RestService {
 			public List<LgInvite> execute() throws Exception {
 				final List<LgInvite> result;
 				try {
-					result = startSession().getInvites();//TODO change and implement the method
+					result = startSession().getInvitesAsParticipant();//TODO change and implement the method
 				} catch (Exception ex) {
 					throw create(RestGetInvitesFailure.class, ex, getSession().getUser().getName());
 				}
@@ -139,68 +139,5 @@ public class ReInviteService extends RestService {
 			}
 		}.getResult();
 	}
-	
-//	/**
-//	 * Delete LgInvite by specified oid.
-//	 * @param oid The LgInvite oid.
-//	 * @param request The request information from HTTP service.
-//	 * @exception RestDeleteInviteFailure if it was not possible to delete invite of current user.
-//	 */
-//	@Path("delete")
-//	@DELETE
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgInvite delete(final long oid, @Context final HttpServletRequest request) {
-//		return new LgTransaction <LgInvite>(request) {
-//			public LgInvite execute() throws Exception {
-//				try {
-//					startSession().deleteInvite(oid);
-//				} catch (Exception ex) {
-//					throw create(RestDeleteInviteFailure.class, ex, oid, getSession().getUser().getName());
-//				}
-//				return null;
-//			}
-//		}.getResult();
-//	}
-//
-//	/**
-//	 * Could not delete invite with oid "{0}" for user "{1}"
-//	 */
-//	@SuppressWarnings("serial")
-//	public static final class RestDeleteInviteFailure extends multex.Failure {}
-//	
-//	/**
-//	 * Returns a list of all invites that belong to the specified invite's survey.
-//	 * 
-//	 * @param oid The invite oid.
-//	 * @param request The request information from HTTP service.
-//	 * @return The list of invites.
-//	 * @exception RestGetInvitesFailure if it was not possible to get list of invites for current user.
-//	 */
-//	@POST
-//	@Path("getSurveyInvites")
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public List<LgInvite> getSurveyInvites(final long oid, @Context final HttpServletRequest request) {
-//		return new LgTransaction<List<LgInvite>>(request) {
-//			@Override
-//			public List<LgInvite> execute() throws Exception {
-//				final List<LgInvite> result;
-//				try {
-//					result = startSession().getInvite(oid).getSurvey().getInvites();
-//					System.err.printf("############### number of invites for survey #%d = %d%n", oid, result.size());
-//				} catch (Exception ex) {
-//					throw create(RestGetSurveyInvitesFailure.class, ex, oid, getSession().getUser().getName());
-//				}
-//				return result;
-//			}
-//		}.getResult();
-//	}
-//
-//	/**
-//	 * Could not get invites of survey of invite with oid "{0}" for user "{1}"
-//	 */
-//	@SuppressWarnings("serial")
-//	public static final class RestGetSurveyInvitesFailure extends multex.Failure {}
 
 }

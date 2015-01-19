@@ -1,21 +1,21 @@
 %form.form-signin{:name => "registerForm", "ng-submit" => "register(user)"}
-  %h2.form-signin-heading Registrieren
+  %h2.form-signin-heading Register
   %div
-    %label{:for => "inputName"} Benutzername
-    %input#inputName.form-control{:name => "inputName", "ng-model" => "user.name", :placeholder => "Dein Benutzername ...", :required => "", :type => "text"}
-    %label{:for => "inputPassword"} Passwort
-    %input#inputPassword.form-control{:name => "inputPassword", "ng-model" => "user.password", :placeholder => "8-20 Buchstaben", :required => "", :type => "password"}
+    %label{:for => "inputName"} User name
+    %input#inputName.form-control{:name => "inputName", "ng-model" => "user.name", :placeholder => "Your user name ...", :required => "", :type => "text"}
+    %label{:for => "inputPassword"} Password
+    %input#inputPassword.form-control{:name => "inputPassword", "ng-model" => "user.password", :placeholder => "8-20 characters", :required => "", :type => "password"}
     .error
   %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "showPassword", :type => "checkbox"}
-  %label{:for => "toggleShowPassword"} Klartext
+  %label{:for => "toggleShowPassword"} Plain text
   %div
-    %label{:for => "inputEmail"} E-Mail
-    %input#inputEmail.form-control{:name => "inputEmail", "ng-model" => "user.email", :placeholder => "Deine E-Mail-Adresse ...", :required => "", :type => "text"}/
+    %label{:for => "inputEmail"} Email
+    %input#inputEmail.form-control{:name => "inputEmail", "ng-model" => "user.email", :placeholder => "Your email address ...", :required => "", :type => "text"}/
     .error
-    %label{:for => "inputTel"} Telefon
-    %input#inputTel.form-control{:name => "inputTel", "ng-model" => "user.tel", :placeholder => "Deine Telefonnummer ...", :required => "", :type => "text"}/
+    %label{:for => "inputTel"} Telephone
+    %input#inputTel.form-control{:name => "inputTel", "ng-model" => "user.tel", :placeholder => "Your telephone number ...", :required => "", :type => "text"}/
     .error
   %div
-    %a#cancelRegisterLink{:href => "/", } Registrieren abbrechen
+    %a#cancelRegisterLink{:href => "/", } Cancel registration
   %span
-    %input#registerBtn.btn.btn-primary.btn-block{:type => "submit", :value => "Registrieren"}/
+    %input#registerBtn.btn.btn-primary.btn-block{:type => "submit", :value => "Register"}/

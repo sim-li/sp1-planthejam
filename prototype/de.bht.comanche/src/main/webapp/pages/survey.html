@@ -1,0 +1,89 @@
+<ptj-menu></ptj-menu>
+<div class='container'>
+  <div class='row'>
+    <!-- search & results -->
+    <!-- sidebar -->
+    <div class='col-md-2'>
+      <!-- %ptj-survey-select -->
+    </div>
+    <div class='col-md-8'>
+      <div class='panel panel-primary'>
+        <div class='panel-heading'>Create new Event</div>
+        <div class='panel-body'>
+          <div class='row'>
+            <div class='col-md-8'>
+              <h2>
+                <div class='item-wrapper'>
+                  <a editable-text='selectedSurvey.name' href='#'>
+                    {{selectedSurvey.name}}
+                  </a>
+                </div>
+              </h2>
+              <h4>
+                <div class='item-wrapper'>
+                  <a editable-text='selectedSurvey.description' href='#'>
+                    {{selectedSurvey.description}}
+                  </a>
+                </div>
+              </h4>
+            </div>
+            <div class='col-md-4'>
+              <div class='row'>
+                <div class='btn-group pull-right'>
+                  <label btn-radio="'Once'" class='btn btn-primary' ng-click='setOneTime()' ng-model='still_needs_a_model'>Once</label>
+                  <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='setRecurring()' ng-model='still_needs_a_model'>Repeatedly</label>
+                </div>
+                <br>
+                <br>
+                <btn class='btn-sm btn-success pull-right' ng-click='showLiveButton=false' ng-show='showLiveButton'>
+                  Live
+                  <span class='glyphicon glyphicon-bullhorn'></span>
+                </btn>
+                <btn class='btn-sm btn-warning pull-right' ng-click='showLiveButton=true' ng-show='!showLiveButton'>
+                  Staged
+                  <span class='glyphicon glyphicon-off'></span>
+                </btn>
+              </div>
+            </div>
+          </div>
+          <div class='rpw'>
+            <ptj-groups></ptj-groups>
+          </div>
+          <div class='row'>
+            <div class='col-lg-11 dropdown'>
+              <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
+                <div class='input-group'>
+                  <input class='form-control' ng-model='selectedInvite.survey.deadline' type='text'>
+                  <span class='input-group-addon'>
+                    Deadline
+                    <i class='glyphicon glyphicon-calendar'></i>
+                  </span>
+                </div>
+              </a>
+              <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                <datetimepicker bs-datepicker='' data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" date-format='MM/dd/yyyy' date-type='string' ng-model='selectedInvite.survey.deadline'></datetimepicker>
+              </ul>
+            </div>
+          </div>
+          <br>
+          <div class='row'>
+            {{selectedSurvey}}
+            <ptj-calendar possible='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
+          </div>
+        </div>
+        <div class='panel-footer'>
+          <div class='col-md-offset-10'>
+            <button class='btn btn-default btn-sm' type='reset'>Reset</button>
+            <button class='btn btn-primary btn-sm' ng-click='saveSurvey()' type='submit'>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='col-md-2'>
+      <input-group ng-show='isRecurring()'></input-group>
+      <select class='form-control' ng-model='selectedSurvey.frequencyUnit' ng-options='opt for opt in TimeUnit._options'>
+        <input class='form-control' min='0' ng-model='selectedSurvey.frequencyDist' placeholder='Distance' required='true' type='number'>
+      </select>
+    </div>
+  </div>
+</div>

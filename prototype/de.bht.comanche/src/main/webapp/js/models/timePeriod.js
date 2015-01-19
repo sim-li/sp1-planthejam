@@ -1,34 +1,73 @@
-angular.module('timePeriod', [])
+/**
+ * @module models
+ *
+ * @author Duc Tung Tong
+ */
+angular.module('models')
 	.factory('TimePeriod', function() {
 		'use strict';
 
+		/**
+		 * A time period data type.
+		 *
+		 * @class TimePeriod
+		 * @constructor
+		 * @param {Object} [config={}] an optional configuration object
+		 * @param {Number} [config.oid=''] the object id of the time period
+		 * @param {Number} [config.startTime=new Date()] the start time of the time period
+		 * @param {String} [config.durationMins=0] the duration of the time period in minutes
+		 *
+		 *
+		 * @param {[type]} config [description]
+		 */
 		var TimePeriod = function(config) {
 			if (!(this instanceof TimePeriod)) {
 				return new TimePeriod(config);
 			}
+			this.oid = config.oid || '';
 			this.startTime = config.startTime || new Date();
-			this.duration = config.duration || 0;
+			this.durationMins = config.durationMins || 0;
 		};
 
+		/**
+		 * This model's unique id.
+		 *
+		 * @property modelId
+		 * @type {String}
+		 */
 		TimePeriod.prototype.modelId = 'timePeriod';
 
-		TimePeriod.doExport = function() {
+		/**
+		 * Exports the time period by removing any client side attributes, that the server can not handle.
+		 *
+		 * @method doExport
+		 * @return {Object} the exported invite
+		 */
+		TimePeriod.prototype.doExport = function() {
 			return {
+				'oid': this.oid,
 				'startTime': this.startTime,
-				'duration': this.duration
+				'durationMins': this.durationMins
 			};
 		};
 
+		/**
+		 * Provides an array of three dummy time periods.
+		 *
+		 * @method dummyTimePeriods
+		 * @static
+		 * @return {Array} three dummy time periods
+		 */
 		TimePeriod.dummyTimePeriods = function() {
 			return [{
 				'startTime': new Date(),
-				'duration': '3'
+				'durationMins': '3'
 			}, {
 				'startTime': new Date(),
-				'duration': '4'
+				'durationMins': '4'
 			}, {
 				'startTime': new Date(),
-				'duration': '5'
+				'durationMins': '5'
 			}];
 		};
 

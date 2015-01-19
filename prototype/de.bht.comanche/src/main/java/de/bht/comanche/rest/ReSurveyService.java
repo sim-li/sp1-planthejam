@@ -3,6 +3,7 @@ package de.bht.comanche.rest;
 import static multex.MultexUtil.create;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -13,11 +14,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+
+import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgTransaction;
 
 
-@Path("/surveys/")
+@Path("/surveys")
 public class ReSurveyService {
 	
 	@GET
@@ -30,7 +34,26 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().getSurvey(oid);//TODO change and implement the method
+					result = startSession().getSurvey(oid);
+				} catch (Exception ex) {
+					throw create(TempFailure.class, ex);//TODO change and implement the failure
+				}
+				return result;
+			}
+		}.getResult();
+	}
+	
+	@GET
+	@Path("/{oid}/invites")
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public List<LgInvite> getInvitesFor(@PathParam("oid") final long surveyOid, @Context final HttpServletRequest request) {
+		return new LgTransaction<List<LgInvite>>(request) {
+			@Override
+			public List<LgInvite> execute() throws Exception {
+				final List<LgInvite> result;
+				try {
+					result = startSession().getInvitesForSurvey(surveyOid);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
@@ -49,7 +72,12 @@ public class ReSurveyService {
 			public List<LgSurvey> execute() throws Exception {
 				final List<LgSurvey> result;
 				try {
-					result = startSession().getSurveys();//TODO change and implement the method
+					
+					//-- FOR SURVEY EVALUATION --------------------------------
+//					getSession().getUser().evaluateAllSurveys(); // <<---- TODO comment back in when timeperiods an invites etc. work.
+					//---------------------------------------------------------
+					
+					result = startSession().getSurveys();
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
@@ -67,7 +95,10 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().saveSurvey(survey);//TODO change and implement the method
+					result = startSession().saveSurvey(survey);
+//					System.out.println("DEBUGME: Saving survey with no of invites "+  survey.getInvites().size());
+//					System.out.println("DEBUGME: Members:   "+ survey.getInvites());
+					System.out.println("Saved survey");
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
@@ -85,7 +116,7 @@ public class ReSurveyService {
 			public LgSurvey execute() throws Exception {
 				final LgSurvey result;
 				try {
-					result = startSession().updateSurvey(oid, survey);//TODO change and implement the method
+					result = startSession().updateSurvey(survey);
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}

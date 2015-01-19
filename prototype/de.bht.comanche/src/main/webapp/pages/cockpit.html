@@ -1,52 +1,124 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
+  debug {{ showSurveyDetails }}
+  <input class='btn' ng-click='toggleSurveyDetails' type='button' value='toggleSrv'>
+  <input class='btn' ng-click='toggleInviteDetails' type='button' value='toggleInv'>
   <!-- %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}' -->
   <div class='panel panel-default'>
     <div class='panel-body'>
       <div class='col-md-4'>
         <div class='tabbable'>
           <ul class='nav nav-tabs'>
-            <li class='active'>
-              <a data-toggle='tab' href='#surveyTab' onclick='return false;'>
+            <!-- %li.active -->
+            <li>
+              <a data-toggle='tab' href='#surveyTab' ng-click='toggleSurveyDetails()'>
                 Survey
-                <span class='badge'>{{invites.length}}</span>
+                <span class='badge'>{{surveys.length}}</span>
+              </a>
+            </li>
+            <!-- %li -->
+            <li class='active'>
+              <a data-toggle='tab' href='#inviteTab' onclick='toggleInviteDetails()'>
+                Invite
+                <span class='badge'>{{(invites | filter: {ignored: "!YES"}).length}}</span>
               </a>
             </li>
             <li>
-              <a data-toggle='tab' href='#inviteTab' onclick='return false;'>
-                Invite
-                <span class='badge'>{{invites.length}}</span>
+              <a data-toggle='tab' href='#ignoredInviteTab' onclick='toggleInviteDetails()'>
+                Ignored
+                <span class='badge'>{{(invites | filter: {ignored: "YES"}).length}}</span>
               </a>
             </li>
           </ul>
           <div class='tab-content'>
-            <div class='tab-pane active' id='surveyTab'>
-              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
+            <!-- #surveyTab.tab-pane.active -->
+            <div class='tab-pane' id='surveyTab'>
+              SURV Hallo
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'></div>
-              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>{{invite.survey.name}}</a>
+              <a class='list-group-item' href='' ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>{{survey.name}}</a>
             </div>
-            <div class='tab-pane' id='inviteTab'>
-              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchString' placeholder='Terminumfragen durchsuchen ...' type='search'>
-              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites | filter:searchString'>
-                <div class='col-sm-3'>{{invite.survey.name}}</div>
-                <button class='btn btn-success btn-sm col-sm-offset-4'>accept</button>
-                <button class='btn btn-danger btn-sm'>ignore</button>
+            <!-- #inviteTab.tab-pane -->
+            <div class='tab-pane active' id='inviteTab'>
+              INV Hallo
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
+              <div class='list-group' id='surveyList'></div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES', name: searchInvite} ">
+                <div class='col-sm-8'>{{invite.survey.name}} {{invite.ignored}}</div>
+                <div class='btn-group'>
+                  <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteStatus('UNDECIDED')" ng-model='radioModel' onclick='return false;'>
+                    <span class='glyphicon glyphicon-question-sign'></span>
+                  </label>
+                  <label btn-radio="'accept'" class='btn btn-primary btn-sm' data-target='#calendarModal' data-toggle='modal' ng-click="setSelectedInviteStatus('NO')" ng-model='radioModel'>
+                    <span class='glyphicon glyphicon-ok'></span>
+                  </label>
+                  <div aria-hidden='true' class='modal fade bs-example-modal-lg' data-target='.bs-example-modal-lg' id='calendarModal' role='dialog' tabindex='-1'>
+                    <div class='modal-dialog modal-lg'>
+                      <div class='modal-content'>
+                        <div class='modal-header'>
+                          <button aria-label='Close' class='close' data-dismiss='modal' type='button'>
+                            <span aria-hidden='true'>×</span>
+                          </button>
+                          <h4 class='modal-title'>Please choose your Avaibilities</h4>
+                        </div>
+                        <div class='modal-body'>
+                          <ptj-calendar possible='possibleTimePeriods' resulting='resultingTimePeriods'></ptj-calendar>
+                        </div>
+                        <div class='modal-footer'>
+                          <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
+                          <button class='btn btn-primary' ng-click='saveAvailabilities()' type='button'>Save changes</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <label btn-radio="'ignore'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteStatus('YES')" ng-model='radioModel' onclick='return false;'>
+                    <span class='glyphicon glyphicon-remove'></span>
+                  </label>
+                </div>
+              </a>
+            </div>
+            <div class='tab-pane' id='ignoredInviteTab'>
+              IGNORE Hallo
+              <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchIgnored' placeholder='Filter ignored invites ...' type='search'>
+              <div class='list-group' id='surveyList'></div>
+              <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored : 'YES', name: searchIgnored} ">
+                <div class='col-sm-9'>{{invite.survey.name}} {{invite.ignored}}</div>
+                <label btn-radio="'reaccept'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteStatus('NO')" ng-model='radioModel' onclick='return false;'>
+                  reaccept
+                </label>
               </a>
             </div>
           </div>
         </div>
         <!-- %div DEBUG selected: {{ selectedInvite }} -->
       </div>
-      <div class='col-md-8'>
-        <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
-        <!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + user.searchString + '\\'')", "ng-model" => "user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
-        <input class='btn btn-primary' id='addSurvey' ng-click='addInvite()' type='button' value='Neue Terminumfrage erstellen'>
-        <input class='btn btn-primary' id='editSurvey' ng-click='editInvite()' type='button' value='Terminumfrage anzeigen und bearbeiten'>
-        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedInvite()' type='button' value='Terminumfrage löschen'>
-        <div class='panel panel-default' id='surveyPreview'>
+      <div class='col-md-8' id='surveyDetails' ng-show='showSurveyDetails'>
+        hallo from surveyDetails
+        <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
+        <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
+        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedSurvey()' type='button' value='Delete selected survey'>
+        <div class='panel panel-default'>
           <div class='panel-body'>
-            <label for='selectedSurveyDescription'>Beschreibung:</label>
+            <label for='selectedSurveyDescription'>Description:</label>
             <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
+            <div>Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}</div>
+            <label for='selectedSurveyDescription'>Status:</label>
+            <div id='selectedSurveyStatus'>wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}</div>
+          </div>
+        </div>
+      </div>
+      <div class='col-md-8' id='inviteDetails' ng-hide='showSurveyDetails'>
+        huhu from inviteDetails
+        <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
+        <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
+        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedSurvey()' type='button' value='Delete selected survey'>
+        <div class='panel panel-default'>
+          <div class='panel-body'>
+            <label for='selectedSurveyDescription'>Description:</label>
+            <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
+            <div>Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}</div>
+            <label for='selectedSurveyDescription'>Status:</label>
+            <div id='selectedSurveyStatus'>wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}</div>
             <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->
             <!-- %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }} -->
           </div>
@@ -54,4 +126,20 @@
       </div>
     </div>
   </div>
+  <!-- %button.btn.btn-primary{"data-target" => "#calendarModal", "data-toggle" => "modal", :type => "button"} -->
+  <!-- demo calendar modal -->
+  <!-- #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"} -->
+  <!-- .modal-dialog.modal-lg -->
+  <!-- .modal-content -->
+  <!-- .modal-header -->
+  <!-- %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"} -->
+  <!-- %span{"aria-hidden" => "true"} × -->
+  <!-- %h4.modal-title Please choose your Avaibilities -->
+  <!-- .modal-body -->
+  <!-- .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"} -->
+  <!-- .modal-footer -->
+  <!-- %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close -->
+  <ul ng-model='messages'>
+    <li ng-repeat='message in messages'>{{ message }}</li>
+  </ul>
 </div>

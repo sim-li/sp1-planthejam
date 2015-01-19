@@ -4,10 +4,10 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>726</x>
+      <x>660</x>
       <y>517</y>
       <w>429</w>
-      <h>275</h>
+      <h>330</h>
     </coordinates>
     <panel_attributes>User
 --
@@ -15,7 +15,9 @@ name : String
 password : String
 tel : String
 email : String
-generalAvailability : List&lt;TimerPreiod&gt;
+generalAvailability : List&lt;TimePeriod&gt;
+iconurl: String
+messages : List&lt;String&gt;
 --
 &lt;&lt;host&gt;&gt; addSurvey(survey : Survey)
 &lt;&lt;host&gt;&gt; deleteSurvey(survey: Survey)
@@ -30,61 +32,50 @@ showAvailableAndBlockedTimePeriods()</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>275</x>
-      <y>154</y>
-      <w>209</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;data type&gt;&gt;
-Repetition
---
-distance : int
-unit: TimeUnit</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>1144</x>
-      <y>110</y>
+      <x>1166</x>
+      <y>33</y>
       <w>132</w>
       <h>99</h>
     </coordinates>
     <panel_attributes>«enumeration»
 SurveyType
 --
-_once_
-_repeatedly_</panel_attributes>
+_ONE_TIME_
+_RECURRING_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>946</x>
-      <y>385</y>
-      <w>219</w>
+      <x>880</x>
+      <y>418</y>
+      <w>285</w>
       <h>54</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>33;33;198;33</additional_attributes>
+    <additional_attributes>33;33;264;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>594</x>
-      <y>77</y>
+      <y>33</y>
       <w>495</w>
-      <h>297</h>
+      <h>374</h>
     </coordinates>
     <panel_attributes>Survey
 --
 name : String
 description : String
 type : SurveyType
+durationMins: int
 deadline : Date
-frequency : Repetition
+frequencyDist : int
+frequencyUnit : TimeUnit
 possibleTimePeriods : List&lt;TimePeriod&gt;
 determinedTimePeriod : TimePeriod
+success: Status = UNDECIDED
+algoChecked: boolean = false
 --
 F &lt;&lt;host&gt;&gt; addParticipantToSurvey(user : User)
 F &lt;&lt;host&gt;&gt; addAllUsersFromGroupToSurvey(group : Group)
@@ -101,7 +92,7 @@ getGroupSnapshot : Group</panel_attributes>
       <x>1144</x>
       <y>363</y>
       <w>297</w>
-      <h>132</h>
+      <h>143</h>
     </coordinates>
     <panel_attributes>Invite
 
@@ -117,35 +108,35 @@ setConcreteAvailability(List&lt;TimePeriod&gt;)</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>770</x>
-      <y>341</y>
+      <x>704</x>
+      <y>374</y>
       <w>56</w>
-      <h>197</h>
+      <h>164</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..*
 m2=1..*
 r1=Host</panel_attributes>
-    <additional_attributes>33;176;33;33</additional_attributes>
+    <additional_attributes>33;143;33;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>924</x>
-      <y>341</y>
+      <x>858</x>
+      <y>374</y>
       <w>96</w>
-      <h>197</h>
+      <h>164</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1.*
 m2=1..*
 r1=Participant</panel_attributes>
-    <additional_attributes>55;176;55;33</additional_attributes>
+    <additional_attributes>55;143;55;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>770</x>
+      <x>704</x>
       <y>407</y>
       <w>230</w>
       <h>77</h>
@@ -158,7 +149,7 @@ r1=Participant</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>275</x>
-      <y>440</y>
+      <y>341</y>
       <w>209</w>
       <h>88</h>
     </coordinates>
@@ -174,22 +165,22 @@ durationMins : int
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>275</x>
-      <y>286</y>
+      <y>187</y>
       <w>209</w>
       <h>110</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
 TimeUnit
 --
-_Day_
-_Week_
-_Month_</panel_attributes>
+_DAY_
+_WEEK_
+_MONTH_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>385</x>
+      <x>275</x>
       <y>561</y>
       <w>220</w>
       <h>66</h>
@@ -202,15 +193,15 @@ name : String</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>572</x>
+      <x>462</x>
       <y>572</y>
-      <w>175</w>
+      <w>219</w>
       <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
 m1=1..1
 m2=0..*</panel_attributes>
-    <additional_attributes>154;33;33;33</additional_attributes>
+    <additional_attributes>198;33;33;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Note</type>
@@ -222,13 +213,13 @@ m2=0..*</panel_attributes>
     </coordinates>
     <panel_attributes>Entwurfs-Fachklassendiagramm mit Operationen
 Terminfindungs-App "Plan The Jam"
-Team: Comanche, 26.11.2014</panel_attributes>
+Team: Comanche, 12.01.2015</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>495</x>
+      <x>385</x>
       <y>748</y>
       <w>187</w>
       <h>66</h>
@@ -242,7 +233,7 @@ Team: Comanche, 26.11.2014</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>550</x>
+      <x>440</x>
       <y>660</y>
       <w>54</w>
       <h>109</h>
@@ -253,14 +244,30 @@ Team: Comanche, 26.11.2014</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>451</x>
+      <x>341</x>
       <y>594</y>
-      <w>296</w>
+      <w>340</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-&gt;
 m1=0..*
 m2=0..*</panel_attributes>
-    <additional_attributes>33;33;33;99;275;99</additional_attributes>
+    <additional_attributes>33;33;33;99;319;99</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1166</x>
+      <y>165</y>
+      <w>132</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>«enumeration»
+Status
+--
+_UNDECIDED_
+_YES_
+_NO_</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

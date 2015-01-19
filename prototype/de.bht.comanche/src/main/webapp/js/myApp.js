@@ -1,10 +1,3 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * (C)opyright Duc Tung Tong, Mat.-Nr. 798029, s51488@beuth-hochschule.de
- * Module: my app -- the main module
- */
-
 'use strict';
 
 /**
@@ -15,25 +8,16 @@
  *
  * @module myApp
  * @main
- * @requires ngRoute
- * @requires ui.bootstrap
- * @requires ui.bootstrap.datetimepicker
- * @requires xeditable
- * @requires baseModel
  * @requires constants
- * @requires datePickerDate
- * @requires group
- * @requires invite
- * @requires restModule
- * @requires survey
- * @requires timePeriod
- * @requires user
+ * @requires models
+ * @requires rest
  * @requires util
  *
  * @author Sebastian Dass&eacute;
+ * @author Duc Tung Tong
  */
-angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
-        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util'
+angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap', 'ui.bootstrap.datetimepicker',
+        'ui.calendar', 'uiUtilsModule', 'util', 'xeditable'
     ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
         $routeProvider
@@ -49,37 +33,39 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                 templateUrl: 'pages/cockpit.html',
                 controller: 'cockpitCtrl',
                 resolve: {
+                    surveysPromise: function(restService, Survey) {
+                        return restService.doGetMany(Survey);
+                    },
                     invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
+                    },
+                    messagesPromise: function(restService) {
+                        return restService.getMessages();
                     }
                 }
             })
-            .when('/invite/:inviteOid?', {
-                templateUrl: 'pages/invite.html',
-                controller: 'inviteCtrl',
+            .when('/survey/:surveyOid?', {
+                templateUrl: 'pages/survey.html',
+                controller: 'surveyCtrl',
                 resolve: {
-                    selectedInvitePromise: function($route, restService, Invite) {
-                        var inviteOid = $route.current.params.inviteOid;
-                        // console.log("inviteOid = " + inviteOid)
-                        return (inviteOid === undefined) ? '' : restService.doGet(Invite, inviteOid);
+                    selectedSurveyPromise: function($route, restService, Survey) {
+                        var surveyOid = $route.current.params.surveyOid;
+                        // console.log("surveyOid = " + surveyOid)
+                        return (surveyOid === undefined) ? '' : restService.doGet(Survey, surveyOid);
                     },
-                    selectedInviteSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
-                        var inviteOid = $route.current.params.inviteOid;
-                        return (inviteOid === undefined) ? [] : restService.getSurveyInvites(inviteOid);
-                    },
-                    currentUserPromise: function($route, restService, User) {
-                        return ($route.current.params.inviteOid !== undefined) ? '' : restService.doGet(User);
-                    },
-                    // TODO maybe not necessary to get all invites for this route?
-                    invitesPromise: function(restService, Invite) {
-                        return restService.doGetMany(Invite);
+                    selectedSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
+                        var surveyOid = $route.current.params.surveyOid;
+                        return (surveyOid === undefined) ? [] : restService.getSurveyInvites(surveyOid);
                     },
                     groupsPromise: function(restService, Group) {
                         return restService.doGetMany(Group);
                     },
-                    usersPromise: function(restService, User) {
-                        return restService.doGetMany(User);
-                    }
+                    usersPromise: function(restService) {
+                            return restService.getAllUsers();
+                        }
+                        //, timePeriodPromise: function(restService, timePeriod) {
+                        //     return restService.doGetMany(timePeriod);
+                        // }
                 }
             })
             .when('/account', {
@@ -103,7 +89,8 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
     .directive('ptjGroups', function() {
         return {
             restrict: 'E',
-            templateUrl: 'partials/invite/groups.html'
+            templateUrl: 'partials/invite/groups.html',
+            controller: 'groupsCtrl'
         };
     })
     .directive('ptjSearch', function() {
@@ -124,7 +111,25 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
             templateUrl: 'partials/surveyselect.html'
         };
     })
-    .run(function(editableOptions /*, typeAugmentations*/ ) {
+    .directive('ptjTimeperiodSelector', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/timeperiodSelector.html',
+            controller: 'timeperiodSelectorCtrl'
+        };
+    })
+    .directive('ptjCalendar', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                possibleTimePeriods: '=possible',
+                resultingTimePeriods: '=resulting'
+            },
+            // template: '<div class="calendar" ng-model="eventSources" ui-calendar="uiConfig.calendar"></div>',
+            templateUrl: 'partials/calendar.html',
+            controller: 'calendarCtrl'
+        };
+    })
+    .run(function(editableOptions) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-        // typeAugmentations();
     });

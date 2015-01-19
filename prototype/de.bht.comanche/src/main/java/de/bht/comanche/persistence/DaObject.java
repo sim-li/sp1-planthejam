@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import de.bht.comanche.rest.ReInviteService.RestGetInviteFailure;
+
 /**
  * Abstract base class for all entities that will be persisted.
  * Fulfills all basic requirements to interact with the persistence unit.
@@ -59,8 +61,8 @@ public abstract class DaObject implements Serializable {
 	}
 	
 	//for DB test only
-	public <E extends DaObject> E saveUnattached(final E unattachedObject) {
-		return attachPoolTo(unattachedObject).save();
+	public <E extends DaObject> E saveUnattached(final E other) {
+		return attachPoolFor(other).save();
 	}
 
 	
@@ -79,7 +81,7 @@ public abstract class DaObject implements Serializable {
 	 */
 	@SuppressWarnings("serial")
 	public static final class DaObjectUndefinedPoolWhileAttachingFailure extends multex.Failure {}
-	public <E extends DaObject> E attachPoolTo(final E other) {
+	public <E extends DaObject> E attachPoolFor(final E other) {
 
 		if (this.pool == null) {
 			throw create(DaObjectUndefinedPoolWhileAttachingFailure.class, this, other);
@@ -169,6 +171,10 @@ public abstract class DaObject implements Serializable {
 		return result;
 	}
 
+	protected <E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) {
+		return pool.findOneByKey(persistentClass, keyFieldName, keyFieldValue);
+	}
+	
 	public boolean isPersistent() {
 		return this.oid != DaPool.CREATED_OID && this.oid > 0;
 	}
@@ -185,7 +191,7 @@ public abstract class DaObject implements Serializable {
 		return this.oid;
 	}
 
-	protected void setOid(final long oid) {
+	public void setOid(final long oid) {
 		this.oid = oid;
 	}
 
