@@ -1,8 +1,7 @@
 package de.bht.comanche.persistence;
 
 import java.util.List;
-
-import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyFailure;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
 /**
  * Interface for <code>pool</code> implementation of a concrete persistence provider.
@@ -86,7 +85,7 @@ public interface DaPool {
 	 * @param keyFieldValue Value name of entity field
 	 * @return Entity from search
 	 */
-	<E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue);
+	<E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) throws DaFindOneByKeyExc;
 	
 	/**
 	 * Searches for an entity by two key/value pairs 

@@ -29,9 +29,47 @@ public class LgTimePeriod extends DaObject {
 
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * start time
+	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
+	
+	/**
+	 * duration in minutes
+	 */
 	private int durationMins;
+
+	// QUESTION: Do we need to define back-refs? 
+	// Can't LgUser/LgSurvey have an array list & ManyToOne
+	
+	/**
+	 * Column for LgSurvey foreign key 
+	 */
+	@JsonIgnore
+	@ManyToOne
+	private LgSurvey survey;
+	
+	/**
+	 * Column for LgUser foreign key
+	 */
+	@JsonIgnore
+	@ManyToOne
+	private LgUser user;
+	
+	/**
+	 * Column for LgInvite foreign key
+	 */
+	@JsonIgnore
+	@ManyToOne
+	private LgInvite invite;
+
+	/*
+	 * --------------------------------------------------------------------------------------------
+	 * # get(), set() methods for data access
+	 * # hashCode(), toString()
+	 * --------------------------------------------------------------------------------------------
+	 */
 	
 	public LgTimePeriod (){}
 	
@@ -39,6 +77,9 @@ public class LgTimePeriod extends DaObject {
 		this.oid = other.oid;
 		this.startTime = other.startTime;
 		this.durationMins = other.durationMins;
+		this.survey = other.survey;
+		this.user = other.user;
+		this.invite = other.invite;
 	}
 
 	public Date getStartTime() {
@@ -59,9 +100,56 @@ public class LgTimePeriod extends DaObject {
 		return this;
 	}
 
+	public LgSurvey getSurvey() {
+		return this.survey;
+	}
+	
+	public LgInvite getInvite() {
+		return this.invite;
+	}
+	
+	public LgUser getUser() {
+		return this.user;
+	}
+	
+	/*
+	 * --------------------------------------------------------------------------------------------
+	 * # foreign key setters
+	 * # 
+	 * --------------------------------------------------------------------------------------------
+	 */
+	
+	public LgTimePeriod normalized(){
+		LgTimePeriod result = new LgTimePeriod();
+		result.oid = this.oid;
+		result.startTime = this.startTime;
+		result.durationMins = this.durationMins;
+		result.survey = null;
+		result.user = null;
+		result.invite = null;
+		return result;
+//		return this.attachPoolFor(tp); not works
+	}
+	
+	public LgTimePeriod setUser(final LgUser user){
+		this.user = user;
+		return this;
+	}
+	
+	public LgTimePeriod setInvite(final LgInvite invite){
+		this.invite = invite;
+		return this;
+	}
+	
+	public LgTimePeriod setSurvey(final LgSurvey survey) {
+		this.survey = survey;
+		return this;
+	}
+
 	@Override
 	public String toString() {
-		return "LgTimePeriod [startTime=" + startTime + ", durationMins="
-				+ durationMins + "]";
+		return String
+				.format("LgTimePeriod [startTime=%s, durationMines=%s, survey=%s, oid=%s, pool=%s]",
+						startTime, durationMins, survey, oid, pool);
 	}
 }

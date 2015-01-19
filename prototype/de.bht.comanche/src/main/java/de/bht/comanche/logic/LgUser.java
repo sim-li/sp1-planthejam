@@ -1,13 +1,12 @@
 package de.bht.comanche.logic;
 
+import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -18,6 +17,7 @@ import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
+import de.bht.comanche.logic.LgInvite;
 /**
  * This entity class represents a user and serve methods for working with
  * all objects LgClasses.
@@ -54,7 +54,7 @@ public class LgUser extends DaObject {
     /**
      * Representation of a foreign key in a LgInvite entity. Provide a list of invites.
      */
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
     private List<LgInvite> invites;
     /**
      * Representation of a foreign key in a LgGroup entity. Provide a list of groups.
@@ -67,17 +67,20 @@ public class LgUser extends DaObject {
     @OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
     private LgMember member;
 
-    @ElementCollection(targetClass=LgTimePeriod.class)
-    @Column(name="general_availability")
-    private Collection<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
+    /**
+     * Representation of a foreign key in a LgTimePeriod entity. Provide a list of general user's availablity.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LgTimePeriod> generalAvailability;
 
-    @ElementCollection(targetClass=String.class)
-    @Column(name="messages") 
-    private List<String> messages = new ArrayList<String>();
-
+    /**
+     * Construct a new LgUser object with a list of ivites, groups and general availability time.
+     */
     public LgUser() {
         this.invites = new ArrayList<LgInvite>();
         this.groups = new ArrayList<LgGroup>();
+        this.generalAvailability = new ArrayList<LgTimePeriod>();
     }
 
     public LgInvite getInviteBySurveyName(final String name) {
@@ -186,26 +189,11 @@ public class LgUser extends DaObject {
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
-    public Collection<LgTimePeriod> getGeneralAvailability() {
+    @JsonIgnore
+    public List<LgTimePeriod> getTimePeriod() {
         return this.generalAvailability;
     }
-    
-    /**
-     * Returns LgTimePeriods list for current user.
-     * @return The list with LgTimePeriods.
-     */
-    public void setGeneralAvailability(Collection<LgTimePeriod>  generalAvailability) {
-        this.generalAvailability = generalAvailability;
-    }
 
-    public List<String> getMessages() {
-    	return this.messages;
-    }
-    
-    public void setMessages(List<String> messages) {
-    	this.messages = messages;
-    }
-    
     /**
      * Remove invite object from the list of invites.
      * @param invite The LgInvite to remove.
@@ -390,14 +378,7 @@ public class LgUser extends DaObject {
         this.password = password;
         return this;
     }
-    
-//    public List<String> getMessages() {
-//    	return this.messages;
-//    }
-//
-//    public void setMessages(List<String> messages) {
-//    	this.messages = messages;
-//    }
+
     @Override
     public String toString() {
         return String
