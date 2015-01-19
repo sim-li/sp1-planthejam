@@ -2,6 +2,8 @@ package de.bht.comanche.rest;
 
 import static multex.MultexUtil.create;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +25,7 @@ import de.bht.comanche.logic.LgUser;
  * @author Maxim Novichkov
  *
  */
-@Path("/user/")
+@Path("/user")
 public class ReUserService extends RestService {
 	
 	/**
@@ -33,7 +35,7 @@ public class ReUserService extends RestService {
 	 * @return The LgUser object - current user.
 	 * @exception RestLoginUserFailure if it was not possible to login the user.
 	 */
-	@Path("login")
+	@Path("/login")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
@@ -68,7 +70,7 @@ public class ReUserService extends RestService {
 	 * @return The LgUser object - current user.
 	 * @exception RestRegisterUserFailure if it was not register the user on the platform.
 	 */
-	@Path("register")
+	@Path("/register")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
@@ -99,7 +101,7 @@ public class ReUserService extends RestService {
 	 * @param request The request information from HTTP service.
 	 * @exception RestDeleteUserFailure if it was not possible to delete the user from the platform.
 	 */
-	@Path("delete")
+	@Path("/delete")
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
@@ -160,7 +162,7 @@ public class ReUserService extends RestService {
 	 * @return The updated LgUser object.
 	 * @exception RestUserUpdateFailure if it was not possible to update current user.
 	 */
-	@Path("update")
+	@Path("/update")
 	@POST
 	@Consumes("application/json")
 	@Produces({"application/json"})
@@ -191,7 +193,7 @@ public class ReUserService extends RestService {
 	//	 * - implement DaUser.selectAllUsersWhereNameIsLike(String searchString)
 	//	 * - provide access to selectAllUsersWhereNameIsLike from session
 	//	 */
-	//	@Path("findUsers")
+	//	@Path("/findUsers")
 	//	@DELETE
 	//	@Consumes("application/json")
 	//	@Produces({ "application/json" })
@@ -210,7 +212,7 @@ public class ReUserService extends RestService {
 	 * @return The List of LgUsers.
 	 * @exception RestGetAllUsersFailure if it was not possible to get list of users.
 	 */
-	@Path("getAllUsers")
+	@Path("/getAllUsers")
 	@GET
 	@Consumes("application/json")
 	@Produces({ "application/json" })
@@ -240,7 +242,7 @@ public class ReUserService extends RestService {
 	 * @param request The request information from HTTP service.
 	 * @exception RestLogoutUserFailure if it was not possible to logout current user.
 	 */
-	@Path("logout")
+	@Path("/logout")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
@@ -263,5 +265,35 @@ public class ReUserService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestLogoutUserFailure extends multex.Failure {}
+    
+    @Path("/messages")
+    @GET
+    @Consumes("application/json")
+	@Produces({ "application/json" })
+    public List<String> getMessagesFor(@Context final HttpServletRequest request) {
+        return new LgTransaction<List<String>>(request) {
+			@Override
+			public List<String> execute() throws Exception {
+                final List<String> result;
+				try {
+                
+                    result = new ArrayList<String>(Arrays.asList(new String[] {"dummy message no.1", "dummy message no.2", "dummy message no.3"}));
+                    
+                    /********************************
+					* startSession().getMessages();                           // TODO <----------------------- !!!!!!!
+                    *********************************/
+				} catch (Exception ex) {
+					throw create(RestGetMessagesFailure.class, ex, getSession().getUser().getName(), getSession().getUser().getOid());
+				}
+				return result;
+			}
+		}.getResult();
+    }
+    
+    /**
+	 * Unable to get messages for user "{0}" with oid "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetMessagesFailure extends multex.Failure {}
 
 }
