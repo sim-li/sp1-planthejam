@@ -66,20 +66,14 @@ public class LgUser extends DaObject {
     @OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
     private LgMember member;
 
-    /**
-     * Representation of a foreign key in a LgTimePeriod entity. Provide a list of general user's availablity.
-     */
-    @JsonIgnore
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ElementCollection
+    @Column(name="general_availability") 
     private List<LgTimePeriod> generalAvailability;
 
     @ElementCollection 
     @Column(name="messages") 
     private List<String> messages;
     
-    /**
-     * Construct a new LgUser object with a list of ivites, groups and general availability time.
-     */
     public LgUser() {
         this.invites = new ArrayList<LgInvite>();
         this.groups = new ArrayList<LgGroup>();
@@ -192,7 +186,6 @@ public class LgUser extends DaObject {
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
-    @JsonIgnore
     public List<LgTimePeriod> getTimePeriod() {
         return this.generalAvailability;
     }
