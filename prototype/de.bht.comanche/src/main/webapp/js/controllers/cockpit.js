@@ -20,6 +20,7 @@ angular.module('myApp')
             $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.surveys = Model.importMany(Survey, surveysPromise);
             $scope.messages = messagesPromise;
+
             $log.log('messages: ', $scope.messages)
             $log.log('surveys: ', $scope.surveys)
                 // $scope.surveys = Survey.getDummies(3);
@@ -29,7 +30,7 @@ angular.module('myApp')
             $scope.selectedSurvey = $scope.surveys[0];
 
 
-            // -------- HACK ------->
+            // -------- HACK: Dummies ------->
             $scope.selectedInvite.survey.algoChecked = true;
             // $scope.selectedInvite.survey.success = Status.YES;
             $scope.selectedInvite.survey.success = Status.NO;
@@ -40,10 +41,9 @@ angular.module('myApp')
             // $log.log('selected invite: ', $scope.selectedInvite.survey.success)
             // $log.log('sel inv     : ', $scope.selectedInvite)
             $log.log('sel inv surv    : ', $scope.selectedInvite.survey)
-            $log.log('sel inv surv suc: ', $scope.selectedInvite.survey.success)
-            $log.log('sel inv surv alg: ', $scope.selectedInvite.survey.algoChecked)
-            $log.log('sel inv surv dtp: ', $scope.selectedInvite.survey.determinedTimePeriod)
-                // $log.log('sel sur: ', $scope.selectedSurvey)
+            $log.log('suc: ', $scope.selectedInvite.survey.success)
+            $log.log('alg: ', $scope.selectedInvite.survey.algoChecked)
+            $log.log('dtp: ', $scope.selectedInvite.survey.determinedTimePeriod)
                 // <------- HACK --------
 
             $scope.showSurveyDetails = true;
