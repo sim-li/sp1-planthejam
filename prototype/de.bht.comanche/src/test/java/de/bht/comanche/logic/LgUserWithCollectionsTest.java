@@ -15,7 +15,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -63,7 +62,6 @@ public class LgUserWithCollectionsTest {
      * This test actually includes the checking of data, thus the part before the commit
      * is what would be called in a Rest Service.
      */
-    @Ignore
     @Test
     public void saveMessagesTest() {
         saveDemoMessages();
@@ -73,7 +71,6 @@ public class LgUserWithCollectionsTest {
         assertTrue("Alice has message 'Kitty'", alice.getMessages().contains("Kitty"));
     }
     
-    @Ignore
     @Test
     public void removeAndAddUpdateMessageTest() {
     	 saveDemoMessages();
@@ -82,16 +79,11 @@ public class LgUserWithCollectionsTest {
     	 alice.getMessages().remove("Hello");
     	 alice.getMessages().add("Update");
     	 commitAndRestartTransaction();
-    	 LgUser alice22 =  session.startFor("Alice");
-//    	 alice = session.startFor("Alice");
-    	 assertTrue("Alice has Updated message", alice22.getMessages().contains("Update"));
-    	 assertFalse("Alice does not have old message", alice22.getMessages().contains("Hello"));
-    	 for (String msg : alice22.getMessages()) {
-    		 System.out.println("MSG:>" + msg);
-    	 }
+    	 alice = session.startFor("Alice");
+    	 assertTrue("Alice has Updated message", alice.getMessages().contains("Update"));
+    	 assertFalse("Alice does not have old message", alice.getMessages().contains("Hello"));
     }
 
-    @Ignore
     @Test
 	public void saveDemoMessages() {
 		List<String> messages = new ArrayList<String>();
@@ -113,19 +105,13 @@ public class LgUserWithCollectionsTest {
     	final LgTimePeriod timePeriod60 = new LgTimePeriod()
 		.setStartTime(new Date())
 		.setDurationMins(60);
-    	
     	timePeriods.add(timePeriod20);
     	timePeriods.add(timePeriod40);
     	timePeriods.add(timePeriod60);
-    	
     	alice.setGeneralAvailability(timePeriods);
-    	
     	alice.save();
-    	
     	commitAndRestartTransaction();
-    	
     	alice = session.startFor("Alice");
-    	
     	for (LgTimePeriod tp : alice.getGeneralAvailability()) {
     		System.out.println("DUR >> ; " + tp.getDurationMins());
     		assertTrue(
