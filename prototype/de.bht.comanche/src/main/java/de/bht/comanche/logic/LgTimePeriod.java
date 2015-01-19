@@ -2,14 +2,9 @@ package de.bht.comanche.logic;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
 
@@ -23,9 +18,9 @@ import de.bht.comanche.persistence.DaObject;
  * 
  * @author Duc Tung Tong
  */
-@Entity
-@Table(name = "TimePeriod")
-public class LgTimePeriod extends DaObject {
+
+//@Table(name = "TimePeriod")
+@Embeddable public class LgTimePeriod {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,7 +31,6 @@ public class LgTimePeriod extends DaObject {
 	public LgTimePeriod (){}
 	
 	public LgTimePeriod (final LgTimePeriod other){
-		this.oid = other.oid;
 		this.startTime = other.startTime;
 		this.durationMins = other.durationMins;
 	}

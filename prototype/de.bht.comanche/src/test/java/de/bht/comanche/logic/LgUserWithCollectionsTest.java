@@ -1,8 +1,9 @@
 package de.bht.comanche.logic;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ public class LgUserWithCollectionsTest {
         properties.put("hibernate.hbm2ddl.auto", "create");
         Persistence.createEntityManagerFactory(DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
     }
-
+    
     @Before
     public void buildUp() {
         beginTransaction();
@@ -62,32 +63,37 @@ public class LgUserWithCollectionsTest {
      * This test actually includes the checking of data, thus the part before the commit
      * is what would be called in a Rest Service.
      */
+    @Ignore
     @Test
     public void saveMessagesTest() {
         saveDemoMessages();
-        commit();
+        commitAndRestartTransaction();
         alice = session.startFor("Alice");
         assertTrue("Alice has message 'Hello'", alice.getMessages().contains("Hello"));
         assertTrue("Alice has message 'Kitty'", alice.getMessages().contains("Kitty"));
     }
     
+    @Ignore
     @Test
     public void removeAndAddUpdateMessageTest() {
     	 saveDemoMessages();
-    	 commit();
+    	 commitAndRestartTransaction();
     	 alice = session.startFor("Alice");
     	 alice.getMessages().remove("Hello");
     	 alice.getMessages().add("Update");
-    	 commit();
-    	 alice = session.startFor("Alice");
-    	 assertTrue("Alice has Updated message", alice.getMessages().contains("Update"));
-    	 assertFalse("Alice does not have old message", alice.getMessages().contains("Hello"));
-    	 for (String msg : alice.getMessages()) {
+    	 commitAndRestartTransaction();
+    	 LgUser alice22 =  session.startFor("Alice");
+//    	 alice = session.startFor("Alice");
+    	 assertTrue("Alice has Updated message", alice22.getMessages().contains("Update"));
+    	 assertFalse("Alice does not have old message", alice22.getMessages().contains("Hello"));
+    	 for (String msg : alice22.getMessages()) {
     		 System.out.println("MSG:>" + msg);
     	 }
     }
 
-	private void saveDemoMessages() {
+    @Ignore
+    @Test
+	public void saveDemoMessages() {
 		List<String> messages = new ArrayList<String>();
         messages.add("Hello");
         messages.add("Kitty");
@@ -95,12 +101,42 @@ public class LgUserWithCollectionsTest {
         alice.save();
 	}
 
-    
-    @Ignore
     @Test
     public void saveTimePeriodTest() {
+    	List<LgTimePeriod> timePeriods = new ArrayList<LgTimePeriod>();
+    	final LgTimePeriod timePeriod20 = new LgTimePeriod()
+		.setStartTime(new Date())
+		.setDurationMins(20);
+    	final LgTimePeriod timePeriod40 = new LgTimePeriod()
+		.setStartTime(new Date())
+		.setDurationMins(40);
+    	final LgTimePeriod timePeriod60 = new LgTimePeriod()
+		.setStartTime(new Date())
+		.setDurationMins(60);
+    	
+    	timePeriods.add(timePeriod20);
+    	timePeriods.add(timePeriod40);
+    	timePeriods.add(timePeriod60);
+    	
+    	alice.setGeneralAvailability(timePeriods);
+    	
+    	alice.save();
+    	
+    	commitAndRestartTransaction();
+    	
+    	alice = session.startFor("Alice");
+    	
+    	for (LgTimePeriod tp : alice.getGeneralAvailability()) {
+    		System.out.println("DUR >> ; " + tp.getDurationMins());
+    		assertTrue(
+    				"Alices persisted timePeriods have a duraction of 20, 40 or 60",
+    				tp.getDurationMins() == 20 ||
+    				tp.getDurationMins() == 40 ||
+    				tp.getDurationMins() == 60
+    	    );
+    	}
     }
-
+    
     @After
     public void tearDown() {
         alice.deleteThisAccount();
@@ -116,7 +152,7 @@ public class LgUserWithCollectionsTest {
         session.getApplication().endTransaction(true);
     }
 
-    private void commit() {
+    private void commitAndRestartTransaction() {
         endTransaction();
         beginTransaction();
     }

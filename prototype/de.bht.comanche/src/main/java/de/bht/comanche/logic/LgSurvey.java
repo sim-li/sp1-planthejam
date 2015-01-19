@@ -53,7 +53,7 @@ public class LgSurvey extends DaObject {
 	/**
 	 * The intended duration of the survey in minutes.
 	 */
-	private int durationMins;
+	private int durationOfEventMins;
 	
 	/**
 	 * The deadline of the survey.
@@ -130,7 +130,7 @@ public class LgSurvey extends DaObject {
 		this.name = other.name;
 		this.description = other.description;
 		this.type = other.type;
-		this.durationMins = other.durationMins;
+		this.durationOfEventMins = other.durationOfEventMins;
 		this.deadline = other.deadline;
 		this.frequencyDist = other.frequencyDist;
 		this.frequencyUnit = other.frequencyUnit;
@@ -219,7 +219,7 @@ public class LgSurvey extends DaObject {
 				* result
 				+ ((determinedTimePeriod == null) ? 0 : determinedTimePeriod
 						.hashCode());
-		result = prime * result + durationMins;
+		result = prime * result + durationOfEventMins;
 		result = prime * result + frequencyDist;
 		result = prime * result
 				+ ((frequencyUnit == null) ? 0 : frequencyUnit.hashCode());
@@ -261,7 +261,7 @@ public class LgSurvey extends DaObject {
 				return false;
 		} else if (!determinedTimePeriod.equals(other.determinedTimePeriod))
 			return false;
-		if (durationMins != other.durationMins)
+		if (durationOfEventMins != other.durationOfEventMins)
 			return false;
 		if (frequencyDist != other.frequencyDist)
 			return false;
@@ -317,11 +317,11 @@ public class LgSurvey extends DaObject {
 	}
 	
 	public int getDurationMins() {
-		return this.durationMins;
+		return this.durationOfEventMins;
 	}
 	
 	public LgSurvey setDurationMins(final int durationMins) {
-		this.durationMins = durationMins;
+		this.durationOfEventMins = durationMins;
 		return this;
 	}
 	
@@ -403,7 +403,7 @@ public class LgSurvey extends DaObject {
 	public String toString() {
 		return String
 				.format("LgSurvey [name=%s, description=%s, type=%s, durationMins=%s, deadline=%s, frequencyDist=%s, frequencyUnit=%s, possibleTimePeriods=%s, determinedTimePeriod=%s, success=%s, algoChecked=%s, invites=%s, oid=%s, pool=%s]",
-						name, description, type, durationMins, deadline,
+						name, description, type, durationOfEventMins, deadline,
 						frequencyDist, frequencyUnit, possibleTimePeriods,
 						determinedTimePeriod, success, algoChecked, invites, oid,
 						pool);
