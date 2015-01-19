@@ -28,14 +28,12 @@
           <div class='tab-content'>
             <!-- #surveyTab.tab-pane.active -->
             <div class='tab-pane active' id='surveyTab'>
-              SURV Hallo
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>{{survey.name}}</a>
             </div>
             <!-- #inviteTab.tab-pane -->
             <div class='tab-pane' id='inviteTab'>
-              INV Hallo
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES', name: searchInvite} ">
@@ -73,7 +71,6 @@
               </a>
             </div>
             <div class='tab-pane' id='ignoredInviteTab'>
-              IGNORE Hallo
               <input class='form-control' id='filter' ng-change='updateSelection()' ng-model='searchIgnored' placeholder='Filter ignored invites ...' type='search'>
               <div class='list-group' id='surveyList'></div>
               <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored : 'YES', name: searchIgnored} ">
@@ -88,7 +85,6 @@
         <!-- %div DEBUG selected: {{ selectedInvite }} -->
       </div>
       <div class='col-md-8' id='surveyDetails' ng-show='showSurveyDetails'>
-        Survey Details
         <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
         <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
         <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedSurvey()' type='button' value='Delete selected survey'>
@@ -96,24 +92,31 @@
           <div class='panel-body'>
             <h2 class='text-warning'>{{ selectedSurvey.name }}</h2>
             <div>{{ selectedSurvey.description }}</div>
-            <div>Deadline : {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}</div>
-            <label for='selectedSurveyDescription'>algo check:</label>
-            <div id='selectedSurveyStatus'>wird {{ selectedInvite.algoCheck ? "ermittelt" : "nicht ermittelt" }}</div>
+            <p></p>
+            <label for='deadline'>Deadline:</label>
+            <span id='deadline'>{{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}</span>
+            <div id='selectedSurveyStatus' ng-if='selectedSurvey.algoChecked'>
+              <label for='determinedTimePeriod'>Determined Time Period:</label>
+              <span id='determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod }}</span>
+            </div>
           </div>
         </div>
       </div>
       <div class='col-md-8' id='inviteDetails' ng-hide='showSurveyDetails'>
-        Invite Details
-        <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
-        <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
-        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedSurvey()' type='button' value='Delete selected survey'>
         <div class='panel panel-default'>
           <div class='panel-body'>
-            <label for='selectedSurveyDescription'>Description:</label>
-            <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
-            <div>Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}</div>
-            <label for='selectedSurveyDescription'>Status:</label>
-            <div id='selectedSurveyStatus'>wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}</div>
+            <h2 class='text-warning'>{{ selectedInvite.survey.name }}</h2>
+            <div>{{ selectedInvite.survey.description }}</div>
+            <p></p>
+            <label for='deadline'>Deadline:</label>
+            <span id='deadline'>{{ selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}</span>
+            <div id='selectedInviteStatus' ng-if="selectedInvite.survey.success != 'UNDECIDED'">
+              <label for='determinedTimePeriod'>Determined Time Period:</label>
+              <div id='determinedTimePeriod'>
+                <div>{{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}</div>
+                <div>{{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes</div>
+              </div>
+            </div>
             <!-- %label{:for => "selectedSurveyDescription"} Deadline: -->
             <!-- %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }} -->
           </div>

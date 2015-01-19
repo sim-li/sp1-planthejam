@@ -28,6 +28,24 @@ angular.module('myApp')
             $scope.selectedInvite = $scope.invites[0];
             $scope.selectedSurvey = $scope.surveys[0];
 
+
+            // -------- HACK ------->
+            $scope.selectedInvite.survey.algoChecked = true;
+            // $scope.selectedInvite.survey.success = Status.YES;
+            $scope.selectedInvite.survey.success = Status.NO;
+            $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
+                startTime: new Date(),
+                durationMins: 90
+            });
+            // $log.log('selected invite: ', $scope.selectedInvite.survey.success)
+            // $log.log('sel inv     : ', $scope.selectedInvite)
+            $log.log('sel inv surv    : ', $scope.selectedInvite.survey)
+            $log.log('sel inv surv suc: ', $scope.selectedInvite.survey.success)
+            $log.log('sel inv surv alg: ', $scope.selectedInvite.survey.algoChecked)
+            $log.log('sel inv surv dtp: ', $scope.selectedInvite.survey.determinedTimePeriod)
+                // $log.log('sel sur: ', $scope.selectedSurvey)
+                // <------- HACK --------
+
             $scope.showSurveyDetails = true;
 
 
@@ -169,9 +187,9 @@ angular.module('myApp')
                 return false;
             };
 
-    $scope.toggleInviteDetails = function() {
-        $scope.showSurveyDetails = false;
-        return false;
-    };
+            $scope.toggleInviteDetails = function() {
+                $scope.showSurveyDetails = false;
+                return false;
+            };
         }
     ]);
