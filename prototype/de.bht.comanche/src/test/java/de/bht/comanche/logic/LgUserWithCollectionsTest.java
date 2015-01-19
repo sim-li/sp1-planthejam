@@ -1,5 +1,7 @@
 package de.bht.comanche.logic;
 
+import static org.junit.Assert.*;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,8 +67,12 @@ public class LgUserWithCollectionsTest {
 		List<String> messages = new ArrayList<String>();
 		messages.add("Hello");
 		messages.add("Kitty");
-//		alice.setMessages(messages);
+		alice.setMessages(messages);
 		alice.save();
+		commit();
+		final LgUser alicePersisted = session.startFor("Alice");
+		assertTrue(alicePersisted.getMessages().contains("Hello"));
+		assertTrue(alicePersisted.getMessages().contains("Kitty"));
 	}
 	
 	@Ignore
@@ -87,5 +93,10 @@ public class LgUserWithCollectionsTest {
 	
 	private void endTransaction() {
 		session.getApplication().endTransaction(true);
+	}
+	
+	private void commit() {
+		beginTransaction();
+		endTransaction();
 	}
 }
