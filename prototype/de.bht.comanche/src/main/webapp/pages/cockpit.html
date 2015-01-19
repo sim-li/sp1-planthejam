@@ -1,30 +1,25 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
-  debug {{ showSurveyDetails }}
-  <input class='btn' ng-click='toggleSurveyDetails' type='button' value='toggleSrv'>
-  <input class='btn' ng-click='toggleInviteDetails' type='button' value='toggleInv'>
   <!-- %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}' -->
   <div class='panel panel-default'>
     <div class='panel-body'>
       <div class='col-md-4'>
         <div class='tabbable'>
           <ul class='nav nav-tabs'>
-            <!-- %li.active -->
-            <li>
-              <a data-toggle='tab' href='#surveyTab' ng-click='toggleSurveyDetails()'>
+            <li class='active'>
+              <a data-toggle='tab' href='#surveyTab' ng-click='showSurveyDetails = true; showInviteDetails = false' onclick='return false;'>
                 Survey
                 <span class='badge'>{{surveys.length}}</span>
               </a>
             </li>
-            <!-- %li -->
-            <li class='active'>
-              <a data-toggle='tab' href='#inviteTab' onclick='toggleInviteDetails()'>
+            <li>
+              <a data-toggle='tab' href='#inviteTab' ng-click='showSurveyDetails = false; showInviteDetails = true;' onclick='return false;'>
                 Invite
                 <span class='badge'>{{(invites | filter: {ignored: "!YES"}).length}}</span>
               </a>
             </li>
             <li>
-              <a data-toggle='tab' href='#ignoredInviteTab' onclick='toggleInviteDetails()'>
+              <a data-toggle='tab' href='#ignoredInviteTab' onclick='return false;'>
                 Ignored
                 <span class='badge'>{{(invites | filter: {ignored: "YES"}).length}}</span>
               </a>
@@ -93,22 +88,22 @@
         <!-- %div DEBUG selected: {{ selectedInvite }} -->
       </div>
       <div class='col-md-8' id='surveyDetails' ng-show='showSurveyDetails'>
-        hallo from surveyDetails
+        Survey Details
         <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
         <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
         <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedSurvey()' type='button' value='Delete selected survey'>
         <div class='panel panel-default'>
           <div class='panel-body'>
-            <label for='selectedSurveyDescription'>Description:</label>
-            <div id='selectedSurveyDescription'>{{ selectedInvite.survey.description }}</div>
-            <div>Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}</div>
-            <label for='selectedSurveyDescription'>Status:</label>
-            <div id='selectedSurveyStatus'>wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}</div>
+            <h2 class='text-warning'>{{ selectedSurvey.name }}</h2>
+            <div>{{ selectedSurvey.description }}</div>
+            <div>Deadline : {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}</div>
+            <label for='selectedSurveyDescription'>algo check:</label>
+            <div id='selectedSurveyStatus'>wird {{ selectedInvite.algoCheck ? "ermittelt" : "nicht ermittelt" }}</div>
           </div>
         </div>
       </div>
-      <div class='col-md-8' id='inviteDetails' ng-hide='showSurveyDetails'>
-        huhu from inviteDetails
+      <div class='col-md-8' id='inviteDetails' ng-show='showInviteDetails'>
+        Invite Details
         <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
         <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
         <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedSurvey()' type='button' value='Delete selected survey'>

@@ -1,27 +1,22 @@
 %ptj-menu
 
 .container
-  debug {{ showSurveyDetails }}
-  %input.btn{:type => "button", "value" => "toggleSrv", "ng-click" => "toggleSurveyDetails"}
-  %input.btn{:type => "button", "value" => "toggleInv", "ng-click" => "toggleInviteDetails"}
   / %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}'
   .panel.panel-default
     .panel-body
       .col-md-4
         .tabbable
           %ul.nav.nav-tabs
-            / %li.active
-            %li
-              %a{"data-toggle" => "tab", :href => "#surveyTab", "ng-click" => "toggleSurveyDetails()"}
+            %li.active
+              %a{"data-toggle" => "tab", :href => "#surveyTab", "ng-click" => "showSurveyDetails = true; showInviteDetails = false", "onclick" => "return false;"}
                 Survey
                 %span.badge {{surveys.length}}
-            / %li
-            %li.active
-              %a{"data-toggle" => "tab", :href => "#inviteTab", "onclick" => "toggleInviteDetails()"}
+            %li
+              %a{"data-toggle" => "tab", "href" => "#inviteTab", "ng-click" => "showSurveyDetails = false; showInviteDetails = true;", "onclick" => "return false;"}
                 Invite
                 %span.badge {{(invites | filter: {ignored: "!YES"}).length}}
             %li
-              %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "onclick" => "toggleInviteDetails()"}
+              %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "onclick" => "return false;"}
                 Ignored
                 %span.badge {{(invites | filter: {ignored: "YES"}).length}}
           .tab-content
@@ -71,20 +66,20 @@
         / %div DEBUG selected: {{ selectedInvite }}
 
       #surveyDetails.col-md-8{"ng-show" => "showSurveyDetails"}
-        hallo from surveyDetails
+        Survey Details
         %input#addSurvey.btn.btn-primary{"ng-click" => "addSurvey()", :type => "button", :value => "Create a survey"}
         %input#editSurvey.btn.btn-primary{"ng-click" => "editSurvey()", :type => "button", :value => "Show and edit selected survey"}
         %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedSurvey()", :type => "button", :value => "Delete selected survey"}
         .panel.panel-default
           .panel-body
-            %label{:for => "selectedSurveyDescription"} Description:
-            %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
-            %div Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}
-            %label{:for => "selectedSurveyDescription"} Status:
-            %div#selectedSurveyStatus{} wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}
+            %h2.text-warning{} {{ selectedSurvey.name }}
+            %div{} {{ selectedSurvey.description }}
+            %div Deadline : {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}
+            %label{:for => "selectedSurveyDescription"} algo check:
+            %div#selectedSurveyStatus{} wird {{ selectedInvite.algoCheck ? "ermittelt" : "nicht ermittelt" }}
 
-      #inviteDetails.col-md-8{"ng-hide" => "showSurveyDetails"}
-        huhu from inviteDetails
+      #inviteDetails.col-md-8{"ng-show" => "showInviteDetails"}
+        Invite Details
         %input#addSurvey.btn.btn-primary{"ng-click" => "addSurvey()", :type => "button", :value => "Create a survey"}
         %input#editSurvey.btn.btn-primary{"ng-click" => "editSurvey()", :type => "button", :value => "Show and edit selected survey"}
         %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedSurvey()", :type => "button", :value => "Delete selected survey"}
