@@ -64,6 +64,7 @@ public class LgInvite extends DaObject{
 	
 	@ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
 	@Column(name="timeperiods") 
+	//rename later to concreteAvailability
 	private List<LgTimePeriod> timePeriods;
 	
 	
@@ -90,6 +91,15 @@ public class LgInvite extends DaObject{
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
+	
+	public List<LgTimePeriod> getPossibleTimePeriods(){
+		return this.timePeriods;
+	}
+	
+	public LgInvite setPossibleTimePeriods(final List<LgTimePeriod> period){
+		this.timePeriods = period;
+		return this;
+	}
 
 	public boolean isHost() {
 		return this.isHost;

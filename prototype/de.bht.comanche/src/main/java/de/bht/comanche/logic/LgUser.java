@@ -70,13 +70,13 @@ public class LgUser extends DaObject {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
 	
-	@ElementCollection(targetClass = LgTimePeriod.class)
-	@Column(name = "general_availability")
-	private List<LgTimePeriod> generalAvailability;
+//	@ElementCollection(targetClass = LgTimePeriod.class)
+//	@Column(name = "general_availability")
+//	private List<LgTimePeriod> generalAvailability;
 
-	@ElementCollection(targetClass = String.class)
-	@Column(name = "messages")
-	private List<String> messages = new ArrayList<String>();
+//	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+//	@Column(name = "messages")
+//	private List<String> messages = new ArrayList<String>();
 
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
@@ -205,28 +205,28 @@ public class LgUser extends DaObject {
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-	
-	public List<LgTimePeriod> getGeneralAvailability() {
-		return this.generalAvailability;
-	}
+//	
+//	public List<LgTimePeriod> getGeneralAvailability() {
+//		return this.generalAvailability;
+//	}
 
 	/**
 	 * Returns LgTimePeriods list for current user.
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-	public LgUser setGeneralAvailability(List<LgTimePeriod> generalAvailability) {
-		this.generalAvailability = generalAvailability;
-		return this;
-	}
+//	public LgUser setGeneralAvailability(List<LgTimePeriod> generalAvailability) {
+//		this.generalAvailability = generalAvailability;
+//		return this;
+//	}
+	
+//	public List<String> getMessages() {
+//		return this.messages;
+//	}
 
-	public List<String> getMessages() {
-		return this.messages;
-	}
-
-	public void setMessages(List<String> messages) {
-		this.messages = messages;
-	}
+//	public void setMessages(List<String> messages) {
+//		this.messages = messages;
+//	}
 
 	/**
 	 * Remove invite object from the list of invites.
@@ -272,7 +272,7 @@ public class LgUser extends DaObject {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
 		for (LgInvite invite : this.getSurvey(oid).getInvites()) {
 			//if set user to null --> works 
-			filteredInvites.add(new LgInvite(invite).setSurvey(null).setUser(null));
+			filteredInvites.add(new LgInvite(invite).setSurvey(null));
 		}
 		return filteredInvites;
 	}
