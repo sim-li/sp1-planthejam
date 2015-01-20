@@ -1,11 +1,13 @@
 package de.bht.comanche.logic;
 
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.extractProperty;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.fest.assertions.api.Assertions.*;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,15 +112,11 @@ public class LgUserWithCollectionsTest {
     	alice.save();
     	commitAndRestartTransaction();
     	alice = session.startFor("Alice");
-    	for (LgTimePeriod tp : alice.getGeneralAvailability()) {
-    		System.out.println("DUR >> ; " + tp.getDurationMins());
-    		assertTrue(
-    				"Alices persisted timePeriods have a duraction of 20, 40 or 60",
-    				tp.getDurationMins() == 20 ||
-    				tp.getDurationMins() == 40 ||
-    				tp.getDurationMins() == 60
-    	    );
-    	}
+    	
+    	final Collection<LgTimePeriod> alicesAvailability = alice.getGeneralAvailability();
+    	assertThat(extractProperty("durationMins")
+    			.from(alicesAvailability))
+    			.contains(20, 40, 60);
     }
     
     @After
