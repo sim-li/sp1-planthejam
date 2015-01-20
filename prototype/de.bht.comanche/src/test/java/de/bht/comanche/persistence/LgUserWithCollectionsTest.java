@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.persistence.Persistence;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -76,7 +77,7 @@ public class LgUserWithCollectionsTest {
 
 	private void updateMessges() {
 		saveMessageTestData();
-		updateKitty();
+		updateKittyMessage();
 		assertThat(this.messages)
 			.hasSize(2)
 			.containsOnly("Hello", "UpdatedKitty");
@@ -88,7 +89,7 @@ public class LgUserWithCollectionsTest {
 		retrieveMessages();
 	}
 
-	private void updateKitty() {
+	private void updateKittyMessage() {
 		this.messages.remove("Kitty");
 		this.messages.add("UpdatedKitty");
 		saveMessages();
@@ -175,5 +176,23 @@ public class LgUserWithCollectionsTest {
 			);
 		}
 	}
+	
+	@After
+	public void tearDown() {
+		deleteAlicesUserAccount();
+	}
 
+	private void deleteAlicesUserAccount() {
+		new TestTransaction<LgUser> ("Alice") {
+			@Override
+			/**
+			 * Persist demo time periods to Alice's account
+			 */
+			public LgUser execute() throws Exception {
+				final LgUser alice = startSession();
+				alice.deleteThisAccount();
+				return alice;
+			}
+		}.getResult();
+	}
 }
