@@ -27,6 +27,7 @@ import de.bht.comanche.persistence.DaEmProvider;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgUserWithCollectionsTest {
+
 	private LgUser alice;
 	private LgSession session;
 	private LgTimePeriod timePeriod;
@@ -58,35 +59,32 @@ public class LgUserWithCollectionsTest {
 				.setPassword("testtest");
 	}
 
-	/**
-	 * This test actually includes the checking of data, thus the part before
-	 * the commit is what would be called in a Rest Service.
-	 */
-	@Test
-	public void saveMessagesTest() {
-		saveDemoMessages();
-		commitAndRestartTransaction();
-		alice = session.startFor("Alice");
-		assertTrue("Alice has message 'Hello'",
-				alice.getMessages().contains("Hello"));
-		assertTrue("Alice has message 'Kitty'",
-				alice.getMessages().contains("Kitty"));
-	}
 
-	@Test
-	public void removeAndAddUpdateMessageTest() {
-		saveDemoMessages();
-		commitAndRestartTransaction();
-		alice = session.startFor("Alice");
-		alice.getMessages().remove("Hello");
-		alice.getMessages().add("Update");
-		commitAndRestartTransaction();
-		alice = session.startFor("Alice");
-		assertTrue("Alice has Updated message",
-				alice.getMessages().contains("Update"));
-		assertFalse("Alice does not have old message", alice.getMessages()
-				.contains("Hello"));
-	}
+    /**
+     * This test actually includes the checking of data, thus the part before the commit
+     * is what would be called in a Rest Service.
+     */
+    @Test
+    public void saveMessagesTest() {
+        saveDemoMessages();
+        commitAndRestartTransaction();
+        alice = session.startFor("Alice");
+        assertTrue("Alice has message 'Hello'", alice.getMessages().contains("Hello"));
+        assertTrue("Alice has message 'Kitty'", alice.getMessages().contains("Kitty"));
+    }
+
+    @Test
+    public void removeAndAddUpdateMessageTest() {
+    	 saveDemoMessages();
+    	 commitAndRestartTransaction();
+    	 alice = session.startFor("Alice");
+    	 alice.getMessages().remove("Hello");
+    	 alice.getMessages().add("Update");
+    	 commitAndRestartTransaction();
+    	 alice = session.startFor("Alice");
+    	 assertTrue("Alice has Updated message", alice.getMessages().contains("Update"));
+    	 assertFalse("Alice does not have old message", alice.getMessages().contains("Hello"));
+    }
 
 	@Test
 	public void saveDemoMessages() {
