@@ -1,33 +1,22 @@
 package de.bht.comanche.persistence;
 
-import static multex.MultexUtil.create;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.Persistence;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgTimePeriod;
-import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaEmProvider;
-import de.bht.comanche.rest.ReUserService.RestUserUpdateFailure;
 
 /**
- * @author Maxim Novichkov;
  * @author Simon Lischka
  */
 
@@ -35,8 +24,8 @@ import de.bht.comanche.rest.ReUserService.RestUserUpdateFailure;
 public class LgUserWithCollectionsTest {
 
 	private LgUser alice;
-	private LgSession session;
 	private LgTimePeriod timePeriod;
+	private List<String> messages = new ArrayList<String>();
 	private List<LgTimePeriod> variousTimePeriods = new ArrayList<LgTimePeriod>();
 	private List<LgTimePeriod> persistedGeneralAvailabilty;
 	
@@ -48,13 +37,10 @@ public class LgUserWithCollectionsTest {
 				DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
 	}
 
-	/**
-	 * Registers and logs in user Alice
-	 */
 	@Before
 	public void buildUp() {
 		buildTestData();
-	    alice = (new TestTransaction<LgUser>("Alice") {
+		this.alice = (new TestTransaction<LgUser>("Alice") {
 				@Override
 				public LgUser execute() throws Exception {
 					getSession().register(alice);
@@ -64,56 +50,43 @@ public class LgUserWithCollectionsTest {
 	}
 
 	private void buildTestData() {
-		alice = new LgUser().setName("Alice").setEmail("test@test.de")
+		this.alice = new LgUser().setName("Alice").setEmail("test@test.de")
 				.setPassword("testtest");
 		this.timePeriod = new LgTimePeriod().setDurationMins(10).setStartTime(
 				new Date(8099));
 	}
-
-
-    /**
-     * This test actually includes the checking of data, thus the part before the commit
-     * is what would be called in a Rest Service.
-     */
-    @Test
-    public void saveMessagesTest() {
-        saveDemoMessages();
-        commitAndRestartTransaction();
-        alice = session.startFor("Alice");
-        assertTrue("Alice has message 'Hello'", alice.getMessages().contains("Hello"));
-        assertTrue("Alice has message 'Kitty'", alice.getMessages().contains("Kitty"));
-    }
-
+	
     @Test
     public void removeAndAddUpdateMessageTest() {
-    	 saveDemoMessages();
-    	 commitAndRestartTransaction();
-    	 alice = session.startFor("Alice");
-    	 alice.getMessages().remove("Hello");
-    	 alice.getMessages().add("Update");
-    	 commitAndRestartTransaction();
-    	 alice = session.startFor("Alice");
-    	 assertTrue("Alice has Updated message", alice.getMessages().contains("Update"));
-    	 assertFalse("Alice does not have old message", alice.getMessages().contains("Hello"));
+    	buildVariousMessages("Hello", "Kitty");
+		saveMessages();
+		updateMessges();
+		assertTrue("Alice Kitty to UpdatedKitty", !this.alice.getMessages().contains("Kitty") 
+			&& this.alice.getMessages().contains("UpdatedKitty"));
     }
 
+	private void updateMessges() {
+		retrieveMessages();
+		this.messages.remove("Kitty");
+		this.messages.add("UpdatedKitty");
+		saveMessages();
+		retrieveMessages();
+	}
+
 	@Test
-	public void saveDemoMessages() {
-		commitAndRestartTransaction();
-		alice = session.startFor("Alice");
-		List<String> messages = new ArrayList<String>();
-		messages.add("Hello");
-		messages.add("Kitty");
-		alice.setMessages(messages);
-		alice.save();
-		assertTrue(true);
-		commitAndRestartTransaction();
+	public void saveDemoMessagesTest() {
+		buildVariousMessages("Hello", "Kitty");
+		saveMessages();
+		retrieveMessages();
+		assertTrue("Alices persisted message contain 'Hello' and 'Kitty'",
+				this.messages.contains("Hello") && this.messages.contains("Kitty")
+		);
 	}
 
 	@Test
 	public void saveTimePeriodTest() {
 		buildVariousTimePeriods(20, 40, 60);
-		persistGeneralAvailability();
+		saveGeneralAvailability();
 		retrieveGeneralAvailability();
 		for (LgTimePeriod t : persistedGeneralAvailabilty) {
 			assertTrue(
@@ -123,22 +96,32 @@ public class LgUserWithCollectionsTest {
 		}
 	}
 
-	private void retrieveGeneralAvailability() {
-		persistedGeneralAvailabilty  = (new TestTransaction<List<LgTimePeriod>> ("Alice") {
+	private void fetchAlicesUserAccount() {
+		this.alice  = (new TestTransaction<LgUser> ("Alice") {
 			@Override
 			/**
 			 * Persist demo time periods to Alice's account
 			 */
-			public List<LgTimePeriod> execute() throws Exception {
+			public LgUser execute() throws Exception {
 				final LgUser alice = startSession();
-				return alice.getGeneralAvailability();
+				return alice;
 			}
 		}).getResult();
 	}
 
-	private void persistGeneralAvailability() {
-		alice.setGeneralAvailability(variousTimePeriods);
-		alice = (new TestTransaction<LgUser> ("Alice") {
+	private void retrieveMessages() {
+		fetchAlicesUserAccount();
+		this.messages = this.alice.getMessages();
+	}
+	
+	private void retrieveGeneralAvailability() {
+		fetchAlicesUserAccount();
+		this.persistedGeneralAvailabilty = this.alice.getGeneralAvailability();
+	}
+	
+	
+	private void persistAlicesUserAccount() {
+		new TestTransaction<LgUser> ("Alice") {
 				@Override
 				/**
 				 * Persist demo time periods to Alice's account
@@ -148,34 +131,31 @@ public class LgUserWithCollectionsTest {
 					alice.save();
 					return alice;
 				}
-			}).getResult();
+			}.getResult();
+	}
+	
+	private void saveGeneralAvailability() {
+		this.alice.setGeneralAvailability(variousTimePeriods);
+		persistAlicesUserAccount();
 	}
 
+	private void saveMessages() {
+		this.alice.setMessages(messages);
+		persistAlicesUserAccount();
+	}
+	
+	private void buildVariousMessages(String ... messages) {
+		for (int i = 0; i < messages.length; i++) {
+			this.messages.add(messages[i]);
+		}
+	}
+	
 	private void buildVariousTimePeriods(int ... durations) {
 		for (int i = 0; i < durations.length; i++) {
-			variousTimePeriods.add(new LgTimePeriod().setStartTime(
+			this.variousTimePeriods.add(new LgTimePeriod().setStartTime(
 				new Date()).setDurationMins(durations[i])
 			);
 		}
 	}
 
-	@After
-	public void tearDown() {
-		// alice.deleteThisAccount();
-		// endTransaction();
-	}
-
-	private void beginTransaction() {
-		session = new LgSession();
-		session.getApplication().beginTransaction();
-	}
-
-	private void endTransaction() {
-		session.getApplication().endTransaction(true);
-	}
-
-	private void commitAndRestartTransaction() {
-		endTransaction();
-		beginTransaction();
-	}
 }
