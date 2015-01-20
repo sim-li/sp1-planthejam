@@ -1,20 +1,24 @@
 package de.bht.comanche.persistence;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
-import java.util.Date;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.persistence.Persistence;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.persistence.DaEmProvider;
 
 /**
  * @author Simon Lischka
@@ -39,17 +43,22 @@ public class LgUserWithCollectionsTest {
 
 	@Before
 	public void buildUp() {
-		buildTestData();
-		this.alice = (new TestTransaction<LgUser>("Alice") {
-				@Override
-				public LgUser execute() throws Exception {
-					getSession().register(alice);
-					return startSession();
-				}
-			}).getResult();
+		saveGeneralTestData();
+		fetchAlicesUserAccount();
 	}
 
-	private void buildTestData() {
+	private void saveGeneralTestData() {
+		buildGeneralTestData();
+		new TestTransaction<LgUser>("Alice") {
+			@Override
+			public LgUser execute() throws Exception {
+				getSession().register(alice);
+				return startSession();
+			}
+		}.getResult();
+	}
+
+	private void buildGeneralTestData() {
 		this.alice = new LgUser().setName("Alice").setEmail("test@test.de")
 				.setPassword("testtest");
 		this.timePeriod = new LgTimePeriod().setDurationMins(10).setStartTime(
@@ -57,7 +66,7 @@ public class LgUserWithCollectionsTest {
 	}
 	
     @Test
-    public void removeAndAddUpdateMessageTest() {
+    public void updateMessageTest() {
     	buildVariousMessages("Hello", "Kitty");
 		saveMessages();
 		updateMessges();
@@ -66,7 +75,20 @@ public class LgUserWithCollectionsTest {
     }
 
 	private void updateMessges() {
+		saveMessageTestData();
+		updateKitty();
+		assertThat(this.messages)
+			.hasSize(2)
+			.containsOnly("Hello", "UpdatedKitty");
+	}
+
+	private void saveMessageTestData() {
+		buildVariousMessages("Hello", "Kitty");
+		saveMessages();
 		retrieveMessages();
+	}
+
+	private void updateKitty() {
 		this.messages.remove("Kitty");
 		this.messages.add("UpdatedKitty");
 		saveMessages();
@@ -75,12 +97,10 @@ public class LgUserWithCollectionsTest {
 
 	@Test
 	public void saveDemoMessagesTest() {
-		buildVariousMessages("Hello", "Kitty");
-		saveMessages();
-		retrieveMessages();
-		assertTrue("Alices persisted message contain 'Hello' and 'Kitty'",
-				this.messages.contains("Hello") && this.messages.contains("Kitty")
-		);
+		saveMessageTestData();
+		assertThat(this.messages)
+			.hasSize(2)
+        	.contains("Hello", "Kitty");
 	}
 
 	@Test
@@ -88,11 +108,9 @@ public class LgUserWithCollectionsTest {
 		buildVariousTimePeriods(20, 40, 60);
 		saveGeneralAvailability();
 		retrieveGeneralAvailability();
-		for (LgTimePeriod t : persistedGeneralAvailabilty) {
-			assertTrue(
-					"Alices persisted timePeriods have a duraction of 20, 40 or 60",
-					t.getDurationMins() == 20 || t.getDurationMins() == 40
-							|| t.getDurationMins() == 60);
+		for (LgTimePeriod t : this.variousTimePeriods) {
+			assertThat(persistedGeneralAvailabilty)
+				.contains(t);
 		}
 	}
 
