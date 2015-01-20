@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -52,7 +53,7 @@ public class LgSurvey extends DaObject {
 	/**
 	 * The intended duration of the survey in minutes.
 	 */
-	private int durationMins;
+	private int durationOfEventMins;
 
 	/**
 	 * The deadline of the survey.
@@ -75,7 +76,8 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-	@OneToMany(mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
+    @Column(name="possibleTimePeriods")
 	private List<LgTimePeriod> possibleTimePeriods;
 
 	/**
@@ -107,7 +109,7 @@ public class LgSurvey extends DaObject {
 	 * Constructor
 	 */
 	public LgSurvey() {
-		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
+//		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
 		this.invites = new ArrayList<LgInvite>();
 	}
 
@@ -128,7 +130,7 @@ public class LgSurvey extends DaObject {
 		this.name = other.name;
 		this.description = other.description;
 		this.type = other.type;
-		this.durationMins = other.durationMins;
+		this.durationOfEventMins = other.durationOfEventMins;
 		this.deadline = other.deadline;
 		this.frequencyDist = other.frequencyDist;
 		this.frequencyUnit = other.frequencyUnit;
@@ -137,7 +139,7 @@ public class LgSurvey extends DaObject {
 		this.success = other.success;
 		this.algoChecked = other.algoChecked;
 		// Check this, implement Equals method for other classes
-		updateList(this.invites, other.invites);
+//		updateList(this.invites, other.invites);
 	}
 
 	/**
@@ -148,17 +150,28 @@ public class LgSurvey extends DaObject {
 	 * @param persistedList
 	 * @param freshList
 	 */
-	public <E extends DaObject> void updateList(List<E> persistedList, List<E> freshList) {
-
-		persistedList.retainAll(freshList); // PL & its objs must be tracked for this method to work
-										    // (cascade must be activated?)
-		freshList.removeAll(persistedList); // ELs already saved
-		for (E el : freshList) {
-			saveUnattached(el); // Fresh list are never tracked
-		}
-		persistedList.addAll(freshList); // Requires PL tracking too
-	}
-
+	// TODO implement
+//	public LgSurvey updateList(LgSurvey persisted) {
+//		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
+//		listFromDB.add(persisted);
+//		
+//		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
+//		listfresh.add(this);
+//		
+//		System.out.println("listfresh=======" + listfresh.size());
+//		System.out.println("listFromDB=======" + listFromDB.size());
+//		
+//		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
+//		listfresh.removeAll(listFromDB); // ELs already saved
+//		
+//		for (LgSurvey el : listfresh) {
+//		el.save(); // Fresh list are never tracked
+//		}
+//		listFromDB.addAll(listfresh); 
+//		
+//		return listFromDB.get(0);
+//	}
+	
 	//-- METHODS FOR SURVEY EVALUATION ----------------------------------------
 
 	private Date now() {
@@ -229,7 +242,7 @@ public class LgSurvey extends DaObject {
 				* result
 				+ ((determinedTimePeriod == null) ? 0 : determinedTimePeriod
 						.hashCode());
-		result = prime * result + durationMins;
+		result = prime * result + durationOfEventMins;
 		result = prime * result + frequencyDist;
 		result = prime * result
 				+ ((frequencyUnit == null) ? 0 : frequencyUnit.hashCode());
@@ -252,7 +265,7 @@ public class LgSurvey extends DaObject {
 			return false;
 		LgSurvey other = (LgSurvey) obj;
 		// This is the trick!
-		if (this.oid != 0L && other.oid != 0L && this.oid != other.oid)
+		if (this.oid != other.oid)
 			return false;
 		if (algoChecked != other.algoChecked)
 			return false;
@@ -271,7 +284,7 @@ public class LgSurvey extends DaObject {
 				return false;
 		} else if (!determinedTimePeriod.equals(other.determinedTimePeriod))
 			return false;
-		if (durationMins != other.durationMins)
+		if (durationOfEventMins != other.durationOfEventMins)
 			return false;
 		if (frequencyDist != other.frequencyDist)
 			return false;
@@ -327,11 +340,11 @@ public class LgSurvey extends DaObject {
 	}
 
 	public int getDurationMins() {
-		return this.durationMins;
+		return this.durationOfEventMins;
 	}
 
 	public LgSurvey setDurationMins(final int durationMins) {
-		this.durationMins = durationMins;
+		this.durationOfEventMins = durationMins;
 		return this;
 	}
 
@@ -403,7 +416,6 @@ public class LgSurvey extends DaObject {
 		return this.invites;
 	}
 
-	@JsonProperty
 	public LgSurvey setInvites(final List<LgInvite> invites) {
 		this.invites = invites;
 		return this;
@@ -413,7 +425,7 @@ public class LgSurvey extends DaObject {
 	public String toString() {
 		return String
 				.format("LgSurvey [name=%s, description=%s, type=%s, durationMins=%s, deadline=%s, frequencyDist=%s, frequencyUnit=%s, possibleTimePeriods=%s, determinedTimePeriod=%s, success=%s, algoChecked=%s, invites=%s, oid=%s, pool=%s]",
-						name, description, type, durationMins, deadline,
+						name, description, type, durationOfEventMins, deadline,
 						frequencyDist, frequencyUnit, possibleTimePeriods,
 						determinedTimePeriod, success, algoChecked, invites, oid,
 						pool);

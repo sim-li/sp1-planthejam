@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.rest.ReInviteService.RestGetInviteFailure;
 
 /**
@@ -174,11 +176,11 @@ public abstract class DaObject implements Serializable {
 	protected <E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) {
 		return pool.findOneByKey(persistentClass, keyFieldName, keyFieldValue);
 	}
-	
+	@JsonIgnore
 	public boolean isPersistent() {
 		return this.oid != DaPool.CREATED_OID && this.oid > 0;
 	}
-
+	@JsonIgnore
 	public boolean isDeleted() {
 		return this.oid == DaPool.DELETED_OID;
 	}

@@ -2,6 +2,7 @@ package de.bht.comanche.logic;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -60,12 +61,15 @@ public class LgInvite extends DaObject{
 	/**
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
 	 */
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
+	@Column(name="timeperiods") 
+	//rename later to concreteAvailability
+
 	private List<LgTimePeriod> timePeriods;
 	
 	
 	public LgInvite() {
-		this.timePeriods = new ArrayList<LgTimePeriod>();
+//		this.timePeriods = new ArrayList<LgTimePeriod>();
 	}
 	
 	public LgInvite(LgInvite other) {
@@ -87,6 +91,15 @@ public class LgInvite extends DaObject{
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
+	
+	public List<LgTimePeriod> getPossibleTimePeriods(){
+		return this.timePeriods;
+	}
+	
+	public LgInvite setPossibleTimePeriods(final List<LgTimePeriod> period){
+		this.timePeriods = period;
+		return this;
+	}
 
 	public boolean isHost() {
 		return this.isHost;
@@ -119,6 +132,7 @@ public class LgInvite extends DaObject{
 	 * Returns PossibleTimePeriod with nulled db-flags
 	 * @return
 	 */
+	@JsonIgnore
 	public LgSurvey getSurvey() {
 		return this.survey;
 	}

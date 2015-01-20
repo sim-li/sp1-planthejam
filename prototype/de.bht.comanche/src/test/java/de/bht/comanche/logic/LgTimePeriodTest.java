@@ -25,7 +25,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  * @author Maxim Novichkov;
  * @author Simon Lischka
  */
-
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgTimePeriodTest {
 	private LgUser alice;
