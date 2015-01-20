@@ -34,18 +34,25 @@ angular.module('myApp')
             // -------- HACK: Dummies ------------------------------------------------------>
             if ($scope.selectedInvite && $scope.selectedInvite.survey) {
                 $scope.selectedInvite.survey.algoChecked = true;
-                // $scope.selectedInvite.survey.success = Status.YES;
-                $scope.selectedInvite.survey.success = Status.NO;
+                $scope.selectedInvite.survey.success = Status.YES;
+                // $scope.selectedInvite.survey.success = Status.NO;
+                // $scope.selectedInvite.survey.success = Status.UNDECIDED;
                 $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
                     startTime: new Date(),
                     durationMins: 90
                 });
-                // $log.log('selected invite: ', $scope.selectedInvite.survey.success)
-                // $log.log('sel inv     : ', $scope.selectedInvite)
-                $log.log('sel inv surv    : ', $scope.selectedInvite.survey)
-                $log.log('suc: ', $scope.selectedInvite.survey.success)
-                $log.log('alg: ', $scope.selectedInvite.survey.algoChecked)
-                $log.log('dtp: ', $scope.selectedInvite.survey.determinedTimePeriod)
+                $log.debug('hacked invite.survey: ', $scope.selectedInvite.survey)
+            }
+            if ($scope.selectedSurvey) {
+                $scope.selectedSurvey.algoChecked = true;
+                $scope.selectedSurvey.success = Status.YES;
+                // $scope.selectedSurvey.success = Status.NO;
+                // $scope.selectedSurvey.success = Status.UNDECIDED;
+                $scope.selectedSurvey.determinedTimePeriod = new TimePeriod({
+                    startTime: new Date(),
+                    durationMins: 90
+                });
+                $log.debug('hacked survey: ', $scope.selectedSurvey)
             }
             // <------- HACK --------------------------------------------------------------
 
@@ -69,6 +76,10 @@ angular.module('myApp')
              */
             $scope.selectSurvey = function(survey) {
                 $scope.selectedSurvey = survey;
+                restService.getSurveyInvites(survey.oid)
+                    .then(function(invites) {
+                        $scope.selectedSurvey.invites = Model.importMany(Invite, invites);
+                    });
                 $log.debug($scope.selectedSurvey);
             };
 
@@ -146,9 +157,18 @@ angular.module('myApp')
                 } else {
                     message += 'no date could be determined.';
                 }
+
+                // --- HACK --------------------------------------------------->
                 arrayUtil.forEach(invites, function(invite) {
                     invite.user.messages.push(message);
                 });
+                $log.debug('some messages were sent to: ', invites);
+                // <-- HACK ----------------------------------------------------
+
+                restService.notifyParticipants(selectedSurvey.oid)
+                    .then(function(success) {
+                        console.log('All participants have just been notified');
+                    });
             };
 
             $scope.confirm = function() {
@@ -157,9 +177,9 @@ angular.module('myApp')
                 $log.debug($scope.selectedSurvey.success);
                 // $log.debug($scope.selectedSurvey);
 
+                sendMessagesToParticipant();
                 // FIXME temp comment out
-                // sendMessagesToParticipant();
-                restService.doSave($scope.selectedSurvey);
+                // restService.doSave($scope.selectedSurvey);
             };
 
             $scope.reject = function() {
@@ -171,7 +191,7 @@ angular.module('myApp')
 
                 // FIXME temp comment out
                 // sendMessagesToParticipant();
-                restService.doSave($scope.selectedSurvey);
+                // restService.doSave($scope.selectedSurvey);
             };
 
             //-- some dummies

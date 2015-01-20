@@ -46,7 +46,7 @@
           .row
             .col-lg-11
               .h4 Participants:
-              %span#selectedSurveyStatus{"ng-if" => "!selectedSurvey.hasParticipants()"}
+              %span#surveyStatus{"ng-if" => "!selectedSurvey.hasParticipants()"}
                 %ul
                   %li{} None
               %ul

@@ -86,6 +86,10 @@ angular.module('models')
                 return arrayUtil.findByAttribute(this.invites, 'host', false) ? true : false;
             };
 
+            Survey.prototype.isReady = function() {
+                return this.algoChecked && this.success == 'UNDECIDED';
+            };
+
             // Invite.prototype.addParticipantsFromGroup = function(group) {
             //     if (group.modelId !== 'group') {
             //         return;

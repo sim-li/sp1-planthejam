@@ -60,7 +60,7 @@ angular.module('models')
                     'ignored': this.ignored,
                     'user': this.user.doExport(),
                     'survey': this.survey ? this.survey.doExport() : null,
-                    'timePeriods': TimePeriod.exportMany(this.timePeriods) // FIXME temporarily commented out
+                    // 'timePeriods': TimePeriod.exportMany(this.timePeriods) // FIXME temporarily commented out
                 };
             };
 
@@ -98,6 +98,9 @@ angular.module('models')
             // };
 
             Invite.exportMany = function(invitesToExport) {
+                if (!invitesToExport) {
+                    return [];
+                }
                 var invites = [];
                 arrayUtil.forEach(invitesToExport, function(ele) {
                     invites.push(ele.doExport());

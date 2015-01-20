@@ -58,6 +58,9 @@ angular.module('models')
          * @return {Array}                  the exported members
          */
         Member.exportMany = function(membersToExport) {
+            if (!membersToExport) {
+                return [];
+            }
             var members = [];
             for (var i = 0; i < membersToExport.length; i++) {
                 members.push(membersToExport[i].doExport());

@@ -32,13 +32,11 @@
                 %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"}
                   .row
                     .col-sm-8 {{survey.name}}
-                    / FIXME -- NUR WENN UNDECIDED
-                    .btn-group
+                    .btn-groups{"ng-if" => "survey.isReady()"}
                       %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "confirm()","onclick" => "return false;"}
                         %span.glyphicon.glyphicon-ok
                       %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "reject()","onclick" => "return false;"}
                         %span.glyphicon.glyphicon-remove
-
 
             #inviteTab.tab-pane
               %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
@@ -92,9 +90,17 @@
             %p
             %label{:for => "deadline"} Deadline:
             %span#deadline{} {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}
-            %div#selectedSurveyStatus{"ng-if" => "selectedSurvey.algoChecked"}
+            %div#selectedSurveyTimePeriod{"ng-if" => "selectedSurvey.algoChecked"}
               %label{:for => "determinedTimePeriod"}  Determined Time Period:
               %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod ? selectedSurvey.determinedTimePeriod : "None" }}
+            .h4 Participants:
+            %span#selectedSurveyParticipants{"ng-if" => "!selectedSurvey.hasParticipants()"}
+              %ul
+                %li{} None
+            %ul
+              %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: host == false"}
+                %strong{} {{invite.user.name}}
+                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
 
       #inviteDetails.col-md-6{"ng-hide" => "showSurveyDetails"}
         .panel.panel-default

@@ -52,6 +52,9 @@ angular.module('models')
 		};
 
 		TimePeriod.exportMany = function(timePeriodsToExport) {
+			if (!timePeriodsToExport) {
+				return [];
+			}
 			var timePeriods = [];
 			arrayUtil.forEach(timePeriodsToExport, function(ele) {
 				timePeriods.push(ele.doExport());
