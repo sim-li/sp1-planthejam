@@ -173,13 +173,9 @@ angular.module('myApp')
                 $scope.surveyCalendar.fullCalendar('render');
             };
 
-            // $scope.selectedSurvey.deadline = new Date()
-            $scope.debugIt = function() {
-                $log.debug('dbug it: ', $scope.selectedSurvey.deadline)
-                $log.debug('dbug it: ', $scope.selectedSurvey.deadline.toLocaleDateString())
+            $scope.cancel = function() {
+                $location.path('/cockpit');
             };
-
-            console.log($scope.selectedSurvey.hasParticipants())
 
         }
     ]);
