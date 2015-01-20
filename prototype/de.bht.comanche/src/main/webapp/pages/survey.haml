@@ -1,6 +1,5 @@
 %ptj-menu
 .container
-  deadline: {{selectedSurvey.deadline}}
   .row
     / search & results
     / sidebar
@@ -43,15 +42,6 @@
                 %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button", "data-target" => "#", "href" => ""} {{ selectedSurvey.deadline | date: 'yyyy-MM-dd HH:mm' }}
                 %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
                   %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedSurvey.deadline", "data-date-format"=>"dd-mm-yyyy", "date-type" => "string", "bs-datepicker" => "", "ng-required" => "true"}
-            / .col-lg-11.dropdown
-            /   %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button", "data-target" => "#", "href" => ""}
-            /     .input-group
-            /       %input.form-control{"data-ng-model" => "selectedSurvey.deadline", :type => "text"}/
-            /       %span.input-group-addon
-            /         Deadline
-            /         %i.glyphicon.glyphicon-calendar
-            /   %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
-            /     %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedSurvey.deadline", "data-date-format"=>"dd-mm-yyyy", "date-type" => "string", "bs-datepicker" => "", "ng-required" => "true"}
 
           %br
           .row
