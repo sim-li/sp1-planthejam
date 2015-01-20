@@ -4,7 +4,7 @@
  * @author Duc Tung Tong
  */
 angular.module('models')
-	.factory('TimePeriod', ['arrayUtil', function(arrayUtil) {
+	.factory('TimePeriod', function() {
 		'use strict';
 
 		/**
@@ -51,14 +51,6 @@ angular.module('models')
 			};
 		};
 
-		TimePeriod.exportMany = function(timePeriodsToExport) {
-			var timePeriods = [];
-			arrayUtil.forEach(timePeriodsToExport, function(ele) {
-				timePeriods.push(ele.doExport());
-			});
-			return timePeriods;
-		};
-
 		/**
 		 * Provides an array of three dummy time periods.
 		 *
@@ -81,4 +73,4 @@ angular.module('models')
 
 
 		return (TimePeriod);
-	}]);
+	});

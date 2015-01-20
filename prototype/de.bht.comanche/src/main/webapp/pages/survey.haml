@@ -7,7 +7,7 @@
       / %ptj-survey-select
     .col-md-8
       .panel.panel-primary
-        .panel-heading Edit a survey for an event
+        .panel-heading Create new Event
         .panel-body
           .row
             .col-md-8
@@ -36,32 +36,26 @@
             %ptj-groups
 
           .row
-            .col-lg-11
-              %span.h4 Deadline:
-              %span.dropdown
-                %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button", "data-target" => "#", "href" => ""} {{ selectedSurvey.deadline | date: 'yyyy-MM-dd HH:mm' }}
-                %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
-                  %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedSurvey.deadline", "data-date-format"=>"dd-mm-yyyy", "date-type" => "string", "bs-datepicker" => "", "ng-required" => "true"}
+            .col-lg-11.dropdown
+              %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button"}
+                .input-group
+                  %input.form-control{"ng-model" => "selectedInvite.survey.deadline", :type => "text"}/
+                  %span.input-group-addon
+                    Deadline
+                    %i.glyphicon.glyphicon-calendar
+              %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
+                %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "ng-model" => "selectedInvite.survey.deadline", "date-format"=>"MM/dd/yyyy", "date-type" => "string", "bs-datepicker" => ""}
 
+          %br
           .row
-            .col-lg-11
-              .h4 Participants:
-              %span#selectedSurveyStatus{"ng-if" => "!selectedSurvey.hasParticipants()"}
-                %ul
-                  %li{} None
-              %ul
-                %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: host == false"}
-                  %strong{} {{invite.user.name}}
-                  (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
-
-            .col-lg-11
-              %ptj-calendar{"possible" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
+            {{selectedSurvey}}
+            %ptj-calendar{"possible" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
 
         .panel-footer
           .col-md-offset-10
-            %button.btn.btn-default.btn-sm{:type => "reset", "ng-click" => "cancel()"} Reset
+            %button.btn.btn-default.btn-sm{:type => "reset"} Reset
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveSurvey()"} Save
     .col-md-2
       %input-group{"ng-show"=>"isRecurring()"}
-        %select.form-control{"ng-model" => "selectedSurvey.frequencyUnit", "ng-options" => "opt for opt in TimeUnit._options"}
+      %select.form-control{"ng-model" => "selectedSurvey.frequencyUnit", "ng-options" => "opt for opt in TimeUnit._options"}
         %input.form-control{"type" => "number", "ng-model" => "selectedSurvey.frequencyDist", "placeholder" => "Distance", "min" => 0, "required" => "true"}

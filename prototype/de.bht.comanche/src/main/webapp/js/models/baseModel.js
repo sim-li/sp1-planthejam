@@ -9,7 +9,7 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models', ['constants', 'util'])
-    .factory('Model', ['arrayUtil', function(arrayUtil) {
+    .factory('Model', ['arrayUtil', 'Invite', 'Survey', function(arrayUtil) {
 
         'use strict';
 
@@ -52,7 +52,7 @@ angular.module('models', ['constants', 'util'])
          */
         Model.importMany = function(ModelClass, rawModels) {
             if (!rawModels) {
-                return [];
+                return rawModels;
             }
             // console.log('importing many ' + ModelClass.prototype.modelId + 's');
             var models = [];

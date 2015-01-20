@@ -1,102 +1,117 @@
 %ptj-menu
 
 .container
+  debug {{ showSurveyDetails }}
+  %input.btn{:type => "button", "value" => "toggleSrv", "ng-click" => "toggleSurveyDetails"}
+  %input.btn{:type => "button", "value" => "toggleInv", "ng-click" => "toggleInviteDetails"}
   / %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}'
   .panel.panel-default
     .panel-body
-      .col-md-6
+      .col-md-4
         .tabbable
           %ul.nav.nav-tabs
-            %li.active
-              %a{"data-toggle" => "tab", :href => "#surveyTab", "ng-click" => "showSurveyDetails = true", "onclick" => "return false;"}
+            / %li.active
+            %li
+              %a{"data-toggle" => "tab", :href => "#surveyTab", "ng-click" => "toggleSurveyDetails()"}
                 Survey
                 %span.badge {{surveys.length}}
-            %li
-              %a{"data-toggle" => "tab", "href" => "#inviteTab", "ng-click" => "showSurveyDetails = false", "onclick" => "return false;"}
+            / %li
+            %li.active
+              %a{"data-toggle" => "tab", :href => "#inviteTab", "onclick" => "toggleInviteDetails()"}
                 Invite
                 %span.badge {{(invites | filter: {ignored: "!YES"}).length}}
             %li
-              %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "ng-click" => "showSurveyDetails = false", "onclick" => "return false;"}
+              %a{"data-toggle" => "tab", :href => "#ignoredInviteTab", "onclick" => "toggleInviteDetails()"}
                 Ignored
                 %span.badge {{(invites | filter: {ignored: "YES"}).length}}
-            %li
-              %a{"data-toggle" => "tab", :href => "#messagesTab", "onclick" => "return false;"}
-                Messages
-                %span.badge {{messages.length}}
-
           .tab-content
 
-            #surveyTab.tab-pane.active
-              %input#surveyFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
+            / #surveyTab.tab-pane.active
+            #surveyTab.tab-pane
+              SURV Hallo
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
-                %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"} {{survey.name}}
+              %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"} {{survey.name}}
 
-            #inviteTab.tab-pane
-              %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
-              #inviteList.list-group
-                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES', name: searchInvite} "}
-                  .col-sm-8 {{invite.survey.name}} {{invite.ignored}}
-                  .btn-group
-                    %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;"}
-                      %span.glyphicon.glyphicon-question-sign
-                    %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')"}
-                      %span.glyphicon.glyphicon-ok
-                    #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"}
-                      .modal-dialog.modal-lg
-                        .modal-content
-                          .modal-header
-                            %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-                              %span{"aria-hidden" => "true"} ×
-                            %h4.modal-title Please choose your Avaibilities
-                          .modal-body
-                            %ptj-calendar{"possible" => "possibleTimePeriods", "resulting" => "selectedInvite.timePeriods"}
-                          .modal-footer
-                            %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
-                            %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button", "ng-click" => "saveAvailabilities()"} Save changes
-                    %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('YES')", "onclick" => "return false;"}
-                      %span.glyphicon.glyphicon-remove
+            / #inviteTab.tab-pane
+            #inviteTab.tab-pane.active
+              INV Hallo
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
+              #surveyList.list-group
+              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES', name: searchInvite} "}
+                .col-sm-8 {{invite.survey.name}} {{invite.ignored}}
+                .btn-group
+                  %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;"}
+                    %span.glyphicon.glyphicon-question-sign
+                  %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')"}
+                    %span.glyphicon.glyphicon-ok
+                  #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"}
+                    .modal-dialog.modal-lg
+                      .modal-content
+                        .modal-header
+                          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                            %span{"aria-hidden" => "true"} ×
+                          %h4.modal-title Please choose your Avaibilities
+                        .modal-body
+                          %ptj-calendar{"possible" => "possibleTimePeriods", "resulting" => "resultingTimePeriods"}
+                        .modal-footer
+                          %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
+                          %button.btn.btn-primary{:type => "button", "ng-click" => "saveAvailabilities()"} Save changes
+                  %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('YES')", "onclick" => "return false;"}
+                    %span.glyphicon.glyphicon-remove
 
             #ignoredInviteTab.tab-pane
-              %input#ignoredFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
-              #ignoredList.list-group
-                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored : 'YES', name: searchIgnored} "}
-                  .col-sm-9 {{invite.survey.name}} {{invite.ignored}}
-                  %label.btn.btn-primary.btn-sm{"btn-radio" => "'reaccept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')", "onclick" => "return false;"}
-                    reaccept
+              IGNORE Hallo
+              %input#filter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
+              #surveyList.list-group
+              %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored : 'YES', name: searchIgnored} "}
+                .col-sm-9 {{invite.survey.name}} {{invite.ignored}}
+                %label.btn.btn-primary.btn-sm{"btn-radio" => "'reaccept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')", "onclick" => "return false;"}
+                  reaccept
+        / %div DEBUG selected: {{ selectedInvite }}
 
-            #messagesTab.tab-pane
-              %input#messagesFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchMessages", :placeholder => "Filter messages ...", :type => "search"}
-              #messageList.list-group
-                %a.list-group-item{:href => "", "ng-repeat" => "message in messages | filter: searchMessages"}
-                  .row
-                    .col-sm-9 {{ message }}
-
-      #surveyDetails.col-md-6{"ng-show" => "showSurveyDetails"}
+      #surveyDetails.col-md-8{"ng-show" => "showSurveyDetails"}
+        hallo from surveyDetails
         %input#addSurvey.btn.btn-primary{"ng-click" => "addSurvey()", :type => "button", :value => "Create a survey"}
         %input#editSurvey.btn.btn-primary{"ng-click" => "editSurvey()", :type => "button", :value => "Show and edit selected survey"}
         %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedSurvey()", :type => "button", :value => "Delete selected survey"}
         .panel.panel-default
           .panel-body
-            %h2.text-warning{} {{ selectedSurvey.name }}
-            %div{} {{ selectedSurvey.description }}
-            %p
-            %label{:for => "deadline"} Deadline:
-            %span#deadline{} {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}
-            %div#selectedSurveyStatus{"ng-if" => "selectedSurvey.algoChecked"}
-              %label{:for => "determinedTimePeriod"}  Determined Time Period:
-              %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod ? selectedSurvey.determinedTimePeriod : "None" }}
+            %label{:for => "selectedSurveyDescription"} Description:
+            %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
+            %div Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}
+            %label{:for => "selectedSurveyDescription"} Status:
+            %div#selectedSurveyStatus{} wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}
 
-      #inviteDetails.col-md-6{"ng-hide" => "showSurveyDetails"}
+      #inviteDetails.col-md-8{"ng-hide" => "showSurveyDetails"}
+        huhu from inviteDetails
+        %input#addSurvey.btn.btn-primary{"ng-click" => "addSurvey()", :type => "button", :value => "Create a survey"}
+        %input#editSurvey.btn.btn-primary{"ng-click" => "editSurvey()", :type => "button", :value => "Show and edit selected survey"}
+        %input#deleteSurvey.btn.btn-primary{"ng-click" => "deleteSelectedSurvey()", :type => "button", :value => "Delete selected survey"}
         .panel.panel-default
           .panel-body
-            %h2.text-warning{} {{ selectedInvite.survey.name }}
-            %div{} {{ selectedInvite.survey.description }}
-            %p
-            %label{:for => "deadline"} Deadline:
-            %span#deadline{} {{ selectedInvite.survey.deadline | date: 'yyyy-MM-dd HH:mm' }}
-            %div#selectedInviteStatus{"ng-if" => "selectedInvite.survey.success != 'UNDECIDED'"}
-              %div#selectedInviteStatus{"ng-if" => "selectedInvite.survey.success == 'NO'"}
-              %label{:for => "determinedTimePeriod"}  Determined Time Period:
-              %div#determinedTimePeriod{}
-                %div{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
-                %div{} {{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes
+            %label{:for => "selectedSurveyDescription"} Description:
+            %div#selectedSurveyDescription{} {{ selectedInvite.survey.description }}
+            %div Deadline : {{selectedInvite.survey.deadline | date:'yyyy-MM-dd HH:mm'}}
+            %label{:for => "selectedSurveyDescription"} Status:
+            %div#selectedSurveyStatus{} wird {{ selectedInvite.ignored ? "ignoriert" : "akzeptiert" }}
+
+
+            / %label{:for => "selectedSurveyDescription"} Deadline:
+            / %div#selectedSurveyDescription{} {{ selectedInvite.survey.deadline }}
+  / %button.btn.btn-primary{"data-target" => "#calendarModal", "data-toggle" => "modal", :type => "button"}
+  /   demo calendar modal
+  / #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"}
+  /   .modal-dialog.modal-lg
+  /     .modal-content
+  /       .modal-header
+  /         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+  /           %span{"aria-hidden" => "true"} ×
+  /         %h4.modal-title Please choose your Avaibilities
+  /       .modal-body
+  /         .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar"}
+  /       .modal-footer
+  /         %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
+
+  %ul{"ng-model" => "messages"}
+    %li{"ng-repeat" => "message in messages"} {{ message }}
