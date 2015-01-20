@@ -76,7 +76,7 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-    @ElementCollection 
+    @ElementCollection
     @Column(name="possible_timeperiods") 
 	private List<LgTimePeriod> possibleTimePeriods;
 	

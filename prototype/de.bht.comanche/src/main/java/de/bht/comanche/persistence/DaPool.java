@@ -2,7 +2,7 @@ package de.bht.comanche.persistence;
 
 import java.util.List;
 
-import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyFailure;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
 /**
  * Interface for <code>pool</code> implementation of a concrete persistence provider.

@@ -67,9 +67,9 @@ public class LgUser extends DaObject {
     @OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
     private LgMember member;
 
-    @ElementCollection(targetClass=LgTimePeriod.class)
+    @ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER)
     @Column(name="general_availability")
-    private Collection<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
+    private List<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
 
     @ElementCollection(targetClass=String.class)
     @Column(name="messages") 
@@ -186,7 +186,7 @@ public class LgUser extends DaObject {
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
-    public Collection<LgTimePeriod> getGeneralAvailability() {
+    public List<LgTimePeriod> getGeneralAvailability() {
         return this.generalAvailability;
     }
     
@@ -194,7 +194,7 @@ public class LgUser extends DaObject {
      * Returns LgTimePeriods list for current user.
      * @return The list with LgTimePeriods.
      */
-    public void setGeneralAvailability(Collection<LgTimePeriod>  generalAvailability) {
+    public void setGeneralAvailability(List<LgTimePeriod>  generalAvailability) {
         this.generalAvailability = generalAvailability;
     }
 

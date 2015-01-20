@@ -154,6 +154,7 @@ public class LgSession {
 	}
 
 	public LgUser getUser() {
+		this.user.getGeneralAvailability();
 		return this.user;
 	}
 	
