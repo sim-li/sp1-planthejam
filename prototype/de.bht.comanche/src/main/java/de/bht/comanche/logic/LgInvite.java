@@ -96,6 +96,7 @@ public class LgInvite extends DaObject{
 		return this.isIgnored;
 	}
 
+	
 	public LgInvite setIgnored(final LgStatus isIgnored) {
 		this.isIgnored = isIgnored;
 		return this;
