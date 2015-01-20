@@ -2,6 +2,7 @@ package de.bht.comanche.logic;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.fest.assertions.api.Assertions.*;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import de.bht.comanche.persistence.DaEmProvider;
+
 
 /**
  * @author Maxim Novichkov;
