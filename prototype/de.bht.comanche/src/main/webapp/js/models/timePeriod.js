@@ -24,6 +24,7 @@ angular.module('models')
 			if (!(this instanceof TimePeriod)) {
 				return new TimePeriod(config);
 			}
+			config = config || {};
 			this.oid = config.oid || '';
 			this.startTime = config.startTime || new Date();
 			this.durationMins = config.durationMins || 0;
