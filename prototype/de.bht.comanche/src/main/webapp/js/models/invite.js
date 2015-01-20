@@ -59,8 +59,8 @@ angular.module('models')
                     'host': this.host,
                     'ignored': this.ignored,
                     'user': this.user.doExport(),
-                    'survey': this.survey ? this.survey.doExport() : null
-                        // ,'timePeriods': TimePeriod.exportMany(this.timePeriods)      // FIXME temporarily commented out
+                    'survey': this.survey ? this.survey.doExport() : null,
+                    'timePeriods': TimePeriod.exportMany(this.timePeriods) // FIXME temporarily commented out
                 };
             };
 

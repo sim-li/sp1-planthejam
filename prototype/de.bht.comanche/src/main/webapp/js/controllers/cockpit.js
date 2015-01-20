@@ -32,20 +32,22 @@ angular.module('myApp')
 
 
             // -------- HACK: Dummies ------------------------------------------------------>
-            $scope.selectedInvite.survey.algoChecked = true;
-            // $scope.selectedInvite.survey.success = Status.YES;
-            $scope.selectedInvite.survey.success = Status.NO;
-            $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
-                startTime: new Date(),
-                durationMins: 90
-            });
-            // $log.log('selected invite: ', $scope.selectedInvite.survey.success)
-            // $log.log('sel inv     : ', $scope.selectedInvite)
-            $log.log('sel inv surv    : ', $scope.selectedInvite.survey)
-            $log.log('suc: ', $scope.selectedInvite.survey.success)
-            $log.log('alg: ', $scope.selectedInvite.survey.algoChecked)
-            $log.log('dtp: ', $scope.selectedInvite.survey.determinedTimePeriod)
-                // <------- HACK --------------------------------------------------------------
+            if ($scope.selectedInvite && $scope.selectedInvite.survey) {
+                $scope.selectedInvite.survey.algoChecked = true;
+                // $scope.selectedInvite.survey.success = Status.YES;
+                $scope.selectedInvite.survey.success = Status.NO;
+                $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
+                    startTime: new Date(),
+                    durationMins: 90
+                });
+                // $log.log('selected invite: ', $scope.selectedInvite.survey.success)
+                // $log.log('sel inv     : ', $scope.selectedInvite)
+                $log.log('sel inv surv    : ', $scope.selectedInvite.survey)
+                $log.log('suc: ', $scope.selectedInvite.survey.success)
+                $log.log('alg: ', $scope.selectedInvite.survey.algoChecked)
+                $log.log('dtp: ', $scope.selectedInvite.survey.determinedTimePeriod)
+            }
+            // <------- HACK --------------------------------------------------------------
 
             $scope.showSurveyDetails = true;
 
@@ -151,15 +153,25 @@ angular.module('myApp')
 
             $scope.confirm = function() {
                 $scope.selectedSurvey.success = Status.YES;
-                sendMessagesToParticipant();
-                restService.save($scope.selectedSurvey);
+
+                $log.debug($scope.selectedSurvey.success);
+                // $log.debug($scope.selectedSurvey);
+
+                // FIXME temp comment out
+                // sendMessagesToParticipant();
+                restService.doSave($scope.selectedSurvey);
             };
 
             $scope.reject = function() {
                 $scope.selectedSurvey.success = Status.NO;
                 $scope.selectedSurvey.determinedTimePeriod = null;
-                sendMessagesToParticipant();
-                restService.save($scope.selectedSurvey);
+
+                $log.debug($scope.selectedSurvey.success);
+                // $log.debug($scope.selectedSurvey);
+
+                // FIXME temp comment out
+                // sendMessagesToParticipant();
+                restService.doSave($scope.selectedSurvey);
             };
 
             //-- some dummies
