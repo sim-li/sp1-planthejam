@@ -76,8 +76,8 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-    @ElementCollection
-    @Column(name="possible_timeperiods") 
+    @ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
+    @Column(name="possibleTimePeriods")
 	private List<LgTimePeriod> possibleTimePeriods;
 	
 	/**
@@ -109,7 +109,7 @@ public class LgSurvey extends DaObject {
 	 * Constructor 
 	 */
 	public LgSurvey() {
-		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
+//		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
 		this.invites = new ArrayList<LgInvite>();
 	}
 	
@@ -139,7 +139,7 @@ public class LgSurvey extends DaObject {
 		this.success = other.success;
 		this.algoChecked = other.algoChecked;
 		// Check this, implement Equals method for other classes
-		updateList(this.invites, other.invites);
+//		updateList(this.invites, other.invites);
 	}
 	
 	/**
@@ -150,16 +150,26 @@ public class LgSurvey extends DaObject {
 	 * @param persistedList
 	 * @param freshList
 	 */
-	public <E extends DaObject> void updateList(List<E> persistedList, List<E> freshList) {
-		
-		persistedList.retainAll(freshList); // PL & its objs must be tracked for this method to work
-										    // (cascade must be activated?)
-		freshList.removeAll(persistedList); // ELs already saved
-		for (E el : freshList) {
-			saveUnattached(el); // Fresh list are never tracked
-		}
-		persistedList.addAll(freshList); // Requires PL tracking too
-	}
+//	public LgSurvey updateList(LgSurvey persisted) {
+//		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
+//		listFromDB.add(persisted);
+//		
+//		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
+//		listfresh.add(this);
+//		
+//		System.out.println("listfresh=======" + listfresh.size());
+//		System.out.println("listFromDB=======" + listFromDB.size());
+//		
+//		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
+//		listfresh.removeAll(listFromDB); // ELs already saved
+//		
+//		for (LgSurvey el : listfresh) {
+//		el.save(); // Fresh list are never tracked
+//		}
+//		listFromDB.addAll(listfresh); 
+//		
+//		return listFromDB.get(0);
+//	}
 	
 	//-- METHODS FOR SURVEY EVALUATION ----------------------------------------
 	
@@ -242,7 +252,7 @@ public class LgSurvey extends DaObject {
 			return false;
 		LgSurvey other = (LgSurvey) obj;
 		// This is the trick!
-		if (this.oid != 0L && other.oid != 0L && this.oid != other.oid)
+		if (this.oid != other.oid)
 			return false;
 		if (algoChecked != other.algoChecked)
 			return false;
