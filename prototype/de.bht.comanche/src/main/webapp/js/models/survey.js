@@ -38,7 +38,7 @@ angular.module('models')
                 this.description = config.description || 'Say what it is all about';
                 this.type = config.type || SurveyType.ONE_TIME;
                 this.durationMins = config.durationMins || 0;
-                this.deadline = new Date(config.deadline) || new Date();
+                this.deadline = config.deadline ? new Date(config.deadline) : new Date();
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
                 this.possibleTimePeriods = config.possibleTimePeriods || [];

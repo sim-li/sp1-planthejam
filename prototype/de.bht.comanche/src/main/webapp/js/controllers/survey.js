@@ -172,5 +172,12 @@ angular.module('myApp')
             $scope.renderCalendar = function() {
                 $scope.surveyCalendar.fullCalendar('render');
             };
+
+            // $scope.selectedSurvey.deadline = new Date()
+            $scope.debugIt = function() {
+                $log.debug('dbug it: ', $scope.selectedSurvey.deadline)
+                $log.debug('dbug it: ', $scope.selectedSurvey.deadline.toLocaleDateString())
+            };
+
         }
     ]);

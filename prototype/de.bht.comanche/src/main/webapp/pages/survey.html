@@ -1,6 +1,6 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
-  deadline: {{selectedSurvey.deadline___}}
+  deadline: {{selectedSurvey.deadline}}
   <div class='row'>
     <!-- search & results -->
     <!-- sidebar -->
@@ -51,36 +51,44 @@
             <ptj-groups></ptj-groups>
           </div>
           <div class='row'>
-            <div class='col-lg-11 dropdown'>
-              <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
-                <div class='input-group'>
-                  <input class='form-control' ng-model='selectedSurvey.deadline___' type='text'>
-                  <span class='input-group-addon'>
-                    Deadline
-                    <i class='glyphicon glyphicon-calendar'></i>
-                  </span>
-                </div>
-              </a>
-              <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
-                <datetimepicker bs-datepicker='' data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" date-format='MM/dd/yyyy' date-type='string' ng-model='selectedSurvey.deadline___'></datetimepicker>
-              </ul>
+            <div class='col-lg-11'>
+              <span class='h4'>Deadline:</span>
+              <span class='dropdown'>
+                <a class='dropdown-toggle' data-target='#' data-toggle='dropdown' href='' id='dropdown2' role='button'>{{ selectedSurvey.deadline | date: 'yyyy-MM-dd HH:mm' }}</a>
+                <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                  <datetimepicker bs-datepicker='' data-date-format='dd-mm-yyyy' data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='selectedSurvey.deadline' date-type='string' ng-required='true'></datetimepicker>
+                </ul>
+              </span>
             </div>
+            <!-- .col-lg-11.dropdown -->
+            <!-- %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button", "data-target" => "#", "href" => ""} -->
+            <!-- .input-group -->
+            <!-- %input.form-control{"data-ng-model" => "selectedSurvey.deadline", :type => "text"}/ -->
+            <!-- %span.input-group-addon -->
+            <!-- Deadline -->
+            <!-- %i.glyphicon.glyphicon-calendar -->
+            <!-- %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"} -->
+            <!-- %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedSurvey.deadline", "data-date-format"=>"dd-mm-yyyy", "date-type" => "string", "bs-datepicker" => "", "ng-required" => "true"} -->
           </div>
           <br>
           <div class='row'>
-            <div class='h4'>Participants:</div>
-            <ul>
-              <li ng-repeat='invite in selectedSurvey.invites | filter: host == false'>
-                <strong>{{invite.user.name}}</strong>
-                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
-              </li>
-            </ul>
-            <ptj-calendar possible='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
+            <div class='col-lg-11'>
+              <div class='h4'>Participants:</div>
+              <ul>
+                <li ng-repeat='invite in selectedSurvey.invites | filter: host == false'>
+                  <strong>{{invite.user.name}}</strong>
+                  (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
+                </li>
+              </ul>
+            </div>
+            <div class='col-lg-11'>
+              <ptj-calendar possible='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
+            </div>
           </div>
         </div>
         <div class='panel-footer'>
           <div class='col-md-offset-10'>
-            <button class='btn btn-default btn-sm' type='reset'>Reset</button>
+            <button class='btn btn-default btn-sm' ng-click='debugIt()' type='reset'>Reset</button>
             <button class='btn btn-primary btn-sm' ng-click='saveSurvey()' type='submit'>Save</button>
           </div>
         </div>
