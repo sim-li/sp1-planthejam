@@ -27,119 +27,122 @@ import de.bht.comanche.persistence.DaEmProvider;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgUserWithCollectionsTest {
-    private LgUser alice;
-    private LgSession session;
-    private LgTimePeriod timePeriod;
+	private LgUser alice;
+	private LgSession session;
+	private LgTimePeriod timePeriod;
 
-    @BeforeClass
-    public static void resetDatabase() {
-        Map<String, String> properties = new HashMap<String, String>(1);
-        properties.put("hibernate.hbm2ddl.auto", "create");
-        Persistence.createEntityManagerFactory(DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
-    }
-    
-    @Before
-    public void buildUp() {
-        beginTransaction();
-        intializeUsers();
-        registerUsers(session);
-        alice = session.startFor("Alice");
-        timePeriod = new LgTimePeriod()
-            .setDurationMins(10)
-            .setStartTime(new Date(8099));
-    }
-
-    private void registerUsers(final LgSession sessionForRegistration) {
-        sessionForRegistration.register(alice);
-    }
-
-    private void intializeUsers() {
-        alice = new LgUser().setName("Alice").setEmail("test@test.de")
-                .setPassword("testtest");
-    }
-
-    /**
-     * This test actually includes the checking of data, thus the part before the commit
-     * is what would be called in a Rest Service.
-     */
-    @Test
-    public void saveMessagesTest() {
-        saveDemoMessages();
-        commitAndRestartTransaction();
-        alice = session.startFor("Alice");
-        assertTrue("Alice has message 'Hello'", alice.getMessages().contains("Hello"));
-        assertTrue("Alice has message 'Kitty'", alice.getMessages().contains("Kitty"));
-    }
-    
-    @Test
-    public void removeAndAddUpdateMessageTest() {
-    	 saveDemoMessages();
-    	 commitAndRestartTransaction();
-    	 alice = session.startFor("Alice");
-    	 alice.getMessages().remove("Hello");
-    	 alice.getMessages().add("Update");
-    	 commitAndRestartTransaction();
-    	 alice = session.startFor("Alice");
-    	 assertTrue("Alice has Updated message", alice.getMessages().contains("Update"));
-    	 assertFalse("Alice does not have old message", alice.getMessages().contains("Hello"));
-    }
-
-    @Test
-	public void saveDemoMessages() {
-		List<String> messages = new ArrayList<String>();
-        messages.add("Hello");
-        messages.add("Kitty");
-        alice.setMessages(messages);
-        alice.save();
+	@BeforeClass
+	public static void resetDatabase() {
+		Map<String, String> properties = new HashMap<String, String>(1);
+		properties.put("hibernate.hbm2ddl.auto", "create");
+		Persistence.createEntityManagerFactory(
+				DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
 	}
 
-    @Test
-    public void saveTimePeriodTest() {
-    	List<LgTimePeriod> timePeriods = new ArrayList<LgTimePeriod>();
-    	final LgTimePeriod timePeriod20 = new LgTimePeriod()
-		.setStartTime(new Date())
-		.setDurationMins(20);
-    	final LgTimePeriod timePeriod40 = new LgTimePeriod()
-		.setStartTime(new Date())
-		.setDurationMins(40);
-    	final LgTimePeriod timePeriod60 = new LgTimePeriod()
-		.setStartTime(new Date())
-		.setDurationMins(60);
-    	timePeriods.add(timePeriod20);
-    	timePeriods.add(timePeriod40);
-    	timePeriods.add(timePeriod60);
-    	alice.setGeneralAvailability(timePeriods);
-    	alice.save();
-    	commitAndRestartTransaction();
-    	alice = session.startFor("Alice");
-    	for (LgTimePeriod tp : alice.getGeneralAvailability()) {
-    		System.out.println("DUR >> ; " + tp.getDurationMins());
-    		assertTrue(
-    				"Alices persisted timePeriods have a duraction of 20, 40 or 60",
-    				tp.getDurationMins() == 20 ||
-    				tp.getDurationMins() == 40 ||
-    				tp.getDurationMins() == 60
-    	    );
-    	}
-    }
-    
-    @After
-    public void tearDown() {
-        alice.deleteThisAccount();
-        endTransaction();
-    }
+	@Before
+	public void buildUp() {
+		beginTransaction();
+		intializeUsers();
+		registerUsers(session);
+		alice = session.startFor("Alice");
+		timePeriod = new LgTimePeriod().setDurationMins(10).setStartTime(
+				new Date(8099));
+	}
 
-    private void beginTransaction() {
-        session = new LgSession();
-        session.getApplication().beginTransaction();
-    }
+	private void registerUsers(final LgSession sessionForRegistration) {
+		sessionForRegistration.register(alice);
+	}
 
-    private void endTransaction() {
-        session.getApplication().endTransaction(true);
-    }
+	private void intializeUsers() {
+		alice = new LgUser().setName("Alice").setEmail("test@test.de")
+				.setPassword("testtest");
+	}
 
-    private void commitAndRestartTransaction() {
-        endTransaction();
-        beginTransaction();
-    }
+	/**
+	 * This test actually includes the checking of data, thus the part before
+	 * the commit is what would be called in a Rest Service.
+	 */
+	@Test
+	public void saveMessagesTest() {
+		saveDemoMessages();
+		commitAndRestartTransaction();
+		alice = session.startFor("Alice");
+		assertTrue("Alice has message 'Hello'",
+				alice.getMessages().contains("Hello"));
+		assertTrue("Alice has message 'Kitty'",
+				alice.getMessages().contains("Kitty"));
+	}
+
+	@Test
+	public void removeAndAddUpdateMessageTest() {
+		saveDemoMessages();
+		commitAndRestartTransaction();
+		alice = session.startFor("Alice");
+		alice.getMessages().remove("Hello");
+		alice.getMessages().add("Update");
+		commitAndRestartTransaction();
+		alice = session.startFor("Alice");
+		assertTrue("Alice has Updated message",
+				alice.getMessages().contains("Update"));
+		assertFalse("Alice does not have old message", alice.getMessages()
+				.contains("Hello"));
+	}
+
+	@Test
+	public void saveDemoMessages() {
+		commitAndRestartTransaction();
+		alice = session.startFor("Alice");
+		List<String> messages = new ArrayList<String>();
+		messages.add("Hello");
+		messages.add("Kitty");
+		alice.setMessages(messages);
+		alice.save();
+		assertTrue(true);
+		commitAndRestartTransaction();
+	}
+
+	@Test
+	public void saveTimePeriodTest() {
+		List<LgTimePeriod> timePeriods = new ArrayList<LgTimePeriod>();
+		final LgTimePeriod timePeriod20 = new LgTimePeriod().setStartTime(
+				new Date()).setDurationMins(20);
+		final LgTimePeriod timePeriod40 = new LgTimePeriod().setStartTime(
+				new Date()).setDurationMins(40);
+		final LgTimePeriod timePeriod60 = new LgTimePeriod().setStartTime(
+				new Date()).setDurationMins(60);
+		timePeriods.add(timePeriod20);
+		timePeriods.add(timePeriod40);
+		timePeriods.add(timePeriod60);
+		alice.setGeneralAvailability(timePeriods);
+		alice.save();
+		commitAndRestartTransaction();
+		alice = session.startFor("Alice");
+		for (LgTimePeriod tp : alice.getGeneralAvailability()) {
+			System.out.println("DUR >> ; " + tp.getDurationMins());
+			assertTrue(
+					"Alices persisted timePeriods have a duraction of 20, 40 or 60",
+					tp.getDurationMins() == 20 || tp.getDurationMins() == 40
+							|| tp.getDurationMins() == 60);
+		}
+	}
+
+	@After
+	public void tearDown() {
+		// alice.deleteThisAccount();
+		// endTransaction();
+	}
+
+	private void beginTransaction() {
+		session = new LgSession();
+		session.getApplication().beginTransaction();
+	}
+
+	private void endTransaction() {
+		session.getApplication().endTransaction(true);
+	}
+
+	private void commitAndRestartTransaction() {
+		endTransaction();
+		beginTransaction();
+	}
 }

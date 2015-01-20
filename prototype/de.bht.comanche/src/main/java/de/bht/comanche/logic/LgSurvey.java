@@ -76,8 +76,8 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-    @ElementCollection 
-    @Column(name="possible_timeperiods") 
+    @ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
+    @Column(name="possibleTimePeriods")
 	private List<LgTimePeriod> possibleTimePeriods;
 	
 	/**
@@ -109,7 +109,7 @@ public class LgSurvey extends DaObject {
 	 * Constructor 
 	 */
 	public LgSurvey() {
-		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
+//		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
 		this.invites = new ArrayList<LgInvite>();
 	}
 	
@@ -242,7 +242,7 @@ public class LgSurvey extends DaObject {
 			return false;
 		LgSurvey other = (LgSurvey) obj;
 		// This is the trick!
-		if (this.oid != 0L && other.oid != 0L && this.oid != other.oid)
+		if (this.oid != other.oid)
 			return false;
 		if (algoChecked != other.algoChecked)
 			return false;
