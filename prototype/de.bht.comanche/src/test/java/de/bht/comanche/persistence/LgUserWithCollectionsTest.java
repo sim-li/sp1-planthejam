@@ -1,5 +1,6 @@
-package de.bht.comanche.logic;
+package de.bht.comanche.persistence;
 
+import static multex.MultexUtil.create;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -18,7 +19,12 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import de.bht.comanche.logic.LgSession;
+import de.bht.comanche.logic.LgTimePeriod;
+import de.bht.comanche.logic.LgTransaction;
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaEmProvider;
+import de.bht.comanche.rest.ReUserService.RestUserUpdateFailure;
 
 /**
  * @author Maxim Novichkov;
@@ -31,7 +37,9 @@ public class LgUserWithCollectionsTest {
 	private LgUser alice;
 	private LgSession session;
 	private LgTimePeriod timePeriod;
-
+	private List<LgTimePeriod> variousTimePeriods = new ArrayList<LgTimePeriod>();
+	private List<LgTimePeriod> persistedGeneralAvailabilty;
+	
 	@BeforeClass
 	public static void resetDatabase() {
 		Map<String, String> properties = new HashMap<String, String>(1);
@@ -40,23 +48,26 @@ public class LgUserWithCollectionsTest {
 				DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
 	}
 
+	/**
+	 * Registers and logs in user Alice
+	 */
 	@Before
 	public void buildUp() {
-		beginTransaction();
-		intializeUsers();
-		registerUsers(session);
-		alice = session.startFor("Alice");
-		timePeriod = new LgTimePeriod().setDurationMins(10).setStartTime(
-				new Date(8099));
+		buildTestData();
+	    alice = (new TestTransaction<LgUser>("Alice") {
+				@Override
+				public LgUser execute() throws Exception {
+					getSession().register(alice);
+					return startSession();
+				}
+			}).getResult();
 	}
 
-	private void registerUsers(final LgSession sessionForRegistration) {
-		sessionForRegistration.register(alice);
-	}
-
-	private void intializeUsers() {
+	private void buildTestData() {
 		alice = new LgUser().setName("Alice").setEmail("test@test.de")
 				.setPassword("testtest");
+		this.timePeriod = new LgTimePeriod().setDurationMins(10).setStartTime(
+				new Date(8099));
 	}
 
 
@@ -101,26 +112,50 @@ public class LgUserWithCollectionsTest {
 
 	@Test
 	public void saveTimePeriodTest() {
-		List<LgTimePeriod> timePeriods = new ArrayList<LgTimePeriod>();
-		final LgTimePeriod timePeriod20 = new LgTimePeriod().setStartTime(
-				new Date()).setDurationMins(20);
-		final LgTimePeriod timePeriod40 = new LgTimePeriod().setStartTime(
-				new Date()).setDurationMins(40);
-		final LgTimePeriod timePeriod60 = new LgTimePeriod().setStartTime(
-				new Date()).setDurationMins(60);
-		timePeriods.add(timePeriod20);
-		timePeriods.add(timePeriod40);
-		timePeriods.add(timePeriod60);
-		alice.setGeneralAvailability(timePeriods);
-		alice.save();
-		commitAndRestartTransaction();
-		alice = session.startFor("Alice");
-		for (LgTimePeriod tp : alice.getGeneralAvailability()) {
-			System.out.println("DUR >> ; " + tp.getDurationMins());
+		buildVariousTimePeriods(20, 40, 60);
+		persistGeneralAvailability();
+		retrieveGeneralAvailability();
+		for (LgTimePeriod t : persistedGeneralAvailabilty) {
 			assertTrue(
 					"Alices persisted timePeriods have a duraction of 20, 40 or 60",
-					tp.getDurationMins() == 20 || tp.getDurationMins() == 40
-							|| tp.getDurationMins() == 60);
+					t.getDurationMins() == 20 || t.getDurationMins() == 40
+							|| t.getDurationMins() == 60);
+		}
+	}
+
+	private void retrieveGeneralAvailability() {
+		persistedGeneralAvailabilty  = (new TestTransaction<List<LgTimePeriod>> ("Alice") {
+			@Override
+			/**
+			 * Persist demo time periods to Alice's account
+			 */
+			public List<LgTimePeriod> execute() throws Exception {
+				final LgUser alice = startSession();
+				return alice.getGeneralAvailability();
+			}
+		}).getResult();
+	}
+
+	private void persistGeneralAvailability() {
+		alice.setGeneralAvailability(variousTimePeriods);
+		alice = (new TestTransaction<LgUser> ("Alice") {
+				@Override
+				/**
+				 * Persist demo time periods to Alice's account
+				 */
+				public LgUser execute() throws Exception {
+					final LgUser alice = startSession();
+					alice.save();
+					return alice;
+				}
+			}).getResult();
+	}
+
+	private void buildVariousTimePeriods(int ... durations) {
+		for (int i = 0; i < durations.length; i++) {
+			variousTimePeriods.add(new LgTimePeriod().setStartTime(
+				new Date()).setDurationMins(durations[i])
+			);
 		}
 	}
 

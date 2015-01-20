@@ -72,7 +72,7 @@ public class LgUser extends DaObject {
 
 	@ElementCollection(targetClass = LgTimePeriod.class)
 	@Column(name = "general_availability")
-	private Collection<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
+	private List<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
 
 	@ElementCollection(targetClass = String.class)
 	@Column(name = "messages")
@@ -205,7 +205,7 @@ public class LgUser extends DaObject {
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-	public Collection<LgTimePeriod> getGeneralAvailability() {
+	public List<LgTimePeriod> getGeneralAvailability() {
 		return this.generalAvailability;
 	}
 
@@ -215,7 +215,7 @@ public class LgUser extends DaObject {
 	 * @return The list with LgTimePeriods.
 	 */
 	public void setGeneralAvailability(
-			Collection<LgTimePeriod> generalAvailability) {
+			List<LgTimePeriod> generalAvailability) {
 		this.generalAvailability = generalAvailability;
 	}
 
@@ -285,7 +285,6 @@ public class LgUser extends DaObject {
 	}
 
 	public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
-		
 		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
 		listFromDB.add(findOneByKey(LgSurvey.class, "OID", this.getOid()));
 		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
