@@ -103,14 +103,14 @@ public class LgUser extends DaObject {
         return null;
         //@TODO Throw Multex Exception
     }
-    
+
     /**
      * Complete deleting of a user accout.
      */
     public void deleteThisAccount() {
         delete();
     }
-    
+
     public void deleteOtherUserAccount(final LgUser user) {
     	this.findOneByKey(LgUser.class, "oid", user.getOid()).delete();
     }
@@ -237,7 +237,7 @@ public class LgUser extends DaObject {
     	}
     	return filteredInvites;
     }
-    
+
 	public LgSurvey saveSurvey(final LgSurvey survey) {
 		List<LgInvite> dirtyInvites = survey.getInvites();
 		addHostInvite(dirtyInvites);
@@ -246,7 +246,7 @@ public class LgUser extends DaObject {
 		persistInvitesAndAddToSurvey(persistedSurvey, dirtyInvites);
 		return persistedSurvey;
 	}
-	
+
 	 public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
 		final LgSurvey surveyOnDb = this.findOneByKey(LgSurvey.class, "oid", surveyFromClient.getOid()); // May throw EXC
 		final List<LgInvite> invitesFromDb = surveyOnDb.getInvites();
@@ -257,7 +257,7 @@ public class LgUser extends DaObject {
 				if (inv.getUser().getOid() == persistedInvite.getUser().getOid()) {
 					surveyFromClient.getInvites().remove(inv);
 					surveyFromClient.addInvite(persistedInvite);
-				} 
+				}
 			}
 		}
 		for (LgInvite inv : invitesFromDb) {
@@ -270,7 +270,7 @@ public class LgUser extends DaObject {
 		persistInvitesAndAddToSurvey(persistedSurvey, unpersistedInvites);
 		return persistedSurvey;
 	 }
-	    
+
 	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
 			List<LgInvite> dirtyInvites) {
 		for (int i = 0; i < dirtyInvites.size(); i++) {
@@ -291,7 +291,7 @@ public class LgUser extends DaObject {
     public void deleteSurvey(final long oid) {
     	this.getSurvey(oid).delete();
     }
-    
+
     //-- PARTICIPANT ROLES --
     @JsonIgnore
     public List<LgInvite> getInvitesAsParticipant() {
@@ -307,25 +307,32 @@ public class LgUser extends DaObject {
     public LgInvite saveInvite(final LgInvite invite){
         return saveUnattached(invite);
     }
-    
+
     public LgInvite updateInvite(final long oid, LgInvite invite) {
     	 //REDUNDANT
     	 return saveInvite(invite);
     }
-   
+
     //------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
 
     public void evaluateAllSurveys() {
     	final List<LgSurvey> surveysOfThisUser = getSurveys();
+        System.out.println("+#+#+#+#+#+#+#+#+#+#");
+        System.out.println("evaluating all survey (" + surveysOfThisUser.size() + ")");
     	for (final LgSurvey survey : surveysOfThisUser) {
+            System.out.println("survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
     		if (survey.isReadyForEvaluation()) {
+                System.out.println("READY survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
     			survey.determine();
-    			sendMessageToHost(survey);
+    			// sendMessageToHost(survey);
     		}
     	}
     }
 
     private void sendMessageToHost(final LgSurvey survey) {
+        System.out.println(survey);
+        System.out.println(survey.getDeterminedTimePeriod());
+        System.out.println(survey.getDeterminedTimePeriod().getStartTime());
     	final Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
     	final String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
     	// IMPORTANT TODO implementation missing of LgUser.messages
@@ -337,7 +344,7 @@ public class LgUser extends DaObject {
     public LgInvite getInvite(final long oid) {
         return search(this.invites, oid);
     }
-  
+
     @JsonIgnore
     public List<LgGroup> getGroups() {
         return this.groups;
@@ -373,7 +380,7 @@ public class LgUser extends DaObject {
     public String getPassword() {
         return this.password;
     }
-    
+
     public LgUser setPassword(final String password) {
         this.password = password;
         return this;

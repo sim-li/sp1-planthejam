@@ -23,43 +23,43 @@ import de.bht.comanche.persistence.DaObject;
 /**
  * Table contains Survey data
  * A survey connects the invite to the time period.
- * 
+ *
  * @author Duc Tung Tong
  */
 @Entity
 @Table(name = "survey")
 public class LgSurvey extends DaObject {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Survey's name
 	 */
 	private String name;
-	
+
 	/**
 	 * Survey's description
 	 */
 	private String description;
-	
+
 	/**
 	 * The survey type, which can either be ONE_TIME or RECURRING.
 	 */
 	@Column
 	@Enumerated(EnumType.STRING)
 	private LgSurveyType type;
-	
+
 	/**
 	 * The intended duration of the survey in minutes.
 	 */
 	private int durationMins;
-	
+
 	/**
 	 * The deadline of the survey.
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deadline;
-	
+
 	/**
 	 * The distance of the frequency of the survey, e.g. the number of time units in between two runs of the survey.
 	 */
@@ -71,26 +71,26 @@ public class LgSurvey extends DaObject {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private LgTimeUnit frequencyUnit;
-	
+
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
 	@OneToMany(mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private List<LgTimePeriod> possibleTimePeriods;
-	
+
 	/**
 	 * The time period that will be determined after the deadline is reached.
 	 * At this point the date determination algorithm will check for such a time period, which then has to be confirmed by the host of the survey.
 	 */
 	private LgTimePeriod determinedTimePeriod; // TODO check if it works ok with the database
-	
+
 	/**
 	 * A tribool flag indicating whether the host has marked the survey as successful or not or if it is still undecided.
 	 */
 	@Column
 	@Enumerated(EnumType.STRING)
 	private LgStatus success;
-	
+
 	/**
 	 * A flag indicating whether the survey was already checked by the date determination algorithm.
 	 */
@@ -102,22 +102,22 @@ public class LgSurvey extends DaObject {
 	 */
 	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // SEB: changed to fetch eager to get ReInviteService.getSurveyInvites working
 	private List<LgInvite> invites;
-	
+
 	/**
-	 * Constructor 
+	 * Constructor
 	 */
 	public LgSurvey() {
 		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
 		this.invites = new ArrayList<LgInvite>();
 	}
-	
+
 	public LgInvite getInviteByParticipantName(final String name) {
 		for (LgInvite invite: this.invites) {
 			if (invite.getUser().getName() == name) {
 				return invite;
 			}
 		}
-		return null; 
+		return null;
 		//@TODO Throw multex exception
 	}
 	/**
@@ -139,17 +139,17 @@ public class LgSurvey extends DaObject {
 		// Check this, implement Equals method for other classes
 		updateList(this.invites, other.invites);
 	}
-	
+
 	/**
 	 * Elements not present in the freshList are removed from the one persisted on server.
 	 * All elements that already exist on server are removed from freshList,
 	 * to save the rest one by one and add to pers. list.
-	 * 
+	 *
 	 * @param persistedList
 	 * @param freshList
 	 */
 	public <E extends DaObject> void updateList(List<E> persistedList, List<E> freshList) {
-		
+
 		persistedList.retainAll(freshList); // PL & its objs must be tracked for this method to work
 										    // (cascade must be activated?)
 		freshList.removeAll(persistedList); // ELs already saved
@@ -158,18 +158,21 @@ public class LgSurvey extends DaObject {
 		}
 		persistedList.addAll(freshList); // Requires PL tracking too
 	}
-	
+
 	//-- METHODS FOR SURVEY EVALUATION ----------------------------------------
-	
+
 	private Date now() {
 		return new Date();
 	}
-	
+
 	@JsonIgnore
 	public boolean isReadyForEvaluation() {
-		return this.deadline.compareTo(now()) > 0 && this.algoChecked && this.success == LgStatus.UNDECIDED;
+		return this.deadline != null &&
+                this.deadline.before(now()) &&
+                !this.algoChecked &&
+                this.success == LgStatus.UNDECIDED;
 	}
-	
+
 	/**
 	 * A very simple algorithm that just filters out the intersection of the
 	 * possibleTimePeriods of the survey and all availableTimePeriods of the
@@ -177,8 +180,11 @@ public class LgSurvey extends DaObject {
 	 * the filtered list or null if the list was empty.
 	 */
 	public void determine() {
-		final List<LgTimePeriod> filtered = new ArrayList<LgTimePeriod>();
-		
+        System.out.println("+#-+#-+#-+#-+#-+#-+#-+#-+#-+#-");
+        System.out.println("determination started for survey " + this.oid + " " + this.name);
+        System.out.println("+#-+#-+#-+#-+#-+#-+#-+#-+#-+#-");
+
+		final List<LgTimePeriod> filtered = new ArrayList<LgTimePeriod>(this.possibleTimePeriods);
 		for (final LgInvite invite : this.invites) {
 			/* TODO
 			 * - LgTimePeriod needs hashCode and equals
@@ -188,15 +194,21 @@ public class LgSurvey extends DaObject {
 //			filtered.retainAll(invite.getAvailableTimePeriods());
 			// <--
 		}
-		
+
 		if (filtered.size() > 0) {
 			this.determinedTimePeriod = filtered.get(0);
-		}
+		} else {
+
+            /****** HACK ******/
+            this.determinedTimePeriod = new LgTimePeriod().setStartTime(new Date()).setDurationMins(12345);
+            // this.determinedTimePeriod = null	;
+            /****** HACK ******/
+        }
 		this.algoChecked = true;
 	}
-	
+
 	//-------------------------------------------------------------------------
-	
+
 	/*
 	 * --------------------------------------------------------------------------------------------
 	 * # get(), set() methods for data access
@@ -304,29 +316,29 @@ public class LgSurvey extends DaObject {
 		this.description = description;
 		return this;
 	}
-	
+
 	public LgSurveyType getType() {
 		return this.type;
 	}
-	
+
 	public LgSurvey setType(final LgSurveyType type) {
 		this.type = type;
 		return this;
 	}
-	
+
 	public int getDurationMins() {
 		return this.durationMins;
 	}
-	
+
 	public LgSurvey setDurationMins(final int durationMins) {
 		this.durationMins = durationMins;
 		return this;
 	}
-	
+
 	public Date getDeadline() {
 		return this.deadline;
 	}
-	
+
 	public LgSurvey setDeadline(final Date deadline) {
 		this.deadline = deadline;
 		return this;
@@ -349,38 +361,38 @@ public class LgSurvey extends DaObject {
 		this.frequencyUnit = frequencyUnit;
 		return this;
 	}
-	
+
 	public List<LgTimePeriod> getPossibleTimePeriods(){
 		return this.possibleTimePeriods;
 	}
-	
+
 	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> period){
 		this.possibleTimePeriods = period;
 		return this;
 	}
-	
+
 	public LgTimePeriod getDeterminedTimePeriod() {
 		return this.determinedTimePeriod;
 	}
-	
+
 	public LgSurvey setDeterminedTimePeriod(final LgTimePeriod determinedTimePeriod) {
 		this.determinedTimePeriod = determinedTimePeriod;
 		return this;
 	}
-	
+
 	public LgStatus getSuccess() {
 		return this.success;
 	}
-	
+
 	public LgSurvey setSuccess(final LgStatus success) {
 		this.success = success;
 		return this;
 	}
-	
+
 	public boolean isAlgoChecked() {
 		return this.algoChecked;
 	}
-	
+
 	public LgSurvey setAlgoChecked(final boolean algoChecked) {
 		this.algoChecked = algoChecked;
 		return this;

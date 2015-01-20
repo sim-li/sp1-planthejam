@@ -86,8 +86,20 @@ angular.module('models')
                 return arrayUtil.findByAttribute(this.invites, 'host', false) ? true : false;
             };
 
+            Survey.prototype.isNotReady = function() {
+                return !this.algoChecked;
+            };
+
             Survey.prototype.isReady = function() {
-                return this.algoChecked && this.success == 'UNDECIDED';
+                return this.algoChecked && this.success == Status.UNDECIDED;
+            };
+
+            Survey.prototype.isSuccessful = function() {
+                return this.algoChecked && this.success == Status.YES;
+            };
+
+            Survey.prototype.isUnsuccessful = function() {
+                return this.algoChecked && this.success == Status.NO;
             };
 
             // Invite.prototype.addParticipantsFromGroup = function(group) {
