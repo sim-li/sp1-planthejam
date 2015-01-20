@@ -33,7 +33,6 @@ angular.module('models')
                 this.ignored = config.ignored || Status.UNDECIDED;
                 this.user = new User(config.user);
                 this.survey = config.survey ? new Survey(config.survey) : ''; // ???
-                // this.timePeriods = config.timePeriods ? Model.importMany(TimePeriod, config.timePeriods);
                 this.timePeriods = Model.importMany(TimePeriod, config.timePeriods);
             };
 

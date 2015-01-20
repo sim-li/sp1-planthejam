@@ -194,7 +194,9 @@ angular.module('myApp')
                 // restService.doSave($scope.selectedSurvey);
             };
 
+            //### HACK ##############################
             //-- some dummies
+            // $scope.selectedInvite.survey.possibleTimePeriods = [
             $scope.possibleTimePeriods = [
                 new TimePeriod({
                     startTime: new Date('2014-11-10T11:00:00'),
@@ -207,6 +209,7 @@ angular.module('myApp')
                     durationMins: 360
                 })
             ];
+            //### HACK ##############################
             // $scope.resultingTimePeriods = [];
 
             $scope.saveAvailabilities = function() {

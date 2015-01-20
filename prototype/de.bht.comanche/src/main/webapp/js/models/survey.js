@@ -4,9 +4,9 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('Survey', ['arrayUtil', 'Status', 'SurveyType', 'TimePeriod', 'TimeUnit',
+    .factory('Survey', ['arrayUtil', 'Model', 'Status', 'SurveyType', 'TimePeriod', 'TimeUnit',
 
-        function(arrayUtil, Status, SurveyType, TimePeriod, TimeUnit) {
+        function(arrayUtil, Model, Status, SurveyType, TimePeriod, TimeUnit) {
 
             'use strict';
 
@@ -41,7 +41,7 @@ angular.module('models')
                 this.deadline = config.deadline ? new Date(config.deadline) : new Date();
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
-                this.possibleTimePeriods = config.possibleTimePeriods || [];
+                this.possibleTimePeriods = Model.importMany(TimePeriod, config.possibleTimePeriods);
                 this.determinedTimePeriod = config.determinedTimePeriod;
                 this.success = config.success || Status.UNDECIDED;
                 this.algoChecked = config.algoChecked || false;
