@@ -150,6 +150,7 @@ public class LgSurvey extends DaObject {
 	 * @param persistedList
 	 * @param freshList
 	 */
+	// TODO implement
 //	public LgSurvey updateList(LgSurvey persisted) {
 //		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
 //		listFromDB.add(persisted);
@@ -403,7 +404,6 @@ public class LgSurvey extends DaObject {
 		return this.invites;
 	}
 
-	@JsonProperty
 	public LgSurvey setInvites(final List<LgInvite> invites) {
 		this.invites = invites;
 		return this;

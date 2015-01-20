@@ -51,7 +51,7 @@ public class LgUser extends DaObject {
 	/**
 	 * URL to gravatar icon
 	 */
-	private String iconurl;
+//	private String iconurl;
 	/**
 	 * Representation of a foreign key in a LgInvite entity. Provide a list of
 	 * invites.
@@ -69,10 +69,10 @@ public class LgUser extends DaObject {
 	 */
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
-
+	
 	@ElementCollection(targetClass = LgTimePeriod.class)
 	@Column(name = "general_availability")
-	private Collection<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
+	private List<LgTimePeriod> generalAvailability;
 
 	@ElementCollection(targetClass = String.class)
 	@Column(name = "messages")
@@ -137,19 +137,19 @@ public class LgUser extends DaObject {
 		return saveUnattached(group);
 	}
 
-	/**
-	 * Generates icon url from classes internal email Gravatar will deliver a
-	 * default icon if no email given.
-	 */
-	public String getIconurl() {
-		final LgGravatarUtils utils = new LgGravatarUtils();
-		iconurl = utils.getUserUrl(email);
-		return iconurl;
-	}
-
-	public void setIconurl(String iconurl) {
-		this.iconurl = iconurl;
-	}
+//	/**
+//	 * Generates icon url from classes internal email Gravatar will deliver a
+//	 * default icon if no email given.
+//	 */
+//	public String getIconurl() {
+//		final LgGravatarUtils utils = new LgGravatarUtils();
+//		iconurl = utils.getUserUrl(email);
+//		return iconurl;
+//	}
+//
+//	public void setIconurl(String iconurl) {
+//		this.iconurl = iconurl;
+//	}
 
 	/**
 	 * Delete LgGroup by provided oid.
@@ -205,7 +205,8 @@ public class LgUser extends DaObject {
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-	public Collection<LgTimePeriod> getGeneralAvailability() {
+	
+	public List<LgTimePeriod> getGeneralAvailability() {
 		return this.generalAvailability;
 	}
 
@@ -214,9 +215,9 @@ public class LgUser extends DaObject {
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-	public void setGeneralAvailability(
-			Collection<LgTimePeriod> generalAvailability) {
+	public LgUser setGeneralAvailability(List<LgTimePeriod> generalAvailability) {
 		this.generalAvailability = generalAvailability;
+		return this;
 	}
 
 	public List<String> getMessages() {
@@ -262,7 +263,7 @@ public class LgUser extends DaObject {
 		for (LgInvite invite : this.invites) {
 			if (invite.isHost()) {
 				surveys.add(invite.getSurvey());
-			}
+			} 
 		}
 		return surveys;
 	}
@@ -270,7 +271,8 @@ public class LgUser extends DaObject {
 	public List<LgInvite> getInvitesForSurvey(final long oid) {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
 		for (LgInvite invite : this.getSurvey(oid).getInvites()) {
-			filteredInvites.add(new LgInvite(invite).setSurvey(null));
+			//if set user to null --> works 
+			filteredInvites.add(new LgInvite(invite).setSurvey(null).setUser(null));
 		}
 		return filteredInvites;
 	}

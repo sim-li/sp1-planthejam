@@ -61,13 +61,14 @@ public class LgInvite extends DaObject{
 	/**
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
 	 */
-	@ElementCollection 
-    @Column(name="timeperiods") 
+	
+	@ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
+	@Column(name="timeperiods") 
 	private List<LgTimePeriod> timePeriods;
 	
 	
 	public LgInvite() {
-		this.timePeriods = new ArrayList<LgTimePeriod>();
+//		this.timePeriods = new ArrayList<LgTimePeriod>();
 	}
 	
 	public LgInvite(LgInvite other) {
@@ -121,6 +122,7 @@ public class LgInvite extends DaObject{
 	 * Returns PossibleTimePeriod with nulled db-flags
 	 * @return
 	 */
+	@JsonIgnore
 	public LgSurvey getSurvey() {
 		return this.survey;
 	}

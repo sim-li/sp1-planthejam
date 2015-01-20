@@ -1,26 +1,59 @@
 package de.bht.comanche.rest;
-//package de.bht.comanche.rest;
-//
-//import static com.jayway.restassured.RestAssured.expect;
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertNull;
-//import org.junit.FixMethodOrder;
-//import org.junit.Test;
-//import org.junit.runners.MethodSorters;
-//import com.jayway.restassured.path.json.JsonPath;
-//import com.jayway.restassured.response.Response;
-//import de.bht.comanche.logic.LgUser;
-//
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-//public class ReUserServiceTest {
-//
-//	static long oid = 0;
-//	static String testUsername = "Muster10";
-//
-////	@Test
+
+import static com.jayway.restassured.RestAssured.expect;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import org.junit.FixMethodOrder;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import static com.jayway.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
+import com.jayway.restassured.builder.RequestSpecBuilder;
+import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.response.Response;
+import com.jayway.restassured.specification.RequestSpecification;
+
+import de.bht.comanche.logic.LgUser;
+
+@Ignore
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class ReUserServiceTest {
+
+	LgUser alice;
+	
+	@Test
+	public void test1LoginUser() {
+		alice = new LgUser()
+		.setName("Alice")
+		.setPassword("testtest");
+
+		expect().statusCode(204).given().body(alice)
+				.contentType("application/json").when()
+				.post("/rest/user/login");
+		}
+	
+	@Test
+	public void test1GetUser() {
+		RequestSpecification requestSpec = new RequestSpecBuilder().addCookie("NAME",
+                "Alice").build();
+
+		 given().
+		         spec(requestSpec).
+		 expect().
+		         body("x.y.z", equalTo("something")).
+		 when().
+		        get("/rest/user/");
+	}
+	
+	
+//	@Test
 //	public void test1registerUser() {
 //		LgUser testUser = new LgUser();
-//		testUser.setName(testUsername);
+//		testUser.setName("ALice");
 //		testUser.setEmail("muster@test.com");
 //		testUser.setPassword("password");
 //		testUser.setTel("123456789");
@@ -30,10 +63,10 @@ package de.bht.comanche.rest;
 //				.post("/rest/user/register");
 //		
 //		JsonPath jsonPath = response.getBody().jsonPath();
-//		oid = jsonPath.getLong("data.oid");
+////		oid = jsonPath.getLong("data.oid");
 //		}
 //
-////	@Test
+//	@Test
 //	public void test2loginUser() {
 //
 //		LgUser testUser = new LgUser();
@@ -51,10 +84,10 @@ package de.bht.comanche.rest;
 //		assertEquals("123456789", jsonPath.get("data.tel"));
 //	}
 //
-////	@Test
+//	@Test
 //	public void test3updateUser() {
 //
-//		LgUser testUser = new LgUser(oid);
+//		LgUser testUser = new LgUser();
 //		testUser.setName("UpdatedMuster");
 //		testUser.setPassword("updatedPassword");
 //		testUser.setEmail("updated@test.com");
@@ -72,10 +105,10 @@ package de.bht.comanche.rest;
 //
 //	}
 //
-////	@Test
+//	@Test
 //	public void test4DeletedUser() {
 //
-//		LgUser testUser = new LgUser(oid);
+//		LgUser testUser = new LgUser();
 //
 //		Response response = expect().statusCode(200).given().body(testUser)
 //				.contentType("application/json").when()
@@ -85,5 +118,5 @@ package de.bht.comanche.rest;
 //		assertNull(jsonPath.get("data"));
 //
 //	}
-//
-//}
+
+}
