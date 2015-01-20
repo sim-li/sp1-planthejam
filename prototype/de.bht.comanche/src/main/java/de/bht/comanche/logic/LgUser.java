@@ -1,20 +1,23 @@
 package de.bht.comanche.logic;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
-import de.bht.comanche.logic.LgInvite;
 
 /**
  * This entity class represents a user and serve methods for working with all
@@ -26,7 +29,7 @@ import de.bht.comanche.logic.LgInvite;
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "NAME"))
 public class LgUser extends DaObject {
- 
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Column for a user name. Must not be null.
@@ -226,6 +229,16 @@ public class LgUser extends DaObject {
 //	}
 
 	/**
+	 * Remove invite object from the list of invites.
+	 * 
+	 * @param invite
+	 *            The LgInvite to remove.
+	 */
+	public void remove(final LgInvite invite) {
+		this.invites.remove(invite);
+	}
+
+	/**
 	 * Remove grop object from the list of groups.
 	 * 
 	 * @param invite
@@ -264,7 +277,6 @@ public class LgUser extends DaObject {
 		return filteredInvites;
 	}
 
-
 	public LgSurvey saveSurvey(final LgSurvey survey) {
 		List<LgInvite> dirtyInvites = survey.getInvites();
 		addHostInvite(dirtyInvites);
@@ -273,7 +285,6 @@ public class LgUser extends DaObject {
 		persistInvitesAndAddToSurvey(persistedSurvey, dirtyInvites);
 		return persistedSurvey;
 	}
-
 
 	public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
 		
@@ -294,7 +305,6 @@ public class LgUser extends DaObject {
 		return listFromDB.get(0);
 	}
 
-
 	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
 			List<LgInvite> dirtyInvites) {
 		for (int i = 0; i < dirtyInvites.size(); i++) {
@@ -306,41 +316,13 @@ public class LgUser extends DaObject {
 
 	private void addHostInvite(List<LgInvite> dirtyInvites) {
 		final LgInvite invite = new LgInvite();
-		 invite.setHost(true)
-		 .setIgnored(LgStatus.UNDECIDED)
-		 .setUser(this);
-		 dirtyInvites.add(invite);
+		invite.setHost(true).setIgnored(LgStatus.UNDECIDED).setUser(this);
+		dirtyInvites.add(invite);
 	}
 
-    public void deleteSurvey(final long oid) {
-    	this.getSurvey(oid).delete();
-    }
-
-    //------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
-
-    public void evaluateAllSurveys() {
-    	final List<LgSurvey> surveysOfThisUser = getSurveys();
-        System.out.println("+#+#+#+#+#+#+#+#+#+#");
-        System.out.println("evaluating all survey (" + surveysOfThisUser.size() + ")");
-    	for (final LgSurvey survey : surveysOfThisUser) {
-            System.out.println("survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
-    		if (survey.isReadyForEvaluation()) {
-                System.out.println("READY survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
-    			survey.determine();
-    			// sendMessageToHost(survey);
-    		}
-    	}
-    }
-
-//    private void sendMessageToHost(final LgSurvey survey) {
-//        System.out.println(survey);
-//        System.out.println(survey.getDeterminedTimePeriod());
-//        System.out.println(survey.getDeterminedTimePeriod().getStartTime());
-//    	final Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
-//    	final String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
-//    	// IMPORTANT TODO implementation missing of LgUser.messages
-//    	// this.messages.add(message);
-//    }
+	public void deleteSurvey(final long oid) {
+		this.getSurvey(oid).delete();
+	}
 
 	// -- PARTICIPANT ROLES --
 	@JsonIgnore
@@ -363,26 +345,31 @@ public class LgUser extends DaObject {
 		return saveInvite(invite);
 	}
 
-	// ------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
+	//------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
 
-//	public void evaluateAllSurveys() {
-//		final List<LgSurvey> surveysOfThisUser = getSurveys();
-//		for (final LgSurvey survey : surveysOfThisUser) {
-//			if (survey.isReadyForEvaluation()) {
-//				survey.determine();
-//				sendMessageToHost(survey);
-//			}
-//		}
-//	}
+    public void evaluateAllSurveys() {
+    	final List<LgSurvey> surveysOfThisUser = getSurveys();
+        System.out.println("+#+#+#+#+#+#+#+#+#+#");
+        System.out.println("evaluating all survey (" + surveysOfThisUser.size() + ")");
+    	for (final LgSurvey survey : surveysOfThisUser) {
+            System.out.println("survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
+    		if (survey.isReadyForEvaluation()) {
+                System.out.println("READY survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
+    			survey.determine();
+    			// sendMessageToHost(survey);
+    		}
+    	}
+    }
 
-	private void sendMessageToHost(final LgSurvey survey) {
-		final Date determinedDate = survey.getDeterminedTimePeriod()
-				.getStartTime(); // needs formatting
-		final String message = "es konnte folgender / kein Termin ermittelt werden "
-				+ determinedDate;
-		// IMPORTANT TODO implementation missing of LgUser.messages
-		// this.messages.add(message);
-	}
+    private void sendMessageToHost(final LgSurvey survey) {
+        System.out.println(survey);
+        System.out.println(survey.getDeterminedTimePeriod());
+        System.out.println(survey.getDeterminedTimePeriod().getStartTime());
+    	final Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
+    	final String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
+    	// IMPORTANT TODO implementation missing of LgUser.messages
+    	// this.messages.add(message);
+    }
 
 	// -------------------------------------------------------------------------
 
