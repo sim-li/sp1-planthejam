@@ -70,7 +70,7 @@ public class LgUser extends DaObject {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
 
-	@ElementCollection(targetClass = LgTimePeriod.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass = LgTimePeriod.class)
 	@Column(name = "general_availability")
 	private Collection<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
 
