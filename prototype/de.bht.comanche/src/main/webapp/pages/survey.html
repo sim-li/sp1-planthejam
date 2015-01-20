@@ -60,10 +60,14 @@
               </span>
             </div>
           </div>
-          <br>
           <div class='row'>
             <div class='col-lg-11'>
               <div class='h4'>Participants:</div>
+              <span id='selectedSurveyStatus' ng-if='!selectedSurvey.hasParticipants()'>
+                <ul>
+                  <li>None</li>
+                </ul>
+              </span>
               <ul>
                 <li ng-repeat='invite in selectedSurvey.invites | filter: host == false'>
                   <strong>{{invite.user.name}}</strong>

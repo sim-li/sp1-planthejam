@@ -179,5 +179,7 @@ angular.module('myApp')
                 $log.debug('dbug it: ', $scope.selectedSurvey.deadline.toLocaleDateString())
             };
 
+            console.log($scope.selectedSurvey.hasParticipants())
+
         }
     ]);

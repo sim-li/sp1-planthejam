@@ -82,6 +82,10 @@ angular.module('models')
                 };
             };
 
+            Survey.prototype.hasParticipants = function() {
+                return arrayUtil.findByAttribute(this.invites, 'host', false) ? true : false;
+            };
+
             // Invite.prototype.addParticipantsFromGroup = function(group) {
             //     if (group.modelId !== 'group') {
             //         return;

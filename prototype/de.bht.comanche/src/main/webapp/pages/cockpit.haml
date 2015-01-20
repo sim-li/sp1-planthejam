@@ -67,7 +67,7 @@
             #messagesTab.tab-pane
               %input#messagesFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchMessages", :placeholder => "Filter messages ...", :type => "search"}
               #messageList.list-group
-                %a.list-group-item{:href => "", "ng-repeat" => "message in messages | filter: searchIgnored"}
+                %a.list-group-item{:href => "", "ng-repeat" => "message in messages | filter: searchMessages"}
                   .row
                     .col-sm-9 {{ message }}
 

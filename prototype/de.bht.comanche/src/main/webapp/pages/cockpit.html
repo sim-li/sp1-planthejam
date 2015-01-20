@@ -90,7 +90,7 @@
             <div class='tab-pane' id='messagesTab'>
               <input class='form-control' id='messagesFilter' ng-change='updateSelection()' ng-model='searchMessages' placeholder='Filter messages ...' type='search'>
               <div class='list-group' id='messageList'>
-                <a class='list-group-item' href='' ng-repeat='message in messages | filter: searchIgnored'>
+                <a class='list-group-item' href='' ng-repeat='message in messages | filter: searchMessages'>
                   <div class='row'>
                     <div class='col-sm-9'>{{ message }}</div>
                   </div>

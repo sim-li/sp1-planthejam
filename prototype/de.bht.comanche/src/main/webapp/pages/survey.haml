@@ -43,10 +43,12 @@
                 %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
                   %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedSurvey.deadline", "data-date-format"=>"dd-mm-yyyy", "date-type" => "string", "bs-datepicker" => "", "ng-required" => "true"}
 
-          %br
           .row
             .col-lg-11
               .h4 Participants:
+              %span#selectedSurveyStatus{"ng-if" => "!selectedSurvey.hasParticipants()"}
+                %ul
+                  %li{} None
               %ul
                 %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: host == false"}
                   %strong{} {{invite.user.name}}
