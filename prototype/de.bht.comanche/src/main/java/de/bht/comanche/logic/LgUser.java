@@ -295,8 +295,10 @@ public class LgUser extends DaObject {
 		listfresh.removeAll(listFromDB); // ELs already saved
 		
 		for (LgSurvey el : listfresh) {
+		System.out.println(el);
 		saveUnattached(el); // Fresh list are never tracked
 		}
+		
 		listFromDB.addAll(listfresh); // Requires PL tracking too
 		return listFromDB.get(0);
 	}
