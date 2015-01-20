@@ -49,9 +49,11 @@
 
           %br
           .row
-            Participants:
+            .h4 Participants:
             %ul
-              %li{"ng-repeat" => "invite in selectedSurvey.invites"} {{invite.user.name}}
+              %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: host == false"}
+                %strong{} {{invite.user.name}}
+                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
 
             %ptj-calendar{"possible" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
 

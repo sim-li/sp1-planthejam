@@ -53,11 +53,11 @@
                           <h4 class='modal-title'>Please choose your Avaibilities</h4>
                         </div>
                         <div class='modal-body'>
-                          <ptj-calendar possible='possibleTimePeriods' resulting='resultingTimePeriods'></ptj-calendar>
+                          <ptj-calendar possible='possibleTimePeriods' resulting='selectedInvite.timePeriods'></ptj-calendar>
                         </div>
                         <div class='modal-footer'>
-                          <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
-                          <button class='btn btn-primary' ng-click='saveAvailabilities()' type='button'>Save changes</button>
+                          <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
+                          <button class='btn btn-primary' data-dismiss='modal' ng-click='saveAvailabilities()' type='button'>Save changes</button>
                         </div>
                       </div>
                     </div>

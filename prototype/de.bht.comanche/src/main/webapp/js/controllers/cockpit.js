@@ -21,8 +21,9 @@ angular.module('myApp')
             $scope.surveys = Model.importMany(Survey, surveysPromise);
             $scope.messages = messagesPromise;
 
-            $log.log('messages: ', $scope.messages)
+            $log.log('invites: ', $scope.invites)
             $log.log('surveys: ', $scope.surveys)
+            $log.log('messages: ', $scope.messages)
                 // $scope.surveys = Survey.getDummies(3);
 
             // preselects the first survey and invite in the list
@@ -30,7 +31,7 @@ angular.module('myApp')
             $scope.selectedSurvey = $scope.surveys[0];
 
 
-            // -------- HACK: Dummies ------->
+            // -------- HACK: Dummies ------------------------------------------------------>
             $scope.selectedInvite.survey.algoChecked = true;
             // $scope.selectedInvite.survey.success = Status.YES;
             $scope.selectedInvite.survey.success = Status.NO;
@@ -44,7 +45,7 @@ angular.module('myApp')
             $log.log('suc: ', $scope.selectedInvite.survey.success)
             $log.log('alg: ', $scope.selectedInvite.survey.algoChecked)
             $log.log('dtp: ', $scope.selectedInvite.survey.determinedTimePeriod)
-                // <------- HACK --------
+                // <------- HACK --------------------------------------------------------------
 
             $scope.showSurveyDetails = true;
 
@@ -124,6 +125,7 @@ angular.module('myApp')
                 // TODO change color of button when it was pressed
                 // TODO rename to ==>  $scope.setSelectedInviteStatus = function(status) {
                 $scope.selectedInvite.setIgnored(status);
+                $log.debug('debug cockpit ', $scope.selectedInvite)
                 restService.doSave($scope.selectedInvite);
             };
             // $scope.radioModel = $scope.selectedInvite.ignored ? 'ignore' : 'accept';
@@ -173,23 +175,20 @@ angular.module('myApp')
                     durationMins: 360
                 })
             ];
-            $scope.resultingTimePeriods = [];
+            // $scope.resultingTimePeriods = [];
 
             $scope.saveAvailabilities = function() {
-                $log.log($scope.resultingTimePeriods);
-                // $scope.selectedInvite.possibleTimePeriods = ...
+                // $log.log($scope.resultingTimePeriods);
+                $log.log($scope.selectedInvite);
+                restService.doSave($scope.selectedInvite);
             };
-
-
 
             $scope.toggleSurveyDetails = function() {
                 $scope.showSurveyDetails = true;
-                return false;
             };
 
             $scope.toggleInviteDetails = function() {
                 $scope.showSurveyDetails = false;
-                return false;
             };
         }
     ]);

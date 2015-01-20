@@ -68,9 +68,12 @@
           </div>
           <br>
           <div class='row'>
-            Participants:
+            <div class='h4'>Participants:</div>
             <ul>
-              <li ng-repeat='invite in selectedSurvey.invites'>{{invite.user.name}}</li>
+              <li ng-repeat='invite in selectedSurvey.invites | filter: host == false'>
+                <strong>{{invite.user.name}}</strong>
+                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
+              </li>
             </ul>
             <ptj-calendar possible='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
           </div>

@@ -4,9 +4,9 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('Survey', ['arrayUtil', 'Status', 'SurveyType', 'TimeUnit',
+    .factory('Survey', ['arrayUtil', 'Status', 'SurveyType', 'TimePeriod', 'TimeUnit',
 
-        function(arrayUtil, Status, SurveyType, TimeUnit) {
+        function(arrayUtil, Status, SurveyType, TimePeriod, TimeUnit) {
 
             'use strict';
 
@@ -75,7 +75,7 @@ angular.module('models')
                     'invites': this.invites
                         // 'frequencyDist': this.frequencyDist,                         // FIXME temporarily commented out
                         // 'frequencyUnit': this.frequencyUnit,                         // FIXME temporarily commented out
-                        // 'possibleTimePeriods': this.possibleTimePeriods,             // FIXME temporarily commented out
+                        // 'possibleTimePeriods': TimePeriod.exportMany(this.possibleTimePeriods), // FIXME temporarily commented out
                         // 'determinedTimePeriod': this.determinedTimePeriod,           // FIXME temporarily commented out
                         // 'success': this.success,                                     // FIXME temporarily commented out
                         // 'algoChecked': this.algoChecked                              // FIXME temporarily commented out
