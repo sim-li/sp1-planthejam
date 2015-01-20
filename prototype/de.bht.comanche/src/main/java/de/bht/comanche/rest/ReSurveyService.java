@@ -98,7 +98,7 @@ public class ReSurveyService {
 					result = startSession().saveSurvey(survey);
 //					System.out.println("DEBUGME: Saving survey with no of invites "+  survey.getInvites().size());
 //					System.out.println("DEBUGME: Members:   "+ survey.getInvites());
-					System.out.println("Saved survey");
+//					System.out.println("Saved survey");
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
