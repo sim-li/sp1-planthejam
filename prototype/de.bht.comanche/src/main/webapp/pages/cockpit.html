@@ -46,6 +46,12 @@
                         <span class='glyphicon glyphicon-remove'></span>
                       </label>
                     </div>
+                    <div class='btn-groups' ng-if='survey.isSuccessful()'>
+                      <span class='glyphicon glyphicon-thumbs-up'></span>
+                    </div>
+                    <div class='btn-groups' ng-if='survey.isUnsuccessful()'>
+                      <span class='glyphicon glyphicon-remove-down'></span>
+                    </div>
                   </div>
                 </a>
               </div>
@@ -127,9 +133,9 @@
             <span id='deadline'>{{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}</span>
             <div id='selectedSurveyTimePeriod' ng-if='selectedSurvey.algoChecked'>
               <label for='determinedTimePeriod'>Determined Time Period:</label>
-              <span id='determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod ? selectedSurvey.determinedTimePeriod : "None" }}</span>
+              <span id='determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod ? (selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm') : "None" }}</span>
             </div>
-            <div class='h4'>Participants:</div>
+            <h4>Participants:</h4>
             <span id='selectedSurveyParticipants' ng-if='!selectedSurvey.hasParticipants()'>
               <ul>
                 <li>None</li>

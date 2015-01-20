@@ -37,6 +37,10 @@
                         %span.glyphicon.glyphicon-ok
                       %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "reject()","onclick" => "return false;"}
                         %span.glyphicon.glyphicon-remove
+                    .btn-groups{"ng-if" => "survey.isSuccessful()"}
+                      %span.glyphicon.glyphicon-thumbs-up
+                    .btn-groups{"ng-if" => "survey.isUnsuccessful()"}
+                      %span.glyphicon.glyphicon-remove-down
 
             #inviteTab.tab-pane
               %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
@@ -91,9 +95,9 @@
             %label{:for => "deadline"} Deadline:
             %span#deadline{} {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}
             %div#selectedSurveyTimePeriod{"ng-if" => "selectedSurvey.algoChecked"}
-              %label{:for => "determinedTimePeriod"}  Determined Time Period:
-              %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod ? selectedSurvey.determinedTimePeriod : "None" }}
-            .h4 Participants:
+              %label{:for => "determinedTimePeriod"} Determined Time Period:
+              %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod ? (selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm') : "None" }}
+            %h4 Participants:
             %span#selectedSurveyParticipants{"ng-if" => "!selectedSurvey.hasParticipants()"}
               %ul
                 %li{} None

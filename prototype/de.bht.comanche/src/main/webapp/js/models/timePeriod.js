@@ -26,7 +26,7 @@ angular.module('models')
 			}
 			config = config || {};
 			this.oid = config.oid || '';
-			this.startTime = config.startTime || new Date();
+			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
 			this.durationMins = config.durationMins || 0;
 		};
 
