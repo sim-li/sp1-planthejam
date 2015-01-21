@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 @Embeddable public class LgTimePeriod {
 
 	private static final long serialVersionUID = 1L;
+	
 	private final String DATE_PATTERN = "yyyy.MM.dd G HH:mm:ss z";
 	private final DateFormat df = new SimpleDateFormat(DATE_PATTERN);
 	
@@ -68,7 +69,9 @@ import javax.persistence.TemporalType;
 	 * --------------------------------------------------------------------------------------------
 	 */
 	
-	public LgTimePeriod (){}
+	public LgTimePeriod (){
+		
+	}
 	
 	@Override
 	public int hashCode() {

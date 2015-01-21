@@ -110,6 +110,10 @@ public class LgUser extends DaObject {
 	 * Complete deleting of a user accout.
 	 */
 	public void deleteThisAccount() {
+//		for (LgInvite invite : invites) {
+//			attachPoolFor(invite);
+//			invite.delete();
+//		}
 		delete();
 	}
 

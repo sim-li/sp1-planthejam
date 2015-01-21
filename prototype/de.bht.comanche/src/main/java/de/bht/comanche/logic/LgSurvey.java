@@ -2,6 +2,7 @@ package de.bht.comanche.logic;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -109,7 +110,8 @@ public class LgSurvey extends DaObject {
 	 * Constructor
 	 */
 	public LgSurvey() {
-//		this.possibleTimePeriods = new ArrayList<LgTimePeriod>();
+//		this.possibleTimePeriods = new HashSet<LgTimePeriod>();
+		this.determinedTimePeriod = new LgTimePeriod();
 		this.invites = new ArrayList<LgInvite>();
 	}
 

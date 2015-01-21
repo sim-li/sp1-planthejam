@@ -148,7 +148,7 @@ public class LgSurveyTest {
          this.oidOfSavedSurvey = new TestTransaction<Long> ("Alice") {
                 @Override
                 public Long execute() {
-                    return startSession().saveSurvey(freshSurvey).getOid();
+                    return Long.valueOf(startSession().saveSurvey(freshSurvey).getOid());
                 }
             }.getResult();
     }
