@@ -49,9 +49,9 @@
                   .row
                     .col-sm-8 {{invite.survey.name}} {{invite.ignored}}
                     .btn-group
-                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;"}
+                      %label.btn.btn-sm{"btn-radio" => "'undecided'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;", "ng-class" => "{'btn-danger': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}"}
                         %span.glyphicon.glyphicon-question-sign
-                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')"}
+                      %label.btn.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')", "ng-class" => "{'btn-danger': invite.ignored == 'NO', 'btn-primary': invite.ignored != 'NO'}"}
                         %span.glyphicon.glyphicon-ok
                       #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"}
                         .modal-dialog.modal-lg
@@ -65,7 +65,7 @@
                             .modal-footer
                               %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
                               %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button", "ng-click" => "saveAvailabilities()"} Save changes
-                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('YES')", "onclick" => "return false;"}
+                      %label.btn.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('YES')", "onclick" => "return false;", "ng-class" => "{'btn-danger': invite.ignored == 'YES', 'btn-primary': invite.ignored != 'YES'}"}
                         %span.glyphicon.glyphicon-remove
 
             #ignoredInviteTab.tab-pane

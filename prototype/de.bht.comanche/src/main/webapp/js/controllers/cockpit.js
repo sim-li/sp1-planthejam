@@ -32,28 +32,28 @@ angular.module('myApp')
 
 
             // -------- HACK: Dummies ------------------------------------------------------>
-    // if ($scope.selectedInvite && $scope.selectedInvite.survey) {
-    //     $scope.selectedInvite.survey.algoChecked = true;
-    //     $scope.selectedInvite.survey.success = Status.YES;
-    //     // $scope.selectedInvite.survey.success = Status.NO;
-    //     // $scope.selectedInvite.survey.success = Status.UNDECIDED;
-    //     $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
-    //         startTime: new Date(),
-    //         durationMins: 90
-    //     });
-    //     $log.debug('hacked invite.survey: ', $scope.selectedInvite.survey)
-    // }
-    // if ($scope.selectedSurvey) {
-    //     $scope.selectedSurvey.algoChecked = true;
-    //     $scope.selectedSurvey.success = Status.YES;
-    //     // $scope.selectedSurvey.success = Status.NO;
-    //     // $scope.selectedSurvey.success = Status.UNDECIDED;
-    //     $scope.selectedSurvey.determinedTimePeriod = new TimePeriod({
-    //         startTime: new Date(),
-    //         durationMins: 90
-    //     });
-    //     $log.debug('hacked survey: ', $scope.selectedSurvey)
-    // }
+            if ($scope.selectedInvite && $scope.selectedInvite.survey) {
+                $scope.selectedInvite.survey.algoChecked = true;
+                $scope.selectedInvite.survey.success = Status.YES;
+                // $scope.selectedInvite.survey.success = Status.NO;
+                // $scope.selectedInvite.survey.success = Status.UNDECIDED;
+                $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
+                    startTime: new Date(),
+                    durationMins: 90
+                });
+                $log.debug('hacked invite.survey: ', $scope.selectedInvite.survey)
+            }
+            if ($scope.selectedSurvey) {
+                $scope.selectedSurvey.algoChecked = true;
+                $scope.selectedSurvey.success = Status.YES;
+                // $scope.selectedSurvey.success = Status.NO;
+                // $scope.selectedSurvey.success = Status.UNDECIDED;
+                $scope.selectedSurvey.determinedTimePeriod = new TimePeriod({
+                    startTime: new Date(),
+                    durationMins: 90
+                });
+                $log.debug('hacked survey: ', $scope.selectedSurvey)
+            }
             // <------- HACK --------------------------------------------------------------
 
             $scope.showSurveyDetails = true;
@@ -122,6 +122,7 @@ angular.module('myApp')
             $scope.selectInvite = function(invite) {
                 $scope.selectedInvite = invite;
                 // $log.debug($scope.selectedInvite);
+                console.log("########## invites status " + $scope.selectedInvite.ignored);
             };
 
 
