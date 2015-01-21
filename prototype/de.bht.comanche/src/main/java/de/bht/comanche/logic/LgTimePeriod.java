@@ -1,12 +1,12 @@
 package de.bht.comanche.logic;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import de.bht.comanche.persistence.DaObject;
 
 /**
  * A data type for time periods.
@@ -23,6 +23,8 @@ import de.bht.comanche.persistence.DaObject;
 @Embeddable public class LgTimePeriod {
 
 	private static final long serialVersionUID = 1L;
+	private final String DATE_PATTERN = "yyyy.MM.dd G HH:mm:ss z";
+	private final DateFormat df = new SimpleDateFormat(DATE_PATTERN);
 	
 	/**
 	 * start time
@@ -68,6 +70,35 @@ import de.bht.comanche.persistence.DaObject;
 	
 	public LgTimePeriod (){}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + durationMins;
+		result = prime * result
+				+ ((startTime == null) ? 0 : startTime.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LgTimePeriod other = (LgTimePeriod) obj;
+		if (durationMins != other.durationMins)
+			return false;
+		if (startTime == null) {
+			if (other.startTime != null)
+				return false;
+		} else if (!df.format(startTime).equals(df.format(other.startTime)))
+			return false;
+		return true;
+	}
+
 	public LgTimePeriod (final LgTimePeriod other){
 		this.startTime = other.startTime;
 		this.durationMins = other.durationMins;
@@ -91,6 +122,8 @@ import de.bht.comanche.persistence.DaObject;
 
 	public LgTimePeriod setDurationMins(final int durationMins) {
 		this.durationMins = durationMins;
+		
+		
 		return this;
 	}
 
@@ -139,6 +172,12 @@ import de.bht.comanche.persistence.DaObject;
 //		return this;
 //	}
 
+	public LgTimePeriod updateWith(LgTimePeriod other) {
+		this.startTime = other.startTime;
+		this.durationMins = other.durationMins;
+		return this;
+	}
+	
 	@Override
 	public String toString() {
 		return String

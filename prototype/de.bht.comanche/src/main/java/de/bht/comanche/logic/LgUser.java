@@ -3,7 +3,9 @@ package de.bht.comanche.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -70,13 +72,13 @@ public class LgUser extends DaObject {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
 	
-//	@ElementCollection(targetClass = LgTimePeriod.class)
-//	@Column(name = "general_availability")
-//	private List<LgTimePeriod> generalAvailability;
+	@ElementCollection(targetClass = LgTimePeriod.class, fetch = FetchType.EAGER)
+	@Column(name = "general_availability")
+	private Set<LgTimePeriod> generalAvailability;
 
-//	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-//	@Column(name = "messages")
-//	private List<String> messages = new ArrayList<String>();
+	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+	@Column(name = "messages")
+	private Set<LgMessage> messages = new HashSet<LgMessage>();
 
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
@@ -205,28 +207,20 @@ public class LgUser extends DaObject {
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-//	
-//	public List<LgTimePeriod> getGeneralAvailability() {
-//		return this.generalAvailability;
-//	}
+	
+	public Set<LgTimePeriod> getGeneralAvailability() {
+		return this.generalAvailability;
+	}
 
 	/**
 	 * Returns LgTimePeriods list for current user.
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-//	public LgUser setGeneralAvailability(List<LgTimePeriod> generalAvailability) {
-//		this.generalAvailability = generalAvailability;
-//		return this;
-//	}
-	
-//	public List<String> getMessages() {
-//		return this.messages;
-//	}
-
-//	public void setMessages(List<String> messages) {
-//		this.messages = messages;
-//	}
+	public LgUser setGeneralAvailability(Set<LgTimePeriod> generalAvailability) {
+		this.generalAvailability = generalAvailability;
+		return this;
+	}
 
 	/**
 	 * Remove invite object from the list of invites.
@@ -373,6 +367,21 @@ public class LgUser extends DaObject {
 
 	// -------------------------------------------------------------------------
 
+    public LgUser updateWith(LgUser other) {
+		this.email = other.email;
+		this.generalAvailability =  other.generalAvailability;
+		this.groups = other.groups;
+//		this.iconurl = other.iconurl;
+		this.invites = other.invites;
+		this.member = other.member;
+		this.messages = other.messages;
+		this.name = other.name;
+		this.oid = other.oid;
+		this.password = other.password;
+		this.tel = other.tel;	
+		return this;
+	} 
+    
 	public LgInvite getInvite(final long oid) {
 		return search(this.invites, oid);
 	}
@@ -418,13 +427,14 @@ public class LgUser extends DaObject {
 		return this;
 	}
 
-	// public List<String> getMessages() {
-	// return this.messages;
-	// }
-	//
-	// public void setMessages(List<String> messages) {
-	// this.messages = messages;
-	// }
+	 public Set<LgMessage> getMessages() {
+		 return this.messages;
+	 }
+	
+	 public void setMessages(Set<LgMessage> messages) {
+		 this.messages = messages;
+	 }
+	 
 	@Override
 	public String toString() {
 		return String
