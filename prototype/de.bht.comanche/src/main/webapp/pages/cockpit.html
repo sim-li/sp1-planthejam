@@ -35,7 +35,7 @@
             <div class='tab-pane active' id='surveyTab'>
               <input class='form-control' id='surveyFilter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'>
-                <a class='list-group-item' href='' ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>
+                <a class='list-group-item' href='' ng-class="{'list-group-item-success': !survey.algoChecked}" ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>
                   <div class='row'>
                     <div class='col-sm-8'>{{survey.name}}</div>
                     <div class='btn-groups' ng-if='survey.isReady()'>

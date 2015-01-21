@@ -29,7 +29,7 @@
             #surveyTab.tab-pane.active
               %input#surveyFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
-                %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"}
+                %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey", "ng-class" => "{'list-group-item-success': !survey.algoChecked}"}
                   .row
                     .col-sm-8 {{survey.name}}
                     .btn-groups{"ng-if" => "survey.isReady()"}
