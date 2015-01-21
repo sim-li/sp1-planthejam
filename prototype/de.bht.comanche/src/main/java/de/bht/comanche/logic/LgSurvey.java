@@ -3,6 +3,7 @@ package de.bht.comanche.logic;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -76,9 +77,8 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Representation of foreign key in LgTimePeriod entity. Provide all possible time periods for this survey.
 	 */
-    @ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
-    @Column(name="possibleTimePeriods")
-	private List<LgTimePeriod> possibleTimePeriods;
+	@OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<LgTimePeriod> possibleTimePeriods;
 	
 	/**
 	 * The time period that will be determined after the deadline is reached.
@@ -362,11 +362,11 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 	
-	public List<LgTimePeriod> getPossibleTimePeriods(){
+	public Set<LgTimePeriod> getPossibleTimePeriods(){
 		return this.possibleTimePeriods;
 	}
 	
-	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> period){
+	public LgSurvey setPossibleTimePeriods(final Set<LgTimePeriod> period){
 		this.possibleTimePeriods = period;
 		return this;
 	}

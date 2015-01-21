@@ -27,7 +27,7 @@ import de.bht.comanche.persistence.DaObject;
  */
 @Entity
 @Table(name = "invite")
-public class LgInvite extends DaObject{
+public class LgInvite extends DaObject {
 
 	private static final long serialVersionUID = 1L;
 
@@ -61,8 +61,7 @@ public class LgInvite extends DaObject{
 	/**
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
 	 */
-	@ElementCollection 
-    @Column(name="timeperiods") 
+	@OneToMany(mappedBy = "invite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgTimePeriod> timePeriods;
 	
 	

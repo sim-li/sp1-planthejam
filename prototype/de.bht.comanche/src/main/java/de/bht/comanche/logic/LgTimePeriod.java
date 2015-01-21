@@ -2,7 +2,9 @@ package de.bht.comanche.logic;
 
 import java.util.Date;
 
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -17,12 +19,24 @@ import de.bht.comanche.persistence.DaObject;
  * LgTimePeriods are comparable. In the current version timePeriods are considered equal when ...
  * 
  * @author Duc Tung Tong
+ * @author Simon Lischka
  */
 
-//@Table(name = "TimePeriod")
-@Embeddable public class LgTimePeriod {
+@Entity
+@Table(name = "timeperiod") 
+public class LgTimePeriod extends DaObject {
 
 	private static final long serialVersionUID = 1L;
+	
+	@ManyToOne
+	private LgUser user;
+	
+	@ManyToOne
+	private LgSurvey survey;
+	
+	@ManyToOne
+	private LgInvite invite;
+	
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
@@ -50,6 +64,12 @@ import de.bht.comanche.persistence.DaObject;
 
 	public LgTimePeriod setDurationMins(final int durationMins) {
 		this.durationMins = durationMins;
+		return this;
+	}
+	
+	public LgTimePeriod updateWith(LgTimePeriod other) {
+		this.startTime = other.startTime;
+		this.durationMins = other.durationMins;
 		return this;
 	}
 
