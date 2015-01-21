@@ -1,13 +1,12 @@
 package de.bht.comanche.logic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -67,22 +66,37 @@ public class LgUser extends DaObject {
 	/**
 	 * Representation of a foreign key in a LgMember entity. Provide a member.
 	 */
+	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
 
-	@ElementCollection(targetClass = LgTimePeriod.class)
-	@Column(name = "general_availability")
-	private List<LgTimePeriod> generalAvailability = new ArrayList<LgTimePeriod>();
-
-	@ElementCollection(targetClass = String.class)
-	@Column(name = "messages")
-	private List<String> messages = new ArrayList<String>();
-
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<LgTimePeriod> generalAvailability;
+	
+	// Change to Lazy for Lazy Attempt in Test LgUserWithCollectionTest 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<LgMessage> messages;
+	
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
 		this.groups = new ArrayList<LgGroup>();
 	}
-
+	
+	public LgUser updateWith(LgUser other) {
+		this.email = other.email;
+		this.generalAvailability =  other.generalAvailability;
+		this.groups = other.groups;
+		this.iconurl = other.iconurl;
+		this.invites = other.invites;
+		this.member = other.member;
+		this.messages = other.messages;
+		this.name = other.name;
+		this.oid = other.oid;
+		this.password = other.password;
+		this.tel = other.tel;	
+		return this;
+	}
+	
 	public LgInvite getInviteBySurveyName(final String name) {
 		for (LgInvite invite : invites) {
 			if (invite.getSurvey().getName() == name) {
@@ -205,7 +219,7 @@ public class LgUser extends DaObject {
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-	public List<LgTimePeriod> getGeneralAvailability() {
+	public Set<LgTimePeriod> getGeneralAvailability() {
 		return this.generalAvailability;
 	}
 
@@ -215,15 +229,15 @@ public class LgUser extends DaObject {
 	 * @return The list with LgTimePeriods.
 	 */
 	public void setGeneralAvailability(
-			List<LgTimePeriod> generalAvailability) {
+			Set<LgTimePeriod> generalAvailability) {
 		this.generalAvailability = generalAvailability;
 	}
 
-	public List<String> getMessages() {
+	public Set<LgMessage> getMessages() {
 		return this.messages;
 	}
 
-	public void setMessages(List<String> messages) {
+	public void setMessages(Set<LgMessage> messages) {
 		this.messages = messages;
 	}
 
