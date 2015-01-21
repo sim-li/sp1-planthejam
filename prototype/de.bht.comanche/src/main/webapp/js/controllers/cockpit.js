@@ -121,7 +121,7 @@ angular.module('myApp')
              */
             $scope.selectInvite = function(invite) {
                 $scope.selectedInvite = invite;
-                $log.debug($scope.selectedInvite); // for debugging
+                $log.debug('selectInvite(): ', $scope.selectedInvite); // for debugging
             };
 
 
