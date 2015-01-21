@@ -1,15 +1,21 @@
 package de.bht.comanche.logic;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
@@ -20,30 +26,33 @@ import de.bht.comanche.persistence.DaObject;
  * @author Duc Tung Tong
  */
 @Entity
-@Table(name = "Lg_Invite")
-public class LgInvite extends DaObject{
+@Table(name = "invite")
+public class LgInvite extends DaObject {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 *  is true if user is host from survey 
 	 */
+	@Column
 	private boolean isHost;
 	
 	/**
-	 *  is true if user ignored the invite
+	 * A tribool flag indicating whether the participant has marked the invite as ignored or not or if he is still undecided.
 	 */
-	private boolean isIgnored;
+	@Column
+	@Enumerated(EnumType.STRING)
+	private LgStatus isIgnored;
 
 	/**
-	 *  user who receives  invite
+	 * The user who receives this invite.
 	 */
 	@NotNull
 	@ManyToOne
 	private LgUser user;
 
 	/**
-	 *  Survey 
+	 * The survey to which this invite belongs.
 	 */
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -52,16 +61,29 @@ public class LgInvite extends DaObject{
 	/**
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
 	 */
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "invite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgTimePeriod> timePeriods;
 	
 	
 	public LgInvite() {
-		timePeriods = new ArrayList<LgTimePeriod>();
+		this.timePeriods = new ArrayList<LgTimePeriod>();
+	}
+	
+	public LgInvite(LgInvite other) {
+		this.oid = other.oid;
+		this.isHost = other.isHost;
+		this.isIgnored = other.isIgnored;
+		this.user = other.user;
+		this.survey = other.survey;
+		this.timePeriods = new ArrayList<LgTimePeriod>();
+		for (final LgTimePeriod timePeriod : other.timePeriods) {
+			this.timePeriods.add(timePeriod);
+		}
 	}
 	
 	/*
-	 * --------------------------------------------------------------------------------------------
+	 * -------------------------------------
+	 * -------------------------------------------------------
 	 * # get(), set() methods for data access
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
@@ -71,11 +93,11 @@ public class LgInvite extends DaObject{
 		return this.isHost;
 	}
 
-	public boolean isIgnored() {
+	public LgStatus getIgnored() {
 		return this.isIgnored;
 	}
 
-	public LgInvite setIgnored(final boolean isIgnored) {
+	public LgInvite setIgnored(final LgStatus isIgnored) {
 		this.isIgnored = isIgnored;
 		return this;
 	}
@@ -94,7 +116,10 @@ public class LgInvite extends DaObject{
 		this.user = user;
 		return this;
 	}
-
+	/**
+	 * Returns PossibleTimePeriod with nulled db-flags
+	 * @return
+	 */
 	public LgSurvey getSurvey() {
 		return this.survey;
 	}
@@ -109,13 +134,6 @@ public class LgInvite extends DaObject{
 	 * @param invite The LgInvite to set.
 	 * @return Returns The LgInvite.
 	 */ 
-	//not clear, how it will be used
-	public LgInvite setTimePeriod(LgInvite invite){
-			for (final LgTimePeriod period : this.timePeriods) {
-				period.setInvite(invite);
-			}
-			return this;
-	}
 
 	@Override
 	public String toString() {

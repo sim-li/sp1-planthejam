@@ -7,59 +7,47 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import de.bht.comanche.persistence.DaObject;
 
 /**
- * Table contains Time period data
- * Is used to describe the timeperiod of a survey or the availability of
- * users.
+ * A data type for time periods.
+ * 
+ * It is used to describe the possible time periods of a survey or the availability of users.
+ * <p>
+ * Important note: This class needs to <strong>override hashCode and equals</strong>, so that collections of 
+ * LgTimePeriods are comparable. In the current version timePeriods are considered equal when ...
  * 
  * @author Duc Tung Tong
+ * @author Simon Lischka
  */
 
 @Entity
-@Table(name = "TimePeriod")
+@Table(name = "timeperiod") 
 public class LgTimePeriod extends DaObject {
 
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * start time
-	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startTime;
-	
-	/**
-	 * duration in minutes
-	 */
-	private int durationMinutes;
-
-	/**
-	 * Column for LgSurvey foreign key 
-	 */
-	@ManyToOne
-	private LgSurvey survey;
-	
-	/**
-	 * Column for LgUser foreign key
-	 */
 	@ManyToOne
 	private LgUser user;
 	
-	/**
-	 * Column for LgInvite foreign key
-	 */
+	@ManyToOne
+	private LgSurvey survey;
+	
 	@ManyToOne
 	private LgInvite invite;
-
-	/*
-	 * --------------------------------------------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
+	
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date startTime;
+	private int durationMins;
+	
+	public LgTimePeriod (){}
+	
+	public LgTimePeriod (final LgTimePeriod other){
+		this.startTime = other.startTime;
+		this.durationMins = other.durationMins;
+	}
 
 	public Date getStartTime() {
 		return this.startTime;
@@ -70,45 +58,24 @@ public class LgTimePeriod extends DaObject {
 		return this;
 	}
 
-	public int getDurationMinutes() {
-		return this.durationMinutes;
+	public int getDurationMins() {
+		return this.durationMins;
 	}
 
-	public LgTimePeriod setDurationMinutes(final int durationMinutes) {
-		this.durationMinutes = durationMinutes;
-		return this;
-	}
-
-	public LgSurvey getSurvey() {
-		return this.survey;
-	}
-	
-	/*
-	 * --------------------------------------------------------------------------------------------
-	 * # foreign key setters
-	 * # 
-	 * --------------------------------------------------------------------------------------------
-	 */
-		
-	public LgTimePeriod setUser(final LgUser user){
-		this.user = user;
+	public LgTimePeriod setDurationMins(final int durationMins) {
+		this.durationMins = durationMins;
 		return this;
 	}
 	
-	public LgTimePeriod setInvite(final LgInvite invite){
-		this.invite = invite;
-		return this;
-	}
-	
-	public LgTimePeriod setSurvey(final LgSurvey survey) {
-		this.survey = survey;
+	public LgTimePeriod updateWith(LgTimePeriod other) {
+		this.startTime = other.startTime;
+		this.durationMins = other.durationMins;
 		return this;
 	}
 
 	@Override
 	public String toString() {
-		return String
-				.format("LgTimePeriod [startTime=%s, durationMinutes=%s, survey=%s, oid=%s, pool=%s]",
-						startTime, durationMinutes, survey, oid, pool);
+		return "LgTimePeriod [startTime=" + startTime + ", durationMins="
+				+ durationMins + "]";
 	}
 }

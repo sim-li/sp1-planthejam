@@ -1,7 +1,9 @@
 package de.bht.comanche.logic;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,24 +13,27 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
+
 /**
- * This entity class represents a user and serve methods for working with 
- * all objects LgClasses.
- * 
+ * This entity class represents a user and serve methods for working with all
+ * objects LgClasses.
+ *
  * @author Simon Lischka
  *
  */
 @Entity
-@Table(name = "user", uniqueConstraints=@UniqueConstraint(columnNames="NAME"))
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "NAME"))
 public class LgUser extends DaObject {
-	
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Column for a user name. Must not be null.
 	 */
-	@Column(unique=true, nullable=false)
+	@Column(unique = true, nullable = false)
 	private String name;
 	/**
 	 * Column for a user's telephone.
@@ -43,208 +48,346 @@ public class LgUser extends DaObject {
 	 */
 	private String password;
 	/**
-	 * Representation of a foreign key in a LgInvite entity. Provide a list of invites. 
+	 * URL to gravatar icon
 	 */
-	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
+	private String iconurl;
+	/**
+	 * Representation of a foreign key in a LgInvite entity. Provide a list of
+	 * invites.
+	 */
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<LgInvite> invites;
 	/**
-	 * Representation of a foreign key in a LgGroup entity. Provide a list of groups. 
+	 * Representation of a foreign key in a LgGroup entity. Provide a list of
+	 * groups.
 	 */
-	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval=true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<LgGroup> groups;
 	/**
-	 * Representation of a foreign key in a LgMember entity. Provide a member. 
+	 * Representation of a foreign key in a LgMember entity. Provide a member.
 	 */
-	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<LgTimePeriod> generalAvailability;
 	
-	/**
-	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of general user's availablity. 
-	 */
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<LgTimePeriod> timePeriods = new ArrayList<LgTimePeriod>();
+	// Change to Lazy for Lazy Attempt in Test LgUserWithCollectionTest 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<LgMessage> messages;
 	
-	/**
-	 * Construct a new LgUser object with a list of groups and members.
-	 */
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
 		this.groups = new ArrayList<LgGroup>();
 	}
 	
-	public void saveSurveyAsHost(final LgSurvey survey) {
-		
-		final LgInvite invite = new LgInvite();
-		final LgSurvey attachedSurvey = attach(survey);
-		attachedSurvey.save();
-		
-		invite.setHost(true);
-		invite.setIgnored(false);
-		invite.setSurvey(attachedSurvey);
-		attach(invite).save();
+	public LgUser updateWith(LgUser other) {
+		this.email = other.email;
+		this.generalAvailability =  other.generalAvailability;
+		this.groups = other.groups;
+		this.iconurl = other.iconurl;
+		this.invites = other.invites;
+		this.member = other.member;
+		this.messages = other.messages;
+		this.name = other.name;
+		this.oid = other.oid;
+		this.password = other.password;
+		this.tel = other.tel;	
+		return this;
 	}
 	
 	public LgInvite getInviteBySurveyName(final String name) {
-		for (LgInvite invite: invites) {
+		for (LgInvite invite : invites) {
 			if (invite.getSurvey().getName() == name) {
 				return invite;
 			}
 		}
-		return null; 
-		//@TODO Throw Multex Exception
+		return null;
+		// @TODO Throw Multex Exception
 	}
-	
+
 	public LgSurvey getSurveyByName(final String name) {
-		for (LgInvite invite: invites) {
+		for (LgInvite invite : invites) {
 			final LgSurvey survey = invite.getSurvey();
 			if (survey.getName() == name) {
 				return survey;
 			}
 		}
-		return null; 
-		//@TODO Throw Multex Exception
+		return null;
+		// @TODO Throw Multex Exception
 	}
-	
-	/**
-	 * Save Invite for current user.
-	 * @param invite The LgInvite to save.
-	 * @return The saved LgInvite.
-	 */
-	public LgInvite save(final LgInvite invite) {
-		invite.setUser(this);
-		return attach(invite).save();
-	}
+
 	/**
 	 * Complete deleting of a user accout.
 	 */
-	public void deleteAccount() {
+	public void deleteThisAccount() {
 		delete();
 	}
+
+	public void deleteOtherUserAccount(final LgUser user) {
+		this.findOneByKey(LgUser.class, "oid", user.getOid()).delete();
+	}
+
 	/**
 	 * Delete LgInvite by provided oid.
-	 * @param inviteOid The LgInvite oid.
+	 * 
+	 * @param inviteOid
+	 *            The LgInvite oid.
 	 */
 	public void deleteInvite(final long inviteOid) {
 		getInvite(inviteOid).delete();
 	}
-	
+
 	/**
 	 * Save LgGroup for current user.
-	 * @param group The LgGroup to save.
+	 * 
+	 * @param group
+	 *            The LgGroup to save.
 	 * @return The saved LgGroup.
 	 */
 	public LgGroup save(final LgGroup group) {
 		group.setUser(this).setForMember(group);
-		return attach(group).save();
+		return saveUnattached(group);
 	}
-	
-	public List<LgInvite> getInvites(boolean isHost , LgUser oid){
-		search(LgInvite.class, "ISHOST", isHost, "USER_OID", oid);
-		return invites;	
+
+	/**
+	 * Generates icon url from classes internal email Gravatar will deliver a
+	 * default icon if no email given.
+	 */
+	public String getIconurl() {
+		final LgGravatarUtils utils = new LgGravatarUtils();
+		iconurl = utils.getUserUrl(email);
+		return iconurl;
 	}
-	
-	
+
+	public void setIconurl(String iconurl) {
+		this.iconurl = iconurl;
+	}
+
 	/**
 	 * Delete LgGroup by provided oid.
-	 * @param groupOid The LgGroup oid.
+	 * 
+	 * @param groupOid
+	 *            The LgGroup oid.
 	 */
 	public void deleteGroup(final long groupOid) {
 		getGroup(groupOid).delete();
 	}
-	
+
 	/**
 	 * Returns LgGroup by ptovided oid.
-	 * @param groupOid The LgGroup oid.
+	 * 
+	 * @param groupOid
+	 *            The LgGroup oid.
 	 * @return The found LgGroup
 	 */
 	public LgGroup getGroup(final long groupOid) {
 		return search(getGroups(), groupOid);
 	}
-	
-	/**
-	 * Save LgMember for current user.
-	 * @param member The LgMember to save.
-	 * @return The saved LgMember.
-	 */
-	public LgMember save(final LgMember member) {
-		return attach(member).save();
-	}
-	
+
 	/**
 	 * Search LgMember object by group oid and user oid.
-	 * @param groupId The LgGroup oid.
-	 * @param userId The LgUser oid.
+	 * 
+	 * @param groupId
+	 *            The LgGroup oid.
+	 * @param userId
+	 *            The LgUser oid.
 	 * @return The found list with LgMember.
 	 */
 	public List<LgMember> search(final long groupId, final long userId) {
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
 	}
-	
+
 	/**
 	 * Proof key and value of user name and password.
-	 * @param user The LgUser to proof.
-	 * @return If the key and value match - true.  
+	 * 
+	 * @param user
+	 *            The LgUser to proof.
+	 * @return If the key and value match - true.
 	 */
 	public boolean passwordMatchWith(final LgUser user) {
 		if (this.password == null) {
-			return false; // TODO should it be possible/allowed to have no password? if no -> should throw exception
+			return false; // TODO should it be possible/allowed to have no
+							// password? if no -> should throw exception
 		}
 		return this.password.equals(user.getPassword());
 	}
-	
+
 	/**
-	 * Returns LgInvite by provided oid.
-	 * @param inviteOid The LgInvite oid.
-	 * @return The found LgInvite.
+	 * Returns LgTimePeriods list for current user.
+	 * 
+	 * @return The list with LgTimePeriods.
 	 */
-	public LgInvite getInvite(final long inviteOid) {
-		return search(this.invites, inviteOid);
+	public Set<LgTimePeriod> getGeneralAvailability() {
+		return this.generalAvailability;
 	}
-	
-	//TODO improve it
-	public LgTimePeriod saveTpforInvite(final LgInvite invite) {
-		invite.setTimePeriod(invite);
-		return attach(invite).save();
+
+	/**
+	 * Returns LgTimePeriods list for current user.
+	 * 
+	 * @return The list with LgTimePeriods.
+	 */
+	public void setGeneralAvailability(
+			Set<LgTimePeriod> generalAvailability) {
+		this.generalAvailability = generalAvailability;
 	}
-	
-	//for DB test only
-	public <E extends DaObject> E saveObj(final E other) {
-		return attach(other).save();
+
+	public Set<LgMessage> getMessages() {
+		return this.messages;
 	}
-	
+
+	public void setMessages(Set<LgMessage> messages) {
+		this.messages = messages;
+	}
+
 	/**
 	 * Remove invite object from the list of invites.
-	 * @param invite The LgInvite to remove.
+	 * 
+	 * @param invite
+	 *            The LgInvite to remove.
 	 */
 	public void remove(final LgInvite invite) {
 		this.invites.remove(invite);
 	}
-	
+
 	/**
 	 * Remove grop object from the list of groups.
-	 * @param invite The LgGroup to remove.
+	 * 
+	 * @param invite
+	 *            The LgGroup to remove.
 	 */
 	public void remove(final LgGroup group) {
 		this.groups.remove(group);
 	}
-	
-	/*
-	 * --------------------------------------------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
 
-	@JsonIgnore
-	public List<LgInvite> getInvites() {
-		return this.invites;
+	// -- HOST ROLES --
+	public LgSurvey getSurvey(final long oid) {
+		for (LgInvite invite : this.invites) {
+			if (invite.isHost() && invite.getSurvey().getOid() == oid) {
+				return invite.getSurvey();
+			}
+		}
+		return null; // TODO: Throw MULTEX exception
 	}
-	
+
+	public List<LgSurvey> getSurveys() {
+		List<LgSurvey> surveys = new ArrayList<LgSurvey>();
+		for (LgInvite invite : this.invites) {
+			if (invite.isHost()) {
+				surveys.add(invite.getSurvey());
+			}
+		}
+		return surveys;
+	}
+
+	public List<LgInvite> getInvitesForSurvey(final long oid) {
+		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
+		for (LgInvite invite : this.getSurvey(oid).getInvites()) {
+			filteredInvites.add(new LgInvite(invite).setSurvey(null));
+		}
+		return filteredInvites;
+	}
+
+	public LgSurvey saveSurvey(final LgSurvey survey) {
+		List<LgInvite> dirtyInvites = survey.getInvites();
+		addHostInvite(dirtyInvites);
+		survey.setInvites(new ArrayList<LgInvite>());
+		final LgSurvey persistedSurvey = saveUnattached(survey);
+		persistInvitesAndAddToSurvey(persistedSurvey, dirtyInvites);
+		return persistedSurvey;
+	}
+
+	public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
+		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
+		listFromDB.add(findOneByKey(LgSurvey.class, "OID", this.getOid()));
+		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
+		listfresh.add(surveyFromClient);
+		
+		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
+		listfresh.removeAll(listFromDB); // ELs already saved
+		
+		for (LgSurvey el : listfresh) {
+		System.out.println(el);
+		saveUnattached(el); // Fresh list are never tracked
+		}
+		
+		listFromDB.addAll(listfresh); // Requires PL tracking too
+		return listFromDB.get(0);
+	}
+
+	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
+			List<LgInvite> dirtyInvites) {
+		for (int i = 0; i < dirtyInvites.size(); i++) {
+			final LgInvite dirtyInvite = dirtyInvites.get(i);
+			dirtyInvite.setSurvey(persistedSurvey);
+			persistedSurvey.addInvite(saveUnattached(dirtyInvite));
+		}
+	}
+
+	private void addHostInvite(List<LgInvite> dirtyInvites) {
+		final LgInvite invite = new LgInvite();
+		invite.setHost(true).setIgnored(LgStatus.UNDECIDED).setUser(this);
+		dirtyInvites.add(invite);
+	}
+
+	public void deleteSurvey(final long oid) {
+		this.getSurvey(oid).delete();
+	}
+
+	// -- PARTICIPANT ROLES --
+	@JsonIgnore
+	public List<LgInvite> getInvitesAsParticipant() {
+		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
+		for (LgInvite invite : this.invites) {
+			if (!invite.isHost()) {
+				filteredInvites.add(invite);
+			}
+		}
+		return filteredInvites;
+	}
+
+	public LgInvite saveInvite(final LgInvite invite) {
+		return saveUnattached(invite);
+	}
+
+	public LgInvite updateInvite(final long oid, LgInvite invite) {
+		// REDUNDANT
+		return saveInvite(invite);
+	}
+
+	// ------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
+
+	public void evaluateAllSurveys() {
+		final List<LgSurvey> surveysOfThisUser = getSurveys();
+		for (final LgSurvey survey : surveysOfThisUser) {
+			if (survey.isReadyForEvaluation()) {
+				survey.determine();
+				sendMessageToHost(survey);
+			}
+		}
+	}
+
+	private void sendMessageToHost(final LgSurvey survey) {
+		final Date determinedDate = survey.getDeterminedTimePeriod()
+				.getStartTime(); // needs formatting
+		final String message = "es konnte folgender / kein Termin ermittelt werden "
+				+ determinedDate;
+		// IMPORTANT TODO implementation missing of LgUser.messages
+		// this.messages.add(message);
+	}
+
+	// -------------------------------------------------------------------------
+
+	public LgInvite getInvite(final long oid) {
+		return search(this.invites, oid);
+	}
+
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
 		return this.groups;
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}
@@ -280,7 +423,14 @@ public class LgUser extends DaObject {
 		this.password = password;
 		return this;
 	}
-	
+
+	// public List<String> getMessages() {
+	// return this.messages;
+	// }
+	//
+	// public void setMessages(List<String> messages) {
+	// this.messages = messages;
+	// }
 	@Override
 	public String toString() {
 		return String
