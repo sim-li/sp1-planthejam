@@ -6,8 +6,10 @@ import static org.junit.Assert.assertTrue;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Persistence;
 
@@ -84,7 +86,7 @@ public class LgTimePeriodTest {
 	 */
 	@Test
 	public void addPossibleTimePeriodToSurveyTest() {
-		final List<LgTimePeriod> possibleTimePeriods = new ArrayList<LgTimePeriod>();
+		final Set<LgTimePeriod> possibleTimePeriods = new HashSet<LgTimePeriod>();
 		possibleTimePeriods.add(timePeriod);
 		survey.setPossibleTimePeriods(possibleTimePeriods);
 		commit();

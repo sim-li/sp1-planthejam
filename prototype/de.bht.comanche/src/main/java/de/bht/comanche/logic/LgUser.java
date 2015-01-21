@@ -53,7 +53,7 @@ public class LgUser extends DaObject {
 	/**
 	 * URL to gravatar icon
 	 */
-//	private String iconurl;
+	private String iconurl;
 	/**
 	 * Representation of a foreign key in a LgInvite entity. Provide a list of
 	 * invites.
@@ -143,15 +143,15 @@ public class LgUser extends DaObject {
 	 * Generates icon url from classes internal email Gravatar will deliver a
 	 * default icon if no email given.
 	 */
-//	public String getIconurl() {
-//		final LgGravatarUtils utils = new LgGravatarUtils();
-//		iconurl = utils.getUserUrl(email);
-//		return iconurl;
-//	}
-//
-//	public void setIconurl(String iconurl) {
-//		this.iconurl = iconurl;
-//	}
+	public String getIconurl() {
+		final LgGravatarUtils utils = new LgGravatarUtils();
+		iconurl = utils.getUserUrl(email);
+		return iconurl;
+	}
+
+	public void setIconurl(String iconurl) {
+		this.iconurl = iconurl;
+	}
 
 	/**
 	 * Delete LgGroup by provided oid.

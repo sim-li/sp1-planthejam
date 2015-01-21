@@ -52,7 +52,7 @@ public class ReUserService extends RestService {
 				}
 				System.out.println("OID IS " + o_user.getOid());
 
-				return i_user;
+				return o_user;
 			}
 		}.getResult();
 	}

@@ -127,7 +127,6 @@ public class LgUserWithCollectionsTest {
     }
 
     @Test
-    @SuppressWarnings("unused")
     public void saveTimePeriodInUserTest() {
         buildVariousTimePeriods(20, 40, 60);
         saveGeneralAvailability();

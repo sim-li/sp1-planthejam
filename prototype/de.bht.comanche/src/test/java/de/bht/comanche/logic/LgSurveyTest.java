@@ -2,20 +2,24 @@ package de.bht.comanche.logic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class LgSurveyTest {
-	private List<LgTimePeriod> someTimePeriods;
+	private Set<LgTimePeriod> someTimePeriods;
 	private LgSurvey aSurvey;
 	private LgSurvey aTwinSurvey;
 	
 	@Before
 	public void buildUp() {
-		someTimePeriods = new ArrayList<LgTimePeriod>();
+		someTimePeriods = new HashSet<LgTimePeriod>();
 		aSurvey = new LgSurvey();
 		aTwinSurvey = new LgSurvey();
 		someTimePeriods.add(new LgTimePeriod().setDurationMins(39).setStartTime(new Date()));
