@@ -1,7 +1,6 @@
 %ptj-menu
 
 .container
-  / %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}'
   .panel.panel-default
     .panel-body
       .col-md-6
@@ -40,7 +39,7 @@
                     .btn-groups{"ng-if" => "survey.isSuccessful()"}
                       %span.glyphicon.glyphicon-thumbs-up
                     .btn-groups{"ng-if" => "survey.isUnsuccessful()"}
-                      %span.glyphicon.glyphicon-remove-down
+                      %span.glyphicon.glyphicon-thumbs-down
 
             #inviteTab.tab-pane
               %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
@@ -92,13 +91,17 @@
             %h2.text-warning{} {{ selectedSurvey.name }}
             %div{} {{ selectedSurvey.description }}
             %p
-            %label{:for => "deadline"} Deadline:
-            %span#deadline{} {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}
-            %div#selectedSurveyTimePeriod{"ng-if" => "selectedSurvey.algoChecked"}
-              %label{:for => "determinedTimePeriod"} Determined Time Period:
-              %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod ? (selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm') : "None" }}
+            %hr
+            %label{:for => "surveyDetailsDeadline"} Deadline:
+            %span#surveyDetailsDeadline{} {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}
+            %div#surveyDetailsDeterminedTimePeriod{"ng-if" => "selectedSurvey.algoChecked"}
+              %label{:for => "surveyDetailsDeterminedTimePeriod"} Determined Time Period:
+              %span#surveyDetailsDeterminedTimePeriod
+                %span{"ng-if" => "selectedSurvey.determinedTimePeriod"} {{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}
+                %span{"ng-if" => "!selectedSurvey.determinedTimePeriod"} None
+            %hr
             %h4 Participants:
-            %span#selectedSurveyParticipants{"ng-if" => "!selectedSurvey.hasParticipants()"}
+            %span{"ng-if" => "!selectedSurvey.hasParticipants()"}
               %ul
                 %li{} None
             %ul
@@ -112,11 +115,12 @@
             %h2.text-warning{} {{ selectedInvite.survey.name }}
             %div{} {{ selectedInvite.survey.description }}
             %p
-            %label{:for => "deadline"} Deadline:
-            %span#deadline{} {{ selectedInvite.survey.deadline | date: 'yyyy-MM-dd HH:mm' }}
-            %div#selectedInviteStatus{"ng-if" => "selectedInvite.survey.success != 'UNDECIDED'"}
-              %div#selectedInviteStatus{"ng-if" => "selectedInvite.survey.success == 'NO'"}
-              %label{:for => "determinedTimePeriod"}  Determined Time Period:
-              %div#determinedTimePeriod{}
-                %div{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
-                %div{} {{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes
+            %hr
+            %label{:for => "inviteDetailsDeadline"} Deadline:
+            %span#inviteDetailsDeadline{} {{ selectedInvite.survey.deadline | date: 'yyyy-MM-dd HH:mm' }}
+            %div#inviteDetailsStatus{"ng-if" => "selectedInvite.survey.success != 'UNDECIDED'"}
+              %div#inviteDetailsStatus{"ng-if" => "selectedInvite.survey.success == 'NO'"}
+              %label{:for => "inviteDetailsDeterminedTimePeriod"} Determined Time Period:
+              %span#inviteDetailsDeterminedTimePeriod{}
+                %span{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
+                %span{} {{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes

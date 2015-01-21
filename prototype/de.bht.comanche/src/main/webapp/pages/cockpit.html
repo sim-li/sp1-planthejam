@@ -1,6 +1,5 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
-  <!-- %div#temporary-debug-output selectedInvite: '{{ selectedInvite }}' -->
   <div class='panel panel-default'>
     <div class='panel-body'>
       <div class='col-md-6'>
@@ -50,7 +49,7 @@
                       <span class='glyphicon glyphicon-thumbs-up'></span>
                     </div>
                     <div class='btn-groups' ng-if='survey.isUnsuccessful()'>
-                      <span class='glyphicon glyphicon-remove-down'></span>
+                      <span class='glyphicon glyphicon-thumbs-down'></span>
                     </div>
                   </div>
                 </a>
@@ -129,14 +128,19 @@
             <h2 class='text-warning'>{{ selectedSurvey.name }}</h2>
             <div>{{ selectedSurvey.description }}</div>
             <p></p>
-            <label for='deadline'>Deadline:</label>
-            <span id='deadline'>{{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}</span>
-            <div id='selectedSurveyTimePeriod' ng-if='selectedSurvey.algoChecked'>
-              <label for='determinedTimePeriod'>Determined Time Period:</label>
-              <span id='determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod ? (selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm') : "None" }}</span>
+            <hr>
+            <label for='surveyDetailsDeadline'>Deadline:</label>
+            <span id='surveyDetailsDeadline'>{{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}</span>
+            <div id='surveyDetailsDeterminedTimePeriod' ng-if='selectedSurvey.algoChecked'>
+              <label for='surveyDetailsDeterminedTimePeriod'>Determined Time Period:</label>
+              <span id='surveyDetailsDeterminedTimePeriod'>
+                <span ng-if='selectedSurvey.determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}</span>
+                <span ng-if='!selectedSurvey.determinedTimePeriod'>None</span>
+              </span>
             </div>
+            <hr>
             <h4>Participants:</h4>
-            <span id='selectedSurveyParticipants' ng-if='!selectedSurvey.hasParticipants()'>
+            <span ng-if='!selectedSurvey.hasParticipants()'>
               <ul>
                 <li>None</li>
               </ul>
@@ -156,15 +160,16 @@
             <h2 class='text-warning'>{{ selectedInvite.survey.name }}</h2>
             <div>{{ selectedInvite.survey.description }}</div>
             <p></p>
-            <label for='deadline'>Deadline:</label>
-            <span id='deadline'>{{ selectedInvite.survey.deadline | date: 'yyyy-MM-dd HH:mm' }}</span>
-            <div id='selectedInviteStatus' ng-if="selectedInvite.survey.success != 'UNDECIDED'">
-              <div id='selectedInviteStatus' ng-if="selectedInvite.survey.success == 'NO'"></div>
-              <label for='determinedTimePeriod'>Determined Time Period:</label>
-              <div id='determinedTimePeriod'>
-                <div>{{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}</div>
-                <div>{{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes</div>
-              </div>
+            <hr>
+            <label for='inviteDetailsDeadline'>Deadline:</label>
+            <span id='inviteDetailsDeadline'>{{ selectedInvite.survey.deadline | date: 'yyyy-MM-dd HH:mm' }}</span>
+            <div id='inviteDetailsStatus' ng-if="selectedInvite.survey.success != 'UNDECIDED'">
+              <div id='inviteDetailsStatus' ng-if="selectedInvite.survey.success == 'NO'"></div>
+              <label for='inviteDetailsDeterminedTimePeriod'>Determined Time Period:</label>
+              <span id='inviteDetailsDeterminedTimePeriod'>
+                <span>{{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}</span>
+                <span>{{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes</span>
+              </span>
             </div>
           </div>
         </div>
