@@ -28,7 +28,7 @@
             #surveyTab.tab-pane.active
               %input#surveyFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
-                %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey", "ng-class" => "{'list-group-item-success': !survey.algoChecked}"}
+                %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey", "ng-class" => "{'list-group-item-success': survey.isReady()}"}
                   .row
                     .col-sm-8 {{survey.name}}
                     .btn-groups{"ng-if" => "survey.isReady()"}
@@ -42,9 +42,9 @@
                       %span.glyphicon.glyphicon-thumbs-down
 
             #inviteTab.tab-pane
-              %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
+              %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search", }
               #inviteList.list-group
-                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES'} | filter: searchInvite "}
+                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ", "ng-class" => "{'list-group-item-success': invite.ignored == 'UNDECIDED'}"}
                   .row
                     .col-sm-8 {{invite.survey.name}} {{invite.ignored}}
                     .btn-group
@@ -60,7 +60,7 @@
                                 %span{"aria-hidden" => "true"} ×
                               %h4.modal-title Please choose your Avaibilities
                             .modal-body
-                              %ptj-calendar{"possible" => "possibleTimePeriods", "resulting" => "selectedInvite.timePeriods", "calendar" => "calendar"}
+                              %ptj-calendar{"possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.timePeriods", "calendar" => "calendar"}
                             .modal-footer
                               %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
                               %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button", "ng-click" => "saveAvailabilities()"} Save changes
@@ -98,7 +98,7 @@
               %label{:for => "surveyDetailsDeterminedTimePeriod"} Determined Time Period:
               %span#surveyDetailsDeterminedTimePeriod
                 %span{"ng-if" => "selectedSurvey.determinedTimePeriod"} {{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}
-                %span{"ng-if" => "!selectedSurvey.determinedTimePeriod"} None
+                %span.text-danger{"ng-if" => "!selectedSurvey.determinedTimePeriod"} No match. Please start a new survey.
             %hr
             %h4 Participants:
             %span{"ng-if" => "!selectedSurvey.hasParticipants()"}

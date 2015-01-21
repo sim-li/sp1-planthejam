@@ -177,9 +177,10 @@ angular.module('myApp')
                 $log.debug($scope.selectedSurvey.success);
                 // $log.debug($scope.selectedSurvey);
 
-                sendMessagesToParticipant();
+                // sendMessagesToParticipant(); // <<<-----------------
+
                 // FIXME temp comment out
-                // restService.doSave($scope.selectedSurvey);
+                restService.doSave($scope.selectedSurvey);
             };
 
             $scope.reject = function() {
@@ -189,9 +190,11 @@ angular.module('myApp')
                 $log.debug($scope.selectedSurvey.success);
                 // $log.debug($scope.selectedSurvey);
 
+                // sendMessagesToParticipant(); // <<<-----------------
+
                 // FIXME temp comment out
                 // sendMessagesToParticipant();
-                // restService.doSave($scope.selectedSurvey);
+                restService.doSave($scope.selectedSurvey);
             };
 
             //### HACK ##############################
@@ -226,19 +229,19 @@ angular.module('myApp')
                 $scope.showSurveyDetails = false;
             };
 
-    // $scope.renderCalendar = function() {
-    //     $('#calendar').fullCalendar({})
+            // $scope.renderCalendar = function() {
+            //     $('#calendar').fullCalendar({})
 
-    //     var myModelAlreadyShown = false;
-    //     $('#calendarModal').on('shown.bs.modal', function(e) {
-    //         if (!myModelAlreadyShown) {
-    //             $('#calendar').fullCalendar('render');
-    //             $('#myModal').modal('hide');
-    //             $('#myModal').addClass('fade');
-    //             $('#myModal').modal('show');
-    //             myModelAlreadyShown = true;
-    //         }
-    //     });
-    // }
+            //     var myModelAlreadyShown = false;
+            //     $('#calendarModal').on('shown.bs.modal', function(e) {
+            //         if (!myModelAlreadyShown) {
+            //             $('#calendar').fullCalendar('render');
+            //             $('#myModal').modal('hide');
+            //             $('#myModal').addClass('fade');
+            //             $('#myModal').modal('show');
+            //             myModelAlreadyShown = true;
+            //         }
+            //     });
+            // }
         }
     ]);

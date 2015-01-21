@@ -34,7 +34,7 @@
             <div class='tab-pane active' id='surveyTab'>
               <input class='form-control' id='surveyFilter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'>
-                <a class='list-group-item' href='' ng-class="{'list-group-item-success': !survey.algoChecked}" ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>
+                <a class='list-group-item' href='' ng-class="{'list-group-item-success': survey.isReady()}" ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>
                   <div class='row'>
                     <div class='col-sm-8'>{{survey.name}}</div>
                     <div class='btn-groups' ng-if='survey.isReady()'>
@@ -58,7 +58,7 @@
             <div class='tab-pane' id='inviteTab'>
               <input class='form-control' id='inviteFilter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='inviteList'>
-                <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ">
+                <a class='list-group-item' href='' ng-class="{'list-group-item-success': invite.ignored == 'UNDECIDED'}" ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ">
                   <div class='row'>
                     <div class='col-sm-8'>{{invite.survey.name}} {{invite.ignored}}</div>
                     <div class='btn-group'>
@@ -78,7 +78,7 @@
                               <h4 class='modal-title'>Please choose your Avaibilities</h4>
                             </div>
                             <div class='modal-body'>
-                              <ptj-calendar calendar='calendar' possible='possibleTimePeriods' resulting='selectedInvite.timePeriods'></ptj-calendar>
+                              <ptj-calendar calendar='calendar' possible='selectedInvite.survey.possibleTimePeriods' resulting='selectedInvite.timePeriods'></ptj-calendar>
                             </div>
                             <div class='modal-footer'>
                               <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
@@ -135,7 +135,7 @@
               <label for='surveyDetailsDeterminedTimePeriod'>Determined Time Period:</label>
               <span id='surveyDetailsDeterminedTimePeriod'>
                 <span ng-if='selectedSurvey.determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}</span>
-                <span ng-if='!selectedSurvey.determinedTimePeriod'>None</span>
+                <span class='text-danger' ng-if='!selectedSurvey.determinedTimePeriod'>No match. Please start a new survey.</span>
               </span>
             </div>
             <hr>
