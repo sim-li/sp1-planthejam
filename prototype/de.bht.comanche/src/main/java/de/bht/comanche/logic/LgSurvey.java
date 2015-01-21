@@ -3,6 +3,7 @@ package de.bht.comanche.logic;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,7 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
 
 /**
@@ -75,7 +78,7 @@ public class LgSurvey extends DaObject {
 	 */
     @ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
     @Column(name="possibleTimePeriods")
-	private List<LgTimePeriod> possibleTimePeriods;
+	private Set<LgTimePeriod> possibleTimePeriods;
 
 	/**
 	 * The time period that will be determined after the deadline is reached.
@@ -372,11 +375,11 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 
-	public List<LgTimePeriod> getPossibleTimePeriods(){
+	public Set<LgTimePeriod> getPossibleTimePeriods(){
 		return this.possibleTimePeriods;
 	}
 
-	public LgSurvey setPossibleTimePeriods(final List<LgTimePeriod> period){
+	public LgSurvey setPossibleTimePeriods(final Set<LgTimePeriod> period){
 		this.possibleTimePeriods = period;
 		return this;
 	}
