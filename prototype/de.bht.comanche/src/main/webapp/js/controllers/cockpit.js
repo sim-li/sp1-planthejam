@@ -121,7 +121,7 @@ angular.module('myApp')
              */
             $scope.selectInvite = function(invite) {
                 $scope.selectedInvite = invite;
-                // $log.debug($scope.selectedInvite);
+                $log.debug($scope.selectedInvite); // for debugging
             };
 
 
@@ -216,6 +216,11 @@ angular.module('myApp')
             // $scope.resultingTimePeriods = [];
 
             $scope.saveAvailabilities = function() {
+
+                $log.log('-------- from cockpit ---');
+                $log.log($scope.resultingTimePeriods);
+                $log.log($scope.selectedInvite.concreteAvailability);
+                $log.log('-------- from cockpit ---');
                 // $log.log($scope.resultingTimePeriods);
                 $log.log($scope.selectedInvite);
                 restService.doSave($scope.selectedInvite);
@@ -228,6 +233,9 @@ angular.module('myApp')
             $scope.toggleInviteDetails = function() {
                 $scope.showSurveyDetails = false;
             };
+
+            $log.debug($scope.selectedInvite.concreteAvailability);
+            $log.debug($scope.selectedInvite);
 
             // $scope.renderCalendar = function() {
             //     $('#calendar').fullCalendar({})

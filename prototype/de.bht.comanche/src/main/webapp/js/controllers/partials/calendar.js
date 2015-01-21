@@ -52,6 +52,14 @@ angular.module('myApp')
                             constraint: 'possible'
                         });
 
+                        $log.debug('----------')
+                        $log.debug('- debug calendar -')
+                        $log.debug($scope.eventSources)
+                        $log.debug($scope.uiTimePeriods)
+                        $log.debug($scope.possibleTimePeriods)
+                        $log.debug($scope.resultingTimePeriods)
+                        $log.debug('----------')
+
                     },
                     selectConstraint: $scope.possibleTimePeriods.length ? 'possible' : null,
                     events: $scope.uiTimePeriods

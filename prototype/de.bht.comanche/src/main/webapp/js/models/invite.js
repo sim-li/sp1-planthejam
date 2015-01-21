@@ -21,7 +21,7 @@ angular.module('models')
              * @param {Object}  [config.user=new User()] the user that owns the invite
              * @param {Object}  [config.survey=new Survey()] the survey to which the invite belongs
              *
-             * @param {Array}   [config.timePeriods=[]] the available time periods of the participant for this survey
+             * @param {Array}   [config.concreteAvailability=[]] the available time periods of the participant for this survey
              */
             var Invite = function(config) {
                 if (!(this instanceof Invite)) {
@@ -33,7 +33,7 @@ angular.module('models')
                 this.ignored = config.ignored || Status.UNDECIDED;
                 this.user = new User(config.user);
                 this.survey = config.survey ? new Survey(config.survey) : ''; // ???
-                this.timePeriods = Model.importMany(TimePeriod, config.timePeriods);
+                this.concreteAvailability = Model.importMany(TimePeriod, config.concreteAvailability);
             };
 
             // Invite.prototype = new Model();
@@ -58,8 +58,8 @@ angular.module('models')
                     'host': this.host,
                     'ignored': this.ignored,
                     'user': this.user.doExport(),
-                    'survey': this.survey ? this.survey.doExport() : null,
-                    // 'timePeriods': TimePeriod.exportMany(this.timePeriods) // FIXME temporarily commented out
+                    'survey': this.survey ? this.survey.doExport() : null /*,*/
+                        // 'timePeriods': TimePeriod.exportMany(this.concreteAvailability) // FIXME temporarily commented out
                 };
             };
 

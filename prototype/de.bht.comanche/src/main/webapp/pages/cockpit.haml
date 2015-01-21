@@ -6,11 +6,13 @@
       .col-md-6
         .tabbable
           %ul.nav.nav-tabs
-            %li.active
+            / %li.active
+            %li
               %a{"data-toggle" => "tab", :href => "#surveyTab", "ng-click" => "showSurveyDetails = true", "onclick" => "return false;"}
                 Survey
                 %span.badge {{surveys.length}}
-            %li
+            / %li
+            %li.active
               %a{"data-toggle" => "tab", :href => "#inviteTab", "ng-click" => "showSurveyDetails = false", "onclick" => "return false;"}
                 Invite
                 %span.badge {{(invites | filter: {ignored: "!YES"}).length}}
@@ -25,7 +27,8 @@
 
           .tab-content
 
-            #surveyTab.tab-pane.active
+            / #surveyTab.tab-pane.active
+            #surveyTab.tab-pane
               %input#surveyFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
                 %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey", "ng-class" => "{'list-group-item-success': survey.isReady()}"}
@@ -41,7 +44,8 @@
                     .btn-groups{"ng-if" => "survey.isUnsuccessful()"}
                       %span.glyphicon.glyphicon-thumbs-down
 
-            #inviteTab.tab-pane
+            / #inviteTab.tab-pane
+            #inviteTab.tab-pane.active
               %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search", }
               #inviteList.list-group
                 %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ", "ng-class" => "{'list-group-item-success': invite.ignored == 'UNDECIDED'}"}
@@ -60,7 +64,7 @@
                                 %span{"aria-hidden" => "true"} ×
                               %h4.modal-title Please choose your Avaibilities
                             .modal-body
-                              %ptj-calendar{"possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.timePeriods", "calendar" => "calendar"}
+                              %ptj-calendar{"possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "calendar" => "calendar"}
                             .modal-footer
                               %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
                               %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button", "ng-click" => "saveAvailabilities()"} Save changes

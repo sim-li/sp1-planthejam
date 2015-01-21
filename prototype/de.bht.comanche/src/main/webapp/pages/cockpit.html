@@ -5,13 +5,15 @@
       <div class='col-md-6'>
         <div class='tabbable'>
           <ul class='nav nav-tabs'>
-            <li class='active'>
+            <!-- %li.active -->
+            <li>
               <a data-toggle='tab' href='#surveyTab' ng-click='showSurveyDetails = true' onclick='return false;'>
                 Survey
                 <span class='badge'>{{surveys.length}}</span>
               </a>
             </li>
-            <li>
+            <!-- %li -->
+            <li class='active'>
               <a data-toggle='tab' href='#inviteTab' ng-click='showSurveyDetails = false' onclick='return false;'>
                 Invite
                 <span class='badge'>{{(invites | filter: {ignored: "!YES"}).length}}</span>
@@ -31,7 +33,8 @@
             </li>
           </ul>
           <div class='tab-content'>
-            <div class='tab-pane active' id='surveyTab'>
+            <!-- #surveyTab.tab-pane.active -->
+            <div class='tab-pane' id='surveyTab'>
               <input class='form-control' id='surveyFilter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'>
                 <a class='list-group-item' href='' ng-class="{'list-group-item-success': survey.isReady()}" ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>
@@ -55,7 +58,8 @@
                 </a>
               </div>
             </div>
-            <div class='tab-pane' id='inviteTab'>
+            <!-- #inviteTab.tab-pane -->
+            <div class='tab-pane active' id='inviteTab'>
               <input class='form-control' id='inviteFilter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='inviteList'>
                 <a class='list-group-item' href='' ng-class="{'list-group-item-success': invite.ignored == 'UNDECIDED'}" ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ">
@@ -78,7 +82,7 @@
                               <h4 class='modal-title'>Please choose your Avaibilities</h4>
                             </div>
                             <div class='modal-body'>
-                              <ptj-calendar calendar='calendar' possible='selectedInvite.survey.possibleTimePeriods' resulting='selectedInvite.timePeriods'></ptj-calendar>
+                              <ptj-calendar calendar='calendar' possible='selectedInvite.survey.possibleTimePeriods' resulting='selectedInvite.concreteAvailability'></ptj-calendar>
                             </div>
                             <div class='modal-footer'>
                               <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
