@@ -14,7 +14,9 @@ import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -63,14 +65,10 @@ public class LgInvite extends DaObject{
 	 */
 	@ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
 	@Column(name="timeperiods") 
-	//rename later to concreteAvailability
 
-	private List<LgTimePeriod> timePeriods;
+	private Set<LgTimePeriod> concreteAvailability;
 	
-	
-	public LgInvite() {
-//		this.timePeriods = new ArrayList<LgTimePeriod>();
-	}
+	public LgInvite() {}
 	
 	public LgInvite(LgInvite other) {
 		this.oid = other.oid;
@@ -78,9 +76,9 @@ public class LgInvite extends DaObject{
 		this.isIgnored = other.isIgnored;
 		this.user = other.user;
 		this.survey = other.survey;
-		this.timePeriods = new ArrayList<LgTimePeriod>();
-		for (final LgTimePeriod timePeriod : other.timePeriods) {
-			this.timePeriods.add(timePeriod);
+		this.concreteAvailability = new HashSet<LgTimePeriod>();
+		for (final LgTimePeriod timePeriod : other.concreteAvailability) {
+			this.concreteAvailability.add(timePeriod);
 		}
 	}
 	
@@ -92,12 +90,12 @@ public class LgInvite extends DaObject{
 	 * --------------------------------------------------------------------------------------------
 	 */
 	
-	public List<LgTimePeriod> getPossibleTimePeriods(){
-		return this.timePeriods;
+	public Set<LgTimePeriod> getPossibleTimePeriods(){
+		return this.concreteAvailability;
 	}
 	
-	public LgInvite setPossibleTimePeriods(final List<LgTimePeriod> period){
-		this.timePeriods = period;
+	public LgInvite setPossibleTimePeriods(final Set<LgTimePeriod> period){
+		this.concreteAvailability = period;
 		return this;
 	}
 
