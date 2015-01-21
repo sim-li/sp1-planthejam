@@ -132,25 +132,7 @@ public class LgUserWithCollectionsTest {
         buildVariousTimePeriods(20, 40, 60);
         saveGeneralAvailability();
         retrieveGeneralAvailability();
-        
-        @SuppressWarnings("unused")
-		final int sizeOfPersistedGeneralVailability = persistedGeneralAvailabilty.size();
-        final int sizeOfVariousTimePeriods = variousTimePeriods.size();
-        
-        HashSet<LgTimePeriod> timePeriodsCopy = new HashSet<LgTimePeriod>();
-        for (LgTimePeriod t : this.persistedGeneralAvailabilty) {
-        	timePeriodsCopy.add(new LgTimePeriod().updateWith(t));
-        }
-        Object[] timePeriodsCopyAsArray = timePeriodsCopy.toArray();
-        Object[] variousTimePeriodsAsArray = variousTimePeriods.toArray();
-        assertEquals("Length is equal? ", timePeriodsCopyAsArray.length, variousTimePeriodsAsArray.length);
-        for (int i = 0; i < timePeriodsCopyAsArray.length; i++) {
-        	LgTimePeriod tp1 = (LgTimePeriod) timePeriodsCopyAsArray[i];
-        	LgTimePeriod tp2 = (LgTimePeriod) variousTimePeriodsAsArray[i];
-        	assertEquals("Comaparing TP DUR " + tp1.getDurationMins() + " with " + tp2.getDurationMins(),
-        			tp1, tp2);
-        }
-        
+        assertEquals(persistedGeneralAvailabilty, variousTimePeriods);
     }
 
     private void saveGeneralAvailability() {
