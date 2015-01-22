@@ -50,8 +50,6 @@ public class ReUserService extends RestService {
 				} catch (Exception ex) {
 					throw create(RestLoginUserFailure.class, ex, i_user.getName());
 				}
-				System.out.println("OID IS " + o_user.getOid());
-
 				return o_user;
 			}
 		}.getResult();
@@ -80,11 +78,6 @@ public class ReUserService extends RestService {
 			public LgUser execute() throws Exception {
 				final LgUser o_user;
 				try {
-//					//TEST
-//					List<String> messages = new ArrayList<String>();
-//					messages.add("Hello");
-//					messages.add("Kitty");
-//					i_user.setMessages(messages);
 					o_user = getSession().register(i_user);
 					setUserName(request, o_user.getName());
 				} catch (Exception ex) {

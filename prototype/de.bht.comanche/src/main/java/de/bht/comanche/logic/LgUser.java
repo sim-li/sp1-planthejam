@@ -148,7 +148,11 @@ public class LgUser extends DaObject {
 	 */
 	public String getIconurl() {
 		final LgGravatarUtils utils = new LgGravatarUtils();
-		iconurl = utils.getUserUrl(email);
+		if (email != null) {
+			iconurl = utils.getUserUrl(email);
+		} else {
+			iconurl = utils.getUserUrl(name);
+		}
 		return iconurl;
 	}
 
