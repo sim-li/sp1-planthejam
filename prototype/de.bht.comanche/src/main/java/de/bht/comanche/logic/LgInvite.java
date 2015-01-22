@@ -1,5 +1,8 @@
 package de.bht.comanche.logic;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -8,13 +11,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -27,7 +25,7 @@ import de.bht.comanche.persistence.DaObject;
  */
 @Entity
 @Table(name = "invite")
-public class LgInvite extends DaObject {
+public class LgInvite extends DaObject{
 
 	private static final long serialVersionUID = 1L;
 
@@ -47,7 +45,6 @@ public class LgInvite extends DaObject {
 	/**
 	 * The user who receives this invite.
 	 */
-	@NotNull
 	@ManyToOne
 	private LgUser user;
 
@@ -61,13 +58,12 @@ public class LgInvite extends DaObject {
 	/**
 	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
 	 */
-	@OneToMany(mappedBy = "invite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<LgTimePeriod> timePeriods;
+	@ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
+	@Column(name="timeperiods") 
+
+	private Set<LgTimePeriod> concreteAvailability;
 	
-	
-	public LgInvite() {
-		this.timePeriods = new ArrayList<LgTimePeriod>();
-	}
+	public LgInvite() {}
 	
 	public LgInvite(LgInvite other) {
 		this.oid = other.oid;
@@ -75,9 +71,9 @@ public class LgInvite extends DaObject {
 		this.isIgnored = other.isIgnored;
 		this.user = other.user;
 		this.survey = other.survey;
-		this.timePeriods = new ArrayList<LgTimePeriod>();
-		for (final LgTimePeriod timePeriod : other.timePeriods) {
-			this.timePeriods.add(timePeriod);
+		this.concreteAvailability = new HashSet<LgTimePeriod>();
+		for (final LgTimePeriod timePeriod : other.concreteAvailability) {
+			this.concreteAvailability.add(timePeriod);
 		}
 	}
 	
@@ -88,6 +84,15 @@ public class LgInvite extends DaObject {
 	 * # hashCode(), toString()
 	 * --------------------------------------------------------------------------------------------
 	 */
+	
+	public Set<LgTimePeriod> getPossibleTimePeriods(){
+		return this.concreteAvailability;
+	}
+	
+	public LgInvite setPossibleTimePeriods(final Set<LgTimePeriod> period){
+		this.concreteAvailability = period;
+		return this;
+	}
 
 	public boolean isHost() {
 		return this.isHost;
@@ -113,13 +118,23 @@ public class LgInvite extends DaObject {
 	}
 
 	public LgInvite setUser(final LgUser user) {
+		if (user == null) {
+			throw new EmptyUserInInviteFailure();
+		}
 		this.user = user;
 		return this;
 	}
 	/**
+	 * Persisted invite without user field
+	 */
+	@SuppressWarnings("serial")
+	public static final class EmptyUserInInviteFailure extends multex.Failure {}
+	
+	/**
 	 * Returns PossibleTimePeriod with nulled db-flags
 	 * @return
 	 */
+	@JsonIgnore
 	public LgSurvey getSurvey() {
 		return this.survey;
 	}
@@ -127,6 +142,13 @@ public class LgInvite extends DaObject {
 	public LgInvite setSurvey(final LgSurvey survey) {
 		this.survey = survey;
 		return this;
+	}
+	
+	@Override
+	public void delete() {
+		// Null violates not null constraint. 
+		this.user = null;
+		super.delete();
 	}
 	
 	/**

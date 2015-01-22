@@ -1,12 +1,9 @@
 /**
- * Provides a model for invites.
- *
- * @module invite
- * @requires user
+ * @module models
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('member', ['user'])
+angular.module('models')
     .factory('Member', ['User', function(User) {
 
         'use strict';
@@ -61,6 +58,9 @@ angular.module('member', ['user'])
          * @return {Array}                  the exported members
          */
         Member.exportMany = function(membersToExport) {
+            if (!membersToExport) {
+                return [];
+            }
             var members = [];
             for (var i = 0; i < membersToExport.length; i++) {
                 members.push(membersToExport[i].doExport());

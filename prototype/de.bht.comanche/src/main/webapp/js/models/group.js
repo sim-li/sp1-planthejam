@@ -1,13 +1,9 @@
 /**
- * Provides a model for groups.
- *
- * @module group
- * @requires baseModel
- * @requires member
+ * @module models
  *
  * @author Sebastian Dass&eacute;
  */
-angular.module('group', ['baseModel', 'member'])
+angular.module('models')
     .factory('Group', ['Model', 'Member', function(Model, Member) {
 
         'use strict';
@@ -31,6 +27,7 @@ angular.module('group', ['baseModel', 'member'])
             this.name = config.name || 'Your new group';
             // this.members = config.members || []; // e.g.: [{oid: 1, name: 'Alice'}, {oid: 2, name: 'Bob'}, {oid: 3, name: 'Carla'}]
             this.members = config.members ? Model.importMany(Member, config.members) : [];
+            this.iconurl = config.iconurl || '';
         };
 
         // Group.prototype = new Model();

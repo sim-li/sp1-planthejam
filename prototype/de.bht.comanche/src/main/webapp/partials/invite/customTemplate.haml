@@ -1,0 +1,3 @@
+%a{:tabindex => "-1"}
+  %i{"ng-class" => "'icon-'+match.model.type"}
+  %span{"ng-bind-html-unsafe" => "match.model.title | typeaheadHighlight:query"}

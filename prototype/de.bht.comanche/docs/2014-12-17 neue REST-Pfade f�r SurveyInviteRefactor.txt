@@ -1,0 +1,61 @@
+//-- ReSurveyService --
+
+"/surveys/:oid"
+@GET
+    ==> from server: survey
+
+"/surveys"
+@GET
+    ==> from server: surveyArray
+
+"/surveys"
+@POST
+    <== to server: survey
+    server generates oid
+    ==> from server: survey // created survey with fresh oid from DB
+
+"/surveys/:oid"
+@PUT
+    <== to server: survey
+    server uses oid from the path parameter to search the survey in the DB
+    ==> from server: survey
+
+"/surveys/:oid"
+@DELETE
+
+
+//-- ReInviteService --
+
+"/invites/:oid"
+@GET
+    ==> from server: invite
+
+"/invites"
+@GET
+    ==> from server: inviteArray
+
+"/invites"
+@POST
+    <== to server: invite
+    server generates oid
+    ==> from server: invite // created invite with fresh oid from DB
+
+"/invites/:oid"
+@PUT
+    <== to server: invite
+    server uses oid from the path parameter to search the invite in the DB
+    ==> from server: invite
+
+// /invites/:oid
+@DELETE
+/* not allowed! */
+
+
+
+
+
+// evtl. später ändern?
+//-- Users --
+
+@GET
+/users/?all

@@ -1,92 +1,3 @@
-<<<<<<< HEAD
-//package de.bht.comanche.rest;
-//
-//import static multex.MultexUtil.create;
-//
-//import java.util.Date;
-//import java.util.List;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import javax.ws.rs.Consumes;
-//import javax.ws.rs.DELETE;
-//import javax.ws.rs.POST;
-//import javax.ws.rs.Path;
-//import javax.ws.rs.Produces;
-//import javax.ws.rs.core.Context;
-//
-//import de.bht.comanche.logic.LgInvite;
-//import de.bht.comanche.logic.LgSurvey;
-//import de.bht.comanche.logic.LgTransaction;
-//import de.bht.comanche.logic.LgUser;
-//import de.bht.comanche.persistence.DaInvite;
-//import de.bht.comanche.persistence.DaPoolImpl.DaOidNotFoundExc;
-//import de.bht.comanche.persistence.DaSurvey;
-//import de.bht.comanche.persistence.DaUser;
-//
-//@Path("/group/")
-//public class ReGroupService extends RestService {
-//
-//  // TODO should be changed to GET, because no data is sent from calling client
-//	@Path("getGroups")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public List<LgInvite> get(@Context final HttpServletRequest request) {
-//		return new LgTransaction<List<LgGroup>>(request) {
-//			@Override
-//			public List<LgGroup> execute() throws Exception {
-//				return startSession().getGroups();
-//			}
-//		}.getResult();
-//	}
-//	
-//	@Path("save")
-//	@POST
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgInvite save(final LgGroup group, @Context final HttpServletRequest request) {
-//		return new LgTransaction<List<LgGroup>>(request) {
-//			@Override
-//			public List<LgGroup> execute() throws Exception {
-//				return startSession().save(group);
-//			}
-//		}.getResult();
-//	}
-//	
-//	@Path("delete")
-//	@DELETE
-//	@Consumes("application/json")
-//	@Produces({ "application/json" })
-//	public LgInvite delete(final long oid, @Context final HttpServletRequest request) {
-//		return new LgTransaction<List<LgGroup>>(request) {
-//			@Override
-//			public List<LgGroup> execute() throws Exception {
-//				startSession().deleteGroup(oid);
-//				return null;
-//			}
-//		}.getResult();
-//	}
-//	
-////	/* TODO
-////	 * - move to ReUserService
-////	 * - implement DaUser.selectAllUsersWhereNameIsLike(String searchString)
-////	 * - provide access to selectAllUsersWhereNameIsLike from session
-////	 */
-////	@Path("findUsers")
-////	@DELETE
-////	@Consumes("application/json")
-////	@Produces({ "application/json" })
-////	public LgInvite findUsers(final String searchString, @Context final HttpServletRequest request) {
-////		return new LgTransaction<List<LgUser>>(request) {
-////			@Override
-////			public List<LgUser> execute() throws Exception {
-////				return startSession().selectAllUsersWhereNameIsLike(searchString);
-////			}
-////		}.getResult();
-////	}
-//	
-//}
-=======
 package de.bht.comanche.rest;
 
 import static multex.MultexUtil.create;
@@ -96,8 +7,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
@@ -114,7 +28,7 @@ import de.bht.comanche.logic.LgTransaction;
  * 
  *
  */
-@Path("/group/")
+@Path("/groups/")
 public class ReGroupService extends RestService {
 	
 	/**
@@ -123,8 +37,8 @@ public class ReGroupService extends RestService {
 	 * @return Returns the list of LgGroups.
 	 * @exception RestGetGroupsFailure if it was not possible to get all groups for LgUser.
 	 */
-	@Path("getGroups")
-	@POST
+	@Path("/")
+	@GET
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public List<LgGroup> get(@Context final HttpServletRequest request) {
@@ -155,11 +69,30 @@ public class ReGroupService extends RestService {
 	 * @return Returns saved LgGroup.
 	 * @exception RestSaveGroupFailure if it was not possible to save LgGroup.
 	 */
-	@Path("save")
+	@Path("/")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
 	public LgGroup save(final LgGroup group, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgGroup>(request) {
+			@Override
+			public LgGroup execute() throws Exception {
+				final LgGroup result;
+				try {
+					result = startSession().save(group);
+				} catch (Exception ex) {
+					throw create(RestSaveGroupFailure.class, ex, group.getName(), group.getOid(), getSession().getUser().getName());
+				}
+				return result;
+			}
+		}.getResult();
+	}
+	
+	@Path("/{oid}")
+	@PUT
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgGroup update(@PathParam("oid") final long oid, final LgGroup group, @Context final HttpServletRequest request) {
 		return new LgTransaction<LgGroup>(request) {
 			@Override
 			public LgGroup execute() throws Exception {
@@ -186,7 +119,7 @@ public class ReGroupService extends RestService {
 	 * @param request The request information from HTTP service.
 	 * @exception RestDeleteGroupFailure if it was not possible to delete LgGroup.
 	 */
-	@Path("delete")
+	@Path("/")
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
@@ -212,4 +145,3 @@ public class ReGroupService extends RestService {
 	public static final class RestDeleteGroupFailure extends multex.Failure {}
 
 }
->>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135

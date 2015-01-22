@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.rest.ReInviteService.RestGetInviteFailure;
 
 /**
@@ -59,6 +61,13 @@ public abstract class DaObject implements Serializable {
 		this.pool = pool;
 		return this;
 	}
+	
+	//for DB test only
+	public <E extends DaObject> E saveUnattached(final E other) {
+		return attachPoolFor(other).save();
+	}
+
+	
 	@SuppressWarnings("serial")
 	// @TODO Write exception text
 	public static final class OwningPoolChangedExc extends multex.Exc {}
@@ -74,14 +83,14 @@ public abstract class DaObject implements Serializable {
 	 */
 	@SuppressWarnings("serial")
 	public static final class DaObjectUndefinedPoolWhileAttachingFailure extends multex.Failure {}
-	public <E extends DaObject> E attach(final E other) {
+	public <E extends DaObject> E attachPoolFor(final E other) {
 
 		if (this.pool == null) {
 			throw create(DaObjectUndefinedPoolWhileAttachingFailure.class, this, other);
 		}
 		// @TODO Throw no pool exception when other object doesn't contain pool
 		@SuppressWarnings("unchecked")
-		final E result = (E) other.attach(getPool());
+		final E result = (E) other.attach(this.pool);
 		return result;
 	}
 
@@ -164,10 +173,14 @@ public abstract class DaObject implements Serializable {
 		return result;
 	}
 
+	protected <E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) {
+		return pool.findOneByKey(persistentClass, keyFieldName, keyFieldValue);
+	}
+	@JsonIgnore
 	public boolean isPersistent() {
 		return this.oid != DaPool.CREATED_OID && this.oid > 0;
 	}
-
+	@JsonIgnore
 	public boolean isDeleted() {
 		return this.oid == DaPool.DELETED_OID;
 	}
@@ -180,7 +193,7 @@ public abstract class DaObject implements Serializable {
 		return this.oid;
 	}
 
-	protected void setOid(final long oid) {
+	public void setOid(final long oid) {
 		this.oid = oid;
 	}
 

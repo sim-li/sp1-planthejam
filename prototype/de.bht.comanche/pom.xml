@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-YOU LIKE THAT?
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.bht.comanche</groupId>
@@ -137,10 +137,9 @@ YOU LIKE THAT?
                     <stopPort>${jetty.stop.port}</stopPort>
                 </configuration>
             </plugin>
-            <plugin>
+   <!--          <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <!-- NB! Set <version> to the latest released version of frontend-maven-plugin, like in README.md -->
                 <version>${eirslett.frontend.plugin.version}</version>
                 <configuration>
                     <workingDirectory>${project.basedir}/src/main/webapp</workingDirectory>
@@ -161,22 +160,10 @@ YOU LIKE THAT?
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- Optional configuration which provides for running any npm command -->
                         <configuration>
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-                    <!-- Goal not known to eirslett. -->
-                    <!-- <execution>
-                        <id>bower install</id>
-                        <goals>
-                            <goal>bower</goal>
-                        </goals>
-                        <configuration>
-                             <workingDirectory>${project.basedir}/src/main/webapp</workingDirectory>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution> -->
                     <execution>
                         <id>javascript tests</id>
                     <goals>
@@ -187,7 +174,7 @@ YOU LIKE THAT?
                     </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>

@@ -1,30 +1,13 @@
-<<<<<<< HEAD
-<form name="loginForm" ng-hide="session.state.isLoggedIn"  ng-show="session.state.is(dialogMap.USER_LOGIN)" ng-submit="login()" class="form-signin">
-    <h2 class="form-signin-heading">Bitte einloggen</h2>
-    <div>
-        <label for="inputName">Benutzername</label>
-        <input class="form-control" id="inputName" name="inputName" type="text" ng-model="session.user.name" placeholder="Dein Benutzername ..." required autofocus/>
-        <label for="inputPassword">Passwort</label>
-        <input class="form-control" id="inputPassword" name="inputPassword" ng-hide="session.showPassword" type="password" ng-model="session.user.password" 
-        placeholder="8-20 Buchstaben" ng-change="discardWarnings()" required />
-    </div>
-    <div>
-        <a id="registerLink" href="#/register" ng-click="toggleLoginDialog()">Registrieren</a>
-    </div>
-    <input class="btn btn-primary btn-block" id="loginBtn" type="submit" value="Login" />
-</form><!-- loginForm -->
-=======
 <form class='form-signin' name='loginForm' ng-submit='login(user)'>
-  <h2 class='form-signin-heading'>Bitte einloggen</h2>
+  <h2 class='form-signin-heading'>Welcome to Plan The Jam. Please log in.</h2>
   <div>
-    <label for='inputName'>Benutzername</label>
-    <input autofocus='' class='form-control' id='inputName' name='inputName' ng-model='user.name' placeholder='Dein Benutzername ...' required='' type='text'>
-    <label for='inputPassword'>Passwort</label>
-    <input class='form-control' id='inputPassword' name='inputPassword' ng-model='user.password' placeholder='8-20 Buchstaben' required='' type='password'>
+    <label for='inputName'>User name</label>
+    <input autofocus='' class='form-control' id='inputName' name='inputName' ng-model='user.name' placeholder='Your user name ...' required='' type='text'>
+    <label for='inputPassword'>Password</label>
+    <input class='form-control' id='inputPassword' name='inputPassword' ng-model='user.password' placeholder='8-20 characters' required='' type='password'>
   </div>
   <div>
-    <a href='#/register' id='registerLink' ng-click='toggleLoginDialog()'>Registrieren</a>
+    <a href='#/register' id='registerLink' ng-click='toggleLoginDialog()'>Register</a>
   </div>
   <input class='btn btn-primary btn-block' id='loginBtn' type='submit' value='Login'>
 </form>
->>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135

@@ -1,36 +1,5 @@
-/*
- * Softwareprojekt SoSe/WiSe 2014, Team: Comanche
- * (C)opyright Sebastian Dassé, Mat.-Nr. 791537, s50602@beuth-hochschule.de
- * (C)opyright Duc Tung Tong, Mat.-Nr. 798029, s51488@beuth-hochschule.de
- * Module: my app -- the main module
- */
-
 'use strict';
 
-<<<<<<< HEAD
-"use strict";
-
-angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "constants", "restModule", "typeAugmentations"])
-    .constant("dialogMap", {
-        USER_LOGIN: 0, 
-        USER_REGISTER: 1, 
-        USER_EDIT: 2, 
-        SURVEY_SELECTION: 3,
-        SURVEY_EDIT: 4
-    })
-    .factory("util", function() {
-        var removeElementFrom = function(element, array) {
-            var index = array.indexOf(element);
-            if (index > -1) {
-                array.splice(index, 1);
-            }
-        };
-        return {
-            removeElementFrom: removeElementFrom
-        }
-    })
-    .config(function($routeProvider, $locationProvider) {
-=======
 /**
  * Provides the webapp. Also has:
  * - routes
@@ -39,28 +8,18 @@ angular.module("myApp", ["ui.bootstrap", "ngRoute","datePickerDate", "survey", "
  *
  * @module myApp
  * @main
- * @requires ngRoute
- * @requires ui.bootstrap
- * @requires ui.bootstrap.datetimepicker
- * @requires xeditable
- * @requires baseModel
  * @requires constants
- * @requires datePickerDate
- * @requires group
- * @requires invite
- * @requires restModule
- * @requires survey
- * @requires timePeriod
- * @requires user
+ * @requires models
+ * @requires rest
  * @requires util
  *
  * @author Sebastian Dass&eacute;
+ * @author Duc Tung Tong
  */
-angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'xeditable', 'baseModel',
-        'constants', 'datePickerDate', 'group', 'invite', 'restModule', 'survey', 'timePeriod', 'user', 'util'
+angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap', 'ui.bootstrap.datetimepicker',
+        'ui.calendar', 'uiUtilsModule', 'util', 'xeditable'
     ])
     .config(function($routeProvider /*, $locationProvider*/ ) {
->>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135
         $routeProvider
             .when('/', {
                 templateUrl: 'pages/login.html',
@@ -74,44 +33,39 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                 templateUrl: 'pages/cockpit.html',
                 controller: 'cockpitCtrl',
                 resolve: {
+                    surveysPromise: function(restService, Survey) {
+                        return restService.doGetMany(Survey);
+                    },
                     invitesPromise: function(restService, Invite) {
                         return restService.doGetMany(Invite);
+                    },
+                    messagesPromise: function(restService) {
+                        return restService.getMessages();
                     }
                 }
             })
-<<<<<<< HEAD
-            .when('/invite', {
-                templateUrl : 'pages/invite.html',
-                controller  : 'inviteCtrl'
-            });
-        $locationProvider.html5Mode(true);
-=======
-            .when('/invite/:inviteOid?', {
-                templateUrl: 'pages/invite.html',
-                controller: 'inviteCtrl',
+            .when('/survey/:surveyOid?', {
+                templateUrl: 'pages/survey.html',
+                controller: 'surveyCtrl',
                 resolve: {
-                    selectedInvitePromise: function($route, restService, Invite) {
-                        var inviteOid = $route.current.params.inviteOid;
-                        // console.log("inviteOid = " + inviteOid)
-                        return (inviteOid === undefined) ? '' : restService.doGet(Invite, inviteOid);
+                    selectedSurveyPromise: function($route, restService, Survey) {
+                        var surveyOid = $route.current.params.surveyOid;
+                        // console.log("surveyOid = " + surveyOid)
+                        return (surveyOid === undefined) ? '' : restService.doGet(Survey, surveyOid);
                     },
-                    // selectedInviteSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
-                    //     var inviteOid = $route.current.params.inviteOid;
-                    //     return (inviteOid === undefined) ? [] : restService.getSurveyInvites(inviteOid);
-                    // },
-                    currentUserPromise: function($route, restService, User) {
-                        return ($route.current.params.inviteOid !== undefined) ? '' : restService.doGet(User);
-                    },
-                    // TODO maybe not necessary to get all invites for this route?
-                    invitesPromise: function(restService, Invite) {
-                        return restService.doGetMany(Invite);
+                    selectedSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
+                        var surveyOid = $route.current.params.surveyOid;
+                        return (surveyOid === undefined) ? [] : restService.getSurveyInvites(surveyOid);
                     },
                     groupsPromise: function(restService, Group) {
                         return restService.doGetMany(Group);
                     },
-                    usersPromise: function(restService, User) {
-                        return restService.doGetMany(User);
-                    }
+                    usersPromise: function(restService) {
+                            return restService.getAllUsers();
+                        }
+                        //, timePeriodPromise: function(restService, timePeriod) {
+                        //     return restService.doGetMany(timePeriod);
+                        // }
                 }
             })
             .when('/account', {
@@ -124,54 +78,31 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
                 }
             });
         // $locationProvider.html5Mode(true); // for prettier urls
->>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135
     })
     .directive('ptjMenu', function() {
         return {
             restrict: 'E',
-<<<<<<< HEAD
-            templateUrl: 'partials/menu.html'
-        }
-=======
             templateUrl: 'partials/menu.html',
             controller: 'menuCtrl'
         };
->>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135
     })
     .directive('ptjGroups', function() {
         return {
             restrict: 'E',
-            templateUrl: 'partials/invite/groups.html'
-<<<<<<< HEAD
-        }
-=======
+            templateUrl: 'partials/invite/groups.html',
+            controller: 'groupsCtrl'
         };
->>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135
     })
     .directive('ptjSearch', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/search.html'
-<<<<<<< HEAD
-        }
-=======
         };
->>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135
     })
     .directive('ptjSurveyDetails', function() {
         return {
             restrict: 'E',
             templateUrl: 'partials/invite/surveydetails.html'
-<<<<<<< HEAD
-        }
-    })
-    .directive('ptjMembers', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'partials/invite/members.html'
-        }
-    });
-=======
         };
     })
     .directive('ptjSurveySelect', function() {
@@ -180,8 +111,27 @@ angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.datetimepicker
             templateUrl: 'partials/surveyselect.html'
         };
     })
-    .run(function(editableOptions /*, typeAugmentations*/ ) {
+    .directive('ptjTimeperiodSelector', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/timeperiodSelector.html',
+            controller: 'timeperiodSelectorCtrl'
+        };
+    })
+    .directive('ptjCalendar', function() {
+        return {
+            restrict: 'E',
+        scope: {
+            /*
+                            test: '=test',
+                            possibleTimePeriods: '=possible',
+                            resultingTimePeriods: '=resulting'*/
+            },
+            // template: '<div class="calendar" ng-model="eventSources" ui-calendar="uiConfig.calendar"></div>',
+            templateUrl: 'partials/calendar.html',
+            controller: 'calendarCtrl'
+        };
+    })
+    .run(function(editableOptions) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-        // typeAugmentations();
     });
->>>>>>> 28717c5aa782520e8b4a53c98880b3d839cc4135
