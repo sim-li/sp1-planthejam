@@ -32,6 +32,9 @@ angular.module('models')
              *          @param {Array}   [config.invites=[]] the invites of the survey           ==> TODO ==> delete this line if attribute was removed
              */
             var Survey = function(config) {
+                if (!(this instanceof Survey)) {
+                    return new Survey(config);
+                }
                 config = config || {};
                 this.oid = config.oid || '';
                 this.name = config.name || 'Your survey';
@@ -193,7 +196,6 @@ angular.module('models')
                     frequencyDist: 1 + Math.round(Math.random() * 30),
                     frequencyUnit: TimeUnit._options[Math.round(Math.random() * (TimeUnit._options.length - 1))],
                     possibleTimePeriods: [],
-                    determinedTimePeriods: [],
                     determinedTimePeriod: null
                 });
             };

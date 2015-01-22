@@ -25,7 +25,11 @@ angular.module('models')
 				return new TimePeriod(config);
 			}
 			config = config || {};
+<<<<<<< HEAD
 			// this.oid = config.oid || '';
+=======
+			this.oid = config.oid || '';
+>>>>>>> ui
 			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
 			this.durationMins = config.durationMins || 0;
 		};
