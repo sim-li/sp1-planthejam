@@ -43,7 +43,8 @@ angular.module('rest', ['models'])
                 },
                 'survey': {
                     'path': 'surveys/',
-                    'invites': 'invites' // TODO -> REST service on server side: GET and PUT surveys/:oid/invites
+                    'invites': 'invites',
+                    'notifyParticipants': 'notifyParticipants' // TODO -> REST service on server side: POST surveys/:oid/notifyParticipants
                 },
                 'invite': {
                     'path': 'invites/'
@@ -228,6 +229,12 @@ angular.module('rest', ['models'])
                 var url = getUrlFor(User, null, 'messages');
                 $log.debug(url)
                 return callHttp('GET')(url);
+            };
+
+            restService.notifyParticipants = function(oid) {
+                var url = getUrlFor(Survey, oid, 'notifyParticipants');
+                $log.debug(url)
+                return callHttp('POST')(url);
             };
 
             /**

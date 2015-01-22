@@ -4,7 +4,7 @@
  * @author Duc Tung Tong
  */
 angular.module('models')
-	.factory('TimePeriod', function() {
+	.factory('TimePeriod', ['arrayUtil', function(arrayUtil) {
 		'use strict';
 
 		/**
@@ -24,8 +24,9 @@ angular.module('models')
 			if (!(this instanceof TimePeriod)) {
 				return new TimePeriod(config);
 			}
+			config = config || {};
 			this.oid = config.oid || '';
-			this.startTime = config.startTime || new Date();
+			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
 			this.durationMins = config.durationMins || 0;
 		};
 
@@ -51,6 +52,17 @@ angular.module('models')
 			};
 		};
 
+		TimePeriod.exportMany = function(timePeriodsToExport) {
+			if (!timePeriodsToExport) {
+				return [];
+			}
+			var timePeriods = [];
+			arrayUtil.forEach(timePeriodsToExport, function(ele) {
+				timePeriods.push(ele.doExport());
+			});
+			return timePeriods;
+		};
+
 		/**
 		 * Provides an array of three dummy time periods.
 		 *
@@ -73,4 +85,4 @@ angular.module('models')
 
 
 		return (TimePeriod);
-	});
+	}]);

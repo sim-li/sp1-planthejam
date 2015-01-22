@@ -26,8 +26,11 @@ angular.module('myApp')
              * All $scope variables for directives and their controllers should be declared here.
              */
             $scope.selectedSurvey = new Survey(selectedSurveyPromise);
+            $scope.selectedSurvey.invites = Model.importMany(Invite, selectedSurveyInvitesPromise);
             $log.debug('selected survey: ', $scope.selectedSurvey)
-            $scope.selectedSurveyInvites = Model.importMany(Invite, selectedSurveyInvitesPromise);
+                // $scope.selectedSurveyInvites = Model.importMany(Invite, selectedSurveyInvitesPromise);
+                // $log.debug('selected survey invites: ', $scope.selectedSurveyInvites);
+
             // For group widget
             $scope.groups = Model.importMany(Group, groupsPromise);
             $scope.users = Model.importMany(User, usersPromise);
@@ -88,9 +91,8 @@ angular.module('myApp')
             };
 
             $scope.saveSurvey = function() {
-                $log.log($scope.selectedSurvey);
-                // HACK -> Move to survey class when possible.
-                $scope.selectedSurvey.invites = Invite.exportMany($scope.selectedSurvey.invites);
+                $log.log('selected survey: ', $scope.selectedSurvey);
+                $scope.selectedSurvey.invites = Invite.exportMany($scope.selectedSurvey.invites); // HACK -> Move to survey class when possible.
                 restService.doSave($scope.selectedSurvey)
                     .then(function(success) {
                         $location.path('/cockpit');
@@ -166,13 +168,14 @@ angular.module('myApp')
             //     }
             // };
 
+            // UNUSED?
             $scope.renderCalendar = function() {
                 $scope.surveyCalendar.fullCalendar('render');
             };
 
-            $scope.saveAvailabilities = function() {
-                // $log.log($scope.resultingTimePeriods);
-                // $scope.selectedInvite.possibleTimePeriods = ...
+            $scope.cancel = function() {
+                $location.path('/cockpit');
             };
+
         }
     ]);

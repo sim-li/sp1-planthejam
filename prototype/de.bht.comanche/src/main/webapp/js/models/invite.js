@@ -4,8 +4,8 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('Invite', ['arrayUtil', 'Status', 'Survey' /*, 'SurveyType', 'TimeUnit'*/ , 'User',
-        function(arrayUtil, Status, Survey /*, SurveyType, TimeUnit*/ , User) {
+    .factory('Invite', ['arrayUtil', 'Model', 'Status', 'Survey' /*, 'SurveyType', 'TimeUnit'*/ , 'TimePeriod', 'User',
+        function(arrayUtil, Model, Status, Survey /*, SurveyType, TimeUnit*/ , TimePeriod, User) {
 
             'use strict';
 
@@ -21,7 +21,7 @@ angular.module('models')
              * @param {Object}  [config.user=new User()] the user that owns the invite
              * @param {Object}  [config.survey=new Survey()] the survey to which the invite belongs
              *
-             * @param {Array}   [config.concreteAvailability=[]] the available time periods of the participant for this survey
+             * @param {Array}   [config.timePeriods=[]] the available time periods of the participant for this survey
              */
             var Invite = function(config) {
                 if (!(this instanceof Invite)) {
@@ -33,6 +33,7 @@ angular.module('models')
                 this.ignored = config.ignored || Status.UNDECIDED;
                 this.user = new User(config.user);
                 this.survey = config.survey ? new Survey(config.survey) : ''; // ???
+                this.timePeriods = Model.importMany(TimePeriod, config.timePeriods);
             };
 
             // Invite.prototype = new Model();
@@ -57,7 +58,8 @@ angular.module('models')
                     'host': this.host,
                     'ignored': this.ignored,
                     'user': this.user.doExport(),
-                    'survey': this.survey ? this.survey.doExport() : null
+                    'survey': this.survey ? this.survey.doExport() : null,
+                    // 'timePeriods': TimePeriod.exportMany(this.timePeriods) // FIXME temporarily commented out
                 };
             };
 
@@ -95,6 +97,9 @@ angular.module('models')
             // };
 
             Invite.exportMany = function(invitesToExport) {
+                if (!invitesToExport) {
+                    return [];
+                }
                 var invites = [];
                 arrayUtil.forEach(invitesToExport, function(ele) {
                     invites.push(ele.doExport());

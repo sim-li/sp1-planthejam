@@ -4,9 +4,9 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('Survey', ['arrayUtil', 'Status', 'SurveyType', 'TimeUnit',
+    .factory('Survey', ['arrayUtil', 'Model', 'Status', 'SurveyType', 'TimePeriod', 'TimeUnit',
 
-        function(arrayUtil, Status, SurveyType, TimeUnit) {
+        function(arrayUtil, Model, Status, SurveyType, TimePeriod, TimeUnit) {
 
             'use strict';
 
@@ -32,17 +32,20 @@ angular.module('models')
              *          @param {Array}   [config.invites=[]] the invites of the survey           ==> TODO ==> delete this line if attribute was removed
              */
             var Survey = function(config) {
+                if (!(this instanceof Survey)) {
+                    return new Survey(config);
+                }
                 config = config || {};
                 this.oid = config.oid || '';
                 this.name = config.name || 'Your survey';
                 this.description = config.description || 'Say what it is all about';
                 this.type = config.type || SurveyType.ONE_TIME;
                 this.durationMins = config.durationMins || 0;
-                this.deadline = new Date(config.deadline) || new Date();
+                this.deadline = config.deadline ? new Date(config.deadline) : new Date();
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
-                this.possibleTimePeriods = config.possibleTimePeriods || [];
-                this.determinedTimePeriod = config.determinedTimePeriod;
+                this.possibleTimePeriods = Model.importMany(TimePeriod, config.possibleTimePeriods);
+                this.determinedTimePeriod = new TimePeriod(config.determinedTimePeriod);
                 this.success = config.success || Status.UNDECIDED;
                 this.algoChecked = config.algoChecked || false;
                 this.invites = config.invites || []; // ??? -- removed ON PURPOSE --> the invites shall be imported seperately
@@ -72,14 +75,34 @@ angular.module('models')
                     'type': this.type,
                     'durationMins': this.durationMins,
                     'deadline': this.deadline,
-                    'invites': this.invites
-                        // 'frequencyDist': this.frequencyDist,                         // FIXME temporarily commented out
-                        // 'frequencyUnit': this.frequencyUnit,                         // FIXME temporarily commented out
-                        // 'possibleTimePeriods': this.possibleTimePeriods,             // FIXME temporarily commented out
-                        // 'determinedTimePeriod': this.determinedTimePeriod,           // FIXME temporarily commented out
-                        // 'success': this.success,                                     // FIXME temporarily commented out
-                        // 'algoChecked': this.algoChecked                              // FIXME temporarily commented out
+                    'invites': this.invites,
+                    'frequencyDist': this.frequencyDist, // FIXME temporarily commented out
+                    'frequencyUnit': this.frequencyUnit, // FIXME temporarily commented out
+                    'possibleTimePeriods': TimePeriod.exportMany(this.possibleTimePeriods), // FIXME temporarily commented out
+                    'determinedTimePeriod': this.determinedTimePeriod ? this.determinedTimePeriod.doExport() : null, // FIXME temporarily commented out
+                    'success': this.success, // FIXME temporarily commented out
+                    'algoChecked': this.algoChecked // FIXME temporarily commented out
                 };
+            };
+
+            Survey.prototype.hasParticipants = function() {
+                return arrayUtil.findByAttribute(this.invites, 'host', false) ? true : false;
+            };
+
+            Survey.prototype.isNotReady = function() {
+                return !this.algoChecked;
+            };
+
+            Survey.prototype.isReady = function() {
+                return this.algoChecked && this.success == Status.UNDECIDED;
+            };
+
+            Survey.prototype.isSuccessful = function() {
+                return this.algoChecked && this.success == Status.YES;
+            };
+
+            Survey.prototype.isUnsuccessful = function() {
+                return this.algoChecked && this.success == Status.NO;
             };
 
             // Invite.prototype.addParticipantsFromGroup = function(group) {
@@ -173,7 +196,6 @@ angular.module('models')
                     frequencyDist: 1 + Math.round(Math.random() * 30),
                     frequencyUnit: TimeUnit._options[Math.round(Math.random() * (TimeUnit._options.length - 1))],
                     possibleTimePeriods: [],
-                    determinedTimePeriods: [],
                     determinedTimePeriod: null
                 });
             };
