@@ -78,7 +78,7 @@ public class DaHibernateJpaPool implements DaPool {
 
 	@Override
 	public <E extends DaObject> E findOneByKey(Class<E> persistentClass,
-			String keyFieldName, Object keyFieldValue) {
+			String keyFieldName, Object keyFieldValue) throws DaFindOneByKeyExc{
 		final List<E> results = findManyByKey(persistentClass, keyFieldName, keyFieldValue);
 		if(results.isEmpty()){
 			throw create(DaFindOneByKeyExc.class, persistentClass.getClass(), keyFieldName, keyFieldValue);
@@ -92,7 +92,7 @@ public class DaHibernateJpaPool implements DaPool {
 	 * Could not find entry for class "{0}" with field "{1}" and value "{2}".
 	 */
 	@SuppressWarnings("serial")
-	public static final class DaFindOneByKeyExc extends multex.Exc {}
+	public static final class DaFindOneByKeyExc extends multex.Failure {}
 	
 	public <E extends DaObject> E findOneByTwoKeys(final Class<E> persistentClass, final String firstKeyFieldName, final Object firstKey, final String secondKeyFieldName, final Object secondKey) {
 		final List<E> results = findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);

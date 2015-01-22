@@ -28,7 +28,6 @@ public class LgGravatarUtils {
 	}
 	
 	private String generateMd5Hash(String email) {
-		if (email == null) { return ""; }
 		try {
 			final byte[] emailBytes = email.getBytes(MD5_ENC);
 			final MessageDigest md = MessageDigest.getInstance(MD5_ALG_NAME);

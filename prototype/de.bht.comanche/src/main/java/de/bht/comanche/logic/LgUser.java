@@ -1,12 +1,15 @@
 package de.bht.comanche.logic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -66,37 +69,22 @@ public class LgUser extends DaObject {
 	/**
 	 * Representation of a foreign key in a LgMember entity. Provide a member.
 	 */
-	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	
+	@ElementCollection(targetClass = LgTimePeriod.class, fetch = FetchType.EAGER)
+	@Column(name = "general_availability")
 	private Set<LgTimePeriod> generalAvailability;
-	
-	// Change to Lazy for Lazy Attempt in Test LgUserWithCollectionTest 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<LgMessage> messages;
-	
+
+	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+	@Column(name = "messages")
+	private Set<LgMessage> messages = new HashSet<LgMessage>();
+
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
 		this.groups = new ArrayList<LgGroup>();
 	}
-	
-	public LgUser updateWith(LgUser other) {
-		this.email = other.email;
-		this.generalAvailability =  other.generalAvailability;
-		this.groups = other.groups;
-		this.iconurl = other.iconurl;
-		this.invites = other.invites;
-		this.member = other.member;
-		this.messages = other.messages;
-		this.name = other.name;
-		this.oid = other.oid;
-		this.password = other.password;
-		this.tel = other.tel;	
-		return this;
-	}
-	
+
 	public LgInvite getInviteBySurveyName(final String name) {
 		for (LgInvite invite : invites) {
 			if (invite.getSurvey().getName() == name) {
@@ -122,6 +110,10 @@ public class LgUser extends DaObject {
 	 * Complete deleting of a user accout.
 	 */
 	public void deleteThisAccount() {
+//		for (LgInvite invite : invites) {
+//			attachPoolFor(invite);
+//			invite.delete();
+//		}
 		delete();
 	}
 
@@ -219,6 +211,7 @@ public class LgUser extends DaObject {
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
+	
 	public Set<LgTimePeriod> getGeneralAvailability() {
 		return this.generalAvailability;
 	}
@@ -228,17 +221,9 @@ public class LgUser extends DaObject {
 	 * 
 	 * @return The list with LgTimePeriods.
 	 */
-	public void setGeneralAvailability(
-			Set<LgTimePeriod> generalAvailability) {
+	public LgUser setGeneralAvailability(Set<LgTimePeriod> generalAvailability) {
 		this.generalAvailability = generalAvailability;
-	}
-
-	public Set<LgMessage> getMessages() {
-		return this.messages;
-	}
-
-	public void setMessages(Set<LgMessage> messages) {
-		this.messages = messages;
+		return this;
 	}
 
 	/**
@@ -276,7 +261,7 @@ public class LgUser extends DaObject {
 		for (LgInvite invite : this.invites) {
 			if (invite.isHost()) {
 				surveys.add(invite.getSurvey());
-			}
+			} 
 		}
 		return surveys;
 	}
@@ -284,6 +269,7 @@ public class LgUser extends DaObject {
 	public List<LgInvite> getInvitesForSurvey(final long oid) {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
 		for (LgInvite invite : this.getSurvey(oid).getInvites()) {
+			//if set user to null --> works 
 			filteredInvites.add(new LgInvite(invite).setSurvey(null));
 		}
 		return filteredInvites;
@@ -299,6 +285,7 @@ public class LgUser extends DaObject {
 	}
 
 	public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
+		
 		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
 		listFromDB.add(findOneByKey(LgSurvey.class, "OID", this.getOid()));
 		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
@@ -356,29 +343,49 @@ public class LgUser extends DaObject {
 		return saveInvite(invite);
 	}
 
-	// ------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
+	//------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
 
-	public void evaluateAllSurveys() {
-		final List<LgSurvey> surveysOfThisUser = getSurveys();
-		for (final LgSurvey survey : surveysOfThisUser) {
-			if (survey.isReadyForEvaluation()) {
-				survey.determine();
-				sendMessageToHost(survey);
-			}
-		}
-	}
+    public void evaluateAllSurveys() {
+    	final List<LgSurvey> surveysOfThisUser = getSurveys();
+        System.out.println("+#+#+#+#+#+#+#+#+#+#");
+        System.out.println("evaluating all survey (" + surveysOfThisUser.size() + ")");
+    	for (final LgSurvey survey : surveysOfThisUser) {
+            System.out.println("survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
+    		if (survey.isReadyForEvaluation()) {
+                System.out.println("READY survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
+    			survey.determine();
+    			// sendMessageToHost(survey);
+    		}
+    	}
+    }
 
-	private void sendMessageToHost(final LgSurvey survey) {
-		final Date determinedDate = survey.getDeterminedTimePeriod()
-				.getStartTime(); // needs formatting
-		final String message = "es konnte folgender / kein Termin ermittelt werden "
-				+ determinedDate;
-		// IMPORTANT TODO implementation missing of LgUser.messages
-		// this.messages.add(message);
-	}
+    private void sendMessageToHost(final LgSurvey survey) {
+        System.out.println(survey);
+        System.out.println(survey.getDeterminedTimePeriod());
+        System.out.println(survey.getDeterminedTimePeriod().getStartTime());
+    	final Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
+    	final String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
+    	// IMPORTANT TODO implementation missing of LgUser.messages
+    	// this.messages.add(message);
+    }
 
 	// -------------------------------------------------------------------------
 
+    public LgUser updateWith(LgUser other) {
+		this.email = other.email;
+		this.generalAvailability =  other.generalAvailability;
+		this.groups = other.groups;
+//		this.iconurl = other.iconurl;
+		this.invites = other.invites;
+		this.member = other.member;
+		this.messages = other.messages;
+		this.name = other.name;
+		this.oid = other.oid;
+		this.password = other.password;
+		this.tel = other.tel;	
+		return this;
+	} 
+    
 	public LgInvite getInvite(final long oid) {
 		return search(this.invites, oid);
 	}
@@ -424,13 +431,14 @@ public class LgUser extends DaObject {
 		return this;
 	}
 
-	// public List<String> getMessages() {
-	// return this.messages;
-	// }
-	//
-	// public void setMessages(List<String> messages) {
-	// this.messages = messages;
-	// }
+	 public Set<LgMessage> getMessages() {
+		 return this.messages;
+	 }
+	
+	 public void setMessages(Set<LgMessage> messages) {
+		 this.messages = messages;
+	 }
+	 
 	@Override
 	public String toString() {
 		return String

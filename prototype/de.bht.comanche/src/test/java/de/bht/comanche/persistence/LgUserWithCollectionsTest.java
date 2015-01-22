@@ -1,27 +1,26 @@
 package de.bht.comanche.persistence;
 
 //import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Persistence;
 
-import de.bht.comanche.logic.LgMessage;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import de.bht.comanche.logic.LgMessage;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
 
@@ -35,7 +34,7 @@ public class LgUserWithCollectionsTest {
     private LgUser alice;
     private Set <LgMessage> messages = new HashSet<LgMessage>();
     private Set <LgMessage> variousMessages = new HashSet<LgMessage>();
-    private Set <LgTimePeriod> variousTimePeriods = new HashSet<LgTimePeriod>();
+    private HashSet<LgTimePeriod> variousTimePeriods = new HashSet<LgTimePeriod>();
     private Set <LgTimePeriod> persistedGeneralAvailabilty;
     
     @BeforeClass
@@ -125,7 +124,6 @@ public class LgUserWithCollectionsTest {
         updateAlicesUserAccount();
 //      fetchAlicesMessagesForLazyAttempt();
         fetchAlicesMessagesForEagerAttempt();
-        
     }
 
     @Test
@@ -133,25 +131,9 @@ public class LgUserWithCollectionsTest {
         buildVariousTimePeriods(20, 40, 60);
         saveGeneralAvailability();
         retrieveGeneralAvailability();
-        for (LgTimePeriod t : this.persistedGeneralAvailabilty) {
-            assertTrue(
-                variousTimePeriods.contains(
-                        new LgTimePeriod().updateWith(t)
-                )
-            );
-        }
+        assertEquals(persistedGeneralAvailabilty, variousTimePeriods);
     }
 
-    @Test
-    public void saveTimePeriodInSurveyTest() {
-        
-    }
-    
-    @Test
-    public void saveTimePeriodInInviteTest() {
-        
-    }
-    
     private void saveGeneralAvailability() {
         this.alice.setGeneralAvailability(variousTimePeriods);
         updateAlicesUserAccount();

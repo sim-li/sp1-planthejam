@@ -71,9 +71,7 @@ public class LgSession {
 	public LgUser startFor(final String userName) {
 		// @TODO Throw exception when user not found
 		this.user = this.pool.findOneByKey(LgUser.class, NAME_FIELD, userName); 
-//		this.user.setMessages(this.pool.findManyByKey(LgMessage.class, "user_oid", user.getOid()));
-//		this.user.setGeneralAvailability(this.pool.findManyByKey(LgTimePeriod.class, "user_oid", user.getOid()));
-		return user;
+		return this.user;
 	}
 	
 	/**
@@ -156,7 +154,6 @@ public class LgSession {
 	}
 
 	public LgUser getUser() {
-		this.user.getGeneralAvailability();
 		return this.user;
 	}
 	

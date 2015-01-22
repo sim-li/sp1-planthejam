@@ -25,7 +25,7 @@ angular.module('models')
 				return new TimePeriod(config);
 			}
 			config = config || {};
-			this.oid = config.oid || '';
+			// this.oid = config.oid || '';
 			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
 			this.durationMins = config.durationMins || 0;
 		};
@@ -46,7 +46,7 @@ angular.module('models')
 		 */
 		TimePeriod.prototype.doExport = function() {
 			return {
-				'oid': this.oid,
+				// 'oid': this.oid,
 				'startTime': this.startTime,
 				'durationMins': this.durationMins
 			};

@@ -12,7 +12,7 @@
                 Survey
                 %span.badge {{surveys.length}}
             %li
-              %a{"data-toggle" => "tab", :href => "#inviteTab", "ng-click" => "showSurveyDetails = false", "onclick" => "return false;"}
+              %a{"data-toggle" => "tab", "href" => "#inviteTab", "ng-click" => "showSurveyDetails = false", "onclick" => "return false;"}
                 Invite
                 %span.badge {{(invites | filter: {ignored: "!YES"}).length}}
             %li
@@ -29,7 +29,7 @@
             #surveyTab.tab-pane.active
               %input#surveyFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchSurvey", :placeholder => "Filter surveys ...", :type => "search"}
               #surveyList.list-group
-                %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey", "ng-class" => "{'list-group-item-success': !survey.algoChecked}"}
+                %a.list-group-item{"ng-click" => "selectSurvey(survey)", :href => "", "ng-repeat" => "survey in surveys | filter: searchSurvey"}
                   .row
                     .col-sm-8 {{survey.name}}
                     .btn-groups{"ng-if" => "survey.isReady()"}
@@ -37,23 +37,19 @@
                         %span.glyphicon.glyphicon-ok
                       %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "reject()","onclick" => "return false;"}
                         %span.glyphicon.glyphicon-remove
-                    .btn-groups{"ng-if" => "survey.isSuccessful()"}
-                      %span.glyphicon.glyphicon-thumbs-up
-                    .btn-groups{"ng-if" => "survey.isUnsuccessful()"}
-                      %span.glyphicon.glyphicon-remove-down
 
             #inviteTab.tab-pane
               %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search"}
               #inviteList.list-group
-                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES'} | filter: searchInvite "}
+                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES', name: searchInvite} "}
                   .row
                     .col-sm-8 {{invite.survey.name}} {{invite.ignored}}
                     .btn-group
-                      %label.btn.btn-sm{"btn-radio" => "'undecided'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;", "ng-class" => "{'btn-danger': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}"}
+                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;"}
                         %span.glyphicon.glyphicon-question-sign
-                      %label.btn.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO'); renderCalendar();", "ng-class" => "{'btn-danger': invite.ignored == 'NO', 'btn-primary': invite.ignored != 'NO'}"}
+                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')"}
                         %span.glyphicon.glyphicon-ok
-                      #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-2"}
+                      #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"}
                         .modal-dialog.modal-lg
                           .modal-content
                             .modal-header
@@ -61,7 +57,7 @@
                                 %span{"aria-hidden" => "true"} ×
                               %h4.modal-title Please choose your Avaibilities
                             .modal-body
-                              %ptj-calendar{"possible" => "possibleTimePeriods", "resulting" => "selectedInvite.timePeriods", "calendar" => "calendar"}
+                              %ptj-calendar{"possible" => "possibleTimePeriods", "resulting" => "selectedInvite.timePeriods"}
                             .modal-footer
                               %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
                               %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button", "ng-click" => "saveAvailabilities()"} Save changes
@@ -71,7 +67,7 @@
             #ignoredInviteTab.tab-pane
               %input#ignoredFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
               #ignoredList.list-group
-                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored : 'YES'} | filter : searchIgnored"}
+                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored : 'YES', name: searchIgnored} "}
                   .col-sm-8 {{invite.survey.name}} {{invite.ignored}}
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'reaccept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO')", "onclick" => "return false;"}
                     reaccept
@@ -95,9 +91,9 @@
             %label{:for => "deadline"} Deadline:
             %span#deadline{} {{selectedSurvey.deadline | date:'yyyy-MM-dd HH:mm'}}
             %div#selectedSurveyTimePeriod{"ng-if" => "selectedSurvey.algoChecked"}
-              %label{:for => "determinedTimePeriod"} Determined Time Period:
-              %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod ? (selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm') : "None" }}
-            %h4 Participants:
+              %label{:for => "determinedTimePeriod"}  Determined Time Period:
+              %span#determinedTimePeriod{} {{ selectedSurvey.determinedTimePeriod ? selectedSurvey.determinedTimePeriod : "None" }}
+            .h4 Participants:
             %span#selectedSurveyParticipants{"ng-if" => "!selectedSurvey.hasParticipants()"}
               %ul
                 %li{} None

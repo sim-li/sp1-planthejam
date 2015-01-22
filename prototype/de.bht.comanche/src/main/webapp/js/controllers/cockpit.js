@@ -225,20 +225,5 @@ angular.module('myApp')
             $scope.toggleInviteDetails = function() {
                 $scope.showSurveyDetails = false;
             };
-
-    // $scope.renderCalendar = function() {
-    //     $('#calendar').fullCalendar({})
-
-    //     var myModelAlreadyShown = false;
-    //     $('#calendarModal').on('shown.bs.modal', function(e) {
-    //         if (!myModelAlreadyShown) {
-    //             $('#calendar').fullCalendar('render');
-    //             $('#myModal').modal('hide');
-    //             $('#myModal').addClass('fade');
-    //             $('#myModal').modal('show');
-    //             myModelAlreadyShown = true;
-    //         }
-    //     });
-    // }
         }
     ]);

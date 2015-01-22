@@ -23,7 +23,7 @@ import de.bht.comanche.logic.LgTransaction;
 
 @Path("/surveys")
 public class ReSurveyService {
-	
+
 	@GET
 	@Path("/{oid}")
 	@Consumes("application/json")
@@ -42,7 +42,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	@GET
 	@Path("/{oid}/invites")
 	@Consumes("application/json")
@@ -61,7 +61,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	@GET
 	@Path("/")
 	@Consumes("application/json")
@@ -72,11 +72,11 @@ public class ReSurveyService {
 			public List<LgSurvey> execute() throws Exception {
 				final List<LgSurvey> result;
 				try {
-					
+
 					//-- FOR SURVEY EVALUATION --------------------------------
-//					getSession().getUser().evaluateAllSurveys(); // <<---- TODO comment back in when timeperiods an invites etc. work.
+					// startSession().evaluateAllSurveys(); // <<---- TODO comment back in when timeperiods an invites etc. work.
 					//---------------------------------------------------------
-					
+
 					result = startSession().getSurveys();
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
@@ -85,7 +85,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	@Path("/")
 	@POST
 	@Consumes("application/json")
@@ -98,7 +98,7 @@ public class ReSurveyService {
 					result = startSession().saveSurvey(survey);
 //					System.out.println("DEBUGME: Saving survey with no of invites "+  survey.getInvites().size());
 //					System.out.println("DEBUGME: Members:   "+ survey.getInvites());
-					System.out.println("Saved survey");
+//					System.out.println("Saved survey");
 				} catch (Exception ex) {
 					throw create(TempFailure.class, ex);//TODO change and implement the failure
 				}
@@ -106,7 +106,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	@Path("/{oid}")
 	@PUT
 	@Consumes("application/json")
@@ -124,7 +124,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	@Path("/{oid}")
 	@DELETE
 	@Consumes("application/json")
@@ -141,12 +141,12 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	/**
 	 * Temp failure
 	 */
 	@SuppressWarnings("serial")
 	public static final class TempFailure extends multex.Failure {}
-	
+
 
 }

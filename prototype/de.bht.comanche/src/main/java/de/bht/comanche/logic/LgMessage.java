@@ -1,14 +1,14 @@
 package de.bht.comanche.logic;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import de.bht.comanche.persistence.DaObject;
 
-@Entity
-@Table(name = "message")
-public class LgMessage extends DaObject{
+@Embeddable
+public class LgMessage {
 	@ManyToOne
 	private LgUser user;
 	
