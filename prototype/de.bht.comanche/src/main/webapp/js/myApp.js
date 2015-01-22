@@ -121,11 +121,9 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
     .directive('ptjCalendar', function() {
         return {
             restrict: 'E',
-        scope: {
-            /*
-                            test: '=test',
-                            possibleTimePeriods: '=possible',
-                            resultingTimePeriods: '=resulting'*/
+            scope: {
+                possibleTimePeriods: '=possible',
+                resultingTimePeriods: '=resulting'
             },
             // template: '<div class="calendar" ng-model="eventSources" ui-calendar="uiConfig.calendar"></div>',
             templateUrl: 'partials/calendar.html',

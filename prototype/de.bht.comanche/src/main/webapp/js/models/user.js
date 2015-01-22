@@ -4,7 +4,7 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('User', ['Model', 'TimePeriod', function(Model, TimePeriod) {
+    .factory('User', function() {
 
         'use strict';
 
@@ -21,8 +21,6 @@ angular.module('models')
          * @param {String} [config.email=''] the email address of the user
          * @param {String} [config.iconurl=''] the icon URL of the user
          * @param {Array}  [config.messages=[]] the messages of the user
-         *
-         * @param {Array}  [config.generalAvailability=[]] the time periods when the user is generally available
          */
         var User = function(config) {
             if (!(this instanceof User)) {
@@ -38,7 +36,6 @@ angular.module('models')
             // this.invites = [];
             // this.groups = [];
             this.messages = config.messages || [];
-            this.generalAvailability = Model.importMany(TimePeriod, config.generalAvailability);
         };
 
         // User.prototype = new Model();
@@ -66,11 +63,10 @@ angular.module('models')
                 'email': this.email,
                 // ,'invites': this.invites
                 // ,'groups': this.groups
-                'iconurl': this.iconurl /*,*/
+                'iconurl': this.iconurl
                     // ,'messages': this.messages                               // FIXME temporarily commented out
-                    // 'generalAvailability': TimePeriod.exportMany(this.generalAvailability) // FIXME temporarily commented out
             };
         };
 
         return (User);
-    }]);
+    });
