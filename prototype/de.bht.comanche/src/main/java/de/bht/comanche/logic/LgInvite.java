@@ -1,5 +1,8 @@
 package de.bht.comanche.logic;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -8,15 +11,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -49,7 +45,6 @@ public class LgInvite extends DaObject{
 	/**
 	 * The user who receives this invite.
 	 */
-	@NotNull
 	@ManyToOne
 	private LgUser user;
 
@@ -123,9 +118,18 @@ public class LgInvite extends DaObject{
 	}
 
 	public LgInvite setUser(final LgUser user) {
+		if (user == null) {
+			throw new EmptyUserInInviteFailure();
+		}
 		this.user = user;
 		return this;
 	}
+	/**
+	 * Persisted invite without user field
+	 */
+	@SuppressWarnings("serial")
+	public static final class EmptyUserInInviteFailure extends multex.Failure {}
+	
 	/**
 	 * Returns PossibleTimePeriod with nulled db-flags
 	 * @return
@@ -138,6 +142,13 @@ public class LgInvite extends DaObject{
 	public LgInvite setSurvey(final LgSurvey survey) {
 		this.survey = survey;
 		return this;
+	}
+	
+	@Override
+	public void delete() {
+		// Null violates not null constraint. 
+		this.user = null;
+		super.delete();
 	}
 	
 	/**

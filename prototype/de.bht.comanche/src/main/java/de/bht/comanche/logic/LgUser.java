@@ -110,10 +110,9 @@ public class LgUser extends DaObject {
 	 * Complete deleting of a user accout.
 	 */
 	public void deleteThisAccount() {
-//		for (LgInvite invite : invites) {
-//			attachPoolFor(invite);
-//			invite.delete();
-//		}
+		for (LgInvite invite : this.getInvites()) {
+			attachPoolFor(invite).delete();
+		}
 		delete();
 	}
 
@@ -264,6 +263,10 @@ public class LgUser extends DaObject {
 			} 
 		}
 		return surveys;
+	}
+	
+	public List<LgInvite> getInvites() {
+		return this.invites;
 	}
 
 	public List<LgInvite> getInvitesForSurvey(final long oid) {
