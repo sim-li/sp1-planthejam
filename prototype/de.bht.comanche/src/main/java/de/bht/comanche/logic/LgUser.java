@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -80,9 +81,13 @@ public class LgUser extends DaObject {
 	@Column(name = "messages")
 	private Set<LgMessage> messages = new HashSet<LgMessage>();
 
+	@Transient
+	final LgGravatarUtils gravUtils;
+	
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
 		this.groups = new ArrayList<LgGroup>();
+		this.gravUtils = new LgGravatarUtils();
 	}
 
 	public LgInvite getInviteBySurveyName(final String name) {
@@ -147,11 +152,11 @@ public class LgUser extends DaObject {
 	 * default icon if no email given.
 	 */
 	public String getIconurl() {
-		final LgGravatarUtils utils = new LgGravatarUtils();
+		
 		if (email != null) {
-			iconurl = utils.getUserUrl(email);
+			iconurl = gravUtils.getUserUrl(email);
 		} else {
-			iconurl = utils.getUserUrl(name);
+			iconurl = gravUtils.getUserUrl(name);
 		}
 		return iconurl;
 	}

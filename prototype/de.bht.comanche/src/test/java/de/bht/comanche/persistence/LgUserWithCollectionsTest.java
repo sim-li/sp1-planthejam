@@ -119,7 +119,7 @@ public class LgUserWithCollectionsTest {
             );
         }
     }
-    
+   
     private void saveMessagesToAlicesAccount() {
         updateAlicesUserAccount();
 //      fetchAlicesMessagesForLazyAttempt();
