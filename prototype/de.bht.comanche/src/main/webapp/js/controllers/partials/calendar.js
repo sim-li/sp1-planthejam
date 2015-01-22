@@ -7,7 +7,7 @@ angular.module('myApp')
 
             $scope.eventSources = [];
 
-            $scope.possibleTimePeriods = $scope.possibleTimePeriods || [];
+            // $scope.possibleTimePeriods = $scope.possibleTimePeriods || [];
             // $scope.resultingTimePeriods = $scope.resultingTimePeriods || [];
 
             // placeholder all events for rendering ui-calendar
@@ -51,15 +51,6 @@ angular.module('myApp')
                             durationEditable: true,
                             constraint: 'possible'
                         });
-
-                        $log.debug('----------')
-                        $log.debug('- debug calendar -')
-                        $log.debug($scope.test.survey.name)
-                            // $log.debug($scope.eventSources)
-                            // $log.debug($scope.uiTimePeriods)
-                            // $log.debug($scope.possibleTimePeriods)
-                            // $log.debug($scope.resultingTimePeriods)
-                        $log.debug('----------')
 
                     },
                     selectConstraint: $scope.possibleTimePeriods.length ? 'possible' : null,
