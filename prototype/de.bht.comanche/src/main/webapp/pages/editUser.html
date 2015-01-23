@@ -43,7 +43,12 @@
         <div class='input-group'>
           <input class='btn btn-danger' id='deleteUserBtn' ng-click='deleteUser()' type='button' value='Delete account'>
         </div>
-        <ptj-calendar-modal></ptj-calendar-modal>
+        <!-- %ptj-calendar-modal{"test" => "user.generalAvailability"} -->
+        <ptj-calendar possible='dummyPoss' resulting='user.generalAvailability'></ptj-calendar>
+        <div class='row'>{{ user.generalAvailability }}</div>
+        <div class='row'>{{ dummyPoss }}</div>
+        <!-- .row {{ user.generalAvailability.length }} -->
+        <!-- .row {{ dummyPoss.length }} -->
       </div>
     </div>
   </div>

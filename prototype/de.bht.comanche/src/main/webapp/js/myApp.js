@@ -122,10 +122,9 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
         return {
             restrict: 'E',
             scope: {
-                /*
-                                test: '=test',
-                                possibleTimePeriods: '=possible',
-                                resultingTimePeriods: '=resulting'*/
+                // test: '=test',
+                possibleTimePeriods: '=possible',
+                resultingTimePeriods: '=resulting'
             },
             // template: '<div class="calendar" ng-model="eventSources" ui-calendar="uiConfig.calendar"></div>',
             templateUrl: 'partials/calendar.html',
@@ -135,6 +134,9 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
     .directive('ptjCalendarModal', function() {
         return {
             restrict: 'E',
+            scope: {
+                test: '='
+            },
             templateUrl: 'partials/calendarModal.html',
             controller: 'calendarModalCtrl'
         };

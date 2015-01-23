@@ -11,11 +11,12 @@
             %span.glyphicon.glyphicon-plus
             Add
     .row
-      %ptj-calendar
+      %ptj-calendar{"resulting" => "test"}
   .modal-footer
     %button.btn.btn-primary{"ng-click" => "ok()"} OK
     %button.btn.btn-warning{"ng-click" => "cancel()"} Cancel
 
 .input-group
   %input.btn.btn-primary{:type => "button", "ng-click" => "openCalendarModal()", :value => "Open calendar"}/
-%div{} {{ selected }}
+%div{} sel: {{ selected }}
+%div{} test: {{ test }}

@@ -6,8 +6,10 @@ angular.module('myApp')
 
             $scope.items = ['item1', 'item2', 'item3'];
 
-            $scope.openCalendarModal = function(size) {
+            $scope.openCalendarModal = function() {
                 $log.debug('openCalendarModal')
+                $log.debug($scope.test)
+                $scope.test.tel = 10101019
 
                 var modalInstance = $modal.open({
                     templateUrl: 'calendarModalContent.html',

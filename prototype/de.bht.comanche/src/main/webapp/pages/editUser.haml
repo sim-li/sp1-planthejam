@@ -32,4 +32,9 @@
           %input#saveUserEditBtn.btn.btn-success{"ng-click" => "saveEditedUser()", :type => "submit", :value => "Save changes"}/
         .input-group
           %input#deleteUserBtn.btn.btn-danger{"ng-click" => "deleteUser()", :type => "button", :value => "Delete account"}/
-        %ptj-calendar-modal
+        / %ptj-calendar-modal{"test" => "user.generalAvailability"}
+        %ptj-calendar{"possible" => "dummyPoss", "resulting" => "user.generalAvailability"}
+        .row {{ user.generalAvailability }}
+        .row {{ dummyPoss }}
+        / .row {{ user.generalAvailability.length }}
+        / .row {{ dummyPoss.length }}
