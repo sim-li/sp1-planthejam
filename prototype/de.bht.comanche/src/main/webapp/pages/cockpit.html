@@ -67,10 +67,10 @@
                   <div class='row'>
                     <div class='col-sm-8'>{{ invite.survey.oid }} {{ invite.survey.name}} {{ invite.ignored }}</div>
                     <div class='btn-group'>
-                      <label btn-radio="'undecided'" class='btn btn-sm' ng-class="{'btn-danger': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}" ng-click="setSelectedInviteStatus('UNDECIDED')" ng-model='radioModel' onclick='return false;'>
+                      <label btn-radio="'undecided'" class='btn btn-sm' ng-class="{'disabled': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}" ng-click="setSelectedInviteStatus('UNDECIDED')" ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-question-sign'></span>
                       </label>
-                      <label btn-radio="'accept'" class='btn btn-sm' data-target='#calendarModal' data-toggle='modal' ng-class="{'btn-danger': invite.ignored == 'NO', 'btn-primary': invite.ignored != 'NO'}" ng-click="setSelectedInviteStatus('NO'); renderCalendar();" ng-model='radioModel'>
+                      <label btn-radio="'accept'" class='btn btn-sm' data-target='#calendarModal' data-toggle='modal' ng-class="{'btn-success disabled': invite.ignored == 'NO', 'btn-success': invite.ignored != 'NO'}" ng-click="setSelectedInviteStatus('NO'); renderCalendar();" ng-model='radioModel'>
                         <span class='glyphicon glyphicon-ok'></span>
                       </label>
                       <div aria-hidden='true' class='modal fade bs-example-modal-lg' data-target='.bs-example-modal-lg' id='calendarModal' role='dialog' tabindex='-2'>

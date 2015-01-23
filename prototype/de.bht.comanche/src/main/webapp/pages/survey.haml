@@ -32,7 +32,7 @@
                 %btn.btn-sm.btn-warning.pull-right{"ng-click" => "showLiveButton=true", "ng-show" => "!showLiveButton"}
                   Staged
                   %span.glyphicon.glyphicon-off
-          .rpw
+          .row
             %ptj-groups
 
           .row
@@ -59,7 +59,7 @@
 
         .panel-footer
           .col-md-offset-10
-            %button.btn.btn-default.btn-sm{:type => "reset", "ng-click" => "cancel()"} Reset
+            %button.btn.btn-default.btn-sm{:type => "reset", "ng-click" => "cancel()"} Cancel
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveSurvey()"} Save
     .col-md-2
       %input-group{"ng-show"=>"isRecurring()"}

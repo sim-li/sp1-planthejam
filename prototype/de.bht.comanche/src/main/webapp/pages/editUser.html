@@ -1,42 +1,50 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
-  <div class='col-lg-8'>
-    <div class='form-group'>
-      <label for='inputName'>User name</label>
-      <div class='item-wrapper'>
-        <a editable-text='user.name' href='#' id='inputName'>
-          {{user.name}}
-        </a>
+  <div class='col-md-8'>
+    <div class='panel panel-primary'>
+      <div class='panel-body'>
+        <div class='form-group'>
+          <label for='inputName'>User name</label>
+          <div class='item-wrapper'>
+            <a editable-text='user.name' href='#' id='inputName'>
+              {{user.name}}
+            </a>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label for='inputPassword'>Password</label>
+          <input class='form-control col-lg-3' id='inputPassword' ng-model='user.password' placeholder='8-20 letters' required='' type='password'>
+        </div>
+        <!-- %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "session.showPassword", :type => "checkbox"}/ -->
+        <!-- %label{:for => "toggleShowPassword"} Plain text -->
+        <div class='form-group'>
+          <label for='inputEmail'>E-Mail</label>
+          <div class='item-wrapper'>
+            <a editable-text='user.email' href='#' id='inputEmail'>
+              {{user.email}}
+            </a>
+          </div>
+        </div>
+        <div class='error'></div>
+        <div class='form-group'>
+          <label for='inputTel'>Telephone</label>
+          <div class='item-wrapper'>
+            <input class='form-control col-lg-3' id='inputTel' ng-model='user.tel' placeholder='Your phone number'>
+            <!-- %a#inputTel{"editable-text" => "user.tel", :href => "#"} -->
+            <!-- {{user.tel}} -->
+          </div>
+          <div class='error'></div>
+        </div>
+        <div class='input-group'>
+          <input class='btn btn-primary' id='deleteUserBtn' ng-click='openCalendar()' type='button' value='Edit general availability'>
+          <input class='btn btn-default' id='cancelUserEditBtn' ng-click='cancelEditUser()' type='button' value='Cancel'>
+          <input class='btn btn-success' id='saveUserEditBtn' ng-click='saveEditedUser()' type='submit' value='Save changes'>
+        </div>
+        <div class='input-group'>
+          <input class='btn btn-danger' id='deleteUserBtn' ng-click='deleteUser()' type='button' value='Delete account'>
+        </div>
+        <ptj-calendar-modal></ptj-calendar-modal>
       </div>
     </div>
-    <div class='form-group'>
-      <label for='inputPassword'>Password</label>
-      <input class='form-control col-lg-3' id='inputPassword' ng-model='user.password' placeholder='8-20 letters' required='' type='password'>
-    </div>
-    <!-- %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "session.showPassword", :type => "checkbox"}/ -->
-    <!-- %label{:for => "toggleShowPassword"} Plain text -->
-    <div class='form-group'>
-      <label for='inputEmail'>E-Mail</label>
-      <div class='item-wrapper'>
-        <a editable-text='user.email' href='#' id='inputEmail'>
-          {{user.email}}
-        </a>
-      </div>
-    </div>
-    <div class='error'></div>
-    <div class='form-group'>
-      <label for='inputTel'>Telephone</label>
-      <div class='item-wrapper'>
-        <input class='form-control col-lg-3' id='inputTel' ng-model='user.tel' placeholder='Your phone number'>
-        <!-- %a#inputTel{"editable-text" => "user.tel", :href => "#"} -->
-        <!-- {{user.tel}} -->
-      </div>
-      <div class='error'></div>
-    </div>
-    <span>
-      <input class='btn btn-primary' id='cancelUserEditBtn' ng-click='cancelEditUser()' type='button' value='Cancel'>
-      <input class='btn btn-primary' id='saveUserEditBtn' ng-click='saveEditedUser()' type='submit' value='Save changes'>
-      <input class='btn btn-primary' id='deleteUserBtn' ng-click='deleteUser()' type='button' value='Delete account'>
-    </span>
   </div>
 </div>

@@ -121,15 +121,22 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
     .directive('ptjCalendar', function() {
         return {
             restrict: 'E',
-        scope: {
-            /*
-                            test: '=test',
-                            possibleTimePeriods: '=possible',
-                            resultingTimePeriods: '=resulting'*/
+            scope: {
+                /*
+                                test: '=test',
+                                possibleTimePeriods: '=possible',
+                                resultingTimePeriods: '=resulting'*/
             },
             // template: '<div class="calendar" ng-model="eventSources" ui-calendar="uiConfig.calendar"></div>',
             templateUrl: 'partials/calendar.html',
             controller: 'calendarCtrl'
+        };
+    })
+    .directive('ptjCalendarModal', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/calendarModal.html',
+            controller: 'calendarModalCtrl'
         };
     })
     .run(function(editableOptions) {

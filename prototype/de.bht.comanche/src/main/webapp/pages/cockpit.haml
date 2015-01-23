@@ -53,9 +53,9 @@
                   .row
                     .col-sm-8 {{ invite.survey.oid }} {{ invite.survey.name}} {{ invite.ignored }}
                     .btn-group
-                      %label.btn.btn-sm{"btn-radio" => "'undecided'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;", "ng-class" => "{'btn-danger': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}"}
+                      %label.btn.btn-sm{"btn-radio" => "'undecided'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;", "ng-class" => "{'disabled': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}"}
                         %span.glyphicon.glyphicon-question-sign
-                      %label.btn.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO'); renderCalendar();", "ng-class" => "{'btn-danger': invite.ignored == 'NO', 'btn-primary': invite.ignored != 'NO'}"}
+                      %label.btn.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO'); renderCalendar();", "ng-class" => "{'btn-success disabled': invite.ignored == 'NO', 'btn-success': invite.ignored != 'NO'}"}
                         %span.glyphicon.glyphicon-ok
                       #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-2"}
                         .modal-dialog.modal-lg
