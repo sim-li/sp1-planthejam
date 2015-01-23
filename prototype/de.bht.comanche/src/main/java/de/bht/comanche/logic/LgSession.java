@@ -1,8 +1,11 @@
 package de.bht.comanche.logic;
 
 import static multex.MultexUtil.create;
+
 import java.util.List;
+
 import de.bht.comanche.persistence.DaApplication;
+import de.bht.comanche.persistence.DaObject;
 import de.bht.comanche.persistence.DaPool;
 
 /**
@@ -25,7 +28,7 @@ import de.bht.comanche.persistence.DaPool;
  * @author Simon Lischka
  *
  */
-public class LgSession {
+public class LgSession extends DaObject {
 	
 	/**
 	 * Application instance for access to pool.

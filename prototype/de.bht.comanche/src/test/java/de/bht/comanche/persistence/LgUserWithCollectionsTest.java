@@ -4,9 +4,11 @@ package de.bht.comanche.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +34,7 @@ import de.bht.comanche.logic.LgUser;
 public class LgUserWithCollectionsTest {
 
     private LgUser alice;
-    private Set <LgMessage> messages = new HashSet<LgMessage>();
+    private Set <LgMessage> persistedMessages = new HashSet<LgMessage>();
     private Set <LgMessage> variousMessages = new HashSet<LgMessage>();
     private HashSet<LgTimePeriod> variousTimePeriods = new HashSet<LgTimePeriod>();
     private Set <LgTimePeriod> persistedGeneralAvailabilty;
@@ -96,7 +98,7 @@ public class LgUserWithCollectionsTest {
                 final LgUser alice = startSession();
                 alice.getMessages();
                 for (LgMessage msg : alice.getMessages()) {
-                    messages.add(msg);
+                    persistedMessages.add(msg);
                 }
                 return alice;
             }
@@ -104,14 +106,14 @@ public class LgUserWithCollectionsTest {
     }
     
     private void fetchAlicesMessagesForEagerAttempt() {
-        this.messages = this.alice.getMessages();
+        this.persistedMessages = this.alice.getMessages();
     }
     
     @Test
     public void saveDemoMessagesTest() {
         buildVariousMessages("Hello", "Kitty");
         saveMessagesToAlicesAccount();
-        for (LgMessage m : this.messages) {
+        for (LgMessage m : this.persistedMessages) {
             assertTrue(
                     this.variousMessages.contains(
                             new LgMessage().updateWith(m)
@@ -133,7 +135,7 @@ public class LgUserWithCollectionsTest {
         retrieveGeneralAvailability();
         assertEquals(persistedGeneralAvailabilty, variousTimePeriods);
     }
-
+    
     private void saveGeneralAvailability() {
         this.alice.setGeneralAvailability(variousTimePeriods);
         updateAlicesUserAccount();
@@ -158,6 +160,20 @@ public class LgUserWithCollectionsTest {
                 new Date()).setDurationMins(durations[i])
             );
         }
+    }
+    
+    @Test
+    private void verifyDeletingAccountSuccessful() {
+    	deleteAlicesUserAccount();
+    	Collection<DaObject> persistedObjects =
+    	  new TestTransaction<Collection<DaObject>> ("Alice") {
+              @Override
+              public Collection<DaObject> execute() {
+            	  Collection<DaObject> queryResults = new LinkedList<DaObject>();
+                  queryResults.add(getSession().findOneByKey(LgUser.class, "oid", alice.getOid()));
+                  
+              }
+          }.getResult();
     }
     
     @After
