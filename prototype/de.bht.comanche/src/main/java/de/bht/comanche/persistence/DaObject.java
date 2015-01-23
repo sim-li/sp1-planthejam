@@ -176,6 +176,11 @@ public abstract class DaObject implements Serializable {
 	protected <E extends DaObject> E findOneByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) {
 		return pool.findOneByKey(persistentClass, keyFieldName, keyFieldValue);
 	}
+	
+	protected <E extends DaObject> List<E> findManyByKey(Class<E> persistentClass, String keyFieldName, Object keyFieldValue) {
+		return pool.findManyByKey(persistentClass, keyFieldName, keyFieldValue);
+	}
+	
 	@JsonIgnore
 	public boolean isPersistent() {
 		return this.oid != DaPool.CREATED_OID && this.oid > 0;

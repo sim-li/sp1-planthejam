@@ -21,7 +21,7 @@ import de.bht.comanche.persistence.DaEmProvider;
  *
  */
 
-@Ignore
+//@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgGroupTest {
 	
@@ -61,7 +61,7 @@ public class LgGroupTest {
 		return session;
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void test1SaveGroup(){
 		final LgSession session = start();
@@ -71,7 +71,7 @@ public class LgGroupTest {
 		assertEquals("Group", getAliceGroup(aliceGroup.getOid()).getName());
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void test2changeGroupName(){
 		final LgSession session = start();
@@ -82,15 +82,22 @@ public class LgGroupTest {
 	}
 
 	// @author Simon Lischka: Commented two lines out because I didn't find save method
-	@Ignore
+//	@Ignore
 	@Test
 	public void test3addMember(){
 		final LgSession session = start();
+		System.out.println("start=====================================");
 		final LgUser user = startForAlice(session);
 		final LgGroup aliceGroup = user.getGroups().get(0);
 		//changed findByName->startFor: same functionality
 		final LgUser bob = session.startFor("Bob"); 		
 		final LgUser pit = session.startFor("Pit");
+		System.out.println("Pit=====================================" + pit.getOid());
+		new LgMember().setUser(bob).setGroup(aliceGroup).save();
+		System.out.println("Saved=====================================");
+		new LgMember().setUser(pit).setGroup(aliceGroup).save();
+		aliceGroup.save();
+//		user.save();
 //		user.save(new LgMember().setUser(bob).setGroup(aliceGroup));
 //		user.save(new LgMember().setUser(pit).setGroup(aliceGroup));
 		end(session);
