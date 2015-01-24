@@ -18,6 +18,7 @@ import org.junit.Test;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
 public class LgSurveyTest {
@@ -125,21 +126,35 @@ public class LgSurveyTest {
 				return null;
 			}
 		}.getResult();
-		final Boolean foundComponentOfSurvey = new TestTransaction<Boolean>("Alice") {
+		final Boolean foundComponentOfSurvey = new TestTransaction<Boolean>(
+				"Alice") {
 			@Override
 			public Boolean execute() {
-				Boolean foundADeletedElement = false;
+				Boolean foundADeletedElement = null;
 				try {
-					startSession().findOneByKey(persistentClass, keyFieldName, keyFieldValue);
+					startSession().findOneByKey(LgSurvey.class, "oid",
+							surveyForEvaluation.getOid());
 					foundADeletedElement = true;
 				} catch (DaFindOneByKeyExc ex) {
-					
+					setFalseIfNull(foundADeletedElement);
+				}
+				for (final LgInvite invite : surveyForEvaluation.getInvites()) {
+					try {
+						startSession().findOneByKey(LgInvite.class, "oid",
+								invite.getOid());
+						foundADeletedElement = true;
+					} catch (DaFindOneByKeyExc ex) {
+						setFalseIfNull(foundADeletedElement);
+					}
 				}
 				return false;
 			}
 		}.getResult();
 	}
 	
+	private void setFalseIfNull(Boolean val) {
+		val = val == null ? false : val;
+	}
 	/**
 	 * Saves survey given list of participants.
 	 * 

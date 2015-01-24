@@ -263,7 +263,7 @@ public class LgUser extends DaObject {
 	public LgSurvey getSurvey(final long oid) {
 		for (LgInvite invite : this.invites) {
 			if (invite.getIsHost() && invite.getSurvey().getOid() == oid) {
-				return invite.getSurvey();
+				return attachPoolFor(invite.getSurvey());
 			}
 		}
 		return null; // TODO: Throw MULTEX exception
