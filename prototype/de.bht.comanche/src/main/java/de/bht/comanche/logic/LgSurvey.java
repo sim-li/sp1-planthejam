@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -530,5 +531,9 @@ public class LgSurvey extends DaObject {
 	public LgSurvey addInvite(LgInvite invite) {
 		invites.add(invite);
 		return this;
+	}
+
+	public boolean getAlgoChecked() {
+		return this.algoChecked;
 	}
 }

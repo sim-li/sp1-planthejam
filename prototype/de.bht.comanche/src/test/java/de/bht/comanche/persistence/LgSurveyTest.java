@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Persistence;
 
@@ -15,8 +16,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.bht.comanche.logic.LgStatus;
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgSurveyType;
 import de.bht.comanche.logic.LgTimePeriod;
+import de.bht.comanche.logic.LgTimeUnit;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
@@ -70,6 +74,47 @@ public class LgSurveyTest {
 		}.getResult();
 	}
 
+	@Test
+	public void getSurveyByOidTest() {
+		final Date aDate = new Date();
+		final LgTimePeriod aTimePeriod = new LgTimePeriod().setDurationMins(30).setStartTime(aDate);
+		final Set<LgTimePeriod> severalTimePeriods = buildTimePeriods(20,30,40); 
+		final LgSurvey aSurvey = new LgSurvey()
+			.setAlgoChecked(false)
+			.setDeadline(aDate)
+			.setDescription("My description")
+			.setDeterminedTimePeriod(aTimePeriod)
+			.setFrequencyDist(30)
+			.setFrequencyUnit(LgTimeUnit.MONTH)
+			.addParticipants(bob, carol)
+			.setName("My test survey")
+		    .setPossibleTimePeriods(severalTimePeriods)
+		    .setSuccess(LgStatus.UNDECIDED)
+		    .setSurveyDurationMins(30)
+		    .setType(LgSurveyType.ONE_TIME);
+		saveSurveyForAlice(aSurvey);
+		final LgSurvey surveyEval = new TestTransaction<LgSurvey>(
+				"Alice") {
+			@Override
+			public LgSurvey execute() {
+				return startSession().getSurvey(aSurvey.getOid());
+			}
+		}.getResult();
+		//Comment: Whats up with bool getters: Naming conventions!
+		assertThat(surveyEval.getAlgoChecked()).isFalse();
+		assertThat(surveyEval.getDeadline()).equals(aDate);
+		assertThat(surveyEval.getDescription()).equals("My Decsription");
+		assertThat(surveyEval.getDeterminedTimePeriod()).equals(aTimePeriod);
+		assertThat(surveyEval.getFrequencyDist()).equals(30);
+		assertThat(surveyEval.getFrequencyUnit()).equals(LgTimeUnit.MONTH);
+		assertThat(surveyEval.getParticipants()).containsOnly(bob, carol);
+		assertThat(surveyEval.getName()).equals("My test survey");
+		assertThat(surveyEval.getPossibleTimePeriods()).equals(severalTimePeriods);
+		assertThat(surveyEval.getSuccess()).equals(LgStatus.UNDECIDED);
+		assertThat(surveyEval.getSurveyDurationMins()).equals(30);
+		assertThat(surveyEval.getType()).equals(LgSurveyType.ONE_TIME);
+	}
+	
 	/**
 	 * Note: User with active transaction will automatically be added as host
 	 * when calling saveSurvey. That's why we check for Alice even though we
