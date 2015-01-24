@@ -59,15 +59,16 @@ angular.module('myApp')
             };
 
             //-- dummies -->
-            $scope.dummyPoss = [];
-            $scope.dummyPoss.push({
-                startTime: new Date('Jan 23 2015 10:00'),
-                durationMins: 120
-            });
-            $scope.dummyPoss.push({
-                startTime: new Date('Jan 24 2015 6:00'),
-                durationMins: 120
-            });
+            // var dummyPoss = [];
+            // dummyPoss.push({
+            //     startTime: new Date('Jan 23 2015 10:00'),
+            //     durationMins: 120
+            // });
+            // dummyPoss.push({
+            //     startTime: new Date('Jan 24 2015 6:00'),
+            //     durationMins: 120
+            // });
+            // $scope.user.generalAvailability = dummyPoss;
             //<-- dummies --
 
         }

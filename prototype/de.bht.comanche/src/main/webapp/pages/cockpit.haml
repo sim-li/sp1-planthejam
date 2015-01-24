@@ -51,27 +51,29 @@
               #inviteList.list-group
                 %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ", "ng-class" => "{'list-group-item-success': invite.ignored == 'UNDECIDED'}"}
                   .row
-                    .col-sm-8 {{ invite.survey.oid }} {{ invite.survey.name}} {{ invite.ignored }}
-                    .btn-group
+                    .col-sm-6 {{ invite.survey.oid }} {{ invite.survey.name}} {{ invite.ignored }}
+                    .col-sm-6.btn-group
                       %label.btn.btn-sm{"btn-radio" => "'undecided'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('UNDECIDED')","onclick" => "return false;", "ng-class" => "{'disabled': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}"}
                         %span.glyphicon.glyphicon-question-sign
                       %label.btn.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('NO'); renderCalendar();", "ng-class" => "{'btn-success disabled': invite.ignored == 'NO', 'btn-success': invite.ignored != 'NO'}"}
                         %span.glyphicon.glyphicon-ok
-                      #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-2"}
-                        .modal-dialog.modal-lg
-                          .modal-content
-                            .modal-header
-                              %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-                                %span{"aria-hidden" => "true"} ×
-                              %h4.modal-title Please choose your Avaibilities
-                            .modal-body
-                              %ptj-calendar
-                              / %ptj-calendar{"test" => "selectedInvite", "possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "calendar" => "calendar"}
-                            .modal-footer
-                              %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
-                              %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button", "ng-click" => "saveAvailabilities()"} Save changes
+                      / #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-2"}
+                      /   .modal-dialog.modal-lg
+                      /     .modal-content
+                      /       .modal-header
+                      /         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                      /           %span{"aria-hidden" => "true"} ×
+                      /         %h4.modal-title Please choose your Avaibilities
+                      /       .modal-body
+                      /         %ptj-calendar
+                      /         / %ptj-calendar{"test" => "selectedInvite", "possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "calendar" => "calendar"}
+                      /       .modal-footer
+                      /         %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
+                      /         %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button", "ng-click" => "saveAvailabilities()"} Save changes
                       %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteStatus('YES')", "onclick" => "return false;"}
                         %span.glyphicon.glyphicon-remove
+                      / %ptj-calendar-modal
+                      %ptj-calendar-modal{"possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability"}
 
             #ignoredInviteTab.tab-pane
               %input#ignoredFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
@@ -130,3 +132,4 @@
               %span#inviteDetailsDeterminedTimePeriod{}
                 %span{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
                 %span{} {{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes
+            poss: {{ selectedInvite.survey.possibleTimePeriods }}

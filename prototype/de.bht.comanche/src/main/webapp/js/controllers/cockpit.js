@@ -28,6 +28,11 @@ angular.module('myApp')
 
             // preselects the first survey and invite in the list
             $scope.selectedInvite = $scope.invites[0];
+            $scope.selectedInvite.survey.possibleTimePeriods.push(new TimePeriod({
+                startTime: new Date(),
+                durationMins: 120
+            }))
+
             $scope.selectedSurvey = $scope.surveys[0];
 
 

@@ -1,24 +1,60 @@
 angular.module('myApp')
     .controller('calendarCtrl', ['$scope', '$modal', '$log', 'arrayUtil', 'TimePeriod',
-
         function($scope, $modal, $log, arrayUtil, TimePeriod) {
 
             'use strict';
 
-            $scope.possibleTimePeriods = $scope.possibleTimePeriods || [];
-            // $scope.resultingTimePeriods = $scope.resultingTimePeriods || [];
+            /** The calendar uses Moment.js, which provides some operations for date manipulation --> http://momentjs.com */
 
-            // placeholder for all events for rendering ui-calendar
-            $scope.eventSources = [];
-            // copy all elements of possibleTimePeriods to eventSources and convert durationMins to end
-            arrayUtil.forEach($scope.possibleTimePeriods, function(timePeriod) {
+            // an optional list for constraining the timePeriods that can be generated
+            $scope.allowedTimePeriods = $scope.allowedTimePeriods || [];
+            $scope.resultingTimePeriods = $scope.resultingTimePeriods || []; //
+            $scope.eventSources = []; // placeholder for all events for rendering ui-calendar
+
+            /** must be called to keep the resulting time periods in sync with the edits done in the calendar */
+            var refreshResultingTimePeriods = function() {
+                $scope.resultingTimePeriods = [];
+                arrayUtil.forEach($scope.eventSources, function(event) {
+                    if (event.id != 'allowed') {
+                        $scope.resultingTimePeriods.push(new TimePeriod({
+                            startTime: event.start.toDate(),
+                            durationMins: event.end.diff(event.start, 'minutes')
+                        }));
+                    }
+                });
+                $log.debug(' - refreshResultingTimePeriods -');
+                $log.debug($scope.resultingTimePeriods);
+            };
+
+            /** required for the calendar */
+            var generateUniqueId = function() {
+                var time = new Date().getTime();
+                while (time == new Date().getTime());
+                return '#' + new Date().getTime();
+            };
+
+            /** constrains the input of time periods if the list of allowed time periods is not empty */
+            var autoConstrain = function() {
+                return $scope.allowedTimePeriods.length > 0 ? 'allowed' : null;
+            };
+
+            /** copy all elements of allowedTimePeriods and existing resultingTimePeriods to eventSources and convert to the calendar date format */
+            arrayUtil.forEach($scope.allowedTimePeriods, function(timePeriod) {
                 $scope.eventSources.push({
-                    id: 'possible',
-                    rendering: 'background',
-                    // start: timePeriod.startTime,
-                    // end: moment(timePeriod.startTime).add(timePeriod.durationMins, 'minutes').toDate()
+                    id: 'allowed',
                     start: moment(timePeriod.startTime),
-                    end: moment(timePeriod.startTime).add(timePeriod.durationMins, 'minutes')
+                    end: moment(timePeriod.startTime).add(timePeriod.durationMins, 'minutes'),
+                    rendering: 'background'
+                });
+            });
+            arrayUtil.forEach($scope.resultingTimePeriods, function(timePeriod) {
+                $scope.eventSources.push({
+                    id: generateUniqueId(),
+                    start: moment(timePeriod.startTime),
+                    end: moment(timePeriod.startTime).add(timePeriod.durationMins, 'minutes'),
+                    editable: true,
+                    durationEditable: true,
+                    constraint: autoConstrain()
                 });
             });
 
@@ -33,48 +69,39 @@ angular.module('myApp')
                         center: 'title',
                         right: 'today prev,next'
                     },
+                    timezone: 'local',
                     selectable: true,
                     select: function(startDate, endDate, jsEvent, view) {
-                        /* correct timezoneoffset */
-                        var timeZoneOffset = new Date().getTimezoneOffset();
-                        // var start = new Date(startDate + timeZoneOffset * 60000);
-                        // var end = new Date(endDate + timeZoneOffset * 60000);
 
                         $scope.eventSources.push({
-                            // start: startDate.zone(timeZoneOffset),
-                            // end: endDate.zone(timeZoneOffset),
+                            id: generateUniqueId(),
                             start: startDate,
                             end: endDate,
                             editable: true,
                             durationEditable: true,
-                            constraint: 'possible'
+                            constraint: autoConstrain()
                         });
-
-                        // $scope.resultingTimePeriods.push(new TimePeriod({
-                        //     startTime: startDate.toDate(),
-                        //     durationMins: endDate.diff(startDate, 'minutes')
-                        // }));
-
-                        $log.debug('----------')
-                        $log.debug('- debug calendar -')
-                            // $log.debug($scope.test.survey.name)
-                        $log.debug('possible : ', $scope.possibleTimePeriods)
-                        $log.debug('ui       : ', $scope.eventSources)
-                        $log.debug('resulting: ', $scope.resultingTimePeriods)
-                        $log.debug('----------')
-
+                        refreshResultingTimePeriods();
                     },
                     eventResize: function(event, delta, reverFunc, jsEvent, ui, view) {
+                        $log.debug(event);
                         var ele = arrayUtil.findByAttribute($scope.eventSources, 'id', event.id);
                         ele.end = event.end;
+                        refreshResultingTimePeriods();
                     },
                     eventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
+                        $log.debug(event);
                         var ele = arrayUtil.findByAttribute($scope.eventSources, 'id', event.id);
                         ele.start = event.start;
                         ele.end = event.end;
+                        refreshResultingTimePeriods();
                     },
-                    selectConstraint: $scope.eventSources.length > 0 ? 'possible' : null,
-                    // selectConstraint: 'possible',
+                    eventClick: function(event, jsEvent, view) {
+                        $log.debug(event);
+                        arrayUtil.removeByAttribute($scope.eventSources, 'id', event.id);
+                        refreshResultingTimePeriods();
+                    },
+                    selectConstraint: autoConstrain(),
                     events: $scope.eventSources
                 }
 

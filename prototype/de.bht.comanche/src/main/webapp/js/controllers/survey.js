@@ -169,9 +169,9 @@ angular.module('myApp')
             // };
 
             // UNUSED?
-            $scope.renderCalendar = function() {
-                $scope.surveyCalendar.fullCalendar('render');
-            };
+            // $scope.renderCalendar = function() {
+            //     $scope.surveyCalendar.fullCalendar('render');
+            // };
 
             $scope.cancel = function() {
                 $location.path('/cockpit');

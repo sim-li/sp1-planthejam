@@ -65,37 +65,32 @@
               <div class='list-group' id='inviteList'>
                 <a class='list-group-item' href='' ng-class="{'list-group-item-success': invite.ignored == 'UNDECIDED'}" ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ">
                   <div class='row'>
-                    <div class='col-sm-8'>{{ invite.survey.oid }} {{ invite.survey.name}} {{ invite.ignored }}</div>
-                    <div class='btn-group'>
+                    <div class='col-sm-6'>{{ invite.survey.oid }} {{ invite.survey.name}} {{ invite.ignored }}</div>
+                    <div class='col-sm-6 btn-group'>
                       <label btn-radio="'undecided'" class='btn btn-sm' ng-class="{'disabled': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}" ng-click="setSelectedInviteStatus('UNDECIDED')" ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-question-sign'></span>
                       </label>
                       <label btn-radio="'accept'" class='btn btn-sm' data-target='#calendarModal' data-toggle='modal' ng-class="{'btn-success disabled': invite.ignored == 'NO', 'btn-success': invite.ignored != 'NO'}" ng-click="setSelectedInviteStatus('NO'); renderCalendar();" ng-model='radioModel'>
                         <span class='glyphicon glyphicon-ok'></span>
                       </label>
-                      <div aria-hidden='true' class='modal fade bs-example-modal-lg' data-target='.bs-example-modal-lg' id='calendarModal' role='dialog' tabindex='-2'>
-                        <div class='modal-dialog modal-lg'>
-                          <div class='modal-content'>
-                            <div class='modal-header'>
-                              <button aria-label='Close' class='close' data-dismiss='modal' type='button'>
-                                <span aria-hidden='true'>×</span>
-                              </button>
-                              <h4 class='modal-title'>Please choose your Avaibilities</h4>
-                            </div>
-                            <div class='modal-body'>
-                              <ptj-calendar></ptj-calendar>
-                              <!-- %ptj-calendar{"test" => "selectedInvite", "possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "calendar" => "calendar"} -->
-                            </div>
-                            <div class='modal-footer'>
-                              <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
-                              <button class='btn btn-primary' data-dismiss='modal' ng-click='saveAvailabilities()' type='button'>Save changes</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <!-- #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-2"} -->
+                      <!-- .modal-dialog.modal-lg -->
+                      <!-- .modal-content -->
+                      <!-- .modal-header -->
+                      <!-- %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"} -->
+                      <!-- %span{"aria-hidden" => "true"} × -->
+                      <!-- %h4.modal-title Please choose your Avaibilities -->
+                      <!-- .modal-body -->
+                      <!-- %ptj-calendar -->
+                      <!-- / %ptj-calendar{"test" => "selectedInvite", "possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "calendar" => "calendar"} -->
+                      <!-- .modal-footer -->
+                      <!-- %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel -->
+                      <!-- %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button", "ng-click" => "saveAvailabilities()"} Save changes -->
                       <label btn-radio="'ignore'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteStatus('YES')" ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-remove'></span>
                       </label>
+                      <!-- %ptj-calendar-modal -->
+                      <ptj-calendar-modal possible='selectedInvite.survey.possibleTimePeriods' resulting='selectedInvite.concreteAvailability'></ptj-calendar-modal>
                     </div>
                   </div>
                 </a>
@@ -177,6 +172,7 @@
                 <span>{{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes</span>
               </span>
             </div>
+            poss: {{ selectedInvite.survey.possibleTimePeriods }}
           </div>
         </div>
       </div>

@@ -4,26 +4,25 @@ angular.module('myApp')
 
             'use strict';
 
-            $scope.items = ['item1', 'item2', 'item3'];
-
             $scope.openCalendarModal = function() {
-                $log.debug('openCalendarModal')
-                $log.debug($scope.test)
-                $scope.test.tel = 10101019
+                // $log.debug('openCalendarModal')
 
                 var modalInstance = $modal.open({
                     templateUrl: 'calendarModalContent.html',
                     controller: 'calendarModalInstanceCtrl',
                     size: 'lg',
                     resolve: {
-                        itemsRes: function() {
-                            return $scope.items;
+                        possibleTimePeriods: function() {
+                            return $scope.possibleTimePeriods;
+                        },
+                        resultingTimePeriods: function() {
+                            return $scope.resultingTimePeriods;
                         }
                     }
                 });
 
-                modalInstance.result.then(function(selectedItem) {
-                    $scope.selected = selectedItem;
+                modalInstance.result.then(function(resultingTimePeriods) {
+                    $scope.resultingTimePeriods = resultingTimePeriods;
                 }, function() {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
@@ -33,24 +32,23 @@ angular.module('myApp')
     ]);
 
 angular.module('myApp')
-    .controller('calendarModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'itemsRes',
-        function($scope, $modalInstance, $log, itemsRes) {
+    .controller('calendarModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'possibleTimePeriods', 'resultingTimePeriods',
+        function($scope, $modalInstance, $log, possibleTimePeriods, resultingTimePeriods) {
 
             'use strict';
 
-            $scope.items_ = itemsRes;
-            $scope.selected = {
-                item: $scope.items_[0]
-            };
+            $scope.possibleTimePeriods = possibleTimePeriods;
+            $scope.resultingTimePeriods = resultingTimePeriods;
 
             $scope.ok = function() {
-                $log.debug($scope.items_)
-                    // $modalInstance.close($scope.selected.item);
-                $modalInstance.close("hi from modal");
+                // $log.debug($scope.possibleTimePeriods);
+                // $log.debug($scope.resultingTimePeriods);
+
+                $modalInstance.close($scope.resultingTimePeriods);
             };
 
             $scope.cancel = function() {
-                $log.debug($scope.items_)
+                // $log.debug($scope.items_)
                 $modalInstance.dismiss('cancel');
             };
 

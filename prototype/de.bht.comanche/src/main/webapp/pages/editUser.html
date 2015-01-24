@@ -35,19 +35,17 @@
           </div>
           <div class='error'></div>
         </div>
+        <ptj-calendar-modal possible='[]' resulting='user.generalAvailability'></ptj-calendar-modal>
         <div class='input-group'>
-          <input class='btn btn-primary' id='deleteUserBtn' ng-click='openCalendar()' type='button' value='Edit general availability'>
           <input class='btn btn-default' id='cancelUserEditBtn' ng-click='cancelEditUser()' type='button' value='Cancel'>
           <input class='btn btn-success' id='saveUserEditBtn' ng-click='saveEditedUser()' type='submit' value='Save changes'>
         </div>
         <div class='input-group'>
           <input class='btn btn-danger' id='deleteUserBtn' ng-click='deleteUser()' type='button' value='Delete account'>
         </div>
-        <!-- %ptj-calendar-modal{"test" => "user.generalAvailability"} -->
-        <ptj-calendar possible='dummyPoss' resulting='user.generalAvailability'></ptj-calendar>
         <div class='row'>{{ user.generalAvailability }}</div>
         <div class='row'>{{ dummyPoss }}</div>
-        <!-- .row {{ user.generalAvailability.length }} -->
+        <div class='row'>{{ user.generalAvailability.length }}</div>
         <!-- .row {{ dummyPoss.length }} -->
       </div>
     </div>

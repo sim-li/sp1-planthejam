@@ -123,7 +123,7 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
             restrict: 'E',
             scope: {
                 // test: '=test',
-                possibleTimePeriods: '=possible',
+                allowedTimePeriods: '=allowed',
                 resultingTimePeriods: '=resulting'
             },
             // template: '<div class="calendar" ng-model="eventSources" ui-calendar="uiConfig.calendar"></div>',
@@ -135,7 +135,8 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
         return {
             restrict: 'E',
             scope: {
-                test: '='
+                possibleTimePeriods: '=possible',
+                resultingTimePeriods: '=resulting'
             },
             templateUrl: 'partials/calendarModal.html',
             controller: 'calendarModalCtrl'

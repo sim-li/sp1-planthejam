@@ -26,15 +26,13 @@
             / %a#inputTel{"editable-text" => "user.tel", :href => "#"}
             /   {{user.tel}}
           .error
+        %ptj-calendar-modal{"possible" => "[]", "resulting" => "user.generalAvailability"}
         .input-group
-          %input#deleteUserBtn.btn.btn-primary{"ng-click" => "openCalendar()", :type => "button", :value => "Edit general availability"}/
           %input#cancelUserEditBtn.btn.btn-default{"ng-click" => "cancelEditUser()", :type => "button", :value => "Cancel"}/
           %input#saveUserEditBtn.btn.btn-success{"ng-click" => "saveEditedUser()", :type => "submit", :value => "Save changes"}/
         .input-group
           %input#deleteUserBtn.btn.btn-danger{"ng-click" => "deleteUser()", :type => "button", :value => "Delete account"}/
-        / %ptj-calendar-modal{"test" => "user.generalAvailability"}
-        %ptj-calendar{"possible" => "dummyPoss", "resulting" => "user.generalAvailability"}
         .row {{ user.generalAvailability }}
         .row {{ dummyPoss }}
-        / .row {{ user.generalAvailability.length }}
+        .row {{ user.generalAvailability.length }}
         / .row {{ dummyPoss.length }}

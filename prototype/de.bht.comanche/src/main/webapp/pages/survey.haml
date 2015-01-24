@@ -54,8 +54,12 @@
                   %strong{} {{invite.user.name}}
                   (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
 
+          .row
             .col-lg-11
-              %ptj-calendar{"possible" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
+              possible: {{ selectedSurvey.possibleTimePeriods }}
+          .row
+            .col-lg-11
+              %ptj-calendar{"allowed" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
 
         .panel-footer
           .col-md-offset-10

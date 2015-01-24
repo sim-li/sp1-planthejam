@@ -2,7 +2,7 @@
   <div class='modal-header'>
     <h3 class='modal-title'>
       <span class='glyphicon glyphicon-user'></span>
-      Edit calendar
+      Edit calendar - {{ text }}
     </h3>
   </div>
   <div class='modal-body'>
@@ -17,16 +17,16 @@
       </div>
     </div>
     <div class='row'>
-      <ptj-calendar resulting='test'></ptj-calendar>
+      <ptj-calendar allowed='possibleTimePeriods' resulting='resultingTimePeriods'></ptj-calendar>
     </div>
   </div>
   <div class='modal-footer'>
-    <button class='btn btn-primary' ng-click='ok()'>OK</button>
     <button class='btn btn-warning' ng-click='cancel()'>Cancel</button>
+    <button class='btn btn-primary' ng-click='ok()'>OK</button>
   </div>
 </script>
 <div class='input-group'>
-  <input class='btn btn-primary' ng-click='openCalendarModal()' type='button' value='Open calendar'>
+  <input class='btn btn-primary' ng-click='openCalendarModal()' type='button' value='Edit calendar'>
 </div>
-<div>sel: {{ selected }}</div>
-<div>test: {{ test }}</div>
+<!-- ---- debugging -->
+<span>resulting: {{ resultingTimePeriods }}</span>
