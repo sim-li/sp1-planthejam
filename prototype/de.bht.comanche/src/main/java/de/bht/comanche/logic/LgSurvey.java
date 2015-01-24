@@ -54,7 +54,7 @@ public class LgSurvey extends DaObject {
 	/**
 	 * The intended duration of the survey in minutes.
 	 */
-	private int durationOfEventMins;
+	private int surveyDurationMins;
 
 	/**
 	 * The deadline of the survey.
@@ -216,7 +216,7 @@ public class LgSurvey extends DaObject {
 		this.name = other.name;
 		this.description = other.description;
 		this.type = other.type;
-		this.durationOfEventMins = other.durationOfEventMins;
+		this.surveyDurationMins = other.surveyDurationMins;
 		this.deadline = other.deadline;
 		this.frequencyDist = other.frequencyDist;
 		this.frequencyUnit = other.frequencyUnit;
@@ -330,7 +330,7 @@ public class LgSurvey extends DaObject {
 				* result
 				+ ((determinedTimePeriod == null) ? 0 : determinedTimePeriod
 						.hashCode());
-		result = prime * result + durationOfEventMins;
+		result = prime * result + surveyDurationMins;
 		result = prime * result + frequencyDist;
 		result = prime * result
 				+ ((frequencyUnit == null) ? 0 : frequencyUnit.hashCode());
@@ -372,7 +372,7 @@ public class LgSurvey extends DaObject {
 				return false;
 		} else if (!determinedTimePeriod.equals(other.determinedTimePeriod))
 			return false;
-		if (durationOfEventMins != other.durationOfEventMins)
+		if (surveyDurationMins != other.surveyDurationMins)
 			return false;
 		if (frequencyDist != other.frequencyDist)
 			return false;
@@ -428,11 +428,11 @@ public class LgSurvey extends DaObject {
 	}
 
 	public int getDurationOfEventMins() {
-		return this.durationOfEventMins;
+		return this.surveyDurationMins;
 	}
 
 	public LgSurvey setDurationOfEventMins(final int durationOfEventMins) {
-		this.durationOfEventMins = durationOfEventMins;
+		this.surveyDurationMins = durationOfEventMins;
 		return this;
 	}
 
@@ -516,7 +516,7 @@ public class LgSurvey extends DaObject {
 	public String toString() {
 		return String
 				.format("LgSurvey [name=%s, description=%s, type=%s, durationMins=%s, deadline=%s, frequencyDist=%s, frequencyUnit=%s, possibleTimePeriods=%s, determinedTimePeriod=%s, success=%s, algoChecked=%s, oid=%s, pool=%s]",
-						name, description, type, durationOfEventMins, deadline,
+						name, description, type, surveyDurationMins, deadline,
 						frequencyDist, frequencyUnit, possibleTimePeriods,
 						determinedTimePeriod, success, algoChecked, oid,
 						pool);

@@ -20,7 +20,7 @@ angular.module('models')
              * @param {String}  [config.name='Your survey'] the name of the survey
              * @param {String}  [config.descrition='Say what it is all about'] the description of the survey
              * @param {String}  [config.type='ONE_TIME'] the type of the survey
-             * @param {Number}  [config.durationMins=0] the duration of the survey in minutes
+             * @param {Number}  [config.surveyDurationMins=0] the duration of the survey in minutes
              * @param {Date}    [config.deadline=new Date()] the deadline of the survey
              * @param {Number}  [config.frequencyDist=0] the frequency distance of the survey
              * @param {String}  [config.frequencyUnit='WEEK'] the frequency time unit of the survey
@@ -40,7 +40,7 @@ angular.module('models')
                 this.name = config.name || 'Your survey';
                 this.description = config.description || 'Say what it is all about';
                 this.type = config.type || SurveyType.ONE_TIME;
-                this.durationMins = config.durationMins || 0;
+                this.surveyDurationMins = config.surveyDurationMins || 0;
                 this.deadline = config.deadline ? new Date(config.deadline) : new Date();
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
@@ -73,7 +73,7 @@ angular.module('models')
                     'name': this.name,
                     'description': this.description,
                     'type': this.type,
-                    'durationMins': this.durationMins,
+                    'surveyDurationMins': this.surveyDurationMins,
                     'deadline': this.deadline,
                     'invites': this.invites,
                     'frequencyDist': this.frequencyDist, // FIXME temporarily commented out
@@ -191,7 +191,7 @@ angular.module('models')
                     name: randomString(5 + Math.round(Math.random() * 15)),
                     description: randomString(10 + Math.round(Math.random() * 30)),
                     type: SurveyType._options[Math.round(Math.random() * (SurveyType._options.length - 1))],
-                    durationMins: Math.round(Math.random() * 240),
+                    surveyDurationMins: Math.round(Math.random() * 240),
                     deadline: new Date(),
                     frequencyDist: 1 + Math.round(Math.random() * 30),
                     frequencyUnit: TimeUnit._options[Math.round(Math.random() * (TimeUnit._options.length - 1))],
