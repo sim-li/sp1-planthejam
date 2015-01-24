@@ -29,7 +29,7 @@ import de.bht.comanche.logic.LgUser;
 /**
  * @author Simon Lischka
  */
-
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LgUserWithCollectionsTest {
 

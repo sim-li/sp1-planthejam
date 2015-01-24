@@ -12,13 +12,14 @@ import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
 
-
+//@Ignore
 public class LgSurveyTest {
 	private LgUser alice;
 	private LgUser bob;
