@@ -45,6 +45,7 @@ public class LgInvite extends DaObject{
 	/**
 	 * The user who receives this invite.
 	 */
+	@NotNull
 	@ManyToOne
 	private LgUser user;
 
@@ -118,9 +119,6 @@ public class LgInvite extends DaObject{
 	}
 
 	public LgInvite setUser(final LgUser user) {
-		if (user == null) {
-			throw new EmptyUserInInviteFailure();
-		}
 		this.user = user;
 		return this;
 	}

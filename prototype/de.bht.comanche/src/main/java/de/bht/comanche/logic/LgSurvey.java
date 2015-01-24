@@ -124,11 +124,51 @@ public class LgSurvey extends DaObject {
 		return null;
 		//@TODO Throw multex exception
 	}
+	
 	/**
-	 * Updates a Survey with values form another one and saves
+	 * Introduced for testing. Returns all user that were invited in
+	 * a survey.
+	 */
+	public List<LgUser> getParticipants() {
+		List<LgUser> participants = new ArrayList<LgUser>();
+		for (LgInvite invite : this.invites) {
+			participants.add(invite.getUser());
+		}
+		return participants;
+	}
+	/**
+	 * Adds an invite with user in participant role.
+	 * (isHost = false)
+	 * 
+	 * For Unit testing
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public LgSurvey addParticipants(final LgUser ... users) {
+		for (LgUser user : users) {
+			this.addInvite(new LgInvite().setUser(user).setHost(false));
+		}
+		return this;
+	}
+	
+	/**
+	 * Adds an invite with user in host role.
+	 * (isHost = true)
+	 * 
+	 * Originally written for tests.
+	 * @param user
+	 * @return
+	 */
+	public LgSurvey addHost(final LgUser user) {
+		this.addInvite(new LgInvite().setUser(user).setHost(true));
+		return this;
+	}
+	/**
+	 * Updates a Survey with values form another one
 	 * @param other Other survey
 	 */
-	public void updateWith(final LgSurvey other) {
+	public LgSurvey updateWith(final LgSurvey other) {
 		this.name = other.name;
 		this.description = other.description;
 		this.type = other.type;
@@ -140,6 +180,8 @@ public class LgSurvey extends DaObject {
 		this.determinedTimePeriod = other.determinedTimePeriod;
 		this.success = other.success;
 		this.algoChecked = other.algoChecked;
+		this.invites = other.invites;
+		return this;
 		// Check this, implement Equals method for other classes
 //		updateList(this.invites, other.invites);
 	}
@@ -423,13 +465,16 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 
+	/**
+	 * Removed invites property - leads to stack overflow error.
+	 */
 	@Override
 	public String toString() {
 		return String
-				.format("LgSurvey [name=%s, description=%s, type=%s, durationMins=%s, deadline=%s, frequencyDist=%s, frequencyUnit=%s, possibleTimePeriods=%s, determinedTimePeriod=%s, success=%s, algoChecked=%s, invites=%s, oid=%s, pool=%s]",
+				.format("LgSurvey [name=%s, description=%s, type=%s, durationMins=%s, deadline=%s, frequencyDist=%s, frequencyUnit=%s, possibleTimePeriods=%s, determinedTimePeriod=%s, success=%s, algoChecked=%s, oid=%s, pool=%s]",
 						name, description, type, durationOfEventMins, deadline,
 						frequencyDist, frequencyUnit, possibleTimePeriods,
-						determinedTimePeriod, success, algoChecked, invites, oid,
+						determinedTimePeriod, success, algoChecked, oid,
 						pool);
 	}
 

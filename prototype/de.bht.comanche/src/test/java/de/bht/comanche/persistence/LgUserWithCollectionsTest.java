@@ -106,13 +106,16 @@ public class LgUserWithCollectionsTest {
     }
     
     private void fetchAlicesMessagesForEagerAttempt() {
+    	fetchAlicesUserAccount();
         this.persistedMessages = this.alice.getMessages();
     }
     
+    // FAILS
     @Test
     public void saveDemoMessagesTest() {
         buildVariousMessages("Hello", "Kitty");
         saveMessagesToAlicesAccount();
+        fetchAlicesMessagesForEagerAttempt();
         for (LgMessage m : this.persistedMessages) {
             assertTrue(
                     this.variousMessages.contains(
@@ -121,11 +124,36 @@ public class LgUserWithCollectionsTest {
             );
         }
     }
+    
+    @Test
+    public void updateMessagesInUserAccountTest() {
+    	buildVariousMessages("Hello", "Kitty Two");
+        saveMessagesToAlicesAccount();
+        fetchAlicesMessagesForEagerAttempt();
+        for (LgMessage m : this.persistedMessages) {
+            assertTrue(
+                    this.variousMessages.contains(
+                            new LgMessage().updateWith(m)
+                    )
+            );
+        }
+    }
+    
+    // ROUGH DRAFT
+    @Test
+    public void deleteMessagesInUserAccountTest() {
+    	buildVariousMessages("Hello", "Kitty Two");
+        saveMessagesToAlicesAccount();
+        fetchAlicesMessagesForEagerAttempt();
+        alice.setMessages(new HashSet<LgMessage>());
+        saveMessagesToAlicesAccount();
+        fetchAlicesMessagesForEagerAttempt();
+        assertTrue(this.persistedMessages.size() == 0);
+    }
    
     private void saveMessagesToAlicesAccount() {
+    	alice.setMessages(variousMessages);
         updateAlicesUserAccount();
-//      fetchAlicesMessagesForLazyAttempt();
-        fetchAlicesMessagesForEagerAttempt();
     }
 
     @Test
@@ -134,6 +162,30 @@ public class LgUserWithCollectionsTest {
         saveGeneralAvailability();
         retrieveGeneralAvailability();
         assertEquals(persistedGeneralAvailabilty, variousTimePeriods);
+    }
+    
+
+    @Test
+    public void updateTimePeriodInUserTest() {
+        buildVariousTimePeriods(20, 40, 60);
+        saveGeneralAvailability();
+        retrieveGeneralAvailability();
+        // UPDATE
+        buildVariousTimePeriods(70, 80, 90);
+        saveGeneralAvailability();
+        retrieveGeneralAvailability();
+        assertTrue(this.persistedGeneralAvailabilty.size() == 3);
+        assertTrue(this.persistedGeneralAvailabilty.contains(variousTimePeriods));
+    }
+    
+    @Test
+    public void updateUserAccountTest() {
+    	
+    }
+    
+    @Test
+    public void deleteCompleteUserAccountTest() {
+    	
     }
     
     private void saveGeneralAvailability() {
@@ -161,20 +213,20 @@ public class LgUserWithCollectionsTest {
             );
         }
     }
-    
-    @Test
-    private void verifyDeletingAccountSuccessful() {
-    	deleteAlicesUserAccount();
-    	Collection<DaObject> persistedObjects =
-    	  new TestTransaction<Collection<DaObject>> ("Alice") {
-              @Override
-              public Collection<DaObject> execute() {
-            	  Collection<DaObject> queryResults = new LinkedList<DaObject>();
-                  queryResults.add(getSession().findOneByKey(LgUser.class, "oid", alice.getOid()));
-                  
-              }
-          }.getResult();
-    }
+//    
+//    @Test
+//    private void verifyDeletingAccountSuccessful() {
+//    	deleteAlicesUserAccount();
+//    	Collection<DaObject> persistedObjects =
+//    	  new TestTransaction<Collection<DaObject>> ("Alice") {
+//              @Override
+//              public Collection<DaObject> execute() {
+//            	  Collection<DaObject> queryResults = new LinkedList<DaObject>();
+//                  queryResults.add(getSession().findOneByKey(LgUser.class, "oid", alice.getOid()));
+//                  
+//              }
+//          }.getResult();
+//    }
     
     @After
     public void tearDown() {

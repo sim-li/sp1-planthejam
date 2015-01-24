@@ -115,7 +115,7 @@ public class ReInviteService extends RestService {
 			}
 		}.getResult();
 	}
-
+	
 	/**
 	 * Could not save invite with oid "{0}" for user "{1}"
 	 */

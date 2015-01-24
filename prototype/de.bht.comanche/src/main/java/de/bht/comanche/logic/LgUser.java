@@ -77,7 +77,7 @@ public class LgUser extends DaObject {
 	@Column(name = "general_availability")
 	private Set<LgTimePeriod> generalAvailability;
 
-	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass = LgMessage.class, fetch = FetchType.EAGER)
 	@Column(name = "messages")
 	private Set<LgMessage> messages = new HashSet<LgMessage>();
 
@@ -112,10 +112,14 @@ public class LgUser extends DaObject {
 	}
 
 	/**
-	 * Complete deleting of a user accout.
+	 * Complete delete of user account. 
+	 * 
+	 * Invites have to be delete first in order to comply
+	 * with foreign key constraint.
+	 * 
 	 */
 	public void deleteThisAccount() {
-		for (LgInvite invite : this.getInvites()) {
+		for (final LgInvite invite : this.getInvites()) {
 			attachPoolFor(invite).delete();
 		}
 		delete();
@@ -287,6 +291,12 @@ public class LgUser extends DaObject {
 		return filteredInvites;
 	}
 
+	/**
+	 * JSON Object from Server doesn't send host invite.
+	 * 
+	 * @param survey
+	 * @return
+	 */
 	public LgSurvey saveSurvey(final LgSurvey survey) {
 		List<LgInvite> dirtyInvites = survey.getInvites();
 		addHostInvite(dirtyInvites);
@@ -383,6 +393,17 @@ public class LgUser extends DaObject {
 
 	// -------------------------------------------------------------------------
 
+
+    /**
+     * For testing: Add invites manually
+     * @param invite
+     * @return Invite added to collection
+     */
+    public LgUser addInvite(final LgInvite invite) {
+    	this.invites.add(invite);
+    	return this;
+    }
+    
     public LgUser updateWith(LgUser other) {
 		this.email = other.email;
 		this.generalAvailability =  other.generalAvailability;
