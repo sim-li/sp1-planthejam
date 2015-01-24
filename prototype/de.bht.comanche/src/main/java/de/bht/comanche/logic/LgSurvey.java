@@ -209,6 +209,16 @@ public class LgSurvey extends DaObject {
 		this.addInvite(new LgInvite().setUser(user).setHost(true));
 		return this;
 	}
+	
+	public LgUser getHost() {
+		for (final LgInvite invite : this.invites) {
+			if (invite.getIsHost() == true) {
+				return invite.getUser();
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Updates a Survey with values form another one
 	 * @param other Other survey
