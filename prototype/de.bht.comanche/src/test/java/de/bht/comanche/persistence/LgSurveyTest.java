@@ -1,6 +1,6 @@
 package de.bht.comanche.persistence;
-
 import java.util.Date;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,6 +16,7 @@ import de.bht.comanche.logic.LgUser;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.extractProperty;
+
 
 public class LgSurveyTest {
 	private LgUser alice;
@@ -71,6 +72,7 @@ public class LgSurveyTest {
 	 * when calling saveSurvey. That's why we check for Alice even though we
 	 * only add Bob and Carol to the survey.
 	 */
+	//ITERABLES FAIL
 	@Test
 	public void saveSurveyWithInvitesPariticipantsTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
@@ -80,6 +82,7 @@ public class LgSurveyTest {
 				"Alice", "Bob", "Carol");
 	}
 
+	//ITERABLES FAIL
 	@Test
 	public void saveSurveyWithInvitesHostAttributeTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
@@ -101,6 +104,7 @@ public class LgSurveyTest {
 	}
 	
 	@Test
+	//ITERABLES FAIL
 	public void addParticipantTest() {
 		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob);
 		aSurvey.addParticipants(carol);
@@ -191,6 +195,7 @@ public class LgSurveyTest {
 		return persistedSurvey;
 	}
 
+	//ITERABLES FAIL
 	@Test
 	public void updateSurveyByModifyingTimePeriods() {
 		testTimePeriodsUpdateWith(20, 40, 80);

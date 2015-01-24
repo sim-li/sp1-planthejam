@@ -1,31 +1,13 @@
 package de.bht.comanche.persistence;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import javax.persistence.Persistence;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-
 import de.bht.comanche.logic.LgInvite;
-import de.bht.comanche.logic.LgMessage;
-import de.bht.comanche.logic.LgStatus;
 import de.bht.comanche.logic.LgSurvey;
-import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
 
 public class LgInviteTest {
