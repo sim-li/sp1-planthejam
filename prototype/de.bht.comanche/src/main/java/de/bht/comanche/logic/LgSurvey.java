@@ -126,8 +126,19 @@ public class LgSurvey extends DaObject {
 	}
 	
 	/**
-	 * Introduced for testing. Returns all user that were invited in
+	 * Returns all user that were invited in
 	 * a survey.
+	 * 
+	 * For unit testing.
+	 * 
+	 */
+	
+	/**
+	 * Returns all users that were invited in a survey.
+	 * 
+	 * For unit testing.
+	 * 
+	 * @return Participants of a survey
 	 */
 	public List<LgUser> getParticipants() {
 		List<LgUser> participants = new ArrayList<LgUser>();
@@ -150,6 +161,39 @@ public class LgSurvey extends DaObject {
 			this.addInvite(new LgInvite().setUser(user).setHost(false));
 		}
 		return this;
+	}
+	
+	/**
+	 * Removes participants from Survey
+	 * 
+	 * For Unit testing
+	 * 
+	 * @param Users that should be removed from survey.
+	 * @return This survey, updated.
+	 */
+	public LgSurvey removeParticipants(LgUser ... users) {
+		for (LgUser user : users) {
+			final LgInvite invite = findInviteForParticipant(user);
+			if (this.invites.contains(invite)) {
+				this.removeInvite(invite);
+			}
+		}
+		return this;
+	}
+	
+	/**
+	 * Returns invite by user name.
+	 * 
+	 * @param user User object to be used as search criteria.
+	 * @return Invite or empty invite when not found
+	 */
+	public LgInvite findInviteForParticipant(LgUser user) {
+		for (LgInvite invite : this.invites) {
+			if (invite.getUser().equals(user)) {
+				return invite;
+			}
+		}
+		return new LgInvite();
 	}
 	
 	/**
@@ -478,6 +522,11 @@ public class LgSurvey extends DaObject {
 						pool);
 	}
 
+	public LgSurvey removeInvite(LgInvite invite) {
+		invites.remove(invite);
+		return this;
+	}
+	
 	public LgSurvey addInvite(LgInvite invite) {
 		invites.add(invite);
 		return this;
