@@ -96,6 +96,8 @@ public class LgSurveyTest {
 				.containsOnly(true, false, false);
 	}
 	
+	//SUC
+	@Ignore
 	@Test
 	public void deleteParticipantTest() {
 		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob, carol);
@@ -107,7 +109,6 @@ public class LgSurveyTest {
 				"Alice", "Bob");
 	}
 	
-	@Ignore
 	@Test
 	public void addParticipantTest() {
 		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob);
