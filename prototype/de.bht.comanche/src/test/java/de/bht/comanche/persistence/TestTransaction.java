@@ -66,5 +66,5 @@ public abstract class TestTransaction<E> {
 		return this.session.startFor(this.username);
 	}
 	
-	public abstract E execute() throws Exception;
+	public abstract E execute();
 }

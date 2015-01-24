@@ -25,7 +25,10 @@ angular.module('models')
 				return new TimePeriod(config);
 			}
 			config = config || {};
-			this.oid = config.oid || '';
+			// Empty fields will cause Server Errors 'unrecognized field' --SIM, 24 JAN 2014
+			if (config.oid) {
+				this.oid = config.oid;
+			}
 			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
 			this.durationMins = config.durationMins || 0;
 		};

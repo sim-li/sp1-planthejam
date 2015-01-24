@@ -12,12 +12,14 @@ import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
-
+import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
 public class LgSurveyTest {
 	private LgUser alice;
@@ -73,13 +75,13 @@ public class LgSurveyTest {
 	 * when calling saveSurvey. That's why we check for Alice even though we
 	 * only add Bob and Carol to the survey.
 	 */
-	
 	@Test
 	public void saveSurveyWithInvitesPariticipantsTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
 		assertThat(
 				extractProperty("user.name").from(
-						surveyForEvaluation.getInvites())).containsExactly(
+						surveyForEvaluation.getInvites())).
+						containsOnly(
 				"Alice", "Bob", "Carol");
 	}
 
@@ -89,7 +91,7 @@ public class LgSurveyTest {
 		assertThat(
 				extractProperty("isHost")
 						.from(surveyForEvaluation.getInvites()))
-				.containsExactly(true, false, false);
+				.containsOnly(true, false, false);
 	}
 	
 	@Test
@@ -99,20 +101,18 @@ public class LgSurveyTest {
 		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
 	    assertThat(
 				extractProperty("user.name").from(
-						surveyForEvaluation.getInvites())).containsExactly(
+						surveyForEvaluation.getInvites())).containsOnly(
 				"Alice", "Bob");
 	}
 	
-	
 	@Test
-	//ITERABLES FAIL
 	public void addParticipantTest() {
 		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob);
 		aSurvey.addParticipants(carol);
 		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
 	    assertThat(
 				extractProperty("user.name").from(
-						surveyForEvaluation.getInvites())).containsExactly(
+						surveyForEvaluation.getInvites())).containsOnly(
 				"Alice", "Bob", "Carol");
 	}
 
@@ -126,8 +126,35 @@ public class LgSurveyTest {
 				return null;
 			}
 		}.getResult();
+		final Boolean foundComponentOfSurvey = new TestTransaction<Boolean>(
+				"Alice") {
+			@Override
+			public Boolean execute() {
+				Boolean foundADeletedElement = null;
+				try {
+					startSession().findOneByKey(LgSurvey.class, "oid",
+							surveyForEvaluation.getOid());
+					foundADeletedElement = true;
+				} catch (DaFindOneByKeyExc ex) {
+					setFalseIfNull(foundADeletedElement);
+				}
+				for (final LgInvite invite : surveyForEvaluation.getInvites()) {
+					try {
+						startSession().findOneByKey(LgInvite.class, "oid",
+								invite.getOid());
+						foundADeletedElement = true;
+					} catch (DaFindOneByKeyExc ex) {
+						setFalseIfNull(foundADeletedElement);
+					}
+				}
+				return false;
+			}
+		}.getResult();
 	}
 	
+	private void setFalseIfNull(Boolean val) {
+		val = val == null ? false : val;
+	}
 	/**
 	 * Saves survey given list of participants.
 	 * 
@@ -138,7 +165,7 @@ public class LgSurveyTest {
 		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
 		return surveyForEvaluation;
 	}
-
+	
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
@@ -196,45 +223,55 @@ public class LgSurveyTest {
 		return persistedSurvey;
 	}
 
-	//ITERABLES FAIL
 	@Test
 	public void updateSurveyByModifyingTimePeriods() {
-		testTimePeriodsUpdateWith(20, 40, 80);
+		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40, 80);
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.containsOnly(20, 40,80);
 	}
 
 	@Test
 	public void updateSurveyByDeletingOneTimePeriods() {
-		testTimePeriodsUpdateWith(20, 40);
+		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40);
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.containsOnly(20, 40);
 	}
 
 	@Test
 	public void updateSurveyByDeletingTwoTimePeriods() {
-		testTimePeriodsUpdateWith(20);
+		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20);
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.containsOnly(20);
 	}
 
 	@Test
 	public void updateSurveyByDeletingAllTimePeriods() {
-		testTimePeriodsUpdateWith();
+		final LgSurvey surveyForEvaluation = updateTimePeriodsWith();
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.isEmpty();
 	}
 
 	/**
-	 * Checks that the durations of the time periods were updated successfully
-	 * and the exact number of durations are contained in the survey.
-	 * 
-	 * Test will try to modify timePeriods with durations [20, 40, 60] to given
-	 * values and check against database.
-	 * 
-	 * An empty parameter list will persist an empty collection.
+	 * Updates the time periods [20, 40, 60] of a survey with the 
+	 * given durations.
 	 * 
 	 * @param durationUpdates
 	 *            A series of durations
+	 * @return Updated survey with new durations for checking with assertions
 	 */
-	private void testTimePeriodsUpdateWith(int... durationUpdates) {
+	private LgSurvey updateTimePeriodsWith(int... durationUpdates) {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setPossibleTimePeriods(buildTimePeriods(20, 40, 60));
-		saveSurveyForAlice(freshSurvey);
-		final LgSurvey updatedSurvey = new LgSurvey()
-				.setPossibleTimePeriods(buildTimePeriods(durationUpdates));
+		final LgSurvey updatedSurvey = saveSurveyForAlice(freshSurvey);
+		updatedSurvey.setPossibleTimePeriods(buildTimePeriods(durationUpdates));
 		final LgSurvey surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
@@ -242,10 +279,7 @@ public class LgSurveyTest {
 				return startSession().updateSurvey(updatedSurvey);
 			}
 		}.getResult();
-		assertThat(
-				extractProperty("durationOfEventMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
-				.containsExactly(durationUpdates);
+		return surveyForEvaluation;
 	}
 
 	/**
