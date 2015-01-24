@@ -427,12 +427,12 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 
-	public int getDurationOfEventMins() {
+	public int getSurveyDurationMins() {
 		return this.surveyDurationMins;
 	}
 
-	public LgSurvey setDurationOfEventMins(final int durationOfEventMins) {
-		this.surveyDurationMins = durationOfEventMins;
+	public LgSurvey setSurveyDurationMins(final int surveyDurationMins) {
+		this.surveyDurationMins = surveyDurationMins;
 		return this;
 	}
 
