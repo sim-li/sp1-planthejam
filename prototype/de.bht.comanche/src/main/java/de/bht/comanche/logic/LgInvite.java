@@ -86,6 +86,8 @@ public class LgInvite extends DaObject{
 	 * --------------------------------------------------------------------------------------------
 	 */
 	
+	
+	
 	public Set<LgTimePeriod> getPossibleTimePeriods(){
 		return this.concreteAvailability;
 	}
@@ -95,10 +97,10 @@ public class LgInvite extends DaObject{
 		return this;
 	}
 
-	public boolean isHost() {
+	public boolean getIsHost() {
 		return this.isHost;
 	}
-
+	
 	public LgStatus getIgnored() {
 		return this.isIgnored;
 	}

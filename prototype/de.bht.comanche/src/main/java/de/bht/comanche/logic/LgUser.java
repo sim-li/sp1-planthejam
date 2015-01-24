@@ -120,7 +120,7 @@ public class LgUser extends DaObject {
 	 */
 	public void deleteThisAccount() {
 		for (final LgInvite invite : this.getInvites()) {
-			attachPoolFor(invite).delete();
+			invite.setUser(null);
 		}
 		delete();
 	}
@@ -261,7 +261,7 @@ public class LgUser extends DaObject {
 	// -- HOST ROLES --
 	public LgSurvey getSurvey(final long oid) {
 		for (LgInvite invite : this.invites) {
-			if (invite.isHost() && invite.getSurvey().getOid() == oid) {
+			if (invite.getIsHost() && invite.getSurvey().getOid() == oid) {
 				return invite.getSurvey();
 			}
 		}
@@ -271,7 +271,7 @@ public class LgUser extends DaObject {
 	public List<LgSurvey> getSurveys() {
 		List<LgSurvey> surveys = new ArrayList<LgSurvey>();
 		for (LgInvite invite : this.invites) {
-			if (invite.isHost()) {
+			if (invite.getIsHost()) {
 				surveys.add(invite.getSurvey());
 			} 
 		}
@@ -349,7 +349,7 @@ public class LgUser extends DaObject {
 	public List<LgInvite> getInvitesAsParticipant() {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
 		for (LgInvite invite : this.invites) {
-			if (!invite.isHost()) {
+			if (!invite.getIsHost()) {
 				filteredInvites.add(invite);
 			}
 		}

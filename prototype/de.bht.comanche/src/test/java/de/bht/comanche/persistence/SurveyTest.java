@@ -96,10 +96,10 @@ public class SurveyTest {
         LgInvite pitsInvite = persistedSurvey.getInviteByParticipantName(pit.getName());
 
         //ASSERT FALSE
-        assertEquals("Bob's invite has status 'participant'", false, bobsInvite.isHost());
+        assertEquals("Bob's invite has status 'participant'", false, bobsInvite.getIsHost());
         assertEquals("Bob is user of his invite", bob.getName(), bobsInvite.getUser().getName());
         assertEquals("Bob's invite is not set to isIgnored", false, bobsInvite.getIgnored());
-        assertEquals("Pit's invite has status 'participant'", false, bobsInvite.isHost());
+        assertEquals("Pit's invite has status 'participant'", false, bobsInvite.getIsHost());
         assertEquals("Pit is user of the invite", pit.getName(), pitsInvite.getUser().getName());
         assertEquals("Pit's invite is not set to isIgnored", false, pitsInvite.getIgnored());
 
@@ -109,7 +109,7 @@ public class SurveyTest {
                     .getInviteBySurveyName(demoSurvey.getName());
 
         assertEquals("Alice has an invite containing DemoSurvey", demoSurvey.getName(), alicesInviteFromDemoSurvey.getSurvey().getName());
-        assertEquals("Alice's has status 'host' of her invite", true, alicesInviteFromDemoSurvey.isHost());
+        assertEquals("Alice's has status 'host' of her invite", true, alicesInviteFromDemoSurvey.getIsHost());
         assertEquals("Alice's invite is not ignored", false, alicesInviteFromDemoSurvey.getIgnored());
     }
 
