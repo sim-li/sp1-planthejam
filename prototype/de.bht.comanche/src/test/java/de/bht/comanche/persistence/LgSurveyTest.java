@@ -66,12 +66,6 @@ public class LgSurveyTest {
 		}.getResult();
 	}
 
-	// @Ignore
-	// @Test
-	// public void getAllAcountsDoesntContainOwnerTest() {
-	// assertFalse(allAcountsOnSystem.contains(alice));
-	// }
-	//
 	/**
 	 * Note: User with active transaction will automatically be added as host
 	 * when calling saveSurvey. That's why we check for Alice even though we
@@ -79,7 +73,7 @@ public class LgSurveyTest {
 	 */
 	@Test
 	public void saveSurveyWithInvitesPariticipantsTest() {
-		final LgSurvey surveyForEvaluation = saveSurveyWithInvites();
+		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
 		assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).containsExactly(
@@ -88,44 +82,56 @@ public class LgSurveyTest {
 
 	@Test
 	public void saveSurveyWithInvitesHostAttributeTest() {
-		final LgSurvey surveyForEvaluation = saveSurveyWithInvites();
+		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
 		assertThat(
 				extractProperty("isHost")
 						.from(surveyForEvaluation.getInvites()))
 				.containsExactly(true, false, false);
 	}
-
-	/**
-	 * Saves survey with Bob and Carol as Participant.
-	 * 
-	 * @return Persisted survey with OID.
-	 */
-	private LgSurvey saveSurveyWithInvites() {
-		final LgSurvey aSurvey = new LgSurvey().addParticipants(bob, carol);
+	
+	@Test
+	public void deleteParticipantTest() {
+		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob, carol);
+		aSurvey.removeParticipants(carol);
 		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
-		return surveyForEvaluation;
+	    assertThat(
+				extractProperty("user.name").from(
+						surveyForEvaluation.getInvites())).containsExactly(
+				"Alice", "Bob");
 	}
-
+	
 	@Test
-	public void updateInviteForParticipantsTest() {
-		final LgSurvey surveyWithTwoParticipants = saveSurveyWithInvites();
-		surveyWithTwoParticipants.removeParticipants(carol);
-		
-	}
-
-	@Test
-	public void deleteInviteForParticipantsTest() {
-
-	}
-
-	@Test
-	public void saveInviteForParticipantsTest() {
-
+	public void addParticipantTest() {
+		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob);
+		aSurvey.addParticipants(carol);
+		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
+	    assertThat(
+				extractProperty("user.name").from(
+						surveyForEvaluation.getInvites())).containsExactly(
+				"Alice", "Bob", "Carol");
 	}
 
 	@Test
 	public void deleteSurveyTest() {
-
+		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
+		new TestTransaction<Object>("Alice") {
+			@Override
+			public Object execute() {
+				startSession().deleteSurvey(surveyForEvaluation.getOid());
+				return null;
+			}
+		}.getResult();
+	}
+	
+	/**
+	 * Saves survey given list of participants.
+	 * 
+	 * @return Persisted survey with OID.
+	 */
+	private LgSurvey saveTestSurveyWithParticipants(LgUser ... participants) {
+		final LgSurvey aSurvey = new LgSurvey().addParticipants(participants);
+		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
+		return surveyForEvaluation;
 	}
 
 	@Test
