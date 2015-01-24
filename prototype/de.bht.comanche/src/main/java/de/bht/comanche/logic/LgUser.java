@@ -251,6 +251,7 @@ public class LgUser extends DaObject {
 	}
 
 	// -- HOST ROLES --
+	@JsonIgnore
 	public LgSurvey getSurvey(final long oid) {
 		for (LgInvite invite : this.invites) {
 			if (invite.isHost() && invite.getSurvey().getOid() == oid) {
@@ -446,7 +447,7 @@ public class LgUser extends DaObject {
 		this.email = email;
 		return this;
 	}
-
+	
 	public String getPassword() {
 		return this.password;
 	}
