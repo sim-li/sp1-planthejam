@@ -503,11 +503,12 @@ public class LgUser extends DaObject {
 		 this.messages = messages;
 	 }
 	 
+	//Removed invites (Causes stack overflow error)
 	@Override
 	public String toString() {
 		return String
-				.format("LgUser [name=%s, tel=%s, email=%s, password=%s, invites=%s, groups=%s, member=%s, oid=%s, pool=%s]",
-						name, tel, email, password, invites, groups, member,
+				.format("LgUser [name=%s, tel=%s, email=%s, password=%s, groups=%s, member=%s, oid=%s, pool=%s]",
+						name, tel, email, password, groups, member,
 						oid, pool);
 	}
 }

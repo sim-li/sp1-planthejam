@@ -5,7 +5,10 @@ import static org.fest.assertions.api.Assertions.extractProperty;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Persistence;
 
@@ -15,8 +18,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.bht.comanche.logic.LgStatus;
 import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgSurveyType;
 import de.bht.comanche.logic.LgTimePeriod;
+import de.bht.comanche.logic.LgTimeUnit;
 import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
@@ -70,6 +76,92 @@ public class LgSurveyTest {
 		}.getResult();
 	}
 
+	@Test
+	public void getSurveyByOidTest() {
+		final Date aDate = new Date();
+		final LgTimePeriod aTimePeriod = new LgTimePeriod().setDurationMins(30).setStartTime(aDate);
+		final Set<LgTimePeriod> severalTimePeriods = buildTimePeriods(20,30,40); 
+		final LgSurvey aSurvey = new LgSurvey()
+			.setAlgoChecked(false)
+			.setDeadline(aDate)
+			.setDescription("My description")
+			.setDeterminedTimePeriod(aTimePeriod)
+			.setFrequencyDist(30)
+			.setFrequencyUnit(LgTimeUnit.MONTH)
+			.addParticipants(bob, carol)
+			.setName("My test survey")
+		    .setPossibleTimePeriods(severalTimePeriods)
+		    .setSuccess(LgStatus.UNDECIDED)
+		    .setSurveyDurationMins(30)
+		    .setType(LgSurveyType.ONE_TIME);
+		final LgSurvey surveyWithOid = saveSurveyForAlice(aSurvey);
+		final LgSurvey surveyEval = new TestTransaction<LgSurvey>(
+				"Alice") {
+			@Override
+			public LgSurvey execute() {
+				return startSession().getSurvey(surveyWithOid.getOid());
+			}
+		}.getResult();
+		//Comment: Whats up with bool getters: Do these naming conventions work for JSONization? -- SIM, 24. JAN 2015
+		assertThat(surveyEval.getAlgoChecked()).isFalse();
+		assertThat(surveyEval.getDeadline()).isEqualTo(aDate);
+		assertThat(surveyEval.getDescription()).isEqualTo("My description");
+		assertThat(surveyEval.getDeterminedTimePeriod()).isEqualTo(aTimePeriod);
+		assertThat(surveyEval.getFrequencyDist()).isEqualTo(30);
+		assertThat(surveyEval.getFrequencyUnit()).isEqualTo(LgTimeUnit.MONTH);
+		assertThat(surveyEval.getParticipants()).containsOnly(alice, bob, carol);
+		assertThat(surveyEval.getHost()).isEqualTo(alice);
+		assertThat(surveyEval.getName()).isEqualTo("My test survey");
+		assertThat(surveyEval.getPossibleTimePeriods()).isEqualTo(severalTimePeriods);
+		assertThat(surveyEval.getSuccess()).isEqualTo(LgStatus.UNDECIDED);
+		assertThat(surveyEval.getSurveyDurationMins()).isEqualTo(30);
+		assertThat(surveyEval.getType()).isEqualTo(LgSurveyType.ONE_TIME);
+	}
+	
+	/**
+	 * Note: The host is also returned with the getInvites method.
+	 */
+	@Test
+	public void getInvitesForSurveyByOidTest() {
+		final LgSurvey surveyWithOid = saveTestSurveyWithParticipants(bob, carol);
+		final List<LgInvite> invites = new TestTransaction<List<LgInvite>>("Alice") {
+			@Override
+			public List<LgInvite> execute() {
+				return startSession().getInvitesForSurvey(surveyWithOid.getOid());
+			}
+		}.getResult();
+		assertThat(
+				extractProperty("user.name").from(
+						invites)).containsOnly(
+				"Alice", "Bob", "Carol");
+	}
+	
+	@Test
+	public void getSurveysTest() {
+		saveSurveyForAlice(new LgSurvey().setName("Survey1"));
+		saveSurveyForAlice(new LgSurvey().setName("Survey2"));
+		saveSurveyForAlice(new LgSurvey().setName("Survey3"));
+		List<LgSurvey> surveysForEvaluation = new TestTransaction<List<LgSurvey>>("Alice") {
+			@Override
+			public List<LgSurvey> execute() {
+				return startSession().getSurveys();
+			}
+		}.getResult();
+		assertThat(
+				extractProperty("name").from(
+						surveysForEvaluation)).
+						contains(
+				"Survey1", "Survey2", "Survey3");
+	}
+	
+	public List<LgSurvey> createSurveysWithNames(String ... names) {
+		List<LgSurvey> surveys = new LinkedList<LgSurvey>();
+		for (String name : names) {
+			surveys.add(new LgSurvey().setName(name).addHost(alice).addParticipants(bob, carol));
+		}
+		return surveys;
+	}
+	
 	/**
 	 * Note: User with active transaction will automatically be added as host
 	 * when calling saveSurvey. That's why we check for Alice even though we

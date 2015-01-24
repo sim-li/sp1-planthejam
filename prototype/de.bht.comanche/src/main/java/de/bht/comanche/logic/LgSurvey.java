@@ -1,5 +1,6 @@
 package de.bht.comanche.logic;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -208,6 +209,16 @@ public class LgSurvey extends DaObject {
 		this.addInvite(new LgInvite().setUser(user).setHost(true));
 		return this;
 	}
+	
+	public LgUser getHost() {
+		for (final LgInvite invite : this.invites) {
+			if (invite.getIsHost() == true) {
+				return invite.getUser();
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Updates a Survey with values form another one
 	 * @param other Other survey
@@ -530,5 +541,9 @@ public class LgSurvey extends DaObject {
 	public LgSurvey addInvite(LgInvite invite) {
 		invites.add(invite);
 		return this;
+	}
+
+	public boolean getAlgoChecked() {
+		return this.algoChecked;
 	}
 }
