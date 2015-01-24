@@ -1,10 +1,14 @@
 package de.bht.comanche.persistence;
-import java.util.Date;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.extractProperty;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
 import javax.persistence.Persistence;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,9 +17,6 @@ import org.junit.Test;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
-
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.fest.assertions.api.Assertions.extractProperty;
 
 
 public class LgSurveyTest {

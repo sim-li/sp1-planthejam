@@ -20,6 +20,10 @@ public class IterablesTest {
 				extractProperty("user.name").from(
 						col))
 				.contains("Hello", "Kitty");
+		assertThat(
+				extractProperty("name").from(
+						col))
+				.containsExactly("Hello");
 	}
 	
 	public void tFail() {
