@@ -5,6 +5,8 @@ import static org.fest.assertions.api.Assertions.extractProperty;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -117,11 +119,54 @@ public class LgSurveyTest {
 	}
 	
 	/**
+	 * Note: The host is also returned with the getInvites method.
+	 */
+	@Test
+	public void getInvitesForSurveyByOidTest() {
+		final LgSurvey surveyWithOid = saveTestSurveyWithParticipants(bob, carol);
+		final List<LgInvite> invites = new TestTransaction<List<LgInvite>>("Alice") {
+			@Override
+			public List<LgInvite> execute() {
+				return startSession().getInvitesForSurvey(surveyWithOid.getOid());
+			}
+		}.getResult();
+		assertThat(
+				extractProperty("user.name").from(
+						invites)).containsOnly(
+				"Alice", "Bob", "Carol");
+	}
+	
+	@Test
+	public void getSurveysTest() {
+		saveSurveyForAlice(new LgSurvey().setName("Survey1"));
+		saveSurveyForAlice(new LgSurvey().setName("Survey2"));
+		saveSurveyForAlice(new LgSurvey().setName("Survey3"));
+		List<LgSurvey> surveysForEvaluation = new TestTransaction<List<LgSurvey>>("Alice") {
+			@Override
+			public List<LgSurvey> execute() {
+				return startSession().getSurveys();
+			}
+		}.getResult();
+		assertThat(
+				extractProperty("name").from(
+						surveysForEvaluation)).
+						contains(
+				"Survey1", "Survey2", "Survey3");
+	}
+	
+	public List<LgSurvey> createSurveysWithNames(String ... names) {
+		List<LgSurvey> surveys = new LinkedList<LgSurvey>();
+		for (String name : names) {
+			surveys.add(new LgSurvey().setName(name).addHost(alice).addParticipants(bob, carol));
+		}
+		return surveys;
+	}
+	
+	/**
 	 * Note: User with active transaction will automatically be added as host
 	 * when calling saveSurvey. That's why we check for Alice even though we
 	 * only add Bob and Carol to the survey.
 	 */
-	@Ignore
 	@Test
 	public void saveSurveyWithInvitesPariticipantsTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
@@ -132,7 +177,6 @@ public class LgSurveyTest {
 				"Alice", "Bob", "Carol");
 	}
 
-	@Ignore
 	@Test
 	public void saveSurveyWithInvitesHostAttributeTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
@@ -142,7 +186,6 @@ public class LgSurveyTest {
 				.containsOnly(true, false, false);
 	}
 	
-	@Ignore
 	@Test
 	public void deleteParticipantTest() {
 		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob, carol);
@@ -154,7 +197,6 @@ public class LgSurveyTest {
 				"Alice", "Bob");
 	}
 	
-	@Ignore
 	@Test
 	public void addParticipantTest() {
 		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob);
@@ -166,7 +208,6 @@ public class LgSurveyTest {
 				"Alice", "Bob", "Carol");
 	}
 
-	@Ignore
 	@Test
 	public void deleteSurveyTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
@@ -217,7 +258,6 @@ public class LgSurveyTest {
 		return surveyForEvaluation;
 	}
 	
-	@Ignore
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
@@ -229,7 +269,6 @@ public class LgSurveyTest {
 				.contains(20, 40, 60);
 	}
 
-	@Ignore
 	@Test
 	public void saveSurveyWithDeterminedTimePeriodTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
@@ -276,7 +315,6 @@ public class LgSurveyTest {
 		return persistedSurvey;
 	}
 
-	@Ignore
 	@Test
 	public void updateSurveyByModifyingTimePeriods() {
 		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40, 80);
@@ -286,7 +324,6 @@ public class LgSurveyTest {
 				.containsOnly(20, 40,80);
 	}
 
-	@Ignore
 	@Test
 	public void updateSurveyByDeletingOneTimePeriods() {
 		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40);
@@ -296,7 +333,6 @@ public class LgSurveyTest {
 				.containsOnly(20, 40);
 	}
 
-	@Ignore
 	@Test
 	public void updateSurveyByDeletingTwoTimePeriods() {
 		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20);
@@ -306,7 +342,6 @@ public class LgSurveyTest {
 				.containsOnly(20);
 	}
 
-	@Ignore
 	@Test
 	public void updateSurveyByDeletingAllTimePeriods() {
 		final LgSurvey surveyForEvaluation = updateTimePeriodsWith();
