@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import static multex.MultexUtil.create;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -306,24 +307,36 @@ public class LgUser extends DaObject {
 		return persistedSurvey;
 	}
 
-	public LgSurvey updateSurvey(final LgSurvey surveyFromClient) {
-		
-		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
-		listFromDB.add(findOneByKey(LgSurvey.class, "OID", this.getOid()));
-		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
-		listfresh.add(surveyFromClient);
-		
-		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
-		listfresh.removeAll(listFromDB); // ELs already saved
-		
-		for (LgSurvey el : listfresh) {
-		System.out.println(el);
-		saveUnattached(el); // Fresh list are never tracked
+	public LgSurvey updateSurvey(final LgSurvey other) {
+		if (other.getOid() <= 0) {
+			throw create(UpdateWithUnpersistedSurveyExc.class, other.getOid());
 		}
-		
-		listFromDB.addAll(listfresh); // Requires PL tracking too
-		return listFromDB.get(0);
+		final LgSurvey survey = findOneByKey(LgSurvey.class, "OID", other.getOid());
+		survey.updateWith(other);
+		return saveUnattached(other);
+//		
+//		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
+//		listFromDB.add(findOneByKey(LgSurvey.class, "OID", this.getOid()));
+//		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
+//		listfresh.add(surveyFromClient);
+//		
+//		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
+//		listfresh.removeAll(listFromDB); // ELs already saved
+//		
+//		for (LgSurvey el : listfresh) {
+//		System.out.println(el);
+//		saveUnattached(el); // Fresh list are never tracked
+//		}
+//		
+//		listFromDB.addAll(listfresh); // Requires PL tracking too
+//		return listFromDB.get(0);
 	}
+	/**
+	 *  The survey with oid "{0}" seems to be unpersisted. You can only
+	 *  update surveys you have retrieved from the server before.
+	 */
+	@SuppressWarnings("serial")
+	public static final class UpdateWithUnpersistedSurveyExc extends multex.Failure {}
 
 	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
 			List<LgInvite> dirtyInvites) {
@@ -408,12 +421,11 @@ public class LgUser extends DaObject {
 		this.email = other.email;
 		this.generalAvailability =  other.generalAvailability;
 		this.groups = other.groups;
-//		this.iconurl = other.iconurl;
+		this.iconurl = other.iconurl;
 		this.invites = other.invites;
 		this.member = other.member;
 		this.messages = other.messages;
 		this.name = other.name;
-		this.oid = other.oid;
 		this.password = other.password;
 		this.tel = other.tel;	
 		return this;

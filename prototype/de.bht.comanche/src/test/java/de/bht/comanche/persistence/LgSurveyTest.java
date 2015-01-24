@@ -18,6 +18,7 @@ import org.junit.Test;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
 public class LgSurveyTest {
 	private LgUser alice;
@@ -73,8 +74,6 @@ public class LgSurveyTest {
 	 * when calling saveSurvey. That's why we check for Alice even though we
 	 * only add Bob and Carol to the survey.
 	 */
-	//SUC
-	@Ignore
 	@Test
 	public void saveSurveyWithInvitesPariticipantsTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
@@ -85,8 +84,6 @@ public class LgSurveyTest {
 				"Alice", "Bob", "Carol");
 	}
 
-	//SUC
-	@Ignore
 	@Test
 	public void saveSurveyWithInvitesHostAttributeTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
@@ -96,8 +93,6 @@ public class LgSurveyTest {
 				.containsOnly(true, false, false);
 	}
 	
-	//SUC
-	@Ignore
 	@Test
 	public void deleteParticipantTest() {
 		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob, carol);
@@ -120,7 +115,6 @@ public class LgSurveyTest {
 				"Alice", "Bob", "Carol");
 	}
 
-	@Ignore
 	@Test
 	public void deleteSurveyTest() {
 		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
@@ -129,6 +123,19 @@ public class LgSurveyTest {
 			public Object execute() {
 				startSession().deleteSurvey(surveyForEvaluation.getOid());
 				return null;
+			}
+		}.getResult();
+		final Boolean foundComponentOfSurvey = new TestTransaction<Boolean>("Alice") {
+			@Override
+			public Boolean execute() {
+				Boolean foundADeletedElement = false;
+				try {
+					startSession().findOneByKey(persistentClass, keyFieldName, keyFieldValue);
+					foundADeletedElement = true;
+				} catch (DaFindOneByKeyExc ex) {
+					
+				}
+				return false;
 			}
 		}.getResult();
 	}
@@ -144,7 +151,6 @@ public class LgSurveyTest {
 		return surveyForEvaluation;
 	}
 	
-	@Ignore
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
@@ -156,7 +162,6 @@ public class LgSurveyTest {
 				.contains(20, 40, 60);
 	}
 
-	@Ignore
 	@Test
 	public void saveSurveyWithDeterminedTimePeriodTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
@@ -203,48 +208,55 @@ public class LgSurveyTest {
 		return persistedSurvey;
 	}
 
-	@Ignore
 	@Test
 	public void updateSurveyByModifyingTimePeriods() {
-		testTimePeriodsUpdateWith(20, 40, 80);
+		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40, 80);
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.containsOnly(20, 40,80);
 	}
 
-	@Ignore
 	@Test
 	public void updateSurveyByDeletingOneTimePeriods() {
-		testTimePeriodsUpdateWith(20, 40);
+		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40);
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.containsOnly(20, 40);
 	}
 
-	@Ignore
 	@Test
 	public void updateSurveyByDeletingTwoTimePeriods() {
-		testTimePeriodsUpdateWith(20);
+		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20);
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.containsOnly(20);
 	}
 
-	@Ignore
 	@Test
 	public void updateSurveyByDeletingAllTimePeriods() {
-		testTimePeriodsUpdateWith();
+		final LgSurvey surveyForEvaluation = updateTimePeriodsWith();
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.isEmpty();
 	}
 
 	/**
-	 * Checks that the durations of the time periods were updated successfully
-	 * and the exact number of durations are contained in the survey.
-	 * 
-	 * Test will try to modify timePeriods with durations [20, 40, 60] to given
-	 * values and check against database.
-	 * 
-	 * An empty parameter list will persist an empty collection.
+	 * Updates the time periods [20, 40, 60] of a survey with the 
+	 * given durations.
 	 * 
 	 * @param durationUpdates
 	 *            A series of durations
+	 * @return Updated survey with new durations for checking with assertions
 	 */
-	private void testTimePeriodsUpdateWith(int... durationUpdates) {
+	private LgSurvey updateTimePeriodsWith(int... durationUpdates) {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setPossibleTimePeriods(buildTimePeriods(20, 40, 60));
-		saveSurveyForAlice(freshSurvey);
-		final LgSurvey updatedSurvey = new LgSurvey()
-				.setPossibleTimePeriods(buildTimePeriods(durationUpdates));
+		final LgSurvey updatedSurvey = saveSurveyForAlice(freshSurvey);
+		updatedSurvey.setPossibleTimePeriods(buildTimePeriods(durationUpdates));
 		final LgSurvey surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
@@ -252,10 +264,7 @@ public class LgSurveyTest {
 				return startSession().updateSurvey(updatedSurvey);
 			}
 		}.getResult();
-		assertThat(
-				extractProperty("durationOfEventMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
-				.containsOnly(durationUpdates);
+		return surveyForEvaluation;
 	}
 
 	/**
