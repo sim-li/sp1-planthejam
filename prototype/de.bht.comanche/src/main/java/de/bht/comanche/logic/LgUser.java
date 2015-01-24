@@ -65,6 +65,7 @@ public class LgUser extends DaObject {
 	 * Representation of a foreign key in a LgGroup entity. Provide a list of
 	 * groups.
 	 */
+	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<LgGroup> groups;
 	/**
@@ -259,6 +260,7 @@ public class LgUser extends DaObject {
 	}
 
 	// -- HOST ROLES --
+	@JsonIgnore
 	public LgSurvey getSurvey(final long oid) {
 		for (LgInvite invite : this.invites) {
 			if (invite.isHost() && invite.getSurvey().getOid() == oid) {
@@ -267,7 +269,8 @@ public class LgUser extends DaObject {
 		}
 		return null; // TODO: Throw MULTEX exception
 	}
-
+	
+	@JsonIgnore
 	public List<LgSurvey> getSurveys() {
 		List<LgSurvey> surveys = new ArrayList<LgSurvey>();
 		for (LgInvite invite : this.invites) {
@@ -278,6 +281,7 @@ public class LgUser extends DaObject {
 		return surveys;
 	}
 	
+	@JsonIgnore
 	public List<LgInvite> getInvites() {
 		return this.invites;
 	}
@@ -285,7 +289,6 @@ public class LgUser extends DaObject {
 	public List<LgInvite> getInvitesForSurvey(final long oid) {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
 		for (LgInvite invite : this.getSurvey(oid).getInvites()) {
-			//if set user to null --> works 
 			filteredInvites.add(new LgInvite(invite).setSurvey(null));
 		}
 		return filteredInvites;
@@ -341,7 +344,23 @@ public class LgUser extends DaObject {
 	}
 
 	public void deleteSurvey(final long oid) {
-		this.getSurvey(oid).delete();
+//		this.getSurvey(oid).delete();
+		
+		System.out.println("this.getSurvey(oid).getInvites().get(0).getOid()" + this.getSurvey(oid).getInvites().get(0).getOid());
+		LgSurvey survey = this.getSurvey(oid);
+		List<LgInvite> invites = survey.getInvites();
+//		survey.delete();
+		List<LgInvite> persistedInvites = findManyByKey(LgInvite.class, "SURVEY_OID", survey.getOid());
+//		for (LgInvite invite : invites){
+//			attachPoolFor(invite).delete();
+////			remove(invite);
+//			invite.delete();
+//		}
+		
+		for (LgInvite invite : survey.getInvites()) {
+			attachPoolFor(invite).delete();
+		}
+		attachPoolFor(survey).delete();
 	}
 
 	// -- PARTICIPANT ROLES --
@@ -418,7 +437,7 @@ public class LgUser extends DaObject {
 		this.tel = other.tel;	
 		return this;
 	} 
-    
+    //need json split
 	public LgInvite getInvite(final long oid) {
 		return search(this.invites, oid);
 	}
@@ -454,7 +473,7 @@ public class LgUser extends DaObject {
 		this.email = email;
 		return this;
 	}
-
+	
 	public String getPassword() {
 		return this.password;
 	}
