@@ -131,22 +131,17 @@ angular.module('myApp')
 
 
             /**
-             * TODO to be changed to enums { UNDECIDED, ACCEPTED, INGORED }
-             *
              * Sets the ignored status of the selected invite according to the
-             * specified boolean value. Finally saves the invite on the server.
+             * specified tribool value. Finally saves the invite on the server.
              *
-             * @method setSelectedInviteStatus
+             * @method setSelectedInviteIgnoredStatus
              * @param {Status} status the status of the invite
              */
-            $scope.setSelectedInviteStatus = function(status) {
-                // TODO change color of button when it was pressed
-                // TODO rename to ==>  $scope.setSelectedInviteStatus = function(status) {
+            $scope.setSelectedInviteIgnoredStatus = function(status) {
                 $scope.selectedInvite.setIgnored(status);
                 $log.debug('debug cockpit ', $scope.selectedInvite)
                 restService.doSave($scope.selectedInvite);
             };
-            // $scope.radioModel = $scope.selectedInvite.ignored ? 'ignore' : 'accept';
 
             var sendMessagesToParticipant = function() {
 
@@ -204,16 +199,17 @@ angular.module('myApp')
 
             //### HACK ##############################
             //-- some dummies
-            // $scope.selectedInvite.survey.possibleTimePeriods = [
-            $scope.possibleTimePeriods = [
+            // $scope.possibleTimePeriods = [
+            var now = new Date();
+            $scope.selectedInvite.survey.possibleTimePeriods = [
                 new TimePeriod({
-                    startTime: new Date('2014-11-10T11:00:00'),
+                    startTime: new Date(now.getTime() - 2 * 24 * 60 * 60000),
                     durationMins: 120
                 }), new TimePeriod({
-                    startTime: new Date('2014-11-11T05:00:00'),
+                    startTime: new Date(now.getTime() - 1 * 24 * 60 * 60000),
                     durationMins: 240
                 }), new TimePeriod({
-                    startTime: new Date('2014-11-13T10:00:00'),
+                    startTime: now,
                     durationMins: 360
                 })
             ];
@@ -228,6 +224,7 @@ angular.module('myApp')
                 $log.log('-------- from cockpit ---');
                 // $log.log($scope.resultingTimePeriods);
                 $log.log($scope.selectedInvite);
+
                 restService.doSave($scope.selectedInvite);
             };
 
@@ -239,22 +236,5 @@ angular.module('myApp')
                 $scope.showSurveyDetails = false;
             };
 
-            $log.debug($scope.selectedInvite.concreteAvailability);
-            $log.debug($scope.selectedInvite);
-
-            // $scope.renderCalendar = function() {
-            //     $('#calendar').fullCalendar({})
-
-            //     var myModelAlreadyShown = false;
-            //     $('#calendarModal').on('shown.bs.modal', function(e) {
-            //         if (!myModelAlreadyShown) {
-            //             $('#calendar').fullCalendar('render');
-            //             $('#myModal').modal('hide');
-            //             $('#myModal').addClass('fade');
-            //             $('#myModal').modal('show');
-            //             myModelAlreadyShown = true;
-            //         }
-            //     });
-            // }
         }
     ]);

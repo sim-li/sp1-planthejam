@@ -1,12 +1,20 @@
+/**
+ * @module myApp
+ *
+ * @author Sebastian Dass&eacute;
+ */
 angular.module('myApp')
+    /**
+     * The controller for the calendar modal.
+     *
+     * @class calendarModalCtrl
+     */
     .controller('calendarModalCtrl', ['$scope', '$modal', '$log', 'arrayUtil', 'TimePeriod',
         function($scope, $modal, $log, arrayUtil, TimePeriod) {
 
             'use strict';
 
             $scope.openCalendarModal = function() {
-                // $log.debug('openCalendarModal')
-
                 var modalInstance = $modal.open({
                     templateUrl: 'calendarModalContent.html',
                     controller: 'calendarModalInstanceCtrl',
@@ -24,14 +32,17 @@ angular.module('myApp')
                 modalInstance.result.then(function(resultingTimePeriods) {
                     $scope.resultingTimePeriods = resultingTimePeriods;
                 }, function() {
-                    $log.info('Modal dismissed at: ' + new Date());
+                    $log.debug('Modal dismissed at: ' + new Date());
                 });
             };
 
         }
-    ]);
-
-angular.module('myApp')
+    ])
+    /**
+     * The controller for the calendar modal instance.
+     *
+     * @class calendarModalInstanceCtrl
+     */
     .controller('calendarModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'possibleTimePeriods', 'resultingTimePeriods',
         function($scope, $modalInstance, $log, possibleTimePeriods, resultingTimePeriods) {
 
@@ -41,14 +52,10 @@ angular.module('myApp')
             $scope.resultingTimePeriods = resultingTimePeriods;
 
             $scope.ok = function() {
-                // $log.debug($scope.possibleTimePeriods);
-                // $log.debug($scope.resultingTimePeriods);
-
                 $modalInstance.close($scope.resultingTimePeriods);
             };
 
             $scope.cancel = function() {
-                // $log.debug($scope.items_)
                 $modalInstance.dismiss('cancel');
             };
 

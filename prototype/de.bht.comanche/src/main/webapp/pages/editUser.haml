@@ -32,7 +32,6 @@
           %input#saveUserEditBtn.btn.btn-success{"ng-click" => "saveEditedUser()", :type => "submit", :value => "Save changes"}/
         .input-group
           %input#deleteUserBtn.btn.btn-danger{"ng-click" => "deleteUser()", :type => "button", :value => "Delete account"}/
+        /---- debugging
         .row {{ user.generalAvailability }}
-        .row {{ dummyPoss }}
         .row {{ user.generalAvailability.length }}
-        / .row {{ dummyPoss.length }}

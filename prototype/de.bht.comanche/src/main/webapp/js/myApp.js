@@ -122,7 +122,6 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
         return {
             restrict: 'E',
             scope: {
-                // test: '=test',
                 allowedTimePeriods: '=allowed',
                 resultingTimePeriods: '=resulting'
             },

@@ -70,6 +70,5 @@ angular.module('myApp')
             // });
             // $scope.user.generalAvailability = dummyPoss;
             //<-- dummies --
-
         }
     ]);

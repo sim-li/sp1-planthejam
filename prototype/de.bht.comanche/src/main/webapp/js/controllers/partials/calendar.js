@@ -1,6 +1,16 @@
+/**
+ * @module myApp
+ *
+ * @author Sebastian Dass&eacute;
+ */
 angular.module('myApp')
-    .controller('calendarCtrl', ['$scope', '$modal', '$log', 'arrayUtil', 'TimePeriod',
-        function($scope, $modal, $log, arrayUtil, TimePeriod) {
+    /**
+     * The controller for the calendar directive view.
+     *
+     * @class calendarCtrl
+     */
+    .controller('calendarCtrl', ['$scope', '$log', 'arrayUtil', 'TimePeriod',
+        function($scope, $log, arrayUtil, TimePeriod) {
 
             'use strict';
 
@@ -22,8 +32,7 @@ angular.module('myApp')
                         }));
                     }
                 });
-                $log.debug(' - refreshResultingTimePeriods -');
-                $log.debug($scope.resultingTimePeriods);
+                $log.debug('refreshResultingTimePeriods: ', $scope.resultingTimePeriods);
             };
 
             /** required for the calendar */
@@ -34,11 +43,10 @@ angular.module('myApp')
             };
 
             /** constrains the input of time periods if the list of allowed time periods is not empty */
-            var autoConstrain = function() {
-                return $scope.allowedTimePeriods.length > 0 ? 'allowed' : null;
-            };
+            var autoConstrain = $scope.allowedTimePeriods.length > 0 ? 'allowed' : null;
+            $log.debug('autoConstrain: ', $scope.allowedTimePeriods);
 
-            /** copy all elements of allowedTimePeriods and existing resultingTimePeriods to eventSources and convert to the calendar date format */
+            /** copy all elements of allowedTimePeriods and existing resultingTimePeriods to eventSources and convert tothe calendar date format */
             arrayUtil.forEach($scope.allowedTimePeriods, function(timePeriod) {
                 $scope.eventSources.push({
                     id: 'allowed',
@@ -54,7 +62,7 @@ angular.module('myApp')
                     end: moment(timePeriod.startTime).add(timePeriod.durationMins, 'minutes'),
                     editable: true,
                     durationEditable: true,
-                    constraint: autoConstrain()
+                    constraint: autoConstrain
                 });
             });
 
@@ -79,29 +87,29 @@ angular.module('myApp')
                             end: endDate,
                             editable: true,
                             durationEditable: true,
-                            constraint: autoConstrain()
+                            constraint: autoConstrain
                         });
                         refreshResultingTimePeriods();
                     },
                     eventResize: function(event, delta, reverFunc, jsEvent, ui, view) {
-                        $log.debug(event);
+                        $log.debug('resize: ', event);
                         var ele = arrayUtil.findByAttribute($scope.eventSources, 'id', event.id);
                         ele.end = event.end;
                         refreshResultingTimePeriods();
                     },
                     eventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
-                        $log.debug(event);
+                        $log.debug('drop  : ', event);
                         var ele = arrayUtil.findByAttribute($scope.eventSources, 'id', event.id);
                         ele.start = event.start;
                         ele.end = event.end;
                         refreshResultingTimePeriods();
                     },
                     eventClick: function(event, jsEvent, view) {
-                        $log.debug(event);
+                        $log.debug('click : ', event);
                         arrayUtil.removeByAttribute($scope.eventSources, 'id', event.id);
                         refreshResultingTimePeriods();
                     },
-                    selectConstraint: autoConstrain(),
+                    selectConstraint: autoConstrain,
                     events: $scope.eventSources
                 }
 
