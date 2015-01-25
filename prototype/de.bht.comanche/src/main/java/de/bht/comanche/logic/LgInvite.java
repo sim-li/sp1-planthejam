@@ -101,7 +101,7 @@ public class LgInvite extends DaObject{
 		return this.isHost;
 	}
 	
-	public LgStatus getIgnored() {
+	public LgStatus getIsIgnored() {
 		return this.isIgnored;
 	}
 

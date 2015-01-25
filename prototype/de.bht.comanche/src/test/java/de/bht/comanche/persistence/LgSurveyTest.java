@@ -55,7 +55,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 		    .setSuccess(LgStatus.UNDECIDED)
 		    .setSurveyDurationMins(30)
 		    .setType(LgSurveyType.ONE_TIME);
-		final LgSurvey surveyWithOid = saveSurvey(aSurvey);
+		final LgSurvey surveyWithOid = testUtils.saveSurvey(aSurvey);
 		final LgSurvey surveyEval = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
@@ -84,7 +84,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 	 */
 	@Test
 	public void getInvitesForSurveyByOidTest() {
-		final LgSurvey surveyWithOid = saveSurvey(new LgSurvey().addParticipants(bob, carol));
+		final LgSurvey surveyWithOid = testUtils.saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		final List<LgInvite> invites = new TestTransaction<List<LgInvite>>("Alice") {
 			@Override
 			public List<LgInvite> execute() {
@@ -99,9 +99,9 @@ public class LgSurveyTest extends LgTestWithUsers {
 	
 	@Test
 	public void getSurveysTest() {
-		saveSurvey(new LgSurvey().setName("Survey1"));
-		saveSurvey(new LgSurvey().setName("Survey2"));
-		saveSurvey(new LgSurvey().setName("Survey3"));
+		testUtils.saveSurvey(new LgSurvey().setName("Survey1"));
+		testUtils.saveSurvey(new LgSurvey().setName("Survey2"));
+		testUtils.saveSurvey(new LgSurvey().setName("Survey3"));
 		List<LgSurvey> surveysForEvaluation = new TestTransaction<List<LgSurvey>>("Alice") {
 			@Override
 			public List<LgSurvey> execute() {
@@ -130,7 +130,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 	 */
 	@Test
 	public void saveSurveyWithInvitesPariticipantsTest() {
-		final LgSurvey surveyForEvaluation = saveSurvey(new LgSurvey().addParticipants(bob, carol));
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).
@@ -140,7 +140,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void saveSurveyWithInvitesHostAttributeTest() {
-		final LgSurvey surveyForEvaluation = saveSurvey(new LgSurvey().addParticipants(bob, carol));
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		assertThat(
 				extractProperty("isHost")
 						.from(surveyForEvaluation.getInvites()))
@@ -149,9 +149,9 @@ public class LgSurveyTest extends LgTestWithUsers {
 	
 	@Test
 	public void deleteParticipantTest() {
-		final LgSurvey aSurvey = saveSurvey(new LgSurvey().addParticipants(bob, carol));
+		final LgSurvey aSurvey = testUtils.saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		aSurvey.removeParticipants(carol);
-		final LgSurvey surveyForEvaluation = saveSurvey(aSurvey);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(aSurvey);
 	    assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).containsOnly(
@@ -160,9 +160,9 @@ public class LgSurveyTest extends LgTestWithUsers {
 	
 	@Test
 	public void addParticipantTest() {
-		final LgSurvey aSurvey = saveSurvey(new LgSurvey().addParticipants(bob));
+		final LgSurvey aSurvey = testUtils.saveSurvey(new LgSurvey().addParticipants(bob));
 		aSurvey.addParticipants(carol);
-		final LgSurvey surveyForEvaluation = saveSurvey(aSurvey);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(aSurvey);
 	    assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).containsOnly(
@@ -172,7 +172,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 	
 	@Test
 	public void deleteSurveyTest() {
-		final LgSurvey surveyForEvaluation = saveSurvey(new LgSurvey()
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(new LgSurvey()
 			.addParticipants(bob, carol)
 			.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 30, 40))
 			.setDeterminedTimePeriod(new LgTimePeriod().setDurationMins(50).setStartTime(new Date())));
@@ -224,7 +224,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setPossibleTimePeriods(
 						testUtils.buildTimePeriods(20, 40, 60));
-		final LgSurvey surveyForEvaluation = saveSurvey(freshSurvey);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(freshSurvey);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -236,28 +236,10 @@ public class LgSurveyTest extends LgTestWithUsers {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setDeterminedTimePeriod(
 						testUtils.buildOneTimePeriod(20));
-		final LgSurvey surveyForEvaluation = saveSurvey(freshSurvey);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(freshSurvey);
 		assertThat(
 				surveyForEvaluation.getDeterminedTimePeriod().getDurationMins())
 				.isEqualTo(20);
-	}
-
-	/**
-	 * Saves a survey for Alice, which is our standard account for these
-	 * operations
-	 *  
-	 * @param freshSurvey
-	 *            Survey to be persisted
-	 * @return The persisted survey with OID.
-	 */
-	private LgSurvey saveSurvey(final LgSurvey freshSurvey) {
-		final LgSurvey persistedSurvey = new TestTransaction<LgSurvey>("Alice") {
-			@Override
-			public LgSurvey execute() {
-				return startSession().saveSurvey(freshSurvey);
-			}
-		}.getResult();
-		return persistedSurvey;
 	}
 
 	@Test
@@ -307,7 +289,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 	private LgSurvey saveAndUpdateToTimePeriods(int... durationUpdates) {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60));
-		final LgSurvey updatedSurvey = saveSurvey(freshSurvey);
+		final LgSurvey updatedSurvey = testUtils.saveSurvey(freshSurvey);
 		updatedSurvey.setPossibleTimePeriods(testUtils.buildTimePeriods(durationUpdates));
 		final LgSurvey surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {

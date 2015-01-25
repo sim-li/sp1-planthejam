@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.persistence.Persistence;
 
+import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
 
@@ -69,6 +70,29 @@ public class TestUtils {
 				}
 			}.getResult();
 		}
+	}
+	
+
+	/**
+	 * Saves a survey for Alice, which is our standard account for these
+	 * operations
+	 *  
+	 * @param freshSurvey
+	 *            Survey to be persisted
+	 * @return The persisted survey with OID.
+	 */
+	public LgSurvey saveSurvey(final LgSurvey freshSurvey) {
+		return saveSurveyFor("Alice", freshSurvey);
+	}
+	
+	public LgSurvey saveSurveyFor(String username, final LgSurvey freshSurvey) {
+		final LgSurvey persistedSurvey = new TestTransaction<LgSurvey>(username) {
+			@Override
+			public LgSurvey execute() {
+				return startSession().saveSurvey(freshSurvey);
+			}
+		}.getResult();
+		return persistedSurvey;
 	}
 
 }
