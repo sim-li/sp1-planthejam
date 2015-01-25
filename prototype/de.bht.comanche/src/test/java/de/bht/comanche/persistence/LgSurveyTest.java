@@ -3,17 +3,12 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.extractProperty;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import de.bht.comanche.logic.LgStatus;
 import de.bht.comanche.logic.LgSurvey;
@@ -227,7 +222,8 @@ public class LgSurveyTest extends LgTestWithUsers {
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
-				.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60));
+				.setPossibleTimePeriods(
+						testUtils.buildTimePeriods(20, 40, 60));
 		final LgSurvey surveyForEvaluation = saveSurvey(freshSurvey);
 		assertThat(
 				extractProperty("durationMins").from(
@@ -238,8 +234,8 @@ public class LgSurveyTest extends LgTestWithUsers {
 	@Test
 	public void saveSurveyWithDeterminedTimePeriodTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
-				.setDeterminedTimePeriod(new LgTimePeriod().setDurationMins(20)
-						.setStartTime(new Date()));
+				.setDeterminedTimePeriod(
+						testUtils.buildOneTimePeriod(20));
 		final LgSurvey surveyForEvaluation = saveSurvey(freshSurvey);
 		assertThat(
 				surveyForEvaluation.getDeterminedTimePeriod().getDurationMins())
@@ -266,7 +262,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void updateSurveyByModifyingTimePeriods() {
-		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40, 80);
+		final LgSurvey surveyForEvaluation = saveAndUpdateToTimePeriods(20, 40, 80);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -275,7 +271,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void updateSurveyByDeletingOneTimePeriods() {
-		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40);
+		final LgSurvey surveyForEvaluation = saveAndUpdateToTimePeriods(20, 40);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -284,7 +280,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void updateSurveyByDeletingTwoTimePeriods() {
-		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20);
+		final LgSurvey surveyForEvaluation = saveAndUpdateToTimePeriods(20);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -293,7 +289,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void updateSurveyByDeletingAllTimePeriods() {
-		final LgSurvey surveyForEvaluation = updateTimePeriodsWith();
+		final LgSurvey surveyForEvaluation = saveAndUpdateToTimePeriods();
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -308,7 +304,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 	 *            A series of durations
 	 * @return Updated survey with new durations for checking with assertions
 	 */
-	private LgSurvey updateTimePeriodsWith(int... durationUpdates) {
+	private LgSurvey saveAndUpdateToTimePeriods(int... durationUpdates) {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60));
 		final LgSurvey updatedSurvey = saveSurvey(freshSurvey);

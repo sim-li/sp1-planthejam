@@ -47,5 +47,9 @@ public class TestUtils {
 		}
 		return timePeriods;
 	}
+	
+	public LgTimePeriod buildOneTimePeriod(int duration) {
+		return new LgTimePeriod().setDurationMins(duration).setStartTime(new Date());
+	}
 
 }
