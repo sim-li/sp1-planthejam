@@ -24,60 +24,29 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
-public class LgSurveyTest {
+public class LgSurveyTest extends LgTestWithUsers {
 	private LgUser alice;
 	private LgUser bob;
 	private LgUser carol;
+	private TestUtils testUtils = new TestUtils();
 
 	@BeforeClass
-	public static void resetDatabase() {
-		Map<String, String> properties = new HashMap<String, String>(1);
-		properties.put("hibernate.hbm2ddl.auto", "create");
-		Persistence.createEntityManagerFactory(
-				DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
+	public static void init() {
+		TestUtils.resetJPADatabase();
 	}
-
+	
 	@Before
 	public void buildUp() {
-		saveUserAccounts();
+		alice = testUtils.registerTestUser("Alice");
+		bob = testUtils.registerTestUser("Bob");
+		carol = testUtils.registerTestUser("Carol");
 	}
-
-	/**
-	 * Saves Alice, Bob, and Carols user accounts in three separate transactions
-	 * using the register method which is also used in the rest service.
-	 */
-	private void saveUserAccounts() {
-		final LgUser testAccountBob = new LgUser().setName("Bob")
-				.setEmail("test@test.de").setPassword("testtest");
-		final LgUser testAccountAlice = new LgUser().setName("Alice")
-				.setEmail("test@test.de").setPassword("testtest");
-		final LgUser testAccountCarol = new LgUser().setName("Carol")
-				.setEmail("carol@test.de").setPassword("testtest");
-		alice = new TestTransaction<LgUser>("Alice") {
-			@Override
-			public LgUser execute() {
-				return getSession().register(testAccountAlice);
-			}
-		}.getResult();
-		bob = new TestTransaction<LgUser>("Bob") {
-			@Override
-			public LgUser execute() {
-				return getSession().register(testAccountBob);
-			}
-		}.getResult();
-		carol = new TestTransaction<LgUser>("Bob") {
-			@Override
-			public LgUser execute() {
-				return getSession().register(testAccountCarol);
-			}
-		}.getResult();
-	}
-
+	
 	@Test
 	public void getSurveyByOidTest() {
 		final Date aDate = new Date();
 		final LgTimePeriod aTimePeriod = new LgTimePeriod().setDurationMins(30).setStartTime(aDate);
-		final Set<LgTimePeriod> severalTimePeriods = buildTimePeriods(20,30,40); 
+		final Set<LgTimePeriod> severalTimePeriods = testUtils.buildTimePeriods(20,30,40); 
 		final LgSurvey aSurvey = new LgSurvey()
 			.setAlgoChecked(false)
 			.setDeadline(aDate)
@@ -210,7 +179,7 @@ public class LgSurveyTest {
 	public void deleteSurveyTest() {
 		final LgSurvey surveyForEvaluation = saveSurvey(new LgSurvey()
 			.addParticipants(bob, carol)
-			.setPossibleTimePeriods(buildTimePeriods(20, 30, 40))
+			.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 30, 40))
 			.setDeterminedTimePeriod(new LgTimePeriod().setDurationMins(50).setStartTime(new Date())));
 		new TestTransaction<Object>("Alice") {
 			@Override
@@ -258,7 +227,7 @@ public class LgSurveyTest {
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
-				.setPossibleTimePeriods(buildTimePeriods(20, 40, 60));
+				.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60));
 		final LgSurvey surveyForEvaluation = saveSurvey(freshSurvey);
 		assertThat(
 				extractProperty("durationMins").from(
@@ -275,24 +244,6 @@ public class LgSurveyTest {
 		assertThat(
 				surveyForEvaluation.getDeterminedTimePeriod().getDurationMins())
 				.isEqualTo(20);
-	}
-
-	/**
-	 * Generates a hash set of time periods, inserts the current date stamp to
-	 * fill the field with a value.
-	 * 
-	 * @param durations
-	 *            List of durations as integer. Every duration will generate a
-	 *            time period.
-	 * @return A set of time periods
-	 */
-	private HashSet<LgTimePeriod> buildTimePeriods(int... durations) {
-		final HashSet<LgTimePeriod> timePeriods = new HashSet<LgTimePeriod>();
-		for (int i = 0; i < durations.length; i++) {
-			timePeriods.add(new LgTimePeriod().setStartTime(new Date())
-					.setDurationMins(durations[i]));
-		}
-		return timePeriods;
 	}
 
 	/**
@@ -359,9 +310,9 @@ public class LgSurveyTest {
 	 */
 	private LgSurvey updateTimePeriodsWith(int... durationUpdates) {
 		final LgSurvey freshSurvey = new LgSurvey()
-				.setPossibleTimePeriods(buildTimePeriods(20, 40, 60));
+				.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60));
 		final LgSurvey updatedSurvey = saveSurvey(freshSurvey);
-		updatedSurvey.setPossibleTimePeriods(buildTimePeriods(durationUpdates));
+		updatedSurvey.setPossibleTimePeriods(testUtils.buildTimePeriods(durationUpdates));
 		final LgSurvey surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
