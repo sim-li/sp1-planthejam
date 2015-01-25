@@ -35,11 +35,6 @@ public class ReUserWithCollectionsTest {
 	
 	@Test
 	public void getUser() {
-
-//	Response response = expect().statusCode(200).given().body(testSurvey)
-//			.contentType("application/json").when()
-//			.post("/rest/invite/getInvites");
-
 	final Response response = expect().statusCode(200)
 			.when()
 				.get("/rest/user/");

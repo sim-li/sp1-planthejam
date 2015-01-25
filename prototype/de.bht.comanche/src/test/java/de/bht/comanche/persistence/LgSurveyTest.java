@@ -9,15 +9,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.persistence.Persistence;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import de.bht.comanche.logic.LgStatus;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgSurveyType;
@@ -94,7 +91,7 @@ public class LgSurveyTest {
 		    .setSuccess(LgStatus.UNDECIDED)
 		    .setSurveyDurationMins(30)
 		    .setType(LgSurveyType.ONE_TIME);
-		final LgSurvey surveyWithOid = saveSurveyForAlice(aSurvey);
+		final LgSurvey surveyWithOid = saveSurvey(aSurvey);
 		final LgSurvey surveyEval = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
@@ -123,7 +120,7 @@ public class LgSurveyTest {
 	 */
 	@Test
 	public void getInvitesForSurveyByOidTest() {
-		final LgSurvey surveyWithOid = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey surveyWithOid = saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		final List<LgInvite> invites = new TestTransaction<List<LgInvite>>("Alice") {
 			@Override
 			public List<LgInvite> execute() {
@@ -138,9 +135,9 @@ public class LgSurveyTest {
 	
 	@Test
 	public void getSurveysTest() {
-		saveSurveyForAlice(new LgSurvey().setName("Survey1"));
-		saveSurveyForAlice(new LgSurvey().setName("Survey2"));
-		saveSurveyForAlice(new LgSurvey().setName("Survey3"));
+		saveSurvey(new LgSurvey().setName("Survey1"));
+		saveSurvey(new LgSurvey().setName("Survey2"));
+		saveSurvey(new LgSurvey().setName("Survey3"));
 		List<LgSurvey> surveysForEvaluation = new TestTransaction<List<LgSurvey>>("Alice") {
 			@Override
 			public List<LgSurvey> execute() {
@@ -169,7 +166,7 @@ public class LgSurveyTest {
 	 */
 	@Test
 	public void saveSurveyWithInvitesPariticipantsTest() {
-		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey surveyForEvaluation = saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).
@@ -179,7 +176,7 @@ public class LgSurveyTest {
 
 	@Test
 	public void saveSurveyWithInvitesHostAttributeTest() {
-		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey surveyForEvaluation = saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		assertThat(
 				extractProperty("isHost")
 						.from(surveyForEvaluation.getInvites()))
@@ -188,9 +185,9 @@ public class LgSurveyTest {
 	
 	@Test
 	public void deleteParticipantTest() {
-		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey aSurvey = saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		aSurvey.removeParticipants(carol);
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
+		final LgSurvey surveyForEvaluation = saveSurvey(aSurvey);
 	    assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).containsOnly(
@@ -199,18 +196,22 @@ public class LgSurveyTest {
 	
 	@Test
 	public void addParticipantTest() {
-		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob);
+		final LgSurvey aSurvey = saveSurvey(new LgSurvey().addParticipants(bob));
 		aSurvey.addParticipants(carol);
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
+		final LgSurvey surveyForEvaluation = saveSurvey(aSurvey);
 	    assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).containsOnly(
 				"Alice", "Bob", "Carol");
 	}
 
+	
 	@Test
 	public void deleteSurveyTest() {
-		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey surveyForEvaluation = saveSurvey(new LgSurvey()
+			.addParticipants(bob, carol)
+			.setPossibleTimePeriods(buildTimePeriods(20, 30, 40))
+			.setDeterminedTimePeriod(new LgTimePeriod().setDurationMins(50).setStartTime(new Date())));
 		new TestTransaction<Object>("Alice") {
 			@Override
 			public Object execute() {
@@ -218,51 +219,47 @@ public class LgSurveyTest {
 				return null;
 			}
 		}.getResult();
-		final Boolean foundComponentOfSurvey = new TestTransaction<Boolean>(
+		final Boolean foundDeletedObj = new TestTransaction<Boolean>(
 				"Alice") {
 			@Override
 			public Boolean execute() {
-				Boolean foundADeletedElement = null;
+				Boolean foundDeletedObj = null;
 				try {
 					startSession().findOneByKey(LgSurvey.class, "oid",
 							surveyForEvaluation.getOid());
-					foundADeletedElement = true;
+					foundDeletedObj = true;
 				} catch (DaFindOneByKeyExc ex) {
-					setFalseIfNull(foundADeletedElement);
+					foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
 				}
 				for (final LgInvite invite : surveyForEvaluation.getInvites()) {
 					try {
 						startSession().findOneByKey(LgInvite.class, "oid",
 								invite.getOid());
-						foundADeletedElement = true;
+						foundDeletedObj = true;
 					} catch (DaFindOneByKeyExc ex) {
-						setFalseIfNull(foundADeletedElement);
+						foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
 					}
 				}
+				//TODO: Implement this, not really urgent.
+//				for (final LgTimePeriod timePeriod : surveyForEvaluation.getPossibleTimePeriods()) {
+//					try {
+//						startSession().findManyByQuery("select o from " + LgTimePeriod.class);
+//						foundDeletedObj = true;
+//					} catch (DaFindOneByKeyExc ex) {
+//						foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
+//					}
+//				}
 				return false;
 			}
 		}.getResult();
-	}
-	
-	private void setFalseIfNull(Boolean val) {
-		val = val == null ? false : val;
-	}
-	/**
-	 * Saves survey given list of participants.
-	 * 
-	 * @return Persisted survey with OID.
-	 */
-	private LgSurvey saveTestSurveyWithParticipants(LgUser ... participants) {
-		final LgSurvey aSurvey = new LgSurvey().addParticipants(participants);
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
-		return surveyForEvaluation;
+		assertThat(foundDeletedObj).isEqualTo(false);
 	}
 	
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setPossibleTimePeriods(buildTimePeriods(20, 40, 60));
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(freshSurvey);
+		final LgSurvey surveyForEvaluation = saveSurvey(freshSurvey);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -274,7 +271,7 @@ public class LgSurveyTest {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setDeterminedTimePeriod(new LgTimePeriod().setDurationMins(20)
 						.setStartTime(new Date()));
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(freshSurvey);
+		final LgSurvey surveyForEvaluation = saveSurvey(freshSurvey);
 		assertThat(
 				surveyForEvaluation.getDeterminedTimePeriod().getDurationMins())
 				.isEqualTo(20);
@@ -299,13 +296,14 @@ public class LgSurveyTest {
 	}
 
 	/**
-	 * Saves a survey for Alice.
-	 * 
+	 * Saves a survey for Alice, which is our standard account for these
+	 * operations
+	 *  
 	 * @param freshSurvey
 	 *            Survey to be persisted
 	 * @return The persisted survey with OID.
 	 */
-	private LgSurvey saveSurveyForAlice(final LgSurvey freshSurvey) {
+	private LgSurvey saveSurvey(final LgSurvey freshSurvey) {
 		final LgSurvey persistedSurvey = new TestTransaction<LgSurvey>("Alice") {
 			@Override
 			public LgSurvey execute() {
@@ -362,7 +360,7 @@ public class LgSurveyTest {
 	private LgSurvey updateTimePeriodsWith(int... durationUpdates) {
 		final LgSurvey freshSurvey = new LgSurvey()
 				.setPossibleTimePeriods(buildTimePeriods(20, 40, 60));
-		final LgSurvey updatedSurvey = saveSurveyForAlice(freshSurvey);
+		final LgSurvey updatedSurvey = saveSurvey(freshSurvey);
 		updatedSurvey.setPossibleTimePeriods(buildTimePeriods(durationUpdates));
 		final LgSurvey surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {

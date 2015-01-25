@@ -1,7 +1,8 @@
 package de.bht.comanche.persistence;
 
-//import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
@@ -29,10 +30,10 @@ import de.bht.comanche.logic.LgUser;
 /**
  * @author Simon Lischka
  */
-@Ignore
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class LgUserWithCollectionsTest {
-
+public class LgUserTest {
+	/**
+	 * REWRITE!
+	 */
     private LgUser alice;
     private Set <LgMessage> persistedMessages = new HashSet<LgMessage>();
     private Set <LgMessage> variousMessages = new HashSet<LgMessage>();
@@ -46,11 +47,10 @@ public class LgUserWithCollectionsTest {
         Persistence.createEntityManagerFactory(
                 DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
     }
-
+	
     @Before
     public void buildUp() {
         createAlicesUserAccount();
-        fetchAlicesUserAccount();
     }
 
     private void createAlicesUserAccount() {
