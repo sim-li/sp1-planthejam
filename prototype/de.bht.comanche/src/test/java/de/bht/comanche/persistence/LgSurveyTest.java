@@ -325,25 +325,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 	 */
 	@After
 	public void deleteTestData() {
-		deleteAccountFor("Alice", "Bob", "Carol");
+		testUtils.deleteAccountsFor("Alice", "Bob", "Carol");
 	}
 
-	/**
-	 * Runs a transaction with a delete command for every given user.
-	 * 
-	 * @param users
-	 *            Users to be deleted
-	 */
-	public void deleteAccountFor(String... users) {
-		for (String user : users) {
-			new TestTransaction<LgUser>(user) {
-				@Override
-				public LgUser execute() {
-					final LgUser user = startSession();
-					user.deleteThisAccount();
-					return user;
-				}
-			}.getResult();
-		}
-	}
 }

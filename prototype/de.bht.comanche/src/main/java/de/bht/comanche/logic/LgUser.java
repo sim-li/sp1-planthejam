@@ -373,7 +373,7 @@ public class LgUser extends DaObject {
 		return saveUnattached(invite);
 	}
 
-	public LgInvite updateInvite(final long oid, LgInvite invite) {
+	public LgInvite updateInvite(LgInvite invite) {
 		// REDUNDANT
 		return saveInvite(invite);
 	}

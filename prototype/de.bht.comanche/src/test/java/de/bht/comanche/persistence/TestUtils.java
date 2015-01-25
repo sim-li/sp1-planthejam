@@ -51,5 +51,24 @@ public class TestUtils {
 	public LgTimePeriod buildOneTimePeriod(int duration) {
 		return new LgTimePeriod().setDurationMins(duration).setStartTime(new Date());
 	}
+	
+	/**
+	 * Runs a transaction with a delete command for every given user.
+	 * 
+	 * @param users
+	 *            Users to be deleted
+	 */
+	public void deleteAccountsFor(String... users) {
+		for (String user : users) {
+			new TestTransaction<LgUser>(user) {
+				@Override
+				public LgUser execute() {
+					final LgUser user = startSession();
+					user.deleteThisAccount();
+					return user;
+				}
+			}.getResult();
+		}
+	}
 
 }
