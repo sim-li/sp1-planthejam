@@ -5,15 +5,13 @@
       <div class='col-md-6'>
         <div class='tabbable'>
           <ul class='nav nav-tabs'>
-            <!-- %li.active -->
-            <li>
+            <li class='active'>
               <a data-toggle='tab' href='#surveyTab' ng-click='showSurveyDetails = true' onclick='return false;'>
                 Survey
                 <span class='badge'>{{surveys.length}}</span>
               </a>
             </li>
-            <!-- %li -->
-            <li class='active'>
+            <li>
               <a data-toggle='tab' href='#inviteTab' ng-click='showSurveyDetails = false' onclick='return false;'>
                 Invite
                 <span class='badge'>{{(invites | filter: {ignored: "!YES"}).length}}</span>
@@ -33,14 +31,13 @@
             </li>
           </ul>
           <div class='tab-content'>
-            <!-- #surveyTab.tab-pane.active -->
-            <div class='tab-pane' id='surveyTab'>
+            <div class='tab-pane active' id='surveyTab'>
               <input class='form-control' id='surveyFilter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'>
                 <a class='list-group-item' href='' ng-class="{'list-group-item-warning': survey.isReady(), 'list-group-item-success': survey.isSuccessful()}" ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>
                   <div class='row'>
-                    <div class='col-sm-10'>{{survey.name}}</div>
-                    <div class='col-sm-2 btn-group pull-right' ng-if='survey.isReady()'>
+                    <div class='col-sm-9'>{{survey.name}}</div>
+                    <div class='col-sm-3 btn-group pull-right' ng-if='survey.isReady()'>
                       <label btn-radio="'accept'" class='btn btn-success btn-sm' ng-click='confirm()' ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-ok'></span>
                       </label>
@@ -48,25 +45,23 @@
                         <span class='glyphicon glyphicon-remove'></span>
                       </label>
                     </div>
-                    <div class='btn-groups' ng-if='survey.isSuccessful()'>
+                    <div class='btn-group' ng-if='survey.isSuccessful()'>
                       <span class='glyphicon glyphicon-thumbs-up'></span>
                     </div>
-                    <div class='btn-groups' ng-if='survey.isUnsuccessful()'>
+                    <div class='btn-group' ng-if='survey.isUnsuccessful()'>
                       <span class='glyphicon glyphicon-thumbs-down'></span>
                     </div>
                   </div>
                 </a>
               </div>
             </div>
-            <!-- #inviteTab.tab-pane -->
-            <div class='tab-pane active' id='inviteTab'>
-              sel: {{ selectedInvite.survey.oid }} {{ selectedInvite.survey.name }}
+            <div class='tab-pane' id='inviteTab'>
               <input class='form-control' id='inviteFilter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='inviteList'>
                 <a class='list-group-item' href='' ng-class="{'list-group-item-warning': invite.ignored == 'UNDECIDED'}" ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ">
                   <div class='row'>
-                    <div class='col-sm-7'>{{ invite.survey.oid }} {{ invite.survey.name}} {{ invite.ignored }}</div>
-                    <div class='col-sm-5 btn-group pull-right'>
+                    <div class='col-sm-6'>{{ invite.survey.name}}</div>
+                    <div class='col-sm-6 btn-group pull-right'>
                       <label btn-radio="'undecided'" class='btn btn-sm' ng-class="{'disabled': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}" ng-click="setSelectedInviteIgnoredStatus('UNDECIDED')" ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-question-sign'></span>
                       </label>
