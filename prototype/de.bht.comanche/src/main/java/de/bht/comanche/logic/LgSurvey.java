@@ -118,7 +118,7 @@ public class LgSurvey extends DaObject {
 
 	public LgInvite getInviteByParticipantName(final String name) {
 		for (LgInvite invite: this.invites) {
-			if (invite.getUser().getName() == name) {
+			if (invite.getUser().getName().equals(name)) {
 				return invite;
 			}
 		}

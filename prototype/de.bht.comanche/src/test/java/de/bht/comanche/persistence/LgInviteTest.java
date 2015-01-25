@@ -10,12 +10,16 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgSession;
 import de.bht.comanche.logic.LgStatus;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.rest.ReErrorMessage;
+import de.bht.comanche.rest.ReServerException;
 
 public class LgInviteTest {
 	private LgUser alice;
@@ -59,7 +63,8 @@ public class LgInviteTest {
 		invites.add(survey3.getInviteByParticipantName("Bob"));
 		invites.add(survey4.getInviteByParticipantName("Bob"));
 	}
-
+	
+	@Ignore
 	@Test
 	public void getInviteByOidUserNameTest() {
 		final List<LgInvite> invitesForEvaluation = getAllInvitesByOid();
@@ -68,11 +73,10 @@ public class LgInviteTest {
 						invitesForEvaluation)).containsOnly(
 								"Bob", "Bob", "Bob");
 	}
-
 	@Test
 	public void getInviteByOidSurveyNameTest() {
 		final List<LgInvite> invitesForEvaluation = getAllInvitesByOid();
-	assertThat(
+		assertThat(
 			extractProperty("survey.name").from(
 					invitesForEvaluation)).containsOnly(
 							"Sporting Event", "Swim Course", "Denim Jeans Reunion");
@@ -82,12 +86,12 @@ public class LgInviteTest {
 		final List<LgInvite> invitesForEvaluation = new TestTransaction<List<LgInvite>>("Bob") {
 			@Override
 			public List<LgInvite> execute() {
-				final List <LgInvite> invites = new ArrayList<LgInvite>();
+				final List <LgInvite> invitesFetch = new ArrayList<LgInvite>();
 				final LgUser bob = startSession();
 				for (LgInvite inv : invites) {
-					invites.add(bob.getInvite(inv.getOid()));
+					invitesFetch.add(bob.getInvite(inv.getOid()));
 				}
-				return invites;
+				return invitesFetch;
 			}
 		}.getResult();
 		return invitesForEvaluation;
@@ -96,6 +100,8 @@ public class LgInviteTest {
 	/**
 	 * Note: Surveys will be transmitted with invites, we are checking for invites form certain perspective
 	 */
+	
+	@Ignore
 	@Test
 	public void getInvitesAsParticipantIsIgnoredFlagTest() {
 		final List<LgInvite> invites = getInvitesAsParticipantFor("Bob");
@@ -104,7 +110,8 @@ public class LgInviteTest {
 						invites)).containsOnly(
 								LgStatus.UNDECIDED);
 	}
-
+	
+	@Ignore
 	@Test
 	public void getInvitesAsParticipantIsHostFlagTest() {
 		final List<LgInvite> invites = getInvitesAsParticipantFor("Bob");
@@ -116,6 +123,7 @@ public class LgInviteTest {
 								false, false, false);
 	}
 	
+	@Ignore
 	@Test
 	public void getInvitesAsParticipantSurveyNameTest() {
 		final List<LgInvite> invites = getInvitesAsParticipantFor("Bob");
@@ -135,6 +143,7 @@ public class LgInviteTest {
 		return invites;
 	}
 	
+	@Ignore
 	@Test
 	public void updateInviteSetConcreteAvailabilityTest() {
 		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(20, 40, 60);
@@ -148,6 +157,7 @@ public class LgInviteTest {
 	/**
 	 * Note: The call to updateInvite is internally forwarded to saveInvite.
 	 */
+	@Ignore
 	@Test
 	public void updateInviteChangeConcreteAvailabilityTest() {
 		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(20, 80, 60);
@@ -158,6 +168,7 @@ public class LgInviteTest {
 							);
 	}
 	
+	@Ignore
 	@Test
 	public void updateInviteDeleteOneConcreteAvailabilityTest() {
 		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(20, 60);
@@ -168,6 +179,7 @@ public class LgInviteTest {
 							);
 	}
 	
+	@Ignore
 	@Test
 	public void updateInviteDeleteAllConcreteAvailabilitiesTest() {
 		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith();
