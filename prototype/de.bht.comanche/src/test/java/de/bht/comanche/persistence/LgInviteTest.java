@@ -29,6 +29,7 @@ public class LgInviteTest {
     private LgUser edgar;
     private List<LgInvite> invites = new LinkedList<LgInvite>();
 	private TestUtils testUtils = new TestUtils();
+	private LgInvite bobsFirstInvite;
 
 	@BeforeClass
 	public static void init() {
@@ -60,11 +61,10 @@ public class LgInviteTest {
 		.setName("Denim Jeans Reunion"));
 		invites.add(survey1.getInviteByParticipantName("Bob"));
 		invites.add(survey2.getInviteByParticipantName("Bob"));
-		invites.add(survey3.getInviteByParticipantName("Bob"));
 		invites.add(survey4.getInviteByParticipantName("Bob"));
+		bobsFirstInvite = survey1.getInviteByParticipantName("Bob");
 	}
 	
-	@Ignore
 	@Test
 	public void getInviteByOidUserNameTest() {
 		final List<LgInvite> invitesForEvaluation = getAllInvitesByOid();
@@ -101,7 +101,6 @@ public class LgInviteTest {
 	 * Note: Surveys will be transmitted with invites, we are checking for invites form certain perspective
 	 */
 	
-	@Ignore
 	@Test
 	public void getInvitesAsParticipantIsIgnoredFlagTest() {
 		final List<LgInvite> invites = getInvitesAsParticipantFor("Bob");
@@ -111,7 +110,6 @@ public class LgInviteTest {
 								LgStatus.UNDECIDED);
 	}
 	
-	@Ignore
 	@Test
 	public void getInvitesAsParticipantIsHostFlagTest() {
 		final List<LgInvite> invites = getInvitesAsParticipantFor("Bob");
@@ -123,7 +121,6 @@ public class LgInviteTest {
 								false, false, false);
 	}
 	
-	@Ignore
 	@Test
 	public void getInvitesAsParticipantSurveyNameTest() {
 		final List<LgInvite> invites = getInvitesAsParticipantFor("Bob");
@@ -143,10 +140,9 @@ public class LgInviteTest {
 		return invites;
 	}
 	
-	@Ignore
 	@Test
 	public void updateInviteSetConcreteAvailabilityTest() {
-		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(20, 40, 60);
+		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(invites.get(0), 20, 40, 60);
 		assertThat(
 				extractProperty("durationMins").from(inviteForEvaluation.getPossibleTimePeriods()))
 					.containsOnly(
@@ -157,10 +153,10 @@ public class LgInviteTest {
 	/**
 	 * Note: The call to updateInvite is internally forwarded to saveInvite.
 	 */
-	@Ignore
 	@Test
 	public void updateInviteChangeConcreteAvailabilityTest() {
-		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(20, 80, 60);
+		final LgInvite inviteWithTimeperiods = updatePossibleTimePeriodsWith(bobsFirstInvite, 20, 40, 60);
+		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(inviteWithTimeperiods, 20, 80, 60);
 		assertThat(
 				extractProperty("durationMins").from(inviteForEvaluation.getPossibleTimePeriods()))
 					.containsOnly(
@@ -168,10 +164,10 @@ public class LgInviteTest {
 							);
 	}
 	
-	@Ignore
 	@Test
 	public void updateInviteDeleteOneConcreteAvailabilityTest() {
-		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(20, 60);
+		final LgInvite inviteWithTimeperiods = updatePossibleTimePeriodsWith(bobsFirstInvite, 20, 40, 60);
+		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(inviteWithTimeperiods, 20, 60);
 		assertThat(
 				extractProperty("durationMins").from(inviteForEvaluation.getPossibleTimePeriods()))
 					.containsOnly(
@@ -179,22 +175,21 @@ public class LgInviteTest {
 							);
 	}
 	
-	@Ignore
 	@Test
 	public void updateInviteDeleteAllConcreteAvailabilitiesTest() {
-		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith();
+		final LgInvite inviteWithTimeperiods = updatePossibleTimePeriodsWith(bobsFirstInvite, 20, 40, 60);
+		final LgInvite inviteForEvaluation = updatePossibleTimePeriodsWith(inviteWithTimeperiods);
 		assertThat(
 				inviteForEvaluation.getPossibleTimePeriods())
 					.isEmpty();
 	}
 	
-	private LgInvite updatePossibleTimePeriodsWith(int ... durations) {
-		final LgInvite aPersistedInvite = invites.get(0);
-		aPersistedInvite.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 60));
+	private LgInvite updatePossibleTimePeriodsWith(final LgInvite inviteWithOid, int ... durations) {
+		inviteWithOid.setPossibleTimePeriods(testUtils.buildTimePeriods(durations));
 		return new TestTransaction<LgInvite>("Bob") {
 			@Override
 			public LgInvite execute() {
-				return startSession().updateInvite(aPersistedInvite);
+				return startSession().updateInvite(inviteWithOid);
 			}
 		}.getResult();
 	}

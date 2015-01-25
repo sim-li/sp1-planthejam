@@ -432,7 +432,8 @@ public class LgUser extends DaObject {
 	} 
     
 	public LgInvite getInvite(final long oid) {
-		return search(this.invites, oid);
+		//return search(this.invites, oid);
+		return findOneByKey(LgInvite.class, "oid", oid);
 	}
 
 	@JsonIgnore
