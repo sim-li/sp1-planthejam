@@ -9,8 +9,8 @@ angular.module('myApp')
      *
      * @class calendarModalCtrl
      */
-    .controller('calendarModalCtrl', ['$scope', '$modal', '$log', 'arrayUtil', 'TimePeriod',
-        function($scope, $modal, $log, arrayUtil, TimePeriod) {
+    .controller('calendarModalCtrl', ['$scope', '$modal', '$log', 'arrayUtil', 'restService', 'TimePeriod',
+        function($scope, $modal, $log, arrayUtil, restService, TimePeriod) {
 
             'use strict';
 
@@ -25,12 +25,13 @@ angular.module('myApp')
                         },
                         resultingTimePeriods: function() {
                             return $scope.resultingTimePeriods;
-                        }
+                        },
                     }
                 });
 
                 modalInstance.result.then(function(resultingTimePeriods) {
                     $scope.resultingTimePeriods = resultingTimePeriods;
+                    $scope.save();
                 }, function() {
                     $log.debug('Modal dismissed at: ' + new Date());
                 });

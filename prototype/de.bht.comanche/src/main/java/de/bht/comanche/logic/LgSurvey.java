@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.bht.comanche.persistence.DaObject;
 
@@ -515,6 +516,7 @@ public class LgSurvey extends DaObject {
 		return this.invites;
 	}
 
+    @JsonProperty
 	public LgSurvey setInvites(final List<LgInvite> invites) {
 		this.invites = invites;
 		return this;

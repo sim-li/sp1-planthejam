@@ -13,7 +13,7 @@ angular.module('models')
 		 * @class TimePeriod
 		 * @constructor
 		 * @param {Object} [config={}] an optional configuration object
-		 * @param {Number} [config.oid=''] the object id of the time period
+		 *                             @param {Number} [config.oid=''] the object id of the time period
 		 * @param {Number} [config.startTime=new Date()] the start time of the time period
 		 * @param {String} [config.durationMins=0] the duration of the time period in minutes
 		 *
@@ -25,7 +25,7 @@ angular.module('models')
 				return new TimePeriod(config);
 			}
 			config = config || {};
-			this.oid = config.oid || '';
+			// this.oid = config.oid || '';
 			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
 			this.durationMins = config.durationMins || 0;
 		};
@@ -46,7 +46,7 @@ angular.module('models')
 		 */
 		TimePeriod.prototype.doExport = function() {
 			return {
-				'oid': this.oid,
+				// 'oid': this.oid,
 				'startTime': this.startTime,
 				'durationMins': this.durationMins
 			};

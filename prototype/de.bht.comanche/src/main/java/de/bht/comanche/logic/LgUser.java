@@ -269,6 +269,7 @@ public class LgUser extends DaObject {
 		return null; // TODO: Throw MULTEX exception
 	}
 
+    @JsonIgnore
 	public List<LgSurvey> getSurveys() {
 		List<LgSurvey> surveys = new ArrayList<LgSurvey>();
 		for (LgInvite invite : this.invites) {
@@ -279,6 +280,7 @@ public class LgUser extends DaObject {
 		return surveys;
 	}
 	
+    @JsonIgnore
 	public List<LgInvite> getInvites() {
 		return this.invites;
 	}

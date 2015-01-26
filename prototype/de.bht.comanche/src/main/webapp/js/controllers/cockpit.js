@@ -17,8 +17,8 @@ angular.module('myApp')
             'use strict';
 
             // resolve the promises passed to this route
-            $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.surveys = Model.importMany(Survey, surveysPromise);
+            $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.messages = messagesPromise;
 
             $log.log('invites: ', $scope.invites)
@@ -28,10 +28,10 @@ angular.module('myApp')
 
             // preselects the first survey and invite in the list
             $scope.selectedInvite = $scope.invites[0];
-            $scope.selectedInvite.survey.possibleTimePeriods.push(new TimePeriod({
-                startTime: new Date(),
-                durationMins: 120
-            }))
+            // $scope.selectedInvite.survey.possibleTimePeriods.push(new TimePeriod({
+            //     startTime: new Date(),
+            //     durationMins: 120
+            // }))
 
             $scope.selectedSurvey = $scope.surveys[0];
 
@@ -80,6 +80,7 @@ angular.module('myApp')
              * @param  {Survey} survey the survey
              */
             $scope.selectSurvey = function(survey) {
+                if (!survey) return;
                 $scope.selectedSurvey = survey;
                 restService.getSurveyInvites(survey.oid)
                     .then(function(invites) {
@@ -87,6 +88,9 @@ angular.module('myApp')
                     });
                 $log.debug($scope.selectedSurvey);
             };
+
+            /** Preselect the first survey on page load and get its invites. */
+            $scope.selectSurvey($scope.surveys[0]);
 
             /**
              * Switches to the survey edit view to edit the selected survey.
@@ -200,19 +204,21 @@ angular.module('myApp')
             //### HACK ##############################
             //-- some dummies
             // $scope.possibleTimePeriods = [
-            var now = new Date();
-            $scope.selectedInvite.survey.possibleTimePeriods = [
-                new TimePeriod({
-                    startTime: new Date(now.getTime() - 2 * 24 * 60 * 60000),
-                    durationMins: 120
-                }), new TimePeriod({
-                    startTime: new Date(now.getTime() - 1 * 24 * 60 * 60000),
-                    durationMins: 240
-                }), new TimePeriod({
-                    startTime: now,
-                    durationMins: 360
-                })
-            ];
+            if ($scope.selectedInvite) {
+                var now = new Date();
+                $scope.selectedInvite.survey.possibleTimePeriods = [
+                    new TimePeriod({
+                        startTime: new Date(now.getTime() - 2 * 24 * 60 * 60000),
+                        durationMins: 120
+                    }), new TimePeriod({
+                        startTime: new Date(now.getTime() - 1 * 24 * 60 * 60000),
+                        durationMins: 240
+                    }), new TimePeriod({
+                        startTime: now,
+                        durationMins: 360
+                    })
+                ];
+            }
             //### HACK ##############################
             // $scope.resultingTimePeriods = [];
 
@@ -234,6 +240,10 @@ angular.module('myApp')
 
             $scope.toggleInviteDetails = function() {
                 $scope.showSurveyDetails = false;
+            };
+
+            $scope.saveSelectedInvite = function() {
+                restService.doSave($scope.selectedInvite);
             };
 
         }

@@ -135,7 +135,8 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
             restrict: 'E',
             scope: {
                 possibleTimePeriods: '=possible',
-                resultingTimePeriods: '=resulting'
+                resultingTimePeriods: '=resulting',
+                save: '&'
             },
             templateUrl: 'partials/calendarModal.html',
             controller: 'calendarModalCtrl'

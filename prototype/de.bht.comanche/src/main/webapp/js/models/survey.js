@@ -45,7 +45,13 @@ angular.module('models')
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
                 this.possibleTimePeriods = Model.importMany(TimePeriod, config.possibleTimePeriods);
+
+                // THE REAL THING:
+                // this.determinedTimePeriod = config.determinedTimePeriod ? new TimePeriod(config.determinedTimePeriod) : null;
+
+                // HACK:
                 this.determinedTimePeriod = new TimePeriod(config.determinedTimePeriod);
+
                 this.success = config.success || Status.UNDECIDED;
                 this.algoChecked = config.algoChecked || false;
                 this.invites = config.invites || []; // ??? -- removed ON PURPOSE --> the invites shall be imported seperately
@@ -76,17 +82,17 @@ angular.module('models')
                     'surveyDurationMins': this.surveyDurationMins,
                     'deadline': this.deadline,
                     'invites': this.invites,
-                    'frequencyDist': this.frequencyDist, // FIXME temporarily commented out
-                    'frequencyUnit': this.frequencyUnit, // FIXME temporarily commented out
-                    'possibleTimePeriods': TimePeriod.exportMany(this.possibleTimePeriods), // FIXME temporarily commented out
-                    'determinedTimePeriod': this.determinedTimePeriod ? this.determinedTimePeriod.doExport() : null, // FIXME temporarily commented out
-                    'success': this.success, // FIXME temporarily commented out
-                    'algoChecked': this.algoChecked // FIXME temporarily commented out
+                    'frequencyDist': this.frequencyDist,
+                    'frequencyUnit': this.frequencyUnit,
+                    'possibleTimePeriods': TimePeriod.exportMany(this.possibleTimePeriods),
+                    'determinedTimePeriod': this.determinedTimePeriod ? this.determinedTimePeriod.doExport() : null,
+                    'success': this.success,
+                    'algoChecked': this.algoChecked
                 };
             };
 
             Survey.prototype.hasParticipants = function() {
-                return arrayUtil.findByAttribute(this.invites, 'host', false) ? true : false;
+                return arrayUtil.findByAttribute(this.invites, 'isHost', false) ? true : false;
             };
 
             Survey.prototype.isNotReady = function() {
@@ -144,7 +150,7 @@ angular.module('models')
             //  */
             // Survey.prototype.addParticipant = function(user) {
             //     this.invites.push(new Invite({
-            //         user: user /*, host: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
+            //         user: user /*, isHost: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
             //     }));
             // };
 
