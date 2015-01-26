@@ -40,7 +40,7 @@ public class LgInvite extends DaObject{
 	 */
 	@Column
 	@Enumerated(EnumType.STRING)
-	private LgStatus isIgnored;
+	private LgStatus isIgnored = LgStatus.UNDECIDED;
 
 	/**
 	 * The user who receives this invite.
@@ -101,7 +101,7 @@ public class LgInvite extends DaObject{
 		return this.isHost;
 	}
 	
-	public LgStatus getIgnored() {
+	public LgStatus getIsIgnored() {
 		return this.isIgnored;
 	}
 

@@ -93,6 +93,10 @@ public class ReInviteService extends RestService {
 	public static final class RestGetInvitesFailure extends multex.Failure {}
 	
 	/**
+	 * ###
+	 * COMMENT: Is this path ever used or can the update method be removed?
+	 * Currently we have redundant save and update methods in code.
+	 * 
 	 * Save incoming LgInvite for current user. 
 	 * @param invite The incoming LgInvite.
 	 * @param request The request information from HTTP service.
@@ -131,7 +135,7 @@ public class ReInviteService extends RestService {
 			public LgInvite execute() throws Exception {
 				final LgInvite result;
 				try {
-					result = startSession().updateInvite(oid, invite);//TODO change and implement the method
+					result = startSession().updateInvite(invite);
 				} catch (Exception ex) {
 					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
 				}

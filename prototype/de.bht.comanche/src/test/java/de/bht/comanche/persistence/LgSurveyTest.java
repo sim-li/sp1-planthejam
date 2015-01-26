@@ -3,21 +3,13 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.extractProperty;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import javax.persistence.Persistence;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-
 import de.bht.comanche.logic.LgStatus;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgSurveyType;
@@ -27,60 +19,36 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
-public class LgSurveyTest {
+public class LgSurveyTest extends LgTestWithUsers {
 	private LgUser alice;
 	private LgUser bob;
 	private LgUser carol;
-
+	private TestUtils testUtils = new TestUtils();
+	private LgSurvey surveyForEvaluation;
+	
 	@BeforeClass
-	public static void resetDatabase() {
-		Map<String, String> properties = new HashMap<String, String>(1);
-		properties.put("hibernate.hbm2ddl.auto", "create");
-		Persistence.createEntityManagerFactory(
-				DaEmProvider.PERSISTENCE_UNIT_NAME, properties);
+	public static void init() {
+		TestUtils.resetJPADatabase();
 	}
-
+	
 	@Before
 	public void buildUp() {
-		saveUserAccounts();
+		alice = testUtils.registerTestUser("Alice");
+		bob = testUtils.registerTestUser("Bob");
+		carol = testUtils.registerTestUser("Carol");
+		saveSurveyWithTimeperiods();
 	}
-
-	/**
-	 * Saves Alice, Bob, and Carols user accounts in three separate transactions
-	 * using the register method which is also used in the rest service.
-	 */
-	private void saveUserAccounts() {
-		final LgUser testAccountBob = new LgUser().setName("Bob")
-				.setEmail("test@test.de").setPassword("testtest");
-		final LgUser testAccountAlice = new LgUser().setName("Alice")
-				.setEmail("test@test.de").setPassword("testtest");
-		final LgUser testAccountCarol = new LgUser().setName("Carol")
-				.setEmail("carol@test.de").setPassword("testtest");
-		alice = new TestTransaction<LgUser>("Alice") {
-			@Override
-			public LgUser execute() {
-				return getSession().register(testAccountAlice);
-			}
-		}.getResult();
-		bob = new TestTransaction<LgUser>("Bob") {
-			@Override
-			public LgUser execute() {
-				return getSession().register(testAccountBob);
-			}
-		}.getResult();
-		carol = new TestTransaction<LgUser>("Bob") {
-			@Override
-			public LgUser execute() {
-				return getSession().register(testAccountCarol);
-			}
-		}.getResult();
+	
+	private void saveSurveyWithTimeperiods() {
+		surveyForEvaluation = testUtils.saveSurvey(new LgSurvey()
+		.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60)));
 	}
-
+	
 	@Test
 	public void getSurveyByOidTest() {
 		final Date aDate = new Date();
 		final LgTimePeriod aTimePeriod = new LgTimePeriod().setDurationMins(30).setStartTime(aDate);
-		final Set<LgTimePeriod> severalTimePeriods = buildTimePeriods(20,30,40); 
+		final Set<LgTimePeriod> severalTimePeriods = testUtils.buildTimePeriods(20,30,40); 
 		final LgSurvey aSurvey = new LgSurvey()
 			.setAlgoChecked(false)
 			.setDeadline(aDate)
@@ -94,7 +62,7 @@ public class LgSurveyTest {
 		    .setSuccess(LgStatus.UNDECIDED)
 		    .setSurveyDurationMins(30)
 		    .setType(LgSurveyType.ONE_TIME);
-		final LgSurvey surveyWithOid = saveSurveyForAlice(aSurvey);
+		final LgSurvey surveyWithOid = testUtils.saveSurvey(aSurvey);
 		final LgSurvey surveyEval = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
@@ -123,7 +91,7 @@ public class LgSurveyTest {
 	 */
 	@Test
 	public void getInvitesForSurveyByOidTest() {
-		final LgSurvey surveyWithOid = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey surveyWithOid = testUtils.saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		final List<LgInvite> invites = new TestTransaction<List<LgInvite>>("Alice") {
 			@Override
 			public List<LgInvite> execute() {
@@ -138,9 +106,9 @@ public class LgSurveyTest {
 	
 	@Test
 	public void getSurveysTest() {
-		saveSurveyForAlice(new LgSurvey().setName("Survey1"));
-		saveSurveyForAlice(new LgSurvey().setName("Survey2"));
-		saveSurveyForAlice(new LgSurvey().setName("Survey3"));
+		testUtils.saveSurvey(new LgSurvey().setName("Survey1"));
+		testUtils.saveSurvey(new LgSurvey().setName("Survey2"));
+		testUtils.saveSurvey(new LgSurvey().setName("Survey3"));
 		List<LgSurvey> surveysForEvaluation = new TestTransaction<List<LgSurvey>>("Alice") {
 			@Override
 			public List<LgSurvey> execute() {
@@ -169,7 +137,7 @@ public class LgSurveyTest {
 	 */
 	@Test
 	public void saveSurveyWithInvitesPariticipantsTest() {
-		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).
@@ -179,7 +147,7 @@ public class LgSurveyTest {
 
 	@Test
 	public void saveSurveyWithInvitesHostAttributeTest() {
-		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		assertThat(
 				extractProperty("isHost")
 						.from(surveyForEvaluation.getInvites()))
@@ -188,9 +156,9 @@ public class LgSurveyTest {
 	
 	@Test
 	public void deleteParticipantTest() {
-		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey aSurvey = testUtils.saveSurvey(new LgSurvey().addParticipants(bob, carol));
 		aSurvey.removeParticipants(carol);
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(aSurvey);
 	    assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).containsOnly(
@@ -199,18 +167,22 @@ public class LgSurveyTest {
 	
 	@Test
 	public void addParticipantTest() {
-		final LgSurvey aSurvey = saveTestSurveyWithParticipants(bob);
+		final LgSurvey aSurvey = testUtils.saveSurvey(new LgSurvey().addParticipants(bob));
 		aSurvey.addParticipants(carol);
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(aSurvey);
 	    assertThat(
 				extractProperty("user.name").from(
 						surveyForEvaluation.getInvites())).containsOnly(
 				"Alice", "Bob", "Carol");
 	}
 
+	
 	@Test
 	public void deleteSurveyTest() {
-		final LgSurvey surveyForEvaluation = saveTestSurveyWithParticipants(bob, carol);
+		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(new LgSurvey()
+			.addParticipants(bob, carol)
+			.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 30, 40))
+			.setDeterminedTimePeriod(new LgTimePeriod().setDurationMins(50).setStartTime(new Date())));
 		new TestTransaction<Object>("Alice") {
 			@Override
 			public Object execute() {
@@ -218,106 +190,66 @@ public class LgSurveyTest {
 				return null;
 			}
 		}.getResult();
-		final Boolean foundComponentOfSurvey = new TestTransaction<Boolean>(
+		final Boolean foundDeletedObj = new TestTransaction<Boolean>(
 				"Alice") {
 			@Override
 			public Boolean execute() {
-				Boolean foundADeletedElement = null;
+				Boolean foundDeletedObj = null;
 				try {
 					startSession().findOneByKey(LgSurvey.class, "oid",
 							surveyForEvaluation.getOid());
-					foundADeletedElement = true;
+					foundDeletedObj = true;
 				} catch (DaFindOneByKeyExc ex) {
-					setFalseIfNull(foundADeletedElement);
+					foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
 				}
 				for (final LgInvite invite : surveyForEvaluation.getInvites()) {
 					try {
 						startSession().findOneByKey(LgInvite.class, "oid",
 								invite.getOid());
-						foundADeletedElement = true;
+						foundDeletedObj = true;
 					} catch (DaFindOneByKeyExc ex) {
-						setFalseIfNull(foundADeletedElement);
+						foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
 					}
 				}
+				//TODO: Implement this, not really urgent.
+//				for (final LgTimePeriod timePeriod : surveyForEvaluation.getPossibleTimePeriods()) {
+//					try {
+//						startSession().findManyByQuery("select o from " + LgTimePeriod.class);
+//						foundDeletedObj = true;
+//					} catch (DaFindOneByKeyExc ex) {
+//						foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
+//					}
+//				}
 				return false;
 			}
 		}.getResult();
-	}
-	
-	private void setFalseIfNull(Boolean val) {
-		val = val == null ? false : val;
-	}
-	/**
-	 * Saves survey given list of participants.
-	 * 
-	 * @return Persisted survey with OID.
-	 */
-	private LgSurvey saveTestSurveyWithParticipants(LgUser ... participants) {
-		final LgSurvey aSurvey = new LgSurvey().addParticipants(participants);
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(aSurvey);
-		return surveyForEvaluation;
+		assertThat(foundDeletedObj).isEqualTo(false);
 	}
 	
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
-		final LgSurvey freshSurvey = new LgSurvey()
-				.setPossibleTimePeriods(buildTimePeriods(20, 40, 60));
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(freshSurvey);
+		final LgSurvey surveyWithVariousTimePeriods = testUtils.saveSurvey(new LgSurvey()
+		.setPossibleTimePeriods(
+				testUtils.buildTimePeriods(20, 40, 60)));
 		assertThat(
 				extractProperty("durationMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
+						surveyWithVariousTimePeriods.getPossibleTimePeriods()))
 				.contains(20, 40, 60);
 	}
 
 	@Test
 	public void saveSurveyWithDeterminedTimePeriodTest() {
-		final LgSurvey freshSurvey = new LgSurvey()
-				.setDeterminedTimePeriod(new LgTimePeriod().setDurationMins(20)
-						.setStartTime(new Date()));
-		final LgSurvey surveyForEvaluation = saveSurveyForAlice(freshSurvey);
+		final LgSurvey surveyWithOneTimePeriod = testUtils.saveSurvey(new LgSurvey()
+		.setDeterminedTimePeriod(
+				testUtils.buildOneTimePeriod(20)));
 		assertThat(
-				surveyForEvaluation.getDeterminedTimePeriod().getDurationMins())
+				surveyWithOneTimePeriod.getDeterminedTimePeriod().getDurationMins())
 				.isEqualTo(20);
-	}
-
-	/**
-	 * Generates a hash set of time periods, inserts the current date stamp to
-	 * fill the field with a value.
-	 * 
-	 * @param durations
-	 *            List of durations as integer. Every duration will generate a
-	 *            time period.
-	 * @return A set of time periods
-	 */
-	private HashSet<LgTimePeriod> buildTimePeriods(int... durations) {
-		final HashSet<LgTimePeriod> timePeriods = new HashSet<LgTimePeriod>();
-		for (int i = 0; i < durations.length; i++) {
-			timePeriods.add(new LgTimePeriod().setStartTime(new Date())
-					.setDurationMins(durations[i]));
-		}
-		return timePeriods;
-	}
-
-	/**
-	 * Saves a survey for Alice.
-	 * 
-	 * @param freshSurvey
-	 *            Survey to be persisted
-	 * @return The persisted survey with OID.
-	 */
-	private LgSurvey saveSurveyForAlice(final LgSurvey freshSurvey) {
-		final LgSurvey persistedSurvey = new TestTransaction<LgSurvey>("Alice") {
-			@Override
-			public LgSurvey execute() {
-				return startSession().saveSurvey(freshSurvey);
-			}
-		}.getResult();
-		return persistedSurvey;
 	}
 
 	@Test
 	public void updateSurveyByModifyingTimePeriods() {
-		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40, 80);
+		updateSurveyTimePeriods(20, 40, 80);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -326,7 +258,7 @@ public class LgSurveyTest {
 
 	@Test
 	public void updateSurveyByDeletingOneTimePeriods() {
-		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20, 40);
+		updateSurveyTimePeriods(20, 40);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -335,7 +267,7 @@ public class LgSurveyTest {
 
 	@Test
 	public void updateSurveyByDeletingTwoTimePeriods() {
-		final LgSurvey surveyForEvaluation = updateTimePeriodsWith(20);
+		updateSurveyTimePeriods(20);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -344,7 +276,7 @@ public class LgSurveyTest {
 
 	@Test
 	public void updateSurveyByDeletingAllTimePeriods() {
-		final LgSurvey surveyForEvaluation = updateTimePeriodsWith();
+		updateSurveyTimePeriods();
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -352,26 +284,18 @@ public class LgSurveyTest {
 	}
 
 	/**
-	 * Updates the time periods [20, 40, 60] of a survey with the 
+	 * Updates the time periods [20, 40, 60] of the test survey with the 
 	 * given durations.
-	 * 
-	 * @param durationUpdates
-	 *            A series of durations
-	 * @return Updated survey with new durations for checking with assertions
 	 */
-	private LgSurvey updateTimePeriodsWith(int... durationUpdates) {
-		final LgSurvey freshSurvey = new LgSurvey()
-				.setPossibleTimePeriods(buildTimePeriods(20, 40, 60));
-		final LgSurvey updatedSurvey = saveSurveyForAlice(freshSurvey);
-		updatedSurvey.setPossibleTimePeriods(buildTimePeriods(durationUpdates));
-		final LgSurvey surveyForEvaluation = new TestTransaction<LgSurvey>(
+	private void updateSurveyTimePeriods(int... durationUpdates) {
+		surveyForEvaluation.setPossibleTimePeriods(testUtils.buildTimePeriods(durationUpdates));
+		surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
 			public LgSurvey execute() {
-				return startSession().updateSurvey(updatedSurvey);
+				return startSession().updateSurvey(surveyForEvaluation);
 			}
 		}.getResult();
-		return surveyForEvaluation;
 	}
 
 	/**
@@ -380,25 +304,7 @@ public class LgSurveyTest {
 	 */
 	@After
 	public void deleteTestData() {
-		deleteAccountFor("Alice", "Bob", "Carol");
+		testUtils.deleteAccountsFor("Alice", "Bob", "Carol");
 	}
 
-	/**
-	 * Runs a transaction with a delete command for every given user.
-	 * 
-	 * @param users
-	 *            Users to be deleted
-	 */
-	public void deleteAccountFor(String... users) {
-		for (String user : users) {
-			new TestTransaction<LgUser>(user) {
-				@Override
-				public LgUser execute() {
-					final LgUser user = startSession();
-					user.deleteThisAccount();
-					return user;
-				}
-			}.getResult();
-		}
-	}
 }

@@ -392,7 +392,7 @@ public class LgUser extends DaObject {
 		return saveUnattached(invite);
 	}
 
-	public LgInvite updateInvite(final long oid, LgInvite invite) {
+	public LgInvite updateInvite(LgInvite invite) {
 		// REDUNDANT
 		return saveInvite(invite);
 	}
@@ -451,7 +451,8 @@ public class LgUser extends DaObject {
 	} 
     //need json split
 	public LgInvite getInvite(final long oid) {
-		return search(this.invites, oid);
+		//return search(this.invites, oid);
+		return findOneByKey(LgInvite.class, "oid", oid);
 	}
 
 	@JsonIgnore
