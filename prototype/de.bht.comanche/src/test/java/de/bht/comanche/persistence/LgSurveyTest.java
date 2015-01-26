@@ -24,7 +24,8 @@ public class LgSurveyTest extends LgTestWithUsers {
 	private LgUser bob;
 	private LgUser carol;
 	private TestUtils testUtils = new TestUtils();
-
+	private LgSurvey surveyForEvaluation;
+	
 	@BeforeClass
 	public static void init() {
 		TestUtils.resetJPADatabase();
@@ -35,6 +36,12 @@ public class LgSurveyTest extends LgTestWithUsers {
 		alice = testUtils.registerTestUser("Alice");
 		bob = testUtils.registerTestUser("Bob");
 		carol = testUtils.registerTestUser("Carol");
+		saveSurveyWithTimeperiods();
+	}
+	
+	private void saveSurveyWithTimeperiods() {
+		surveyForEvaluation = testUtils.saveSurvey(new LgSurvey()
+		.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60)));
 	}
 	
 	@Test
@@ -221,30 +228,28 @@ public class LgSurveyTest extends LgTestWithUsers {
 	
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
-		final LgSurvey freshSurvey = new LgSurvey()
-				.setPossibleTimePeriods(
-						testUtils.buildTimePeriods(20, 40, 60));
-		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(freshSurvey);
+		final LgSurvey surveyWithVariousTimePeriods = testUtils.saveSurvey(new LgSurvey()
+		.setPossibleTimePeriods(
+				testUtils.buildTimePeriods(20, 40, 60)));
 		assertThat(
 				extractProperty("durationMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
+						surveyWithVariousTimePeriods.getPossibleTimePeriods()))
 				.contains(20, 40, 60);
 	}
 
 	@Test
 	public void saveSurveyWithDeterminedTimePeriodTest() {
-		final LgSurvey freshSurvey = new LgSurvey()
-				.setDeterminedTimePeriod(
-						testUtils.buildOneTimePeriod(20));
-		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(freshSurvey);
+		final LgSurvey surveyWithOneTimePeriod = testUtils.saveSurvey(new LgSurvey()
+		.setDeterminedTimePeriod(
+				testUtils.buildOneTimePeriod(20)));
 		assertThat(
-				surveyForEvaluation.getDeterminedTimePeriod().getDurationMins())
+				surveyWithOneTimePeriod.getDeterminedTimePeriod().getDurationMins())
 				.isEqualTo(20);
 	}
 
 	@Test
 	public void updateSurveyByModifyingTimePeriods() {
-		final LgSurvey surveyForEvaluation = saveAndUpdateToTimePeriods(20, 40, 80);
+		updateSurveyTimePeriods(20, 40, 80);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -253,7 +258,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void updateSurveyByDeletingOneTimePeriods() {
-		final LgSurvey surveyForEvaluation = saveAndUpdateToTimePeriods(20, 40);
+		updateSurveyTimePeriods(20, 40);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -262,7 +267,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void updateSurveyByDeletingTwoTimePeriods() {
-		final LgSurvey surveyForEvaluation = saveAndUpdateToTimePeriods(20);
+		updateSurveyTimePeriods(20);
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -271,7 +276,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void updateSurveyByDeletingAllTimePeriods() {
-		final LgSurvey surveyForEvaluation = saveAndUpdateToTimePeriods();
+		updateSurveyTimePeriods();
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
@@ -279,26 +284,18 @@ public class LgSurveyTest extends LgTestWithUsers {
 	}
 
 	/**
-	 * Updates the time periods [20, 40, 60] of a survey with the 
+	 * Updates the time periods [20, 40, 60] of the test survey with the 
 	 * given durations.
-	 * 
-	 * @param durationUpdates
-	 *            A series of durations
-	 * @return Updated survey with new durations for checking with assertions
 	 */
-	private LgSurvey saveAndUpdateToTimePeriods(int... durationUpdates) {
-		final LgSurvey freshSurvey = new LgSurvey()
-				.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60));
-		final LgSurvey updatedSurvey = testUtils.saveSurvey(freshSurvey);
-		updatedSurvey.setPossibleTimePeriods(testUtils.buildTimePeriods(durationUpdates));
-		final LgSurvey surveyForEvaluation = new TestTransaction<LgSurvey>(
+	private void updateSurveyTimePeriods(int... durationUpdates) {
+		surveyForEvaluation.setPossibleTimePeriods(testUtils.buildTimePeriods(durationUpdates));
+		surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
 			public LgSurvey execute() {
-				return startSession().updateSurvey(updatedSurvey);
+				return startSession().updateSurvey(surveyForEvaluation);
 			}
 		}.getResult();
-		return surveyForEvaluation;
 	}
 
 	/**
