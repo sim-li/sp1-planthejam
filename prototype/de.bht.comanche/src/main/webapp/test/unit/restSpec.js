@@ -18,10 +18,13 @@ describe('restModule', function() {
             expect(restService.deleteUser).toBeDefined();
             expect(restService.updateUser).toBeDefined();
             expect(restService.logout).toBeDefined();
-            expect(restService.doGet).toBeDefined();
+            expect(restService.getAllUsers).toBeDefined();
+            expect(restService.getSurveyInvites).toBeDefined();
+            expect(restService.getMessages).toBeDefined();
+            expect(restService.notifyParticipants).toBeDefined();
             expect(restService.doGetMany).toBeDefined();
+            expect(restService.doGet).toBeDefined();
             expect(restService.doSave).toBeDefined();
-            // expect(restService.doUpdate).toBeDefined();
             expect(restService.doDelete).toBeDefined();
         }));
 
@@ -37,13 +40,19 @@ describe('restModule', function() {
 
     describe('logout', function() {});
 
-    describe('doGet', function() {});
+    describe('getAllUsers', function() {});
+
+    describe('getSurveyInvites', function() {});
+
+    describe('getMessages', function() {});
+
+    describe('notifyParticipants', function() {});
 
     describe('doGetMany', function() {});
 
-    describe('doSave', function() {});
+    describe('doGet', function() {});
 
-    // describe('doUpdate', function() {});
+    describe('doSave', function() {});
 
     describe('doDelete', function() {});
 

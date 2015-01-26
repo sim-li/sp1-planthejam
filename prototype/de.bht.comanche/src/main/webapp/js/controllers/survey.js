@@ -90,19 +90,6 @@ angular.module('myApp')
                 // QUESTION maybe better to just delete on server and then refresh? - but then we have to wait for the server
             };
 
-            $scope.saveSurvey = function() {
-                $log.log('selected survey: ', $scope.selectedSurvey);
-                $scope.selectedSurvey.invites = Invite.exportMany($scope.selectedSurvey.invites); // HACK -> Move to survey class when possible.
-                restService.doSave($scope.selectedSurvey)
-                    .then(function(success) {
-                        $location.path('/cockpit');
-                    } /*, function(error) { $log.log(error); }*/ );
-
-                // arrayUtil.forEach($scope.selectedInviteSurveyInvites, function(invite) { // <<<<<<<<<<<<< TODO
-                //     restService.saveSurveyInvite($scope.selectedInvite, invite);
-                // });
-            };
-
             // TODO rest service to save many groups
             $scope.saveGroups = function() {
                 $log.log('Saving all groups');
@@ -139,38 +126,17 @@ angular.module('myApp')
                 $scope.selectedSurvey.type = SurveyType.ONE_TIME;
             };
 
-            /**********************************************************************************************/
+            $scope.saveSurvey = function() {
+                $log.log('selected survey: ', $scope.selectedSurvey);
+                $scope.selectedSurvey.invites = Invite.exportMany($scope.selectedSurvey.invites); // HACK -> Move to survey class when possible.
+                restService.doSave($scope.selectedSurvey)
+                    .then(function(success) {
+                        $location.path('/cockpit');
+                    } /*, function(error) { $log.log(error); }*/ );
 
-            /* config object */
-            // $scope.uiConfig = {
-            //     calendar: {
-            //         height: 450,
-            //         defaultView: 'agendaWeek',
-            //         header: {
-            //             left: 'month,agendaWeek,agendaDay',
-            //             center: 'title',
-            //             right: 'today prev,next'
-            //         },
-            //         editable: true,
-            //         selectable: true,
-            //         select: function(startDate, endDate) {
-            //             /* correct timezoneoffset */
-            //             var timeZoneOffset = new Date().getTimezoneOffset();
-            //             var start = new Date(startDate + timeZoneOffset * 60000);
-            //             var end = new Date(endDate + timeZoneOffset * 60000);
-
-            //             $scope.possibleTimePeriods.push({
-            //                 start: start,
-            //                 end: end
-            //             });
-            //         },
-            //         events: $scope.possibleTimePeriods
-            //     }
-            // };
-
-            // UNUSED?
-            $scope.renderCalendar = function() {
-                $scope.surveyCalendar.fullCalendar('render');
+                // arrayUtil.forEach($scope.selectedInviteSurveyInvites, function(invite) { // <<<<<<<<<<<<< TODO
+                //     restService.saveSurveyInvite($scope.selectedInvite, invite);
+                // });
             };
 
             $scope.cancel = function() {
