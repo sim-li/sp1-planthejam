@@ -5,6 +5,7 @@ import static multex.MultexUtil.create;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -13,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
 /**

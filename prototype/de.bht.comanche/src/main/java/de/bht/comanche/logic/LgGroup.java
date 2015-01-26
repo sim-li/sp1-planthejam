@@ -13,8 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.bht.comanche.persistence.DaObject;
 
 /**
@@ -48,7 +46,6 @@ public class LgGroup extends DaObject{
     /**
      * Representation of a foreign key in a LgMember entity. Provide a list of members. 
      */
-    
     @OneToMany(mappedBy="group", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval=true)
     private List<LgMember> members;
     
@@ -133,7 +130,6 @@ public class LgGroup extends DaObject{
      * Returns a list of LgUsers for specified group.
      * @return The list of LgUsers.
      */
-    @JsonIgnore
     public List<LgUser> getUsers() {
         final List<LgUser> users = new LinkedList<LgUser>();
         for (final LgMember member : this.members) {
@@ -176,11 +172,6 @@ public class LgGroup extends DaObject{
      */
     public List<LgMember> getMembers() {
         return this.members;
-    }
-    
-    public LgGroup setMembers(final List<LgMember> members) {
-    	this.members = members;
-        return this;
     }
 
     @Override
