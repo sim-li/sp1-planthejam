@@ -2,14 +2,19 @@ package de.bht.comanche.persistence;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.extractProperty;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import de.bht.comanche.logic.LgStatus;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgSurveyType;
@@ -258,11 +263,39 @@ public class LgSurveyTest extends LgTestWithUsers {
 	
 	@Test
 	public void updateSurveyByAddingEquallyLastingTimePeriods() {
-		updateSurveyTimePeriods(20, 20, 80);
+		Date firstDate;
+		Date secondDate;
+		Date thirdDate;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			firstDate = sdf.parse("21/12/2012");
+			secondDate = sdf.parse("21/12/2014");
+			thirdDate = sdf.parse("21/12/2016");
+			final HashSet<LgTimePeriod> pTimePeriods = new HashSet<LgTimePeriod>();
+			pTimePeriods.add(
+					new LgTimePeriod().setDurationMins(20).setStartTime(firstDate)
+					);
+			pTimePeriods.add(
+					new LgTimePeriod().setDurationMins(20).setStartTime(secondDate)
+					);
+			pTimePeriods.add(
+					new LgTimePeriod().setDurationMins(20).setStartTime(thirdDate)
+					);
+			surveyForEvaluation.setPossibleTimePeriods(pTimePeriods);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		surveyForEvaluation = new TestTransaction<LgSurvey>(
+				"Alice") {
+			@Override
+			public LgSurvey execute() {
+				return startSession().updateSurvey(surveyForEvaluation);
+			}
+		}.getResult();
 		assertThat(
 				extractProperty("durationMins").from(
 						surveyForEvaluation.getPossibleTimePeriods()))
-				.containsOnly(20, 20, 80)
+				.containsOnly(20, 20, 20)
 				.hasSize(3);
 	}
 
