@@ -17,17 +17,40 @@ angular.module('models')
 		 * @param {Number} [config.startTime=new Date()] the start time of the time period
 		 * @param {String} [config.durationMins=0] the duration of the time period in minutes
 		 *
-		 *
 		 * @param {[type]} config [description]
 		 */
 		var TimePeriod = function(config) {
 			if (!(this instanceof TimePeriod)) {
 				return new TimePeriod(config);
 			}
-			config = config || {};
+			config = config || timePeriodNull;
 			// this.oid = config.oid || '';
 			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
 			this.durationMins = config.durationMins || 0;
+		};
+
+
+		var timePeriodNull = {
+			startTime: new Date(0),
+			durationMins: -1
+		};
+
+		/**
+		 * A pseudo-null value, defined as:
+		 * 	- startTime: Jan 01 1970 01:00:00 GMT+0100
+		 *  - duration: 0
+		 *
+		 * @method NULL
+		 * @static
+		 * @constant
+		 */
+		TimePeriod.NULL = function() {
+			return new TimePeriod(timePeriodNull);
+		};
+
+		TimePeriod.prototype.isNull = function() {
+			return this.startTime.getTime() == timePeriodNull.startTime.getTime() &&
+				this.durationMins == timePeriodNull.durationMins;
 		};
 
 		/**

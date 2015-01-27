@@ -144,7 +144,14 @@ angular.module('rest', ['models'])
                         'name': user.name,
                         'password': user.password
                     };
-                return callHttp('POST')(url, data);
+                console.log(url)
+                console.log(user)
+                var res = callHttp('POST')(url, data);
+                res.then(function(ret) {
+                    console.log(ret)
+                })
+                return res;
+                // return callHttp('POST')(url, data);
             };
 
             /**

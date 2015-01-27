@@ -87,8 +87,8 @@
             %div#surveyDetailsDeterminedTimePeriod{"ng-if" => "selectedSurvey.algoChecked"}
               %label{:for => "surveyDetailsDeterminedTimePeriod"} Determined Time Period:
               %span#surveyDetailsDeterminedTimePeriod
-                %span{"ng-if" => "selectedSurvey.determinedTimePeriod"} {{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}
-                %span.text-danger{"ng-if" => "!selectedSurvey.determinedTimePeriod"} No match. Please start a new survey.
+                %span{"ng-if" => "!selectedSurvey.determinedTimePeriod.isNull()"} {{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}
+                %span.text-danger{"ng-if" => "selectedSurvey.determinedTimePeriod.isNull()"} No match. Please start a new survey.
             %hr
             %h4 Participants:
             %span{"ng-if" => "!selectedSurvey.hasParticipants()"}

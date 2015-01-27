@@ -225,6 +225,7 @@ public class LgSurvey extends DaObject {
 	 * @param other Other survey
 	 */
 	public LgSurvey updateWith(final LgSurvey other) {
+		System.out.println(" ----------------------- update with: num of possTPs " + other.possibleTimePeriods.size());
 		this.name = other.name;
 		this.description = other.description;
 		this.type = other.type;
@@ -236,6 +237,9 @@ public class LgSurvey extends DaObject {
 		this.determinedTimePeriod = other.determinedTimePeriod;
 		this.success = other.success;
 		this.algoChecked = other.algoChecked;
+		for (LgInvite invite : other.invites) {
+			invite.setSurvey(other);
+		}
 		this.invites = other.invites;
 		return this;
 		// Check this, implement Equals method for other classes
@@ -479,8 +483,8 @@ public class LgSurvey extends DaObject {
 		return this.possibleTimePeriods;
 	}
 
-	public LgSurvey setPossibleTimePeriods(final Set<LgTimePeriod> period){
-		this.possibleTimePeriods = period;
+	public LgSurvey setPossibleTimePeriods(final Set<LgTimePeriod> possibleTimePeriods){
+		this.possibleTimePeriods = possibleTimePeriods;
 		return this;
 	}
 

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -30,6 +31,7 @@ import javax.persistence.TemporalType;
 	/**
 	 * start time
 	 */
+//	@Id 								// added by SEB, to make startTime PK - does it work?? try to drop DB and rebuild tables
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
 	

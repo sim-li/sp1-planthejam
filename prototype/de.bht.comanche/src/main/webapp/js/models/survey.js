@@ -45,13 +45,7 @@ angular.module('models')
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
                 this.possibleTimePeriods = Model.importMany(TimePeriod, config.possibleTimePeriods);
-
-                // THE REAL THING:
-                // this.determinedTimePeriod = config.determinedTimePeriod ? new TimePeriod(config.determinedTimePeriod) : null;
-
-                // HACK:
                 this.determinedTimePeriod = new TimePeriod(config.determinedTimePeriod);
-
                 this.success = config.success || Status.UNDECIDED;
                 this.algoChecked = config.algoChecked || false;
                 this.invites = config.invites || []; // ??? -- removed ON PURPOSE --> the invites shall be imported seperately
@@ -85,7 +79,8 @@ angular.module('models')
                     'frequencyDist': this.frequencyDist,
                     'frequencyUnit': this.frequencyUnit,
                     'possibleTimePeriods': TimePeriod.exportMany(this.possibleTimePeriods),
-                    'determinedTimePeriod': this.determinedTimePeriod ? this.determinedTimePeriod.doExport() : null,
+                    // 'determinedTimePeriod': this.determinedTimePeriod ? this.determinedTimePeriod.doExport() : null,
+                    'determinedTimePeriod': this.determinedTimePeriod.doExport(),
                     'success': this.success,
                     'algoChecked': this.algoChecked
                 };

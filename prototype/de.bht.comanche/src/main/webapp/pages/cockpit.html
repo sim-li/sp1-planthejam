@@ -117,8 +117,8 @@
             <div id='surveyDetailsDeterminedTimePeriod' ng-if='selectedSurvey.algoChecked'>
               <label for='surveyDetailsDeterminedTimePeriod'>Determined Time Period:</label>
               <span id='surveyDetailsDeterminedTimePeriod'>
-                <span ng-if='selectedSurvey.determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}</span>
-                <span class='text-danger' ng-if='!selectedSurvey.determinedTimePeriod'>No match. Please start a new survey.</span>
+                <span ng-if='!selectedSurvey.determinedTimePeriod.isNull()'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}</span>
+                <span class='text-danger' ng-if='selectedSurvey.determinedTimePeriod.isNull()'>No match. Please start a new survey.</span>
               </span>
             </div>
             <hr>

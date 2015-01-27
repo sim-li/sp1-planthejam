@@ -260,11 +260,10 @@ public class LgUser extends DaObject {
 	}
 
 	// -- HOST ROLES --
-	public LgSurvey getSurvey(final long oid) {
-		for (LgInvite invite : this.invites) {
-			if (invite.getIsHost() && invite.getSurvey().getOid() == oid) {
-				return attachPoolFor(invite.getSurvey());
-			}
+	public LgSurvey getSurvey(final Long oid) {
+		final LgSurvey survey = findOneByKey(LgSurvey.class, "OID", oid);
+		if (survey != null) {
+			return attachPoolFor(survey);
 		}
 		return null; // TODO: Throw MULTEX exception
 	}
