@@ -255,6 +255,16 @@ public class LgSurveyTest extends LgTestWithUsers {
 						surveyForEvaluation.getPossibleTimePeriods()))
 				.containsOnly(20, 40,80);
 	}
+	
+	@Test
+	public void updateSurveyByAddingEquallyLastingTimePeriods() {
+		updateSurveyTimePeriods(20, 20, 80);
+		assertThat(
+				extractProperty("durationMins").from(
+						surveyForEvaluation.getPossibleTimePeriods()))
+				.containsOnly(20, 20, 80)
+				.hasSize(3);
+	}
 
 	@Test
 	public void updateSurveyByDeletingOneTimePeriods() {
