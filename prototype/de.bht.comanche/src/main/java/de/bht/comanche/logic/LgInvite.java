@@ -88,12 +88,12 @@ public class LgInvite extends DaObject{
 	
 	
 	
-	public Set<LgTimePeriod> getPossibleTimePeriods(){
+	public Set<LgTimePeriod> getConcreteAvailability(){
 		return this.concreteAvailability;
 	}
 	
-	public LgInvite setPossibleTimePeriods(final Set<LgTimePeriod> period){
-		this.concreteAvailability = period;
+	public LgInvite setConcreteAvailability(final Set<LgTimePeriod> concreteAvailability){
+		this.concreteAvailability = concreteAvailability;
 		return this;
 	}
 

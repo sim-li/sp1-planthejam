@@ -76,17 +76,18 @@ angular.module('models')
                     'surveyDurationMins': this.surveyDurationMins,
                     'deadline': this.deadline,
                     'invites': this.invites,
-                    'frequencyDist': this.frequencyDist, // FIXME temporarily commented out
-                    'frequencyUnit': this.frequencyUnit, // FIXME temporarily commented out
-                    'possibleTimePeriods': TimePeriod.exportMany(this.possibleTimePeriods), // FIXME temporarily commented out
-                    'determinedTimePeriod': this.determinedTimePeriod ? this.determinedTimePeriod.doExport() : null, // FIXME temporarily commented out
-                    'success': this.success, // FIXME temporarily commented out
-                    'algoChecked': this.algoChecked // FIXME temporarily commented out
+                    'frequencyDist': this.frequencyDist,
+                    'frequencyUnit': this.frequencyUnit,
+                    'possibleTimePeriods': TimePeriod.exportMany(this.possibleTimePeriods),
+                    // 'determinedTimePeriod': this.determinedTimePeriod ? this.determinedTimePeriod.doExport() : null,
+                    'determinedTimePeriod': this.determinedTimePeriod.doExport(),
+                    'success': this.success,
+                    'algoChecked': this.algoChecked
                 };
             };
 
             Survey.prototype.hasParticipants = function() {
-                return arrayUtil.findByAttribute(this.invites, 'host', false) ? true : false;
+                return arrayUtil.findByAttribute(this.invites, 'isHost', false) ? true : false;
             };
 
             Survey.prototype.isNotReady = function() {
@@ -144,7 +145,7 @@ angular.module('models')
             //  */
             // Survey.prototype.addParticipant = function(user) {
             //     this.invites.push(new Invite({
-            //         user: user /*, host: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
+            //         user: user /*, isHost: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
             //     }));
             // };
 

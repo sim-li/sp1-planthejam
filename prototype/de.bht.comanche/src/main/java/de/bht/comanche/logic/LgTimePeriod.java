@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -19,58 +20,41 @@ import javax.persistence.TemporalType;
  * @author Duc Tung Tong
  */
 
-//@Table(name = "TimePeriod")
 @Embeddable public class LgTimePeriod {
 
 	private static final long serialVersionUID = 1L;
-	
 	private final String DATE_PATTERN = "yyyy.MM.dd G HH:mm:ss z";
 	private final DateFormat df = new SimpleDateFormat(DATE_PATTERN);
 	
-	/**
-	 * start time
-	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
-	
-	/**
-	 * duration in minutes
-	 */
+
 	private int durationMins;
 
-	// QUESTION: Do we need to define back-refs? 
-	// Can't LgUser/LgSurvey have an array list & ManyToOne
-	
-//	/**
-//	 * Column for LgSurvey foreign key 
-//	 */
-//	@JsonIgnore
-//	@ManyToOne
-//	private LgSurvey survey;
-//	
-//	/**
-//	 * Column for LgUser foreign key
-//	 */
-//	@JsonIgnore
-//	@ManyToOne
-//	private LgUser user;
-//	
-//	/**
-//	 * Column for LgInvite foreign key
-//	 */
-//	@JsonIgnore
-//	@ManyToOne
-//	private LgInvite invite;
-
-	/*
-	 * --------------------------------------------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
-	
 	public LgTimePeriod (){
-		
+	}
+
+	public LgTimePeriod (final LgTimePeriod other){
+		this.startTime = other.startTime;
+		this.durationMins = other.durationMins;
+	}
+
+	public Date getStartTime() {
+		return this.startTime;
+	}
+
+	public LgTimePeriod setStartTime(final Date startTime) {
+		this.startTime = startTime;
+		return this;
+	}
+
+	public int getDurationMins() {
+		return this.durationMins;
+	}
+
+	public LgTimePeriod setDurationMins(final int durationMins) {
+		this.durationMins = durationMins;
+		return this;
 	}
 	
 	@Override
@@ -100,85 +84,6 @@ import javax.persistence.TemporalType;
 		} else if (!df.format(startTime).equals(df.format(other.startTime)))
 			return false;
 		return true;
-	}
-
-	public LgTimePeriod (final LgTimePeriod other){
-		this.startTime = other.startTime;
-		this.durationMins = other.durationMins;
-//		this.survey = other.survey;
-//		this.user = other.user;
-//		this.invite = other.invite;
-	}
-
-	public Date getStartTime() {
-		return this.startTime;
-	}
-
-	public LgTimePeriod setStartTime(final Date startTime) {
-		this.startTime = startTime;
-		return this;
-	}
-
-	public int getDurationMins() {
-		return this.durationMins;
-	}
-
-	public LgTimePeriod setDurationMins(final int durationMins) {
-		this.durationMins = durationMins;
-		
-		
-		return this;
-	}
-
-//	public LgSurvey getSurvey() {
-//		return this.survey;
-//	}
-//	
-//	public LgInvite getInvite() {
-//		return this.invite;
-//	}
-//	
-//	public LgUser getUser() {
-//		return this.user;
-//	}
-	
-	/*
-	 * --------------------------------------------------------------------------------------------
-	 * # foreign key setters
-	 * # 
-	 * --------------------------------------------------------------------------------------------
-	 */
-	
-	public LgTimePeriod normalized(){
-		LgTimePeriod result = new LgTimePeriod();
-		result.startTime = this.startTime;
-		result.durationMins = this.durationMins;
-//		result.survey = null;
-//		result.user = null;
-//		result.invite = null;
-		return result;
-//		return this.attachPoolFor(tp); not works
-	}
-	
-//	public LgTimePeriod setUser(final LgUser user){
-//		this.user = user;
-//		return this;
-//	}
-//	
-//	public LgTimePeriod setInvite(final LgInvite invite){
-//		this.invite = invite;
-//		return this;
-//	}
-//	
-//	public LgTimePeriod setSurvey(final LgSurvey survey) {
-//		this.survey = survey;
-//		return this;
-//	}
-
-	public LgTimePeriod updateWith(LgTimePeriod other) {
-		this.startTime = other.startTime;
-		this.durationMins = other.durationMins;
-		return this;
 	}
 	
 	@Override

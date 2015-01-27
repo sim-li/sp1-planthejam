@@ -17,8 +17,8 @@ angular.module('myApp')
             'use strict';
 
             // resolve the promises passed to this route
-            $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.surveys = Model.importMany(Survey, surveysPromise);
+            $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.messages = messagesPromise;
 
             $log.log('invites: ', $scope.invites)
@@ -28,6 +28,11 @@ angular.module('myApp')
 
             // preselects the first survey and invite in the list
             $scope.selectedInvite = $scope.invites[0];
+            // $scope.selectedInvite.survey.possibleTimePeriods.push(new TimePeriod({
+            //     startTime: new Date(),
+            //     durationMins: 120
+            // }))
+
             $scope.selectedSurvey = $scope.surveys[0];
 
 
@@ -75,6 +80,7 @@ angular.module('myApp')
              * @param  {Survey} survey the survey
              */
             $scope.selectSurvey = function(survey) {
+                if (!survey) return;
                 $scope.selectedSurvey = survey;
                 restService.getSurveyInvites(survey.oid)
                     .then(function(invites) {
@@ -82,6 +88,9 @@ angular.module('myApp')
                     });
                 $log.debug($scope.selectedSurvey);
             };
+
+            /** Preselect the first survey on page load and get its invites. */
+            $scope.selectSurvey($scope.surveys[0]);
 
             /**
              * Switches to the survey edit view to edit the selected survey.
@@ -121,27 +130,22 @@ angular.module('myApp')
              */
             $scope.selectInvite = function(invite) {
                 $scope.selectedInvite = invite;
-                // $log.debug($scope.selectedInvite);
+                $log.debug('selectInvite(): ', $scope.selectedInvite); // for debugging
             };
 
 
             /**
-             * TODO to be changed to enums { UNDECIDED, ACCEPTED, INGORED }
-             *
              * Sets the ignored status of the selected invite according to the
-             * specified boolean value. Finally saves the invite on the server.
+             * specified tribool value. Finally saves the invite on the server.
              *
-             * @method setSelectedInviteStatus
+             * @method setSelectedInviteIgnoredStatus
              * @param {Status} status the status of the invite
              */
-            $scope.setSelectedInviteStatus = function(status) {
-                // TODO change color of button when it was pressed
-                // TODO rename to ==>  $scope.setSelectedInviteStatus = function(status) {
+            $scope.setSelectedInviteIgnoredStatus = function(status) {
                 $scope.selectedInvite.setIgnored(status);
                 $log.debug('debug cockpit ', $scope.selectedInvite)
                 restService.doSave($scope.selectedInvite);
             };
-            // $scope.radioModel = $scope.selectedInvite.ignored ? 'ignore' : 'accept';
 
             var sendMessagesToParticipant = function() {
 
@@ -199,25 +203,34 @@ angular.module('myApp')
 
             //### HACK ##############################
             //-- some dummies
-            // $scope.selectedInvite.survey.possibleTimePeriods = [
-            $scope.possibleTimePeriods = [
-                new TimePeriod({
-                    startTime: new Date('2014-11-10T11:00:00'),
-                    durationMins: 120
-                }), new TimePeriod({
-                    startTime: new Date('2014-11-11T05:00:00'),
-                    durationMins: 240
-                }), new TimePeriod({
-                    startTime: new Date('2014-11-13T10:00:00'),
-                    durationMins: 360
-                })
-            ];
+            // $scope.possibleTimePeriods = [
+            if ($scope.selectedInvite) {
+                var now = new Date();
+                $scope.selectedInvite.survey.possibleTimePeriods = [
+                    new TimePeriod({
+                        startTime: new Date(now.getTime() - 2 * 24 * 60 * 60000),
+                        durationMins: 120
+                    }), new TimePeriod({
+                        startTime: new Date(now.getTime() - 1 * 24 * 60 * 60000),
+                        durationMins: 240
+                    }), new TimePeriod({
+                        startTime: now,
+                        durationMins: 360
+                    })
+                ];
+            }
             //### HACK ##############################
             // $scope.resultingTimePeriods = [];
 
             $scope.saveAvailabilities = function() {
+
+                $log.log('-------- from cockpit ---');
+                $log.log($scope.resultingTimePeriods);
+                $log.log($scope.selectedInvite.concreteAvailability);
+                $log.log('-------- from cockpit ---');
                 // $log.log($scope.resultingTimePeriods);
                 $log.log($scope.selectedInvite);
+
                 restService.doSave($scope.selectedInvite);
             };
 
@@ -229,19 +242,9 @@ angular.module('myApp')
                 $scope.showSurveyDetails = false;
             };
 
-            // $scope.renderCalendar = function() {
-            //     $('#calendar').fullCalendar({})
+            $scope.saveSelectedInvite = function() {
+                restService.doSave($scope.selectedInvite);
+            };
 
-            //     var myModelAlreadyShown = false;
-            //     $('#calendarModal').on('shown.bs.modal', function(e) {
-            //         if (!myModelAlreadyShown) {
-            //             $('#calendar').fullCalendar('render');
-            //             $('#myModal').modal('hide');
-            //             $('#myModal').addClass('fade');
-            //             $('#myModal').modal('show');
-            //             myModelAlreadyShown = true;
-            //         }
-            //     });
-            // }
         }
     ]);

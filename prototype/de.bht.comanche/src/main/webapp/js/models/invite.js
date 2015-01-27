@@ -16,12 +16,12 @@ angular.module('models')
              * @constructor
              * @param {Object}  [config={}] an optional configuration object
              * @param {Number}  [config.oid=''] the object id of the invite
-             * @param {Boolean} [config.host='false'] a flag that indicates if the owning user of the invite is host of the survey
-             * @param {Status}  [config.ignored='UNDECIDED'] a flag that indicates if the invite is ignored
+             * @param {Boolean} [config.isHost='false'] a flag that indicates if the owning user of the invite is host of the survey
+             * @param {Status}  [config.isIgnored='UNDECIDED'] a flag that indicates if the invite is ignored
              * @param {Object}  [config.user=new User()] the user that owns the invite
              * @param {Object}  [config.survey=new Survey()] the survey to which the invite belongs
              *
-             * @param {Array}   [config.timePeriods=[]] the available time periods of the participant for this survey
+             * @param {Array}   [config.concreteAvailability=[]] the available time periods of the participant for this survey
              */
             var Invite = function(config) {
                 if (!(this instanceof Invite)) {
@@ -29,11 +29,11 @@ angular.module('models')
                 }
                 config = config || {};
                 this.oid = config.oid || '';
-                this.host = config.host || false;
-                this.ignored = config.ignored || Status.UNDECIDED;
+                this.isHost = config.isHost || false;
+                this.isIgnored = config.isIgnored || Status.UNDECIDED;
                 this.user = new User(config.user);
                 this.survey = config.survey ? new Survey(config.survey) : ''; // ???
-                this.timePeriods = Model.importMany(TimePeriod, config.timePeriods);
+                this.concreteAvailability = Model.importMany(TimePeriod, config.concreteAvailability);
             };
 
             // Invite.prototype = new Model();
@@ -55,22 +55,22 @@ angular.module('models')
             Invite.prototype.doExport = function() {
                 return {
                     'oid': this.oid,
-                    'host': this.host,
-                    'ignored': this.ignored,
+                    'isHost': this.isHost,
+                    'isIgnored': this.isIgnored,
                     'user': this.user.doExport(),
                     'survey': this.survey ? this.survey.doExport() : null,
-                    // 'timePeriods': TimePeriod.exportMany(this.timePeriods) // FIXME temporarily commented out
+                    'concreteAvailability': TimePeriod.exportMany(this.concreteAvailability) // FIXME temporarily commented out
                 };
             };
 
             /**
-             * Sets the ignored flag, which, if set to true, indicates that the invite is ignored by the user.
+             * Sets the isIgnored flag, which, if set to true, indicates that the invite is ignored by the user.
              *
              * @method setIgnored
-             * @param {Boolean} ignored a flag that indicates, whether or not the invite is ignored by the user
+             * @param {Boolean} isIgnored a flag that indicates, whether or not the invite is ignored by the user
              */
-            Invite.prototype.setIgnored = function(ignored) {
-                this.ignored = ignored;
+            Invite.prototype.setIgnored = function(isIgnored) {
+                this.isIgnored = isIgnored;
             };
 
             /**

@@ -14,13 +14,13 @@
             <li>
               <a data-toggle='tab' href='#inviteTab' ng-click='showSurveyDetails = false' onclick='return false;'>
                 Invite
-                <span class='badge'>{{(invites | filter: {ignored: "!YES"}).length}}</span>
+                <span class='badge'>{{(invites | filter: {isIgnored: "!YES"}).length}}</span>
               </a>
             </li>
             <li>
               <a data-toggle='tab' href='#ignoredInviteTab' ng-click='showSurveyDetails = false' onclick='return false;'>
                 Ignored
-                <span class='badge'>{{(invites | filter: {ignored: "YES"}).length}}</span>
+                <span class='badge'>{{(invites | filter: {isIgnored: "YES"}).length}}</span>
               </a>
             </li>
             <li>
@@ -34,21 +34,21 @@
             <div class='tab-pane active' id='surveyTab'>
               <input class='form-control' id='surveyFilter' ng-change='updateSelection()' ng-model='searchSurvey' placeholder='Filter surveys ...' type='search'>
               <div class='list-group' id='surveyList'>
-                <a class='list-group-item' href='' ng-class="{'list-group-item-success': survey.isReady()}" ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>
+                <a class='list-group-item' href='' ng-class="{'list-group-item-warning': survey.isReady(), 'list-group-item-success': survey.isSuccessful()}" ng-click='selectSurvey(survey)' ng-repeat='survey in surveys | filter: searchSurvey'>
                   <div class='row'>
-                    <div class='col-sm-8'>{{survey.name}}</div>
-                    <div class='btn-groups' ng-if='survey.isReady()'>
-                      <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click='confirm()' ng-model='radioModel' onclick='return false;'>
+                    <div class='col-sm-9'>{{survey.name}}</div>
+                    <div class='col-sm-3 btn-group pull-right' ng-if='survey.isReady()'>
+                      <label btn-radio="'accept'" class='btn btn-success btn-sm' ng-click='confirm()' ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-ok'></span>
                       </label>
                       <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click='reject()' ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-remove'></span>
                       </label>
                     </div>
-                    <div class='btn-groups' ng-if='survey.isSuccessful()'>
+                    <div class='btn-group' ng-if='survey.isSuccessful()'>
                       <span class='glyphicon glyphicon-thumbs-up'></span>
                     </div>
-                    <div class='btn-groups' ng-if='survey.isUnsuccessful()'>
+                    <div class='btn-group' ng-if='survey.isUnsuccessful()'>
                       <span class='glyphicon glyphicon-thumbs-down'></span>
                     </div>
                   </div>
@@ -58,38 +58,20 @@
             <div class='tab-pane' id='inviteTab'>
               <input class='form-control' id='inviteFilter' ng-change='updateSelection()' ng-model='searchInvite' placeholder='Filter invites ...' type='search'>
               <div class='list-group' id='inviteList'>
-                <a class='list-group-item' href='' ng-class="{'list-group-item-success': invite.ignored == 'UNDECIDED'}" ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored: '!YES'} | filter: searchInvite ">
+                <a class='list-group-item' href='' ng-class="{'list-group-item-warning': invite.isIgnored == 'UNDECIDED'}" ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {isIgnored: '!YES'} | filter: searchInvite ">
                   <div class='row'>
-                    <div class='col-sm-8'>{{invite.survey.name}} {{invite.ignored}}</div>
-                    <div class='btn-group'>
-                      <label btn-radio="'undecided'" class='btn btn-sm' ng-class="{'btn-danger': invite.ignored == 'UNDECIDED', 'btn-primary': invite.ignored != 'UNDECIDED'}" ng-click="setSelectedInviteStatus('UNDECIDED')" ng-model='radioModel' onclick='return false;'>
+                    <div class='col-sm-6'>{{ invite.survey.name}}</div>
+                    <div class='col-sm-6 btn-group pull-right'>
+                      <label btn-radio="'undecided'" class='btn btn-sm' ng-class="{'disabled': invite.isIgnored == 'UNDECIDED', 'btn-primary': invite.isIgnored != 'UNDECIDED'}" ng-click="setSelectedInviteIgnoredStatus('UNDECIDED')" ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-question-sign'></span>
                       </label>
-                      <label btn-radio="'accept'" class='btn btn-sm' data-target='#calendarModal' data-toggle='modal' ng-class="{'btn-danger': invite.ignored == 'NO', 'btn-primary': invite.ignored != 'NO'}" ng-click="setSelectedInviteStatus('NO'); renderCalendar();" ng-model='radioModel'>
+                      <label btn-radio="'accept'" class='btn btn-sm' data-target='#calendarModal' data-toggle='modal' ng-class="{'btn-success disabled': invite.isIgnored == 'NO', 'btn-success': invite.isIgnored != 'NO'}" ng-click="setSelectedInviteIgnoredStatus('NO')" ng-model='radioModel'>
                         <span class='glyphicon glyphicon-ok'></span>
                       </label>
-                      <div aria-hidden='true' class='modal fade bs-example-modal-lg' data-target='.bs-example-modal-lg' id='calendarModal' role='dialog' tabindex='-2'>
-                        <div class='modal-dialog modal-lg'>
-                          <div class='modal-content'>
-                            <div class='modal-header'>
-                              <button aria-label='Close' class='close' data-dismiss='modal' type='button'>
-                                <span aria-hidden='true'>×</span>
-                              </button>
-                              <h4 class='modal-title'>Please choose your Avaibilities</h4>
-                            </div>
-                            <div class='modal-body'>
-                              <ptj-calendar calendar='calendar' possible='selectedInvite.survey.possibleTimePeriods' resulting='selectedInvite.timePeriods'></ptj-calendar>
-                            </div>
-                            <div class='modal-footer'>
-                              <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
-                              <button class='btn btn-primary' data-dismiss='modal' ng-click='saveAvailabilities()' type='button'>Save changes</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <label btn-radio="'ignore'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteStatus('YES')" ng-model='radioModel' onclick='return false;'>
+                      <label btn-radio="'ignore'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteIgnoredStatus('YES')" ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-remove'></span>
                       </label>
+                      <ptj-calendar-modal possible='selectedInvite.survey.possibleTimePeriods' resulting='selectedInvite.concreteAvailability' save='saveSelectedInvite()'></ptj-calendar-modal>
                     </div>
                   </div>
                 </a>
@@ -98,9 +80,10 @@
             <div class='tab-pane' id='ignoredInviteTab'>
               <input class='form-control' id='ignoredFilter' ng-change='updateSelection()' ng-model='searchIgnored' placeholder='Filter ignored invites ...' type='search'>
               <div class='list-group' id='ignoredList'>
-                <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {ignored : 'YES'} | filter : searchIgnored">
-                  <div class='col-sm-8'>{{invite.survey.name}} {{invite.ignored}}</div>
-                  <label btn-radio="'reaccept'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteStatus('NO')" ng-model='radioModel' onclick='return false;'>
+                <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat="invite in invites | filter: {isIgnored : 'YES'} | filter : searchIgnored">
+                  <div class='col-sm-10'>{{invite.survey.name}} {{invite.isIgnored}}</div>
+                  <div class='col-sm-2 pull-right'></div>
+                  <label btn-radio="'reaccept'" class='btn btn-primary btn-sm' ng-click="setSelectedInviteIgnoredStatus('NO')" ng-model='radioModel' onclick='return false;'>
                     reaccept
                   </label>
                 </a>
@@ -134,8 +117,8 @@
             <div id='surveyDetailsDeterminedTimePeriod' ng-if='selectedSurvey.algoChecked'>
               <label for='surveyDetailsDeterminedTimePeriod'>Determined Time Period:</label>
               <span id='surveyDetailsDeterminedTimePeriod'>
-                <span ng-if='selectedSurvey.determinedTimePeriod'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}</span>
-                <span class='text-danger' ng-if='!selectedSurvey.determinedTimePeriod'>No match. Please start a new survey.</span>
+                <span ng-if='!selectedSurvey.determinedTimePeriod.isNull()'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}</span>
+                <span class='text-danger' ng-if='selectedSurvey.determinedTimePeriod.isNull()'>No match. Please start a new survey.</span>
               </span>
             </div>
             <hr>
@@ -146,7 +129,7 @@
               </ul>
             </span>
             <ul>
-              <li ng-repeat='invite in selectedSurvey.invites | filter: host == false'>
+              <li ng-repeat='invite in selectedSurvey.invites | filter: isHost == false'>
                 <strong>{{invite.user.name}}</strong>
                 (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
               </li>
@@ -171,6 +154,7 @@
                 <span>{{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes</span>
               </span>
             </div>
+            poss: {{ selectedInvite.survey.possibleTimePeriods }}
           </div>
         </div>
       </div>

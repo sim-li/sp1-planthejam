@@ -46,7 +46,7 @@
               </div>
             </div>
           </div>
-          <div class='rpw'>
+          <div class='row'>
             <ptj-groups></ptj-groups>
           </div>
           <div class='row'>
@@ -69,20 +69,27 @@
                 </ul>
               </span>
               <ul>
-                <li ng-repeat='invite in selectedSurvey.invites | filter: host == false'>
+                <li ng-repeat='invite in selectedSurvey.invites | filter: isHost == false'>
                   <strong>{{invite.user.name}}</strong>
                   (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
                 </li>
               </ul>
             </div>
+          </div>
+          <div class='row'>
             <div class='col-lg-11'>
-              <ptj-calendar possible='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
+              possible: {{ selectedSurvey.possibleTimePeriods }}
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-lg-11'>
+              <ptj-calendar allowed='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
             </div>
           </div>
         </div>
         <div class='panel-footer'>
           <div class='col-md-offset-10'>
-            <button class='btn btn-default btn-sm' ng-click='cancel()' type='reset'>Reset</button>
+            <button class='btn btn-default btn-sm' ng-click='cancel()' type='reset'>Cancel</button>
             <button class='btn btn-primary btn-sm' ng-click='saveSurvey()' type='submit'>Save</button>
           </div>
         </div>

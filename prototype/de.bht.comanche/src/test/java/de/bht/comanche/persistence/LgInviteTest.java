@@ -167,7 +167,7 @@ public class LgInviteTest {
 		updatePossibleTimeperiodsSportingSurvey(20, 40, 60);
 		assertThat(
 				extractProperty("durationMins").from(
-						sportingSurveyInvite.getPossibleTimePeriods()))
+						sportingSurveyInvite.getConcreteAvailability()))
 				.containsOnly(20, 40, 60);
 	}
 
@@ -180,7 +180,7 @@ public class LgInviteTest {
 		updatePossibleTimeperiodsSportingSurvey(20, 80, 60);
 		assertThat(
 				extractProperty("durationMins").from(
-						sportingSurveyInvite.getPossibleTimePeriods()))
+						sportingSurveyInvite.getConcreteAvailability()))
 				.containsOnly(20, 80, 60);
 	}
 
@@ -190,7 +190,7 @@ public class LgInviteTest {
 		updatePossibleTimeperiodsSportingSurvey(20, 60);
 		assertThat(
 				extractProperty("durationMins").from(
-						sportingSurveyInvite.getPossibleTimePeriods()))
+						sportingSurveyInvite.getConcreteAvailability()))
 				.containsOnly(20, 60);
 	}
 
@@ -198,14 +198,14 @@ public class LgInviteTest {
 	public void updateInviteDeleteAllConcreteAvailabilitiesTest() {
 		updatePossibleTimeperiodsSportingSurvey(20, 40, 60);
 		updatePossibleTimeperiodsSportingSurvey();
-		assertThat(sportingSurveyInvite.getPossibleTimePeriods()).isEmpty();
+		assertThat(sportingSurveyInvite.getConcreteAvailability()).isEmpty();
 	}
 
 	/**
 	 * Updates Bob's sporting survey invites with given durations.
 	 */
 	private void updatePossibleTimeperiodsSportingSurvey(int... durations) {
-		sportingSurveyInvite.setPossibleTimePeriods(testUtils
+		sportingSurveyInvite.setConcreteAvailability(testUtils
 				.buildTimePeriods(durations));
 		sportingSurveyInvite = new TestTransaction<LgInvite>("Bob") {
 			@Override

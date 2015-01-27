@@ -13,10 +13,8 @@ angular.module('models')
 		 * @class TimePeriod
 		 * @constructor
 		 * @param {Object} [config={}] an optional configuration object
-		 * @param {Number} [config.oid=''] the object id of the time period
 		 * @param {Number} [config.startTime=new Date()] the start time of the time period
 		 * @param {String} [config.durationMins=0] the duration of the time period in minutes
-		 *
 		 *
 		 * @param {[type]} config [description]
 		 */
@@ -24,13 +22,33 @@ angular.module('models')
 			if (!(this instanceof TimePeriod)) {
 				return new TimePeriod(config);
 			}
-			config = config || {};
-			// Empty fields will cause Server Errors 'unrecognized field' --SIM, 24 JAN 2014
-			if (config.oid) {
-				this.oid = config.oid;
-			}
+			config = config || timePeriodNull;
 			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
 			this.durationMins = config.durationMins || 0;
+		};
+
+
+		var timePeriodNull = {
+			startTime: new Date(0),
+			durationMins: -1
+		};
+
+		/**
+		 * A pseudo-null value, defined as:
+		 * 	- startTime: Jan 01 1970 01:00:00 GMT+0100
+		 *  - duration: 0
+		 *
+		 * @method NULL
+		 * @static
+		 * @constant
+		 */
+		TimePeriod.NULL = function() {
+			return new TimePeriod(timePeriodNull);
+		};
+
+		TimePeriod.prototype.isNull = function() {
+			return this.startTime.getTime() == timePeriodNull.startTime.getTime() &&
+				this.durationMins == timePeriodNull.durationMins;
 		};
 
 		/**
@@ -49,7 +67,7 @@ angular.module('models')
 		 */
 		TimePeriod.prototype.doExport = function() {
 			return {
-				'oid': this.oid,
+				// 'oid': this.oid,
 				'startTime': this.startTime,
 				'durationMins': this.durationMins
 			};
