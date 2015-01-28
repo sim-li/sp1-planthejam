@@ -362,6 +362,11 @@ public class LgUser extends DaObject {
 		return saveInvite(invite);
 	}
 
+	/**
+	 * Evaluates all surveys of this user and and notifies host about outcome.
+	 * 
+	 * Should be triggered by rest path before calling getSurveys().
+	 */
     public void evaluateAllSurveys() {
     	final List<LgSurvey> surveysOfThisUser = getSurveys();
     	for (final LgSurvey survey : surveysOfThisUser) {
@@ -372,6 +377,12 @@ public class LgUser extends DaObject {
     	}
     }
     
+    /**
+     * Sends host a message about determined time period if 
+     * existent.
+     * 
+     * @param survey Surevey to be used for notifying host.
+     */
     private void notifyHost(LgSurvey survey) {
     	if (survey.getDeterminedTimePeriod().isNull()) {
     		this.addMessage("Sorry, we couldn't determine a common date for the survey '" + survey.getName() + "'");
@@ -381,6 +392,14 @@ public class LgUser extends DaObject {
     	}
     }
     
+    /**
+     * Notifies all participants of a survey of the outcome by 
+     * sending them a message. 
+     * 
+     * Should be triggered by rest path.
+     * 
+     * @param surveyOid Survey to be used for notifying participants.
+     */
     public void notifyParticipants(long surveyOid) {
     	final LgSurvey survey = this.getSurvey(surveyOid);
     	for (LgUser user : survey.getParticipants()) {
@@ -395,9 +414,18 @@ public class LgUser extends DaObject {
     	}
     }
 
+    /**
+     * Sends this user a string message.
+     * 
+     * Convenience method, constructs message object and adds to local 
+     * list.
+     * 
+     * @param message Message text as string
+     */
     public void addMessage(String message) {
     	this.messages.add(new LgMessage().setMessage(message));
     }
+    
     /**
      * For testing: Add invites manually
      * @param invite
@@ -408,6 +436,12 @@ public class LgUser extends DaObject {
     	return this;
     }
    
+    /**
+     * Searches invite by oid. Doesn't execute owner check!
+     * 
+     * @param oid OID of invite to be retrieved
+     * @return Found invite
+     */
 	public LgInvite getInvite(final long oid) {
 		return findOneByKey(LgInvite.class, "oid", oid);
 	}
