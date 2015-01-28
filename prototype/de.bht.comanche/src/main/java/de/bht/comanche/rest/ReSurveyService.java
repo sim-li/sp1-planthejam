@@ -184,7 +184,9 @@ public class ReSurveyService {
 		return new LgTransaction <LgSurvey>(request) {
 			public LgSurvey execute() throws Exception {
 				try {
-					startSession().notifyParticipants(oid);
+					
+//					startSession().notifyParticipants(oid);
+					
 				} catch (Exception ex) {
 					throw create(RestNotifyParticipantsFailure.class, ex, oid, getSession().getUser().getName());
 				}

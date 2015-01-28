@@ -44,10 +44,10 @@
             #inviteTab.tab-pane
               %input#inviteFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchInvite", :placeholder => "Filter invites ...", :type => "search", }
               #inviteList.list-group
-                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {isIgnored: '!YES'} | filter: searchInvite ", "ng-class" => "{'list-group-item-warning': invite.isIgnored == 'UNDECIDED'}"}
+                %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {isIgnored: '!YES'} | filter: searchInvite ", "ng-class" => "{'list-group-item-warning': invite.survey.isNotReady() && invite.isIgnored == 'UNDECIDED', 'list-group-item-success': invite.survey.isSuccessful()}"}
                   .row
                     .col-sm-6 {{ invite.survey.name}}
-                    .col-sm-6.btn-group.pull-right
+                    .col-sm-6.btn-group.pull-right{"ng-if" => "invite.survey.isNotReady()"}
                       %label.btn.btn-sm{"btn-radio" => "'undecided'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('UNDECIDED')","onclick" => "return false;", "ng-class" => "{'disabled': invite.isIgnored == 'UNDECIDED', 'btn-primary': invite.isIgnored != 'UNDECIDED'}"}
                         %span.glyphicon.glyphicon-question-sign
                       %label.btn.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('NO')", "ng-class" => "{'btn-success disabled': invite.isIgnored == 'NO', 'btn-success': invite.isIgnored != 'NO'}"}
@@ -55,6 +55,11 @@
                       %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('YES')", "onclick" => "return false;"}
                         %span.glyphicon.glyphicon-remove
                       %ptj-calendar-modal{"allowed" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "save" => "saveSelectedInvite()"}
+                    / .col-sm-6.btn-group.pull-right{"ng-if" => "selectedSurvey.isNotReady()"}
+                    .btn-group{"ng-if" => "invite.survey.isSuccessful()"}
+                      %span.glyphicon.glyphicon-thumbs-up
+                    .btn-group{"ng-if" => "invite.survey.isUnsuccessful()"}
+                      %span.glyphicon.glyphicon-thumbs-down
 
             #ignoredInviteTab.tab-pane
               %input#ignoredFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
@@ -109,10 +114,12 @@
             %label{:for => "inviteDetailsDeadline"} Deadline:
             %span#inviteDetailsDeadline{} {{ selectedInvite.survey.deadline | date: 'yyyy-MM-dd HH:mm' }}
             %div#inviteDetailsStatus{"ng-if" => "selectedInvite.survey.success != 'UNDECIDED'"}
-              %div#inviteDetailsStatus{"ng-if" => "selectedInvite.survey.success == 'NO'"}
-              %label{:for => "inviteDetailsDeterminedTimePeriod"} Determined Time Period:
-              %span#inviteDetailsDeterminedTimePeriod{}
-                %span{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
-                %span{} {{ selectedInvite.survey.determinedTimePeriod.getDurationMins() }} minutes
+              %div.text-danger{"ng-if" => "selectedInvite.survey.isUnsuccessful()"} No date could be determined.
+              %div{"ng-if" => "selectedInvite.survey.isSuccessful()"}
+                %label{:for => "inviteDetailsDeterminedTimePeriod"} Determined Time Period:
+                %span#inviteDetailsDeterminedTimePeriod{}
+                  %span{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
+                  %span{} {{ selectedInvite.survey.determinedTimePeriod.getDurationMins() }} minutes
+
             poss: {{ selectedInvite.survey.possibleTimePeriods }}
             conc: {{ selectedInvite.concreteAvailability }}
