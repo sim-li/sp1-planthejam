@@ -258,7 +258,6 @@ public class LgUser extends DaObject {
 		this.groups.remove(group);
 	}
 
-	// -- HOST ROLES --
 	public LgSurvey getSurvey(final Long oid) {
 		final LgSurvey survey = findOneByKey(LgSurvey.class, "OID", oid);
 		if (survey != null) {

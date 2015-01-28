@@ -1,4 +1,4 @@
-package de.bht.comanche.logic;
+package de.bht.comanche.persistence;
 
 import static multex.MultexUtil.create;
 import static org.junit.Assert.assertEquals;
@@ -23,6 +23,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 
+import de.bht.comanche.logic.LgGroup;
+import de.bht.comanche.logic.LgMember;
+import de.bht.comanche.logic.LgSession;
+import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.persistence.DaEmProvider;
 import de.bht.comanche.rest.ReGroupService.RestSaveGroupFailure;
 
