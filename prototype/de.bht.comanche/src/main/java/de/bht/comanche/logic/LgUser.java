@@ -284,12 +284,8 @@ public class LgUser extends DaObject {
 		return this.invites;
 	}
 
-	public List<LgInvite> getInvitesForSurvey(final long oid) {
-		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
-		for (LgInvite invite : this.getSurvey(oid).getInvites()) {
-			filteredInvites.add(new LgInvite(invite).setSurvey(null));
-		}
-		return filteredInvites;
+	public List<LgInvite> getInvitesForSurvey(final Long oid) {
+		return findManyByKey(LgInvite.class, "SURVEY_OID", oid);
 	}
 
 	/**

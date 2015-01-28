@@ -43,8 +43,8 @@ angular.module('rest', ['models'])
                 },
                 'survey': {
                     'path': 'surveys/',
-                    'invites': 'invites' /*,*/
-                        // 'notifyParticipants': 'notifyParticipants' // TODO -> REST service on server side: POST surveys/:oid/notifyParticipants
+                    'invites': 'invites',
+                    'notifyParticipants': 'notifyParticipants'
                 },
                 'invite': {
                     'path': 'invites/'
@@ -116,6 +116,11 @@ angular.module('rest', ['models'])
                             // } : ''
                     }).success(function(data, status, header, config) {
                         if (LOG) {
+                            if (url == '/rest/surveys/1/invites') {
+                                console.log('calling ', url)
+                                console.log('retrieving ', data)
+                                console.log('retrieving ', status)
+                            }
                             $log.debug('%s %s ==> %o', method, url, data);
                         }
                         deferred.resolve(data);
@@ -222,6 +227,7 @@ angular.module('rest', ['models'])
             };
 
             restService.getSurveyInvites = function(oid) {
+                console.log('getting many for ', oid)
                 var url = getUrlFor(Survey, oid, 'invites');
                 return callHttp('GET')(url);
             };

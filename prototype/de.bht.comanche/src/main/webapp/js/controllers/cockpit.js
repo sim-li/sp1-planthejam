@@ -180,10 +180,12 @@ angular.module('myApp')
                 $log.debug($scope.selectedSurvey.success);
                 // $log.debug($scope.selectedSurvey);
 
-                // FIXME temp comment out
-                // sendMessagesToParticipant(); // <<<-----------------
 
-                restService.doSave($scope.selectedSurvey);
+                restService.doSave($scope.selectedSurvey)
+                    .then(function() {
+                        // FIXME temp comment out
+                        // sendMessagesToParticipant(); // <<<-----------------
+                    });
             };
 
             $scope.reject = function() {
