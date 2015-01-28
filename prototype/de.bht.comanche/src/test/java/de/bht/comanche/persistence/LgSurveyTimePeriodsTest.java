@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -144,4 +145,10 @@ public class LgSurveyTimePeriodsTest {
 			}
 		}.getResult();
 	}
+	
+	@After
+	public void deleteTestData() {
+		testUtils.deleteAccountsFor("Alice");
+	}
+
 }
