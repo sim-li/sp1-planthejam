@@ -45,10 +45,10 @@
                         <span class='glyphicon glyphicon-remove'></span>
                       </label>
                     </div>
-                    <div class='btn-group' ng-if='survey.isSuccessful()'>
+                    <div class='col-sm-3 btn-group' ng-if='survey.isSuccessful()'>
                       <span class='glyphicon glyphicon-thumbs-up'></span>
                     </div>
-                    <div class='btn-group' ng-if='survey.isUnsuccessful()'>
+                    <div class='col-sm-3 btn-group' ng-if='survey.isUnsuccessful()'>
                       <span class='glyphicon glyphicon-thumbs-down'></span>
                     </div>
                   </div>
@@ -74,10 +74,10 @@
                       <ptj-calendar-modal allowed='selectedInvite.survey.possibleTimePeriods' resulting='selectedInvite.concreteAvailability' save='saveSelectedInvite()'></ptj-calendar-modal>
                     </div>
                     <!-- .col-sm-6.btn-group.pull-right{"ng-if" => "selectedSurvey.isNotReady()"} -->
-                    <div class='btn-group' ng-if='invite.survey.isSuccessful()'>
+                    <div class='col-sm-6 btn-group' ng-if='invite.survey.isSuccessful()'>
                       <span class='glyphicon glyphicon-thumbs-up'></span>
                     </div>
-                    <div class='btn-group' ng-if='invite.survey.isUnsuccessful()'>
+                    <div class='col-sm-6 btn-group' ng-if='invite.survey.isUnsuccessful()'>
                       <span class='glyphicon glyphicon-thumbs-down'></span>
                     </div>
                   </div>
@@ -125,7 +125,9 @@
               <label for='surveyDetailsDeterminedTimePeriod'>Determined Time Period:</label>
               <span id='surveyDetailsDeterminedTimePeriod'>
                 <span ng-if='!selectedSurvey.determinedTimePeriod.isNull()'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}</span>
+                <div class='h4' ng-if="selectedSurvey.success == 'UNDECIDED'">Please confirm or reject this survey.</div>
                 <span class='text-danger' ng-if='selectedSurvey.determinedTimePeriod.isNull()'>No match. Please start a new survey.</span>
+                <div class='text-danger h4' ng-if='selectedSurvey.isUnsuccessful()'>This survey was cancelled.</div>
               </span>
             </div>
             <hr>

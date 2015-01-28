@@ -36,9 +36,9 @@
                         %span.glyphicon.glyphicon-ok
                       %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "reject()","onclick" => "return false;"}
                         %span.glyphicon.glyphicon-remove
-                    .btn-group{"ng-if" => "survey.isSuccessful()"}
+                    .col-sm-3.btn-group{"ng-if" => "survey.isSuccessful()"}
                       %span.glyphicon.glyphicon-thumbs-up
-                    .btn-group{"ng-if" => "survey.isUnsuccessful()"}
+                    .col-sm-3.btn-group{"ng-if" => "survey.isUnsuccessful()"}
                       %span.glyphicon.glyphicon-thumbs-down
 
             #inviteTab.tab-pane
@@ -56,9 +56,9 @@
                         %span.glyphicon.glyphicon-remove
                       %ptj-calendar-modal{"allowed" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "save" => "saveSelectedInvite()"}
                     / .col-sm-6.btn-group.pull-right{"ng-if" => "selectedSurvey.isNotReady()"}
-                    .btn-group{"ng-if" => "invite.survey.isSuccessful()"}
+                    .col-sm-6.btn-group{"ng-if" => "invite.survey.isSuccessful()"}
                       %span.glyphicon.glyphicon-thumbs-up
-                    .btn-group{"ng-if" => "invite.survey.isUnsuccessful()"}
+                    .col-sm-6.btn-group{"ng-if" => "invite.survey.isUnsuccessful()"}
                       %span.glyphicon.glyphicon-thumbs-down
 
             #ignoredInviteTab.tab-pane
@@ -93,7 +93,9 @@
               %label{:for => "surveyDetailsDeterminedTimePeriod"} Determined Time Period:
               %span#surveyDetailsDeterminedTimePeriod
                 %span{"ng-if" => "!selectedSurvey.determinedTimePeriod.isNull()"} {{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}
+                %div.h4{"ng-if" => "selectedSurvey.success == 'UNDECIDED'"} Please confirm or reject this survey.
                 %span.text-danger{"ng-if" => "selectedSurvey.determinedTimePeriod.isNull()"} No match. Please start a new survey.
+                %div.text-danger.h4{"ng-if" => "selectedSurvey.isUnsuccessful()"} This survey was cancelled.
             %hr
             %h4 Participants:
             %span{"ng-if" => "!selectedSurvey.hasParticipants()"}
