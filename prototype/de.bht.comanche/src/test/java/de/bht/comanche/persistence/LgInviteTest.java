@@ -32,7 +32,7 @@ public class LgInviteTest {
 	private LgSurvey swimSurvey;
 	private LgSurvey denimSurvey;
 	private LgInvite sportingSurveyInvite;
-	
+
 	@BeforeClass
 	public static void init() {
 		TestUtils.resetJPADatabase();
@@ -94,7 +94,7 @@ public class LgInviteTest {
 	 * Executes getInvite([ oid ]) on all surveys. We don't check on the Lou
 	 * Reed Survey (throw null pointer exception, should be corrected in other
 	 * moment)
-	 * 
+	 *
 	 * @return Invites fetched from surveys.
 	 */
 	private List<LgInvite> getAllInvitesByOid() {
@@ -115,7 +115,7 @@ public class LgInviteTest {
 
 	/**
 	 * Extracts the invites for Bob from the given surveys.
-	 * 
+	 *
 	 * @param Surveys
 	 *            to be queried
 	 * @return Invites for Bob
@@ -217,7 +217,7 @@ public class LgInviteTest {
 		updateConcreteAvailabilitySportingInvite();
 		assertThat(sportingSurveyInvite.getConcreteAvailability()).isEmpty();
 	}
-	
+
 	public void saveConcreteAvailabilites() {
 		updateConcreteAvailabilitySportingInvite(
 		"31.01.1986/21:30 -> 30.01.1986/22:30",
@@ -244,3 +244,4 @@ public class LgInviteTest {
 		testUtils.deleteAccountsFor("Alice", "Bob", "Carol", "Denise", "Edgar");
 	}
 }
+
