@@ -39,9 +39,9 @@ public class LgSurveyEvaluationTest {
 				.setName("Go Skiing")
 				.setPossibleTimePeriods(
 						testUtils.buildTimePeriods(
-								"01.05.99/21:30 -> 01.05.99/22:30",
-								"30.01.86/20:30 -> 30.01.86/22:30",
-								"08.09.05/00:30 -> 08.09.05/01:30"))
+								"01.05.1999/21:30 -> 01.05.1999/22:30",
+								"30.01.1986/20:30 -> 30.01.1986/22:30",
+								"08.09.2005/00:30 -> 08.09.2005/01:30"))
 				.setDeadline(testUtils.buildDate("30.01.2012/22:30" // This
 																	// deadline
 																	// definately
@@ -53,16 +53,16 @@ public class LgSurveyEvaluationTest {
 				"Bob",
 				getSkiInviteFor("Bob").setConcreteAvailability(
 						testUtils.buildTimePeriods(
-								"01.05.99/21:30 -> 01.05.99/22:30",
-								"30.01.86/22:30 -> 30.01.86/23:30",
-								"08.09.05/01:30 -> 08.09.05/02:30")));
+								"01.05.1999/21:30 -> 01.05.1999/22:30",
+								"30.01.1986/22:30 -> 30.01.1986/23:30",
+								"08.09.2005/01:30 -> 08.09.2005/02:30")));
 		saveInviteFor(
 				"Carol",
 				getSkiInviteFor("Carol").setConcreteAvailability(
 						testUtils.buildTimePeriods(
-								"01.05.99/21:30 -> 01.05.99/22:30",
-								"30.01.86/00:30 -> 30.01.86/01:30",
-								"08.09.05/02:30 -> 08.09.05/03:30")));
+								"01.05.1999/21:30 -> 01.05.1999/22:30",
+								"30.01.1986/00:30 -> 30.01.1986/01:30",
+								"08.09.2005/02:30 -> 08.09.2005/03:30")));
 	}
 
 	@Ignore
@@ -127,7 +127,7 @@ public class LgSurveyEvaluationTest {
 	public void determinedTimePeriodAsExpectedTest() {
 		runDemoScenario();
 		assertThat(surveyForEvaluation.getDeterminedTimePeriod()).isEqualTo(
-				testUtils.tP("01.05.99/21:30 -> 01.05.99/22:30"));
+				testUtils.tP("01.05.1999/21:30 -> 01.05.1999/22:30"));
 	}
 
 	public Set<LgMessage> getMessagesFor(String username) {

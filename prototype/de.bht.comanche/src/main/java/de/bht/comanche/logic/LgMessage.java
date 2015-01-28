@@ -14,7 +14,7 @@ public class LgMessage {
 	
 	public String messageText;
 	
-	public String getMessage() {
+	public String getMessageText() {
 		return this.messageText;
 	}
 	

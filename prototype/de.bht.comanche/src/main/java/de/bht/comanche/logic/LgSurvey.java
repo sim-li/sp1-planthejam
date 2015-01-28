@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.bht.comanche.persistence.DaObject;
-import de.bht.comanche.persistence.TestUtils;
 
 /**
  * Table contains Survey data
@@ -279,9 +278,11 @@ public class LgSurvey extends DaObject {
 	 * the filtered list or null if the list was empty.
 	 */
 	public void evaluate() {
-		final TestUtils testUtils = new TestUtils();
-		this.determinedTimePeriod = testUtils.tP("28.12.2015/12:30 -> 28.12.2015/13:30");
+//		this.determinedTimePeriod = testUtils.tP("28.12.2015/12:30 -> 28.12.2015/13:30");
+		Date date1 = new Date();
+		Date date2 = new Date();
 		// W.I.P.> 
+		this.determinedTimePeriod = new LgTimePeriod().setStartTime(date1).setEndTime(date2);
 		// this.getPossibleTimePeriods();
 		this.algoChecked = true;
 	}

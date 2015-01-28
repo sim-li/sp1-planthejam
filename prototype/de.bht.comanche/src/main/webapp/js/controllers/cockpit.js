@@ -36,29 +36,29 @@ angular.module('myApp')
             $scope.selectedSurvey = $scope.surveys[0];
 
 
-            // -------- HACK: Dummies ------------------------------------------------------>
-            if ($scope.selectedInvite && $scope.selectedInvite.survey) {
-                $scope.selectedInvite.survey.algoChecked = true;
-                $scope.selectedInvite.survey.success = Status.YES;
-                // $scope.selectedInvite.survey.success = Status.NO;
-                // $scope.selectedInvite.survey.success = Status.UNDECIDED;
-                $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
-                    startTime: new Date(),
-                    durationMins: 90
-                });
-                $log.debug('hacked invite.survey: ', $scope.selectedInvite.survey)
-            }
-            if ($scope.selectedSurvey) {
-                $scope.selectedSurvey.algoChecked = true;
-                $scope.selectedSurvey.success = Status.YES;
-                // $scope.selectedSurvey.success = Status.NO;
-                // $scope.selectedSurvey.success = Status.UNDECIDED;
-                $scope.selectedSurvey.determinedTimePeriod = new TimePeriod({
-                    startTime: new Date(),
-                    durationMins: 90
-                });
-                $log.debug('hacked survey: ', $scope.selectedSurvey)
-            }
+//            // -------- HACK: Dummies ------------------------------------------------------>
+//            if ($scope.selectedInvite && $scope.selectedInvite.survey) {
+//                $scope.selectedInvite.survey.algoChecked = true;
+//                $scope.selectedInvite.survey.success = Status.YES;
+//                // $scope.selectedInvite.survey.success = Status.NO;
+//                // $scope.selectedInvite.survey.success = Status.UNDECIDED;
+//                $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
+//                    startTime: new Date(),
+//                    durationMins: 90
+//                });
+//                $log.debug('hacked invite.survey: ', $scope.selectedInvite.survey)
+//            }
+//            if ($scope.selectedSurvey) {
+//                $scope.selectedSurvey.algoChecked = true;
+//                $scope.selectedSurvey.success = Status.YES;
+//                // $scope.selectedSurvey.success = Status.NO;
+//                // $scope.selectedSurvey.success = Status.UNDECIDED;
+//                $scope.selectedSurvey.determinedTimePeriod = new TimePeriod({
+//                    startTime: new Date(),
+//                    durationMins: 90
+//                });
+//                $log.debug('hacked survey: ', $scope.selectedSurvey)
+//            }
             // <------- HACK --------------------------------------------------------------
 
             $scope.showSurveyDetails = true;
@@ -147,27 +147,6 @@ angular.module('myApp')
             };
 
             var sendMessagesToParticipant = function() {
-
-                /* FRAGE oder lieber Server-Methode ???
-                --> restService.sendMessagesToParticipant($scope.selectedSurvey);
-                */
-
-                var selectedSurvey = $scope.selectedSurvey,
-                    invites = selectedSurvey.invites,
-                    message = 'For ' + selectedSurvey.name;
-                if (selectedSurvey.success == Status.YES) {
-                    message += 'the following date was determined: ' + selectedSurvey.determinedTimePeriod; // some extra formatting here?
-                } else {
-                    message += 'no date could be determined.';
-                }
-
-                // --- HACK --------------------------------------------------->
-                arrayUtil.forEach(invites, function(invite) {
-                    invite.user.messages.push(message);
-                });
-                $log.debug('some messages were sent to: ', invites);
-                // <-- HACK ----------------------------------------------------
-
                 restService.notifyParticipants(selectedSurvey.oid)
                     .then(function(success) {
                         console.log('All participants have just been notified');
@@ -175,31 +154,20 @@ angular.module('myApp')
             };
 
             $scope.confirm = function() {
-                $scope.selectedSurvey.success = Status.YES;
-
-                $log.debug($scope.selectedSurvey.success);
-                // $log.debug($scope.selectedSurvey);
-
-
+            	$scope.selectedSurvey.success = Status.YES;
                 restService.doSave($scope.selectedSurvey)
                     .then(function() {
-                        // FIXME temp comment out
-                        // sendMessagesToParticipant(); // <<<-----------------
+                         sendMessagesToParticipant(); 
                     });
             };
 
             $scope.reject = function() {
                 $scope.selectedSurvey.success = Status.NO;
                 $scope.selectedSurvey.determinedTimePeriod = TimePeriod.NÙLL();
-
-                $log.debug($scope.selectedSurvey.success);
-                // $log.debug($scope.selectedSurvey);
-
-
-                // FIXME temp comment out
-                // sendMessagesToParticipant(); // <<<-----------------
-
-                restService.doSave($scope.selectedSurvey);
+                restService.doSave($scope.selectedSurvey)
+                	.then(function() {
+                		sendMessagesToParticipant();
+                	});
             };
 
             $scope.toggleSurveyDetails = function() {
