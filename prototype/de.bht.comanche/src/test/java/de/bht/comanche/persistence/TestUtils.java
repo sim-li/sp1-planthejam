@@ -96,6 +96,15 @@ public class TestUtils {
 		return cal.getTime();
 	}
 	
+	/**
+	 * Parses a single time string. 
+	 * 
+	 * Format (start/end) is dd.MM.yyyy/mm:HH->dd.MM.yyyy/mm:HH
+	 * 
+	 * @param timeString String representation of start and end time
+	 * @return Time Period with start and end time
+	 * 
+	 */
 	public LgTimePeriod tP(String timeString) {
 		try {
 			return buildTimePeriodWithExc(timeString);

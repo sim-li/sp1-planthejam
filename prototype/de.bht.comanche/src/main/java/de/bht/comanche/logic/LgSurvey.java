@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.bht.comanche.persistence.DaObject;
+import de.bht.comanche.persistence.TestUtils;
 
 /**
  * Table contains Survey data
@@ -114,7 +115,7 @@ public class LgSurvey extends DaObject {
 	 * Constructor
 	 */
 	public LgSurvey() {
-//		this.possibleTimePeriods = new HashSet<LgTimePeriod>();
+		this.possibleTimePeriods = new HashSet<LgTimePeriod>();
 		this.determinedTimePeriod = new LgTimePeriod();
 		this.invites = new ArrayList<LgInvite>();
 	}
@@ -224,6 +225,7 @@ public class LgSurvey extends DaObject {
 	
 	/**
 	 * Updates a Survey with values form another one
+	 * 
 	 * @param other Other survey
 	 */
 	public LgSurvey updateWith(final LgSurvey other) {
@@ -244,50 +246,15 @@ public class LgSurvey extends DaObject {
 		}
 		this.invites = other.invites;
 		return this;
-		// Check this, implement Equals method for other classes
-//		updateList(this.invites, other.invites);
 	}
-
-	/**
-	 * Elements not present in the freshList are removed from the one persisted on server.
-	 * All elements that already exist on server are removed from freshList,
-	 * to save the rest one by one and add to pers. list.
-	 *
-	 * @param persistedList
-	 * @param freshList
-	 */
-	// TODO implement
-//	public LgSurvey updateList(LgSurvey persisted) {
-//		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
-//		listFromDB.add(persisted);
-//		
-//		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
-//		listfresh.add(this);
-//		
-//		System.out.println("listfresh=======" + listfresh.size());
-//		System.out.println("listFromDB=======" + listFromDB.size());
-//		
-//		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
-//		listfresh.removeAll(listFromDB); // ELs already saved
-//		
-//		for (LgSurvey el : listfresh) {
-//		el.save(); // Fresh list are never tracked
-//		}
-//		listFromDB.addAll(listfresh); 
-//		
-//		return listFromDB.get(0);
-//	}
-	
-	//-- METHODS FOR SURVEY EVALUATION ----------------------------------------
 
 	private Date now() {
 		return new Date();
 	}
 
 	@JsonIgnore
-	public boolean isReadyForEvaluation() {
-		return this.deadline != null &&
-                this.deadline.before(now()) &&
+	public boolean shouldBeEvaluated() {
+		return  this.deadline.before(now()) &&
                 !this.algoChecked &&
                 this.success == LgStatus.UNDECIDED;
 	}
@@ -298,42 +265,11 @@ public class LgSurvey extends DaObject {
 	 * invites. The determinedTimePeriod is simply the first LgTimePeriod in
 	 * the filtered list or null if the list was empty.
 	 */
-	public void determine() {
-        System.out.println("+#-+#-+#-+#-+#-+#-+#-+#-+#-+#-");
-        System.out.println("determination started for survey " + this.oid + " " + this.name);
-        System.out.println("+#-+#-+#-+#-+#-+#-+#-+#-+#-+#-");
-
-		final List<LgTimePeriod> filtered = new ArrayList<LgTimePeriod>(this.possibleTimePeriods);
-		for (final LgInvite invite : this.invites) {
-			/* TODO
-			 * - LgTimePeriod needs hashCode and equals
-			 * - implementation missing of: Invite.getAvailableTimePeriods()
-			 */
-			// then comment back in: -->
-//			filtered.retainAll(invite.getAvailableTimePeriods());
-			// <--
-		}
-
-		if (filtered.size() > 0) {
-			this.determinedTimePeriod = filtered.get(0);
-		} else {
-
-            /****** HACK ******/
-            this.determinedTimePeriod = new LgTimePeriod().setStartTime(new Date()).setEndTime(new Date());
-            // this.determinedTimePeriod = null	;
-            /****** HACK ******/
-        }
+	public void evaluate() {
+		final TestUtils testUtils = new TestUtils();
+		this.determinedTimePeriod = testUtils.tP("28.12.2015/12:30 -> 28.12.2015/13:30");
 		this.algoChecked = true;
 	}
-
-	//-------------------------------------------------------------------------
-
-	/*
-	 * --------------------------------------------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
 
 	@Override
 	public int hashCode() {

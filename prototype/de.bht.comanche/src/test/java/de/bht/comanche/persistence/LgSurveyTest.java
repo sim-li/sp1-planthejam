@@ -286,11 +286,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 	}
 
 	@Test
-	@SuppressWarnings("unused")
 	public void updateSurveyByModifyingTimePeriods() {
-		final LgTimePeriod tp1 = testUtils.tP("31.01.1986/21:30 -> 30.01.1986/22:30");
-		final LgTimePeriod tp2 = testUtils.tP("01.05.1999/21:30 -> 01.07.2005/21:30");
-		final LgTimePeriod tp3 = testUtils.tP("08.09.2005/00:30 -> 01.06.2006/20:30");
 		updateSurveyTimePeriods(
 				"31.01.1986/21:30 -> 30.01.1986/22:30",
 				"01.05.1999/21:30 -> 01.07.2005/21:30",

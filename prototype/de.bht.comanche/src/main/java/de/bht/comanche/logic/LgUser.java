@@ -33,7 +33,6 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "NAME"))
 public class LgUser extends DaObject {
-
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Column for a user name. Must not be null.
@@ -315,23 +314,9 @@ public class LgUser extends DaObject {
 		final LgSurvey survey = findOneByKey(LgSurvey.class, "OID", other.getOid());
 		survey.updateWith(other);
 		return saveUnattached(other);
-//		
-//		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
-//		listFromDB.add(findOneByKey(LgSurvey.class, "OID", this.getOid()));
-//		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
-//		listfresh.add(surveyFromClient);
-//		
-//		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
-//		listfresh.removeAll(listFromDB); // ELs already saved
-//		
-//		for (LgSurvey el : listfresh) {
-//		System.out.println(el);
-//		saveUnattached(el); // Fresh list are never tracked
-//		}
-//		
-//		listFromDB.addAll(listfresh); // Requires PL tracking too
-//		return listFromDB.get(0);
 	}
+	
+	
 	/**
 	 *  The survey with oid "{0}" seems to be unpersisted. You can only
 	 *  update surveys you have retrieved from the server before.
@@ -358,7 +343,6 @@ public class LgUser extends DaObject {
 		this.getSurvey(oid).delete();
 	}
 
-	// -- PARTICIPANT ROLES --
 	@JsonIgnore
 	public List<LgInvite> getInvitesAsParticipant() {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
@@ -379,17 +363,11 @@ public class LgUser extends DaObject {
 		return saveInvite(invite);
 	}
 
-	//------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
-
     public void evaluateAllSurveys() {
     	final List<LgSurvey> surveysOfThisUser = getSurveys();
-        System.out.println("+#+#+#+#+#+#+#+#+#+#");
-        System.out.println("evaluating all survey (" + surveysOfThisUser.size() + ")");
     	for (final LgSurvey survey : surveysOfThisUser) {
-            System.out.println("survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
-    		if (survey.isReadyForEvaluation()) {
-                System.out.println("READY survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
-    			survey.determine();
+    		if (survey.shouldBeEvaluated()) {
+    			survey.evaluate();
     			// sendMessageToHost(survey);
     		}
     	}
@@ -405,9 +383,6 @@ public class LgUser extends DaObject {
     	// this.messages.add(message);
     }
 
-	// -------------------------------------------------------------------------
-
-
     /**
      * For testing: Add invites manually
      * @param invite
@@ -417,7 +392,11 @@ public class LgUser extends DaObject {
     	this.invites.add(invite);
     	return this;
     }
-    
+   
+	public LgInvite getInvite(final long oid) {
+		return findOneByKey(LgInvite.class, "oid", oid);
+	}
+
     public LgUser updateWith(LgUser other) {
 		this.email = other.email;
 		this.generalAvailability =  other.generalAvailability;
@@ -432,11 +411,6 @@ public class LgUser extends DaObject {
 		return this;
 	} 
     
-	public LgInvite getInvite(final long oid) {
-		//return search(this.invites, oid);
-		return findOneByKey(LgInvite.class, "oid", oid);
-	}
-
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
 		return this.groups;
@@ -486,7 +460,7 @@ public class LgUser extends DaObject {
 		 this.messages = messages;
 	 }
 	 
-	//Removed invites (Causes stack overflow error)
+	//Removed invites from toString method (Causes stack overflow error)
 	@Override
 	public String toString() {
 		return String

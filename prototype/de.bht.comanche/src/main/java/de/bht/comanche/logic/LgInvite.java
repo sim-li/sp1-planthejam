@@ -61,7 +61,6 @@ public class LgInvite extends DaObject{
 	 */
 	@ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
 	@Column(name="timeperiods") 
-
 	private Set<LgTimePeriod> concreteAvailability;
 	
 	public LgInvite() {}
@@ -150,7 +149,7 @@ public class LgInvite extends DaObject{
 		this.user = null;
 		super.delete();
 	}
-	
+
 	/**
 	 * Sets specified LgInvite for LgTimePeriod.
 	 * @param invite The LgInvite to set.
