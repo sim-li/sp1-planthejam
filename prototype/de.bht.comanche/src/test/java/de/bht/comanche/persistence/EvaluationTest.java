@@ -1,14 +1,7 @@
 package de.bht.comanche.persistence;
 
 import static org.junit.Assert.*;
-
-import java.util.Date;
-
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.junit.Test;
-
-import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 
 public class EvaluationTest {

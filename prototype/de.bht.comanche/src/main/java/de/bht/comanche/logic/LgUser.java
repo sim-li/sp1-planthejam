@@ -367,31 +367,37 @@ public class LgUser extends DaObject {
     	for (final LgSurvey survey : surveysOfThisUser) {
     		if (survey.shouldBeEvaluated()) {
     			survey.evaluate();
-    			sendMessageToHost(survey);
+    			notifyHost(survey);
     		}
     	}
     }
     
-    public void notifyParticipants() {
-    	
+    private void notifyHost(LgSurvey survey) {
+    	if (survey.getDeterminedTimePeriod().isNull()) {
+    		this.addMessage("Sorry, we couldn't determine a common date for the survey '" + survey.getName() + "'");
+    	} else {
+    		this.addMessage("We determined a date for the survey '" + survey.getName() + "' from "
+    				+ survey.getDeterminedTimePeriod().getStartTime() + "to " +  survey.getDeterminedTimePeriod().getEndTime());
+    	}
+    }
+    
+    public void notifyParticipants(long surveyOid) {
+    	final LgSurvey survey = this.getSurvey(surveyOid);
+    	for (LgUser user : survey.getParticipants()) {
+    		if (survey.isAlgoChecked() && survey.getSuccess() == LgStatus.YES) {
+    			user.addMessage(survey.getName() + " is going to happen from "
+    					+ survey.getDeterminedTimePeriod().getStartTime() + " to "
+    					+ survey.getDeterminedTimePeriod().getEndTime());
+    			
+    		} else if (survey.isAlgoChecked() && survey.getSuccess() == LgStatus.NO){
+    			user.addMessage(survey.getName() + " got cancelled. Blame " + survey.getHost());
+    		}
+    	}
     }
 
-    private void sendMessageToHost(LgSurvey survey) {
-    	// new Date(0) -> Jan 01 1970 01:00:00 GMT +0100
-    	// new Date(-60000) -> Jan 01 1970 00:59:00 GMT 0+100
-    	// Duration = -1
-    	
-//    	if (survey.getDeterminedTimePeriod()) {
-//    		this.messages.add(new LgMessage().setMessage("De));"
-//    	} else {
-//    		
-//    	}
-    	final Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
-    	final String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
-    	// IMPORTANT TODO implementation missing of LgUser.messages
-    	// this.messages.add(message);
+    public void addMessage(String message) {
+    	this.messages.add(new LgMessage().setMessage(message));
     }
-
     /**
      * For testing: Add invites manually
      * @param invite

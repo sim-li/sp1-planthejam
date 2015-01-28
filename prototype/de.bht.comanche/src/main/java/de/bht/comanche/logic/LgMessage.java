@@ -18,8 +18,9 @@ public class LgMessage {
 		return this.messageText;
 	}
 	
-	public void setMessage(String message) {
+	public LgMessage setMessage(String message) {
 		this.messageText = message;
+		return this;
 	}
 	
 	public LgMessage updateWith(LgMessage other){
