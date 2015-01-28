@@ -37,7 +37,8 @@ public class ReSurveyService {
 				try {
 					result = startSession().getSurvey(oid);
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					//TODO change and implement the failure
+					throw create(TempFailure.class, ex);
 				}
 				return result;
 			}
@@ -56,7 +57,8 @@ public class ReSurveyService {
 				try {
 					result = startSession().getInvitesForSurvey(surveyOid);
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					//TODO change and implement the failure
+					throw create(TempFailure.class, ex);
 				}
 				return result;
 			}
@@ -95,11 +97,9 @@ public class ReSurveyService {
 				final LgSurvey result;
 				try {
 					result = startSession().saveSurvey(survey);
-//					System.out.println("DEBUGME: Saving survey with no of invites "+  survey.getInvites().size());
-//					System.out.println("DEBUGME: Members:   "+ survey.getInvites());
-//					System.out.println("Saved survey");
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					//TODO change and implement the failure
+					throw create(TempFailure.class, ex);
 				}
 				return result;
 			}
@@ -117,7 +117,8 @@ public class ReSurveyService {
 				try {
 					result = startSession().updateSurvey(survey);
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					//TODO change and implement the failure
+					throw create(TempFailure.class, ex);
 				}
 				return result;
 			}
@@ -132,9 +133,10 @@ public class ReSurveyService {
 		return new LgTransaction <LgSurvey>(request) {
 			public LgSurvey execute() throws Exception {
 				try {
-					startSession().deleteSurvey(oid);//TODO change and implement the method
+					startSession().deleteSurvey(oid);
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					//TODO change and implement the failure
+					throw create(TempFailure.class, ex);
 				}
 				return null;
 			}

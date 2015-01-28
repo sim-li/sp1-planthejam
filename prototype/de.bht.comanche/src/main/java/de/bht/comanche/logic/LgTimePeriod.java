@@ -11,34 +11,44 @@ import javax.persistence.TemporalType;
 /**
  * A data type for time periods.
  * 
- * It is used to describe the possible time periods of a survey or the availability of users.
+ * It is used to describe the possible time periods of a survey or the
+ * availability of users.
  * <p>
- * Important note: This class needs to <strong>override hashCode and equals</strong>, so that collections of 
- * LgTimePeriods are comparable. In the current version timePeriods are considered equal when ...
+ * Important note: This class needs to <strong>override hashCode and
+ * equals</strong>, so that collections of LgTimePeriods are comparable. In the
+ * current version timePeriods are considered equal when ...
  * 
  * @author Duc Tung Tong
  */
 
-@Embeddable public class LgTimePeriod {
+@Embeddable
+public class LgTimePeriod {
 
 	private static final long serialVersionUID = 1L;
 	private final String DATE_PATTERN = "yyyy.MM.dd G HH:mm z";
 	private final DateFormat df = new SimpleDateFormat(DATE_PATTERN);
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
 
-	public LgTimePeriod (){
+	public static final LgTimePeriod EMPTY_TIMEPERIOD = new LgTimePeriod()
+			.setStartTime(new Date(0)).setEndTime(new Date(-60000));
+
+	public LgTimePeriod() {
 	}
 
-	public LgTimePeriod (final LgTimePeriod other){
+	public LgTimePeriod(final LgTimePeriod other) {
 		this.startTime = other.startTime;
 		this.endTime = other.endTime;
 	}
 
+	public boolean isNull() {
+		return this.equals(EMPTY_TIMEPERIOD);
+	}
+	
 	public Date getStartTime() {
 		return this.startTime;
 	}
@@ -47,7 +57,7 @@ import javax.persistence.TemporalType;
 		this.startTime = startTime;
 		return this;
 	}
-	
+
 	public Date getEndTime() {
 		return endTime;
 	}
@@ -57,8 +67,6 @@ import javax.persistence.TemporalType;
 		return this;
 	}
 
-
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -93,8 +101,7 @@ import javax.persistence.TemporalType;
 
 	@Override
 	public String toString() {
-		return String
-				.format("LgTimePeriod [startTime=%s, endTime=%s]",
-						startTime, endTime);
+		return String.format("LgTimePeriod [startTime=%s, endTime=%s]",
+				startTime, endTime);
 	}
 }

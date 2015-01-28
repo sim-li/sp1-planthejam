@@ -1,0 +1,27 @@
+package de.bht.comanche.persistence;
+
+import static org.junit.Assert.*;
+
+import java.util.Date;
+
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.junit.Test;
+
+import de.bht.comanche.logic.LgSurvey;
+import de.bht.comanche.logic.LgTimePeriod;
+
+public class EvaluationTest {
+
+	@Test
+	@SuppressWarnings("unused")
+	public void nulledTimePeriodImplCorrectly() {
+		LgTimePeriod nulledTimePeriod = LgTimePeriod.EMPTY_TIMEPERIOD;
+		assertEquals(-1, differenceInSeconds(nulledTimePeriod));
+	}
+	
+	public long differenceInSeconds(LgTimePeriod timePeriod ) {
+		return (timePeriod.getEndTime().getTime() - timePeriod.getStartTime().getTime()) / 60000;
+	}
+	
+}

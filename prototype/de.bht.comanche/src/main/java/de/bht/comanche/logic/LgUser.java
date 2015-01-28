@@ -316,7 +316,6 @@ public class LgUser extends DaObject {
 		return saveUnattached(other);
 	}
 	
-	
 	/**
 	 *  The survey with oid "{0}" seems to be unpersisted. You can only
 	 *  update surveys you have retrieved from the server before.
@@ -368,15 +367,25 @@ public class LgUser extends DaObject {
     	for (final LgSurvey survey : surveysOfThisUser) {
     		if (survey.shouldBeEvaluated()) {
     			survey.evaluate();
-    			// sendMessageToHost(survey);
+    			sendMessageToHost(survey);
     		}
     	}
     }
+    
+    public void notifyParticipants() {
+    	
+    }
 
-    private void sendMessageToHost(final LgSurvey survey) {
-        System.out.println(survey);
-        System.out.println(survey.getDeterminedTimePeriod());
-        System.out.println(survey.getDeterminedTimePeriod().getStartTime());
+    private void sendMessageToHost(LgSurvey survey) {
+    	// new Date(0) -> Jan 01 1970 01:00:00 GMT +0100
+    	// new Date(-60000) -> Jan 01 1970 00:59:00 GMT 0+100
+    	// Duration = -1
+    	
+//    	if (survey.getDeterminedTimePeriod()) {
+//    		this.messages.add(new LgMessage().setMessage("De));"
+//    	} else {
+//    		
+//    	}
     	final Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
     	final String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
     	// IMPORTANT TODO implementation missing of LgUser.messages

@@ -4,7 +4,9 @@ import static multex.MultexUtil.create;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -17,6 +19,7 @@ import javax.ws.rs.core.Context;
 
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.logic.LgUser;
+import de.bht.comanche.logic.LgMessage;
 /**
  * This class provide a LgUser service as a network-accessible endpoint by using Representational State Transfer (RESTful) web service (JAX-RS). 
  * Jersey implements support for the annotations defined in the specification and used in this class. Resources are identified by URIs, 
@@ -186,24 +189,6 @@ public class ReUserService extends RestService {
 	@SuppressWarnings("serial")
 	public static final class RestUserUpdateFailure extends multex.Failure {}
 
-
-	//	/* TODO
-	//	 * - implement DaUser.selectAllUsersWhereNameIsLike(String searchString)
-	//	 * - provide access to selectAllUsersWhereNameIsLike from session
-	//	 */
-	//	@Path("/findUsers")
-	//	@DELETE
-	//	@Consumes("application/json")
-	//	@Produces({ "application/json" })
-	//	public LgInvite findUsers(final String searchString, @Context final HttpServletRequest request) {
-	//		return new LgTransaction<List<LgUser>>(request) {
-	//			@Override
-	//			public List<LgUser> execute() throws Exception {
-	//				return startSession().selectAllUsersWhereNameIsLike(searchString);
-	//			}
-	//		}.getResult();
-	//	}
-	
 	/**
 	 * Get the list of all registered users.
 	 * @param request The request information from HTTP service.
@@ -268,22 +253,15 @@ public class ReUserService extends RestService {
     @GET
     @Consumes("application/json")
 	@Produces({ "application/json" })
-    public List<String> getMessagesFor(@Context final HttpServletRequest request) {
-        return new LgTransaction<List<String>>(request) {
+    public Set<LgMessage> getMessagesFor(@Context final HttpServletRequest request) {
+        return new LgTransaction<Set<LgMessage>>(request) {
 			@Override
-			public List<String> execute() throws Exception {
-                final List<String> result;
+			public Set<LgMessage> execute() throws Exception {
 				try {
-                
-                    result = new ArrayList<String>(Arrays.asList(new String[] {"dummy message no.1", "dummy message no.2", "dummy message no.3"}));
-                    
-                    /********************************
-					* startSession().getMessages();                           // TODO <----------------------- !!!!!!!
-                    *********************************/
+					return startSession().getMessages();
 				} catch (Exception ex) {
 					throw create(RestGetMessagesFailure.class, ex, getSession().getUser().getName(), getSession().getUser().getOid());
 				}
-				return result;
 			}
 		}.getResult();
     }
