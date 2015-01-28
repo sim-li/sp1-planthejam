@@ -28,7 +28,7 @@ angular.module('myApp')
                     if (event.id != 'allowed') {
                         $scope.resultingTimePeriods.push(new TimePeriod({
                             startTime: event.start.toDate(),
-                            durationMins: event.end.diff(event.start, 'minutes')
+                            endTime: event.end.toDate()
                         }));
                     }
                 });
@@ -51,7 +51,7 @@ angular.module('myApp')
                 $scope.eventSources.push({
                     id: 'allowed',
                     start: moment(timePeriod.startTime),
-                    end: moment(timePeriod.startTime).add(timePeriod.durationMins, 'minutes'),
+                    end: moment(timePeriod.endTime),
                     rendering: 'background'
                 });
             });
@@ -59,7 +59,7 @@ angular.module('myApp')
                 $scope.eventSources.push({
                     id: generateUniqueId(),
                     start: moment(timePeriod.startTime),
-                    end: moment(timePeriod.startTime).add(timePeriod.durationMins, 'minutes'),
+                    end: moment(timePeriod.endTime),
                     editable: true,
                     durationEditable: true,
                     constraint: autoConstrain

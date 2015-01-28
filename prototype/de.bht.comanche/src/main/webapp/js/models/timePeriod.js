@@ -13,8 +13,8 @@ angular.module('models')
 		 * @class TimePeriod
 		 * @constructor
 		 * @param {Object} [config={}] an optional configuration object
-		 * @param {Number} [config.startTime=new Date()] the start time of the time period
-		 * @param {String} [config.durationMins=0] the duration of the time period in minutes
+		 * @param {Date}   [config.startTime=new Date()] the start time of the time period
+		 * @param {Date}   [config.endTime=new Date()] the end time of the time period
 		 *
 		 * @param {[type]} config [description]
 		 */
@@ -24,31 +24,48 @@ angular.module('models')
 			}
 			config = config || timePeriodNull;
 			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
-			this.durationMins = config.durationMins || 0;
+			this.endTime = config.endTime ? new Date(config.endTime) : new Date();
 		};
 
 
 		var timePeriodNull = {
 			startTime: new Date(0),
-			durationMins: -1
+			endTime: new Date(-60000),
 		};
 
 		/**
 		 * A pseudo-null value, defined as:
 		 * 	- startTime: Jan 01 1970 01:00:00 GMT+0100
-		 *  - duration: 0
+		 *  - endTime:   Jan 01 1970 00:59:00 GMT+0100
 		 *
 		 * @method NULL
 		 * @static
-		 * @constant
 		 */
 		TimePeriod.NULL = function() {
 			return new TimePeriod(timePeriodNull);
 		};
 
+		/**
+		 * Returns the duration of this time period in minutes.
+		 *
+		 * @method getDurationMins
+		 * @return {Number} the duration of the time period in minutes
+		 */
+		TimePeriod.prototype.getDurationMins = function() {
+			return (this.endTime - this.startTime) / 60000;
+		};
+
+		/**
+		 * Returns true if this time period is considered to be null, which is the case when it equals TimePeriod.NULL.
+		 * TimePeriod.NULL is defined as:
+		 * 	- startTime: Jan 01 1970 01:00:00 GMT+0100
+		 *  - endTime:   Jan 01 1970 00:59:00 GMT+0100
+		 *
+		 * @method isNull
+		 * @return {Boolean} true if this time period is considered to be null, otherwise false.
+		 */
 		TimePeriod.prototype.isNull = function() {
-			return this.startTime.getTime() == timePeriodNull.startTime.getTime() &&
-				this.durationMins == timePeriodNull.durationMins;
+			return this.getDurationMins() == -1;
 		};
 
 		/**
