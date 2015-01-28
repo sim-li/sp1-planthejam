@@ -151,7 +151,7 @@
               <label for='inviteDetailsDeterminedTimePeriod'>Determined Time Period:</label>
               <span id='inviteDetailsDeterminedTimePeriod'>
                 <span>{{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}</span>
-                <span>{{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes</span>
+                <span>{{ selectedInvite.survey.determinedTimePeriod.getDurationMins() }} minutes</span>
               </span>
             </div>
             poss: {{ selectedInvite.survey.possibleTimePeriods }}

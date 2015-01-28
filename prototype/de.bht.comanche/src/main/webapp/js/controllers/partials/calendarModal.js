@@ -15,6 +15,7 @@ angular.module('myApp')
             'use strict';
 
             $scope.openCalendarModal = function() {
+                console.log("open calendar modal");
                 var modalInstance = $modal.open({
                     templateUrl: 'calendarModalContent.html',
                     controller: 'calendarModalInstanceCtrl',

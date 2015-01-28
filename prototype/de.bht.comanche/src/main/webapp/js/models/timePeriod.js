@@ -14,7 +14,8 @@ angular.module('models')
 		 * @constructor
 		 * @param {Object} [config={}] an optional configuration object
 		 * @param {Number} [config.startTime=new Date()] the start time of the time period
-		 * @param {String} [config.durationMins=0] the duration of the time period in minutes
+ * @param {		String
+	}[config.durationMins = 0] the duration of the time period in minutes
 		 *
 		 * @param {[type]} config [description]
 		 */
@@ -24,13 +25,13 @@ angular.module('models')
 			}
 			config = config || timePeriodNull;
 			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
-			this.durationMins = config.durationMins || 0;
+			this.endTime = config.endTime ? new Date(config.endTime) : new Date();
 		};
 
 
 		var timePeriodNull = {
 			startTime: new Date(0),
-			durationMins: -1
+			endTime: new Date(0)
 		};
 
 		/**
@@ -47,10 +48,12 @@ angular.module('models')
 		};
 
 		TimePeriod.prototype.isNull = function() {
-			return this.startTime.getTime() == timePeriodNull.startTime.getTime() &&
-				this.durationMins == timePeriodNull.durationMins;
+			return this.startTime.getTime() == this.endTime.getTime();
 		};
 
+		TimePeriod.prototype.getDurationMins = function() {
+			return (this.endTime - this.startTime) / 60000;
+		};
 		/**
 		 * This model's unique id.
 		 *
@@ -69,7 +72,7 @@ angular.module('models')
 			return {
 				// 'oid': this.oid,
 				'startTime': this.startTime,
-				'durationMins': this.durationMins
+				'endTime': this.endTime
 			};
 		};
 
@@ -84,25 +87,6 @@ angular.module('models')
 			return timePeriods;
 		};
 
-		/**
-		 * Provides an array of three dummy time periods.
-		 *
-		 * @method dummyTimePeriods
-		 * @static
-		 * @return {Array} three dummy time periods
-		 */
-		TimePeriod.dummyTimePeriods = function() {
-			return [{
-				'startTime': new Date(),
-				'durationMins': '3'
-			}, {
-				'startTime': new Date(),
-				'durationMins': '4'
-			}, {
-				'startTime': new Date(),
-				'durationMins': '5'
-			}];
-		};
 
 
 		return (TimePeriod);
