@@ -57,7 +57,7 @@ public class LgSurveyEvaluationTest {
 								"30.01.86/22:30 -> 30.01.86/23:30",
 								"08.09.05/01:30 -> 08.09.05/02:30")));
 		saveInviteFor(
-				"Bob",
+				"Carol",
 				getSkiInviteFor("Carol").setConcreteAvailability(
 						testUtils.buildTimePeriods(
 								"01.05.99/21:30 -> 01.05.99/22:30",
@@ -76,21 +76,7 @@ public class LgSurveyEvaluationTest {
 		assertThat(carolsMessages).hasSize(1);
 		assertThat(alicesMessages).hasSize(1);
 	}
-
-	@Ignore
-	@Test
-	public void algoCheckedSetRightTest() {
-		runDemoScenario();
-		assertThat(surveyForEvaluation.getAlgoChecked()).isTrue();
-	}
-
-	@Test
-	public void determinedTimePeriodAsExpectedTest() {
-		runDemoScenario();
-		assertThat(surveyForEvaluation.getDeterminedTimePeriod()).isEqualTo(
-				testUtils.tP("01.05.99/21:30 -> 01.05.99/22:30"));
-	}
-
+	
 	private void runDemoScenario() {
 		triggerEvaluation();
 		// Set flag to YES and save
@@ -101,15 +87,22 @@ public class LgSurveyEvaluationTest {
 		notifyParticipants();
 	}
 
-	public Set<LgMessage> getMessagesFor(String username) {
-		return new TestTransaction<Set<LgMessage>>(username) {
+
+	private void triggerEvaluation() {
+		// Call evaluation, get Surveys
+		surveyForEvaluation = new TestTransaction<LgSurvey>("Alice") {
 			@Override
-			public Set<LgMessage> execute() {
-				return startSession().getMessages();
+			public LgSurvey execute() {
+				final LgUser user = startSession();
+				// Triggering switch!
+				user.evaluateAllSurveys();
+				// Pulling single survey, not all surevys like in orignal
+				// version.
+				return user.getSurvey(surveyForEvaluation.getOid());
 			}
 		}.getResult();
 	}
-
+	
 	private void notifyParticipants() {
 		new TestTransaction<String>("Alice") {
 			@Override
@@ -123,17 +116,25 @@ public class LgSurveyEvaluationTest {
 		}.getResult();
 	}
 
-	private void triggerEvaluation() {
-		// Call evaluation, get Surveys
-		surveyForEvaluation = new TestTransaction<LgSurvey>("Alice") {
+	
+	@Test
+	public void algoCheckedSetRightTest() {
+		runDemoScenario();
+		assertThat(surveyForEvaluation.getAlgoChecked()).isTrue();
+	}
+
+	@Test
+	public void determinedTimePeriodAsExpectedTest() {
+		runDemoScenario();
+		assertThat(surveyForEvaluation.getDeterminedTimePeriod()).isEqualTo(
+				testUtils.tP("01.05.99/21:30 -> 01.05.99/22:30"));
+	}
+
+	public Set<LgMessage> getMessagesFor(String username) {
+		return new TestTransaction<Set<LgMessage>>(username) {
 			@Override
-			public LgSurvey execute() {
-				final LgUser user = startSession();
-				// Triggering switch!
-				user.evaluateAllSurveys();
-				// Pulling single survey, not all surevys like in orignal
-				// version.
-				return user.getSurvey(surveyForEvaluation.getOid());
+			public Set<LgMessage> execute() {
+				return startSession().getMessages();
 			}
 		}.getResult();
 	}

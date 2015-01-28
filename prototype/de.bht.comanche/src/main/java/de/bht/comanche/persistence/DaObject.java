@@ -181,6 +181,11 @@ public abstract class DaObject implements Serializable {
 		return pool.findOneByKey(persistentClass, keyFieldName, keyFieldValue);
 	}
 	
+	public <E extends DaObject> List<E> findManyByQuery(final Class<E> resultClass, final Class<?> queryClass, 
+			final String queryString, final Object[] args) {
+		return pool.findManyByQuery(resultClass, queryClass, queryString, args);
+	}
+	
 	
 	@JsonIgnore
 	public boolean isPersistent() {

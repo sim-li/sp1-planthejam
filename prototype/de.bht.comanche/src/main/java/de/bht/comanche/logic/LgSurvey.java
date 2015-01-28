@@ -57,6 +57,9 @@ public class LgSurvey extends DaObject {
 	private LgSurveyType type;
 
 	/**
+	 * Note: Marked for delete! User has to think of considering durations
+	 * in front end.
+	 * 
 	 * The intended duration of the survey in minutes.
 	 */
 	private int surveyDurationMins;
@@ -239,7 +242,6 @@ public class LgSurvey extends DaObject {
 	 * @param other Other survey
 	 */
 	public LgSurvey updateWith(final LgSurvey other) {
-		System.out.println(" ----------------------- update with: num of possTPs " + other.possibleTimePeriods.size());
 		this.name = other.name;
 		this.description = other.description;
 		this.type = other.type;
@@ -279,9 +281,17 @@ public class LgSurvey extends DaObject {
 	public void evaluate() {
 		final TestUtils testUtils = new TestUtils();
 		this.determinedTimePeriod = testUtils.tP("28.12.2015/12:30 -> 28.12.2015/13:30");
+		// W.I.P.> 
+		// this.getPossibleTimePeriods();
 		this.algoChecked = true;
 	}
-
+	
+	
+	// W.I.P.> 
+	//	public List<LgTimePeriod> getAllConcreteAvailabilities() {
+	//		return this.findManyByKey(LgInvite.class, "SURVEY_OID", this.getOid());
+	//	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
