@@ -244,4 +244,3 @@ public class LgInviteTest {
 		testUtils.deleteAccountsFor("Alice", "Bob", "Carol", "Denise", "Edgar");
 	}
 }
-

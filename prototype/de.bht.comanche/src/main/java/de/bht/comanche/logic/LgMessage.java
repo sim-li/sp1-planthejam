@@ -14,12 +14,13 @@ public class LgMessage {
 	
 	public String messageText;
 	
-	public String getMessage() {
+	public String getMessageText() {
 		return this.messageText;
 	}
 	
-	public void setMessage(String message) {
+	public LgMessage setMessage(String message) {
 		this.messageText = message;
+		return this;
 	}
 	
 	public LgMessage updateWith(LgMessage other){
@@ -57,5 +58,10 @@ public class LgMessage {
 		} else if (!user.equals(other.user))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "LgMessage [messageText=" + messageText + "]";
 	}
 } 
