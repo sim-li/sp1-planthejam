@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,20 +22,21 @@ import javax.persistence.TemporalType;
 @Embeddable public class LgTimePeriod {
 
 	private static final long serialVersionUID = 1L;
-	private final String DATE_PATTERN = "yyyy.MM.dd G HH:mm:ss z";
+	private final String DATE_PATTERN = "yyyy.MM.dd G HH:mm z";
 	private final DateFormat df = new SimpleDateFormat(DATE_PATTERN);
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
 
-	private int durationMins;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date endTime;
 
 	public LgTimePeriod (){
 	}
 
 	public LgTimePeriod (final LgTimePeriod other){
 		this.startTime = other.startTime;
-		this.durationMins = other.durationMins;
+		this.endTime = other.endTime;
 	}
 
 	public Date getStartTime() {
@@ -47,21 +47,23 @@ import javax.persistence.TemporalType;
 		this.startTime = startTime;
 		return this;
 	}
-
-	public int getDurationMins() {
-		return this.durationMins;
+	
+	public Date getEndTime() {
+		return endTime;
 	}
 
-	public LgTimePeriod setDurationMins(final int durationMins) {
-		this.durationMins = durationMins;
+	public LgTimePeriod setEndTime(Date endTime) {
+		this.endTime = endTime;
 		return this;
 	}
+
+
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + durationMins;
+		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
 		result = prime * result
 				+ ((startTime == null) ? 0 : startTime.hashCode());
 		return result;
@@ -76,7 +78,10 @@ import javax.persistence.TemporalType;
 		if (getClass() != obj.getClass())
 			return false;
 		LgTimePeriod other = (LgTimePeriod) obj;
-		if (durationMins != other.durationMins)
+		if (endTime == null) {
+			if (other.endTime != null)
+				return false;
+		} else if (!df.format(endTime).equals(df.format(other.endTime)))
 			return false;
 		if (startTime == null) {
 			if (other.startTime != null)
@@ -85,11 +90,11 @@ import javax.persistence.TemporalType;
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return String
-				.format("LgTimePeriod [startTime=%s, durationMines=%s]",
-						startTime, durationMins);
+				.format("LgTimePeriod [startTime=%s, endTime=%s]",
+						startTime, endTime);
 	}
 }

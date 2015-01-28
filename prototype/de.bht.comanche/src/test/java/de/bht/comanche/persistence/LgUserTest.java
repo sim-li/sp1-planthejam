@@ -158,7 +158,7 @@ public class LgUserTest {
 
     @Test
     public void saveTimePeriodInUserTest() {
-        buildVariousTimePeriods(20, 40, 60);
+//        buildVariousTimePeriods(20, 40, 60);
         saveGeneralAvailability();
         retrieveGeneralAvailability();
         assertEquals(persistedGeneralAvailabilty, variousTimePeriods);
@@ -167,11 +167,11 @@ public class LgUserTest {
 
     @Test
     public void updateTimePeriodInUserTest() {
-        buildVariousTimePeriods(20, 40, 60);
+//        buildVariousTimePeriods(20, 40, 60);
         saveGeneralAvailability();
         retrieveGeneralAvailability();
         // UPDATE
-        buildVariousTimePeriods(70, 80, 90);
+//        buildVariousTimePeriods(70, 80, 90);
         saveGeneralAvailability();
         retrieveGeneralAvailability();
         assertTrue(this.persistedGeneralAvailabilty.size() == 3);
@@ -206,13 +206,13 @@ public class LgUserTest {
         }
     }
     
-    private void buildVariousTimePeriods(int ... durations) {
-        for (int i = 0; i < durations.length; i++) {
-            this.variousTimePeriods.add(new LgTimePeriod().setStartTime(
-                new Date()).setDurationMins(durations[i])
-            );
-        }
-    }
+//    private void buildVariousTimePeriods(int ... durations) {
+//        for (int i = 0; i < durations.length; i++) {
+//            this.variousTimePeriods.add(new LgTimePeriod().setStartTime(
+//                new Date()).setDurationMins(durations[i])
+//            );
+//        }
+//    }
 //    
 //    @Test
 //    private void verifyDeletingAccountSuccessful() {

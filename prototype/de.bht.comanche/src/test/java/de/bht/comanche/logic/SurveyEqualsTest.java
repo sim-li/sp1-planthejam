@@ -3,6 +3,8 @@ package de.bht.comanche.logic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,12 +21,19 @@ public class SurveyEqualsTest {
 	
 	@Before
 	public void buildUp() {
-		someTimePeriods = new HashSet<LgTimePeriod>();
-		aSurvey = new LgSurvey();
-		aTwinSurvey = new LgSurvey();
-		someTimePeriods.add(new LgTimePeriod().setDurationMins(39).setStartTime(new Date()));
-		aSurvey.setName("Alice").setPossibleTimePeriods(someTimePeriods);
-		aTwinSurvey.setName("Alice").setPossibleTimePeriods(someTimePeriods);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			final Date startTime = sdf.parse("21/12/2012");
+			final Date endTime = sdf.parse("21/12/2014");
+			someTimePeriods = new HashSet<LgTimePeriod>();
+			aSurvey = new LgSurvey();
+			aTwinSurvey = new LgSurvey();
+			someTimePeriods.add(new LgTimePeriod().setStartTime(startTime).setEndTime(endTime));
+			aSurvey.setName("Alice").setPossibleTimePeriods(someTimePeriods);
+			aTwinSurvey.setName("Alice").setPossibleTimePeriods(someTimePeriods);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

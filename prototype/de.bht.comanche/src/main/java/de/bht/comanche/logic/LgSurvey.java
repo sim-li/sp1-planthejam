@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -318,7 +319,7 @@ public class LgSurvey extends DaObject {
 		} else {
 
             /****** HACK ******/
-            this.determinedTimePeriod = new LgTimePeriod().setStartTime(new Date()).setDurationMins(12345);
+            this.determinedTimePeriod = new LgTimePeriod().setStartTime(new Date()).setEndTime(new Date());
             // this.determinedTimePeriod = null	;
             /****** HACK ******/
         }
