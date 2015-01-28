@@ -55,7 +55,13 @@ angular.module('models')
             };
         };
 
-        Group.create
+        Group.prototype.addUser = function(user) {
+            this.members.push(new Member({
+                "user": user
+            }));
+            // console.log(new Member(user));
+        };
+
 
         return (Group);
     }]);

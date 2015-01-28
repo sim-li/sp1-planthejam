@@ -72,7 +72,7 @@ public class LgUser extends DaObject {
 	 */
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
-	
+
 	@ElementCollection(targetClass = LgTimePeriod.class, fetch = FetchType.EAGER)
 	@Column(name = "general_availability")
 	private Set<LgTimePeriod> generalAvailability;
@@ -83,7 +83,7 @@ public class LgUser extends DaObject {
 
 	@Transient
 	final LgGravatarUtils gravUtils;
-	
+
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
 		this.groups = new ArrayList<LgGroup>();
@@ -112,11 +112,11 @@ public class LgUser extends DaObject {
 	}
 
 	/**
-	 * Complete delete of user account. 
-	 * 
+	 * Complete delete of user account.
+	 *
 	 * Invites have to be delete first in order to comply
 	 * with foreign key constraint.
-	 * 
+	 *
 	 */
 	public void deleteThisAccount() {
 		for (final LgInvite invite : this.getInvites()) {
@@ -131,7 +131,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Delete LgInvite by provided oid.
-	 * 
+	 *
 	 * @param inviteOid
 	 *            The LgInvite oid.
 	 */
@@ -141,7 +141,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Save LgGroup for current user.
-	 * 
+	 *
 	 * @param group
 	 *            The LgGroup to save.
 	 * @return The saved LgGroup.
@@ -156,7 +156,7 @@ public class LgUser extends DaObject {
 	 * default icon if no email given.
 	 */
 	public String getIconurl() {
-		
+
 		if (email != null) {
 			iconurl = gravUtils.getUserUrl(email);
 		} else {
@@ -171,7 +171,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Delete LgGroup by provided oid.
-	 * 
+	 *
 	 * @param groupOid
 	 *            The LgGroup oid.
 	 */
@@ -181,7 +181,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Returns LgGroup by ptovided oid.
-	 * 
+	 *
 	 * @param groupOid
 	 *            The LgGroup oid.
 	 * @return The found LgGroup
@@ -190,9 +190,20 @@ public class LgUser extends DaObject {
 		return search(getGroups(), groupOid);
 	}
 
+	public LgGroup updateGroup(final LgGroup other){
+		if (other.getOid() <= 0) {
+			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
+		}
+		final LgGroup group = findOneByKey(LgGroup.class, "OID", other.getOid());
+		group.updateWith(other);
+		return saveUnattached(other);
+	}
+
+	@SuppressWarnings("serial")
+	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
 	/**
 	 * Search LgMember object by group oid and user oid.
-	 * 
+	 *
 	 * @param groupId
 	 *            The LgGroup oid.
 	 * @param userId
@@ -205,7 +216,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Proof key and value of user name and password.
-	 * 
+	 *
 	 * @param user
 	 *            The LgUser to proof.
 	 * @return If the key and value match - true.
@@ -220,17 +231,17 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Returns LgTimePeriods list for current user.
-	 * 
+	 *
 	 * @return The list with LgTimePeriods.
 	 */
-	
+
 	public Set<LgTimePeriod> getGeneralAvailability() {
 		return this.generalAvailability;
 	}
 
 	/**
 	 * Returns LgTimePeriods list for current user.
-	 * 
+	 *
 	 * @return The list with LgTimePeriods.
 	 */
 	public LgUser setGeneralAvailability(Set<LgTimePeriod> generalAvailability) {
@@ -240,7 +251,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Remove invite object from the list of invites.
-	 * 
+	 *
 	 * @param invite
 	 *            The LgInvite to remove.
 	 */
@@ -250,7 +261,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Remove grop object from the list of groups.
-	 * 
+	 *
 	 * @param invite
 	 *            The LgGroup to remove.
 	 */
@@ -272,11 +283,11 @@ public class LgUser extends DaObject {
 		for (LgInvite invite : this.invites) {
 			if (invite.getIsHost()) {
 				surveys.add(invite.getSurvey());
-			} 
+			}
 		}
 		return surveys;
 	}
-	
+
     @JsonIgnore
 	public List<LgInvite> getInvites() {
 		return this.invites;
@@ -288,7 +299,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * JSON Object from Server doesn't send host invite.
-	 * 
+	 *
 	 * @param survey
 	 * @return
 	 */
@@ -309,7 +320,7 @@ public class LgUser extends DaObject {
 		survey.updateWith(other);
 		return saveUnattached(other);
 	}
-	
+
 	/**
 	 *  The survey with oid "{0}" seems to be unpersisted. You can only
 	 *  update surveys you have retrieved from the server before.
@@ -359,7 +370,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Evaluates all surveys of this user and and notifies host about outcome.
-	 * 
+	 *
 	 * Should be triggered by rest path before calling getSurveys().
 	 */
     public void evaluateAllSurveys() {
@@ -373,11 +384,11 @@ public class LgUser extends DaObject {
     		}
     	}
     }
-    
+
     /**
-     * Sends host a message about determined time period if 
+     * Sends host a message about determined time period if
      * existent.
-     * 
+     *
      * @param survey Surevey to be used for notifying host.
      */
     private void notifyHost(LgSurvey survey) {
@@ -388,13 +399,13 @@ public class LgUser extends DaObject {
     				+ survey.getDeterminedTimePeriod().getStartTime() + "to " +  survey.getDeterminedTimePeriod().getEndTime());
     	}
     }
-    
+
     /**
-     * Notifies all participants of a survey of the outcome by 
-     * sending them a message. 
-     * 
+     * Notifies all participants of a survey of the outcome by
+     * sending them a message.
+     *
      * Should be triggered by rest path.
-     * 
+     *
      * @param surveyOid Survey to be used for notifying participants.
      */
     public void notifyParticipants(long surveyOid) {
@@ -413,7 +424,7 @@ public class LgUser extends DaObject {
 			sendMessageToAllParticipants(survey.getParticipants(), noMsg);
     	}
     }
-    
+
     public void sendMessageToAllParticipants(final List<LgUser> participants, final String text) {
     	for (LgUser user: participants) {
     		user.addMessage(text);
@@ -423,16 +434,16 @@ public class LgUser extends DaObject {
 
     /**
      * Sends this user a string message.
-     * 
-     * Convenience method, constructs message object and adds to local 
+     *
+     * Convenience method, constructs message object and adds to local
      * list.
-     * 
+     *
      * @param message Message text as string
      */
     public void addMessage(String message) {
     	this.messages.add(new LgMessage().setMessage(message));
     }
-    
+
     /**
      * For testing: Add invites manually
      * @param invite
@@ -442,16 +453,17 @@ public class LgUser extends DaObject {
     	this.invites.add(invite);
     	return this;
     }
-   
+
     /**
      * Searches invite by oid. Doesn't execute owner check!
-     * 
+     *
      * @param oid OID of invite to be retrieved
      * @return Found invite
      */
 	public LgInvite getInvite(final long oid) {
 		return findOneByKey(LgInvite.class, "oid", oid);
 	}
+
 
     public LgUser updateWith(LgUser other) {
 		this.email = other.email;
@@ -463,10 +475,10 @@ public class LgUser extends DaObject {
 		this.messages = other.messages;
 		this.name = other.name;
 		this.password = other.password;
-		this.tel = other.tel;	
+		this.tel = other.tel;
 		return this;
-	} 
-    
+	}
+
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
 		return this.groups;
@@ -511,11 +523,11 @@ public class LgUser extends DaObject {
 	 public Set<LgMessage> getMessages() {
 		 return this.messages;
 	 }
-	
+
 	 public void setMessages(Set<LgMessage> messages) {
 		 this.messages = messages;
 	 }
-	 
+
 	//Removed invites from toString method (Causes stack overflow error)
 	@Override
 	public String toString() {

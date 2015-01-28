@@ -19,18 +19,18 @@ import de.bht.comanche.logic.LgGroup;
 import de.bht.comanche.logic.LgTransaction;
 
 /**
- * This class provide a LgGroup service as a network-accessible endpoint by using Representational State Transfer (RESTful) web service (JAX-RS). 
- * Jersey implements support for the annotations defined in the specification and used in this class. Resources are identified by URIs, 
- * which provide a global addressing space for resource and service discovery. The @Path annotation identifies the URI path template to which the 
- * resource responds and is specified at the class or method level of a resource. 
- * 
+ * This class provide a LgGroup service as a network-accessible endpoint by using Representational State Transfer (RESTful) web service (JAX-RS).
+ * Jersey implements support for the annotations defined in the specification and used in this class. Resources are identified by URIs,
+ * which provide a global addressing space for resource and service discovery. The @Path annotation identifies the URI path template to which the
+ * resource responds and is specified at the class or method level of a resource.
+ *
  * @author Maxim Novichkov
- * 
+ *
  *
  */
 @Path("/groups/")
 public class ReGroupService extends RestService {
-	
+
 	/**
 	 * Returns the list of groups with all groups for current user.
 	 * @param request The request information from HTTP service.
@@ -87,7 +87,7 @@ public class ReGroupService extends RestService {
 			}
 		}.getResult();
 	}
-	
+
 	@Path("/{oid}")
 	@PUT
 	@Consumes("application/json")
@@ -112,9 +112,9 @@ public class ReGroupService extends RestService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class  RestSaveGroupFailure extends multex.Failure {}
-	
+
 	/**
-	 * Delete LgGrop specified by oid. 
+	 * Delete LgGrop specified by oid.
 	 * @param oid 	  The LgGroup oid to be deleted.
 	 * @param request The request information from HTTP service.
 	 * @exception RestDeleteGroupFailure if it was not possible to delete LgGroup.
