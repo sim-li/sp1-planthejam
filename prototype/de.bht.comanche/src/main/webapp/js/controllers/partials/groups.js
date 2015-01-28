@@ -183,6 +183,48 @@ angular.module('myApp')
             $scope.selectedUser = '';
 
 
+
+            $scope.addNewGroup = function() {
+                $scope.selectedGroup = new Group({
+                    name: 'Your new group'
+                });
+                $scope.groups.push($scope.selectedGroup);
+            };
+
+            $scope.removeGroup = function(index) {
+                $scope.groups.splice($scope.groups.indexOf($scope.selectedGroup), 1);
+                restService.doDelete($scope.selectedGroup)
+                    .then(function(success) {
+                        console.log("delete Group : ")
+                        console.log("with success : ", success);
+                    }, function(err) {
+                        console.log("delete Group : ")
+                        console.log("with err : ", success);
+                    });
+            }
+
+            $scope.saveGroup = function() {
+                $modalInstance.close($scope.selectedGroup);
+                console.log("selectedGroup : ", $scope.selectedGroup);
+                restService.doSave($scope.selectedGroup)
+                    .then(function(success) {
+                        console.log("save Group function:");
+                        console.log('with success: ', success);
+                    }, function(err) {
+                        console.log("save Group function:");
+                        console.log('with error: ', err);
+                    });
+            };
+
+            $scope.mergeGroups = function() {
+
+            };
+
+            $scope.selectGroup = function(group) {
+                $scope.selectedGroup = group;
+                console.log(group);
+            };
+
             /**
              * This must be transferred into a generic solution, simply not convincing.
              * Must dock to actual data model.
@@ -202,38 +244,8 @@ angular.module('myApp')
                 // console.log($scope.selectedUser);
             });
 
-            $scope.addNewGroup = function() {
-                $scope.selectedGroup = new Group({
-                    name: 'Your new group'
-                });
-                $scope.groups.push($scope.selectedGroup);
-                console.log("add new group");
-            };
-
-            $scope.removeGroup = function(index) {
-                $scope.groups.splice(index, 1);
-            }
-
-            $scope.selectGroup = function(group) {
-                $scope.selectedGroup = group;
-                console.log(group);
-            };
-
             $scope.removeParticipantFromGroup = function(index) {
                 $scope.selectedGroup.members.splice(index, 1);
-            };
-
-            $scope.saveGroup = function() {
-                $modalInstance.close($scope.selectedGroup);
-                console.log("selectedGroup : ", $scope.selectedGroup);
-                restService.doSave($scope.selectedGroup)
-                    .then(function(success) {
-                        console.log("save Group function:");
-                        console.log('with success: ', success);
-                    }, function(err) {
-                        console.log("save Group function:");
-                        console.log('with error: ', err);
-                    });
             };
 
             $scope.cancel = function() {

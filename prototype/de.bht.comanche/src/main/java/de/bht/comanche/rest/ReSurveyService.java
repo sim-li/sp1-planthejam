@@ -44,7 +44,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	/**
 	 * Could not found any survey with oid "{0}" for user "{1}"
 	 */
@@ -69,7 +69,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	/**
 	 * Could not found any invites for survey with oid "{0}" for user "{1}"
 	 */
@@ -96,7 +96,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	/**
 	 * Could not found any survey for user "{0}"
 	 */
@@ -120,7 +120,7 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	/**
 	 * Could not save survey for user "{0}"
 	 */
@@ -145,14 +145,14 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	/**
 	 * Could not update survey with oid "{0}" for user "{1}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestUpdateSurveyFailure extends multex.Failure {}
-	
-	
+
+
 	@Path("/{oid}")
 	@DELETE
 	@Consumes("application/json")
@@ -175,7 +175,7 @@ public class ReSurveyService {
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestDeleteSurveyFailure extends multex.Failure {}
-	
+
 	@Path("/{oid}/notifyParticipants")
 	@POST
 	@Consumes("application/json")
@@ -184,9 +184,15 @@ public class ReSurveyService {
 		return new LgTransaction <LgSurvey>(request) {
 			public LgSurvey execute() throws Exception {
 				try {
+<<<<<<< HEAD
 					
 //					startSession().notifyParticipants(oid);
 					
+=======
+
+					// startSession().notifyParticipants(oid);
+
+>>>>>>> a1d87e7f7f8e82b27ccb0b1617be2afb815a1709
 				} catch (Exception ex) {
 					throw create(RestNotifyParticipantsFailure.class, ex, oid, getSession().getUser().getName());
 				}
@@ -194,11 +200,11 @@ public class ReSurveyService {
 			}
 		}.getResult();
 	}
-	
+
 	/**
 	 * Could not save messages for survey with oid "{0}" and user "{1}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestNotifyParticipantsFailure extends multex.Failure {}
-	
+
 }
