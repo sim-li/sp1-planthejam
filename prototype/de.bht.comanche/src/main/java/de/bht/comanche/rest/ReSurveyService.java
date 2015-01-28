@@ -45,7 +45,7 @@ public class ReSurveyService {
 	}
 	
 	/**
-	 * Could not found any survey with oid "{0}" for user {1}
+	 * Could not found any survey with oid "{0}" for user "{1}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestGetSurveyFailure extends multex.Failure {}
@@ -70,7 +70,7 @@ public class ReSurveyService {
 	}
 	
 	/**
-	 * Could not found any invites for survey with oid "{0}" for user {1}
+	 * Could not found any invites for survey with oid "{0}" for user "{1}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestGetInvitesForSurveyFailure extends multex.Failure {}
@@ -124,7 +124,7 @@ public class ReSurveyService {
 	}
 	
 	/**
-	 * Could not save survey for user {0}
+	 * Could not save survey for user "{0}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestSaveSurveyFailure extends multex.Failure {}
@@ -149,7 +149,7 @@ public class ReSurveyService {
 	}
 	
 	/**
-	 * Could not update survey with oid "{0}" for user {1}
+	 * Could not update survey with oid "{0}" for user "{1}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestUpdateSurveyFailure extends multex.Failure {}
@@ -163,7 +163,7 @@ public class ReSurveyService {
 		return new LgTransaction <LgSurvey>(request) {
 			public LgSurvey execute() throws Exception {
 				try {
-					startSession().deleteSurvey(oid);//TODO change and implement the method
+					startSession().deleteSurvey(oid);
 				} catch (Exception ex) {
 					throw create(RestDeleteSurveyFailure.class, ex, oid, getSession().getUser().getName());
 				}
@@ -173,12 +173,12 @@ public class ReSurveyService {
 	}
 
 	/**
-	 * Could not delete survey with oid "{0}" for user {1}
+	 * Could not delete survey with oid "{0}" for user "{1}"
 	 */
 	@SuppressWarnings("serial")
 	public static final class RestDeleteSurveyFailure extends multex.Failure {}
 	
-	@Path("/{oid}/notifyAllParticipants")
+	@Path("/{oid}/notifyParticipants")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
@@ -186,12 +186,19 @@ public class ReSurveyService {
 		return new LgTransaction <LgSurvey>(request) {
 			public LgSurvey execute() throws Exception {
 				try {
-//					startSession().notify();
+//					startSession().notify(oid);
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					throw create(RestNotifyParticipantsFailure.class, ex, oid, getSession().getUser().getName());
 				}
 				return null;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not save messages for survey with oid "{0}" and user "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestNotifyParticipantsFailure extends multex.Failure {}
+	
 }
