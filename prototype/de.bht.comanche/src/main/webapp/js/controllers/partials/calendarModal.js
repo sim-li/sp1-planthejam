@@ -20,8 +20,8 @@ angular.module('myApp')
                     controller: 'calendarModalInstanceCtrl',
                     size: 'lg',
                     resolve: {
-                        possibleTimePeriods: function() {
-                            return $scope.possibleTimePeriods;
+                        allowedTimePeriods: function() {
+                            return $scope.allowedTimePeriods;
                         },
                         resultingTimePeriods: function() {
                             return $scope.resultingTimePeriods;
@@ -30,8 +30,8 @@ angular.module('myApp')
                 });
 
                 modalInstance.result.then(function(resultingTimePeriods) {
-                    $scope.resultingTimePeriods = resultingTimePeriods;
-                    $scope.save();
+                    // $scope.resultingTimePeriods = resultingTimePeriods;
+                    $scope.save()(resultingTimePeriods);
                 }, function() {
                     $log.debug('Modal dismissed at: ' + new Date());
                 });
@@ -44,12 +44,12 @@ angular.module('myApp')
      *
      * @class calendarModalInstanceCtrl
      */
-    .controller('calendarModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'possibleTimePeriods', 'resultingTimePeriods',
-        function($scope, $modalInstance, $log, possibleTimePeriods, resultingTimePeriods) {
+    .controller('calendarModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'allowedTimePeriods', 'resultingTimePeriods',
+        function($scope, $modalInstance, $log, allowedTimePeriods, resultingTimePeriods) {
 
             'use strict';
 
-            $scope.possibleTimePeriods = possibleTimePeriods;
+            $scope.allowedTimePeriods = allowedTimePeriods;
             $scope.resultingTimePeriods = resultingTimePeriods;
 
             $scope.ok = function() {
@@ -57,6 +57,7 @@ angular.module('myApp')
             };
 
             $scope.cancel = function() {
+                $log.debug($scope.allowedTimePeriods)
                 $modalInstance.dismiss('cancel');
             };
 

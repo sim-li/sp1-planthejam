@@ -54,13 +54,13 @@
                         %span.glyphicon.glyphicon-ok
                       %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('YES')", "onclick" => "return false;"}
                         %span.glyphicon.glyphicon-remove
-                      %ptj-calendar-modal{"possible" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "save" => "saveSelectedInvite()"}
+                      %ptj-calendar-modal{"allowed" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "save" => "saveSelectedInvite()"}
 
             #ignoredInviteTab.tab-pane
               %input#ignoredFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
               #ignoredList.list-group
                 %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {isIgnored : 'YES'} | filter : searchIgnored"}
-                  .col-sm-10 {{invite.survey.name}} {{invite.isIgnored}}
+                  .col-sm-10 {{invite.survey.name}}
                   .col-sm-2.pull-right
                   %label.btn.btn-primary.btn-sm{"btn-radio" => "'reaccept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('NO')", "onclick" => "return false;"}
                     reaccept
@@ -115,3 +115,4 @@
                 %span{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
                 %span{} {{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes
             poss: {{ selectedInvite.survey.possibleTimePeriods }}
+            conc: {{ selectedInvite.concreteAvailability }}

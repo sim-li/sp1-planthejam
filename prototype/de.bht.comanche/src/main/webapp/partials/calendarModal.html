@@ -6,7 +6,7 @@
   </div>
   <div class='modal-body'>
     <div class='row'>
-      <ptj-calendar allowed='possibleTimePeriods' resulting='resultingTimePeriods'></ptj-calendar>
+      <ptj-calendar allowed='allowedTimePeriods' resulting='resultingTimePeriods'></ptj-calendar>
     </div>
   </div>
   <div class='modal-footer'>
@@ -18,4 +18,5 @@
   <input class='btn btn-primary' ng-click='openCalendarModal()' type='button' value='Edit calendar'>
 </div>
 <!-- ---- debugging -->
+<span>allowed: {{ allowedTimePeriods }}</span>
 <span>resulting: {{ resultingTimePeriods }}</span>
