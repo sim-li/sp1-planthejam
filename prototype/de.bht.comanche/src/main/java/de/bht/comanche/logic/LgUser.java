@@ -378,7 +378,7 @@ public class LgUser extends DaObject {
     		if (survey.shouldBeEvaluated()) {
     			survey.evaluate();
     			saveUnattached(survey);
-    			notifyHost(survey);
+    			// notifyHost(survey);
     			saveUnattached(this);
     		}
     	}

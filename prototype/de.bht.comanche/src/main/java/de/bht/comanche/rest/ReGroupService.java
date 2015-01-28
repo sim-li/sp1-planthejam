@@ -119,7 +119,7 @@ public class ReGroupService extends RestService {
 	 * @param request The request information from HTTP service.
 	 * @exception RestDeleteGroupFailure if it was not possible to delete LgGroup.
 	 */
-	@Path("/")
+	@Path("/{oid}")
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })

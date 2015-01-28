@@ -59,8 +59,9 @@ angular.module('models')
             this.members.push(new Member({
                 "user": user
             }));
-            // console.log(new Member(user));
         };
+
+        Group.prototype.removeUser
 
 
         return (Group);
