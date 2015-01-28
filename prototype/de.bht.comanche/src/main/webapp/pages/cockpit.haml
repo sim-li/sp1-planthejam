@@ -113,6 +113,6 @@
               %label{:for => "inviteDetailsDeterminedTimePeriod"} Determined Time Period:
               %span#inviteDetailsDeterminedTimePeriod{}
                 %span{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
-                %span{} {{ selectedInvite.survey.determinedTimePeriod.durationMins }} minutes
+                %span{} {{ selectedInvite.survey.determinedTimePeriod.getDurationMins() }} minutes
             poss: {{ selectedInvite.survey.possibleTimePeriods }}
             conc: {{ selectedInvite.concreteAvailability }}
