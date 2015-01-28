@@ -86,7 +86,8 @@ public class LgSurveyEvaluationTest {
 				"Alice") {
 			@Override
 			public String execute() {
-				startSession().notifyParticipants(surveyForEvaluation.getOid());
+				final LgUser user = startSession();
+				user.notifyParticipants(surveyForEvaluation.getOid());
 				return "";
 			}
 		}.getResult();

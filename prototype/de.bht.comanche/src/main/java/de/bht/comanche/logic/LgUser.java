@@ -366,6 +366,7 @@ public class LgUser extends DaObject {
     	for (final LgSurvey survey : surveysOfThisUser) {
     		if (survey.shouldBeEvaluated()) {
     			survey.evaluate();
+    			saveUnattached(survey);
     			notifyHost(survey);
     		}
     	}
@@ -396,17 +397,25 @@ public class LgUser extends DaObject {
      */
     public void notifyParticipants(long surveyOid) {
     	final LgSurvey survey = this.getSurvey(surveyOid);
-    	for (LgUser user : survey.getParticipants()) {
-    		if (survey.isAlgoChecked() && survey.getSuccess() == LgStatus.YES) {
-    			user.addMessage(survey.getName() + " is going to happen from "
-    					+ survey.getDeterminedTimePeriod().getStartTime() + " to "
-    					+ survey.getDeterminedTimePeriod().getEndTime());
-    			saveUnattached(user);
-    			
-    		} else if (survey.isAlgoChecked() && survey.getSuccess() == LgStatus.NO){
-    			user.addMessage(survey.getName() + " got cancelled. Blame " + survey.getHost());
-    			saveUnattached(user);
-    		}
+    	if (!survey.isAlgoChecked()) {
+    		return;
+    	}
+    	if (survey.getSuccess() == LgStatus.YES) {
+    		final String yesMsg = survey.getName() + " is going to happen from "
+					+ survey.getDeterminedTimePeriod().getStartTime() + " to "
+					+ survey.getDeterminedTimePeriod().getEndTime();
+			sendMessageToAllParticipants(survey.getParticipants(), yesMsg);
+    	}
+    	if (survey.getSuccess() == LgStatus.NO) {
+    		final String noMsg = survey.getName() + " got cancelled. Blame " + survey.getHost();
+			sendMessageToAllParticipants(survey.getParticipants(), noMsg);
+    	}
+    }
+    
+    public void sendMessageToAllParticipants(final List<LgUser> participants, final String text) {
+    	for (LgUser user: participants) {
+    		user.addMessage(text);
+        	saveUnattached(user);
     	}
     }
 
