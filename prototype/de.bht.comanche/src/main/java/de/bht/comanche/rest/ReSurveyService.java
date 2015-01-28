@@ -20,6 +20,7 @@ import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgTransaction;
 import de.bht.comanche.rest.ReInviteService.RestGetInviteFailure;
+import de.bht.comanche.logic.LgUser;
 
 
 @Path("/surveys")
@@ -85,12 +86,9 @@ public class ReSurveyService {
 			public List<LgSurvey> execute() throws Exception {
 				final List<LgSurvey> result;
 				try {
-
-					//-- FOR SURVEY EVALUATION --------------------------------
-					// startSession().evaluateAllSurveys(); // <<---- TODO comment back in when timeperiods an invites etc. work.
-					//---------------------------------------------------------
-
-					result = startSession().getSurveys();
+					final LgUser user = startSession();
+					user.evaluateAllSurveys();
+					result = user.getSurveys();
 				} catch (Exception ex) {
 					throw create(RestGetAllSurveysFailure.class, ex, getSession().getUser().getName());
 					}

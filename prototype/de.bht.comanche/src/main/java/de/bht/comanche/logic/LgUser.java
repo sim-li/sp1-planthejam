@@ -33,7 +33,6 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "NAME"))
 public class LgUser extends DaObject {
-
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Column for a user name. Must not be null.
@@ -259,7 +258,6 @@ public class LgUser extends DaObject {
 		this.groups.remove(group);
 	}
 
-	// -- HOST ROLES --
 	public LgSurvey getSurvey(final Long oid) {
 		final LgSurvey survey = findOneByKey(LgSurvey.class, "OID", oid);
 		if (survey != null) {
@@ -310,23 +308,8 @@ public class LgUser extends DaObject {
 		final LgSurvey survey = findOneByKey(LgSurvey.class, "OID", other.getOid());
 		survey.updateWith(other);
 		return saveUnattached(other);
-//		
-//		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
-//		listFromDB.add(findOneByKey(LgSurvey.class, "OID", this.getOid()));
-//		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
-//		listfresh.add(surveyFromClient);
-//		
-//		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
-//		listfresh.removeAll(listFromDB); // ELs already saved
-//		
-//		for (LgSurvey el : listfresh) {
-//		System.out.println(el);
-//		saveUnattached(el); // Fresh list are never tracked
-//		}
-//		
-//		listFromDB.addAll(listfresh); // Requires PL tracking too
-//		return listFromDB.get(0);
 	}
+	
 	/**
 	 *  The survey with oid "{0}" seems to be unpersisted. You can only
 	 *  update surveys you have retrieved from the server before.
@@ -353,7 +336,6 @@ public class LgUser extends DaObject {
 		this.getSurvey(oid).delete();
 	}
 
-	// -- PARTICIPANT ROLES --
 	@JsonIgnore
 	public List<LgInvite> getInvitesAsParticipant() {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
@@ -374,35 +356,82 @@ public class LgUser extends DaObject {
 		return saveInvite(invite);
 	}
 
-	//------------------ TODO: METHODS FOR SURVEY EVALUATION ------------------
-
+	/**
+	 * Evaluates all surveys of this user and and notifies host about outcome.
+	 * 
+	 * Should be triggered by rest path before calling getSurveys().
+	 */
     public void evaluateAllSurveys() {
     	final List<LgSurvey> surveysOfThisUser = getSurveys();
-        System.out.println("+#+#+#+#+#+#+#+#+#+#");
-        System.out.println("evaluating all survey (" + surveysOfThisUser.size() + ")");
     	for (final LgSurvey survey : surveysOfThisUser) {
-            System.out.println("survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
-    		if (survey.isReadyForEvaluation()) {
-                System.out.println("READY survey " + survey.getOid() + " " + survey.getName() + " " + survey.isReadyForEvaluation());
-    			survey.determine();
-    			// sendMessageToHost(survey);
+    		if (survey.shouldBeEvaluated()) {
+    			survey.evaluate();
+    			saveUnattached(survey);
+    			notifyHost(survey);
+    			saveUnattached(this);
     		}
     	}
     }
-
-    private void sendMessageToHost(final LgSurvey survey) {
-        System.out.println(survey);
-        System.out.println(survey.getDeterminedTimePeriod());
-        System.out.println(survey.getDeterminedTimePeriod().getStartTime());
-    	final Date determinedDate = survey.getDeterminedTimePeriod().getStartTime(); // needs formatting
-    	final String message = "es konnte folgender / kein Termin ermittelt werden " + determinedDate;
-    	// IMPORTANT TODO implementation missing of LgUser.messages
-    	// this.messages.add(message);
+    
+    /**
+     * Sends host a message about determined time period if 
+     * existent.
+     * 
+     * @param survey Surevey to be used for notifying host.
+     */
+    private void notifyHost(LgSurvey survey) {
+    	if (survey.getDeterminedTimePeriod().isNull()) {
+    		this.addMessage("Sorry, we couldn't determine a common date for the survey '" + survey.getName() + "'");
+    	} else {
+    		this.addMessage("We determined a date for the survey '" + survey.getName() + "' from "
+    				+ survey.getDeterminedTimePeriod().getStartTime() + "to " +  survey.getDeterminedTimePeriod().getEndTime());
+    	}
+    }
+    
+    /**
+     * Notifies all participants of a survey of the outcome by 
+     * sending them a message. 
+     * 
+     * Should be triggered by rest path.
+     * 
+     * @param surveyOid Survey to be used for notifying participants.
+     */
+    public void notifyParticipants(long surveyOid) {
+    	final LgSurvey survey = this.getSurvey(surveyOid);
+    	if (!survey.isAlgoChecked()) {
+    		return;
+    	}
+    	if (survey.getSuccess() == LgStatus.YES) {
+    		final String yesMsg = survey.getName() + " is going to happen from "
+					+ survey.getDeterminedTimePeriod().getStartTime() + " to "
+					+ survey.getDeterminedTimePeriod().getEndTime();
+			sendMessageToAllParticipants(survey.getParticipants(), yesMsg);
+    	}
+    	if (survey.getSuccess() == LgStatus.NO) {
+    		final String noMsg = survey.getName() + " got cancelled. Blame " + survey.getHost();
+			sendMessageToAllParticipants(survey.getParticipants(), noMsg);
+    	}
+    }
+    
+    public void sendMessageToAllParticipants(final List<LgUser> participants, final String text) {
+    	for (LgUser user: participants) {
+    		user.addMessage(text);
+        	saveUnattached(user);
+    	}
     }
 
-	// -------------------------------------------------------------------------
-
-
+    /**
+     * Sends this user a string message.
+     * 
+     * Convenience method, constructs message object and adds to local 
+     * list.
+     * 
+     * @param message Message text as string
+     */
+    public void addMessage(String message) {
+    	this.messages.add(new LgMessage().setMessage(message));
+    }
+    
     /**
      * For testing: Add invites manually
      * @param invite
@@ -412,7 +441,17 @@ public class LgUser extends DaObject {
     	this.invites.add(invite);
     	return this;
     }
-    
+   
+    /**
+     * Searches invite by oid. Doesn't execute owner check!
+     * 
+     * @param oid OID of invite to be retrieved
+     * @return Found invite
+     */
+	public LgInvite getInvite(final long oid) {
+		return findOneByKey(LgInvite.class, "oid", oid);
+	}
+
     public LgUser updateWith(LgUser other) {
 		this.email = other.email;
 		this.generalAvailability =  other.generalAvailability;
@@ -427,11 +466,6 @@ public class LgUser extends DaObject {
 		return this;
 	} 
     
-	public LgInvite getInvite(final long oid) {
-		//return search(this.invites, oid);
-		return findOneByKey(LgInvite.class, "oid", oid);
-	}
-
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
 		return this.groups;
@@ -481,7 +515,7 @@ public class LgUser extends DaObject {
 		 this.messages = messages;
 	 }
 	 
-	//Removed invites (Causes stack overflow error)
+	//Removed invites from toString method (Causes stack overflow error)
 	@Override
 	public String toString() {
 		return String
