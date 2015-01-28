@@ -19,6 +19,7 @@ import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgTransaction;
+import de.bht.comanche.rest.ReInviteService.RestGetInviteFailure;
 
 
 @Path("/surveys")
@@ -36,12 +37,18 @@ public class ReSurveyService {
 				try {
 					result = startSession().getSurvey(oid);
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					throw create(RestGetSurveyFailure.class, ex, oid, getSession().getUser().getName());
 				}
 				return result;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not found any survey with oid "{0}" for user {1}
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetSurveyFailure extends multex.Failure {}
 
 	@GET
 	@Path("/{oid}/invites")
@@ -55,12 +62,18 @@ public class ReSurveyService {
 				try {
 					result = startSession().getInvitesForSurvey(surveyOid);
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					throw create(RestGetInvitesForSurveyFailure.class, ex, surveyOid, getSession().getUser().getName());
 				}
 				return result;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not found any invites for survey with oid "{0}" for user {1}
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetInvitesForSurveyFailure extends multex.Failure {}
 
 	@GET
 	@Path("/")
@@ -79,12 +92,18 @@ public class ReSurveyService {
 
 					result = startSession().getSurveys();
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
-				}
+					throw create(RestGetAllSurveysFailure.class, ex, getSession().getUser().getName());
+					}
 				return result;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not found any survey for user "{0}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetAllSurveysFailure extends multex.Failure {}
 
 	@Path("/")
 	@POST
@@ -96,16 +115,20 @@ public class ReSurveyService {
 				final LgSurvey result;
 				try {
 					result = startSession().saveSurvey(survey);
-//					System.out.println("DEBUGME: Saving survey with no of invites "+  survey.getInvites().size());
-//					System.out.println("DEBUGME: Members:   "+ survey.getInvites());
-//					System.out.println("Saved survey");
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					throw create(RestSaveSurveyFailure.class, ex, getSession().getUser().getName());
 				}
 				return result;
 			}
 		}.getResult();
 	}
+	
+	/**
+	 * Could not save survey for user {0}
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestSaveSurveyFailure extends multex.Failure {}
+
 
 	@Path("/{oid}")
 	@PUT
@@ -118,13 +141,20 @@ public class ReSurveyService {
 				try {
 					result = startSession().updateSurvey(survey);
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					throw create(RestUpdateSurveyFailure.class, ex, oid, getSession().getUser().getName());
 				}
 				return result;
 			}
 		}.getResult();
 	}
-
+	
+	/**
+	 * Could not update survey with oid "{0}" for user {1}
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestUpdateSurveyFailure extends multex.Failure {}
+	
+	
 	@Path("/{oid}")
 	@DELETE
 	@Consumes("application/json")
@@ -135,7 +165,7 @@ public class ReSurveyService {
 				try {
 					startSession().deleteSurvey(oid);//TODO change and implement the method
 				} catch (Exception ex) {
-					throw create(TempFailure.class, ex);//TODO change and implement the failure
+					throw create(RestDeleteSurveyFailure.class, ex, oid, getSession().getUser().getName());
 				}
 				return null;
 			}
@@ -143,10 +173,25 @@ public class ReSurveyService {
 	}
 
 	/**
-	 * Temp failure
+	 * Could not delete survey with oid "{0}" for user {1}
 	 */
 	@SuppressWarnings("serial")
-	public static final class TempFailure extends multex.Failure {}
-
-
+	public static final class RestDeleteSurveyFailure extends multex.Failure {}
+	
+	@Path("/{oid}/notifyAllParticipants")
+	@POST
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public LgSurvey notify(@PathParam("oid") final long oid, @Context final HttpServletRequest request) {
+		return new LgTransaction <LgSurvey>(request) {
+			public LgSurvey execute() throws Exception {
+				try {
+//					startSession().notify();
+				} catch (Exception ex) {
+					throw create(TempFailure.class, ex);//TODO change and implement the failure
+				}
+				return null;
+			}
+		}.getResult();
+	}
 }

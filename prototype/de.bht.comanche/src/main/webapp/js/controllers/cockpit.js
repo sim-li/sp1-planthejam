@@ -202,29 +202,6 @@ angular.module('myApp')
                 restService.doSave($scope.selectedSurvey);
             };
 
-
-            //### HACK ##############################
-            //-- some dummies
-            // $scope.possibleTimePeriods = [
-            if ($scope.selectedInvite) {
-                var now = new Date();
-                $scope.selectedInvite.survey.possibleTimePeriods = [
-                    new TimePeriod({
-                        startTime: new Date(now.getTime() - 2 * 24 * 60 * 60000),
-                        durationMins: 120
-                    }), new TimePeriod({
-                        startTime: new Date(now.getTime() - 1 * 24 * 60 * 60000),
-                        durationMins: 240
-                    }), new TimePeriod({
-                        startTime: now,
-                        durationMins: 360
-                    })
-                ];
-            }
-            //### HACK ##############################
-            // $scope.resultingTimePeriods = [];
-
-
             $scope.toggleSurveyDetails = function() {
                 $scope.showSurveyDetails = true;
             };

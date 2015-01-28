@@ -111,7 +111,7 @@ public class ReInviteService extends RestService {
 			public LgInvite execute() throws Exception {
 				final LgInvite result;
 				try {
-					result = startSession().saveInvite(invite);//TODO change and implement the method
+					result = startSession().saveInvite(invite);
 				} catch (Exception ex) {
 					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
 				}

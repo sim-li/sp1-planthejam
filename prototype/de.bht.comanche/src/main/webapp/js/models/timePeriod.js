@@ -30,7 +30,7 @@ angular.module('models')
 
 		var timePeriodNull = {
 			startTime: new Date(0),
-			endTime: new Date(-60000),
+			endTime: new Date(-60000)
 		};
 
 		/**
@@ -68,6 +68,9 @@ angular.module('models')
 			return this.getDurationMins() == -1;
 		};
 
+		TimePeriod.prototype.getDurationMins = function() {
+			return (this.endTime - this.startTime) / 60000;
+		};
 		/**
 		 * This model's unique id.
 		 *
@@ -100,25 +103,6 @@ angular.module('models')
 			return timePeriods;
 		};
 
-		/**
-		 * Provides an array of three dummy time periods.
-		 *
-		 * @method dummyTimePeriods
-		 * @static
-		 * @return {Array} three dummy time periods
-		 */
-		TimePeriod.dummyTimePeriods = function() {
-			return [{
-				'startTime': new Date(),
-				'durationMins': '3'
-			}, {
-				'startTime': new Date(),
-				'durationMins': '4'
-			}, {
-				'startTime': new Date(),
-				'durationMins': '5'
-			}];
-		};
 
 
 		return (TimePeriod);

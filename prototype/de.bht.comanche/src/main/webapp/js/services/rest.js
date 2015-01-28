@@ -43,8 +43,8 @@ angular.module('rest', ['models'])
                 },
                 'survey': {
                     'path': 'surveys/',
-                    'invites': 'invites' /*,*/
-                        // 'notifyParticipants': 'notifyParticipants' // TODO -> REST service on server side: POST surveys/:oid/notifyParticipants
+                    'invites': 'invites',
+                    'notifyParticipants': 'notifyParticipants'
                 },
                 'invite': {
                     'path': 'invites/'
