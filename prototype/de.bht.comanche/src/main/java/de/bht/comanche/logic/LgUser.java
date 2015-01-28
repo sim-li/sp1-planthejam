@@ -79,7 +79,7 @@ public class LgUser extends DaObject {
 
 	@ElementCollection(targetClass = LgMessage.class, fetch = FetchType.EAGER)
 	@Column(name = "messages")
-	private Set<LgMessage> messages = new HashSet<LgMessage>();
+	private Set<LgMessage> messages;
 
 	@Transient
 	final LgGravatarUtils gravUtils;
@@ -328,6 +328,7 @@ public class LgUser extends DaObject {
 	@SuppressWarnings("serial")
 	public static final class UpdateWithUnpersistedSurveyExc extends multex.Failure {}
 
+	//Potential candidate for bull shit
 	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
 			List<LgInvite> dirtyInvites) {
 		for (int i = 0; i < dirtyInvites.size(); i++) {
@@ -378,7 +379,9 @@ public class LgUser extends DaObject {
     		if (survey.shouldBeEvaluated()) {
     			survey.evaluate();
     			saveUnattached(survey);
+
     			// notifyHost(survey);
+
     			saveUnattached(this);
     		}
     	}

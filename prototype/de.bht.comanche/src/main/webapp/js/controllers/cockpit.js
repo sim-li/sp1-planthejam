@@ -147,9 +147,9 @@ angular.module('myApp')
             };
 
             var sendMessagesToParticipant = function() {
-                restService.notifyParticipants(selectedSurvey.oid)
+                restService.notifyParticipants($scope.selectedSurvey.oid)
                     .then(function(success) {
-                        console.log('All participants have just been notified');
+                    	$location.path('/cockpit');
                     });
             };
 
