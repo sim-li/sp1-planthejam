@@ -78,6 +78,10 @@ public class TestUtils {
 			.setEndTime(endTime);
 	}
 	
+	public Date buildDate(String dateString) {
+		return parseDate(dateString);
+	}
+	
 	public Date parseDate(String date) {
 		// Format: dd.MM.yyyy/mm:HH
 		// Note: Using "dumb" regEx for the moment.

@@ -44,6 +44,9 @@ public class LgSurveyEvaluationTest {
 				"01.05.99/21:30 -> 01.05.99/22:30",
 				"30.01.86/20:30 -> 30.01.86/22:30",
 				"08.09.05/00:30 -> 08.09.05/01:30"))
+			.setDeadline(testUtils.buildDate(
+				"30.01.2012/22:30"				// This deadline definately is over
+					))
 			.addParticipants(bob, carol);
 		this.surveyForEvaluation = testUtils.saveSurveyFor("Alice", testSurvey);
 		// Bob and carol seem to have time at the 01.05.99
@@ -122,7 +125,8 @@ public class LgSurveyEvaluationTest {
 				username) {
 			@Override
 			public LgInvite execute() {
-				return startSession().getInviteBySurveyName("Go Skiing");
+				// Just gets the first invite and done.
+				return startSession().getInvites().get(0);
 			}
 		}.getResult();
 	}

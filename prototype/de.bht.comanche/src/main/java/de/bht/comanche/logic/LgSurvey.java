@@ -118,6 +118,7 @@ public class LgSurvey extends DaObject {
 		this.possibleTimePeriods = new HashSet<LgTimePeriod>();
 		this.determinedTimePeriod = new LgTimePeriod();
 		this.invites = new ArrayList<LgInvite>();
+		this.success = LgStatus.UNDECIDED;
 	}
 
 	public LgInvite getInviteByParticipantName(final String name) {
@@ -254,7 +255,8 @@ public class LgSurvey extends DaObject {
 
 	@JsonIgnore
 	public boolean shouldBeEvaluated() {
-		return  this.deadline.before(now()) &&
+		return  this.deadline != null && 
+				this.deadline.before(now()) &&
                 !this.algoChecked &&
                 this.success == LgStatus.UNDECIDED;
 	}

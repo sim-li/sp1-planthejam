@@ -401,9 +401,11 @@ public class LgUser extends DaObject {
     			user.addMessage(survey.getName() + " is going to happen from "
     					+ survey.getDeterminedTimePeriod().getStartTime() + " to "
     					+ survey.getDeterminedTimePeriod().getEndTime());
+    			saveUnattached(user);
     			
     		} else if (survey.isAlgoChecked() && survey.getSuccess() == LgStatus.NO){
     			user.addMessage(survey.getName() + " got cancelled. Blame " + survey.getHost());
+    			saveUnattached(user);
     		}
     	}
     }
