@@ -1,9 +1,14 @@
 package de.bht.comanche.persistence;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.Persistence;
 
@@ -32,25 +37,73 @@ public class TestUtils {
 	}
 	
 	/**
-	 * Generates a hash set of time periods, inserts the current date stamp to
-	 * fill the field with a value.
+	 * Generates a hash set of time periods by parsing the time strings.
 	 * 
-	 * @param durations
-	 *            List of durations as integer. Every duration will generate a
+	 * @param timeString
+	 *            List of time strings that define start and end time of
 	 *            time period.
 	 * @return A set of time periods
 	 */
-	public HashSet<LgTimePeriod> buildTimePeriods(int... durations) {
+	public HashSet<LgTimePeriod> buildTimePeriods(String ... timeStrings) {
 		final HashSet<LgTimePeriod> timePeriods = new HashSet<LgTimePeriod>();
-		for (int i = 0; i < durations.length; i++) {
-			timePeriods.add(new LgTimePeriod().setStartTime(new Date())
-					.setDurationMins(durations[i]));
+		try {
+			for (String tS: timeStrings) {
+				timePeriods.add(buildTimePeriodWithExc(tS));
+			}
+		}
+		catch(ParseException e) {
+			e.printStackTrace();
 		}
 		return timePeriods;
 	}
 	
-	public LgTimePeriod buildOneTimePeriod(int duration) {
-		return new LgTimePeriod().setDurationMins(duration).setStartTime(new Date());
+	/**
+	 * Parses a single time string. 
+	 * 
+	 * Format (start/end) is dd.MM.yyyy/mm:HH->dd.MM.yyyy/mm:HH
+	 * 
+	 * @param timeString String representation of start and end time
+	 * @return Time Period with start and end time
+	 * @throws ParseException
+	 */
+	public LgTimePeriod buildTimePeriodWithExc(String timeString) throws ParseException {
+		final String[] times = timeString.split("->");
+		for (int i = 0; i <times.length; i++) {
+			times[i] = times[i].trim();
+		}
+		final Date startTime = parseDate(times[0]);
+		final Date endTime = parseDate(times[1]);
+		return new LgTimePeriod()
+			.setStartTime(startTime)
+			.setEndTime(endTime);
+	}
+	
+	public Date parseDate(String date) {
+		// Format: dd.MM.yyyy/mm:HH
+		// Note: Using "dumb" regEx for the moment.
+		final String re = "([0-9]{2}).([0-9]{2}).([0-9]{4})/([0-9]{2}):([0-9]{2})";
+		final Pattern p = Pattern.compile(re);
+		final Matcher m = p.matcher(date);
+		Calendar cal = GregorianCalendar.getInstance();
+		if (m.matches()) {
+			cal.set(Integer.parseInt(m.group(3)),     	//YEAR
+					Integer.parseInt(m.group(2)) - 1,	//MONTH
+					Integer.parseInt(m.group(1)),		//DAY
+					Integer.parseInt(m.group(4)),		//HOUR
+					Integer.parseInt(m.group(5))		//MINUTE
+					);
+		}
+		return cal.getTime();
+	}
+	
+	public LgTimePeriod tP(String timeString) {
+		try {
+			return buildTimePeriodWithExc(timeString);
+		}
+		catch(ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**

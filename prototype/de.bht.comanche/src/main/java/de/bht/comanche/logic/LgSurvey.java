@@ -319,7 +319,7 @@ public class LgSurvey extends DaObject {
 		} else {
 
             /****** HACK ******/
-            this.determinedTimePeriod = new LgTimePeriod().setStartTime(new Date()).setDurationMins(12345);
+            this.determinedTimePeriod = new LgTimePeriod().setStartTime(new Date()).setEndTime(new Date());
             // this.determinedTimePeriod = null	;
             /****** HACK ******/
         }

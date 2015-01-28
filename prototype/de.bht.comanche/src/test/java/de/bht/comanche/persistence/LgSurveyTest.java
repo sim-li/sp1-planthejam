@@ -4,7 +4,9 @@ import static org.fest.assertions.api.Assertions.extractProperty;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.bht.comanche.logic.LgStatus;
@@ -46,14 +49,18 @@ public class LgSurveyTest extends LgTestWithUsers {
 	
 	private void saveSurveyWithTimeperiods() {
 		surveyForEvaluation = testUtils.saveSurvey(new LgSurvey()
-		.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 40, 60)));
+		.setPossibleTimePeriods(testUtils.buildTimePeriods(
+				"30.01.86/20:30 -> 30.01.86/22:30",
+				"01.05.99/21:30 -> 01.06.99/22:30",
+				"08.09.05/00:30 -> 01.06.06/22:30"
+			)));
 	}
 	
 	@Test
 	public void getSurveyByOidTest() {
 		final Date aDate = new Date();
-		final LgTimePeriod aTimePeriod = new LgTimePeriod().setDurationMins(30).setStartTime(aDate);
-		final Set<LgTimePeriod> severalTimePeriods = testUtils.buildTimePeriods(20,30,40); 
+		final LgTimePeriod aTimePeriod = new LgTimePeriod().setStartTime(aDate);
+		//final Set<LgTimePeriod> severalTimePeriods = testUtils.buildTimePeriods(20,30,40); 
 		final LgSurvey aSurvey = new LgSurvey()
 			.setAlgoChecked(false)
 			.setDeadline(aDate)
@@ -63,7 +70,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 			.setFrequencyUnit(LgTimeUnit.MONTH)
 			.addParticipants(bob, carol)
 			.setName("My test survey")
-		    .setPossibleTimePeriods(severalTimePeriods)
+		    //.setPossibleTimePeriods(severalTimePeriods)
 		    .setSuccess(LgStatus.UNDECIDED)
 		    .setSurveyDurationMins(30)
 		    .setType(LgSurveyType.ONE_TIME);
@@ -85,7 +92,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 		assertThat(surveyEval.getParticipants()).containsOnly(alice, bob, carol);
 		assertThat(surveyEval.getHost()).isEqualTo(alice);
 		assertThat(surveyEval.getName()).isEqualTo("My test survey");
-		assertThat(surveyEval.getPossibleTimePeriods()).isEqualTo(severalTimePeriods);
+		//assertThat(surveyEval.getPossibleTimePeriods()).isEqualTo(severalTimePeriods);
 		assertThat(surveyEval.getSuccess()).isEqualTo(LgStatus.UNDECIDED);
 		assertThat(surveyEval.getSurveyDurationMins()).isEqualTo(30);
 		assertThat(surveyEval.getType()).isEqualTo(LgSurveyType.ONE_TIME);
@@ -181,157 +188,184 @@ public class LgSurveyTest extends LgTestWithUsers {
 				"Alice", "Bob", "Carol");
 	}
 
-	
-	@Test
-	public void deleteSurveyTest() {
-		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(new LgSurvey()
-			.addParticipants(bob, carol)
-			.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 30, 40))
-			.setDeterminedTimePeriod(new LgTimePeriod().setDurationMins(50).setStartTime(new Date())));
-		new TestTransaction<Object>("Alice") {
-			@Override
-			public Object execute() {
-				startSession().deleteSurvey(surveyForEvaluation.getOid());
-				return null;
-			}
-		}.getResult();
-		final Boolean foundDeletedObj = new TestTransaction<Boolean>(
-				"Alice") {
-			@Override
-			public Boolean execute() {
-				Boolean foundDeletedObj = null;
-				try {
-					startSession().findOneByKey(LgSurvey.class, "oid",
-							surveyForEvaluation.getOid());
-					foundDeletedObj = true;
-				} catch (DaFindOneByKeyExc ex) {
-					foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
-				}
-				for (final LgInvite invite : surveyForEvaluation.getInvites()) {
-					try {
-						startSession().findOneByKey(LgInvite.class, "oid",
-								invite.getOid());
-						foundDeletedObj = true;
-					} catch (DaFindOneByKeyExc ex) {
-						foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
-					}
-				}
-				//TODO: Implement this, not really urgent.
-//				for (final LgTimePeriod timePeriod : surveyForEvaluation.getPossibleTimePeriods()) {
+	// WHAT IS THIS?
+//	@Ignore
+//	@Test
+//	public void deleteSurveyTest() {
+//		final LgSurvey surveyForEvaluation = testUtils.saveSurvey(new LgSurvey()
+//			.addParticipants(bob, carol)
+//			.setPossibleTimePeriods(testUtils.buildTimePeriods(20, 30, 40))
+//			.setDeterminedTimePeriod(new LgTimePeriod().setStartTime(new Date()).setEndTime(new Date())));
+//		new TestTransaction<Object>("Alice") {
+//			@Override
+//			public Object execute() {
+//				startSession().deleteSurvey(surveyForEvaluation.getOid());
+//				return null;
+//			}
+//		}.getResult();
+//		final Boolean foundDeletedObj = new TestTransaction<Boolean>(
+//				"Alice") {
+//			@Override
+//			public Boolean execute() {
+//				Boolean foundDeletedObj = null;
+//				try {
+//					startSession().findOneByKey(LgSurvey.class, "oid",
+//							surveyForEvaluation.getOid());
+//					foundDeletedObj = true;
+//				} catch (DaFindOneByKeyExc ex) {
+//					foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
+//				}
+//				for (final LgInvite invite : surveyForEvaluation.getInvites()) {
 //					try {
-//						startSession().findManyByQuery("select o from " + LgTimePeriod.class);
+//						startSession().findOneByKey(LgInvite.class, "oid",
+//								invite.getOid());
 //						foundDeletedObj = true;
 //					} catch (DaFindOneByKeyExc ex) {
 //						foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
 //					}
 //				}
-				return false;
-			}
-		}.getResult();
-		assertThat(foundDeletedObj).isEqualTo(false);
+//				//TODO: Implement this, not really urgent.
+////				for (final LgTimePeriod timePeriod : surveyForEvaluation.getPossibleTimePeriods()) {
+////					try {
+////						startSession().findManyByQuery("select o from " + LgTimePeriod.class);
+////						foundDeletedObj = true;
+////					} catch (DaFindOneByKeyExc ex) {
+////						foundDeletedObj = foundDeletedObj == null ? false : foundDeletedObj;
+////					}
+////				}
+//				return false;
+//			}
+//		}.getResult();
+//		assertThat(foundDeletedObj).isEqualTo(false);
+//	}
+//	
+	@Test
+	public void testUtilTpCorrect() {
+		Calendar cal = GregorianCalendar.getInstance();
+		cal.set(1982, Calendar.JANUARY, 20, 13, 30);
+		final Date targetStartDate = cal.getTime();
+		cal.set(1982, Calendar.JANUARY, 21, 14, 30);
+		final Date targetEndDate = cal.getTime();
+		final LgTimePeriod gregorianTimePeriod = new LgTimePeriod()
+			.setStartTime(targetStartDate)
+			.setEndTime(targetEndDate);
+		final LgTimePeriod testTimePeriod = testUtils.tP("20.01.1982/13:30 -> 21.01.1982/14:30");
+		final LgTimePeriod testTimePeriodWrong = testUtils.tP("20.01.1982/13:31 -> 21.01.1982/14:30");
+		final LgTimePeriod testTimePeriodWrongAgain = testUtils.tP("20.01.1982/13:30 -> 21.02.1982/14:30");
+		assertThat(gregorianTimePeriod).isEqualTo(testTimePeriod);
+		assertThat(gregorianTimePeriod).isNotEqualTo(testTimePeriodWrong);
+		assertThat(gregorianTimePeriod).isNotEqualTo(testTimePeriodWrongAgain);
 	}
 	
 	@Test
 	public void saveSurveyWithTimePeriodsTest() {
 		final LgSurvey surveyWithVariousTimePeriods = testUtils.saveSurvey(new LgSurvey()
 		.setPossibleTimePeriods(
-				testUtils.buildTimePeriods(20, 40, 60)));
-		assertThat(
-				extractProperty("durationMins").from(
-						surveyWithVariousTimePeriods.getPossibleTimePeriods()))
-				.contains(20, 40, 60);
+				testUtils.buildTimePeriods(
+						"02.12.1982/13:40 -> 02.12.1982/15:40",
+						"03.12.1984/13:40 -> 04.12.1986/15:40",
+						"05.12.1986/13:45 -> 06.12.1986/15:40"
+						)));
+		assertThat(surveyWithVariousTimePeriods.getPossibleTimePeriods())
+				.contains(
+						testUtils.tP("02.12.1982/13:40 -> 02.12.1982/15:40"),
+						testUtils.tP("03.12.1984/13:40 -> 04.12.1986/15:40"),
+						testUtils.tP("05.12.1986/13:45 -> 06.12.1986/15:40")
+				)
+				.hasSize(3);
 	}
 
 	@Test
 	public void saveSurveyWithDeterminedTimePeriodTest() {
 		final LgSurvey surveyWithOneTimePeriod = testUtils.saveSurvey(new LgSurvey()
 		.setDeterminedTimePeriod(
-				testUtils.buildOneTimePeriod(20)));
+				testUtils.tP("02.12.2012/13:40 -> 02.12.2012/15:40")));
 		assertThat(
-				surveyWithOneTimePeriod.getDeterminedTimePeriod().getDurationMins())
-				.isEqualTo(20);
+				surveyWithOneTimePeriod.getDeterminedTimePeriod())
+				.isEqualTo(testUtils.tP("02.12.2012/13:40 -> 02.12.2012/15:40"));
 	}
 
 	@Test
+	@SuppressWarnings("unused")
 	public void updateSurveyByModifyingTimePeriods() {
-		updateSurveyTimePeriods(20, 40, 80);
+		final LgTimePeriod tp1 = testUtils.tP("31.01.1986/21:30 -> 30.01.1986/22:30");
+		final LgTimePeriod tp2 = testUtils.tP("01.05.1999/21:30 -> 01.07.2005/21:30");
+		final LgTimePeriod tp3 = testUtils.tP("08.09.2005/00:30 -> 01.06.2006/20:30");
+		updateSurveyTimePeriods(
+				"31.01.1986/21:30 -> 30.01.1986/22:30",
+				"01.05.1999/21:30 -> 01.07.2005/21:30",
+				"08.09.2005/00:30 -> 01.06.2006/20:30");
 		assertThat(
-				extractProperty("durationMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
-				.containsOnly(20, 40,80);
+						surveyForEvaluation.getPossibleTimePeriods())
+				.containsOnly(
+					testUtils.tP("31.01.1986/21:30 -> 30.01.1986/22:30"),
+					testUtils.tP("01.05.1999/21:30 -> 01.07.2005/21:30"),
+					testUtils.tP("08.09.2005/00:30 -> 01.06.2006/20:30")
+						)
+						.hasSize(3);
 	}
-	
+
 	@Test
-	public void updateSurveyByAddingEquallyLastingTimePeriods() {
-		Date firstDate;
-		Date secondDate;
-		Date thirdDate;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		try {
-			firstDate = sdf.parse("21/12/2012");
-			secondDate = sdf.parse("21/12/2014");
-			thirdDate = sdf.parse("21/12/2016");
-			final HashSet<LgTimePeriod> pTimePeriods = new HashSet<LgTimePeriod>();
-			pTimePeriods.add(
-					new LgTimePeriod().setDurationMins(20).setStartTime(firstDate)
-					);
-			pTimePeriods.add(
-					new LgTimePeriod().setDurationMins(20).setStartTime(secondDate)
-					);
-			pTimePeriods.add(
-					new LgTimePeriod().setDurationMins(20).setStartTime(thirdDate)
-					);
-			surveyForEvaluation.setPossibleTimePeriods(pTimePeriods);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		surveyForEvaluation = new TestTransaction<LgSurvey>(
-				"Alice") {
-			@Override
-			public LgSurvey execute() {
-				return startSession().updateSurvey(surveyForEvaluation);
-			}
-		}.getResult();
+	/**
+	 * Note: Equal time periods will be ignored and saved as one time period.
+	 */
+	public void updateSurveyByAddingEqualTimePeriods() {
+		updateSurveyTimePeriods(
+				"31.01.1986/21:30 -> 30.01.1986/22:30",
+				"31.01.1986/21:30 -> 30.01.1986/22:30",
+				"31.01.1986/21:30 -> 30.01.1986/22:30");
 		assertThat(
-				extractProperty("durationMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
-				.containsOnly(20, 20, 20)
-				.hasSize(3);
+						surveyForEvaluation.getPossibleTimePeriods())
+				.containsOnly(
+					testUtils.tP("31.01.1986/21:30 -> 30.01.1986/22:30")
+						)
+				.hasSize(1);
 	}
 
 	@Test
 	public void updateSurveyByDeletingOneTimePeriods() {
-		updateSurveyTimePeriods(20, 40);
+		updateSurveyTimePeriods(
+				"30.01.1986/20:30 -> 30.01.1986/22:30",
+				"08.09.2005/00:30 -> 01.06.2006/22:30"
+				);
 		assertThat(
-				extractProperty("durationMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
-				.containsOnly(20, 40);
+						surveyForEvaluation.getPossibleTimePeriods())
+				.containsOnly(
+					testUtils.tP("30.01.1986/20:30 -> 30.01.1986/22:30"),
+					testUtils.tP("08.09.2005/00:30 -> 01.06.2006/22:30")
+						)
+				.hasSize(2);
 	}
 
 	@Test
 	public void updateSurveyByDeletingTwoTimePeriods() {
-		updateSurveyTimePeriods(20);
+		updateSurveyTimePeriods(
+				"30.01.1986/20:30 -> 30.01.1986/22:30"
+				);
 		assertThat(
-				extractProperty("durationMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
-				.containsOnly(20);
+						surveyForEvaluation.getPossibleTimePeriods())
+				.containsOnly(
+					testUtils.tP("30.01.1986/20:30 -> 30.01.1986/22:30")
+						)
+				.hasSize(1);
 	}
 
 	@Test
 	public void updateSurveyByDeletingAllTimePeriods() {
-		updateSurveyTimePeriods();
+		updateSurveyTimePeriods(
+				);
 		assertThat(
-				extractProperty("durationMins").from(
-						surveyForEvaluation.getPossibleTimePeriods()))
+						surveyForEvaluation.getPossibleTimePeriods())
 				.isEmpty();
 	}
 
 	/**
-	 * Updates the time periods [20, 40, 60] of the test survey with the 
-	 * given durations.
+	 * Updates the time periods of the test survey with the 
+	 * given timeString dd.MM.yyyy/mm:HH->dd.MM.yyyy/mm:HH
+	 * 
 	 */
-	private void updateSurveyTimePeriods(int... durationUpdates) {
-		surveyForEvaluation.setPossibleTimePeriods(testUtils.buildTimePeriods(durationUpdates));
+	private void updateSurveyTimePeriods(String... dateStrings) {
+		surveyForEvaluation.setPossibleTimePeriods(testUtils.buildTimePeriods(dateStrings));
 		surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
