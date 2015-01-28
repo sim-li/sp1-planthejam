@@ -84,9 +84,8 @@ angular.module('models')
 		 */
 		TimePeriod.prototype.doExport = function() {
 			return {
-				// 'oid': this.oid,
 				'startTime': this.startTime,
-				'durationMins': this.durationMins
+				'endTime': this.endTime
 			};
 		};
 
