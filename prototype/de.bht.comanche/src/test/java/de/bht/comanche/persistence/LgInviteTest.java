@@ -164,11 +164,18 @@ public class LgInviteTest {
 
 	@Test
 	public void updateInviteSetConcreteAvailabilityTest() {
-		updatePossibleTimeperiodsSportingSurvey(20, 40, 60);
+		updateConcreteAvailabilitySportingInvite(
+				"31.01.1986/21:30 -> 30.01.1986/22:30",
+				"01.05.1999/21:30 -> 01.07.2005/21:30",
+				"08.09.2005/00:30 -> 01.06.2006/20:30"
+				);
 		assertThat(
-				extractProperty("durationMins").from(
-						sportingSurveyInvite.getConcreteAvailability()))
-				.containsOnly(20, 40, 60);
+				sportingSurveyInvite.getConcreteAvailability())
+				.containsOnly(
+						testUtils.tP("31.01.1986/21:30 -> 30.01.1986/22:30"),
+						testUtils.tP("01.05.1999/21:30 -> 01.07.2005/21:30"),
+						testUtils.tP("08.09.2005/00:30 -> 01.06.2006/20:30")
+						);
 	}
 
 	/**
@@ -176,37 +183,54 @@ public class LgInviteTest {
 	 */
 	@Test
 	public void updateInviteChangeConcreteAvailabilityTest() {
-		updatePossibleTimeperiodsSportingSurvey(20, 40, 60);
-		updatePossibleTimeperiodsSportingSurvey(20, 80, 60);
+		saveConcreteAvailabilites();
+		updateConcreteAvailabilitySportingInvite(
+				"31.01.1986/21:30 -> 30.01.1986/23:30",
+				"01.05.1999/22:30 -> 01.07.2005/21:30",
+				"08.10.2005/00:30 -> 01.06.2009/20:30");
 		assertThat(
-				extractProperty("durationMins").from(
-						sportingSurveyInvite.getConcreteAvailability()))
-				.containsOnly(20, 80, 60);
+				sportingSurveyInvite.getConcreteAvailability())
+				.containsOnly(
+						testUtils.tP("31.01.1986/21:30 -> 30.01.1986/23:30"),
+						testUtils.tP("01.05.1999/22:30 -> 01.07.2005/21:30"),
+						testUtils.tP("08.10.2005/00:30 -> 01.06.2009/20:30")
+						);
 	}
 
 	@Test
 	public void updateInviteDeleteOneConcreteAvailabilityTest() {
-		updatePossibleTimeperiodsSportingSurvey(20, 40, 60);
-		updatePossibleTimeperiodsSportingSurvey(20, 60);
+		saveConcreteAvailabilites();
+		updateConcreteAvailabilitySportingInvite(
+				"31.01.1986/21:30 -> 30.01.1986/22:30",
+				"08.09.2005/00:30 -> 01.06.2006/20:30");
 		assertThat(
-				extractProperty("durationMins").from(
-						sportingSurveyInvite.getConcreteAvailability()))
-				.containsOnly(20, 60);
+				sportingSurveyInvite.getConcreteAvailability())
+				.containsOnly(
+						testUtils.tP("31.01.1986/21:30 -> 30.01.1986/22:30"),
+						testUtils.tP("08.09.2005/00:30 -> 01.06.2006/20:30"))
+			    .hasSize(2);
 	}
 
 	@Test
 	public void updateInviteDeleteAllConcreteAvailabilitiesTest() {
-		updatePossibleTimeperiodsSportingSurvey(20, 40, 60);
-		updatePossibleTimeperiodsSportingSurvey();
+		saveConcreteAvailabilites();
+		updateConcreteAvailabilitySportingInvite();
 		assertThat(sportingSurveyInvite.getConcreteAvailability()).isEmpty();
+	}
+	
+	public void saveConcreteAvailabilites() {
+		updateConcreteAvailabilitySportingInvite(
+		"31.01.1986/21:30 -> 30.01.1986/22:30",
+		"01.05.1999/21:30 -> 01.07.2005/21:30",
+		"08.09.2005/00:30 -> 01.06.2006/20:30");
 	}
 
 	/**
 	 * Updates Bob's sporting survey invites with given durations.
 	 */
-	private void updatePossibleTimeperiodsSportingSurvey(int... durations) {
+	private void updateConcreteAvailabilitySportingInvite(String... dateStrings) {
 		sportingSurveyInvite.setConcreteAvailability(testUtils
-				.buildTimePeriods(durations));
+				.buildTimePeriods(dateStrings));
 		sportingSurveyInvite = new TestTransaction<LgInvite>("Bob") {
 			@Override
 			public LgInvite execute() {
