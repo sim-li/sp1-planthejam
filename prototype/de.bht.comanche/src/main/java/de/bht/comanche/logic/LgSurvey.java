@@ -149,7 +149,9 @@ public class LgSurvey extends DaObject {
 	public List<LgUser> getParticipants() {
 		List<LgUser> participants = new ArrayList<LgUser>();
 		for (LgInvite invite : this.invites) {
-			participants.add(invite.getUser());
+			if (!invite.getIsHost()) {
+				participants.add(invite.getUser());
+			}
 		}
 		return participants;
 	}
@@ -222,6 +224,13 @@ public class LgSurvey extends DaObject {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Added for testing.
+	 */
+	public void detach() {
+		this.pool = null;
 	}
 	
 	/**

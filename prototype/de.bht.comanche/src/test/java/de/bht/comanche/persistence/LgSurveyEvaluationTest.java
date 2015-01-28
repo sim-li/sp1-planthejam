@@ -38,7 +38,6 @@ public class LgSurveyEvaluationTest {
 
 	private void saveSurvey() {
 		final LgSurvey testSurvey = new LgSurvey()
-			.addHost(alice)
 			.setName("Go Skiing")
 			.setPossibleTimePeriods(testUtils.buildTimePeriods(
 				"01.05.99/21:30 -> 01.05.99/22:30",
@@ -69,19 +68,22 @@ public class LgSurveyEvaluationTest {
 	@Test
 	public void acceptSurveyTest() {
 		// Call evaluation, get Surveys
-		new TestTransaction<String>(
+		surveyForEvaluation = new TestTransaction<LgSurvey>(
 				"Alice") {
 			@Override
-			public String execute() {
+			public LgSurvey execute() {
 				final LgUser user = startSession();
 				user.evaluateAllSurveys();
-				user.getSurveys();
-				return "";
+				// Pulling single survey, not all surevys like in orignal version.
+				return user.getSurvey(surveyForEvaluation.getOid());
 			}
 		}.getResult();
 		// Set flag to YES and save
 		surveyForEvaluation.setSuccess(LgStatus.YES);
+		
+		surveyForEvaluation.detach();
 		surveyForEvaluation = testUtils.saveSurveyFor("Alice", surveyForEvaluation);
+		
 		new TestTransaction<String>(
 				"Alice") {
 			@Override
@@ -102,6 +104,13 @@ public class LgSurveyEvaluationTest {
 		// Carol should have message
 		Set<LgMessage> carolsMessages = new TestTransaction<Set<LgMessage>>(
 				"Carol") {
+			@Override
+			public Set<LgMessage> execute() {
+				return startSession().getMessages();
+			}
+		}.getResult();
+		Set<LgMessage> alicesMessages = new TestTransaction<Set<LgMessage>>(
+				"Alice") {
 			@Override
 			public Set<LgMessage> execute() {
 				return startSession().getMessages();

@@ -59,4 +59,9 @@ public class LgMessage {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "LgMessage [messageText=" + messageText + "]";
+	}
 } 
