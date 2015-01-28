@@ -196,13 +196,14 @@ angular.module('rest', ['models'])
              */
             restService.updateUser = function(user) { // TODO use generic doUpdate if possible
                 var url = getUrlFor(user, null, 'update'),
-                    data = {
-                        'oid': user.oid,
-                        'name': user.name,
-                        'password': user.password,
-                        'email': user.email,
-                        'tel': user.tel
-                    };
+                    // data = {
+                    //     'oid': user.oid,
+                    //     'name': user.name,
+                    //     'password': user.password,
+                    //     'email': user.email,
+                    //     'tel': user.tel
+                    // };
+                    data = user.doExport();
                 return callHttp('POST')(url, data);
             };
 

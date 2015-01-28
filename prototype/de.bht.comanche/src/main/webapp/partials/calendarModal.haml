@@ -4,7 +4,7 @@
       Edit calendar
   .modal-body
     .row
-      %ptj-calendar{"allowed" => "possibleTimePeriods", "resulting" => "resultingTimePeriods"}
+      %ptj-calendar{"allowed" => "allowedTimePeriods", "resulting" => "resultingTimePeriods"}
   .modal-footer
     %button.btn.btn-warning{"ng-click" => "cancel()"} Cancel
     %button.btn.btn-primary{"ng-click" => "ok()"} OK
@@ -12,4 +12,5 @@
 .input-group
   %input.btn.btn-primary{:type => "button", "ng-click" => "openCalendarModal()", :value => "Edit calendar"}/
 /---- debugging
+%span{} allowed: {{ allowedTimePeriods }}
 %span{} resulting: {{ resultingTimePeriods }}

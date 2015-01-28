@@ -66,9 +66,9 @@ angular.module('models')
                 'email': this.email,
                 // ,'invites': this.invites
                 // ,'groups': this.groups
-                'iconurl': this.iconurl /*,*/
-                    // ,'messages': this.messages                               // FIXME temporarily commented out
-                    // 'generalAvailability': TimePeriod.exportMany(this.generalAvailability) // FIXME temporarily commented out
+                'iconurl': this.iconurl,
+                // ,'messages': this.messages                               // FIXME temporarily commented out
+                'generalAvailability': TimePeriod.exportMany(this.generalAvailability)
             };
         };
 

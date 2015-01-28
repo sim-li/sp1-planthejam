@@ -134,9 +134,11 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
         return {
             restrict: 'E',
             scope: {
-                possibleTimePeriods: '=possible',
+                allowedTimePeriods: '=allowed',
                 resultingTimePeriods: '=resulting',
                 save: '&'
+                    /*,
+                                    selected: '='*/
             },
             templateUrl: 'partials/calendarModal.html',
             controller: 'calendarModalCtrl'

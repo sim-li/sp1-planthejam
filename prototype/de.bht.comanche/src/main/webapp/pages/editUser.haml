@@ -26,7 +26,7 @@
             / %a#inputTel{"editable-text" => "user.tel", :href => "#"}
             /   {{user.tel}}
           .error
-        %ptj-calendar-modal{"possible" => "[]", "resulting" => "user.generalAvailability"}
+        %ptj-calendar-modal{"allowed" => "[]", "resulting" => "user.generalAvailability", "save" => "saveGeneralAvailability()"}
         .input-group
           %input#cancelUserEditBtn.btn.btn-default{"ng-click" => "cancelEditUser()", :type => "button", :value => "Cancel"}/
           %input#saveUserEditBtn.btn.btn-success{"ng-click" => "saveEditedUser()", :type => "submit", :value => "Save changes"}/

@@ -58,17 +58,24 @@ angular.module('myApp')
                     } /*, function(error) {$log.error(error);}*/ );
             };
 
+            $scope.saveGeneralAvailability = function() {
+                return function(resultingTimePeriods) {
+                    $scope.user.generalAvailability = resultingTimePeriods;
+                    restService.updateUser($scope.user);
+                };
+            };
+
             //-- dummies -->
-            // var dummyPoss = [];
-            // dummyPoss.push({
+            // $scope.dummyPoss = [];
+            // $scope.dummyPoss.push({
             //     startTime: new Date('Jan 23 2015 10:00'),
             //     durationMins: 120
             // });
-            // dummyPoss.push({
+            // $scope.dummyPoss.push({
             //     startTime: new Date('Jan 24 2015 6:00'),
             //     durationMins: 120
             // });
-            // $scope.user.generalAvailability = dummyPoss;
+            // $scope.user.generalAvailability = $scope.dummyPoss;
             //<-- dummies --
         }
     ]);

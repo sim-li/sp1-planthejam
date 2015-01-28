@@ -143,7 +143,6 @@ angular.module('myApp')
              */
             $scope.setSelectedInviteIgnoredStatus = function(status) {
                 $scope.selectedInvite.setIgnored(status);
-                $log.debug('debug cockpit ', $scope.selectedInvite)
                 restService.doSave($scope.selectedInvite);
             };
 
@@ -181,25 +180,26 @@ angular.module('myApp')
                 $log.debug($scope.selectedSurvey.success);
                 // $log.debug($scope.selectedSurvey);
 
+                // FIXME temp comment out
                 // sendMessagesToParticipant(); // <<<-----------------
 
-                // FIXME temp comment out
                 restService.doSave($scope.selectedSurvey);
             };
 
             $scope.reject = function() {
                 $scope.selectedSurvey.success = Status.NO;
-                $scope.selectedSurvey.determinedTimePeriod = null;
+                $scope.selectedSurvey.determinedTimePeriod = TimePeriod.NÙLL();
 
                 $log.debug($scope.selectedSurvey.success);
                 // $log.debug($scope.selectedSurvey);
 
-                // sendMessagesToParticipant(); // <<<-----------------
 
                 // FIXME temp comment out
-                // sendMessagesToParticipant();
+                // sendMessagesToParticipant(); // <<<-----------------
+
                 restService.doSave($scope.selectedSurvey);
             };
+
 
             //### HACK ##############################
             //-- some dummies
@@ -222,17 +222,6 @@ angular.module('myApp')
             //### HACK ##############################
             // $scope.resultingTimePeriods = [];
 
-            $scope.saveAvailabilities = function() {
-
-                $log.log('-------- from cockpit ---');
-                $log.log($scope.resultingTimePeriods);
-                $log.log($scope.selectedInvite.concreteAvailability);
-                $log.log('-------- from cockpit ---');
-                // $log.log($scope.resultingTimePeriods);
-                $log.log($scope.selectedInvite);
-
-                restService.doSave($scope.selectedInvite);
-            };
 
             $scope.toggleSurveyDetails = function() {
                 $scope.showSurveyDetails = true;
@@ -243,7 +232,10 @@ angular.module('myApp')
             };
 
             $scope.saveSelectedInvite = function() {
-                restService.doSave($scope.selectedInvite);
+                return function(resultingTimePeriods) {
+                    $scope.selectedInvite.concreteAvailability = resultingTimePeriods;
+                    restService.doSave($scope.selectedInvite);
+                };
             };
 
         }
