@@ -73,7 +73,7 @@ public class LgUser extends DaObject {
 	 */
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LgMember member;
-	
+
 	@ElementCollection(targetClass = LgTimePeriod.class, fetch = FetchType.EAGER)
 	@Column(name = "general_availability")
 	private Set<LgTimePeriod> generalAvailability;
@@ -84,7 +84,7 @@ public class LgUser extends DaObject {
 
 	@Transient
 	final LgGravatarUtils gravUtils;
-	
+
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
 		this.groups = new ArrayList<LgGroup>();
@@ -113,11 +113,11 @@ public class LgUser extends DaObject {
 	}
 
 	/**
-	 * Complete delete of user account. 
-	 * 
+	 * Complete delete of user account.
+	 *
 	 * Invites have to be delete first in order to comply
 	 * with foreign key constraint.
-	 * 
+	 *
 	 */
 	public void deleteThisAccount() {
 		for (final LgInvite invite : this.getInvites()) {
@@ -132,7 +132,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Delete LgInvite by provided oid.
-	 * 
+	 *
 	 * @param inviteOid
 	 *            The LgInvite oid.
 	 */
@@ -142,7 +142,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Save LgGroup for current user.
-	 * 
+	 *
 	 * @param group
 	 *            The LgGroup to save.
 	 * @return The saved LgGroup.
@@ -157,7 +157,7 @@ public class LgUser extends DaObject {
 	 * default icon if no email given.
 	 */
 	public String getIconurl() {
-		
+
 		if (email != null) {
 			iconurl = gravUtils.getUserUrl(email);
 		} else {
@@ -172,7 +172,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Delete LgGroup by provided oid.
-	 * 
+	 *
 	 * @param groupOid
 	 *            The LgGroup oid.
 	 */
@@ -182,7 +182,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Returns LgGroup by ptovided oid.
-	 * 
+	 *
 	 * @param groupOid
 	 *            The LgGroup oid.
 	 * @return The found LgGroup
@@ -191,9 +191,20 @@ public class LgUser extends DaObject {
 		return search(getGroups(), groupOid);
 	}
 
+	public LgGroup updateGroup(final LgGroup other){
+		if (other.getOid() <= 0) {
+			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
+		}
+		final LgGroup group = findOneByKey(LgGroup.class, "OID", other.getOid());
+		group.updateWith(other);
+		return saveUnattached(other);
+	}
+
+	@SuppressWarnings("serial")
+	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
 	/**
 	 * Search LgMember object by group oid and user oid.
-	 * 
+	 *
 	 * @param groupId
 	 *            The LgGroup oid.
 	 * @param userId
@@ -206,7 +217,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Proof key and value of user name and password.
-	 * 
+	 *
 	 * @param user
 	 *            The LgUser to proof.
 	 * @return If the key and value match - true.
@@ -221,17 +232,17 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Returns LgTimePeriods list for current user.
-	 * 
+	 *
 	 * @return The list with LgTimePeriods.
 	 */
-	
+
 	public Set<LgTimePeriod> getGeneralAvailability() {
 		return this.generalAvailability;
 	}
 
 	/**
 	 * Returns LgTimePeriods list for current user.
-	 * 
+	 *
 	 * @return The list with LgTimePeriods.
 	 */
 	public LgUser setGeneralAvailability(Set<LgTimePeriod> generalAvailability) {
@@ -241,7 +252,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Remove invite object from the list of invites.
-	 * 
+	 *
 	 * @param invite
 	 *            The LgInvite to remove.
 	 */
@@ -251,7 +262,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Remove grop object from the list of groups.
-	 * 
+	 *
 	 * @param invite
 	 *            The LgGroup to remove.
 	 */
@@ -274,11 +285,11 @@ public class LgUser extends DaObject {
 		for (LgInvite invite : this.invites) {
 			if (invite.getIsHost()) {
 				surveys.add(invite.getSurvey());
-			} 
+			}
 		}
 		return surveys;
 	}
-	
+
     @JsonIgnore
 	public List<LgInvite> getInvites() {
 		return this.invites;
@@ -287,7 +298,7 @@ public class LgUser extends DaObject {
 	public List<LgInvite> getInvitesForSurvey(final long oid) {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
 		for (LgInvite invite : this.getSurvey(oid).getInvites()) {
-			//if set user to null --> works 
+			//if set user to null --> works
 			filteredInvites.add(new LgInvite(invite).setSurvey(null));
 		}
 		return filteredInvites;
@@ -295,7 +306,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * JSON Object from Server doesn't send host invite.
-	 * 
+	 *
 	 * @param survey
 	 * @return
 	 */
@@ -315,20 +326,20 @@ public class LgUser extends DaObject {
 		final LgSurvey survey = findOneByKey(LgSurvey.class, "OID", other.getOid());
 		survey.updateWith(other);
 		return saveUnattached(other);
-//		
+//
 //		List<LgSurvey> listFromDB = new ArrayList<LgSurvey>();
 //		listFromDB.add(findOneByKey(LgSurvey.class, "OID", this.getOid()));
 //		List<LgSurvey> listfresh = new ArrayList<LgSurvey>();
 //		listfresh.add(surveyFromClient);
-//		
+//
 //		listFromDB.retainAll(listfresh); // PL & its objs must be tracked for
 //		listfresh.removeAll(listFromDB); // ELs already saved
-//		
+//
 //		for (LgSurvey el : listfresh) {
 //		System.out.println(el);
 //		saveUnattached(el); // Fresh list are never tracked
 //		}
-//		
+//
 //		listFromDB.addAll(listfresh); // Requires PL tracking too
 //		return listFromDB.get(0);
 	}
@@ -417,7 +428,7 @@ public class LgUser extends DaObject {
     	this.invites.add(invite);
     	return this;
     }
-    
+
     public LgUser updateWith(LgUser other) {
 		this.email = other.email;
 		this.generalAvailability =  other.generalAvailability;
@@ -428,10 +439,10 @@ public class LgUser extends DaObject {
 		this.messages = other.messages;
 		this.name = other.name;
 		this.password = other.password;
-		this.tel = other.tel;	
+		this.tel = other.tel;
 		return this;
-	} 
-    
+	}
+
 	public LgInvite getInvite(final long oid) {
 		//return search(this.invites, oid);
 		return findOneByKey(LgInvite.class, "oid", oid);
@@ -481,11 +492,11 @@ public class LgUser extends DaObject {
 	 public Set<LgMessage> getMessages() {
 		 return this.messages;
 	 }
-	
+
 	 public void setMessages(Set<LgMessage> messages) {
 		 this.messages = messages;
 	 }
-	 
+
 	//Removed invites (Causes stack overflow error)
 	@Override
 	public String toString() {

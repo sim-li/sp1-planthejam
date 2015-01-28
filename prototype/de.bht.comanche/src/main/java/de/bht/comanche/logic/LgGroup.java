@@ -14,11 +14,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import de.bht.comanche.persistence.DaObject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * This entity class represents a group and serve methods for working with 
+ * This entity class represents a group and serve methods for working with
  * LgMember and LgGroup objects.
- * 
+ *
  * @author Maxim Novichkov
  *
  */
@@ -28,27 +29,27 @@ import de.bht.comanche.persistence.DaObject;
 public class LgGroup extends DaObject{
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Column for a group name. Must not be null.
      */
     @NotNull
     @Column
     private String name;
-    
+
     /**
      * Column for a LgUser representation. Must not be null.
      */
     @NotNull
     @ManyToOne
     private LgUser user;
-    
+
     /**
-     * Representation of a foreign key in a LgMember entity. Provide a list of members. 
+     * Representation of a foreign key in a LgMember entity. Provide a list of members.
      */
     @OneToMany(mappedBy="group", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval=true)
     private List<LgMember> members;
-    
+
     /**
      * URL for gravatar random art.
      */
@@ -60,17 +61,17 @@ public class LgGroup extends DaObject{
     public LgGroup() {
         this.members = new ArrayList<LgMember>();
     }
-    
+
     /**
      * Returns the LgMember object by oid.
-     * 
+     *
      * @param oid The LgMember oid.
      * @return Return serched LgMember.
      */
     public LgMember getMember(final long oid) {
         return search(this.members, oid);
     }
-    
+
     /**
      * Delete LgMember by oid.
      * @param oid The LgMember oid.
@@ -92,7 +93,7 @@ public class LgGroup extends DaObject{
             }
         }
     }
-    
+
     /**
      * Sets specified LgGroup for LgMembers.
      * @param group The LgGroup to set.
@@ -104,7 +105,14 @@ public class LgGroup extends DaObject{
             }
             return this;
     }
-    
+
+    public LgGroup updateWith(final LgGroup other) {
+        this.name = other.name;
+        this.user = other.user;
+        this.members = other.members;
+        this.iconurl = other.iconurl;
+        return this;
+    }
 
     /**
      * Generates a random art URL for the gravatar service
@@ -130,6 +138,7 @@ public class LgGroup extends DaObject{
      * Returns a list of LgUsers for specified group.
      * @return The list of LgUsers.
      */
+    @JsonIgnore
     public List<LgUser> getUsers() {
         final List<LgUser> users = new LinkedList<LgUser>();
         for (final LgMember member : this.members) {
@@ -137,7 +146,7 @@ public class LgGroup extends DaObject{
         }
         return users;
     }
-    
+
     /**
      * Gets string name for this group.
      * @return The name of this group.
@@ -145,7 +154,7 @@ public class LgGroup extends DaObject{
     public String getName() {
         return this.name;
     }
-    
+
     /**
      * Sets a  name for this group.
      * @param name Name to set.
@@ -155,7 +164,7 @@ public class LgGroup extends DaObject{
         this.name = name;
         return this;
     }
-    
+
     /**
      * Sets LgUser for this LgGroup.
      * @param user LgUser object to set.
@@ -165,9 +174,9 @@ public class LgGroup extends DaObject{
         this.user = user;
         return this;
     }
-    
+
     /**
-     * Returns LgMember list for specified LgGroup. 
+     * Returns LgMember list for specified LgGroup.
      * @return The list with LgMembers.
      */
     public List<LgMember> getMembers() {

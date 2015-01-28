@@ -2,40 +2,38 @@
 <script id='groupsModalContent.html' type='text/ng-template'>
   <div class='modal-header'>
     <h3 class='modal-title'>
-      <span class='glyphicon glyphicon-user'></span>
-      Edit groups
-      <div class='pull-right'>
-        <b>{{selectedGroup.name}}</b>
-        <img ng-src='{{selectedGroup.iconurl}}&amp;s=40' style='padding-right:2px;'>
+      <div class='row'>
+        <div class='col-md-3'>
+          <span class='glyphicon glyphicon-user'></span>
+          Edit groups
+        </div>
+        <div class='col-md-6'>
+          <div class='btn-group'>
+            <button class='btn btn-default' ng-click='addNewGroup()' type='button'>
+              <span class='glyphicon glyphicon-plus'></span>
+              Add
+            </button>
+            <button class='btn btn-default' ng-click='removeGroup($index)' type='button'>
+              <span class='glyphicon glyphicon-remove'></span>
+              Remove
+            </button>
+            <button class='btn btn-default' ng-click='' type='button'>
+              <span class='glyphicon glyphicon-resize-small'></span>
+              Merge
+            </button>
+          </div>
+        </div>
+        <div class='pull-right'>
+          <b>{{selectedGroup.name}}</b>
+          <img ng-src='{{selectedGroup.iconurl}}&amp;s=40' style='padding-right:2px;'>
+        </div>
       </div>
     </h3>
   </div>
   <div class='modal-body'>
-    <div class='row'>
-      <div class='col-md-6'>
-        <div class='btn-group'>
-          <button class='btn btn-default' ng-click='' type='button'>
-            <span class='glyphicon glyphicon-plus'></span>
-            Add
-          </button>
-          <button class='btn btn-default' ng-click='' type='button'>
-            <span class='glyphicon glyphicon-pencil'></span>
-            Rename
-          </button>
-          <button class='btn btn-default' ng-click='' type='button'>
-            <span class='glyphicon glyphicon-resize-small'></span>
-            Merge
-          </button>
-          <button class='btn btn-default' ng-click='' type='button'>
-            <span class='glyphicon glyphicon-remove'></span>
-            Remove
-          </button>
-        </div>
-      </div>
-    </div>
     <br>
     <div class='row'>
-      <div class='col-md-3'>
+      <div class='col-sm-3'>
         <div class='row'>
           <div class='list-group'>
             <a class='list-group-item' ng-click='selectGroup(group)' ng-repeat='group in groups'>
@@ -49,16 +47,48 @@
           </div>
         </div>
       </div>
-      <div class='col-md-6'>
-        <div class='row'>
-          Moma
-          <!-- Search Users must go here -->
+      <div class='col-sm-9'>
+        <div class='panel panel-default'>
+          <div class='panel-body'>
+            <div class='form-group'>
+              <label>Group name :</label>
+              <div class='item-wrapper'>
+                <a editable-text='selectedGroup.name' href='#' id='inputName'>
+                  {{selectedGroup.name}}
+                </a>
+              </div>
+            </div>
+            <div class='form-group'>
+              <div class='row'>
+                <div class='col-md-3'>
+                  <label>Member :</label>
+                </div>
+                <div class='col-md-8'>
+                  <input class='form-control' ng-model='selectedUser' placeholder='+ Add user to this group' type='text' typeahead-template-url='itemTpl.html' typeahead='user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5'>
+                </div>
+              </div>
+            </div>
+            <div class='well well-sm'>
+              <div class='container-fluid'>
+                <div class='btn-group' ng-repeat='member in selectedGroup.members'>
+                  <label class='btn btn-default' type='button'>
+                    <img class='pull-left' ng-src='{{member.user.iconurl}}&amp;s=20' style='padding-right:2px;'>
+                    <b>{{member.user.name}}</b>
+                  </label>
+                  <button class='btn btn-default' ng-click='removeParticipantFromGroup($index)' type='button'>
+                    <b></b>
+                    <span class='glyphicon glyphicon-remove'></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class='modal-footer'>
-    <button class='btn btn-primary' ng-click='ok()'>OK</button>
+    <button class='btn btn-primary' ng-click='saveGroup()'>OK</button>
     <button class='btn btn-warning' ng-click='cancel()'>Cancel</button>
   </div>
 </script>

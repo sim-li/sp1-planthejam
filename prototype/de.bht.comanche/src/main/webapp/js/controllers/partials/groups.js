@@ -171,39 +171,73 @@ angular.module('myApp')
 // It is not the same as the $modal service used above.
 
 angular.module('myApp')
-    .controller('groupsModalCtrl', function($scope, $modalInstance, groups, users) {
-        $scope.test = 'My test!';
-        $scope.groups = groups;
-        $scope.users = users;
-        console.log('GRAV URL', groups);
-        $scope.selectedGroup = '';
-        $scope.userSelected = '';
+    .controller('groupsModalCtrl', ['$scope', '$modalInstance', 'groups', 'users', 'restService', 'Group',
+        function($scope, $modalInstance, groups, users, restService, Group) {
+            'use strict';
 
-        /**
-         * This must be transferred into a generic solution, simply not convincing.
-         * Must dock to actual data model.
-         * @return {[type]} [description]
-         */
-        $scope.$watch('userSelected', function() {
-            if ($scope.userSelected === undefined || $scope.userSelected.name === undefined) {
-                return;
-            }
-            for (var i = 0, len = $scope.addedUsers.length; i < len; i++) {
-                if ($scope.addedUsers[i] === $scope.userSelected) {
+            $scope.groups = groups;
+            console.log("groups : ", groups);
+            $scope.users = users;
+
+            $scope.selectedGroup = $scope.groups[0];
+            $scope.selectedUser = '';
+
+
+            /**
+             * This must be transferred into a generic solution, simply not convincing.
+             * Must dock to actual data model.
+             * @return {[type]} [description]
+             */
+            $scope.$watch('selectedUser', function() {
+                if ($scope.selectedUser === undefined || $scope.selectedUser.name === undefined) {
                     return;
                 }
+                for (var i = 0, len = $scope.selectedGroup.members.length; i < len; i++) {
+                    if ($scope.selectedGroup.members[i].user === $scope.selectedUser) {
+                        return;
+                    }
+                }
+
+                $scope.selectedGroup.addUser($scope.selectedUser);
+                // console.log($scope.selectedUser);
+            });
+
+            $scope.addNewGroup = function() {
+                $scope.selectedGroup = new Group({
+                    name: 'Your new group'
+                });
+                $scope.groups.push($scope.selectedGroup);
+                console.log("add new group");
+            };
+
+            $scope.removeGroup = function(index) {
+                $scope.groups.splice(index, 1);
             }
-            $scope.addedUsers.push($scope.userSelected);
-        });
 
-        $scope.selectGroup = function(group) {
-            $scope.selectedGroup = group;
-        };
+            $scope.selectGroup = function(group) {
+                $scope.selectedGroup = group;
+                console.log(group);
+            };
 
-        $scope.ok = function() {
-            // $modalInstance.close($scope.selected.item);
-        };
-        $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
-        };
-    });
+            $scope.removeParticipantFromGroup = function(index) {
+                $scope.selectedGroup.members.splice(index, 1);
+            };
+
+            $scope.saveGroup = function() {
+                $modalInstance.close($scope.selectedGroup);
+                console.log("selectedGroup : ", $scope.selectedGroup);
+                restService.doSave($scope.selectedGroup)
+                    .then(function(success) {
+                        console.log("save Group function:");
+                        console.log('with success: ', success);
+                    }, function(err) {
+                        console.log("save Group function:");
+                        console.log('with error: ', err);
+                    });
+            };
+
+            $scope.cancel = function() {
+                $modalInstance.dismiss('cancel');
+            };
+        }
+    ]);
