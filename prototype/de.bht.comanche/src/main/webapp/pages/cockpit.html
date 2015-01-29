@@ -140,7 +140,7 @@
             <div id='surveyDetailsDeterminedTimePeriod' ng-if='selectedSurvey.algoChecked'>
               <label for='surveyDetailsDeterminedTimePeriod'>Determined Time Period:</label>
               <span id='surveyDetailsDeterminedTimePeriod'>
-                <span ng-if='!selectedSurvey.determinedTimePeriod.isNull()'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}</span>
+                <span ng-if='!selectedSurvey.determinedTimePeriod.isNull()'>{{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}} ({{ selectedSurvey.determinedTimePeriod.getDurationMins() }} minutes) abc</span>
                 <div class='h4' ng-if="selectedSurvey.success == 'UNDECIDED'">Please confirm or reject this survey.</div>
                 <span class='text-danger' ng-if='selectedSurvey.determinedTimePeriod.isNull()'>No match. Please start a new survey.</span>
                 <div class='text-danger h4' ng-if='selectedSurvey.isUnsuccessful()'>This survey was cancelled.</div>
@@ -159,7 +159,7 @@
             <ul>
               <li ng-repeat="invite in selectedSurvey.invites | filter: {isHost: false, isIgnored: '!YES'}">
                 <strong>{{invite.user.name}}</strong>
-                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
+                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}}) {{invite.isIgnored != 'NO' && 'not accepted'}}
               </li>
             </ul>
           </div>

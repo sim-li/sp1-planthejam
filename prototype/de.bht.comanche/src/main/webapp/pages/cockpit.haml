@@ -102,7 +102,7 @@
             %div#surveyDetailsDeterminedTimePeriod{"ng-if" => "selectedSurvey.algoChecked"}
               %label{:for => "surveyDetailsDeterminedTimePeriod"} Determined Time Period:
               %span#surveyDetailsDeterminedTimePeriod
-                %span{"ng-if" => "!selectedSurvey.determinedTimePeriod.isNull()"} {{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}}
+                %span{"ng-if" => "!selectedSurvey.determinedTimePeriod.isNull()"} {{ selectedSurvey.determinedTimePeriod.startTime | date: 'yyyy-MM-dd HH:mm'}} ({{ selectedSurvey.determinedTimePeriod.getDurationMins() }} minutes) abc
                 %div.h4{"ng-if" => "selectedSurvey.success == 'UNDECIDED'"} Please confirm or reject this survey.
                 %span.text-danger{"ng-if" => "selectedSurvey.determinedTimePeriod.isNull()"} No match. Please start a new survey.
                 %div.text-danger.h4{"ng-if" => "selectedSurvey.isUnsuccessful()"} This survey was cancelled.
@@ -117,7 +117,7 @@
             %ul
               %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: {isHost: false, isIgnored: '!YES'}"}
                 %strong{} {{invite.user.name}}
-                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
+                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}}) {{invite.isIgnored != 'NO' && 'not accepted'}}
 
       #inviteDetails.col-md-6{"ng-hide" => "showSurveyDetails"}
         .panel.panel-default
