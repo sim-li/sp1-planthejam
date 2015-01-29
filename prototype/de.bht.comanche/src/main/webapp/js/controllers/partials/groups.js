@@ -193,14 +193,7 @@ angular.module('myApp')
 
             $scope.removeGroup = function(index) {
                 $scope.groups.splice($scope.groups.indexOf($scope.selectedGroup), 1);
-                restService.doDelete($scope.selectedGroup)
-                    .then(function(success) {
-                        console.log("delete Group : ")
-                        console.log("with success : ", success);
-                    }, function(err) {
-                        console.log("delete Group : ")
-                        console.log("with err : ", success);
-                    });
+                restService.doDelete($scope.selectedGroup);
             }
 
             $scope.saveGroup = function() {
