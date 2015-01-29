@@ -235,6 +235,14 @@ public class LgSurvey extends DaObject {
 		this.pool = null;
 	}
 	
+	public LgInvite getInviteAt(int index) {
+        return this.invites.get(index);
+	}
+
+	public void setInvite(int index, LgInvite invite) {
+	        this.invites.set(index, invite);
+	}
+
 	/**
 	 * Updates a Survey with values form another one
 	 * 
