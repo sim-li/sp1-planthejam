@@ -25,8 +25,8 @@ angular.module('myApp')
                         }
                     }
                 });
-                modalInstance.result.then(function(selectedItem) {
-                    $scope.selected = selectedItem;
+                modalInstance.result.then(function(groups) {
+                    $scope.groups = groups;
                 }, function() {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
@@ -171,8 +171,9 @@ angular.module('myApp')
 // It is not the same as the $modal service used above.
 
 angular.module('myApp')
-    .controller('groupsModalCtrl', ['$scope', '$modalInstance', 'groups', 'users', 'restService', 'Group',
-        function($scope, $modalInstance, groups, users, restService, Group) {
+    .controller('groupsModalCtrl', ['$scope', '$modalInstance', 'arrayUtil', 'groups', 'users', 'restService', 'Group', 'Model',
+        function($scope, $modalInstance, arrayUtil, groups, users, restService, Group, Model) {
+
             'use strict';
 
             $scope.groups = groups;
@@ -185,28 +186,40 @@ angular.module('myApp')
 
 
             $scope.addNewGroup = function() {
-                $scope.selectedGroup = new Group({
+                // $scope.groups.push(new Group({
+                //     name: 'Your new group'
+                // }));
+
+                restService.doSave(new Group({
                     name: 'Your new group'
+                })).then(function(success) {
+                    $scope.groups.push(new Group(success));
+                    $scope.selectedGroup = $scope.groups[$scope.groups.length];
                 });
-                $scope.groups.push($scope.selectedGroup);
+
+                // $scope.selectedGroup = new Group({
+                //     name: 'Your new group'
+                // });
+                // $scope.groups.push($scope.selectedGroup);
             };
 
             $scope.removeGroup = function(index) {
                 $scope.groups.splice($scope.groups.indexOf($scope.selectedGroup), 1);
-                restService.doDelete($scope.selectedGroup);
+                restService.doDelete($scope.selectedGroup).then(function(success) {
+                    console.log('success: ', success)
+                    $scope.selectedGroup = $scope.groups[0];
+                    console.log($scope.selectedGroup)
+                });
             }
 
             $scope.saveGroup = function() {
-                $modalInstance.close($scope.selectedGroup);
-                console.log("selectedGroup : ", $scope.selectedGroup);
-                restService.doSave($scope.selectedGroup)
-                    .then(function(success) {
-                        console.log("save Group function:");
-                        console.log('with success: ', success);
-                    }, function(err) {
-                        console.log("save Group function:");
-                        console.log('with error: ', err);
+                arrayUtil.forEach($scope.groups, function(elem, i, arr) {
+                    restService.doSave(elem).then(function(success) {
+                        arr[i] = new Group(elem);
+                        console.log('succ: ', i, $scope.groups);
                     });
+                });
+                $modalInstance.close($scope.groups);
             };
 
             $scope.mergeGroups = function() {
@@ -235,6 +248,7 @@ angular.module('myApp')
 
                 $scope.selectedGroup.addUser($scope.selectedUser);
                 // console.log($scope.selectedUser);
+                console.log($scope.selectedGroup);
             });
 
             $scope.removeParticipantFromGroup = function(index) {

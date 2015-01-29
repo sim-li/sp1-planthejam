@@ -27,6 +27,7 @@
 				Ein Vorlage von Terminumfrage wird angezeigt. Benutzer sollte eigenen Name und Beschreibung eingeben. Man kann andere Benutzer oder Gruppe suchen und einladen.
 				Um eigene Gruppe zu erstellen kann man auf "Edit Group" klicken.
 				Außerdem soll Benutzer Deadline und die verfügbare Zeiträume eingeben.
+                Terminumfragen können einmalig oder wiederholt sein. Sollen sie wiederholt stattfinden, dann kann die Frequenz der Wiederholung festgelegt werden.
 	+ Account : hier werden alle Informationen über Benutzer selbt angezeigt und Benutzer kann 				eigene Daten editieren.
 
 
