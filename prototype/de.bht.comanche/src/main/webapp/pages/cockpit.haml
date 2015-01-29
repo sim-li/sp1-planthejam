@@ -33,13 +33,13 @@
                   .row
                     .col-sm-9 {{survey.name}}
                     .col-sm-3.btn-group.pull-right{"ng-if" => "survey.isReady()"}
-                      %label.btn.btn-success.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "confirmSelectedSurvey()","onclick" => "return false;"}
+                      %label.btn.btn-success.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "confirmSelectedSurvey()","onclick" => "return false;", "tooltip" => "confirm this survey"}
                         %span.glyphicon.glyphicon-ok
-                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "rejectSelectedSurvey()","onclick" => "return false;"}
+                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "rejectSelectedSurvey()","onclick" => "return false;", "tooltip" => "reject this survey"}
                         %span.glyphicon.glyphicon-remove
-                    .col-sm-3.btn-group{"ng-if" => "survey.isSuccessful()"}
+                    .col-sm-3.btn-group{"ng-if" => "survey.isSuccessful()", "tooltip"=>"successful"}
                       %span.glyphicon.glyphicon-thumbs-up
-                    .col-sm-3.btn-group{"ng-if" => "survey.isUnsuccessful()"}
+                    .col-sm-3.btn-group{"ng-if" => "survey.isUnsuccessful()", "tooltip"=>"unsuccessful"}
                       %span.glyphicon.glyphicon-thumbs-down
 
             #inviteTab.tab-pane
@@ -47,29 +47,31 @@
               #inviteList.list-group
                 %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {isIgnored: '!YES'} | filter: searchInvite ", "ng-class" => "{'list-group-item-warning': invite.survey.isNotReady() && invite.isIgnored == 'UNDECIDED', 'list-group-item-success': invite.survey.isSuccessful()}"}
                   .row
-                    .col-sm-6 {{ invite.survey.name}}
-                    .col-sm-6.btn-group.pull-right{"ng-if" => "invite.survey.isNotReady()"}
-                      %label.btn.btn-sm{"btn-radio" => "'undecided'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('UNDECIDED')","onclick" => "return false;", "ng-class" => "{'disabled': invite.isIgnored == 'UNDECIDED', 'btn-primary': invite.isIgnored != 'UNDECIDED'}"}
+                    .col-sm-5 {{ invite.survey.name}}
+                    .col-sm-7.btn-group.pull-right{"ng-if" => "invite.survey.isNotReady()"}
+                      %label.btn.btn-sm{"btn-radio" => "'undecided'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('UNDECIDED')","onclick" => "return false;", "ng-class" => "{'disabled': invite.isIgnored == 'UNDECIDED', 'btn-primary': invite.isIgnored != 'UNDECIDED'}", "tooltip" => "UNDECIDE"}
                         %span.glyphicon.glyphicon-question-sign
-                      %label.btn.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('NO')", "ng-class" => "{'btn-success disabled': invite.isIgnored == 'NO', 'btn-success': invite.isIgnored != 'NO'}"}
+                      %label.btn.btn-sm{"btn-radio" => "'accept'", "data-target" => "#calendarModal", "data-toggle" => "modal","ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('NO')", "ng-class" => "{'btn-success disabled': invite.isIgnored == 'NO', 'btn-success': invite.isIgnored != 'NO'}", "tooltip" => "ACCEPT"}
                         %span.glyphicon.glyphicon-ok
-                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('YES')", "onclick" => "return false;"}
+                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'ignore'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('YES')", "onclick" => "return false;", "tooltip" => "IGNORE"}
                         %span.glyphicon.glyphicon-remove
                       %ptj-calendar-modal{"allowed" => "selectedInvite.survey.possibleTimePeriods", "resulting" => "selectedInvite.concreteAvailability", "save" => "saveSelectedInvite()"}
                     / .col-sm-6.btn-group.pull-right{"ng-if" => "selectedSurvey.isNotReady()"}
-                    .col-sm-6.btn-group{"ng-if" => "invite.survey.isSuccessful()"}
+                    .col-sm-6.btn-group{"ng-if" => "invite.survey.isSuccessful()", "tooltip" => "successful"}
                       %span.glyphicon.glyphicon-thumbs-up
-                    .col-sm-6.btn-group{"ng-if" => "invite.survey.isUnsuccessful()"}
+                    .col-sm-6.btn-group{"ng-if" => "invite.survey.isUnsuccessful()", "tooltip" => "unsuccessful"}
                       %span.glyphicon.glyphicon-thumbs-down
 
             #ignoredInviteTab.tab-pane
               %input#ignoredFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchIgnored", :placeholder => "Filter ignored invites ...", :type => "search"}
               #ignoredList.list-group
                 %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites | filter: {isIgnored : 'YES'} | filter : searchIgnored"}
-                  .col-sm-10 {{invite.survey.name}}
-                  .col-sm-2.pull-right
-                  %label.btn.btn-primary.btn-sm{"btn-radio" => "'reaccept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('NO')", "onclick" => "return false;"}
-                    reaccept
+                  .row
+                    .col-sm-8
+                      {{invite.survey.name}}
+                    .col-sm-2
+                      .btn.btn-primary.btn-sm{"btn-radio" => "'reaccept'", "ng-model" => "radioModel", "ng-click" => "setSelectedInviteIgnoredStatus('NO')", "onclick" => "return false;", "tooltip" => "reaccept"}
+                        reaccept
 
             #messagesTab.tab-pane
               %input#messagesFilter.form-control{"ng-change" => "updateSelection()", "ng-model" => "searchMessages", :placeholder => "Filter messages ...", :type => "search"}
@@ -108,9 +110,12 @@
             %h4 Participants:
             %span{"ng-if" => "!selectedSurvey.hasParticipants()"}
               %ul
-                %li{} None
+                %li{} No participant was invited.
+            / %span{"ng-if" => "selectedSurvey.hasParticipants() && hasNoAcceptation()"}
+            /   %ul
+            /     %li{} No participant has accepted!
             %ul
-              %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: {isHost: false}"}
+              %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: {isHost: false, isIgnored : 'NO'}"}
                 %strong{} {{invite.user.name}}
                 (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
 

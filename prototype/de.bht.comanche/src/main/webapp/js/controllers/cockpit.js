@@ -145,6 +145,13 @@ angular.module('myApp')
                     restService.doSave($scope.selectedInvite);
                 };
             };
-
+    // $scope.hasNoAcceptation = function() {
+    //     arrayUtil.forEach($scope.selectedSurvey.invites, function(invite) {
+    //         if (invite.isHost == false && invite.isIgnored != 'NO') {
+    //             return true;
+    //         }
+    //     });
+    //     return false;
+    // }
         }
     ]);
