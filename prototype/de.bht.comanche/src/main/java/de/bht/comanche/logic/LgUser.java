@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -18,9 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import static multex.MultexUtil.create;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.bht.comanche.persistence.DaObject;
 
 /**
@@ -76,27 +73,6 @@ public class LgUser extends DaObject {
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
 		this.gravUtils = new LgGravatarUtils();
-	}
-
-	public LgInvite getInviteBySurveyName(final String name) {
-		for (LgInvite invite : invites) {
-			if (invite.getSurvey().getName() == name) {
-				return invite;
-			}
-		}
-		return null;
-		// @TODO Throw Multex Exception
-	}
-
-	public LgSurvey getSurveyByName(final String name) {
-		for (LgInvite invite : invites) {
-			final LgSurvey survey = invite.getSurvey();
-			if (survey.getName() == name) {
-				return survey;
-			}
-		}
-		return null;
-		// @TODO Throw Multex Exception
 	}
 
 	/**
