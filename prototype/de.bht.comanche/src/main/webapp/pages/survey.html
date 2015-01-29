@@ -25,8 +25,12 @@
             <div class='col-md-4'>
               <div class='row'>
                 <div class='btn-group pull-right'>
-                  <label btn-radio="'Once'" class='btn btn-primary' ng-click='setOneTime()' ng-model='still_needs_a_model'>Once</label>
-                  <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='setRecurring()' ng-model='still_needs_a_model'>Repeatedly</label>
+                  <label btn-radio="'Once'" class='btn' ng-class="{'btn-primary' : selectedSurvey.type == 'ONE_TIME', 'btn-default' : selectedSurvey.type != 'ONE_TIME'}" ng-click='setOneTime()' ng-model='still_needs_a_model'>
+                    Once
+                  </label>
+                  <label btn-radio="'Repeatedly'" class='btn' ng-class="{'btn-primary' : selectedSurvey.type == 'RECURRING', 'btn-default' : selectedSurvey.type != 'RECURRING'}" ng-click='setRecurring()' ng-model='still_needs_a_model'>
+                    Repeatedly
+                  </label>
                 </div>
               </div>
               <div class='row' ng-show='isRecurring()'>
@@ -36,16 +40,6 @@
                     <input class='form-control' min='0' ng-model='selectedSurvey.frequencyDist' placeholder='Distance' required='true' type='number'>
                   </input-group>
                 </div>
-              </div>
-              <div class='row'>
-                <btn class='btn-sm btn-success pull-right' ng-click='showLiveButton=false' ng-show='showLiveButton'>
-                  Live
-                  <span class='glyphicon glyphicon-bullhorn'></span>
-                </btn>
-                <btn class='btn-sm btn-warning pull-right' ng-click='showLiveButton=true' ng-show='!showLiveButton'>
-                  Staged
-                  <span class='glyphicon glyphicon-off'></span>
-                </btn>
               </div>
             </div>
           </div>

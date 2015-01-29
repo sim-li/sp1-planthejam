@@ -18,20 +18,15 @@
             .col-md-4
               .row
                 .btn-group.pull-right
-                  %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "still_needs_a_model", "ng-click"=>"setOneTime()"} Once
-                  %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "still_needs_a_model", "ng-click"=>"setRecurring()"} Repeatedly
+                  %label.btn{"btn-radio" => "'Once'", "ng-model" => "still_needs_a_model", "ng-click"=>"setOneTime()", "ng-class" => "{'btn-primary' : selectedSurvey.type == 'ONE_TIME', 'btn-default' : selectedSurvey.type != 'ONE_TIME'}"}
+                    Once
+                  %label.btn{"btn-radio" => "'Repeatedly'", "ng-model" => "still_needs_a_model", "ng-click"=>"setRecurring()", "ng-class" => "{'btn-primary' : selectedSurvey.type == 'RECURRING', 'btn-default' : selectedSurvey.type != 'RECURRING'}"}
+                    Repeatedly
               .row{"ng-show"=>"isRecurring()"}
                 .btn-group.pull-right
                   %input-group
                     %select.form-control{"ng-model" => "selectedSurvey.frequencyUnit", "ng-options" => "opt for opt in TimeUnit._options"}
                     %input.form-control{"type" => "number", "ng-model" => "selectedSurvey.frequencyDist", "placeholder" => "Distance", "min" => 0, "required" => "true"}
-              .row
-                %btn.btn-sm.btn-success.pull-right{"ng-click" => "showLiveButton=false", "ng-show" => "showLiveButton"}
-                  Live
-                  %span.glyphicon.glyphicon-bullhorn
-                %btn.btn-sm.btn-warning.pull-right{"ng-click" => "showLiveButton=true", "ng-show" => "!showLiveButton"}
-                  Staged
-                  %span.glyphicon.glyphicon-off
           .row
             %ptj-groups
 
