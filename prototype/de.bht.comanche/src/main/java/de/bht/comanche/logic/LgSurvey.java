@@ -244,6 +244,24 @@ public class LgSurvey extends DaObject {
 	}
 
 	/**
+	 * Returns invite of participant found with given
+	 * name.
+	 * 
+	 * Only used for testing.
+	 * 
+	 * @param name Username
+	 * @return User object linked to survey
+	 */
+	public LgInvite getInviteByUserName(String name) {
+		for (LgInvite invite : this.invites) {
+			final LgUser user = invite.getUser();
+			if (user.getName().equals(name)) {
+				return invite;
+			}
+		}
+		return null;
+	}
+	/**
 	 * Updates a Survey with values form another one
 	 * 
 	 * @param other Other survey

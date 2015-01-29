@@ -284,16 +284,22 @@ public class LgUser extends DaObject {
      * @return
      */
     public LgSurvey saveSurvey(final LgSurvey survey) {
-            survey.addHost(this);
-            for (int i = 0; i < survey.getInvites().size(); i++) {
-                    final LgInvite invite = survey.getInviteAt(i);
-                    // Set survey reference
-                    invite.setSurvey(survey);
-                    // Write back
-                    survey.setInvite(i, invite);
-            }
-            final LgSurvey persistedSurvey = saveUnattached(survey);
+            final LgSurvey persistedSurvey = saveUnattached(
+            		addSurveyForHost(survey)
+            		);
             return persistedSurvey;
+    }
+    
+    public LgSurvey addSurveyForHost(final LgSurvey survey) {
+        survey.addHost(this);
+        for (int i = 0; i < survey.getInvites().size(); i++) {
+                final LgInvite invite = survey.getInviteAt(i);
+                // Set survey reference
+                invite.setSurvey(survey);
+                // Write back
+                survey.setInvite(i, invite);
+        }
+        return survey;
     }
     
 	public LgSurvey updateSurvey(final LgSurvey other) {
