@@ -1,7 +1,7 @@
 %ptj-menu
 .container
   .row
-    .col-md-8.col-md-offset-2
+    .col-md-10.col-md-offset-1
       .panel.panel-primary
         .panel-heading Edit a survey for an event
         .panel-body
@@ -59,6 +59,6 @@
               %ptj-calendar{"allowed" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
 
         .panel-footer
-          .col-md-offset-10
+          .input-group.col-sm-offset-9
             %button.btn.btn-default.btn-sm{:type => "reset", "ng-click" => "cancel()"} Cancel
             %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveSurvey()"} Save

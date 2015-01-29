@@ -110,9 +110,20 @@
         </div>
       </div>
       <div class='col-md-6' id='surveyDetails' ng-show='showSurveyDetails'>
-        <input class='btn btn-primary' id='addSurvey' ng-click='addSurvey()' type='button' value='Create a survey'>
-        <input class='btn btn-primary' id='editSurvey' ng-click='editSurvey()' type='button' value='Show and edit selected survey'>
-        <input class='btn btn-primary' id='deleteSurvey' ng-click='deleteSelectedSurvey()' type='button' value='Delete selected survey'>
+        <div class='btn-group'>
+          <button class='btn btn-default' ng-click='addSurvey()'>
+            <span class='glyphicon glyphicon-plus'></span>
+            Add Survey
+          </button>
+          <button class='btn btn-default' ng-click='editSurvey()'>
+            <span class='glyphicon glyphicon-edit'></span>
+            Edit Survey
+          </button>
+          <button class='btn btn-default' ng-click='deleteSelectedSurvey()'>
+            <span class='glyphicon glyphicon-remove'></span>
+            Delete Survey
+          </button>
+        </div>
         <div class='panel panel-default'>
           <div class='panel-body'>
             <h2 class='text-warning'>{{ selectedSurvey.name }}</h2>
