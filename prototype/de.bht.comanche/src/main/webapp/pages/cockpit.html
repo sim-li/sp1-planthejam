@@ -150,11 +150,14 @@
             <h4>Participants:</h4>
             <span ng-if='!selectedSurvey.hasParticipants()'>
               <ul>
-                <li>None</li>
+                <li>No participant was invited.</li>
               </ul>
             </span>
+            <!-- %span{"ng-if" => "selectedSurvey.hasParticipants() && hasNoAcceptation()"} -->
+            <!-- %ul -->
+            <!-- %li{} No participant has accepted! -->
             <ul>
-              <li ng-repeat='invite in selectedSurvey.invites | filter: {isHost: false}'>
+              <li ng-repeat="invite in selectedSurvey.invites | filter: {isHost: false, isIgnored : 'NO'}">
                 <strong>{{invite.user.name}}</strong>
                 (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
               </li>
