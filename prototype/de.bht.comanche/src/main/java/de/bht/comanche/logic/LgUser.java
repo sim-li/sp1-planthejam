@@ -277,21 +277,25 @@ public class LgUser extends DaObject {
 		return findManyByKey(LgInvite.class, "SURVEY_OID", oid);
 	}
 
-	/**
-	 * JSON Object from Server doesn't send host invite.
-	 *
-	 * @param survey
-	 * @return
-	 */
-	public LgSurvey saveSurvey(final LgSurvey survey) {
-		List<LgInvite> dirtyInvites = survey.getInvites();
-		addHostInvite(dirtyInvites);
-		survey.setInvites(new ArrayList<LgInvite>());
-		final LgSurvey persistedSurvey = saveUnattached(survey);
-		persistInvitesAndAddToSurvey(persistedSurvey, dirtyInvites);
-		return persistedSurvey;
-	}
-
+	 /**
+     * JSON Object from Server doesn't send host invite.
+     *
+     * @param survey
+     * @return
+     */
+    public LgSurvey saveSurvey(final LgSurvey survey) {
+            survey.addHost(this);
+            for (int i = 0; i < survey.getInvites().size(); i++) {
+                    final LgInvite invite = survey.getInviteAt(i);
+                    // Set survey reference
+                    invite.setSurvey(survey);
+                    // Write back
+                    survey.setInvite(i, invite);
+            }
+            final LgSurvey persistedSurvey = saveUnattached(survey);
+            return persistedSurvey;
+    }
+    
 	public LgSurvey updateSurvey(final LgSurvey other) {
 		if (other.getOid() <= 0) {
 			throw create(UpdateWithUnpersistedSurveyExc.class, other.getOid());
@@ -307,22 +311,6 @@ public class LgUser extends DaObject {
 	 */
 	@SuppressWarnings("serial")
 	public static final class UpdateWithUnpersistedSurveyExc extends multex.Failure {}
-
-	//Potential candidate for bull shit
-	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
-			List<LgInvite> dirtyInvites) {
-		for (int i = 0; i < dirtyInvites.size(); i++) {
-			final LgInvite dirtyInvite = dirtyInvites.get(i);
-			dirtyInvite.setSurvey(persistedSurvey);
-			persistedSurvey.addInvite(saveUnattached(dirtyInvite));
-		}
-	}
-
-	private void addHostInvite(List<LgInvite> dirtyInvites) {
-		final LgInvite invite = new LgInvite();
-		invite.setHost(true).setIgnored(LgStatus.UNDECIDED).setUser(this);
-		dirtyInvites.add(invite);
-	}
 
 	public void deleteSurvey(final long oid) {
 		this.getSurvey(oid).delete();
