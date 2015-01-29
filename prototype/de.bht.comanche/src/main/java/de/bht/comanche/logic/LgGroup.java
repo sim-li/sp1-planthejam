@@ -76,9 +76,9 @@ public class LgGroup extends DaObject{
      * Delete LgMember by oid.
      * @param oid The LgMember oid.
      */
-    public void deleteMember(final long oid) {
-        search(this.members, oid).delete();
-    }
+//    public void deleteMember(final long oid) {
+//        search(this.members, oid).delete();
+//    }
 
     /**
      * Delete LgMember by LgUser oid.

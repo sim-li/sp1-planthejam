@@ -134,6 +134,7 @@ public class LgUser extends DaObject {
 	 * @return The saved LgGroup.
 	 */
 	public LgGroup save(final LgGroup group) {
+		//proof if group has oid already
 		group.setUser(this).setForMember(group);
 		return saveUnattached(group);
 	}
@@ -142,16 +143,8 @@ public class LgUser extends DaObject {
 	 * Delete LgGroup by provided oid.
 	 * @param groupOid The LgGroup oid.
 	 */
-//	public void deleteGroup(final long groupOid) {
-//		getGroup(groupOid).delete();
-//	}
 	public void deleteGroup(final long groupOid) {
-		LgGroup group = findOneByKey(LgGroup.class, "OID", groupOid);
-		System.out.println("groupOid========================================= " + group.getOid());
-		for (LgMember item : group.getMembers()){
-			item.delete();
-		}
-		this.remove(group);
+		this.getGroup(groupOid).delete();
 	}
 
 	/**
@@ -160,13 +153,14 @@ public class LgUser extends DaObject {
 	 * @return The found LgGroup
 	 */
 	public LgGroup getGroup(final long groupOid) {
-		return search(getGroups(), groupOid);
+		return this.findOneByKey(LgGroup.class, "OID", groupOid);
 	}
 	
 	/**
 	 * Remove grop object from the list of groups.
 	 * @param invite The LgGroup to remove.
 	 */
+	//not working
 	public void remove(final LgGroup group) {
 		this.findManyByKey(LgGroup.class, "OID", this.getOid()).remove(group);
 	}
@@ -177,25 +171,22 @@ public class LgUser extends DaObject {
 		return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
 	}
 
-	//is it used?
-//	public LgGroup updateGroup(final LgGroup other){
-//		if (other.getOid() <= 0) {
-//			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
-//		}
-//		final LgGroup group = findOneByKey(LgGroup.class, "OID", other.getOid());
-//		group.updateWith(other);
-//		return saveUnattached(other);
-//	}
-//
-//	@SuppressWarnings("serial")
-//	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
+	public LgGroup updateGroup(final LgGroup other){
+		if (other.getOid() <= 0) {
+			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
+		}
+		final LgGroup group = findOneByKey(LgGroup.class, "OID", other.getOid());
+		group.updateWith(other);
+		return saveUnattached(other);
+	}
+
+	@SuppressWarnings("serial")
+	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
+
 	/**
 	 * Search LgMember object by group oid and user oid.
-	 *
-	 * @param groupId
-	 *            The LgGroup oid.
-	 * @param userId
-	 *            The LgUser oid.
+	 * @param groupId The LgGroup oid.
+	 * @param userId The LgUser oid.
 	 * @return The found list with LgMember.
 	 */
 	public List<LgMember> search(final long groupId, final long userId) {
@@ -220,19 +211,7 @@ public class LgUser extends DaObject {
 	public void setIconurl(String iconurl) {
 		this.iconurl = iconurl;
 	}
-
-	public LgGroup updateGroup(final LgGroup other){
-		if (other.getOid() <= 0) {
-			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
-		}
-		final LgGroup group = findOneByKey(LgGroup.class, "OID", other.getOid());
-		group.updateWith(other);
-		return saveUnattached(other);
-	}
-
-	@SuppressWarnings("serial")
-	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
-
+	
 	/**
 	 * Proof key and value of user name and password.
 	 *

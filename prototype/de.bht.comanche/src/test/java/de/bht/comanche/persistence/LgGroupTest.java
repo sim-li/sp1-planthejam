@@ -119,14 +119,6 @@ public class LgGroupTest {
 	
 	@Ignore
 	@Test
-	public void test4deleteUser(){
-		final LgSession session = start();
-		final LgUser bob = session.startFor("Bob");
-		bob.deleteThisAccount();
-		assertEquals(0, startFor().getGroups().size());
-	}
-	
-	@Test
 	public void test5deleteMember(){
 		final LgSession session = start();
 		final LgUser sessionUser = startForAlice(session);
@@ -146,7 +138,7 @@ public class LgGroupTest {
 		assertEquals(null, getAliceGroup(aliceGroup.getOid()).getMember(bob_moid));
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void test6deleteGroup(){
 		final LgSession session = start();
