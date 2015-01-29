@@ -97,6 +97,7 @@ public class TestUtils {
 					Integer.parseInt(m.group(5))		//MINUTE
 					);
 		}
+		cal.set(Calendar.SECOND, 0);
 		return cal.getTime();
 	}
 	

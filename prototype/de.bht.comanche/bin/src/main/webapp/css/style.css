@@ -1,0 +1,66 @@
+/* region to display an error */
+#error { 
+    color: white; 
+    font-weight: bold; 
+    background-color: red; 
+}
+
+/* class to display an error */
+.error { 
+    color: red; 
+    font-weight: bold; 
+    font-size: 0.6em; 
+}
+
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+  background-color: #FAFAFA;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.list-group{
+  
+}
+
+#inhalt{
+  position: relative;
+  right: 0px;
+  border-color: black;
+  border-width: 5px;
+}
+
+#searchFriends{
+ border-color: black;
+ border-radius: 5px;
+}

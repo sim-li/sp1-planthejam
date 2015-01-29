@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -17,7 +18,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import static multex.MultexUtil.create;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.bht.comanche.persistence.DaObject;
 
 /**
@@ -75,21 +78,25 @@ public class LgUser extends DaObject {
 		this.gravUtils = new LgGravatarUtils();
 	}
 
-	/**
-	 * Complete delete of user account.
-	 *
-	 * Invites have to be delete first in order to comply
-	 * with foreign key constraint.
-	 *
-	 */
-	public void deleteThisAccount() {
-		for (final LgInvite invite : this.getInvites()) {
-			invite.setUser(null);
+	public LgInvite getInviteBySurveyName(final String name) {
+		for (LgInvite invite : invites) {
+			if (invite.getSurvey().getName() == name) {
+				return invite;
+			}
 		}
-		// Do the same with Groups!
-		// Child surveys + invites are not cascaded!
-		delete();
-		
+		return null;
+		// @TODO Throw Multex Exception
+	}
+
+	public LgSurvey getSurveyByName(final String name) {
+		for (LgInvite invite : invites) {
+			final LgSurvey survey = invite.getSurvey();
+			if (survey.getName() == name) {
+				return survey;
+			}
+		}
+		return null;
+		// @TODO Throw Multex Exception
 	}
 
 	public void deleteOtherUserAccount(final LgUser user) {
@@ -253,21 +260,31 @@ public class LgUser extends DaObject {
 		return findManyByKey(LgInvite.class, "SURVEY_OID", oid);
 	}
 
-	/**
-	 * JSON Object from Server doesn't send host invite.
-	 *
-	 * @param survey
-	 * @return
-	 */
-	public LgSurvey saveSurvey(final LgSurvey survey) {
-		List<LgInvite> dirtyInvites = survey.getInvites();
-		addHostInvite(dirtyInvites);
-		survey.setInvites(new ArrayList<LgInvite>());
-		final LgSurvey persistedSurvey = saveUnattached(survey);
-		persistInvitesAndAddToSurvey(persistedSurvey, dirtyInvites);
-		return persistedSurvey;
-	}
-
+	 /**
+     * JSON Object from Server doesn't send host invite.
+     *
+     * @param survey
+     * @return
+     */
+    public LgSurvey saveSurvey(final LgSurvey survey) {
+            final LgSurvey persistedSurvey = saveUnattached(
+            		addSurveyForHost(survey)
+            		);
+            return persistedSurvey;
+    }
+    
+    public LgSurvey addSurveyForHost(final LgSurvey survey) {
+        survey.addHost(this);
+        for (int i = 0; i < survey.getInvites().size(); i++) {
+                final LgInvite invite = survey.getInviteAt(i);
+                // Set survey reference
+                invite.setSurvey(survey);
+                // Write back
+                survey.setInvite(i, invite);
+        }
+        return survey;
+    }
+    
 	public LgSurvey updateSurvey(final LgSurvey other) {
 		if (other.getOid() <= 0) {
 			throw create(UpdateWithUnpersistedSurveyExc.class, other.getOid());
@@ -284,26 +301,45 @@ public class LgUser extends DaObject {
 	@SuppressWarnings("serial")
 	public static final class UpdateWithUnpersistedSurveyExc extends multex.Failure {}
 
-	//Potential candidate for bull shit
-	private void persistInvitesAndAddToSurvey(LgSurvey persistedSurvey,
-			List<LgInvite> dirtyInvites) {
-		for (int i = 0; i < dirtyInvites.size(); i++) {
-			final LgInvite dirtyInvite = dirtyInvites.get(i);
-			dirtyInvite.setSurvey(persistedSurvey);
-			persistedSurvey.addInvite(saveUnattached(dirtyInvite));
-		}
-	}
-
-	private void addHostInvite(List<LgInvite> dirtyInvites) {
-		final LgInvite invite = new LgInvite();
-		invite.setHost(true).setIgnored(LgStatus.UNDECIDED).setUser(this);
-		dirtyInvites.add(invite);
-	}
-
 	public void deleteSurvey(final long oid) {
-		this.getSurvey(oid).delete();
+		List<LgInvite> invites = new ArrayList<LgInvite>();
+		invites.addAll(this.findManyByKey(LgInvite.class, "survey_oid", oid));
+		for (LgInvite invite : invites) {
+			invite.setSurvey(null);
+			invite.setUser(null);
+			invite.delete();
+		}
+		this.findOneByKey(LgSurvey.class, "oid", oid).delete();
 	}
+	
 
+	/**
+	 * Complete delete of user account.
+	 *
+	 * Invites have to be delete first in order to comply
+	 * with foreign key constraint.
+	 *
+	 */
+	public void deleteThisAccount() {
+		for (final LgInvite invite : this.getInvites()) {
+			invite.setUser(null);
+		}
+		// Do the same with Groups!
+		// Child surveys + invites are not cascaded!
+		delete();
+		
+	}
+	
+//	public void deleteAllInvites() {
+//		List<LgInvite> invites = new ArrayList<LgInvite>();
+//		invites.addAll(this.findManyByKey(LgInvite.class, "user_oid", this.getOid()));
+//		for (LgInvite invite : invites) {
+//			invite.setSurvey(null);
+//			invite.setUser(null);
+//			invite.delete();
+//		}
+//	}
+	
 	@JsonIgnore
 	public List<LgInvite> getInvitesAsParticipant() {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
@@ -335,9 +371,7 @@ public class LgUser extends DaObject {
     		if (survey.shouldBeEvaluated()) {
     			survey.evaluate();
     			saveUnattached(survey);
-
     			// notifyHost(survey);
-
     			saveUnattached(this);
     		}
     	}
