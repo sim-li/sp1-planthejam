@@ -4,6 +4,7 @@
   .panel.panel-default
     .panel-body
       .col-md-6
+
         .tabbable
           %ul.nav.nav-tabs
             %li.active
@@ -32,9 +33,9 @@
                   .row
                     .col-sm-9 {{survey.name}}
                     .col-sm-3.btn-group.pull-right{"ng-if" => "survey.isReady()"}
-                      %label.btn.btn-success.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "confirm()","onclick" => "return false;"}
+                      %label.btn.btn-success.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "confirmSelectedSurvey()","onclick" => "return false;"}
                         %span.glyphicon.glyphicon-ok
-                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "reject()","onclick" => "return false;"}
+                      %label.btn.btn-primary.btn-sm{"btn-radio" => "'accept'", "ng-model" => "radioModel", "ng-click" => "rejectSelectedSurvey()","onclick" => "return false;"}
                         %span.glyphicon.glyphicon-remove
                     .col-sm-3.btn-group{"ng-if" => "survey.isSuccessful()"}
                       %span.glyphicon.glyphicon-thumbs-up
@@ -120,8 +121,5 @@
               %div{"ng-if" => "selectedInvite.survey.isSuccessful()"}
                 %label{:for => "inviteDetailsDeterminedTimePeriod"} Determined Time Period:
                 %span#inviteDetailsDeterminedTimePeriod{}
-                  %span{} {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
-                  %span{} {{ selectedInvite.survey.determinedTimePeriod.getDurationMins() }} minutes
-
-            poss: {{ selectedInvite.survey.possibleTimePeriods }}
-            conc: {{ selectedInvite.concreteAvailability }}
+                  {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
+                  ({{ selectedInvite.survey.determinedTimePeriod.getDurationMins() }} minutes)

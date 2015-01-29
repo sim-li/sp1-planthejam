@@ -15,8 +15,6 @@
           <label for='inputPassword'>Password</label>
           <input class='form-control col-lg-3' id='inputPassword' ng-model='user.password' placeholder='8-20 letters' required='' type='password'>
         </div>
-        <!-- %input#toggleShowPassword{"ng-checked" => "false", "ng-model" => "session.showPassword", :type => "checkbox"}/ -->
-        <!-- %label{:for => "toggleShowPassword"} Plain text -->
         <div class='form-group'>
           <label for='inputEmail'>E-Mail</label>
           <div class='item-wrapper'>
@@ -25,15 +23,11 @@
             </a>
           </div>
         </div>
-        <div class='error'></div>
         <div class='form-group'>
           <label for='inputTel'>Telephone</label>
           <div class='item-wrapper'>
             <input class='form-control col-lg-3' id='inputTel' ng-model='user.tel' placeholder='Your phone number'>
-            <!-- %a#inputTel{"editable-text" => "user.tel", :href => "#"} -->
-            <!-- {{user.tel}} -->
           </div>
-          <div class='error'></div>
         </div>
         <ptj-calendar-modal allowed='[]' resulting='user.generalAvailability' save='saveGeneralAvailability()'></ptj-calendar-modal>
         <div class='input-group'>
@@ -43,9 +37,6 @@
         <div class='input-group'>
           <input class='btn btn-danger' id='deleteUserBtn' ng-click='deleteUser()' type='button' value='Delete account'>
         </div>
-        <!-- ---- debugging -->
-        <div class='row'>{{ user.generalAvailability }}</div>
-        <div class='row'>{{ user.generalAvailability.length }}</div>
       </div>
     </div>
   </div>

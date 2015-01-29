@@ -17,6 +17,8 @@ angular.module('models')
          * @param {Number} [config.oid=''] the object id of the group
          * @param {String} [config.name='Your new group'] the name of the group
          * @param {Array}  [config.members=[]] the members of the group
+         * @param {Array}  [config.members=[]] the members of the group
+         * @param {String} [config.iconurl=''] the icon URL of the group
          */
         var Group = function(config) {
             if (!(this instanceof Group)) {
@@ -25,8 +27,7 @@ angular.module('models')
             config = config || {};
             this.oid = config.oid || '';
             this.name = config.name || 'Your new group';
-            // this.members = config.members || []; // e.g.: [{oid: 1, name: 'Alice'}, {oid: 2, name: 'Bob'}, {oid: 3, name: 'Carla'}]
-            this.members = config.members ? Model.importMany(Member, config.members) : [];
+            this.members = Model.importMany(Member, config.members);
             this.iconurl = config.iconurl || '';
         };
 
@@ -50,19 +51,24 @@ angular.module('models')
             return {
                 'oid': this.oid,
                 'name': this.name,
-                // 'members': this.members
                 'members': Member.exportMany(this.members)
+                    // , 'iconurl': iconurl
             };
         };
 
         Group.prototype.addUser = function(user) {
             this.members.push(new Member({
-                "user": user
+                'user': user
             }));
         };
 
-        Group.prototype.removeUser
+        Group.prototype.removeUser = function() {
 
+            return function() {
+                throw new Error('NOT IMLEMENTED');
+            };
+
+        };
 
         return (Group);
     }]);

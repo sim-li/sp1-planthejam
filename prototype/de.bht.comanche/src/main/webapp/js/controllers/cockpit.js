@@ -21,48 +21,12 @@ angular.module('myApp')
             $scope.invites = Model.importMany(Invite, invitesPromise);
             $scope.messages = messagesPromise;
 
-            $log.log('invites: ', $scope.invites)
-            $log.log('surveys: ', $scope.surveys)
-            $log.log('messages: ', $scope.messages)
-                // $scope.surveys = Survey.getDummies(3);
-
             // preselects the first survey and invite in the list
             $scope.selectedInvite = $scope.invites[0];
-            // $scope.selectedInvite.survey.possibleTimePeriods.push(new TimePeriod({
-            //     startTime: new Date(),
-            //     durationMins: 120
-            // }))
-
             $scope.selectedSurvey = $scope.surveys[0];
 
 
-            //            // -------- HACK: Dummies ------------------------------------------------------>
-            //            if ($scope.selectedInvite && $scope.selectedInvite.survey) {
-            //                $scope.selectedInvite.survey.algoChecked = true;
-            //                $scope.selectedInvite.survey.success = Status.YES;
-            //                // $scope.selectedInvite.survey.success = Status.NO;
-            //                // $scope.selectedInvite.survey.success = Status.UNDECIDED;
-            //                $scope.selectedInvite.survey.determinedTimePeriod = new TimePeriod({
-            //                    startTime: new Date(),
-            //                    durationMins: 90
-            //                });
-            //                $log.debug('hacked invite.survey: ', $scope.selectedInvite.survey)
-            //            }
-            //            if ($scope.selectedSurvey) {
-            //                $scope.selectedSurvey.algoChecked = true;
-            //                $scope.selectedSurvey.success = Status.YES;
-            //                // $scope.selectedSurvey.success = Status.NO;
-            //                // $scope.selectedSurvey.success = Status.UNDECIDED;
-            //                $scope.selectedSurvey.determinedTimePeriod = new TimePeriod({
-            //                    startTime: new Date(),
-            //                    durationMins: 90
-            //                });
-            //                $log.debug('hacked survey: ', $scope.selectedSurvey)
-            //            }
-            // <------- HACK --------------------------------------------------------------
-
             $scope.showSurveyDetails = true;
-
 
             /**
              * Switches to the survey creation view to create a new survey.
@@ -111,16 +75,14 @@ angular.module('myApp')
              * @method deleteSelectedSurvey
              */
             $scope.deleteSelectedSurvey = function() {
-                // if (!$scope.selectedSurvey) {
-                //     $log.log('Keine Terminumfrage ausgewaehlt.');
-                //     return;
-                // }
+                if (!$scope.selectedSurvey) {
+                    return;
+                }
                 restService.doDelete($scope.selectedSurvey)
                     .then(function(success) {
                         $location.path('/cockpit');
-                    } /*, function(error) { $log.log(error); }*/ );
+                    });
             };
-
 
             /**
              * Selects the specified invite.
@@ -130,9 +92,8 @@ angular.module('myApp')
              */
             $scope.selectInvite = function(invite) {
                 $scope.selectedInvite = invite;
-                $log.debug('selectInvite(): ', $scope.selectedInvite); // for debugging
+                $log.debug('selectInvite(): ', $scope.selectedInvite);
             };
-
 
             /**
              * Sets the ignored status of the selected invite according to the
@@ -153,7 +114,7 @@ angular.module('myApp')
                     });
             };
 
-            $scope.confirm = function() {
+            $scope.confirmSelectedSurvey = function() {
                 $scope.selectedSurvey.success = Status.YES;
                 restService.doSave($scope.selectedSurvey)
                     .then(function() {
@@ -161,7 +122,7 @@ angular.module('myApp')
                     });
             };
 
-            $scope.reject = function() {
+            $scope.rejectSelectedSurvey = function() {
                 $scope.selectedSurvey.success = Status.NO;
                 // $scope.selectedSurvey.determinedTimePeriod = TimePeriod.NÙLL();
                 restService.doSave($scope.selectedSurvey)

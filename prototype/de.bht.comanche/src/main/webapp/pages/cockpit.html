@@ -38,10 +38,10 @@
                   <div class='row'>
                     <div class='col-sm-9'>{{survey.name}}</div>
                     <div class='col-sm-3 btn-group pull-right' ng-if='survey.isReady()'>
-                      <label btn-radio="'accept'" class='btn btn-success btn-sm' ng-click='confirm()' ng-model='radioModel' onclick='return false;'>
+                      <label btn-radio="'accept'" class='btn btn-success btn-sm' ng-click='confirmSelectedSurvey()' ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-ok'></span>
                       </label>
-                      <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click='reject()' ng-model='radioModel' onclick='return false;'>
+                      <label btn-radio="'accept'" class='btn btn-primary btn-sm' ng-click='rejectSelectedSurvey()' ng-model='radioModel' onclick='return false;'>
                         <span class='glyphicon glyphicon-remove'></span>
                       </label>
                     </div>
@@ -160,13 +160,11 @@
               <div ng-if='selectedInvite.survey.isSuccessful()'>
                 <label for='inviteDetailsDeterminedTimePeriod'>Determined Time Period:</label>
                 <span id='inviteDetailsDeterminedTimePeriod'>
-                  <span>{{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}</span>
-                  <span>{{ selectedInvite.survey.determinedTimePeriod.getDurationMins() }} minutes</span>
+                  {{ selectedInvite.survey.determinedTimePeriod.startTime | date:'yyyy-MM-dd HH:mm' }}
+                  ({{ selectedInvite.survey.determinedTimePeriod.getDurationMins() }} minutes)
                 </span>
               </div>
             </div>
-            poss: {{ selectedInvite.survey.possibleTimePeriods }}
-            conc: {{ selectedInvite.concreteAvailability }}
           </div>
         </div>
       </div>

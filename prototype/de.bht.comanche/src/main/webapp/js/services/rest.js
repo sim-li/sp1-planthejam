@@ -55,23 +55,7 @@ angular.module('rest', ['models'])
                 'member': {
                     'path': 'members/'
                 }
-                // ,
-                // 'timePeriod': {
-                //     'path': '/timeperiods',
-                // 'getMany': '/gettimeperiods'
-                // ,
-                // 'save': '/save',
-                // 'delete': '/delete'
-                // }
             };
-
-            //--> TODO the paths config should best be retrieved from a config file
-            // $http.get('restPaths.json').success(function(data, status, header, config) {
-            //     restPaths = data;
-            // }).error(function(data, status, header, config) {
-            //     $log.log('Failed loading the REST paths configuration file restPaths.json.');
-            //     $log.log(data);
-            // });
 
             /**
              * Returns the relative URL for the given model from the central REST path table.
@@ -110,22 +94,17 @@ angular.module('rest', ['models'])
                     $http({
                         method: method,
                         url: url,
-                        data: data /*,*/
-                            // headers: {
+                        data: data
+                            // ,headers: {
                             //     'Content-Type': 'application/json'
                             // } : ''
                     }).success(function(data, status, header, config) {
                         if (LOG) {
-                            if (url == '/rest/surveys/1/invites') {
-                                console.log('calling ', url)
-                                console.log('retrieving ', data)
-                                console.log('retrieving ', status)
-                            }
                             $log.debug('%s %s ==> %o', method, url, data);
                         }
                         deferred.resolve(data);
                     }).error(function(data, status, header, config) {
-                        // errors should always be logged
+                        /* errors should always be logged */
                         var errMsg = method + ' ' + url + ' failed. ==> ';
                         $rootScope.warnings = errMsg + data.message;
                         $log.log(errMsg);
@@ -181,10 +160,6 @@ angular.module('rest', ['models'])
                 return callHttp('DELETE')(url);
             };
 
-            // var getUser = function(user) {
-            //     return callHttp('GET')(getUrlFor(user, null, 'get'));
-            // };
-
             /**
              * Updates the specified user.
              *
@@ -227,20 +202,17 @@ angular.module('rest', ['models'])
             };
 
             restService.getSurveyInvites = function(oid) {
-                console.log('getting many for ', oid)
                 var url = getUrlFor(Survey, oid, 'invites');
                 return callHttp('GET')(url);
             };
 
             restService.getMessages = function() {
                 var url = getUrlFor(User, null, 'messages');
-                $log.debug(url)
                 return callHttp('GET')(url);
             };
 
             restService.notifyParticipants = function(oid) {
                 var url = getUrlFor(Survey, oid, 'notifyParticipants');
-                $log.debug(url)
                 return callHttp('POST')(url);
             };
 

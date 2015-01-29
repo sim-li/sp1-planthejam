@@ -27,7 +27,7 @@ angular.module('myApp')
                     .then(function(success) {
                         $scope.user = new User(success);
                         $location.path('/cockpit');
-                    } /*, function(error) { $log.error(error);}*/ );
+                    });
             };
 
             /**
@@ -55,7 +55,7 @@ angular.module('myApp')
                         restService.logout();
                         $log.log('Account for ' + userName + ' was deleted.');
                         $location.path('/');
-                    } /*, function(error) {$log.error(error);}*/ );
+                    });
             };
 
             $scope.saveGeneralAvailability = function() {
@@ -65,17 +65,5 @@ angular.module('myApp')
                 };
             };
 
-            //-- dummies -->
-            // $scope.dummyPoss = [];
-            // $scope.dummyPoss.push({
-            //     startTime: new Date('Jan 23 2015 10:00'),
-            //     durationMins: 120
-            // });
-            // $scope.dummyPoss.push({
-            //     startTime: new Date('Jan 24 2015 6:00'),
-            //     durationMins: 120
-            // });
-            // $scope.user.generalAvailability = $scope.dummyPoss;
-            //<-- dummies --
         }
     ]);
