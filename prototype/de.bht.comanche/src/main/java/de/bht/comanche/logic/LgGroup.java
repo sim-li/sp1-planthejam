@@ -73,28 +73,6 @@ public class LgGroup extends DaObject{
     }
 
     /**
-     * Delete LgMember by oid.
-     * @param oid The LgMember oid.
-     */
-//    public void deleteMember(final long oid) {
-//        search(this.members, oid).delete();
-//    }
-
-    /**
-     * Delete LgMember by LgUser oid.
-     * @param userOid The LgUser oid.
-     */
-    public void deleteUser(final long userOid) {
-        for (final LgMember member : this.members) {
-            final LgUser user = member.getUser();
-            if (user.getOid() == userOid) {
-                user.remove(this);
-                this.members.remove(member);
-            }
-        }
-    }
-
-    /**
      * Sets specified LgGroup for LgMembers.
      * @param group The LgGroup to set.
      * @return Returns the LgGroup.

@@ -1,9 +1,7 @@
 package de.bht.comanche.rest;
 
 import static multex.MultexUtil.create;
-
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -14,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-
 import de.bht.comanche.logic.LgGroup;
 import de.bht.comanche.logic.LgTransaction;
 
@@ -88,7 +85,6 @@ public class ReGroupService extends RestService {
 		}.getResult();
 	}
 	
-	//not used????
 	@Path("/{oid}")
 	@PUT
 	@Consumes("application/json")

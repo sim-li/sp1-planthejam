@@ -23,6 +23,7 @@ angular.module('myApp')
              * @method saveEditedUser
              */
             $scope.saveEditedUser = function() {
+                console.log("user : ", $scope.user);
                 restService.updateUser($scope.user)
                     .then(function(success) {
                         $scope.user = new User(success);
@@ -47,8 +48,6 @@ angular.module('myApp')
             $scope.deleteUser = function() {
 
                 // *** ask: are you sure you want to delete? ***
-
-                var userName = $scope.user.name;
                 restService.deleteUser($scope.user)
                     .then(function(success) {
                         $log.log(success);

@@ -1,6 +1,6 @@
 %ptj-menu
 .container
-  .col-md-8
+  .col-md-8.col-md-offset-2
     .panel.panel-primary
       .panel-body
         .form-group
@@ -20,11 +20,10 @@
           %label{:for => "inputTel"} Telephone
           .item-wrapper
             %input#inputTel.form-control.col-lg-3{"ng-model" => "user.tel", :placeholder => "Your phone number"}
-
+          %hr
         %ptj-calendar-modal{"allowed" => "[]", "resulting" => "user.generalAvailability", "save" => "saveGeneralAvailability()"}
-
-        .input-group
-          %input#cancelUserEditBtn.btn.btn-default{"ng-click" => "cancelEditUser()", :type => "button", :value => "Cancel"}/
-          %input#saveUserEditBtn.btn.btn-success{"ng-click" => "saveEditedUser()", :type => "submit", :value => "Save changes"}/
-        .input-group
-          %input#deleteUserBtn.btn.btn-danger{"ng-click" => "deleteUser()", :type => "button", :value => "Delete account"}/
+      .panel-footer
+        %input#deleteUserBtn.btn.btn-danger{"ng-click" => "deleteUser()", :type => "button", :value => "Delete account"}
+        .input-group.pull-right
+          %input#cancelUserEditBtn.btn.btn-warning{"ng-click" => "cancelEditUser()", :type => "button", :value => "Cancel"}
+          %input#saveUserEditBtn.btn.btn-success{"ng-click" => "saveEditedUser()", :type => "button", :value => "Save changes"}

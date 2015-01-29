@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -18,9 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import static multex.MultexUtil.create;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.bht.comanche.persistence.DaObject;
 
 /**
@@ -78,27 +75,6 @@ public class LgUser extends DaObject {
 		this.gravUtils = new LgGravatarUtils();
 	}
 
-	public LgInvite getInviteBySurveyName(final String name) {
-		for (LgInvite invite : invites) {
-			if (invite.getSurvey().getName() == name) {
-				return invite;
-			}
-		}
-		return null;
-		// @TODO Throw Multex Exception
-	}
-
-	public LgSurvey getSurveyByName(final String name) {
-		for (LgInvite invite : invites) {
-			final LgSurvey survey = invite.getSurvey();
-			if (survey.getName() == name) {
-				return survey;
-			}
-		}
-		return null;
-		// @TODO Throw Multex Exception
-	}
-
 	/**
 	 * Complete delete of user account.
 	 *
@@ -110,7 +86,10 @@ public class LgUser extends DaObject {
 		for (final LgInvite invite : this.getInvites()) {
 			invite.setUser(null);
 		}
+		// Do the same with Groups!
+		// Child surveys + invites are not cascaded!
 		delete();
+		
 	}
 
 	public void deleteOtherUserAccount(final LgUser user) {
@@ -134,7 +113,6 @@ public class LgUser extends DaObject {
 	 * @return The saved LgGroup.
 	 */
 	public LgGroup save(final LgGroup group) {
-		//proof if group has oid already
 		group.setUser(this).setForMember(group);
 		return saveUnattached(group);
 	}
@@ -156,18 +134,8 @@ public class LgUser extends DaObject {
 		return this.findOneByKey(LgGroup.class, "OID", groupOid);
 	}
 	
-	/**
-	 * Remove grop object from the list of groups.
-	 * @param invite The LgGroup to remove.
-	 */
-	//not working
-	public void remove(final LgGroup group) {
-		this.findManyByKey(LgGroup.class, "OID", this.getOid()).remove(group);
-	}
-	
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
-		System.out.println("=======findManyByKey(LgGroup.class, this.getOid()) - "+ findManyByKey(LgGroup.class, "OID", this.getOid()).size());
 		return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
 	}
 

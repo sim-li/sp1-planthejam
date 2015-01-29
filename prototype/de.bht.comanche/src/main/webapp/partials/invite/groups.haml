@@ -14,10 +14,6 @@
             %button.btn.btn-default{:type => "button", "ng-click" => "removeGroup($index)"}
               %span.glyphicon.glyphicon-remove
               Remove
-            %button.btn.btn-default{:type => "button", "ng-click" => ""}
-              %span.glyphicon.glyphicon-resize-small
-              Merge
-
         .pull-right
           %b {{selectedGroup.name}}
           %img{"ng-src" => "{{selectedGroup.iconurl}}&s=40", "style" => "padding-right:2px;"}
@@ -32,6 +28,7 @@
                 %img{"ng-src" => "{{group.iconurl}}&s=40"}
               .media-body
                 %h5 {{group.name}}
+
       .col-sm-9
         .panel.panel-default
           .panel-body
