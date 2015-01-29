@@ -157,7 +157,7 @@
             <!-- %ul -->
             <!-- %li{} No participant has accepted! -->
             <ul>
-              <li ng-repeat="invite in selectedSurvey.invites | filter: {isHost: false, isIgnored : 'NO'}">
+              <li ng-repeat="invite in selectedSurvey.invites | filter: {isHost: false, isIgnored: '!YES'}">
                 <strong>{{invite.user.name}}</strong>
                 (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
               </li>
