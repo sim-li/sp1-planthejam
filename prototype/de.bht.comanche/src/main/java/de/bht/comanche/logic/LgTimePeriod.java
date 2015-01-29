@@ -2,6 +2,7 @@ package de.bht.comanche.logic;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
@@ -36,8 +37,14 @@ public class LgTimePeriod {
 
 	public static final LgTimePeriod EMPTY_TIMEPERIOD = new LgTimePeriod()
 			.setStartTime(new Date(0)).setEndTime(new Date(-60000));
+	
+	public final Date EMPTY_START_TIME = new Date(0);
+			
+	public final Date EMPTY_END_TIME = new Date(-60000);
 
 	public LgTimePeriod() {
+//		this.startTime = this.EMPTY_START_TIME;
+//		this.endTime = this.EMPTY_END_TIME;
 	}
 
 	public LgTimePeriod(final LgTimePeriod other) {
@@ -54,8 +61,16 @@ public class LgTimePeriod {
 	}
 
 	public LgTimePeriod setStartTime(final Date startTime) {
-		this.startTime = startTime;
+		this.startTime = cutOffSeconds(startTime);
 		return this;
+	}
+
+	private Date cutOffSeconds(final Date startTime) {
+		Calendar cal = Calendar.getInstance(); // locale-specific
+		cal.setTime(startTime);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
 	}
 
 	public Date getEndTime() {
@@ -63,9 +78,17 @@ public class LgTimePeriod {
 	}
 
 	public LgTimePeriod setEndTime(Date endTime) {
-		this.endTime = endTime;
+		this.endTime = cutOffSeconds(endTime);
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("LgTimePeriod [startTime=%s, endTime=%s]",
+				startTime, endTime);
+	}
+
+	
 
 	@Override
 	public int hashCode() {
@@ -89,19 +112,21 @@ public class LgTimePeriod {
 		if (endTime == null) {
 			if (other.endTime != null)
 				return false;
-		} else if (!df.format(endTime).equals(df.format(other.endTime)))
+		} else if (!endTime.equals(other.endTime))
 			return false;
 		if (startTime == null) {
 			if (other.startTime != null)
 				return false;
-		} else if (!df.format(startTime).equals(df.format(other.startTime)))
+		} else if (!startTime.equals(other.startTime))
 			return false;
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("LgTimePeriod [startTime=%s, endTime=%s]",
-				startTime, endTime);
+	public String formatWithNullCheck(Date date) {
+		if (date == null) { 
+			return null;
+		}
+		return df.format(date);
 	}
+	
 }
