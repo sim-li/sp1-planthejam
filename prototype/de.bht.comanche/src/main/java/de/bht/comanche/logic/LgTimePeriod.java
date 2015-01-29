@@ -40,6 +40,13 @@ public class LgTimePeriod {
 	public LgTimePeriod() {
 	}
 
+	public static final LgTimePeriod createEmptyTimePeriod() {
+		final LgTimePeriod emptyTimePeriod = new LgTimePeriod();
+		emptyTimePeriod.setStartTime(new Date(0));
+		emptyTimePeriod.setEndTime(new Date(-60000));
+		return emptyTimePeriod;
+	}
+
 	public LgTimePeriod(final LgTimePeriod other) {
 		this.startTime = other.startTime;
 		this.endTime = other.endTime;
@@ -73,10 +80,6 @@ public class LgTimePeriod {
 	public LgTimePeriod setEndTime(Date endTime) {
 		this.endTime = cutOffSeconds(endTime);
 		return this;
-	}
-
-	public static final LgTimePeriod createEmptyTimePeriod() {
-		return new LgTimePeriod().setStartTime(new Date(0)).setEndTime(new Date(-60000));
 	}
 	
 	@Override

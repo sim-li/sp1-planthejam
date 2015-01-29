@@ -120,7 +120,7 @@ public class LgSurvey extends DaObject {
 	 */
 	public LgSurvey() {
 		this.possibleTimePeriods = new HashSet<LgTimePeriod>();
-		this.determinedTimePeriod = LgTimePeriod.EMPTY_TIMEPERIOD;
+		this.determinedTimePeriod = LgTimePeriod.createEmptyTimePeriod();
 		this.invites = new ArrayList<LgInvite>();
 		this.success = LgStatus.UNDECIDED;
 	}
@@ -306,6 +306,7 @@ public class LgSurvey extends DaObject {
 	 * the filtered list or null if the list was empty.
 	 */
 	public void evaluate() {
+		this.determinedTimePeriod = LgTimePeriod.createEmptyTimePeriod();
 		boolean someOneAccepted = false;
 		final Set<LgTimePeriod> matchesFromUsers = new HashSet<LgTimePeriod>();
 		matchesFromUsers.addAll(this.getPossibleTimePeriods());
