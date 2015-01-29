@@ -110,7 +110,10 @@ public class LgUser extends DaObject {
 		for (final LgInvite invite : this.getInvites()) {
 			invite.setUser(null);
 		}
+		// Do the same with Groups!
+		// Child surveys + invites are not cascaded!
 		delete();
+		
 	}
 
 	public void deleteOtherUserAccount(final LgUser user) {
