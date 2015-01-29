@@ -61,17 +61,6 @@ public class LgUser extends DaObject {
 	 */
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<LgInvite> invites;
-	/**
-	 * Representation of a foreign key in a LgGroup entity. Provide a list of
-	 * groups.
-	 */
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval = true)
-	private List<LgGroup> groups;
-	/**
-	 * Representation of a foreign key in a LgMember entity. Provide a member.
-	 */
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private LgMember member;
 
 	@ElementCollection(targetClass = LgTimePeriod.class, fetch = FetchType.EAGER)
 	@Column(name = "general_availability")
@@ -86,7 +75,6 @@ public class LgUser extends DaObject {
 
 	public LgUser() {
 		this.invites = new ArrayList<LgInvite>();
-		this.groups = new ArrayList<LgGroup>();
 		this.gravUtils = new LgGravatarUtils();
 	}
 
@@ -138,18 +126,82 @@ public class LgUser extends DaObject {
 	public void deleteInvite(final long inviteOid) {
 		getInvite(inviteOid).delete();
 	}
-
+	
+	//---------------------group methods---------------------------------	
 	/**
 	 * Save LgGroup for current user.
-	 *
-	 * @param group
-	 *            The LgGroup to save.
+	 * @param group The LgGroup to save.
 	 * @return The saved LgGroup.
 	 */
 	public LgGroup save(final LgGroup group) {
 		group.setUser(this).setForMember(group);
 		return saveUnattached(group);
 	}
+
+	/**
+	 * Delete LgGroup by provided oid.
+	 * @param groupOid The LgGroup oid.
+	 */
+//	public void deleteGroup(final long groupOid) {
+//		getGroup(groupOid).delete();
+//	}
+	public void deleteGroup(final long groupOid) {
+		LgGroup group = findOneByKey(LgGroup.class, "OID", groupOid);
+		System.out.println("groupOid========================================= " + group.getOid());
+		for (LgMember item : group.getMembers()){
+			item.delete();
+		}
+		this.remove(group);
+	}
+
+	/**
+	 * Returns LgGroup by provided oid.
+	 * @param groupOid The LgGroup oid.
+	 * @return The found LgGroup
+	 */
+	public LgGroup getGroup(final long groupOid) {
+		return search(getGroups(), groupOid);
+	}
+	
+	/**
+	 * Remove grop object from the list of groups.
+	 * @param invite The LgGroup to remove.
+	 */
+	public void remove(final LgGroup group) {
+		this.findManyByKey(LgGroup.class, "OID", this.getOid()).remove(group);
+	}
+	
+	@JsonIgnore
+	public List<LgGroup> getGroups() {
+		System.out.println("=======findManyByKey(LgGroup.class, this.getOid()) - "+ findManyByKey(LgGroup.class, "OID", this.getOid()).size());
+		return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
+	}
+
+	//is it used?
+//	public LgGroup updateGroup(final LgGroup other){
+//		if (other.getOid() <= 0) {
+//			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
+//		}
+//		final LgGroup group = findOneByKey(LgGroup.class, "OID", other.getOid());
+//		group.updateWith(other);
+//		return saveUnattached(other);
+//	}
+//
+//	@SuppressWarnings("serial")
+//	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
+	/**
+	 * Search LgMember object by group oid and user oid.
+	 *
+	 * @param groupId
+	 *            The LgGroup oid.
+	 * @param userId
+	 *            The LgUser oid.
+	 * @return The found list with LgMember.
+	 */
+	public List<LgMember> search(final long groupId, final long userId) {
+		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
+	}
+//--------------------------------------------------------------------
 
 	/**
 	 * Generates icon url from classes internal email Gravatar will deliver a
@@ -169,27 +221,6 @@ public class LgUser extends DaObject {
 		this.iconurl = iconurl;
 	}
 
-	/**
-	 * Delete LgGroup by provided oid.
-	 *
-	 * @param groupOid
-	 *            The LgGroup oid.
-	 */
-	public void deleteGroup(final long groupOid) {
-		getGroup(groupOid).delete();
-	}
-
-	/**
-	 * Returns LgGroup by ptovided oid.
-	 *
-	 * @param groupOid
-	 *            The LgGroup oid.
-	 * @return The found LgGroup
-	 */
-	public LgGroup getGroup(final long groupOid) {
-		return search(getGroups(), groupOid);
-	}
-
 	public LgGroup updateGroup(final LgGroup other){
 		if (other.getOid() <= 0) {
 			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
@@ -201,18 +232,6 @@ public class LgUser extends DaObject {
 
 	@SuppressWarnings("serial")
 	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
-	/**
-	 * Search LgMember object by group oid and user oid.
-	 *
-	 * @param groupId
-	 *            The LgGroup oid.
-	 * @param userId
-	 *            The LgUser oid.
-	 * @return The found list with LgMember.
-	 */
-	public List<LgMember> search(final long groupId, final long userId) {
-		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
-	}
 
 	/**
 	 * Proof key and value of user name and password.
@@ -257,16 +276,6 @@ public class LgUser extends DaObject {
 	 */
 	public void remove(final LgInvite invite) {
 		this.invites.remove(invite);
-	}
-
-	/**
-	 * Remove grop object from the list of groups.
-	 *
-	 * @param invite
-	 *            The LgGroup to remove.
-	 */
-	public void remove(final LgGroup group) {
-		this.groups.remove(group);
 	}
 
 	public LgSurvey getSurvey(final Long oid) {
@@ -470,20 +479,13 @@ public class LgUser extends DaObject {
     public LgUser updateWith(LgUser other) {
 		this.email = other.email;
 		this.generalAvailability =  other.generalAvailability;
-		this.groups = other.groups;
 		this.iconurl = other.iconurl;
 		this.invites = other.invites;
-		this.member = other.member;
 		this.messages = other.messages;
 		this.name = other.name;
 		this.password = other.password;
 		this.tel = other.tel;
 		return this;
-	}
-
-	@JsonIgnore
-	public List<LgGroup> getGroups() {
-		return this.groups;
 	}
 
 	public String getName() {
@@ -534,8 +536,7 @@ public class LgUser extends DaObject {
 	@Override
 	public String toString() {
 		return String
-				.format("LgUser [name=%s, tel=%s, email=%s, password=%s, groups=%s, member=%s, oid=%s, pool=%s]",
-						name, tel, email, password, groups, member,
-						oid, pool);
+				.format("LgUser [name=%s, tel=%s, email=%s, password=%s]",
+						name, tel, email, password);
 	}
 }

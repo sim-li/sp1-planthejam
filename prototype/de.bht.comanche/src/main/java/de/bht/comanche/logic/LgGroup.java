@@ -182,6 +182,11 @@ public class LgGroup extends DaObject{
     public List<LgMember> getMembers() {
         return this.members;
     }
+    
+    public LgGroup setMembers(final List<LgMember> members) {
+        this.members = members;
+        return this;
+    }
 
     @Override
     public String toString() {
