@@ -123,7 +123,7 @@ public class ReGroupService extends RestService {
 	@DELETE
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public LgGroup delete(final long oid, @Context final HttpServletRequest request) {
+	public LgGroup delete(@PathParam("oid") final long oid, @Context final HttpServletRequest request) {
 		return new LgTransaction<LgGroup>(request) {
 			@Override
 			public LgGroup execute() throws Exception {
