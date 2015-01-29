@@ -1,0 +1,189 @@
+<ptj-menu></ptj-menu>
+<div class='container'>
+  <!-- %div#temporary-debug-output1 users: '{{ users }}' -->
+  <!-- %div#temporary-debug-output2 invites: '{{ invites }}' -->
+  <!-- %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}' -->
+  <!-- %div#temporary-debug-output4 groups: '{{ groups }}' -->
+  <!-- %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}' -->
+  <!-- %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}' -->
+  <!-- QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route -->
+  <div class='row'>
+    <!-- search & results -->
+    <!-- sidebar -->
+    <div class='col-md-2'>
+      <!-- %ptj-survey-select -->
+      <a class='list-group-item' href='' ng-click='selectInvite(invite);' ng-repeat='invite in invites'>
+        {{invite.survey.name}}
+      </a>
+    </div>
+    <div class='col-md-8'>
+      <div class='panel panel-primary'>
+        <div class='panel-heading'>Create new Event</div>
+        <div class='panel-body'>
+          <div class='row'>
+            <div class='col-md-8'>
+              <h2>
+                <div class='item-wrapper'>
+                  <a editable-text='selectedInvite.survey.name' href='#'>
+                    {{selectedInvite.survey.name}}
+                  </a>
+                </div>
+              </h2>
+              <h4>
+                <div class='item-wrapper'>
+                  <a editable-text='selectedInvite.survey.description' href='#'>
+                    {{selectedInvite.survey.description}}
+                  </a>
+                </div>
+              </h4>
+            </div>
+            <div class='col-md-4'>
+              <div class='row'>
+                <div class='btn-group pull-right'>
+                  <label btn-radio="'Once'" class='btn btn-primary' ng-click='repeatedly=false' ng-model='still_needs_a_model'>Once</label>
+                  <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='repeatedly=true' ng-model='still_needs_a_model'>Repeatedly</label>
+                </div>
+                <br>
+                <br>
+                <btn class='btn-sm btn-success pull-right' ng-click='showLiveButton=false' ng-show='showLiveButton'>
+                  Live
+                  <span class='glyphicon glyphicon-bullhorn'></span>
+                </btn>
+                <btn class='btn-sm btn-warning pull-right' ng-click='showLiveButton=true' ng-show='!showLiveButton'>
+                  Staged
+                  <span class='glyphicon glyphicon-off'></span>
+                </btn>
+              </div>
+            </div>
+          </div>
+          <div class='rpw'>
+            <ptj-search></ptj-search>
+            <!-- %ptj-members -->
+            <div collapse='memberListIsCollapsed' id='ptj-members'>
+              <div class='well well-sm'>
+                <div class='container-fluid'>
+                  <div class='btn-group'>
+                    <span ng-repeat='member in selectedGroup.members'>
+                      <button class='btn btn-default' ng-click='removeMember($index)' type='button'>
+                        {{member.user.name}}
+                        <span class='badge'>
+                          <span class='glyphicon glyphicon-remove'></span>
+                        </span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+          </div>
+          <!-- DEBUGGING THE GROUPS >>> -->
+          <div class='row col-lg-offset-3' id='debug-the-groups-then-throw-away'>
+            <button class='btn btn-primary btn-sm' ng-click='addNewGroup()' type='submit'>Add New Group</button>
+            <button class='btn btn-primary btn-sm' ng-click='deleteSelectedGroup()' type='submit'>Delete Selected Group</button>
+            <button class='btn btn-primary btn-sm' ng-click='saveGroups()' type='submit'>Save All Groups</button>
+            <button class='btn btn-primary btn-sm' ng-click='attachSelectedGroupToInvite()' type='submit'>Attach Selected Group To Invite</button>
+          </div>
+          <br>
+          <!-- <<< DEBUGGING THE GROUPS -->
+          <div class='row'>
+            <!-- possibleTimeperiods -->
+            <!-- %code {{ dummyTimePeriods | json }} -->
+            <!-- %code {{ selectedTimePeriod | json }} -->
+            <div class='col-lg-5'>
+              <div class='panel-group' id='accordion'></div>
+              <div class='panel panel-info'>
+                <div class='panel-heading'>
+                  <div class='panel-title'>
+                    <a data-parent='#accordion' data-toggle='collapse' href='#collapseOne' onclick='return false;'>
+                      Avaibility
+                      <span class='col-md-offset-7 glyphicon glyphicon-resize-vertical'></span>
+                    </a>
+                  </div>
+                </div>
+                <div class='panel-collapse collapse in' id='collapseOne'>
+                  <div class='panel-body'>
+                    <tabset type='pills' vertical='true'>
+                      <tab heading="{{timePeriod.startTime | date:'yyyy-MM-dd HH:mm' }} in {{timePeriod.duration}}h" ng-click='selectTimePeriod(timePeriod);' ng-repeat='timePeriod in dummyTimePeriods'></tab>
+                    </tabset>
+                  </div>
+                </div>
+                <div class='panel-footer'>
+                  <div class='col-md-offset-5'>
+                    <button class='btn btn-primary btn-sm' ng-click='addNewTimePeriod()'>
+                      <i class='glyphicon glyphicon-plus'></i>
+                    </button>
+                    <button class='btn btn-primary btn-sm' ng-click='removeTimePeriod()'>
+                      <i class='glyphicon glyphicon-minus'></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-7'>
+              <div class='row'>
+                <div class='col-lg-2'>
+                  Deadline
+                </div>
+                <div class='col-lg-8 dropdown'>
+                  <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
+                    <div class='input-group'>
+                      <input class='form-control' data-ng-model='selectedTimePeriod.startTime' type='text'>
+                      <span class='input-group-addon'>
+                        <i class='glyphicon glyphicon-calendar'></i>
+                      </span>
+                    </div>
+                  </a>
+                  <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='selectedTimePeriod.startTime' date='yyyy-MM-dd HH:mm'></datetimepicker>
+                  </ul>
+                </div>
+                <br>
+              </div>
+              <hr>
+              <div class='row'>
+                <div class='col-lg-2'>
+                  Start Time
+                </div>
+                <div class='col-lg-8 dropdown'>
+                  <a class='dropdown-toggle' data-toggle='dropdown' id='dropdown2' role='button'>
+                    <div class='input-group'>
+                      <input class='form-control' data-ng-model='selectedTimePeriod.startTime' type='text'>
+                      <span class='input-group-addon'>
+                        <i class='glyphicon glyphicon-calendar'></i>
+                      </span>
+                    </div>
+                  </a>
+                  <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                    <datetimepicker data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='selectedTimePeriod.startTime' date='yyyy-MM-dd HH:mm'></datetimepicker>
+                  </ul>
+                </div>
+              </div>
+              <br>
+              <div class='row'>
+                <div class='col-lg-2'>
+                  Duration
+                </div>
+                <div class='col-lg-6'>
+                  <input max='24' min='0' ng-model='selectedTimePeriod.duration' step='1' type='range' value='1'>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='panel-footer'>
+          <div class='col-md-offset-10'>
+            <button class='btn btn-default btn-sm' type='reset'>Reset</button>
+            <button class='btn btn-primary btn-sm' ng-click='saveInvite()' type='submit'>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='col-md-2'>
+      <input-group ng-show='repeatedly'>
+        <input class='form-control' placeholder='Frequency' type='text'>
+        <input class='form-control' placeholder='Distance' type='text'>
+      </input-group>
+    </div>
+  </div>
+</div>

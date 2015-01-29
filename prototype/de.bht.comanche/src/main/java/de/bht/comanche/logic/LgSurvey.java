@@ -2,8 +2,10 @@ package de.bht.comanche.logic;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -118,7 +120,7 @@ public class LgSurvey extends DaObject {
 	 */
 	public LgSurvey() {
 		this.possibleTimePeriods = new HashSet<LgTimePeriod>();
-		this.determinedTimePeriod = new LgTimePeriod();
+		this.determinedTimePeriod = LgTimePeriod.EMPTY_TIMEPERIOD;
 		this.invites = new ArrayList<LgInvite>();
 		this.success = LgStatus.UNDECIDED;
 	}
@@ -235,6 +237,32 @@ public class LgSurvey extends DaObject {
 		this.pool = null;
 	}
 	
+	public LgInvite getInviteAt(int index) {
+        return this.invites.get(index);
+	}
+
+	public void setInvite(int index, LgInvite invite) {
+	        this.invites.set(index, invite);
+	}
+
+	/**
+	 * Returns invite of participant found with given
+	 * name.
+	 * 
+	 * Only used for testing.
+	 * 
+	 * @param name Username
+	 * @return User object linked to survey
+	 */
+	public LgInvite getInviteByUserName(String name) {
+		for (LgInvite invite : this.invites) {
+			final LgUser user = invite.getUser();
+			if (user.getName().equals(name)) {
+				return invite;
+			}
+		}
+		return null;
+	}
 	/**
 	 * Updates a Survey with values form another one
 	 * 
@@ -278,13 +306,28 @@ public class LgSurvey extends DaObject {
 	 * the filtered list or null if the list was empty.
 	 */
 	public void evaluate() {
-//		this.determinedTimePeriod = testUtils.tP("28.12.2015/12:30 -> 28.12.2015/13:30");
-		Date date1 = new Date();
-		Date date2 = new Date();
-		// W.I.P.> 
-		this.determinedTimePeriod = new LgTimePeriod().setStartTime(date1).setEndTime(date2);
-		// this.getPossibleTimePeriods();
+		boolean someOneAccepted = false;
+		final Set<LgTimePeriod> matchesFromUsers = new HashSet<LgTimePeriod>();
+		matchesFromUsers.addAll(this.getPossibleTimePeriods());
+		for (LgInvite inv : this.invites) {
+			if (inv.getIsHost() == true ||inv.getConcreteAvailability().isEmpty()) {
+				continue;
+			}
+			final Set<LgTimePeriod> cAvails = inv.getConcreteAvailability();
+			if (inv.getIsIgnored() == LgStatus.NO) {
+				matchesFromUsers.retainAll(cAvails);
+				someOneAccepted = true;
+			}
+		}
 		this.algoChecked = true;
+		if (!someOneAccepted) {
+			return;
+		}
+		if (matchesFromUsers.iterator().hasNext()) {
+			this.determinedTimePeriod = matchesFromUsers.iterator().next();
+			return;
+		}
+		this.setDeterminedTimePeriod(LgTimePeriod.EMPTY_TIMEPERIOD);
 	}
 	
 	

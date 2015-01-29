@@ -1,0 +1,71 @@
+%ptj-menu
+.container
+  .row
+    / search & results
+    / sidebar
+    .col-md-2
+      / %ptj-survey-select
+    .col-md-8
+      .panel.panel-primary
+        .panel-heading Edit a survey for an event
+        .panel-body
+          .row
+            .col-md-8
+              %h2
+                .item-wrapper
+                  %a{"editable-text" => "selectedSurvey.name", :href => "#"}
+                    {{selectedSurvey.name}}
+              %h4
+                .item-wrapper
+                  %a{"editable-text" => "selectedSurvey.description", :href => "#"}
+                    {{selectedSurvey.description}}
+            .col-md-4
+              .row
+                .btn-group.pull-right
+                  %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "still_needs_a_model", "ng-click"=>"setOneTime()"} Once
+                  %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "still_needs_a_model", "ng-click"=>"setRecurring()"} Repeatedly
+                %br/
+                %br/
+                %btn.btn-sm.btn-success.pull-right{"ng-click" => "showLiveButton=false", "ng-show" => "showLiveButton"}
+                  Live
+                  %span.glyphicon.glyphicon-bullhorn
+                %btn.btn-sm.btn-warning.pull-right{"ng-click" => "showLiveButton=true", "ng-show" => "!showLiveButton"}
+                  Staged
+                  %span.glyphicon.glyphicon-off
+          .row
+            %ptj-groups
+
+          .row
+            .col-lg-11
+              %span.h4 Deadline:
+              %span.dropdown
+                %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button", "data-target" => "#", "href" => ""} {{ selectedSurvey.deadline | date: 'yyyy-MM-dd HH:mm' }}
+                %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
+                  %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedSurvey.deadline", "data-date-format"=>"dd-mm-yyyy", "date-type" => "string", "bs-datepicker" => "", "ng-required" => "true"}
+
+          .row
+            .col-lg-11
+              .h4 Participants:
+              %span#surveyStatus{"ng-if" => "!selectedSurvey.hasParticipants()"}
+                %ul
+                  %li{} None
+              %ul
+                %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: isHost == false"}
+                  %strong{} {{invite.user.name}}
+                  (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
+
+          .row
+            .col-lg-11
+              possible: {{ selectedSurvey.possibleTimePeriods }}
+          .row
+            .col-lg-11
+              %ptj-calendar{"allowed" => "[]", "resulting" => "selectedSurvey.possibleTimePeriods"}
+
+        .panel-footer
+          .col-md-offset-10
+            %button.btn.btn-default.btn-sm{:type => "reset", "ng-click" => "cancel()"} Cancel
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveSurvey()"} Save
+    .col-md-2
+      %input-group{"ng-show"=>"isRecurring()"}
+        %select.form-control{"ng-model" => "selectedSurvey.frequencyUnit", "ng-options" => "opt for opt in TimeUnit._options"}
+        %input.form-control{"type" => "number", "ng-model" => "selectedSurvey.frequencyDist", "placeholder" => "Distance", "min" => 0, "required" => "true"}

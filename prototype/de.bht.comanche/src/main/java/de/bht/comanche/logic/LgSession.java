@@ -143,9 +143,14 @@ public class LgSession extends DaObject {
 	 * 
 	 * @return List of users.
 	 */
+	// TEST THIS
 	public List<LgUser> getAllUsers() {
 		// @TODO Load on demand (getNext())
-		return this.pool.findAll(LgUser.class);
+		List<LgUser> allUsers = this.pool.findAll(LgUser.class);
+		if (this.user!= null) {
+			allUsers.remove(this.user);
+		}
+		return allUsers;
 	}
 
 	public DaApplication getApplication() {
