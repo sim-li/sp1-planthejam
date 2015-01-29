@@ -55,14 +55,18 @@ public class LgSurveyEvaluationTest {
 						testUtils.buildTimePeriods(
 								"01.05.1999/21:30 -> 01.05.1999/22:30",
 								"30.01.1986/22:30 -> 30.01.1986/23:30",
-								"08.09.2005/01:30 -> 08.09.2005/02:30")));
+								"08.09.2005/01:30 -> 08.09.2005/02:30")
+						
+					)
+					.setIgnored(LgStatus.NO));
 		saveInviteFor(
 				"Carol",
 				getSkiInviteFor("Carol").setConcreteAvailability(
 						testUtils.buildTimePeriods(
 								"01.05.1999/21:30 -> 01.05.1999/22:30",
 								"30.01.1986/00:30 -> 30.01.1986/01:30",
-								"08.09.2005/02:30 -> 08.09.2005/03:30")));
+								"08.09.2005/02:30 -> 08.09.2005/03:30"))
+								.setIgnored(LgStatus.NO));
 	}
 
 	@Ignore

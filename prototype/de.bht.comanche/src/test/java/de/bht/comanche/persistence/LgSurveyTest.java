@@ -86,7 +86,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 		assertThat(surveyEval.getFrequencyDist()).isEqualTo(30);
 		assertThat(surveyEval.getFrequencyUnit()).isEqualTo(LgTimeUnit.MONTH);
 		assertThat(surveyEval.getParticipants())
-				.containsOnly(alice, bob, carol);
+				.containsOnly(bob, carol);
 		assertThat(surveyEval.getHost()).isEqualTo(alice);
 		assertThat(surveyEval.getName()).isEqualTo("My test survey");
 		// assertThat(surveyEval.getPossibleTimePeriods()).isEqualTo(severalTimePeriods);
