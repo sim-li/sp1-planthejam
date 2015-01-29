@@ -90,7 +90,7 @@ public class DaHibernateJpaPool implements DaPool {
 	 * Could not find entry for class "{0}" with field "{1}" and value "{2}".
 	 */
 	@SuppressWarnings("serial")
-	public static final class DaFindOneByKeyExc extends multex.Failure {}
+	public static final class DaFindOneByKeyExc extends multex.Exc {}
 	
 	public <E extends DaObject> E findOneByTwoKeys(final Class<E> persistentClass, final String firstKeyFieldName, final Object firstKey, final String secondKeyFieldName, final Object secondKey) {
 		final List<E> results = findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);
