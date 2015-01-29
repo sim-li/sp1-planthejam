@@ -106,8 +106,12 @@ public class LgSurveyEvaluationTest {
 			.isEqualTo(LgTimePeriod.EMPTY_TIMEPERIOD);
 	}
 	
-	
+	@Ignore
 	@Test
+	/**
+	 * Note: We are skipping this test because we don't use messages in current
+	 * implementation.
+	 */
 	public void messagesSentTest() {
 		runDemoScenario();
 		Set<LgMessage> bobsMessages = getMessagesFor("Bob");

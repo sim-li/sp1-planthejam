@@ -35,16 +35,9 @@ public class LgTimePeriod {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
 
-	public static final LgTimePeriod EMPTY_TIMEPERIOD = new LgTimePeriod()
-			.setStartTime(new Date(0)).setEndTime(new Date(-60000));
-	
-	public final Date EMPTY_START_TIME = new Date(0);
-			
-	public final Date EMPTY_END_TIME = new Date(-60000);
+	public static final LgTimePeriod EMPTY_TIMEPERIOD = createEmptyTimePeriod();
 
 	public LgTimePeriod() {
-		this.startTime = this.EMPTY_START_TIME;
-		this.endTime = this.EMPTY_END_TIME;
 	}
 
 	public LgTimePeriod(final LgTimePeriod other) {
@@ -82,13 +75,15 @@ public class LgTimePeriod {
 		return this;
 	}
 
+	public static final LgTimePeriod createEmptyTimePeriod() {
+		return new LgTimePeriod().setStartTime(new Date(0)).setEndTime(new Date(-60000));
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("LgTimePeriod [startTime=%s, endTime=%s]",
 				startTime, endTime);
 	}
-
-	
 
 	@Override
 	public int hashCode() {

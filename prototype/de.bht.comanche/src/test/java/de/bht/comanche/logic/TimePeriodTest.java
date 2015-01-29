@@ -7,8 +7,8 @@ import org.junit.Test;
 import de.bht.comanche.logic.LgTimePeriod;
 
 public class TimePeriodTest {
+	
 	@Test
-	@SuppressWarnings("unused")
 	public void nulledTimePeriodImplCorrectly() {
 		LgTimePeriod nulledTimePeriod = LgTimePeriod.EMPTY_TIMEPERIOD;
 		assertEquals(-1, differenceInSeconds(nulledTimePeriod));
