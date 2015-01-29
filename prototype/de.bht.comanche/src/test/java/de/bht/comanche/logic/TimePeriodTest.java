@@ -15,7 +15,10 @@ public class TimePeriodTest {
 	}
 	
 	public long differenceInSeconds(LgTimePeriod timePeriod ) {
-		return (timePeriod.getEndTime().getTime() - timePeriod.getStartTime().getTime()) / 60000;
+		final long startTime = timePeriod.getStartTime().getTime();
+		final long endTime = timePeriod.getEndTime().getTime();
+		final long res = (endTime - startTime) / 60000;
+		return res;
 	}
 	
 	

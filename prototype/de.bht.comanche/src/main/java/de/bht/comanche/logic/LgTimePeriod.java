@@ -43,8 +43,8 @@ public class LgTimePeriod {
 	public final Date EMPTY_END_TIME = new Date(-60000);
 
 	public LgTimePeriod() {
-//		this.startTime = this.EMPTY_START_TIME;
-//		this.endTime = this.EMPTY_END_TIME;
+		this.startTime = this.EMPTY_START_TIME;
+		this.endTime = this.EMPTY_END_TIME;
 	}
 
 	public LgTimePeriod(final LgTimePeriod other) {
@@ -68,8 +68,8 @@ public class LgTimePeriod {
 	private Date cutOffSeconds(final Date startTime) {
 		Calendar cal = Calendar.getInstance(); // locale-specific
 		cal.setTime(startTime);
-		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
 		return cal.getTime();
 	}
 
