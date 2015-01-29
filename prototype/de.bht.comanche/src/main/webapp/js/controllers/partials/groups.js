@@ -34,6 +34,7 @@ angular.module('myApp')
                 });
                 modalInstance.result.then(function(groups) {
                     $scope.groups = groups;
+                    $scope.createDataModels();
                 }, function() {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
@@ -47,13 +48,11 @@ angular.module('myApp')
                 $scope.panelOpened = false;
             })();
 
-            (function createDataModels() {
+            $scope.createDataModels = function() {
                 $scope.lastElementSelected = '';
-                //IMPL THIS
-                //$scope.allElementsSelected = $scope.selectedSurvey.getAllParticipants() ||  []; /////////////////////////////////////////
                 $scope.elements = $scope.users.concat($scope.groups);
                 console.log('Got datamodel $scope')
-            })();
+            };
 
             $scope.$watch('lastElementSelected', function() {
                 addElementToSelection();
@@ -194,24 +193,15 @@ angular.module('myApp')
             $scope.selectedGroup = $scope.groups[0];
             $scope.selectedUser = '';
 
-
-
             $scope.addNewGroup = function() {
-                // $scope.groups.push(new Group({
-                //     name: 'Your new group'
-                // }));
 
                 restService.doSave(new Group({
                     name: 'Your new group'
                 })).then(function(success) {
                     $scope.groups.push(new Group(success));
-                    $scope.selectedGroup = $scope.groups[$scope.groups.length];
+                    console.log("#######", $scope.groups);
+                    $scope.selectedGroup = $scope.groups[$scope.groups.length - 1];
                 });
-
-                // $scope.selectedGroup = new Group({
-                //     name: 'Your new group'
-                // });
-                // $scope.groups.push($scope.selectedGroup);
             };
 
             $scope.removeGroup = function(index) {
@@ -231,10 +221,6 @@ angular.module('myApp')
                     });
                 });
                 $modalInstance.close($scope.groups);
-            };
-
-            $scope.mergeGroups = function() {
-
             };
 
             $scope.selectGroup = function(group) {
