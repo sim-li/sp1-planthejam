@@ -99,23 +99,6 @@ public class LgUser extends DaObject {
 		// @TODO Throw Multex Exception
 	}
 
-	/**
-	 * Complete delete of user account.
-	 *
-	 * Invites have to be delete first in order to comply
-	 * with foreign key constraint.
-	 *
-	 */
-	public void deleteThisAccount() {
-		for (final LgInvite invite : this.getInvites()) {
-			invite.setUser(null);
-		}
-		// Do the same with Groups!
-		// Child surveys + invites are not cascaded!
-		delete();
-		
-	}
-
 	public void deleteOtherUserAccount(final LgUser user) {
 		this.findOneByKey(LgUser.class, "oid", user.getOid()).delete();
 	}
@@ -319,9 +302,44 @@ public class LgUser extends DaObject {
 	public static final class UpdateWithUnpersistedSurveyExc extends multex.Failure {}
 
 	public void deleteSurvey(final long oid) {
-		this.getSurvey(oid).delete();
+		List<LgInvite> invites = new ArrayList<LgInvite>();
+		invites.addAll(this.findManyByKey(LgInvite.class, "survey_oid", oid));
+		for (LgInvite invite : invites) {
+			invite.setSurvey(null);
+			invite.setUser(null);
+			invite.delete();
+		}
+		this.findOneByKey(LgSurvey.class, "oid", oid).delete();
 	}
+	
 
+	/**
+	 * Complete delete of user account.
+	 *
+	 * Invites have to be delete first in order to comply
+	 * with foreign key constraint.
+	 *
+	 */
+	public void deleteThisAccount() {
+		for (final LgInvite invite : this.getInvites()) {
+			invite.setUser(null);
+		}
+		// Do the same with Groups!
+		// Child surveys + invites are not cascaded!
+		delete();
+		
+	}
+	
+//	public void deleteAllInvites() {
+//		List<LgInvite> invites = new ArrayList<LgInvite>();
+//		invites.addAll(this.findManyByKey(LgInvite.class, "user_oid", this.getOid()));
+//		for (LgInvite invite : invites) {
+//			invite.setSurvey(null);
+//			invite.setUser(null);
+//			invite.delete();
+//		}
+//	}
+	
 	@JsonIgnore
 	public List<LgInvite> getInvitesAsParticipant() {
 		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
@@ -353,9 +371,7 @@ public class LgUser extends DaObject {
     		if (survey.shouldBeEvaluated()) {
     			survey.evaluate();
     			saveUnattached(survey);
-
     			// notifyHost(survey);
-
     			saveUnattached(this);
     		}
     	}
