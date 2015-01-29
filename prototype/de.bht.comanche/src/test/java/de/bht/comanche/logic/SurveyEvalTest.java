@@ -76,6 +76,8 @@ public class SurveyEvalTest {
 	@Test
 	public void matchOneTimePeriodTest() {
 		testSurvey.addParticipants(bob, carol);
+		testSurvey.getInviteByParticipantName("Bob").setIgnored(LgStatus.NO);
+		testSurvey.getInviteByParticipantName("Carol").setIgnored(LgStatus.NO);
 		testSurvey.getInviteByParticipantName("Bob").setConcreteAvailability(
 				testUtils.buildTimePeriods(
 						"01.05.1999/21:30 -> 01.05.1999/22:30",
@@ -124,6 +126,9 @@ public class SurveyEvalTest {
 	@Test
 	public void matchOneTimePeriod3UsersTest() {
 		testSurvey.addParticipants(bob, carol, denise);
+		testSurvey.getInviteByParticipantName("Bob").setIgnored(LgStatus.NO);
+		testSurvey.getInviteByParticipantName("Carol").setIgnored(LgStatus.NO);
+		testSurvey.getInviteByParticipantName("Denise").setIgnored(LgStatus.NO);
 		testSurvey.getInviteByParticipantName("Bob").setConcreteAvailability(
 				testUtils.buildTimePeriods(
 						"01.05.1999/21:30 -> 01.05.1999/22:30",
@@ -149,8 +154,43 @@ public class SurveyEvalTest {
 	}
 	
 	@Test
+	public void matchOneTimePeriod3UsersOneRejectsTest() {
+		testSurvey.addParticipants(bob, carol, denise);
+		testSurvey.getInviteByParticipantName("Bob").setIgnored(LgStatus.NO);
+		testSurvey.getInviteByParticipantName("Denise").setIgnored(LgStatus.NO);
+		testSurvey.getInviteByParticipantName("Bob").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1999/21:30 -> 01.05.1999/22:30",
+						"30.01.1986/20:30 -> 30.01.1986/22:30",
+						"08.09.2005/01:30 -> 08.09.2005/02:30")
+				);
+		//Carol's not part of the game
+		testSurvey.getInviteByParticipantName("Carol").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1998/21:30 -> 01.05.1999/0:30",
+						"30.01.1986/20:30 -> 30.01.1986/22:30",
+						"08.09.2005/02:30 -> 08.09.2005/03:30")
+				);
+		//But she is ignoring
+		testSurvey.getInviteByParticipantName("Carol").setIgnored(LgStatus.YES);
+		testSurvey.getInviteByParticipantName("Denise").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1999/21:30 -> 01.05.1999/22:30",
+						"30.01.1986/00:30 -> 30.01.1986/01:30",
+						"08.09.2005/02:30 -> 08.09.2005/03:30")
+				);
+		testSurvey.evaluate();
+		assertThat(testSurvey.getDeterminedTimePeriod())
+			.isEqualTo(testUtils.tP(
+					"01.05.1999/21:30 -> 01.05.1999/22:30"));
+	}
+	
+	@Test
 	public void matchVariousTimePeriod3UsersTest() {
 		testSurvey.addParticipants(bob, carol, denise);
+		testSurvey.getInviteByParticipantName("Bob").setIgnored(LgStatus.NO);
+		testSurvey.getInviteByParticipantName("Carol").setIgnored(LgStatus.NO);
+		testSurvey.getInviteByParticipantName("Denise").setIgnored(LgStatus.NO);
 		testSurvey.getInviteByParticipantName("Bob").setConcreteAvailability(
 				testUtils.buildTimePeriods(
 						"01.05.1999/21:30 -> 01.05.1999/22:30",
@@ -174,6 +214,62 @@ public class SurveyEvalTest {
 			.isEqualTo(testUtils.tP(
 					"01.05.1999/21:30 -> 01.05.1999/22:30"));
 	}
+	
+	@Test
+	public void dontMatchIfAllUsersUndecided() {
+		testSurvey.addParticipants(bob, carol, denise);
+		testSurvey.getInviteByParticipantName("Bob").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1999/21:30 -> 01.05.1999/22:30",
+						"30.01.1986/20:30 -> 30.01.1986/22:30",
+						"08.09.2005/01:30 -> 08.09.2005/02:30")
+				);
+		testSurvey.getInviteByParticipantName("Carol").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1999/21:30 -> 01.05.1999/22:30",
+						"30.01.1986/20:30 -> 30.01.1986/22:30",
+						"08.09.2005/02:30 -> 08.09.2005/03:30")
+				);
+		testSurvey.getInviteByParticipantName("Denise").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1999/21:30 -> 01.05.1999/22:30",
+						"30.01.1986/20:30 -> 30.01.1986/22:30",
+						"08.09.2005/02:30 -> 08.09.2005/03:30")
+				);
+		testSurvey.evaluate();
+		assertThat(testSurvey.getDeterminedTimePeriod())
+			.isEqualTo(LgTimePeriod.EMPTY_TIMEPERIOD);
+	}
+	
+	@Test
+	public void dontMatchIfAllUsersIgnore() {
+		testSurvey.addParticipants(bob, carol, denise);
+		testSurvey.getInviteByParticipantName("Bob").setIgnored(LgStatus.YES);
+		testSurvey.getInviteByParticipantName("Carol").setIgnored(LgStatus.YES);
+		testSurvey.getInviteByParticipantName("Denise").setIgnored(LgStatus.YES);
+		testSurvey.getInviteByParticipantName("Bob").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1999/21:30 -> 01.05.1999/22:30",
+						"30.01.1986/20:30 -> 30.01.1986/22:30",
+						"08.09.2005/01:30 -> 08.09.2005/02:30")
+				);
+		testSurvey.getInviteByParticipantName("Carol").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1999/21:30 -> 01.05.1999/22:30",
+						"30.01.1986/20:30 -> 30.01.1986/22:30",
+						"08.09.2005/02:30 -> 08.09.2005/03:30")
+				);
+		testSurvey.getInviteByParticipantName("Denise").setConcreteAvailability(
+				testUtils.buildTimePeriods(
+						"01.05.1999/21:30 -> 01.05.1999/22:30",
+						"30.01.1986/20:30 -> 30.01.1986/22:30",
+						"08.09.2005/02:30 -> 08.09.2005/03:30")
+				);
+		testSurvey.evaluate();
+		assertThat(testSurvey.getDeterminedTimePeriod())
+			.isEqualTo(LgTimePeriod.EMPTY_TIMEPERIOD);
+	}
+	
 	
 	
 	

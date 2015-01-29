@@ -306,6 +306,7 @@ public class LgSurvey extends DaObject {
 	 * the filtered list or null if the list was empty.
 	 */
 	public void evaluate() {
+		boolean someOneAccepted = false;
 		final Set<LgTimePeriod> matchesFromUsers = new HashSet<LgTimePeriod>();
 		matchesFromUsers.addAll(this.getPossibleTimePeriods());
 		for (LgInvite inv : this.invites) {
@@ -313,12 +314,18 @@ public class LgSurvey extends DaObject {
 				continue;
 			}
 			final Set<LgTimePeriod> cAvails = inv.getConcreteAvailability();
-			matchesFromUsers.retainAll(cAvails);
+			if (inv.getIsIgnored() == LgStatus.NO) {
+				matchesFromUsers.retainAll(cAvails);
+				someOneAccepted = true;
+			}
+		}
+		this.algoChecked = true;
+		if (!someOneAccepted) {
+			return;
 		}
 		if (matchesFromUsers.iterator().hasNext()) {
 			this.determinedTimePeriod = matchesFromUsers.iterator().next();
 		}
-		this.algoChecked = true;
 	}
 	
 	
