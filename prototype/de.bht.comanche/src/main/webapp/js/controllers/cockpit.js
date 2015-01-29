@@ -78,9 +78,12 @@ angular.module('myApp')
                 if (!$scope.selectedSurvey) {
                     return;
                 }
+                $log.debug('deleting ... ')
                 restService.doDelete($scope.selectedSurvey)
                     .then(function(success) {
-                        $location.path('/cockpit');
+                        arrayUtil.remove($scope.surveys, $scope.selectedSurvey);
+                        $log.debug('deleted.')
+                            // $location.path('/cockpit');
                     });
             };
 
@@ -145,13 +148,13 @@ angular.module('myApp')
                     restService.doSave($scope.selectedInvite);
                 };
             };
-    // $scope.hasNoAcceptation = function() {
-    //     arrayUtil.forEach($scope.selectedSurvey.invites, function(invite) {
-    //         if (invite.isHost == false && invite.isIgnored != 'NO') {
-    //             return true;
-    //         }
-    //     });
-    //     return false;
-    // }
+            // $scope.hasNoAcceptation = function() {
+            //     arrayUtil.forEach($scope.selectedSurvey.invites, function(invite) {
+            //         if (invite.isHost == false && invite.isIgnored != 'NO') {
+            //             return true;
+            //         }
+            //     });
+            //     return false;
+            // }
         }
     ]);
