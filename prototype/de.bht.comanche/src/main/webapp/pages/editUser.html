@@ -1,6 +1,6 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
-  <div class='col-md-8'>
+  <div class='col-md-8 col-md-offset-2'>
     <div class='panel panel-primary'>
       <div class='panel-body'>
         <div class='form-group'>
@@ -28,13 +28,14 @@
           <div class='item-wrapper'>
             <input class='form-control col-lg-3' id='inputTel' ng-model='user.tel' placeholder='Your phone number'>
           </div>
+          <hr>
         </div>
         <ptj-calendar-modal allowed='[]' resulting='user.generalAvailability' save='saveGeneralAvailability()'></ptj-calendar-modal>
-        <div class='input-group'>
-          <input class='btn btn-default' id='cancelUserEditBtn' ng-click='cancelEditUser()' type='button' value='Cancel'>
-          <input class='btn btn-success' id='saveUserEditBtn' ng-click='saveEditedUser()' type='submit' value='Save changes'>
-        </div>
-        <div class='input-group'>
+      </div>
+      <div class='panel-footer'>
+        <div class='input-group col-sm-offset-4'>
+          <input class='btn btn-warning' id='cancelUserEditBtn' ng-click='cancelEditUser()' type='button' value='Cancel'>
+          <input class='btn btn-success' id='saveUserEditBtn' ng-click='saveEditedUser()' type='button' value='Save changes'>
           <input class='btn btn-danger' id='deleteUserBtn' ng-click='deleteUser()' type='button' value='Delete account'>
         </div>
       </div>
