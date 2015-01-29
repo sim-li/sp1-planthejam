@@ -5,6 +5,10 @@ angular.module('myApp')
 
             'use strict';
 
+            $scope.allElementsSelected = [];
+            arrayUtil.forEach($scope.selectedSurvey.invites, function(invite) {
+                $scope.allElementsSelected.push(invite.user);
+            });
             /**
              * Creates a new modal instance and opens it.
              * TODO: Improve doc
@@ -22,6 +26,9 @@ angular.module('myApp')
                         },
                         users: function() {
                             return $scope.users;
+                        },
+                        host: function() {
+                            return $scope.host;
                         }
                     }
                 });
@@ -44,7 +51,6 @@ angular.module('myApp')
                 $scope.lastElementSelected = '';
                 //IMPL THIS
                 //$scope.allElementsSelected = $scope.selectedSurvey.getAllParticipants() ||  []; /////////////////////////////////////////
-                $scope.allElementsSelected = [];
                 $scope.elements = $scope.users.concat($scope.groups);
                 console.log('Got datamodel $scope')
             })();
@@ -163,7 +169,13 @@ angular.module('myApp')
                 });
             }
 
-            // TODO Should match users + groups against participants and return mixed list
+            $scope.isHost = function(user) {
+                    if ($scope.host.name == user.name) {
+                        return true;
+                    }
+                    return false;
+                }
+                // TODO Should match users + groups against participants and return mixed list
             var getMixedListFromParticipants = function() {}
         }
     ]);
@@ -171,10 +183,10 @@ angular.module('myApp')
 // It is not the same as the $modal service used above.
 
 angular.module('myApp')
-    .controller('groupsModalCtrl', ['$scope', '$modalInstance', 'groups', 'users', 'restService', 'Group',
-        function($scope, $modalInstance, groups, users, restService, Group) {
+    .controller('groupsModalCtrl', ['$scope', '$modalInstance', 'groups', 'users', 'restService', 'Group', 'host',
+        function($scope, $modalInstance, groups, users, restService, Group, host) {
             'use strict';
-
+            $scope.host = host;
             $scope.groups = groups;
             console.log("groups : ", groups);
             $scope.users = users;
@@ -234,7 +246,6 @@ angular.module('myApp')
                 }
 
                 $scope.selectedGroup.addUser($scope.selectedUser);
-                // console.log($scope.selectedUser);
             });
 
             $scope.removeParticipantFromGroup = function(index) {

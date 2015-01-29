@@ -110,9 +110,12 @@
             %h4 Participants:
             %span{"ng-if" => "!selectedSurvey.hasParticipants()"}
               %ul
-                %li{} None
+                %li{} No participant was invited.
+            / %span{"ng-if" => "selectedSurvey.hasParticipants() && hasNoAcceptation()"}
+            /   %ul
+            /     %li{} No participant has accepted!
             %ul
-              %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: {isHost: false}"}
+              %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: {isHost: false, isIgnored : 'NO'}"}
                 %strong{} {{invite.user.name}}
                 (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
 

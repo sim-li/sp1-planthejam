@@ -12,20 +12,22 @@ angular.module('myApp')
      */
     .controller('surveyCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'Group', 'groupsPromise', 'Invite', 'Member',
         'Model', 'restService', 'selectedSurveyPromise', 'selectedSurveyInvitesPromise', 'Survey', 'TimePeriod',
-        'TimeUnit', 'SurveyType', 'User', 'usersPromise',
+        'TimeUnit', 'SurveyType', 'User', 'usersPromise', 'userPromise',
+
         function($location, $log, $scope, arrayUtil, Group, groupsPromise, Invite, Member,
             Model, restService, selectedSurveyPromise, selectedSurveyInvitesPromise, Survey, TimePeriod,
-            TimeUnit, SurveyType, User, usersPromise) {
+            TimeUnit, SurveyType, User, usersPromise, userPromise) {
 
             'use strict';
-
+            $scope.host = new User(userPromise);
+            console.log("host :", $scope.host);
             /*
              * Retrieve all data loaded by the REST-service before page load.
              * All $scope variables for directives and their controllers should be declared here.
              */
             $scope.selectedSurvey = new Survey(selectedSurveyPromise);
             $scope.selectedSurvey.invites = Model.importMany(Invite, selectedSurveyInvitesPromise);
-            $log.debug('selected survey: ', $scope.selectedSurvey);
+            console.log('selected survey: ', $scope.selectedSurvey);
 
             // For group widget
             $scope.groups = Model.importMany(Group, groupsPromise);
