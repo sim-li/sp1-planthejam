@@ -1,0 +1,9 @@
+<tabset type='pills' vertical='true'>
+  <tab heading='{{invite.survey.name}}' ng-repeat='invite in invites'></tab>
+</tabset>
+<!-- %span -->
+<!-- %input#addSurvey.btn.btn-primary{"ng-click" => "addInvite()", :type => "button", :value => "Neue Terminumfrage erstellen"} -->
+<!-- %select#surveyList{"ng-model" => "session.selectedInvite", "ng-options" => "invite.survey.name for invite in session.user.invites | filter:session.user.searchString"} -->
+<!-- %input#filter.form-control{"ng-change" => "updateSelection()", "ng-keyup" => "$log.log('searchString: \\'' + session.user.searchString + '\\'')", "ng-model" => "session.user.searchString", :placeholder => "Terminumfragen durchsuchen ...", :type => "search"} -->
+<!-- %input#editInvite.btn.btn-primary{"ng-click" => "editInvite()", :type => "button", :value => "Terminumfrage anzeigen und bearbeiten"} -->
+<!-- %input#deleteInvite.btn.btn-primary{"ng-click" => "deleteSelectedInvite()", :type => "button", :value => "Terminumfrage löschen"} -->

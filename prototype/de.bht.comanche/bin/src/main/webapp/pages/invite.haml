@@ -1,0 +1,127 @@
+%ptj-menu
+.container
+  / %div#temporary-debug-output1 users: '{{ users }}'
+  / %div#temporary-debug-output2 invites: '{{ invites }}'
+  / %div#temporary-debug-output3 selectedInvite: '{{ selectedInvite }}'
+  / %div#temporary-debug-output4 groups: '{{ groups }}'
+  / %div#temporary-debug-output5 selectedGroup: '{{ selectedGroup }}'
+  / %div#temporary-debug-output6 selectedUser: '{{ selectedUser }}'
+  /  QUESTION do we need/want a survey selection side-bar?  ->  if not -> TODO no getInvites for this route
+  .row
+    / search & results
+    / sidebar
+    .col-md-2
+      / %ptj-survey-select
+      %a.list-group-item{"ng-click" => "selectInvite(invite);", :href => "", "ng-repeat" => "invite in invites"}
+        {{invite.survey.name}}
+    .col-md-8
+      .panel.panel-primary
+        .panel-heading Create new Event
+        .panel-body
+          .row
+            .col-md-8
+              %h2
+                .item-wrapper
+                  %a{"editable-text" => "selectedInvite.survey.name", :href => "#"}
+                    {{selectedInvite.survey.name}}
+              %h4
+                .item-wrapper
+                  %a{"editable-text" => "selectedInvite.survey.description", :href => "#"}
+                    {{selectedInvite.survey.description}}
+            .col-md-4
+              .row
+                .btn-group.pull-right
+                  %label.btn.btn-primary{"btn-radio" => "'Once'", "ng-model" => "still_needs_a_model", "ng-click"=>"repeatedly=false"} Once
+                  %label.btn.btn-primary{"btn-radio" => "'Repeatedly'", "ng-model" => "still_needs_a_model", "ng-click"=>"repeatedly=true"} Repeatedly
+                %br/
+                %br/
+                %btn.btn-sm.btn-success.pull-right{"ng-click" => "showLiveButton=false", "ng-show" => "showLiveButton"}
+                  Live
+                  %span.glyphicon.glyphicon-bullhorn
+                %btn.btn-sm.btn-warning.pull-right{"ng-click" => "showLiveButton=true", "ng-show" => "!showLiveButton"}
+                  Staged
+                  %span.glyphicon.glyphicon-off
+          .rpw
+            %ptj-search
+            / %ptj-members
+
+            %div#ptj-members{:collapse => "memberListIsCollapsed"}
+              .well.well-sm
+                .container-fluid
+                  .btn-group
+                    %span{"ng-repeat" => "member in selectedGroup.members"}
+                      %button.btn.btn-default{:type => "button", "ng-click" => "removeMember($index)"}
+                        {{member.user.name}}
+                        %span.badge
+                          %span.glyphicon.glyphicon-remove
+
+            %br
+          / DEBUGGING THE GROUPS >>>
+          .row#debug-the-groups-then-throw-away.col-lg-offset-3
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "addNewGroup()"} Add New Group
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "deleteSelectedGroup()"} Delete Selected Group
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveGroups()"} Save All Groups
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "attachSelectedGroupToInvite()"} Attach Selected Group To Invite
+          %br
+          / <<< DEBUGGING THE GROUPS
+          .row
+            / possibleTimeperiods
+            / %code {{ dummyTimePeriods | json }}
+            / %code {{ selectedTimePeriod | json }}
+            .col-lg-5
+              #accordion.panel-group
+              .panel.panel-info
+                .panel-heading
+                  .panel-title
+                    %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne", :onclick => "return false;"}
+                      Avaibility
+                      %span.col-md-offset-7.glyphicon.glyphicon-resize-vertical
+                #collapseOne.panel-collapse.collapse.in
+                  .panel-body
+                    %tabset{:type => "pills", :vertical => "true"}
+                      %tab{:heading => "{{timePeriod.startTime | date:'yyyy-MM-dd HH:mm' }} in {{timePeriod.duration}}h", "ng-repeat" => "timePeriod in dummyTimePeriods", "ng-click" => "selectTimePeriod(timePeriod);"}
+                .panel-footer
+                  .col-md-offset-5
+                    %button.btn.btn-primary.btn-sm{"ng-click" => "addNewTimePeriod()"}
+                      %i.glyphicon.glyphicon-plus
+                    %button.btn.btn-primary.btn-sm{"ng-click" => "removeTimePeriod()"}
+                      %i.glyphicon.glyphicon-minus
+            .col-lg-7
+              .row
+                .col-lg-2
+                  Deadline
+                .col-lg-8.dropdown
+                  %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button"}
+                    .input-group
+                      %input.form-control{"data-ng-model" => "selectedTimePeriod.startTime", :type => "text"}/
+                      %span.input-group-addon
+                        %i.glyphicon.glyphicon-calendar
+                  %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
+                    %datetimepicker{"date" => "yyyy-MM-dd HH:mm", "data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedTimePeriod.startTime"}
+                %br
+              %hr
+              .row
+                .col-lg-2
+                  Start Time
+                .col-lg-8.dropdown
+                  %a#dropdown2.dropdown-toggle{"data-toggle" => "dropdown", :role => "button"}
+                    .input-group
+                      %input.form-control{"data-ng-model" => "selectedTimePeriod.startTime", :type => "text"}/
+                      %span.input-group-addon
+                        %i.glyphicon.glyphicon-calendar
+                  %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
+                    %datetimepicker{"date" => "yyyy-MM-dd HH:mm", "data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2' }", "data-ng-model" => "selectedTimePeriod.startTime"}
+              %br
+              .row
+                .col-lg-2
+                  Duration
+                .col-lg-6
+                  %input{:max => "24", :min => "0", "ng-model" => "selectedTimePeriod.duration", :step => "1", :type => "range", :value => "1"}/
+        .panel-footer
+          .col-md-offset-10
+            %button.btn.btn-default.btn-sm{:type => "reset"} Reset
+            %button.btn.btn-primary.btn-sm{:type => "submit", "ng-click" => "saveInvite()"} Save
+    .col-md-2
+      %input-group{"ng-show"=>"repeatedly"}
+        %input.form-control{"type"=>"text", "placeholder"=>"Frequency"}
+        %input.form-control{"type"=>"text", "placeholder"=>"Distance"}

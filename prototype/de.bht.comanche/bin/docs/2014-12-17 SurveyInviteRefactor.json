@@ -1,0 +1,116 @@
+---------TimePeriods-----
+
+user/periods
+
+surveys/:oid/periods
+
+invites/:oid/periods
+
+
+//------- HOST -------
+
+
+
+//rest/surveys/:surveyOid
+// ==> from Server:
+var survey = {
+    oid: 345,
+    name: ...,
+    description: ...,
+    ...,
+ //  invites: [{
+ //       oid: 123,
+ //       isHost: false,
+ //       isIgnored...,
+ //       ...
+ //   }, ...]
+}
+
+//rest/surveys/:surveyOid/invites
+// ==> from Server:
+var invites: [{
+        oid: 1,
+        isHost: true,<-----!!!
+        isIgnored...,
+        ...
+    }, 
+		oid: 3,
+        isHost: false,<----!!!
+        isIgnored...,
+        ...
+    },...]
+
+
+// get()
+// ==> from Server:
+var surveyArray = [survey1, survey2, ...]
+
+
+// save(survey)
+// <== to Server:
+var survey = {
+        oid: 345,
+        name: ...,
+        description: ...,
+        ...,
+        invites: [{
+            oid: 1,
+            isHost: true,
+            isIgnored...},
+        invites: [{
+            oid: 3,
+            isHost: false,
+            isIgnored...,
+            ...
+        },
+        ...]
+    }
+    // on Server:
+    // - wrap Invite(Survey, isHost: true)
+
+
+// delete(surveyOid)
+
+
+//------- PARTICIPANT -------
+
+// get(inviteOid)
+// ==> from Server:
+var invite = {
+    oid: 123,
+    isHost: false,
+    isIgnored...,
+    ...,
+    survey: {
+        oid: 345,
+        name: ...,
+        description: ...,
+        ...
+        // , invites: [ /* remove invite with back reference*/
+        // {
+        //     oid: 123,
+        //     isHost: false,
+        //     istIgnored ...,
+        //     ...
+        // }, ...
+    ]
+}
+}
+
+
+// get()
+// ==> from Server:
+var inviteArray = [invite1, invite2, ...]
+
+
+//save(invite)
+var invite {
+    oid: 123,
+    isHost: false,
+    isIgnored: true / false
+        /* strip of other attributes on client*/
+}
+
+
+//delete(inviteOid)
+/* not necessary ?*/
