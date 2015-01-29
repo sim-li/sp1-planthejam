@@ -325,9 +325,7 @@ public class LgSurvey extends DaObject {
 		}
 		if (matchesFromUsers.iterator().hasNext()) {
 			this.determinedTimePeriod = matchesFromUsers.iterator().next();
-			return;
 		}
-		this.setDeterminedTimePeriod(LgTimePeriod.EMPTY_TIMEPERIOD);
 	}
 	
 	
