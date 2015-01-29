@@ -134,7 +134,6 @@ public class LgUser extends DaObject {
 	 * @return The saved LgGroup.
 	 */
 	public LgGroup save(final LgGroup group) {
-		//proof if group has oid already
 		group.setUser(this).setForMember(group);
 		return saveUnattached(group);
 	}
@@ -156,18 +155,8 @@ public class LgUser extends DaObject {
 		return this.findOneByKey(LgGroup.class, "OID", groupOid);
 	}
 	
-	/**
-	 * Remove grop object from the list of groups.
-	 * @param invite The LgGroup to remove.
-	 */
-	//not working
-	public void remove(final LgGroup group) {
-		this.findManyByKey(LgGroup.class, "OID", this.getOid()).remove(group);
-	}
-	
 	@JsonIgnore
 	public List<LgGroup> getGroups() {
-		System.out.println("=======findManyByKey(LgGroup.class, this.getOid()) - "+ findManyByKey(LgGroup.class, "OID", this.getOid()).size());
 		return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
 	}
 

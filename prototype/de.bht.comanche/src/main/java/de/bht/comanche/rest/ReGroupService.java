@@ -88,7 +88,6 @@ public class ReGroupService extends RestService {
 		}.getResult();
 	}
 	
-	//not used????
 	@Path("/{oid}")
 	@PUT
 	@Consumes("application/json")
