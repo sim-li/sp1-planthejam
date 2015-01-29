@@ -2,6 +2,7 @@
  * @module models
  *
  * @author Duc Tung Tong
+ * @author Sebastian Dass&eacute;
  */
 angular.module('models')
 	.factory('TimePeriod', ['arrayUtil', function(arrayUtil) {
@@ -10,13 +11,13 @@ angular.module('models')
 		/**
 		 * A time period data type.
 		 *
+		 * If the configuration object is null or undefined the constructed time period will be TimePeriod.NULL.
+		 *
 		 * @class TimePeriod
 		 * @constructor
 		 * @param {Object} [config={}] an optional configuration object
 		 * @param {Date}   [config.startTime=new Date()] the start time of the time period
 		 * @param {Date}   [config.endTime=new Date()] the end time of the time period
-		 *
-		 * @param {[type]} config [description]
 		 */
 		var TimePeriod = function(config) {
 			if (!(this instanceof TimePeriod)) {
@@ -56,10 +57,7 @@ angular.module('models')
 		};
 
 		/**
-		 * Returns true if this time period is considered to be null, which is the case when it equals TimePeriod.NULL.
-		 * TimePeriod.NULL is defined as:
-		 * 	- startTime: Jan 01 1970 01:00:00 GMT+0100
-		 *  - endTime:   Jan 01 1970 00:59:00 GMT+0100
+		 * Returns true if this time period is considered to be null, which is the case when the duration in minutes is -1.
 		 *
 		 * @method isNull
 		 * @return {Boolean} true if this time period is considered to be null, otherwise false.
@@ -68,9 +66,16 @@ angular.module('models')
 			return this.getDurationMins() == -1;
 		};
 
+		/**
+		 * Returns the duration of this time period in minutes.
+		 *
+		 * @method getDurationMins
+		 * @return {Number} the duration of this time period in minutes
+		 */
 		TimePeriod.prototype.getDurationMins = function() {
 			return (this.endTime - this.startTime) / 60000;
 		};
+
 		/**
 		 * This model's unique id.
 		 *
@@ -92,6 +97,14 @@ angular.module('models')
 			};
 		};
 
+		/**
+		 * Exports many time periods.
+		 *
+		 * @method exportMany
+		 * @static
+		 * @param  {Array} timePeriodsToExport the time periods to export
+		 * @return {Array} the exported time periods
+		 */
 		TimePeriod.exportMany = function(timePeriodsToExport) {
 			if (!timePeriodsToExport) {
 				return [];
@@ -102,8 +115,6 @@ angular.module('models')
 			});
 			return timePeriods;
 		};
-
-
 
 		return (TimePeriod);
 	}]);

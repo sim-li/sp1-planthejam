@@ -20,8 +20,7 @@ angular.module('models')
          * @param {String} [config.tel=''] the telephone number of the user
          * @param {String} [config.email=''] the email address of the user
          * @param {String} [config.iconurl=''] the icon URL of the user
-         * @param {Array}  [config.messages=[]] the messages of the user
-         *
+         *                                     @param {Array}  [config.messages=[]] the messages of the user
          * @param {Array}  [config.generalAvailability=[]] the time periods when the user is generally available
          */
         var User = function(config) {
@@ -35,9 +34,7 @@ angular.module('models')
             this.tel = config.tel || '';
             this.email = config.email || '';
             this.iconurl = config.iconurl || '';
-            // this.invites = [];
-            // this.groups = [];
-            this.messages = config.messages || [];
+            // this.messages = config.messages || [];
             this.generalAvailability = Model.importMany(TimePeriod, config.generalAvailability);
         };
 
@@ -64,10 +61,8 @@ angular.module('models')
                 'password': this.password,
                 'tel': this.tel,
                 'email': this.email,
-                // ,'invites': this.invites
-                // ,'groups': this.groups
                 'iconurl': this.iconurl,
-                // ,'messages': this.messages                               // FIXME temporarily commented out
+                // 'messages': this.messages,
                 'generalAvailability': TimePeriod.exportMany(this.generalAvailability)
             };
         };

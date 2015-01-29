@@ -28,8 +28,7 @@ angular.module('models')
              * @param {Object}  [config.determinedTimePeriod] the determined time period of the survey
              * @param {Status}  [config.success='UNDECIDED'] the status of the service, which can be one of the options [UNDECIDED, YES, NO]
              * @param {Boolean} [config.algoChecked=false] indicates whether or not the survey was already checked by the determination algorithm
-             *
-             *          @param {Array}   [config.invites=[]] the invites of the survey           ==> TODO ==> delete this line if attribute was removed
+             * @param {Array}   [config.invites=[]] the invites of the survey
              */
             var Survey = function(config) {
                 if (!(this instanceof Survey)) {
@@ -48,7 +47,7 @@ angular.module('models')
                 this.determinedTimePeriod = new TimePeriod(config.determinedTimePeriod);
                 this.success = config.success || Status.UNDECIDED;
                 this.algoChecked = config.algoChecked || false;
-                this.invites = config.invites || []; // ??? -- removed ON PURPOSE --> the invites shall be imported seperately
+                this.invites = config.invites || [];
             };
 
             // Survey.prototype = new Model();
@@ -79,53 +78,61 @@ angular.module('models')
                     'frequencyDist': this.frequencyDist,
                     'frequencyUnit': this.frequencyUnit,
                     'possibleTimePeriods': TimePeriod.exportMany(this.possibleTimePeriods),
-                    // 'determinedTimePeriod': this.determinedTimePeriod ? this.determinedTimePeriod.doExport() : null,
                     'determinedTimePeriod': this.determinedTimePeriod.doExport(),
                     'success': this.success,
                     'algoChecked': this.algoChecked
                 };
             };
 
+            /**
+             * Returns true if this survey has participants - which is the case when it has any invites that are not the host's invite.
+             *
+             * @method hasParticipants
+             * @return {Boolean} true if this survey has participants, otherwise false
+             */
             Survey.prototype.hasParticipants = function() {
                 return arrayUtil.findByAttribute(this.invites, 'isHost', false) ? true : false;
             };
 
+            /**
+             * Returns true if this survey was not evaluated yet.
+             *
+             * @method isNotReady
+             * @return {Boolean} true if this survey is not ready, otherwise false
+             */
             Survey.prototype.isNotReady = function() {
                 return !this.algoChecked;
             };
 
+            /**
+             * Returns true if this survey was evaluated but the host has still to confirm or reject the result.
+             *
+             * @method isReady
+             * @return {Boolean} true if this survey is ready, otherwise false
+             */
             Survey.prototype.isReady = function() {
                 return this.algoChecked && this.success == Status.UNDECIDED;
             };
 
+            /**
+             * Returns true if this survey was evaluated and the host confirmed the result.
+             *
+             * @method isSuccessful
+             * @return {Boolean} true if this survey is successful, otherwise false
+             */
             Survey.prototype.isSuccessful = function() {
                 return this.algoChecked && this.success == Status.YES;
             };
 
+            /**
+             * Returns true if this survey was evaluated and the host rejected the result.
+             *
+             * @method isUnsuccessful
+             * @return {Boolean} true if this survey is unsuccessful, otherwise false
+             */
             Survey.prototype.isUnsuccessful = function() {
                 return this.algoChecked && this.success == Status.NO;
             };
-
-            // Invite.prototype.addParticipantsFromGroup = function(group) {
-            //     if (group.modelId !== 'group') {
-            //         return;
-            //     }
-            //     group.members.forEach(function(member) {
-            //         this.addParticipant(member.user);
-            //     }, this);
-            // };
-
-            //--------------------------------------------------------------------
-            // IMPORTANT NOTE!
-            //
-            // Surveys do not not know their invites on client side.
-            // In the survey-controller there is:
-            // - $scope.selectedSurvey        -> the survey
-            // - $scope.selectedSurveyInvites -> the invites of the survey -- add participants here
-            // Therefore in the survey-controller we need some methods to handle add/remove of participants.
-            // Some of the methods might as well belong to the invite-model.
-            //--------------------------------------------------------------------
-
 
             // Invite.prototype.addParticipantsFromGroup = function(group) {
             //     if (group.modelId !== 'group') {

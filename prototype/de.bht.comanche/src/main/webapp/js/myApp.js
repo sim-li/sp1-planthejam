@@ -19,7 +19,7 @@
 angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap', 'ui.bootstrap.datetimepicker',
         'ui.calendar', 'uiUtilsModule', 'util', 'xeditable'
     ])
-    .config(function($routeProvider /*, $locationProvider*/ ) {
+    .config(function($routeProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: 'pages/login.html',
@@ -50,10 +50,9 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
                 resolve: {
                     selectedSurveyPromise: function($route, restService, Survey) {
                         var surveyOid = $route.current.params.surveyOid;
-                        // console.log("surveyOid = " + surveyOid)
                         return (surveyOid === undefined) ? '' : restService.doGet(Survey, surveyOid);
                     },
-                    selectedSurveyInvitesPromise: function($route, restService) { // <<<<<<<<<<<<<
+                    selectedSurveyInvitesPromise: function($route, restService) {
                         var surveyOid = $route.current.params.surveyOid;
                         return (surveyOid === undefined) ? [] : restService.getSurveyInvites(surveyOid);
                     },
@@ -61,11 +60,8 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
                         return restService.doGetMany(Group);
                     },
                     usersPromise: function(restService) {
-                            return restService.getAllUsers();
-                        }
-                        //, timePeriodPromise: function(restService, timePeriod) {
-                        //     return restService.doGetMany(timePeriod);
-                        // }
+                        return restService.getAllUsers();
+                    }
                 }
             })
             .when('/account', {
@@ -77,7 +73,6 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
                     }
                 }
             });
-        // $locationProvider.html5Mode(true); // for prettier urls
     })
     .directive('ptjMenu', function() {
         return {

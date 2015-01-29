@@ -1,11 +1,6 @@
 <ptj-menu></ptj-menu>
 <div class='container'>
   <div class='row'>
-    <!-- search & results -->
-    <!-- sidebar -->
-    <div class='col-md-2'>
-      <!-- %ptj-survey-select -->
-    </div>
     <div class='col-md-8'>
       <div class='panel panel-primary'>
         <div class='panel-heading'>Edit a survey for an event</div>
@@ -33,8 +28,16 @@
                   <label btn-radio="'Once'" class='btn btn-primary' ng-click='setOneTime()' ng-model='still_needs_a_model'>Once</label>
                   <label btn-radio="'Repeatedly'" class='btn btn-primary' ng-click='setRecurring()' ng-model='still_needs_a_model'>Repeatedly</label>
                 </div>
-                <br>
-                <br>
+              </div>
+              <div class='row' ng-show='isRecurring()'>
+                <div class='btn-group pull-right'>
+                  <input-group>
+                    <select class='form-control' ng-model='selectedSurvey.frequencyUnit' ng-options='opt for opt in TimeUnit._options'></select>
+                    <input class='form-control' min='0' ng-model='selectedSurvey.frequencyDist' placeholder='Distance' required='true' type='number'>
+                  </input-group>
+                </div>
+              </div>
+              <div class='row'>
                 <btn class='btn-sm btn-success pull-right' ng-click='showLiveButton=false' ng-show='showLiveButton'>
                   Live
                   <span class='glyphicon glyphicon-bullhorn'></span>
@@ -78,11 +81,6 @@
           </div>
           <div class='row'>
             <div class='col-lg-11'>
-              possible: {{ selectedSurvey.possibleTimePeriods }}
-            </div>
-          </div>
-          <div class='row'>
-            <div class='col-lg-11'>
               <ptj-calendar allowed='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
             </div>
           </div>
@@ -94,12 +92,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class='col-md-2'>
-      <input-group ng-show='isRecurring()'>
-        <select class='form-control' ng-model='selectedSurvey.frequencyUnit' ng-options='opt for opt in TimeUnit._options'></select>
-        <input class='form-control' min='0' ng-model='selectedSurvey.frequencyDist' placeholder='Distance' required='true' type='number'>
-      </input-group>
     </div>
   </div>
 </div>

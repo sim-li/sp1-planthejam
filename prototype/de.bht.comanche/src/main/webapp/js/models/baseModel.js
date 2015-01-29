@@ -62,18 +62,6 @@ angular.module('models', ['constants', 'util'])
             return models;
         };
 
-        // Model.importMany = function(ModelClass, rawModels) {
-        //     if (!rawModels) {
-        //         return rawModels;
-        //     }
-        //     var models = [];
-        //     for (var i = 0, len = rawModels.length; i < len; i++) {
-        //         models.push(new ModelClass(rawModels[i]));
-        //     }
-        //     // console.log('imported many ' + ModelClass.prototype.modelId + 's');
-        //     return models;
-        // };
-
         /* ---
          * it is very likely that exporting cannot be done for our models, at least when they themselves have their
          * own collections of models

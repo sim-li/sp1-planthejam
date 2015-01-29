@@ -31,7 +31,6 @@ angular.module('myApp')
                 }
                 if (DUMMY_LOGIN) {
                     user.name = 'Alice';
-                    // user.password = 'yousnoozeyoulose';
                     user.password = 'testtest';
                 }
                 callService(restService.login, user, '/cockpit', 'Login erfolgreich.');

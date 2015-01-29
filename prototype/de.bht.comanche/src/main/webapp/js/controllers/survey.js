@@ -10,14 +10,12 @@ angular.module('myApp')
      *
      * @class surveyCtrl
      */
-    .controller('surveyCtrl', ['$location', '$log', '$scope', 'arrayUtil', /*'currentUserPromise', */ 'Group',
-        'groupsPromise', 'Invite', /*'invitesPromise', */ 'Member', 'Model', 'restService', /*'selectedInvitePromise',*/
-        'selectedSurveyPromise', 'selectedSurveyInvitesPromise', 'Survey', 'TimePeriod', 'TimeUnit', 'SurveyType',
-        'User', 'usersPromise',
-        function($location, $log, $scope, arrayUtil, /*currentUserPromise, */ Group,
-            groupsPromise, Invite, /*invitesPromise, */ Member, Model, restService, /*selectedInvitePromise,*/
-            selectedSurveyPromise, selectedSurveyInvitesPromise, Survey, TimePeriod, TimeUnit, SurveyType,
-            User, usersPromise) {
+    .controller('surveyCtrl', ['$location', '$log', '$scope', 'arrayUtil', 'Group', 'groupsPromise', 'Invite', 'Member',
+        'Model', 'restService', 'selectedSurveyPromise', 'selectedSurveyInvitesPromise', 'Survey', 'TimePeriod',
+        'TimeUnit', 'SurveyType', 'User', 'usersPromise',
+        function($location, $log, $scope, arrayUtil, Group, groupsPromise, Invite, Member,
+            Model, restService, selectedSurveyPromise, selectedSurveyInvitesPromise, Survey, TimePeriod,
+            TimeUnit, SurveyType, User, usersPromise) {
 
             'use strict';
 
@@ -27,30 +25,19 @@ angular.module('myApp')
              */
             $scope.selectedSurvey = new Survey(selectedSurveyPromise);
             $scope.selectedSurvey.invites = Model.importMany(Invite, selectedSurveyInvitesPromise);
-            $log.debug('selected survey: ', $scope.selectedSurvey)
-                // $scope.selectedSurveyInvites = Model.importMany(Invite, selectedSurveyInvitesPromise);
-                // $log.debug('selected survey invites: ', $scope.selectedSurveyInvites);
+            $log.debug('selected survey: ', $scope.selectedSurvey);
 
             // For group widget
             $scope.groups = Model.importMany(Group, groupsPromise);
             $scope.users = Model.importMany(User, usersPromise);
             $scope.TimeUnit = TimeUnit;
-            // No connection to REST yet (widget will probably be discarded)
-            // $scope.timePeriods = TimePeriod.dummyTimePeriods();
 
             /**
+             * ???
+             *
              * Create simple variables needed to store UI states for components that aren't grouped in directives.
              */
             $scope.showLiveButton = true;
-
-            // NO!!! the group widget shall take care of all this
-            var refreshGroupsAndShowLast = function() {
-                restService.doGetMany(Group)
-                    .then(function(success) {
-                        $scope.groups = Model.importMany(Group, success);
-                        $scope.selectedGroup = $scope.groups[$scope.groups.length - 1];
-                    } /*, function(error) { $log.log(error); }*/ );
-            };
 
             /**
              * The new group will immediately be persisted on the server.
@@ -58,10 +45,10 @@ angular.module('myApp')
              * @method addNewGroup
              * @protected
              */
-            $scope.addNewGroup = function() {
-                restService.doSave(new Group())
-                    .then(refreshGroupsAndShowLast());
-            };
+            // $scope.addNewGroup = function() {
+            //     restService.doSave(new Group())
+            //         .then(refreshGroupsAndShowLast());
+            // };
 
             /**
              * Deletes the selected group from the user's groups.
@@ -70,49 +57,48 @@ angular.module('myApp')
              * @method deleteSelectedGroup
              * @protected
              */
-            $scope.deleteSelectedGroup = function() {
-                if (!$scope.selectedGroup) {
-                    return;
-                }
-                // delete selected on client
-                for (var i = 0, len = $scope.groups.length; i < len; i++) {
-                    if ($scope.groups[i].oid === $scope.selectedGroup.oid) {
-                        $scope.groups.splice(i, 1);
-                    }
-                }
+            // $scope.deleteSelectedGroup = function() {
+            //     if (!$scope.selectedGroup) {
+            //         return;
+            //     }
+            //     // delete selected on client
+            //     for (var i = 0, len = $scope.groups.length; i < len; i++) {
+            //         if ($scope.groups[i].oid === $scope.selectedGroup.oid) {
+            //             $scope.groups.splice(i, 1);
+            //         }
+            //     }
 
-                // delete selected on server
-                restService.doDelete($scope.selectedGroup)
-                    .then(function(success) {
-                        $scope.selectedGroup = $scope.groups[0] || new Group();
-                    } /*, function(error) { $log.log(error); }*/ );
+            //     // delete selected on server
+            //     restService.doDelete($scope.selectedGroup)
+            //         .then(function(success) {
+            //             $scope.selectedGroup = $scope.groups[0] || new Group();
+            //         } /*, function(error) { $log.log(error); }*/ );
 
-                // QUESTION maybe better to just delete on server and then refresh? - but then we have to wait for the server
-            };
+            //     // QUESTION maybe better to just delete on server and then refresh? - but then we have to wait for the server
+            // };
 
             // TODO rest service to save many groups
-            $scope.saveGroups = function() {
-                $log.log('Saving all groups');
-                arrayUtil.forEach($scope.groups, function(group) {
-                    restService.doSave(group);
-                });
-                $location.path('/invite');
-            };
+            // $scope.saveGroups = function() {
+            //     $log.log('Saving all groups');
+            //     arrayUtil.forEach($scope.groups, function(group) {
+            //         restService.doSave(group);
+            //     });
+            //     $location.path('/invite');
+            // };
 
-            //____________________________________________________________________ aktuelle Baustelle _______________________
-            $scope.attachSelectedGroupToInvite = function() {
-                // $log.log($scope.selectedInviteSurveyInvites)
-                $scope.selectedInvite.addParticipantsFromGroup($scope.selectedGroup);
-                $log.log($scope.selectedInvite.survey)
-                    // inv.addParticipantsFromGroup($scope.selectedGroup)
-            };
+            // $scope.attachSelectedGroupToInvite = function() {
+            //     // $log.log($scope.selectedInviteSurveyInvites)
+            //     $scope.selectedInvite.addParticipantsFromGroup($scope.selectedGroup);
+            //     $log.log($scope.selectedInvite.survey)
+            //         // inv.addParticipantsFromGroup($scope.selectedGroup)
+            // };
 
-            var selectFirstOrDefaultGroup = function() {
-                $scope.selectedGroup = $scope.groups[0] || new Group({
-                    name: 'Your new group'
-                });
-                return $scope.selectedGroup;
-            };
+            // var selectFirstOrDefaultGroup = function() {
+            //     $scope.selectedGroup = $scope.groups[0] || new Group({
+            //         name: 'Your new group'
+            //     });
+            //     return $scope.selectedGroup;
+            // };
 
             $scope.isRecurring = function() {
                 return $scope.selectedSurvey.type == SurveyType.RECURRING;
@@ -128,15 +114,12 @@ angular.module('myApp')
 
             $scope.saveSurvey = function() {
                 $log.log('selected survey: ', $scope.selectedSurvey);
-                $scope.selectedSurvey.invites = Invite.exportMany($scope.selectedSurvey.invites); // HACK -> Move to survey class when possible.
+                /* Export of invites would be better to be placed inside the survey class, but not possible because of circular dependency. */
+                $scope.selectedSurvey.invites = Invite.exportMany($scope.selectedSurvey.invites);
                 restService.doSave($scope.selectedSurvey)
                     .then(function(success) {
                         $location.path('/cockpit');
-                    } /*, function(error) { $log.log(error); }*/ );
-
-                // arrayUtil.forEach($scope.selectedInviteSurveyInvites, function(invite) { // <<<<<<<<<<<<< TODO
-                //     restService.saveSurveyInvite($scope.selectedInvite, invite);
-                // });
+                    });
             };
 
             $scope.cancel = function() {
