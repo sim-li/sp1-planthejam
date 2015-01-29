@@ -1,0 +1,31 @@
+#accordion.panel-group
+  .panel.panel-info
+    .panel-heading
+      .panel-title
+        .row
+          %span.glyphicon.glyphicon-plus.col-md-offset-1{"data-target" => "#calendarModal", "data-toggle" => "modal", :type => "button", "ng-click" => "renderCalendar()"}
+          #calendarModal.modal.fade.bs-example-modal-lg{"aria-hidden" => "true", "data-target" =>".bs-example-modal-lg", :role => "dialog", :tabindex => "-1"}
+            .modal-dialog.modal-lg
+              .modal-content
+                .modal-header
+                  %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                    %span{"aria-hidden" => "true"} ×
+                  %h4.modal-title Please give your Avaibilities
+                .modal-body
+                  .calendar{"ng-model" => "eventSources", "ui-calendar" => "uiConfig.calendar", "calendar" => "surveyCalendar"}
+                .modal-footer
+                  %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
+                  %button.btn.btn-primary{:type => "button"} Save changes
+          %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne", :onclick => "return false;"}
+            Possible time periods
+            %span.col-md-offset-3.glyphicon.glyphicon-resize-vertical
+    #collapseOne.panel-collapse.collapse.in
+      .panel-body
+        %tabset{:type => "pills", :vertical => "true"}
+          %tab{"ng-repeat" => "timePeriod in possibleTimePeriods"}
+            %tab-heading
+              {{timePeriod.start | date:'yyyy-MM-dd HH:mm' }} to {{timePeriod.end | date:'yyyy-MM-dd HH:mm'}}
+              %span.glyphicon.glyphicon-remove.text-danger{:type => "button", "ng-click" => "removeTimePeriod()", "onClick" =>"return false;"}
+
+
+

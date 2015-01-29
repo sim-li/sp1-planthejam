@@ -1,0 +1,64 @@
+#-- Table of Contents ---------------------------------------------------------
+#
+# 1.    CONFIGURE TEST TOOLS FOR THE WEBAPP
+#   1.1.    Configure Karma
+#   1.2.    Configure Protractor
+# 2.    RUN TESTS FOR THE WEBAPP
+#   2.1.    Run unit tests with Karma
+#   2.2.    Run end to end tests with Protractor
+#
+#------------------------------------------------------------------------------
+
+
+## 1. - CONFIGURE TEST TOOLS FOR THE WEBAPP ##
+
+
+## 1.1. - Configure Karma ##
+
+# should already be done and thus not necessary for our project anymore, so skip this sub-chapter
+
+# inside the folder "de.bht.comanche/src/main/webapp/test" just follow the dialog after typing:
+
+karma init
+
+# edit the karma.conf.js for further configuration
+# be sure to include all needed libraries under "files"
+
+# in package.json > scripts > add the following line
+# "test": "node node_modules/karma/bin/karma start test/karma.conf.js",
+
+#------------------------------------------------------------------------------
+
+
+## 1.2. - Configure Protractor ##
+
+** NEEDS FURTHER INVESTIGATION **
+
+# edit the protractor-conf.js for further configuration
+
+#------------------------------------------------------------------------------
+
+
+## 2. - RUN TESTS FOR THE WEBAPP ##
+
+
+## 2.1. - Run unit tests with Karma ##
+
+# Alternative 1:
+
+npm test
+
+# Alternative 2:
+# should always work, otherwise you will probably have to jump to 1.1.
+
+karma start test/karma.conf.js
+
+#------------------------------------------------------------------------------
+
+
+## 2.2. Run end to end tests with Protractor ##
+
+** NEEDS FURTHER INVESTIGATION **
+
+npm start
+npm run protractor

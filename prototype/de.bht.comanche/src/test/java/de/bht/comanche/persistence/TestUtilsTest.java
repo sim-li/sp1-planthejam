@@ -17,8 +17,12 @@ public class TestUtilsTest {
 		final TestUtils testUtils = new TestUtils();
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.set(1982, Calendar.JANUARY, 20, 13, 30);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
 		final Date targetStartDate = cal.getTime();
 		cal.set(1982, Calendar.JANUARY, 21, 14, 30);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
 		final Date targetEndDate = cal.getTime();
 		final LgTimePeriod gregorianTimePeriod = new LgTimePeriod()
 			.setStartTime(targetStartDate)

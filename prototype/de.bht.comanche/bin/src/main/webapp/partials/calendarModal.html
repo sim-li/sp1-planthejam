@@ -1,0 +1,21 @@
+<script id='calendarModalContent.html' type='text/ng-template'>
+  <div class='modal-header'>
+    <h3 class='modal-title'>
+      Edit calendar
+    </h3>
+  </div>
+  <div class='modal-body'>
+    <div class='row'>
+      <ptj-calendar allowed='allowedTimePeriods' resulting='resultingTimePeriods'></ptj-calendar>
+    </div>
+  </div>
+  <div class='modal-footer'>
+    <button class='btn btn-warning' ng-click='cancel()'>Cancel</button>
+    <button class='btn btn-primary' ng-click='ok()'>OK</button>
+  </div>
+</script>
+<div class='input-group'>
+  <input class='btn btn-primary' ng-click='openCalendarModal()' type='button' value='Edit calendar'>
+</div>
+<span>allowed: {{ allowedTimePeriods }}</span>
+<span>resulting: {{ resultingTimePeriods }}</span>
