@@ -30,6 +30,7 @@ import de.bht.comanche.logic.LgUser;
 /**
  * @author Simon Lischka
  */
+@Ignore
 public class LgUserTest {
 	/**
 	 * REWRITE!
