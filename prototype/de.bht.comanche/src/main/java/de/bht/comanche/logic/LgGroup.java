@@ -84,6 +84,14 @@ public class LgGroup extends DaObject{
             return this;
     }
 
+    public LgGroup updateWith(final LgGroup other) {
+        this.name = other.name;
+        this.user = other.user;
+        this.members = other.members;
+        this.iconurl = other.iconurl;
+        return this;
+    }
+
     /**
      * Generates a random art URL for the gravatar service
      * using the group name.
@@ -161,7 +169,7 @@ public class LgGroup extends DaObject{
     @Override
     public String toString() {
         return String.format(
-                "LgGroup [name=%s, user=%s, oid=%s]",
-                name, user, oid);
+                "LgGroup [name=%s, user=%s, members=%s, oid=%s, pool=%s]",
+                name, user, members, oid, pool);
     }
 }

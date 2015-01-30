@@ -63,7 +63,7 @@ public class LgMember extends DaObject{
 
 	@Override
 	public String toString() {
-		return String.format("LgMember [group=%s, user=%s, oid=%s]",
-				group, user, oid);
+		return String.format("LgMember [group=%s, user=%s, oid=%s, pool=%s]",
+				group, user, oid, pool);
 	}
 }

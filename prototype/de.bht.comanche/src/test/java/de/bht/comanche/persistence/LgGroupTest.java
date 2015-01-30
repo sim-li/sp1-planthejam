@@ -117,23 +117,29 @@ public class LgGroupTest {
 		assertEquals("Pit", getAliceGroup(aliceGroup.getOid()).getUsers().get(1).getName());
 		}
 	
+	@Ignore
 	@Test
-	public void test5UpdateDeleteMember(){
+	public void test5deleteMember(){
 		final LgSession session = start();
 		final LgUser sessionUser = startForAlice(session);
 		final LgGroup aliceGroup = sessionUser.getGroups().get(0);
 		final LgUser bob = session.startFor("Bob");
 		final long bob_moid = session.getUser().search(aliceGroup.getOid(), bob.getOid()).get(0).getOid();
-		sessionUser.deleteMember(aliceGroup.oid, bob.oid);
-
+//		sessionUser.getGroup(aliceGroup.getOid()).deleteMember(bob_moid);
+//		sessionUser.saveUnattached(new LgMember().setUser(bob).setGroup(aliceGroup));
+		List<LgMember> members = new ArrayList<LgMember>();
+		members.add(sessionUser.saveUnattached(new LgMember().setUser(bob).setGroup(aliceGroup)));
+		aliceGroup.setMembers(members);
+		
 		sessionUser.save(aliceGroup);
 		
 		end(session);
 		
-//		assertEquals(null, getAliceGroup(aliceGroup.getOid()).getMember(bob_moid));
+		assertEquals(null, getAliceGroup(aliceGroup.getOid()).getMember(bob_moid));
 	}
 	
-//	@Test
+//	@Ignore
+	@Test
 	public void test6deleteGroup(){
 		final LgSession session = start();
 		final LgUser sessionUser = startForAlice(session);
@@ -142,16 +148,6 @@ public class LgGroupTest {
 		
 		end(session);
 		assertEquals(0, startFor().getGroups().size());
-	}
-	
-	@Test
-	public void test7deleteUserWithGroup(){
-		final LgSession session = start();
-		final LgUser sessionUser = startForAlice(session);
-		
-		sessionUser.deleteThisAccount();
-		
-		end(session);
 	}
 	
 	public void end(LgSession session){
