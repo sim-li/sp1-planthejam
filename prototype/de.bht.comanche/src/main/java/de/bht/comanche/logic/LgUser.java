@@ -25,6 +25,7 @@ import de.bht.comanche.persistence.DaObject;
  * objects LgClasses.
  *
  * @author Simon Lischka
+ * @author Max Novichkov
  *
  */
 @Entity
@@ -86,7 +87,9 @@ public class LgUser extends DaObject {
 		for (final LgInvite invite : this.getInvites()) {
 			invite.setUser(null);
 		}
-		// Do the same with Groups!
+		for (LgGroup group : this.getGroups()){
+			this.deleteGroup(group.getOid());
+		}
 		// Child surveys + invites are not cascaded!
 		delete();
 		
@@ -124,6 +127,29 @@ public class LgUser extends DaObject {
 	public void deleteGroup(final long groupOid) {
 		this.getGroup(groupOid).delete();
 	}
+	
+	/**
+	 * Delete LgMember by provided oid.
+	 * @param oid The LgMember oid.
+	 */
+	public void deleteMember(final long oid) {
+		this.findOneByKey(LgMember.class, "OID", oid).delete();
+	}
+	
+	/**
+	 * Delete group by provided group oid and user oid.
+	 * @param groupOid The LgGroup oid.
+	 * @param lgUserOid The LgUser oid.
+	 * @return
+	 */
+	public LgGroup deleteMember(final long groupOid, final long lgUserOid) {
+		for (LgMember member : this.getGroup(groupOid).getMembers()){
+			if(member.getUser().getOid() == lgUserOid){
+			this.deleteMember(member.getOid());
+			}
+		}	
+		return this.getGroup(groupOid);
+	}
 
 	/**
 	 * Returns LgGroup by provided oid.
@@ -138,18 +164,6 @@ public class LgUser extends DaObject {
 	public List<LgGroup> getGroups() {
 		return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
 	}
-
-	public LgGroup updateGroup(final LgGroup other){
-		if (other.getOid() <= 0) {
-			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
-		}
-		final LgGroup group = findOneByKey(LgGroup.class, "OID", other.getOid());
-		group.updateWith(other);
-		return saveUnattached(other);
-	}
-
-	@SuppressWarnings("serial")
-	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
 
 	/**
 	 * Search LgMember object by group oid and user oid.
