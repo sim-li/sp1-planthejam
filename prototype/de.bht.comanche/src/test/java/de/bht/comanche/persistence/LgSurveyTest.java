@@ -28,7 +28,7 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
-public class LgSurveyTest extends LgTestWithUsers {
+public class LgSurveyTest {
 	private LgUser alice;
 	private LgUser bob;
 	private LgUser carol;
@@ -58,18 +58,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 
 	@Test
 	public void getSurveyByOidTest() {
-		final Date aDate = new Date();
-		final LgTimePeriod aTimePeriod = new LgTimePeriod().setStartTime(aDate);
-		// final Set<LgTimePeriod> severalTimePeriods =
-		// testUtils.buildTimePeriods(20,30,40);
-		final LgSurvey aSurvey = new LgSurvey().setAlgoChecked(false)
-				.setDeadline(aDate).setDescription("My description")
-				.setDeterminedTimePeriod(aTimePeriod).setFrequencyDist(30)
-				.setFrequencyUnit(LgTimeUnit.MONTH).addParticipants(bob, carol)
-				.setName("My test survey")
-				// .setPossibleTimePeriods(severalTimePeriods)
-				.setSuccess(LgStatus.UNDECIDED).setSurveyDurationMins(30)
-				.setType(LgSurveyType.ONE_TIME);
+		final LgSurvey aSurvey = new LgSurvey();
 		final LgSurvey surveyWithOid = testUtils.saveSurvey(aSurvey);
 		final LgSurvey surveyEval = new TestTransaction<LgSurvey>("Alice") {
 			@Override
@@ -77,24 +66,8 @@ public class LgSurveyTest extends LgTestWithUsers {
 				return startSession().getSurvey(surveyWithOid.getOid());
 			}
 		}.getResult();
-		// Comment: Whats up with bool getters: Do these naming conventions work
-		// for JSONization? -- SIM, 24. JAN 2015
-		assertThat(surveyEval.getAlgoChecked()).isFalse();
-		assertThat(surveyEval.getDeadline()).isEqualTo(aDate);
-		assertThat(surveyEval.getDescription()).isEqualTo("My description");
-		assertThat(surveyEval.getDeterminedTimePeriod()).isEqualTo(aTimePeriod);
-		assertThat(surveyEval.getFrequencyDist()).isEqualTo(30);
-		assertThat(surveyEval.getFrequencyUnit()).isEqualTo(LgTimeUnit.MONTH);
-		assertThat(surveyEval.getParticipants())
-				.containsOnly(alice, bob, carol);
-		assertThat(surveyEval.getHost()).isEqualTo(alice);
-		assertThat(surveyEval.getName()).isEqualTo("My test survey");
-		// assertThat(surveyEval.getPossibleTimePeriods()).isEqualTo(severalTimePeriods);
-		assertThat(surveyEval.getSuccess()).isEqualTo(LgStatus.UNDECIDED);
-		assertThat(surveyEval.getSurveyDurationMins()).isEqualTo(30);
-		assertThat(surveyEval.getType()).isEqualTo(LgSurveyType.ONE_TIME);
+		assertThat(surveyEval.getOid()).isEqualTo(surveyWithOid.getOid());
 	}
-
 	/**
 	 * Note: The host is also returned with the getInvites method.
 	 */
@@ -188,67 +161,7 @@ public class LgSurveyTest extends LgTestWithUsers {
 				"Alice", "Bob", "Carol");
 	}
 
-	// WHAT IS THIS?
-	@Test
-	public void deleteSurveyTest() {
-		final LgSurvey surveyForEvaluation = testUtils
-				.saveSurvey(new LgSurvey()
-						.addParticipants(bob, carol)
-						.setPossibleTimePeriods(
-								testUtils.buildTimePeriods(
-										"02.12.1982/13:40 -> 02.12.1982/15:40",
-										"03.12.1984/13:40 -> 04.12.1986/15:40",
-										"05.12.1986/13:45 -> 06.12.1986/15:40"))
-						.setDeterminedTimePeriod(
-								new LgTimePeriod().setStartTime(new Date())
-										.setEndTime(new Date())));
-		new TestTransaction<Object>("Alice") {
-			@Override
-			public Object execute() {
-				startSession().deleteSurvey(surveyForEvaluation.getOid());
-				return null;
-			}
-		}.getResult();
-		final Boolean foundDeletedObj = new TestTransaction<Boolean>("Alice") {
-			@Override
-			public Boolean execute() {
-				Boolean foundDeletedObj = null;
-				try {
-					startSession().findOneByKey(LgSurvey.class, "oid",
-							surveyForEvaluation.getOid());
-					foundDeletedObj = true;
-				} catch (DaFindOneByKeyExc ex) {
-					foundDeletedObj = foundDeletedObj == null ? false
-							: foundDeletedObj;
-				}
-				for (final LgInvite invite : surveyForEvaluation.getInvites()) {
-					try {
-						startSession().findOneByKey(LgInvite.class, "oid",
-								invite.getOid());
-						foundDeletedObj = true;
-					} catch (DaFindOneByKeyExc ex) {
-						foundDeletedObj = foundDeletedObj == null ? false
-								: foundDeletedObj;
-					}
-				}
-				// TODO: Implement this, not really urgent.
-				// for (final LgTimePeriod timePeriod :
-				// surveyForEvaluation.getPossibleTimePeriods()) {
-				// try {
-				// startSession().findManyByQuery("select o from " +
-				// LgTimePeriod.class);
-				// foundDeletedObj = true;
-				// } catch (DaFindOneByKeyExc ex) {
-				// foundDeletedObj = foundDeletedObj == null ? false :
-				// foundDeletedObj;
-				// }
-				// }
-				return false;
-			}
-		}.getResult();
-		assertThat(foundDeletedObj).isEqualTo(false);
-	}
-
+	
 	/**
 	 * Note: Delete has to be executed in separate transactions. Only when a
 	 * transaction was executed, the contained invites and surveys are deleted.

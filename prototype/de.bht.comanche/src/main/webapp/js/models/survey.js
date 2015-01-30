@@ -34,13 +34,15 @@ angular.module('models')
                 if (!(this instanceof Survey)) {
                     return new Survey(config);
                 }
+                var oneWeekLater = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000));
+
                 config = config || {};
                 this.oid = config.oid || '';
                 this.name = config.name || 'Your survey';
                 this.description = config.description || 'Say what it is all about';
                 this.type = config.type || SurveyType.ONE_TIME;
                 this.surveyDurationMins = config.surveyDurationMins || 0;
-                this.deadline = config.deadline ? new Date(config.deadline) : new Date();
+                this.deadline = config.deadline ? new Date(config.deadline) : oneWeekLater;
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
                 this.possibleTimePeriods = Model.importMany(TimePeriod, config.possibleTimePeriods);

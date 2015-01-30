@@ -1,0 +1,25 @@
+﻿BHT Berlin, FB VI, MB4, Software-Projekt I, WiSe 2015, Prof. Knabe
+Team Comanche //
+Maxim Novichkov (797918) / Simon Lischka (797307) / Sebastian Dassé (791537) / Duc Tung Tong
+(798029)
+
+Terminfindungs-App “Plan The Jam”
+
+Technik-Verantwortungsbereiche
+
+Simon Lischka
+• Logik-Klassen, JPA-Annotationen
+• System-Administration
+• Oberfläche mit HTML/HAML, Bootstrap, Javascript und AngularJS
+
+Duc Tung Tong
+• Oberfläche mit HTML/HAML, Bootstrap, Javascript und AngularJS
+
+Maxim Novichkov
+• Logik-Klassen, JPA-Annotationen
+• REST / JAX-RS mit Jersey
+• MulTEx / Ausnahmebehandlung 
+
+Sebastian Dassé
+• Oberfläche mit HTML/HAML, Bootstrap, Javascript und AngularJS
+• MulTEx / Ausnahmebehandlung 

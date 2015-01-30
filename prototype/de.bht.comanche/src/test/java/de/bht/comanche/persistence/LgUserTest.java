@@ -30,6 +30,7 @@ import de.bht.comanche.logic.LgUser;
 /**
  * @author Simon Lischka
  */
+@Ignore
 public class LgUserTest {
 	/**
 	 * REWRITE!
@@ -205,29 +206,7 @@ public class LgUserTest {
             this.variousMessages.add(message);
         }
     }
-    
-//    private void buildVariousTimePeriods(int ... durations) {
-//        for (int i = 0; i < durations.length; i++) {
-//            this.variousTimePeriods.add(new LgTimePeriod().setStartTime(
-//                new Date()).setDurationMins(durations[i])
-//            );
-//        }
-//    }
-//    
-//    @Test
-//    private void verifyDeletingAccountSuccessful() {
-//    	deleteAlicesUserAccount();
-//    	Collection<DaObject> persistedObjects =
-//    	  new TestTransaction<Collection<DaObject>> ("Alice") {
-//              @Override
-//              public Collection<DaObject> execute() {
-//            	  Collection<DaObject> queryResults = new LinkedList<DaObject>();
-//                  queryResults.add(getSession().findOneByKey(LgUser.class, "oid", alice.getOid()));
-//                  
-//              }
-//          }.getResult();
-//    }
-    
+
     @After
     public void tearDown() {
         deleteAlicesUserAccount();

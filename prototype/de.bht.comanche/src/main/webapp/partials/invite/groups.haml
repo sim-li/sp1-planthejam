@@ -28,6 +28,7 @@
                 %img{"ng-src" => "{{group.iconurl}}&s=40"}
               .media-body
                 %h5 {{group.name}}
+
       .col-sm-9
         .panel.panel-default
           .panel-body
@@ -42,7 +43,7 @@
                   %label{} Member :
                 .col-md-8
                   %input.form-control{"ng-model" => "selectedUser", "placeholder" => "+ Add user to this group",
-     "type" => "text", "typeahead" => "user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5",
+     "type" => "text", "typeahead" => "user as user.name for user in users | filter: {name:$viewValue} | filter: {name : '!{{host.name}}' } | limitTo: 5",
      "typeahead-template-url" => "itemTpl.html"}
             .well.well-sm
               .container-fluid
@@ -71,7 +72,7 @@
     %b To:
   / * Type ahead Search Field
   %input.form-control{"ng-model" => "lastElementSelected", :placeholder => "+ Add user or group",                        |
-   :type => "text", :typeahead => "element as element.name for element in elements | filter: {name:$viewValue} | limitTo: 5", |
+   :type => "text", :typeahead => "element as element.name for element in elements | filter: {name:$viewValue} | filter: {name : '!{{host.name}}' } | limitTo: 5",
    "typeahead-template-url" => "itemTpl.html"}
   / CAUTION: Changed controller for one button event, rest of file uses invite controller
   .input-group-btn
@@ -87,7 +88,7 @@
 %div{:collapse => "false"}
   .well.well-sm
     .container-fluid
-      .btn-group{"ng-repeat" => "element in allElementsSelected"}
+      .btn-group{"ng-repeat" => "element in allElementsSelected", "ng-if" => "!isHost(element)"}
         %label.btn.btn-default{:type => "button"}
           %img.pull-left{"ng-src" => "{{element.iconurl}}&s=20", "style" => "padding-right:2px;"}
           %b {{element.name}}

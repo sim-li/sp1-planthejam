@@ -36,10 +36,13 @@ public class SurveyEqualsTest {
 		}
 	}
 	
+	/**
+	 * Note: This rule was once implemented in the opposite matter.
+	 */
 	@Test
 	public void equalsIgnoresEmptyOidTest() {
 		aSurvey.setOid(1);
-		assertEquals("Two surveys with same data and one empty oid are equal", aSurvey, aTwinSurvey);
+		assertNotEquals("Two surveys with same data and one empty oid are not equal", aSurvey, aTwinSurvey);
 	}
 	
 	@Test

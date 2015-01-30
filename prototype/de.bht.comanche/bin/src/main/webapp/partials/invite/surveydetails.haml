@@ -1,0 +1,8 @@
+%h4 Popup
+.row
+  .col-md-6
+    %p.input-group
+      %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "datepicker-popup" => "dd-MMMM-yyyy", "is-open" => "opened", "max-date" => "'2015-06-22'", "min-date" => "minDate", "ng-model" => "dt", "ng-required" => "true", :type => "text"}
+      %span.input-group-btn
+        %button.btn.btn-default{"ng-click" => "open($event)", :type => "button"}
+          %i.glyphicon.glyphicon-calendar

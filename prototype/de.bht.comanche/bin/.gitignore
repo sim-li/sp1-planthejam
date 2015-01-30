@@ -1,0 +1,7 @@
+target/
+node/
+bower_components/
+node_modules/
+apidocs/
+.DS_Store
+*.log

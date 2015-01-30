@@ -1,0 +1,100 @@
+/ * Modal content template
+%script{:id => "groupsModalContent.html", :type => "text/ng-template"}
+  .modal-header
+    %h3.modal-title
+      .row
+        .col-md-3
+          %span.glyphicon.glyphicon-user
+          Edit groups
+        .col-md-6
+          .btn-group
+            %button.btn.btn-default{:type => "button", "ng-click" => "addNewGroup()"}
+              %span.glyphicon.glyphicon-plus
+              Add
+            %button.btn.btn-default{:type => "button", "ng-click" => "removeGroup($index)"}
+              %span.glyphicon.glyphicon-remove
+              Remove
+            %button.btn.btn-default{:type => "button", "ng-click" => ""}
+              %span.glyphicon.glyphicon-resize-small
+              Merge
+
+        .pull-right
+          %b {{selectedGroup.name}}
+          %img{"ng-src" => "{{selectedGroup.iconurl}}&s=40", "style" => "padding-right:2px;"}
+  .modal-body
+    %br
+    .row
+      .col-sm-3
+        .row
+          .list-group
+            %a.list-group-item{"ng-repeat" => "group in groups", "ng-click" => "selectGroup(group)"}
+              .media-left
+                %img{"ng-src" => "{{group.iconurl}}&s=40"}
+              .media-body
+                %h5 {{group.name}}
+      .col-sm-9
+        .panel.panel-default
+          .panel-body
+            .form-group
+              %label{} Group name :
+              .item-wrapper
+                %a#inputName{"editable-text" => "selectedGroup.name", :href => "#"}
+                  {{selectedGroup.name}}
+            .form-group
+              .row
+                .col-md-3
+                  %label{} Member :
+                .col-md-8
+                  %input.form-control{"ng-model" => "selectedUser", "placeholder" => "+ Add user to this group",
+     "type" => "text", "typeahead" => "user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5",
+     "typeahead-template-url" => "itemTpl.html"}
+            .well.well-sm
+              .container-fluid
+                .btn-group{"ng-repeat" => "member in selectedGroup.members"}
+                  %label.btn.btn-default{:type => "button"}
+                    %img.pull-left{"ng-src" => "{{member.user.iconurl}}&s=20", "style" => "padding-right:2px;"}
+                    %b {{member.user.name}}
+                  %button.btn.btn-default{:type => "button", "ng-click" => "removeParticipantFromGroup($index)"}
+                    %b
+                    %span.glyphicon.glyphicon-remove
+  .modal-footer
+    %button.btn.btn-primary{"ng-click" => "saveGroup()"} OK
+    %button.btn.btn-warning{"ng-click" => "cancel()"} Cancel
+
+/ * Search field template
+/ match.model binds to Type Ahead's model (curr. userSelected <- user in users)
+%script{:id => "itemTpl.html", :type => "text/ng-template"}
+  %a{:tabindex => "-1"}
+    %i{"ng-class" => "'icon-'+match.model.type"}
+    %span{"ng-bind-html-unsafe" => "match.model.title | typeaheadHighlight:query"}
+      %img.pull-left{"ng-src" => "{{match.model.iconurl}}&s=20", "style" => "padding-right:2px;"}
+      %b {{match.model.name}}
+
+.input-group
+  .input-group-addon
+    %b To:
+  / * Type ahead Search Field
+  %input.form-control{"ng-model" => "lastElementSelected", :placeholder => "+ Add user or group",                        |
+   :type => "text", :typeahead => "element as element.name for element in elements | filter: {name:$viewValue} | limitTo: 5", |
+   "typeahead-template-url" => "itemTpl.html"}
+  / CAUTION: Changed controller for one button event, rest of file uses invite controller
+  .input-group-btn
+    %button.btn.btn-default{"aria-label" => "Left Align", :type => "button", "ng-click" => "openGroupModal()"}
+      %span.glyphicon.glyphicon-user{"aria-hidden" => "true"}
+      Edit groups
+  .input-group-btn
+    %button.btn.btn-default{"ng-click" => "panelOpener.toggle()", :type => "button"}
+      %span.glyphicon.glyphicon-resize-vertical
+/ * User pills section
+
+/ SET panelOpened var here when state switcher is implemented
+%div{:collapse => "false"}
+  .well.well-sm
+    .container-fluid
+      .btn-group{"ng-repeat" => "element in allElementsSelected"}
+        %label.btn.btn-default{:type => "button"}
+          %img.pull-left{"ng-src" => "{{element.iconurl}}&s=20", "style" => "padding-right:2px;"}
+          %b {{element.name}}
+        %button.btn.btn-default{:type => "button", "ng-click" => "removeElementFromSelection($index)"}
+          %b
+          %span.glyphicon.glyphicon-remove

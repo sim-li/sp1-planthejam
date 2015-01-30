@@ -61,6 +61,9 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
                     },
                     usersPromise: function(restService) {
                         return restService.getAllUsers();
+                    },
+                    userPromise: function(restService, User) {
+                        return restService.doGet(User);
                     }
                 }
             })

@@ -22,11 +22,23 @@ angular.module('models')
 		var TimePeriod = function(config) {
 			if (!(this instanceof TimePeriod)) {
 				return new TimePeriod(config);
-			}
+			};
 			config = config || timePeriodNull;
-			this.startTime = config.startTime ? new Date(config.startTime) : new Date();
-			this.endTime = config.endTime ? new Date(config.endTime) : new Date();
+			this.startTime = validDate(config.startTime);
+			this.endTime = validDate(config.endTime);
 		};
+
+		var validDate = function(date) {
+			return date == undefined ? new Date() : new Date(date)
+		};
+
+		/**
+		 * This model's unique id.
+		 *
+		 * @property modelId
+		 * @type {String}
+		 */
+		TimePeriod.prototype.modelId = 'timePeriod';
 
 
 		var timePeriodNull = {
@@ -53,7 +65,7 @@ angular.module('models')
 		 * @return {Number} the duration of the time period in minutes
 		 */
 		TimePeriod.prototype.getDurationMins = function() {
-			return (this.endTime - this.startTime) / 60000;
+			return parseFloat(((this.endTime - this.startTime) / 60000).toFixed(0));
 		};
 
 		/**
@@ -65,24 +77,6 @@ angular.module('models')
 		TimePeriod.prototype.isNull = function() {
 			return this.getDurationMins() == -1;
 		};
-
-		/**
-		 * Returns the duration of this time period in minutes.
-		 *
-		 * @method getDurationMins
-		 * @return {Number} the duration of this time period in minutes
-		 */
-		TimePeriod.prototype.getDurationMins = function() {
-			return (this.endTime - this.startTime) / 60000;
-		};
-
-		/**
-		 * This model's unique id.
-		 *
-		 * @property modelId
-		 * @type {String}
-		 */
-		TimePeriod.prototype.modelId = 'timePeriod';
 
 		/**
 		 * Exports the time period by removing any client side attributes, that the server can not handle.
