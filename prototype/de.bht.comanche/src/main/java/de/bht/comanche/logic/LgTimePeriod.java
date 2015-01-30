@@ -10,15 +10,21 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * A data type for time periods.
+ * A general data type for time periods, describing a start and end time.
  * 
  * It is used to describe the possible time periods of a survey or the
  * availability of users.
  * <p>
- * Important note: This class needs to <strong>override hashCode and
- * equals</strong>, so that collections of LgTimePeriods are comparable. In the
- * current version timePeriods are considered equal when ...
+ * Seconds and milliseconds are not saved and automatically set to 0.
+ * <p>
+ * The class offers a <code>createEmptyTimePeriod()</code> method which creates a
+ * default time period with duration -1. It should always be used when
+ * expressing a non existent date, for example when a date could not
+ * be determined. 
+ * <p>
  * 
+ * 
+ * @author Simon Lischka
  * @author Duc Tung Tong
  */
 
