@@ -38,7 +38,7 @@ angular.module('myApp')
             };
 
             /**
-             * Selects the specified survey.
+             * Selects the specified survey and loads its invites.
              *
              * @method selectSurvey
              * @param  {Survey} survey the survey
@@ -70,7 +70,7 @@ angular.module('myApp')
             };
 
             /**
-             * Deletes the selected survey and refreshes the cockpit view.
+             * Deletes the selected survey.
              *
              * @method deleteSelectedSurvey
              */
@@ -78,12 +78,9 @@ angular.module('myApp')
                 if (!$scope.selectedSurvey) {
                     return;
                 }
-                $log.debug('deleting ... ')
                 restService.doDelete($scope.selectedSurvey)
                     .then(function(success) {
                         arrayUtil.remove($scope.surveys, $scope.selectedSurvey);
-                        $log.debug('deleted.')
-                            // $location.path('/cockpit');
                     });
             };
 
@@ -117,6 +114,11 @@ angular.module('myApp')
                     });
             };
 
+            /**
+             * Confirms the selected survey.
+             *
+             * @method confirmSelectedSurvey
+             */
             $scope.confirmSelectedSurvey = function() {
                 $scope.selectedSurvey.success = Status.YES;
                 restService.doSave($scope.selectedSurvey)
@@ -125,6 +127,11 @@ angular.module('myApp')
                     });
             };
 
+            /**
+             * Rejects the selected survey.
+             *
+             * @method rejectSelectedSurvey
+             */
             $scope.rejectSelectedSurvey = function() {
                 $scope.selectedSurvey.success = Status.NO;
                 // $scope.selectedSurvey.determinedTimePeriod = TimePeriod.NÙLL();
@@ -134,27 +141,5 @@ angular.module('myApp')
                     });
             };
 
-            $scope.toggleSurveyDetails = function() {
-                $scope.showSurveyDetails = true;
-            };
-
-            $scope.toggleInviteDetails = function() {
-                $scope.showSurveyDetails = false;
-            };
-
-            $scope.saveSelectedInvite = function() {
-                return function(resultingTimePeriods) {
-                    $scope.selectedInvite.concreteAvailability = resultingTimePeriods;
-                    restService.doSave($scope.selectedInvite);
-                };
-            };
-            // $scope.hasNoAcceptation = function() {
-            //     arrayUtil.forEach($scope.selectedSurvey.invites, function(invite) {
-            //         if (invite.isHost == false && invite.isIgnored != 'NO') {
-            //             return true;
-            //         }
-            //     });
-            //     return false;
-            // }
         }
     ]);

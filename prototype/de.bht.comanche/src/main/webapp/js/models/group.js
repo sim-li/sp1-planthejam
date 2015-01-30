@@ -56,6 +56,12 @@ angular.module('models')
             };
         };
 
+        /**
+         * Adds a user to this group.
+         *
+         * @method addUser
+         * @param {Object} user the user to be added
+         */
         Group.prototype.addUser = function(user) {
             this.members.push(new Member({
                 'user': user

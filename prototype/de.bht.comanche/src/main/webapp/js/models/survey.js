@@ -34,7 +34,7 @@ angular.module('models')
                 if (!(this instanceof Survey)) {
                     return new Survey(config);
                 }
-                var oneWeekLater = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000));
+                var nowInOneWeek = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000));
 
                 config = config || {};
                 this.oid = config.oid || '';
@@ -42,7 +42,7 @@ angular.module('models')
                 this.description = config.description || 'Say what it is all about';
                 this.type = config.type || SurveyType.ONE_TIME;
                 this.surveyDurationMins = config.surveyDurationMins || 0;
-                this.deadline = config.deadline ? new Date(config.deadline) : oneWeekLater;
+                this.deadline = config.deadline ? new Date(config.deadline) : nowInOneWeek;
                 this.frequencyDist = config.frequencyDist || 0;
                 this.frequencyUnit = TimeUnit[config.frequencyUnit] || TimeUnit.WEEK;
                 this.possibleTimePeriods = Model.importMany(TimePeriod, config.possibleTimePeriods);
@@ -136,46 +136,6 @@ angular.module('models')
                 return this.algoChecked && this.success == Status.NO;
             };
 
-            // Invite.prototype.addParticipantsFromGroup = function(group) {
-            //     if (group.modelId !== 'group') {
-            //         return;
-            //     }
-            //     group.members.forEach(function(member) {
-            //         this.addParticipant(member.user);
-            //     }, this);
-            // };
-
-            // TODO maybe not used -> to be implemented inviteCtrl?
-            // /**
-            //  * ...
-            //  *
-            //  * @method addParticipant
-            //  * @param {User} user the user to be added as participant
-            //  */
-            // Survey.prototype.addParticipant = function(user) {
-            //     this.invites.push(new Invite({
-            //         user: user /*, isHost: false, ignored: false  <<--  default values in constructor, no need to set explicitly (?) */
-            //     }));
-            // };
-
-            // TODO maybe not used -> to be implemented inviteCtrl?
-            // /**
-            //  * ...
-            //  *
-            //  * @method addParticipants
-            //  * @param {Group} group the group, which members shall be added as participants
-            //  */
-            // Survey.prototype.addParticipantsFromGroup = function(group) {
-            //     if (group.modelId !== 'group') {
-            //         return;
-            //     }
-            //     group.members.forEach(function(member) {
-            //         this.addParticipant(member.user);
-            //     }, this);
-            // };
-
-            //--------------------------------------------------------------------
-
 
             var randomChar = function() {
                 return String.fromCharCode('a'.charCodeAt(0) + Math.round(Math.random() * 25));
@@ -220,8 +180,7 @@ angular.module('models')
             Survey.getDummies = function(num) {
                 var dummies = [];
                 for (var i = 0; i < num; i++) {
-                    var dummy = Survey.getDummy();
-                    dummies.push(dummy);
+                    dummies.push(Survey.getDummy());
                 }
                 return dummies;
             };

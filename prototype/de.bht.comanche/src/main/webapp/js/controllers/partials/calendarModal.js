@@ -14,8 +14,14 @@ angular.module('myApp')
 
             'use strict';
 
+            /**
+             * Opens the calendar modal. When the modal is closed with success, it saves the resulting time periods,
+             * otherwise the data changes will be dismissed.
+             *
+             * @method openCalendarModal
+             */
             $scope.openCalendarModal = function() {
-                console.log("open calendar modal");
+                $log.log('open calendar modal');
                 var modalInstance = $modal.open({
                     templateUrl: 'calendarModalContent.html',
                     controller: 'calendarModalInstanceCtrl',
@@ -53,12 +59,18 @@ angular.module('myApp')
             $scope.allowedTimePeriods = allowedTimePeriods;
             $scope.resultingTimePeriods = resultingTimePeriods;
 
+            /**
+             * Closes the calendar instance while returning the resulting time periods.
+             * @method ok
+             */
             $scope.ok = function() {
                 $modalInstance.close($scope.resultingTimePeriods);
             };
 
+            /**
+             * Closes the calendar instance while dismissing all data changes.
+             */
             $scope.cancel = function() {
-                $log.debug($scope.allowedTimePeriods)
                 $modalInstance.dismiss('cancel');
             };
 
