@@ -22,7 +22,7 @@ angular.module('models')
 		var TimePeriod = function(config) {
 			if (!(this instanceof TimePeriod)) {
 				return new TimePeriod(config);
-			}
+			};
 			config = config || timePeriodNull;
 			this.startTime = validDate(config.startTime);
 			this.endTime = validDate(config.endTime);

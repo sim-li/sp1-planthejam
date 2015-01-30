@@ -117,7 +117,7 @@
             %ul
               %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: {isHost: false, isIgnored: '!YES'}"}
                 %strong{} {{invite.user.name}}
-                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}}) {{invite.isIgnored != 'NO' && 'not accepted'}}
+                (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}}) {{invite.isIgnored != 'NO' && '(not accepted)'}}
 
       #inviteDetails.col-md-6{"ng-hide" => "showSurveyDetails"}
         .panel.panel-default

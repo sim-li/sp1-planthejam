@@ -16,7 +16,7 @@ then
 fi
 
 ## run the tests ##
-node node_modules/karma/bin/karma start test/karma.conf.js  --single-run
+node node_modules/karma/bin/karma start test/karma.conf.ci.js  --single-run
 
 cd ../../..
 
