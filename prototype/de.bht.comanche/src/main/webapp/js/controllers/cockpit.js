@@ -37,6 +37,10 @@ angular.module('myApp')
                 $location.path('/survey');
             };
 
+            $scope.saveSelectedInvite = function() {
+                     return function(resultingTimePeriods) {
+                            $scope.selectedInvite.concreteAvailability = resultingTimePeriods;
+            }}
             /**
              * Selects the specified survey and loads its invites.
              *
