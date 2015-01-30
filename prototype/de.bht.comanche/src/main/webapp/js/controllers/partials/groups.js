@@ -5,6 +5,7 @@ angular.module('myApp')
 
             'use strict';
 
+            console.log('users: ', $scope.users)
             $scope.allElementsSelected = [];
             arrayUtil.forEach($scope.selectedSurvey.invites, function(invite) {
                 $scope.allElementsSelected.push(invite.user);

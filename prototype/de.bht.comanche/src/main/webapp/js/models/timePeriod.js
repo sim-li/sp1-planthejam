@@ -1,11 +1,12 @@
 /**
  * @module models
  *
- * @author Duc Tung Tong
  * @author Sebastian Dass&eacute;
+ * @author Duc Tung Tong
  */
 angular.module('models')
 	.factory('TimePeriod', ['arrayUtil', function(arrayUtil) {
+
 		'use strict';
 
 		/**
@@ -24,12 +25,12 @@ angular.module('models')
 				return new TimePeriod(config);
 			};
 			config = config || timePeriodNull;
-			this.startTime = validDate(config.startTime);
-			this.endTime = validDate(config.endTime);
+			this.startTime = getValidDateFrom(config.startTime);
+			this.endTime = getValidDateFrom(config.endTime);
 		};
 
-		var validDate = function(date) {
-			return date == undefined ? new Date() : new Date(date)
+		var getValidDateFrom = function(date) {
+			return date == undefined ? new Date() : new Date(date);
 		};
 
 		/**

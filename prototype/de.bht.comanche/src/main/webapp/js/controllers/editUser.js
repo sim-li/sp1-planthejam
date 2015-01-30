@@ -23,7 +23,6 @@ angular.module('myApp')
              * @method saveEditedUser
              */
             $scope.saveEditedUser = function() {
-                console.log("user : ", $scope.user);
                 restService.updateUser($scope.user)
                     .then(function(success) {
                         $scope.user = new User(success);
@@ -57,6 +56,11 @@ angular.module('myApp')
                     });
             };
 
+            /**
+             * Saves the general availability of the user.
+             *
+             * @method saveGeneralAvailability
+             */
             $scope.saveGeneralAvailability = function() {
                 return function(resultingTimePeriods) {
                     $scope.user.generalAvailability = resultingTimePeriods;

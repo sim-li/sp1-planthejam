@@ -4,7 +4,7 @@
  * @author Sebastian Dass&eacute;
  */
 angular.module('models')
-    .factory('Member', ['User', function(User) {
+    .factory('Member', ['arrayUtil', 'User', function(arrayUtil, User) {
 
         'use strict';
 
@@ -62,9 +62,12 @@ angular.module('models')
                 return [];
             }
             var members = [];
-            for (var i = 0; i < membersToExport.length; i++) {
-                members.push(membersToExport[i].doExport());
-            }
+            // for (var i = 0; i < membersToExport.length; i++) {
+            //     members.push(membersToExport[i].doExport());
+            // }
+            arrayUtil.forEach(membersToExport, function(ele) {
+                members.push(ele.doExport());
+            });
             return members;
         };
 

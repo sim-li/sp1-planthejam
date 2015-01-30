@@ -111,9 +111,6 @@
             %span{"ng-if" => "!selectedSurvey.hasParticipants()"}
               %ul
                 %li{} No participant was invited.
-            / %span{"ng-if" => "selectedSurvey.hasParticipants() && hasNoAcceptation()"}
-            /   %ul
-            /     %li{} No participant has accepted!
             %ul
               %li{"ng-repeat" => "invite in selectedSurvey.invites | filter: {isHost: false, isIgnored: '!YES'}"}
                 %strong{} {{invite.user.name}}
