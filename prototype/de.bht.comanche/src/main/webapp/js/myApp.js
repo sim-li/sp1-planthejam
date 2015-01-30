@@ -1,10 +1,7 @@
 'use strict';
 
 /**
- * Provides the webapp. Also has:
- * - routes
- * - directives
- * ...
+ * Provides the webapp for Plan The Jam.
  *
  * @module myApp
  * @main
@@ -135,8 +132,6 @@ angular.module('myApp', ['constants', 'models', 'ngRoute', 'rest', 'ui.bootstrap
                 allowedTimePeriods: '=allowed',
                 resultingTimePeriods: '=resulting',
                 save: '&'
-                    /*,
-                                    selected: '='*/
             },
             templateUrl: 'partials/calendarModal.html',
             controller: 'calendarModalCtrl'
