@@ -1,24 +1,26 @@
 package de.bht.comanche.logic;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * A data type for time periods.
+ * A general data type for time periods, describing a start and end time.
  * 
  * It is used to describe the possible time periods of a survey or the
  * availability of users.
  * <p>
- * Important note: This class needs to <strong>override hashCode and
- * equals</strong>, so that collections of LgTimePeriods are comparable. In the
- * current version timePeriods are considered equal when ...
+ * Seconds and milliseconds are not saved and automatically set to 0.
+ * <p>
+ * The class offers a <code>createEmptyTimePeriod()</code> method which creates a
+ * default time period with duration -1. It should always be used when
+ * expressing a non existent date, for example when a date could not
+ * be determined. EMPTY_TIMEPERIOD should only be used for comparison
+ * and caused problems because of its global scope before.
+ * <p>
  * 
+ * @author Simon Lischka
  * @author Duc Tung Tong
  */
 
@@ -26,20 +28,43 @@ import javax.persistence.TemporalType;
 public class LgTimePeriod {
 
 	private static final long serialVersionUID = 1L;
-	private final String DATE_PATTERN = "yyyy.MM.dd G HH:mm z";
-	private final DateFormat df = new SimpleDateFormat(DATE_PATTERN);
 
+	/**
+	 * The <code>start time</code> of the described time period
+	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
-
+	/**
+	 * The <code>end time</code> of the described time period
+	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
 
+	/**
+	 * An empty time period 
+	 */
 	public static final LgTimePeriod EMPTY_TIMEPERIOD = createEmptyTimePeriod();
 
-	public LgTimePeriod() {
+	/**
+	 * Empty default constructor
+	 */
+	public LgTimePeriod() {}
+
+	/**
+	 * Copy constructor
+	 * @param other A different time period
+	 */
+	public LgTimePeriod(final LgTimePeriod other) {
+		this.startTime = other.startTime;
+		this.endTime = other.endTime;
 	}
 
+	/**
+	 * Creates an empty <code>time period</code> with a duration of
+	 * -1 minutes. Use this to express a not existent <code>time period</code>.
+	 * 
+	 * @return A non existent time period
+	 */
 	public static final LgTimePeriod createEmptyTimePeriod() {
 		final LgTimePeriod emptyTimePeriod = new LgTimePeriod();
 		emptyTimePeriod.setStartTime(new Date(0));
@@ -47,11 +72,13 @@ public class LgTimePeriod {
 		return emptyTimePeriod;
 	}
 
-	public LgTimePeriod(final LgTimePeriod other) {
-		this.startTime = other.startTime;
-		this.endTime = other.endTime;
-	}
-
+	/**
+	 * Determines whether this <code>time period</code> is empty.
+	 * This is when it is equal to LgTimePeriod.EMPTY_TIMEPERIOD and 
+	 * has a duration of -1.
+	 * 
+	 * @return True when time period is empty
+	 */
 	public boolean isNull() {
 		return this.equals(EMPTY_TIMEPERIOD);
 	}
@@ -60,28 +87,49 @@ public class LgTimePeriod {
 		return this.startTime;
 	}
 
+	/**
+	 * Set the start time. Cuts off seconds and milliseconds by setting
+	 * them to 0.
+	 * 
+	 * @param startTime to be set
+	 * @return This time period
+	 */
 	public LgTimePeriod setStartTime(final Date startTime) {
 		this.startTime = cutOffSeconds(startTime);
 		return this;
 	}
+	
+	public Date getEndTime() {
+		return endTime;
+	}
 
-	private Date cutOffSeconds(final Date startTime) {
-		Calendar cal = Calendar.getInstance(); // locale-specific
-		cal.setTime(startTime);
+	/**
+	 * Set the end time. Cuts off seconds and milliseconds by setting
+	 * them to 0.
+	 * 
+	 * @param endTime to be set
+	 * @return This time period
+	 */
+	public LgTimePeriod setEndTime(Date endTime) {
+		this.endTime = cutOffSeconds(endTime);
+		return this;
+	}
+
+	/**
+	 * Sets seconds and milliseconds of the given <code>time</code> to null
+	 * and returns the result.
+	 * 
+	 * @param time A date with seconds and milliseconds
+	 * @return A date with nulled out seconds and milliseconds
+	 */
+	private Date cutOffSeconds(final Date time) {
+		final Calendar cal = Calendar.getInstance(); // locale-specific
+		cal.setTime(time);
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.set(Calendar.SECOND, 0);
 		return cal.getTime();
 	}
 
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public LgTimePeriod setEndTime(Date endTime) {
-		this.endTime = cutOffSeconds(endTime);
-		return this;
-	}
-	
 	@Override
 	public String toString() {
 		return String.format("LgTimePeriod [startTime=%s, endTime=%s]",
@@ -119,12 +167,4 @@ public class LgTimePeriod {
 			return false;
 		return true;
 	}
-
-	public String formatWithNullCheck(Date date) {
-		if (date == null) { 
-			return null;
-		}
-		return df.format(date);
-	}
-	
 }
