@@ -32,6 +32,7 @@ import de.bht.comanche.persistence.DaObject;
  * Table contains Survey data
  * A survey connects the invite to the time period.
  *
+ * @author Simon Lischka
  * @author Duc Tung Tong
  */
 @Entity
@@ -94,7 +95,7 @@ public class LgSurvey extends DaObject {
 	 * The time period that will be determined after the deadline is reached.
 	 * At this point the date determination algorithm will check for such a time period, which then has to be confirmed by the host of the survey.
 	 */
-	private LgTimePeriod determinedTimePeriod; // TODO check if it works ok with the database
+	private LgTimePeriod determinedTimePeriod; 
 
 	/**
 	 * A tribool flag indicating whether the host has marked the survey as successful or not or if it is still undecided.
@@ -112,7 +113,7 @@ public class LgSurvey extends DaObject {
 	/**
 	 * Invites which are sent to participants of the survey
 	 */
-	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // SEB: changed to fetch eager to get ReInviteService.getSurveyInvites working
+	@OneToMany(mappedBy="survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LgInvite> invites;
 
 	/**
@@ -125,23 +126,59 @@ public class LgSurvey extends DaObject {
 		this.success = LgStatus.UNDECIDED;
 	}
 
-	public LgInvite getInviteByParticipantName(final String name) {
-		for (LgInvite invite: this.invites) {
-			if (invite.getUser().getName().equals(name)) {
-				return invite;
-			}
-		}
-		return null;
-		//@TODO Throw multex exception
-	}
 	
 	/**
-	 * Returns all user that were invited in
-	 * a survey.
-	 * 
-	 * For unit testing.
-	 * 
+	 * A very simple algorithm that just filters out the intersection of the
+	 * possibleTimePeriods of the survey and all availableTimePeriods of the
+	 * invites. The determinedTimePeriod is simply the first LgTimePeriod in
+	 * the filtered list or null if the list was empty.
 	 */
+	public void evaluate() {
+		this.determinedTimePeriod = LgTimePeriod.createEmptyTimePeriod();
+		boolean someOneAccepted = false;
+		final Set<LgTimePeriod> matchesFromUsers = new HashSet<LgTimePeriod>();
+		matchesFromUsers.addAll(this.getPossibleTimePeriods());
+		for (LgInvite inv : this.invites) {
+			if (inv.getIsHost() == true ||inv.getConcreteAvailability().isEmpty()) {
+				continue;
+			}
+			final Set<LgTimePeriod> cAvails = inv.getConcreteAvailability();
+			if (inv.getIsIgnored() == LgStatus.NO) {
+				matchesFromUsers.retainAll(cAvails);
+				someOneAccepted = true;
+			}
+		}
+		this.algoChecked = true;
+		if (!someOneAccepted) {
+			return;
+		}
+		if (matchesFromUsers.iterator().hasNext()) {
+			this.determinedTimePeriod = matchesFromUsers.iterator().next();
+		}
+	}
+	
+
+	/** 
+	 * Current system time
+	 * @return a date
+	 */
+	private Date now() {
+		return new Date();
+	}
+
+	/**
+	 * Determines whether a surveys deadline is over
+	 * and it is still open for evaluation.
+	 * 
+	 * @return true if survey should be evaluated
+	 */
+	@JsonIgnore
+	public boolean shouldBeEvaluated() {
+		return  this.deadline != null && 
+				this.deadline.before(now()) &&
+                !this.algoChecked &&
+                this.success == LgStatus.UNDECIDED;
+	}
 	
 	/**
 	 * Returns all users that were invited in a survey.
@@ -151,7 +188,7 @@ public class LgSurvey extends DaObject {
 	 * @return Participants of a survey
 	 */
 	public List<LgUser> getParticipants() {
-		List<LgUser> participants = new ArrayList<LgUser>();
+		final List<LgUser> participants = new ArrayList<LgUser>();
 		for (LgInvite invite : this.invites) {
 			if (!invite.getIsHost()) {
 				participants.add(invite.getUser());
@@ -287,53 +324,23 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 
-	private Date now() {
-		return new Date();
-	}
-
-	@JsonIgnore
-	public boolean shouldBeEvaluated() {
-		return  this.deadline != null && 
-				this.deadline.before(now()) &&
-                !this.algoChecked &&
-                this.success == LgStatus.UNDECIDED;
-	}
 
 	/**
-	 * A very simple algorithm that just filters out the intersection of the
-	 * possibleTimePeriods of the survey and all availableTimePeriods of the
-	 * invites. The determinedTimePeriod is simply the first LgTimePeriod in
-	 * the filtered list or null if the list was empty.
+	 * Returns all user that were invited in
+	 * a survey.
+	 * 
+	 * For unit testing.
+	 * 
 	 */
-	public void evaluate() {
-		this.determinedTimePeriod = LgTimePeriod.createEmptyTimePeriod();
-		boolean someOneAccepted = false;
-		final Set<LgTimePeriod> matchesFromUsers = new HashSet<LgTimePeriod>();
-		matchesFromUsers.addAll(this.getPossibleTimePeriods());
-		for (LgInvite inv : this.invites) {
-			if (inv.getIsHost() == true ||inv.getConcreteAvailability().isEmpty()) {
-				continue;
-			}
-			final Set<LgTimePeriod> cAvails = inv.getConcreteAvailability();
-			if (inv.getIsIgnored() == LgStatus.NO) {
-				matchesFromUsers.retainAll(cAvails);
-				someOneAccepted = true;
+	public LgInvite getInviteByParticipantName(final String name) {
+		for (LgInvite invite: this.invites) {
+			if (invite.getUser().getName().equals(name)) {
+				return invite;
 			}
 		}
-		this.algoChecked = true;
-		if (!someOneAccepted) {
-			return;
-		}
-		if (matchesFromUsers.iterator().hasNext()) {
-			this.determinedTimePeriod = matchesFromUsers.iterator().next();
-		}
+		return null;
 	}
 	
-	
-	// W.I.P.> 
-	//	public List<LgTimePeriod> getAllConcreteAvailabilities() {
-	//		return this.findManyByKey(LgInvite.class, "SURVEY_OID", this.getOid());
-	//	}
 	
 	@Override
 	public int hashCode() {
@@ -528,19 +535,6 @@ public class LgSurvey extends DaObject {
 		return this;
 	}
 
-	/**
-	 * Removed invites property - leads to stack overflow error.
-	 */
-	@Override
-	public String toString() {
-		return String
-				.format("LgSurvey [name=%s, description=%s, type=%s, durationMins=%s, deadline=%s, frequencyDist=%s, frequencyUnit=%s, possibleTimePeriods=%s, determinedTimePeriod=%s, success=%s, algoChecked=%s, oid=%s, pool=%s]",
-						name, description, type, surveyDurationMins, deadline,
-						frequencyDist, frequencyUnit, possibleTimePeriods,
-						determinedTimePeriod, success, algoChecked, oid,
-						pool);
-	}
-
 	public LgSurvey removeInvite(LgInvite invite) {
 		invites.remove(invite);
 		return this;
@@ -553,5 +547,18 @@ public class LgSurvey extends DaObject {
 
 	public boolean getAlgoChecked() {
 		return this.algoChecked;
+	}
+	
+	/**
+	 * Removed invites property - leads to stack overflow error.
+	 */
+	@Override
+	public String toString() {
+		return String
+				.format("LgSurvey [name=%s, description=%s, type=%s, durationMins=%s, deadline=%s, frequencyDist=%s, frequencyUnit=%s, possibleTimePeriods=%s, determinedTimePeriod=%s, success=%s, algoChecked=%s, oid=%s, pool=%s]",
+						name, description, type, surveyDurationMins, deadline,
+						frequencyDist, frequencyUnit, possibleTimePeriods,
+						determinedTimePeriod, success, algoChecked, oid,
+						pool);
 	}
 }

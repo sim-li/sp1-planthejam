@@ -89,47 +89,13 @@ public class LgUser extends DaObject {
 		this.gravUtils = new LgGravatarUtils();
 	}
 
-	public LgInvite getInviteBySurveyName(final String name) {
-		for (LgInvite invite : invites) {
-			if (invite.getSurvey().getName() == name) {
-				return invite;
-			}
-		}
-		throw create(InviteNotFoundByNameExc.class, name, this.getName());
-	}
 	/**
 	 * Could not find invite with name {0} of user {1}.
 	 */
 	@SuppressWarnings("serial")
 	public static final class InviteNotFoundByNameExc extends multex.Exc {}
-
-	public LgSurvey getSurveyByName(final String name) {
-		for (LgInvite invite : invites) {
-			final LgSurvey survey = invite.getSurvey();
-			if (survey.getName() == name) {
-				return survey;
-			}
-		}
-		throw create(SurveyNotFoundByNameExc.class, name, this.getName());
-	}
-	/**
-	 * Could not find survey with name {0} of user {1}.
-	 */
-	@SuppressWarnings("serial")
-	public static final class SurveyNotFoundByNameExc extends multex.Exc {}
-	
 	public void deleteOtherUserAccount(final LgUser user) {
 		this.findOneByKey(LgUser.class, "oid", user.getOid()).delete();
-	}
-
-	/**
-	 * Delete LgInvite by provided oid.
-	 *
-	 * @param inviteOid
-	 *            The LgInvite oid.
-	 */
-	public void deleteInvite(final long inviteOid) {
-		getInvite(inviteOid).delete();
 	}
 	
 	/**
@@ -142,6 +108,17 @@ public class LgUser extends DaObject {
 		return saveUnattached(group);
 	}
 
+
+	/**
+	 * Delete LgInvite by provided oid.
+	 *
+	 * @param inviteOid
+	 *            The LgInvite oid.
+	 */
+	public void deleteInvite(final long inviteOid) {
+		getInvite(inviteOid).delete();
+	}
+	
 	/**
 	 * Delete LgGroup by provided oid.
 	 * @param groupOid The LgGroup oid.
@@ -150,20 +127,7 @@ public class LgUser extends DaObject {
 		this.getGroup(groupOid).delete();
 	}
 
-	/**
-	 * Returns LgGroup by provided oid.
-	 * @param groupOid The LgGroup oid.
-	 * @return The found LgGroup
-	 */
-	public LgGroup getGroup(final long groupOid) {
-		return this.findOneByKey(LgGroup.class, "OID", groupOid);
-	}
 	
-	@JsonIgnore
-	public List<LgGroup> getGroups() {
-		return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
-	}
-
 	public LgGroup updateGroup(final LgGroup other){
 		if (other.getOid() <= 0) {
 			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
@@ -172,7 +136,6 @@ public class LgUser extends DaObject {
 		group.updateWith(other);
 		return saveUnattached(other);
 	}
-
 	@SuppressWarnings("serial")
 	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
 
@@ -186,20 +149,7 @@ public class LgUser extends DaObject {
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
 	}
 
-	/**
-	 * Generates icon url from classes internal email Gravatar will deliver a
-	 * default icon if no email given.
-	 */
-	public String getIconurl() {
-
-		if (email != null) {
-			iconurl = gravUtils.getUserUrl(email);
-		} else {
-			iconurl = gravUtils.getUserUrl(name);
-		}
-		return iconurl;
-	}
-
+	
 	public void setIconurl(String iconurl) {
 		this.iconurl = iconurl;
 	}
@@ -223,7 +173,6 @@ public class LgUser extends DaObject {
 	 *
 	 * @return The list with LgTimePeriods.
 	 */
-
 	public Set<LgTimePeriod> getGeneralAvailability() {
 		return this.generalAvailability;
 	}
@@ -248,14 +197,37 @@ public class LgUser extends DaObject {
 		this.invites.remove(invite);
 	}
 
+	/**
+	 * Retrieves survey by OID.
+	 * 
+	 * This method executes a JPA query and returns an attached entity.
+	 * 
+	 * @param oid
+	 * @return Survey from Database
+	 * @throws SurveyNotFoundByNameExc
+	 */
 	public LgSurvey getSurvey(final Long oid) {
 		final LgSurvey survey = findOneByKey(LgSurvey.class, "OID", oid);
 		if (survey != null) {
 			return attachPoolFor(survey);
 		}
-		return null; // TODO: Throw MULTEX exception
+		throw create(SurveyNotFoundByNameExc.class, oid, this.getName());
 	}
+	/**
+	 * Could not find survey with oid {0} of user {1}.
+	 */
+	@SuppressWarnings("serial")
+	public static final class SurveyNotFoundByOidExc extends multex.Exc {}
 
+
+	/**
+	 * Retrieves all surveys of the user that were fetched
+	 * eagerly.
+	 * 
+	 * These are the surveys where the user is in the host role.
+	 * 
+	 * @return Survey fetched with user class
+	 */
     @JsonIgnore
 	public List<LgSurvey> getSurveys() {
 		List<LgSurvey> surveys = new ArrayList<LgSurvey>();
@@ -267,11 +239,26 @@ public class LgUser extends DaObject {
 		return surveys;
 	}
 
+    /**
+     * Returns all invites that were fetched eagerly.
+	 * 
+	 * NOTE: The host invite is not filtered out in this method.
+	 * 
+     * @return List of invites
+     */
     @JsonIgnore
 	public List<LgInvite> getInvites() {
 		return this.invites;
 	}
 
+    /**
+     * Returns all invites that are linked to a survey.
+     * 
+     * This includes the host invite.
+     * 
+     * @param oid of the survey
+     * @return list of invites contained in survey
+     */
 	public List<LgInvite> getInvitesForSurvey(final Long oid) {
 		return findManyByKey(LgInvite.class, "SURVEY_OID", oid);
 	}
@@ -284,12 +271,21 @@ public class LgUser extends DaObject {
      */
     public LgSurvey saveSurvey(final LgSurvey survey) {
             final LgSurvey persistedSurvey = saveUnattached(
-            		addSurveyForHost(survey)
+            		prepareUnpersistedSurvey(survey)
             		);
             return persistedSurvey;
     }
     
-    public LgSurvey addSurveyForHost(final LgSurvey survey) {
+    
+    /**
+     * Processes a fresh survey coming form the client 
+     * by adding the survey reference to the invites
+     * and setting the host invite with the currently logged in user account.
+     * 
+     * @param survey to be prepared
+     * @return survey with wired invites
+     */
+    public LgSurvey prepareUnpersistedSurvey(final LgSurvey survey) {
         survey.addHost(this);
         for (int i = 0; i < survey.getInvites().size(); i++) {
                 final LgInvite invite = survey.getInviteAt(i);
@@ -301,6 +297,13 @@ public class LgUser extends DaObject {
         return survey;
     }
     
+    /**
+     * Updates a persisted survey with the new data coming from client.
+     * 
+     * @param other Dirty survey
+     * @return Persisted survey 
+     * @throws UpdateWithUnpersistedSurveyExc
+     */
 	public LgSurvey updateSurvey(final LgSurvey other) {
 		if (other.getOid() <= 0) {
 			throw create(UpdateWithUnpersistedSurveyExc.class, other.getOid());
@@ -309,7 +312,6 @@ public class LgUser extends DaObject {
 		survey.updateWith(other);
 		return saveUnattached(other);
 	}
-
 	/**
 	 *  The survey with oid "{0}" seems to be unpersisted. You can only
 	 *  update surveys you have retrieved from the server before.
@@ -317,6 +319,12 @@ public class LgUser extends DaObject {
 	@SuppressWarnings("serial")
 	public static final class UpdateWithUnpersistedSurveyExc extends multex.Failure {}
 
+	/**
+	 * Deletes a survey by removing all references in the surveys invites
+	 * and then deleting them one by one.
+	 * 
+	 * @param oid of the survey to be deleted
+	 */
 	public void deleteSurvey(final long oid) {
 		List<LgInvite> invites = new ArrayList<LgInvite>();
 		invites.addAll(this.findManyByKey(LgInvite.class, "survey_oid", oid));
@@ -346,19 +354,67 @@ public class LgUser extends DaObject {
 		
 	}
 	
-//	public void deleteAllInvites() {
-//		List<LgInvite> invites = new ArrayList<LgInvite>();
-//		invites.addAll(this.findManyByKey(LgInvite.class, "user_oid", this.getOid()));
-//		for (LgInvite invite : invites) {
-//			invite.setSurvey(null);
-//			invite.setUser(null);
-//			invite.delete();
-//		}
-//	}
 	
+	public LgSurvey getSurveyByName(final String name) {
+		for (LgInvite invite : invites) {
+			final LgSurvey survey = invite.getSurvey();
+			if (survey.getName() == name) {
+				return survey;
+			}
+		}
+		throw create(SurveyNotFoundByNameExc.class, name, this.getName());
+	}
+	
+	/**
+	 * Returns LgGroup by provided oid.
+	 * @param groupOid The LgGroup oid.
+	 * @return The found LgGroup
+	 */
+	public LgGroup getGroup(final long groupOid) {
+		return this.findOneByKey(LgGroup.class, "OID", groupOid);
+	}
+
+	@JsonIgnore
+	public List<LgGroup> getGroups() {
+		return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
+	}
+	
+	/**
+	 * Generates icon url from classes internal email Gravatar will deliver a
+	 * default icon if no email given.
+	 */
+	public String getIconurl() {
+
+		if (email != null) {
+			iconurl = gravUtils.getUserUrl(email);
+		} else {
+			iconurl = gravUtils.getUserUrl(name);
+		}
+		return iconurl;
+	}
+	/**
+	 * Could not find survey with name {0} of user {1}.
+	 */
+	@SuppressWarnings("serial")
+	public static final class SurveyNotFoundByNameExc extends multex.Exc {}
+	
+	public LgInvite getInviteBySurveyName(final String name) {
+		for (LgInvite invite : invites) {
+			if (invite.getSurvey().getName() == name) {
+				return invite;
+			}
+		}
+		throw create(InviteNotFoundByNameExc.class, name, this.getName());
+	}
+
+	/**
+	 * Retrieves all the invites with the user in participant role.
+	 * 
+	 * @return List of invites
+	 */
 	@JsonIgnore
 	public List<LgInvite> getInvitesAsParticipant() {
-		List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
+		final List<LgInvite> filteredInvites = new ArrayList<LgInvite>();
 		for (LgInvite invite : this.invites) {
 			if (!invite.getIsHost()) {
 				filteredInvites.add(invite);
@@ -369,7 +425,7 @@ public class LgUser extends DaObject {
 
 	/**
 	 * Saves an invite for the user.
-//	 * 
+	 *
 	 * @param invite to be saved
 	 * @return invite with OID
 	 */
@@ -425,6 +481,8 @@ public class LgUser extends DaObject {
     /**
      * Notifies all participants of a survey of the outcome by
      * sending them a message.
+     * 
+     * Note: Currently not used.
      *
      * Should be triggered by rest path.
      *
@@ -543,7 +601,6 @@ public class LgUser extends DaObject {
 		 this.messages = messages;
 	 }
 
-	//Removed invites from toString method (Causes stack overflow error)
 	@Override
 	public String toString() {
 		return String

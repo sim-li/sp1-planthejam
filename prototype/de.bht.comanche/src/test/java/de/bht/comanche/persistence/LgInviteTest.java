@@ -21,6 +21,13 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.rest.ReErrorMessage;
 import de.bht.comanche.rest.ReServerException;
 
+/**
+ * 
+ * Tests operations on invite class
+ * 
+ * @author Simon Lischka
+ *
+ */
 public class LgInviteTest {
 	private TestUtils testUtils;
 	private LgUser alice;

@@ -6,12 +6,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import de.bht.comanche.persistence.DaObject;
-
+/**
+ * Representation of a message send to a user.
+ * 
+ * NOTE: This class is currently not in use.
+ * 
+ * @author Simon Lischka
+ *
+ */
 @Embeddable
 public class LgMessage {
 	@ManyToOne
+	/**
+	 * User that has the message
+	 */
 	private LgUser user;
 	
+	/**
+	 * String message text
+	 */
 	public String messageText;
 	
 	public String getMessageText() {

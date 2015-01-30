@@ -14,6 +14,13 @@ import org.junit.Test;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 
+/**
+ * 
+ * Time Period tests.
+ * 
+ * @author Simon Lischka
+ *
+ */
 public class LgSurveyTimePeriodsTest {
 	private TestUtils testUtils = new TestUtils();
 	private LgSurvey surveyForEvaluation;

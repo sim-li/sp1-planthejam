@@ -15,7 +15,13 @@ import javax.persistence.Persistence;
 import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.logic.LgUser;
-
+/**
+ * 
+ * Common methods for testing.
+ * 
+ * @author Simon Lischka
+ *
+ */
 public class TestUtils {
 	
 	public static void resetJPADatabase() {

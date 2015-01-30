@@ -15,6 +15,13 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgMessage;
 import static org.fest.assertions.api.Assertions.assertThat;
 
+/**
+ * 
+ * Tests the whole process of inviting participants and evaluating a survey.
+ * 
+ * @author Simon Lischka
+ *
+ */
 public class LgSurveyEvaluationTest {
 	private LgUser alice;
 	private LgUser bob;

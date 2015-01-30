@@ -22,6 +22,7 @@ import de.bht.comanche.persistence.DaObject;
  * Table contains Invite data
  * 
  * @author Duc Tung Tong
+ * @author Simon Lischka
  */
 @Entity
 @Table(name = "invite")
@@ -76,16 +77,6 @@ public class LgInvite extends DaObject{
 			this.concreteAvailability.add(timePeriod);
 		}
 	}
-	
-	/*
-	 * -------------------------------------
-	 * -------------------------------------------------------
-	 * # get(), set() methods for data access
-	 * # hashCode(), toString()
-	 * --------------------------------------------------------------------------------------------
-	 */
-	
-	
 	
 	public Set<LgTimePeriod> getConcreteAvailability(){
 		return this.concreteAvailability;
@@ -145,7 +136,6 @@ public class LgInvite extends DaObject{
 	
 	@Override
 	public void delete() {
-		// Null violates not null constraint. 
 		this.user = null;
 		super.delete();
 	}

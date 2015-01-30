@@ -11,6 +11,12 @@ import org.junit.Test;
 import de.bht.comanche.logic.LgTimePeriod;
 import de.bht.comanche.persistence.TestUtils;
 
+/**
+ * Checks the test utils time period generator
+ * 
+ * @authorSimon Lischka
+ *
+ */
 public class TestUtilsTest {
 	@Test
 	public void testUtilTpCorrect() {

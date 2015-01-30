@@ -34,7 +34,7 @@ public class SurveyEvalTest {
 							"08.09.2005/00:30 -> 08.09.2005/01:30"
 					))
 			.setDeadline(testUtils.buildDate("30.01.2012/22:30"));
-		testSurvey = alice.addSurveyForHost(testSurvey);
+		testSurvey = alice.prepareUnpersistedSurvey(testSurvey);
 	}
 	
 	@Test

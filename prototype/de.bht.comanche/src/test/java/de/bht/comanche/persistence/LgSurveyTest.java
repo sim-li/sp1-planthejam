@@ -28,6 +28,12 @@ import de.bht.comanche.logic.LgUser;
 import de.bht.comanche.logic.LgInvite;
 import de.bht.comanche.persistence.DaHibernateJpaPool.DaFindOneByKeyExc;
 
+/**
+ * Basic survey operations.
+ * 
+ * @author Simon Lischka
+ *
+ */
 public class LgSurveyTest {
 	private LgUser alice;
 	private LgUser bob;
