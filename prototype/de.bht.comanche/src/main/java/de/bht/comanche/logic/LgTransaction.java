@@ -6,35 +6,38 @@ import de.bht.comanche.rest.ReErrorMessage;
 import de.bht.comanche.rest.ReServerException;
 import de.bht.comanche.rest.RestService;
 /**
- * Transaction template class for exception handling. 
+ * A transaction template class for exception handling. Exceptions ocurring
+ * during JPA transactions are automatically handled with MulTEx.
  * 
  * @author Simon Lischka
  *
- * @param <E> Return type
+ * @param <E> Object type of element to be returned by transaction
  */
 public abstract class LgTransaction<E> {
 	/**
-	 * Result of operation
+	 * Result of the JPA operation returned by operations in execute method.
 	 */
 	private final E result;
 	
 	/**
-	 * Session
+	 * The session for the transaction. A <code>JPA entity manager</code> is build and a 
+	 * new <code>pool</code> instance is provided for the transaction.
 	 */
-	private final LgSession session = new LgSession();
+	private final LgSession session;
 	
 	/**
-	 * Servelet Request
+	 * Servlet request, used to request user name.
 	 */
     private final HttpServletRequest request;	
-
     
     /**
-     * Sandwich operations
+     * Executes transaction specified in <code>execute</code> method and
+     * handles its exceptions.
      * 
-     * @param request
+     * @param request Servlet request containing user name for transaction
      */
 	public LgTransaction(final HttpServletRequest request) {
+		this.session = new LgSession();
 		this.request = request;
 	   	boolean success = false;
 		try {
@@ -54,21 +57,40 @@ public abstract class LgTransaction<E> {
 	}
 		
 	/**
-	 * Return result 
+	 * Returns result of JPA operation.
 	 * 
-	 * @return
+	 * @return Result returned in execute method
 	 */
 	public E getResult() {
 		return this.result;
 	}
 	
+	/**
+	 * Returns session that is initialized with this class, offers
+	 * non account specific operations.
+	 * 
+	 * @return A initialized session instance for a specific user.
+	 */
 	public LgSession getSession() {
 		return this.session;
 	}
 	
+	/**
+	 * Start session but returns user linked to it. The user contains
+	 * all operations specific to an account.
+	 * 
+	 * @return Logged in user with its operations
+	 */
 	public LgUser startSession() {
 		return this.session.startFor(RestService.getUserName(this.request));
 	}
 	
+	/**
+	 * Runs operations specified here and returns result of specified
+	 * type.
+	 * 
+	 * @return Result of operation 
+	 * @throws Exception
+	 */
 	public abstract E execute() throws Exception;
 }

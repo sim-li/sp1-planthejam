@@ -17,11 +17,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+
 import static multex.MultexUtil.create;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.bht.comanche.persistence.DaObject;
+import de.bht.comanche.rest.ReUserService.RestLoginUserFailure;
 
 /**
  * This entity class represents a user and serve methods for working with all
@@ -62,14 +64,23 @@ public class LgUser extends DaObject {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<LgInvite> invites;
 
+	/**
+	 * General availability of a user
+	 */
 	@ElementCollection(targetClass = LgTimePeriod.class, fetch = FetchType.EAGER)
 	@Column(name = "general_availability")
 	private Set<LgTimePeriod> generalAvailability;
 
+	/**
+	 * Messages of this user, currently not used
+	 */
 	@ElementCollection(targetClass = LgMessage.class, fetch = FetchType.EAGER)
 	@Column(name = "messages")
 	private Set<LgMessage> messages;
 
+	/**
+	 * Used to generate Gravatar urls by email or user name
+	 */
 	@Transient
 	final LgGravatarUtils gravUtils;
 
@@ -84,9 +95,13 @@ public class LgUser extends DaObject {
 				return invite;
 			}
 		}
-		return null;
-		// @TODO Throw Multex Exception
+		throw create(InviteNotFoundByNameExc.class, name, this.getName());
 	}
+	/**
+	 * Could not find invite with name {0} of user {1}.
+	 */
+	@SuppressWarnings("serial")
+	public static final class InviteNotFoundByNameExc extends multex.Exc {}
 
 	public LgSurvey getSurveyByName(final String name) {
 		for (LgInvite invite : invites) {
@@ -95,10 +110,14 @@ public class LgUser extends DaObject {
 				return survey;
 			}
 		}
-		return null;
-		// @TODO Throw Multex Exception
+		throw create(SurveyNotFoundByNameExc.class, name, this.getName());
 	}
-
+	/**
+	 * Could not find survey with name {0} of user {1}.
+	 */
+	@SuppressWarnings("serial")
+	public static final class SurveyNotFoundByNameExc extends multex.Exc {}
+	
 	public void deleteOtherUserAccount(final LgUser user) {
 		this.findOneByKey(LgUser.class, "oid", user.getOid()).delete();
 	}
@@ -113,7 +132,6 @@ public class LgUser extends DaObject {
 		getInvite(inviteOid).delete();
 	}
 	
-	//---------------------group methods---------------------------------	
 	/**
 	 * Save LgGroup for current user.
 	 * @param group The LgGroup to save.
@@ -167,7 +185,6 @@ public class LgUser extends DaObject {
 	public List<LgMember> search(final long groupId, final long userId) {
 		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
 	}
-//--------------------------------------------------------------------
 
 	/**
 	 * Generates icon url from classes internal email Gravatar will deliver a
@@ -196,8 +213,7 @@ public class LgUser extends DaObject {
 	 */
 	public boolean passwordMatchWith(final LgUser user) {
 		if (this.password == null) {
-			return false; // TODO should it be possible/allowed to have no
-							// password? if no -> should throw exception
+			return false; 
 		}
 		return this.password.equals(user.getPassword());
 	}
@@ -351,12 +367,26 @@ public class LgUser extends DaObject {
 		return filteredInvites;
 	}
 
+	/**
+	 * Saves an invite for the user.
+//	 * 
+	 * @param invite to be saved
+	 * @return invite with OID
+	 */
 	public LgInvite saveInvite(final LgInvite invite) {
 		return saveUnattached(invite);
 	}
 
+	/**
+	 * Update an existing invite.
+	 * 
+	 * Currently forwards the request to saveInvite. Prepared
+	 * to treat update and save operations seperately .
+	 * 
+	 * @param invite to be updated
+	 * @return Updated invite
+	 */
 	public LgInvite updateInvite(LgInvite invite) {
-		// REDUNDANT
 		return saveInvite(invite);
 	}
 

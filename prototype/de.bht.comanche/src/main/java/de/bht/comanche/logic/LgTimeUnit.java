@@ -1,7 +1,7 @@
 package de.bht.comanche.logic;
 
 /**
- *  Time Unit that can be used
+ * An enum representing DAY, WEEK AND MONTH.
  *  
  * @author Duc Tung Tong
  *

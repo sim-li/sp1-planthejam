@@ -62,14 +62,12 @@ public abstract class DaObject implements Serializable {
 		return this;
 	}
 	
-	//for DB test only
 	public <E extends DaObject> E saveUnattached(final E other) {
 		return attachPoolFor(other).save();
 	}
 
 	
 	@SuppressWarnings("serial")
-	// @TODO Write exception text
 	public static final class OwningPoolChangedExc extends multex.Exc {}
 
 	/**
@@ -168,7 +166,6 @@ public abstract class DaObject implements Serializable {
 			result = this.pool.findManyByTwoKeys(persistentClass, firstKeyFieldName, firstKey, secondKeyFieldName, secondKey);
 		} catch (final Exception ex) {
 			multex.Msg.printReport(System.err, ex);
-			// @TODO Throw MulTex exception when not found
 		}
 		return result;
 	}
