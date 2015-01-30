@@ -15,8 +15,11 @@
 
 	+ Linke Seite
 		++ Survey Tab: Liste von Terminumfrage was man selbst erzeugt hat.
-		++ Invite Tab: Liste von Einladungen zur Terminumfrage. Da hat man die Möglichkeiten die 				Terminumfrage zu acceptieren oder ignorieren. Beim Acceptieren muss man die 				konkrete Verfügbarkeiten eingeben.
-		++ Ignored Tab: Liste von Einladungen welche ignoriert wurden. Hier kann man die 							Terminumfrage wieder annehmen.
+		++ Invite Tab: Liste von Einladungen zur Terminumfrage. Da hat man die Möglichkeiten
+						die Terminumfrage zu acceptieren oder ignorieren. Beim Acceptieren muss man die
+						konkrete Verfügbarkeiten eingeben.
+		++ Ignored Tab: Liste von Einladungen welche ignoriert wurden. Hier kann man die
+						Terminumfrage wieder annehmen.
 		++ Messages: Benachrichtungen vom System wenn einen Termin ermittelt wird.
 
 	+ Rechte Seite
@@ -28,7 +31,7 @@
 				Um eigene Gruppe zu erstellen kann man auf "Edit Group" klicken.
 				Außerdem soll Benutzer Deadline und die verfügbare Zeiträume eingeben.
                 Terminumfragen können einmalig oder wiederholt sein. Sollen sie wiederholt stattfinden, dann kann die Frequenz der Wiederholung festgelegt werden.
-	+ Account : hier werden alle Informationen über Benutzer selbt angezeigt und Benutzer kann 				eigene Daten editieren.
+	+ Account : hier werden alle Informationen über Benutzer selbt angezeigt und Benutzer kann eigene Daten editieren.
 
 
 - Probleme
