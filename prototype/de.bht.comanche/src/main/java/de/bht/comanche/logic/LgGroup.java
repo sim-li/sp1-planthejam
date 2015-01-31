@@ -3,7 +3,6 @@ package de.bht.comanche.logic;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
 import de.bht.comanche.persistence.DaObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,7 +26,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "group")
 public class LgGroup extends DaObject{
 
-    private static final long serialVersionUID = 1L;
+    
+
+	private static final long serialVersionUID = 1L;
 
     /**
      * Column for a group name. Must not be null.
@@ -84,14 +84,6 @@ public class LgGroup extends DaObject{
             return this;
     }
 
-    public LgGroup updateWith(final LgGroup other) {
-        this.name = other.name;
-        this.user = other.user;
-        this.members = other.members;
-        this.iconurl = other.iconurl;
-        return this;
-    }
-
     /**
      * Generates a random art URL for the gravatar service
      * using the group name.
@@ -113,8 +105,8 @@ public class LgGroup extends DaObject{
     }
 
     /**
-     * Returns a list of LgUsers for specified group.
-     * @return The list of LgUsers.
+     * Returns list with LgUsers for specified group.
+     * @return The list with LgUsers.
      */
     @JsonIgnore
     public List<LgUser> getUsers() {
@@ -169,7 +161,50 @@ public class LgGroup extends DaObject{
     @Override
     public String toString() {
         return String.format(
-                "LgGroup [name=%s, user=%s, members=%s, oid=%s, pool=%s]",
-                name, user, members, oid, pool);
+                "LgGroup [name=%s, user=%s, oid=%s]",
+                name, user, oid);
     }
+    
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((iconurl == null) ? 0 : iconurl.hashCode());
+		result = prime * result + ((members == null) ? 0 : members.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LgGroup other = (LgGroup) obj;
+		if (iconurl == null) {
+			if (other.iconurl != null)
+				return false;
+		} else if (!iconurl.equals(other.iconurl))
+			return false;
+		if (members == null) {
+			if (other.members != null)
+				return false;
+		} else if (!members.equals(other.members))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
 }

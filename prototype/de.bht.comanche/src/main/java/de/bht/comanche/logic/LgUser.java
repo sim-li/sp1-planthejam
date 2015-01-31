@@ -98,16 +98,73 @@ public class LgUser extends DaObject {
 		this.findOneByKey(LgUser.class, "oid", user.getOid()).delete();
 	}
 	
-	/**
-	 * Save LgGroup for current user.
-	 * @param group The LgGroup to save.
-	 * @return The saved LgGroup.
-	 */
-	public LgGroup save(final LgGroup group) {
-		group.setUser(this).setForMember(group);
-		return saveUnattached(group);
-	}
+	//---------------------group methods---------------------------------	
+		/**
+		 * Save LgGroup for current user.
+		 * @param group The LgGroup to save.
+		 * @return The saved LgGroup.
+		 */
+		public LgGroup save(final LgGroup group) {
+			group.setUser(this).setForMember(group);
+			return saveUnattached(group);
+		}
 
+		/**
+		 * Delete LgGroup by provided oid.
+		 * @param groupOid The LgGroup oid.
+		 */
+		public void deleteGroup(final long groupOid) {
+			this.getGroup(groupOid).delete();
+		}
+		
+		/**
+		 * Delete LgMember by provided oid.
+		 * @param oid The LgMember oid.
+		 */
+		public void deleteMember(final long oid) {
+			this.findOneByKey(LgMember.class, "OID", oid).delete();
+		}
+		
+		/**
+		 * Delete member by provided group oid and user oid.
+		 * @param groupOid The LgGroup oid.
+		 * @param lgUserOid The LgUser oid.
+		 * @return
+		 */
+		public LgGroup deleteMember(final long groupOid, final long lgUserOid) {
+			final LgGroup group = this.getGroup(groupOid);
+			for (LgMember member : group.getMembers()){
+				if(member.getUser().getOid() == lgUserOid){
+					this.findOneByKey(LgMember.class, "OID", member.getOid()).delete();
+				}
+			}	
+			return getGroup(group.getOid());
+		}
+		
+		/**
+		 * Returns LgGroup by provided oid.
+		 * @param groupOid The LgGroup oid.
+		 * @return The found LgGroup
+		 */
+		public LgGroup getGroup(final long groupOid) {
+			return this.findOneByKey(LgGroup.class, "OID", groupOid);
+		}
+		
+		@JsonIgnore
+		public List<LgGroup> getGroups() {
+			return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
+		}
+
+		/**
+		 * Search LgMember object by group oid and user oid.
+		 * @param groupId The LgGroup oid.
+		 * @param userId The LgUser oid.
+		 * @return The found list with LgMember.
+		 */
+		public List<LgMember> search(final long groupId, final long userId) {
+			return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
+		}
+	//--------------------------------------------------------------------
 
 	/**
 	 * Delete LgInvite by provided oid.
@@ -118,38 +175,7 @@ public class LgUser extends DaObject {
 	public void deleteInvite(final long inviteOid) {
 		getInvite(inviteOid).delete();
 	}
-	
-	/**
-	 * Delete LgGroup by provided oid.
-	 * @param groupOid The LgGroup oid.
-	 */
-	public void deleteGroup(final long groupOid) {
-		this.getGroup(groupOid).delete();
-	}
-
-	
-	public LgGroup updateGroup(final LgGroup other){
-		if (other.getOid() <= 0) {
-			throw create(UpdateWithUnpersistedGroupExc.class, other.getOid());
-		}
-		final LgGroup group = findOneByKey(LgGroup.class, "OID", other.getOid());
-		group.updateWith(other);
-		return saveUnattached(other);
-	}
-	@SuppressWarnings("serial")
-	public static final class UpdateWithUnpersistedGroupExc extends multex.Failure {}
-
-	/**
-	 * Search LgMember object by group oid and user oid.
-	 * @param groupId The LgGroup oid.
-	 * @param userId The LgUser oid.
-	 * @return The found list with LgMember.
-	 */
-	public List<LgMember> search(final long groupId, final long userId) {
-		return search(LgMember.class, "GROUP_OID", groupId, "USER_OID", userId);
-	}
-
-	
+		
 	public void setIconurl(String iconurl) {
 		this.iconurl = iconurl;
 	}
@@ -348,7 +374,9 @@ public class LgUser extends DaObject {
 		for (final LgInvite invite : this.getInvites()) {
 			invite.setUser(null);
 		}
-		// Do the same with Groups!
+		for (LgGroup group : this.getGroups()){
+			this.deleteGroup(group.getOid());
+		}
 		// Child surveys + invites are not cascaded!
 		delete();
 		
@@ -363,20 +391,6 @@ public class LgUser extends DaObject {
 			}
 		}
 		throw create(SurveyNotFoundByNameExc.class, name, this.getName());
-	}
-	
-	/**
-	 * Returns LgGroup by provided oid.
-	 * @param groupOid The LgGroup oid.
-	 * @return The found LgGroup
-	 */
-	public LgGroup getGroup(final long groupOid) {
-		return this.findOneByKey(LgGroup.class, "OID", groupOid);
-	}
-
-	@JsonIgnore
-	public List<LgGroup> getGroups() {
-		return findManyByKey(LgGroup.class, "USER_OID", this.getOid());
 	}
 	
 	/**

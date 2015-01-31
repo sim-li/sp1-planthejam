@@ -5,6 +5,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import de.bht.comanche.persistence.DaObject;
 
 /**
@@ -16,7 +17,7 @@ import de.bht.comanche.persistence.DaObject;
 @Entity
 @Table(name = "member")
 public class LgMember extends DaObject{
-	
+
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -63,7 +64,38 @@ public class LgMember extends DaObject{
 
 	@Override
 	public String toString() {
-		return String.format("LgMember [group=%s, user=%s, oid=%s, pool=%s]",
-				group, user, oid, pool);
+		return String.format("LgMember [group=%s, user=%s, oid=%s]",
+				group, user, oid);
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((group == null) ? 0 : group.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LgMember other = (LgMember) obj;
+		if (group == null) {
+			if (other.group != null)
+				return false;
+		} else if (!group.equals(other.group))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
 	}
 }

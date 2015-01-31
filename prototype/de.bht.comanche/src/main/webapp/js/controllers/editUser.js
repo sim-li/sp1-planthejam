@@ -50,8 +50,8 @@ angular.module('myApp')
                 restService.deleteUser($scope.user)
                     .then(function(success) {
                         $log.log(success);
-                        restService.logout();
-                        $log.log('Account for ' + userName + ' was deleted.');
+                        // restService.logout();
+                        // $log.log('Account for ' + userName + ' was deleted.');
                         $location.path('/');
                     });
             };
