@@ -1,0 +1,29 @@
+%ptj-menu
+.container
+  .col-md-8.col-md-offset-2
+    .panel.panel-primary
+      .panel-body
+        .form-group
+          %label{:for => "inputName"} User name
+          .item-wrapper
+            %a#inputName{"editable-text" => "user.name", :href => "#"}
+              {{user.name}}
+        .form-group
+          %label{:for => "inputPassword"} Password
+          %input#inputPassword.form-control.col-lg-3{"ng-model" => "user.password", :placeholder => "8-20 letters", :required => "", :type => "password"}
+        .form-group
+          %label{:for => "inputEmail"} E-Mail
+          .item-wrapper
+            %a#inputEmail{"editable-text" => "user.email", :href => "#"}
+              {{user.email}}
+        .form-group
+          %label{:for => "inputTel"} Telephone
+          .item-wrapper
+            %input#inputTel.form-control.col-lg-3{"ng-model" => "user.tel", :placeholder => "Your phone number"}
+          %hr
+        %ptj-calendar-modal{"allowed" => "[]", "resulting" => "user.generalAvailability", "save" => "saveGeneralAvailability()"}
+      .panel-footer
+        %input#deleteUserBtn.btn.btn-danger{"ng-click" => "deleteUser()", :type => "button", :value => "Delete account"}
+        .input-group.pull-right
+          %input#cancelUserEditBtn.btn.btn-warning{"ng-click" => "cancelEditUser()", :type => "button", :value => "Cancel"}
+          %input#saveUserEditBtn.btn.btn-success{"ng-click" => "saveEditedUser()", :type => "button", :value => "Save changes"}

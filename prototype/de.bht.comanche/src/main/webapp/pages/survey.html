@@ -1,0 +1,91 @@
+<ptj-menu></ptj-menu>
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-10 col-md-offset-1'>
+      <div class='panel panel-primary'>
+        <div class='panel-heading'>Edit a survey for an event</div>
+        <div class='panel-body'>
+          <div class='row'>
+            <div class='col-md-8'>
+              <h2>
+                <div class='item-wrapper'>
+                  <a editable-text='selectedSurvey.name' href='#'>
+                    {{selectedSurvey.name}}
+                  </a>
+                </div>
+              </h2>
+              <h4>
+                <div class='item-wrapper'>
+                  <a editable-text='selectedSurvey.description' href='#'>
+                    {{selectedSurvey.description}}
+                  </a>
+                </div>
+              </h4>
+            </div>
+            <div class='col-md-4'>
+              <div class='row'>
+                <div class='btn-group pull-right'>
+                  <label btn-radio="'Once'" class='btn' ng-class="{'btn-primary' : selectedSurvey.type == 'ONE_TIME', 'btn-default' : selectedSurvey.type != 'ONE_TIME'}" ng-click='setOneTime()' ng-model='still_needs_a_model'>
+                    Once
+                  </label>
+                  <label btn-radio="'Repeatedly'" class='btn' ng-class="{'btn-primary' : selectedSurvey.type == 'RECURRING', 'btn-default' : selectedSurvey.type != 'RECURRING'}" ng-click='setRecurring()' ng-model='still_needs_a_model'>
+                    Repeatedly
+                  </label>
+                </div>
+              </div>
+              <div class='row' ng-show='isRecurring()'>
+                <div class='btn-group pull-right'>
+                  <input-group>
+                    <select class='form-control' ng-model='selectedSurvey.frequencyUnit' ng-options='opt for opt in TimeUnit._options'></select>
+                    <input class='form-control' min='0' ng-model='selectedSurvey.frequencyDist' placeholder='Distance' required='true' type='number'>
+                  </input-group>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class='row'>
+            <ptj-groups></ptj-groups>
+          </div>
+          <div class='row'>
+            <div class='col-lg-11'>
+              <span class='h4'>Deadline:</span>
+              <span class='dropdown'>
+                <a class='dropdown-toggle' data-target='#' data-toggle='dropdown' href='' id='dropdown2' role='button'>{{ selectedSurvey.deadline | date: 'yyyy-MM-dd HH:mm' }}</a>
+                <ul aria-labelledby='dLabel' class='dropdown-menu' role='menu'>
+                  <datetimepicker bs-datepicker='' data-date-format='dd-mm-yyyy' data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-ng-model='selectedSurvey.deadline' date-type='string' ng-required='true'></datetimepicker>
+                </ul>
+              </span>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-lg-11'>
+              <div class='h4'>Participants:</div>
+              <span id='surveyStatus' ng-if='!selectedSurvey.hasParticipants()'>
+                <ul>
+                  <li>None</li>
+                </ul>
+              </span>
+              <ul>
+                <li ng-repeat='invite in selectedSurvey.invites | filter: {isHost: false}'>
+                  <strong>{{invite.user.name}}</strong>
+                  (E-Mail: {{invite.user.email}}, Tel: {{invite.user.tel}})
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-lg-11'>
+              <ptj-calendar allowed='[]' resulting='selectedSurvey.possibleTimePeriods'></ptj-calendar>
+            </div>
+          </div>
+        </div>
+        <div class='panel-footer'>
+          <div class='input-group col-sm-offset-9'>
+            <button class='btn btn-default btn-sm' ng-click='cancel()' type='reset'>Cancel</button>
+            <button class='btn btn-primary btn-sm' ng-click='saveSurvey()' type='submit'>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

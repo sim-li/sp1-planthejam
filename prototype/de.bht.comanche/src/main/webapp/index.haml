@@ -1,0 +1,66 @@
+!!!
+%html
+  %head
+    %meta{:charset => "utf-8"}/
+    %meta{:name => "author", :content => "Sebastian Dassé"}/
+    %meta{:name => "author", :content => "Tong Duc Tung"}/
+    %title Plan The Jam
+    / Latest compiled and minified CSS
+    %link{:href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css", :rel => "stylesheet"}
+    / Optional theme
+    %link{:href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css", :rel => "stylesheet"}
+    %link{:href => "", :rel => "stylesheet", :type => "text/css"}
+    / Latest compiled and minified JavaScript
+    %link{:href => "bower_components/bootstrap/dist/css/bootstrap.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "bower_components/angular-xeditable/dist/css/xeditable.css", :rel => "stylesheet"}
+    %link{:href => "css/slider.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "bower_components/fullcalendar/dist/fullcalendar.css", :rel => "stylesheet", :type => "text/css"}
+    / TODO clean up duplicate or orphan CSS ->
+    %link{:href => "css/style.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "css/ptj.css", :rel => "stylesheet", :type => "text/css"}
+    / %link{:href => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href  => "bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css", :rel => "stylesheet", :type => "text/css"}
+    / for production
+    / MINIFIED VERSION OF THE LIBRARIES GO HERE
+    / for development
+    %script{:src => "bower_components/jquery/dist/jquery.min.js"}
+    %script{:src => "bower_components/jquery-ui/jquery-ui.min.js"}
+    %script{:src => "bower_components/angular/angular.js"}
+    %script{:src => "bower_components/angular-bootstrap/ui-bootstrap-tpls.js"}
+    %script{:src => "bower_components/angular-route/angular-route.js"}
+
+    / %script{:src => "bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js"}
+    %script{:src => "bower_components/moment/moment.js"}
+    %script{:src => "bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"}
+    %script{:src => "bower_components/angular-ui-calendar/src/calendar.js"}
+    %script{:src => "bower_components/fullcalendar/dist/fullcalendar.js"}
+    %script{:src => "bower_components/angular-ui-calendar/src/calendar.js"}
+    / May be unwise to mix normal bootstrap with angular ui bootstrap
+    %script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"}
+    %script{:src => "bower_components/angular-xeditable/dist/js/xeditable.js"}
+    %script{:src => "js/myApp.js"}
+    %script{:src => "js/controllers/ctrl.js"}
+    %script{:src => "js/controllers/cockpit.js"}
+    %script{:src => "js/controllers/editUser.js"}
+    %script{:src => "js/controllers/login.js"}
+    %script{:src => "js/controllers/survey.js"}
+    %script{:src => "js/controllers/partials/calendar.js"}
+    %script{:src => "js/controllers/partials/calendarModal.js"}
+    %script{:src => "js/controllers/partials/groups.js"}
+    %script{:src => "js/controllers/partials/menuCtrl.js"}
+    %script{:src => "js/controllers/partials/timeperiodSelector.js"}
+    %script{:src => "js/models/baseModel.js"}
+    %script{:src => "js/models/group.js"}
+    %script{:src => "js/models/member.js"}
+    %script{:src => "js/models/invite.js"}
+    %script{:src => "js/models/survey.js"}
+    %script{:src => "js/models/timePeriod.js"}
+    %script{:src => "js/models/user.js"}
+    %script{:src => "js/services/rest.js"}
+    %script{:src => "js/services/util.js"}
+    %script{:src => "js/util/constants.js"}
+    %script{:src => "js/util/ui/stateSwitcher.js"}
+  / define angular controller
+  %body{"ng-app" => "myApp", "ng-controller" => "ctrl", "ng-keydown" => "discardWarnings()"}
+    %div{"ng-view" => ""}
+    %err#error.error {{ warnings }}

@@ -1,0 +1,13 @@
+<form class='form-signin' name='loginForm' ng-submit='login(user)'>
+  <h2 class='form-signin-heading'>Welcome to Plan The Jam. Please log in.</h2>
+  <div>
+    <label for='inputName'>User name</label>
+    <input autofocus='' class='form-control' id='inputName' name='inputName' ng-model='user.name' placeholder='Your user name ...' required='' type='text'>
+    <label for='inputPassword'>Password</label>
+    <input class='form-control' id='inputPassword' name='inputPassword' ng-model='user.password' placeholder='8-20 characters' required='' type='password'>
+  </div>
+  <div>
+    <a href='#/register' id='registerLink' ng-click='toggleLoginDialog()'>Register</a>
+  </div>
+  <input class='btn btn-primary btn-block' id='loginBtn' type='submit' value='Login'>
+</form>

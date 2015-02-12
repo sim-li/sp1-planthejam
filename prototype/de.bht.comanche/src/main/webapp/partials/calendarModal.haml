@@ -1,0 +1,15 @@
+%script{:id => "calendarModalContent.html", :type => "text/ng-template"}
+  .modal-header
+    %h3.modal-title
+      Edit calendar
+  .modal-body
+    .row
+      %ptj-calendar{"allowed" => "allowedTimePeriods", "resulting" => "resultingTimePeriods"}
+  .modal-footer
+    %button.btn.btn-warning{"ng-click" => "cancel()"} Cancel
+    %button.btn.btn-primary{"ng-click" => "ok()"} OK
+
+.input-group
+  %input.btn.btn-primary.btn-sm{:type => "button", "ng-click" => "openCalendarModal()", :value => "Edit calendar"}
+/ %span{} allowed: {{ allowedTimePeriods }}
+/ %span{} resulting: {{ resultingTimePeriods }}

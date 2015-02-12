@@ -1,96 +1,147 @@
 package de.bht.comanche.rest;
 
+import static multex.MultexUtil.create;
+
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.NotFoundException;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-
-import de.bht.comanche.exceptions.DaInviteNotFoundException;
-import de.bht.comanche.exceptions.DaOidNotFoundException;
-import de.bht.comanche.exceptions.LgNoUserWithThisIdException;
+import javax.ws.rs.core.Context;
 import de.bht.comanche.logic.LgInvite;
+import de.bht.comanche.logic.LgSurvey;
 import de.bht.comanche.logic.LgTransaction;
-import de.bht.comanche.logic.LgTransactionWithList;
-import de.bht.comanche.logic.LgUser;
-import de.bht.comanche.persistence.DaInvite;
-import de.bht.comanche.persistence.DaUser;
+/**
+ * This class provide a LgInvite service as a network-accessible endpoint by using Representational State Transfer (RESTful) web service (JAX-RS). 
+ * Jersey implements support for the annotations defined in the specification and used in this class. Resources are identified by URIs, 
+ * which provide a global addressing space for resource and service discovery. The @Path annotation identifies the URI path template to which the 
+ * resource responds and is specified at the class or method level of a resource. 
+ * 
+ * @author Maxim Novichkov
+ *
+ */
+@Path("/invites")
+public class ReInviteService extends RestService {
 
-@Path("/invite/")
-public class ReInviteService extends ReService {
-	public ReInviteService() {
-		super();
-	}
-	@POST
-	@Path("getInvites")
+	/**
+	 * Returns the LgInvite specified by oid.
+	 * @param oid The LgInvite oid.
+	 * @param request The request information from HTTP service.
+	 * @return The LgInvite.
+	 * @exception RestGetInviteFailure if it was not possible to get invite for current user.
+	 */
+	@GET
+	@Path("/{oid}")
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject<LgInvite> getInvites(final LgUser userFromClient) {
-		final DaUser daUser0 = factory.getDaUser();
-		ReResponseObject<LgInvite> response = new LgTransactionWithList<LgInvite>(daUser0.getPool()) {
-			public List<LgInvite> executeWithThrows() throws Exception {
-				List<LgInvite> invites = null;
+	public LgInvite get(@PathParam("oid") final long oid, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgInvite>(request) {
+			@Override
+			public LgInvite execute() throws Exception {
+				final LgInvite result;
 				try {
-					LgUser lgUser = daUser0.find(userFromClient.getOid());
-					invites = lgUser.getInvites();
-				} catch (DaOidNotFoundException oid) {
-					throw new LgNoUserWithThisIdException();
+					result = startSession().getInvite(oid);//TODO change and implement the method
+				} catch (Exception ex) {
+					throw create(RestGetInviteFailure.class, ex, oid, getSession().getUser().getName());
 				}
-				return invites;
+				return result;
 			}
-		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
-		}
-		return response;
+		}.getResult();
 	}
 
-	@Path("save")
+	/**
+	 * Could not get invite with oid "{0}" for user "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetInviteFailure extends multex.Failure {}
+
+	/**
+	 * Returns the list of all LgInvites for current user.
+	 * @param request The request information from HTTP service.
+	 * @return The list of invites.
+	 * @exception RestGetInvitesFailure if it was not possible to get list of invites for current user.
+	 */
+	@GET
+	@Path("/")
+	@Consumes("application/json")
+	@Produces({ "application/json" })
+	public List<LgInvite> get(@Context final HttpServletRequest request) {
+		return new LgTransaction<List<LgInvite>>(request) {
+			@Override
+			public List<LgInvite> execute() throws Exception {
+				final List<LgInvite> result;
+				try {
+					result = startSession().getInvitesAsParticipant();//TODO change and implement the method
+				} catch (Exception ex) {
+					throw create(RestGetInvitesFailure.class, ex, getSession().getUser().getName());
+				}
+				return result;
+			}
+		}.getResult();
+	}
+	
+	/**
+	 * Could not get invites for user "{0}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestGetInvitesFailure extends multex.Failure {}
+	
+	/**
+	 * ###
+	 * COMMENT: Is this path ever used or can the update method be removed?
+	 * Currently we have redundant save and update methods in code.
+	 * 
+	 * Save incoming LgInvite for current user. 
+	 * @param invite The incoming LgInvite.
+	 * @param request The request information from HTTP service.
+	 * @exception RestSaveInviteFailure if it was not possible to save invite for current user.
+	 */
+	@Path("/")
 	@POST
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject saveInvite(final LgInvite newInviteFromClient) {
-		final DaInvite daInvite = factory.getDaInvite();
-		ReResponseObject response = new LgTransaction<LgInvite>(daInvite.getPool()) {
-			public LgInvite executeWithThrows() throws Exception {
-				daInvite.save(newInviteFromClient);
-				return newInviteFromClient;
+	public LgInvite save(final LgInvite invite, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgInvite>(request) {
+			public LgInvite execute() throws Exception {
+				final LgInvite result;
+				try {
+					result = startSession().saveInvite(invite);
+				} catch (Exception ex) {
+					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
+				}
+				return result;
 			}
-		}.execute();
-		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
-		}
-		return response;
+		}.getResult();
 	}
-
-	@Path("delete")
-	@DELETE
+	
+	/**
+	 * Could not save invite with oid "{0}" for user "{1}"
+	 */
+	@SuppressWarnings("serial")
+	public static final class RestSaveInviteFailure extends multex.Failure {}
+	
+	@Path("/{oid}")
+	@PUT
 	@Consumes("application/json")
 	@Produces({ "application/json" })
-	public ReResponseObject deleteUser(final LgInvite inviteFromClient) {
-		final DaInvite daInvite = factory.getDaInvite();
-		ReResponseObject response = new LgTransaction<LgInvite>(daInvite.getPool()) {
-			public LgInvite executeWithThrows() throws Exception {
-				LgInvite InviteFromDb = null;
+	public LgInvite update(@PathParam("oid") final long oid, final LgInvite invite, @Context final HttpServletRequest request) {
+		return new LgTransaction<LgInvite>(request) {
+			public LgInvite execute() throws Exception {
+				final LgInvite result;
 				try {
-					InviteFromDb = (LgInvite) daInvite
-							.find(inviteFromClient.getOid());
-				} catch (NotFoundException exc) {
-					 throw new DaInviteNotFoundException();
+					result = startSession().updateInvite(invite);
+				} catch (Exception ex) {
+					throw create(RestSaveInviteFailure.class, ex, invite.getOid(), getSession().getUser().getName());
 				}
-				daInvite.delete(InviteFromDb);
-				return null;
+				return result;
 			}
-		}.execute();
-
-		if (response.hasError()) {
-			throw new WebApplicationException(response.getResponseCode());
-		}
-		return response;
+		}.getResult();
 	}
 
 }

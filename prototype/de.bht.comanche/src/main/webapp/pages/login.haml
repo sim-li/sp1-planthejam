@@ -1,0 +1,10 @@
+%form.form-signin{:name => "loginForm", "ng-submit" => "login(user)"}
+  %h2.form-signin-heading Welcome to Plan The Jam. Please log in.
+  %div
+    %label{:for => "inputName"} User name
+    %input#inputName.form-control{:autofocus => "", :name => "inputName", "ng-model" => "user.name", :placeholder => "Your user name ...", :required => "", :type => "text"}
+    %label{:for => "inputPassword"} Password
+    %input#inputPassword.form-control{:name => "inputPassword", "ng-model" => "user.password", :placeholder => "8-20 characters", :required => "", :type => "password"}
+  %input#loginBtn.btn.btn-primary.btn-block{:type => "submit", :value => "Login"}
+  %hr
+  %a#registerLink.text-success{:href => "#/register", "ng-click" => "toggleLoginDialog()"} Register

@@ -1,0 +1,142 @@
+<!-- * Modal content template -->
+<script id='groupsModalContent.html' type='text/ng-template'>
+  <div class='modal-header'>
+    <h3 class='modal-title'>
+      <div class='row'>
+        <div class='col-md-3'>
+          <span class='glyphicon glyphicon-user'></span>
+          Edit groups
+        </div>
+        <div class='col-md-6'>
+          <div class='btn-group'>
+            <button class='btn btn-default' ng-click='addNewGroup()' type='button'>
+              <span class='glyphicon glyphicon-plus'></span>
+              Add
+            </button>
+            <button class='btn btn-default' ng-click='removeGroup($index)' type='button'>
+              <span class='glyphicon glyphicon-remove'></span>
+              Remove
+            </button>
+            <button class='btn btn-default' ng-click='' type='button'>
+              <span class='glyphicon glyphicon-resize-small'></span>
+              Merge
+            </button>
+          </div>
+        </div>
+        <div class='pull-right'>
+          <b>{{selectedGroup.name}}</b>
+          <img ng-src='{{selectedGroup.iconurl}}&amp;s=40' style='padding-right:2px;'>
+        </div>
+      </div>
+    </h3>
+  </div>
+  <div class='modal-body'>
+    <br>
+    <div class='row'>
+      <div class='col-sm-3'>
+        <div class='row'>
+          <div class='list-group'>
+            <a class='list-group-item' ng-click='selectGroup(group)' ng-repeat='group in groups'>
+              <div class='media-left'>
+                <img ng-src='{{group.iconurl}}&amp;s=40'>
+              </div>
+              <div class='media-body'>
+                <h5>{{group.name}}</h5>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class='col-sm-9'>
+        <div class='panel panel-default'>
+          <div class='panel-body'>
+            <div class='form-group'>
+              <label>Group name :</label>
+              <div class='item-wrapper'>
+                <a editable-text='selectedGroup.name' href='#' id='inputName'>
+                  {{selectedGroup.name}}
+                </a>
+              </div>
+            </div>
+            <div class='form-group'>
+              <div class='row'>
+                <div class='col-md-3'>
+                  <label>Member :</label>
+                </div>
+                <div class='col-md-8'>
+                  <input class='form-control' ng-model='selectedUser' placeholder='+ Add user to this group' type='text' typeahead-template-url='itemTpl.html' typeahead='user as user.name for user in users | filter: {name:$viewValue} | limitTo: 5'>
+                </div>
+              </div>
+            </div>
+            <div class='well well-sm'>
+              <div class='container-fluid'>
+                <div class='btn-group' ng-repeat='member in selectedGroup.members'>
+                  <label class='btn btn-default' type='button'>
+                    <img class='pull-left' ng-src='{{member.user.iconurl}}&amp;s=20' style='padding-right:2px;'>
+                    <b>{{member.user.name}}</b>
+                  </label>
+                  <button class='btn btn-default' ng-click='removeParticipantFromGroup($index)' type='button'>
+                    <b></b>
+                    <span class='glyphicon glyphicon-remove'></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='modal-footer'>
+    <button class='btn btn-primary' ng-click='saveGroup()'>OK</button>
+    <button class='btn btn-warning' ng-click='cancel()'>Cancel</button>
+  </div>
+</script>
+<!-- * Search field template -->
+<!-- match.model binds to Type Ahead's model (curr. userSelected <- user in users) -->
+<script id='itemTpl.html' type='text/ng-template'>
+  <a tabindex='-1'>
+    <i ng-class="'icon-'+match.model.type"></i>
+    <span ng-bind-html-unsafe='match.model.title | typeaheadHighlight:query'>
+      <img class='pull-left' ng-src='{{match.model.iconurl}}&amp;s=20' style='padding-right:2px;'>
+      <b>{{match.model.name}}</b>
+    </span>
+  </a>
+</script>
+<div class='input-group'>
+  <div class='input-group-addon'>
+    <b>To:</b>
+  </div>
+  <!-- * Type ahead Search Field -->
+  <input class='form-control' ng-model='lastElementSelected' placeholder='+ Add user or group' type='text' typeahead-template-url='itemTpl.html' typeahead='element as element.name for element in elements | filter: {name:$viewValue} | limitTo: 5'>
+  <!-- CAUTION: Changed controller for one button event, rest of file uses invite controller -->
+  <div class='input-group-btn'>
+    <button aria-label='Left Align' class='btn btn-default' ng-click='openGroupModal()' type='button'>
+      <span aria-hidden='true' class='glyphicon glyphicon-user'></span>
+      Edit groups
+    </button>
+  </div>
+  <div class='input-group-btn'>
+    <button class='btn btn-default' ng-click='panelOpener.toggle()' type='button'>
+      <span class='glyphicon glyphicon-resize-vertical'></span>
+    </button>
+  </div>
+</div>
+<!-- * User pills section -->
+<!-- SET panelOpened var here when state switcher is implemented -->
+<div collapse='false'>
+  <div class='well well-sm'>
+    <div class='container-fluid'>
+      <div class='btn-group' ng-repeat='element in allElementsSelected'>
+        <label class='btn btn-default' type='button'>
+          <img class='pull-left' ng-src='{{element.iconurl}}&amp;s=20' style='padding-right:2px;'>
+          <b>{{element.name}}</b>
+        </label>
+        <button class='btn btn-default' ng-click='removeElementFromSelection($index)' type='button'>
+          <b></b>
+          <span class='glyphicon glyphicon-remove'></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

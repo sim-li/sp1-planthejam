@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>420</x>
+      <y>460</y>
+      <w>390</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>User
+--
+name : String
+password : String
+tel : String
+email : String
+generalAvailability : Set&lt;TimePeriod&gt;
+iconurl: String
+messages : Set&lt;String&gt;
+--
+&lt;&lt;host&gt;&gt; saveSurvey(survey : Survey)
+&lt;&lt;host&gt;&gt; deleteSurvey(survey: Survey)
+saveGroup(group : Group)
+deleteGroup(group: Group)
+saveInvite(invite : Invite)
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>880</x>
+      <y>20</y>
+      <w>120</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>«enumeration»
+SurveyType
+--
+_ONE_TIME_
+_RECURRING_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>620</x>
+      <y>370</y>
+      <w>260</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30;30;240;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>360</x>
+      <y>100</y>
+      <w>450</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>Survey
+--
+name : String
+description : String
+type : SurveyType
+SurveyDurationMins: int
+deadline : Date
+frequencyDist : int
+frequencyUnit : TimeUnit
+possibleTimePeriods : Set&lt;TimePeriod&gt;
+determinedTimePeriod : TimePeriod
+success: Status = UNDECIDED
+algoChecked: boolean = false
+--
+F &lt;&lt;host&gt;&gt; addParticipants(user : User)
+F &lt;&lt;host&gt;&gt; updateWith(survey : Survey)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>860</x>
+      <y>320</y>
+      <w>270</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Invite
+
+--
+isHost : boolean = false
+isIgnored : boolean = false
+concreteAvailability : List&lt;TimePeriod&gt;
+--
+setParticipationStatus(boolean)
+setConcreteAvailability(List&lt;TimePeriod&gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>460</x>
+      <y>330</y>
+      <w>52</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..*
+m2=1..*
+r1=Host</panel_attributes>
+    <additional_attributes>30;130;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>600</x>
+      <y>330</y>
+      <w>88</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1.*
+m2=1..*
+r1=Participant</panel_attributes>
+    <additional_attributes>50;130;50;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>460</x>
+      <y>360</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+{subset}</panel_attributes>
+    <additional_attributes>30;50;190;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>70</x>
+      <y>300</y>
+      <w>190</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;data type&gt;&gt;
+TimePeriod
+--
+startTime : Date
+endTime : Date
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>70</x>
+      <y>160</y>
+      <w>190</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+TimeUnit
+--
+_DAY_
+_WEEK_
+_MONTH_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>70</x>
+      <y>510</y>
+      <w>200</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Group
+--
+name : String
+iconurl : String
+
+ </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>240</x>
+      <y>510</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m1=1..1
+m2=0..*</panel_attributes>
+    <additional_attributes>180;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>0</x>
+      <y>20</y>
+      <w>330</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Entwurfs-Fachklassendiagramm mit Operationen
+Terminfindungs-App "Plan The Jam"
+Team: Comanche, 12.01.2015</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>170</x>
+      <y>740</y>
+      <w>170</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Member
+
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>220</x>
+      <y>610</y>
+      <w>50</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30;130;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>130</x>
+      <y>550</y>
+      <w>310</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;
+m1=0..*
+m2=0..*</panel_attributes>
+    <additional_attributes>30;30;30;90;290;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>880</x>
+      <y>140</y>
+      <w>120</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>«enumeration»
+Status
+--
+_UNDECIDED_
+_YES_
+_NO_</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

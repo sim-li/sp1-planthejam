@@ -1,0 +1,16 @@
+%form.form-signin{:name => "registerForm", "ng-submit" => "register(user)"}
+  %h2.form-signin-heading Register
+  %div
+    %label{:for => "inputName"} User name
+    %input#inputName.form-control{:name => "inputName", "ng-model" => "user.name", :placeholder => "Your user name ...", :required => "", :type => "text"}
+    %label{:for => "inputPassword"} Password
+    %input#inputPassword.form-control{:name => "inputPassword", "ng-model" => "user.password", :placeholder => "8-20 characters", :required => "", :type => "password"}
+  %div
+    %label{:for => "inputEmail"} Email
+    %input#inputEmail.form-control{:name => "inputEmail", "ng-model" => "user.email", :placeholder => "Your email address ...", :required => "", :type => "text"}/
+    %label{:for => "inputTel"} Telephone
+    %input#inputTel.form-control{:name => "inputTel", "ng-model" => "user.tel", :placeholder => "Your telephone number ...", :required => "", :type => "text"}/
+  %br/
+  %input#registerBtn.btn.btn-primary.btn-block{:type => "submit", :value => "Register"}/
+  %hr
+  %a#cancelRegisterLink{:href => "/", } Cancel registration

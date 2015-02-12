@@ -1,0 +1,44 @@
+<ptj-menu></ptj-menu>
+<div class='container'>
+  <div class='col-md-8 col-md-offset-2'>
+    <div class='panel panel-primary'>
+      <div class='panel-body'>
+        <div class='form-group'>
+          <label for='inputName'>User name</label>
+          <div class='item-wrapper'>
+            <a editable-text='user.name' href='#' id='inputName'>
+              {{user.name}}
+            </a>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label for='inputPassword'>Password</label>
+          <input class='form-control col-lg-3' id='inputPassword' ng-model='user.password' placeholder='8-20 letters' required='' type='password'>
+        </div>
+        <div class='form-group'>
+          <label for='inputEmail'>E-Mail</label>
+          <div class='item-wrapper'>
+            <a editable-text='user.email' href='#' id='inputEmail'>
+              {{user.email}}
+            </a>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label for='inputTel'>Telephone</label>
+          <div class='item-wrapper'>
+            <input class='form-control col-lg-3' id='inputTel' ng-model='user.tel' placeholder='Your phone number'>
+          </div>
+          <hr>
+        </div>
+        <ptj-calendar-modal allowed='[]' resulting='user.generalAvailability' save='saveGeneralAvailability()'></ptj-calendar-modal>
+      </div>
+      <div class='panel-footer'>
+        <input class='btn btn-danger' id='deleteUserBtn' ng-click='deleteUser()' type='button' value='Delete account'>
+        <div class='input-group pull-right'>
+          <input class='btn btn-warning' id='cancelUserEditBtn' ng-click='cancelEditUser()' type='button' value='Cancel'>
+          <input class='btn btn-success' id='saveUserEditBtn' ng-click='saveEditedUser()' type='button' value='Save changes'>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

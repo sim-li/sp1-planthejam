@@ -1,109 +1,155 @@
 package de.bht.comanche.logic;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import de.bht.comanche.persistence.DaObject;
+
 /**
- * @author Duc Tung Tong, Beuth Hochschule für Technik Berlin, SWP1 
- * Diese Klasse beschreibt eine Einladung von Host zu Users
- *  hat 2 boolean Werte : istHost und isIgnoredn
- *  und die Verbindung mit LgUser und LgSurvey
+ * Table contains Invite data
+ * 
+ * @author Duc Tung Tong
+ * @author Simon Lischka
  */
 @Entity
-@Table(name = "Lg_Invite")
-public class LgInvite extends LgObject{
-	
+@Table(name = "invite")
+public class LgInvite extends DaObject{
+
 	private static final long serialVersionUID = 1L;
-	
+
+	/**
+	 *  is true if user is host from survey 
+	 */
+	@Column
 	private boolean isHost;
-	private boolean isIgnored;
 	
+	/**
+	 * A tribool flag indicating whether the participant has marked the invite as ignored or not or if he is still undecided.
+	 */
+	@Column
+	@Enumerated(EnumType.STRING)
+	private LgStatus isIgnored = LgStatus.UNDECIDED;
+
+	/**
+	 * The user who receives this invite.
+	 */
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private LgUser user;
-	
+
+	/**
+	 * The survey to which this invite belongs.
+	 */
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private LgSurvey invite_survey;
-
-	public boolean isHost() {
-		return isHost;
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	private LgSurvey survey;
+	
+	/**
+	 * Representation of a foreign key in a LgTimePeriod entity. Provide a list of available periods. 
+	 */
+	@ElementCollection(targetClass=LgTimePeriod.class, fetch = FetchType.EAGER) 
+	@Column(name="timeperiods") 
+	private Set<LgTimePeriod> concreteAvailability;
+	
+	public LgInvite() {}
+	
+	public LgInvite(LgInvite other) {
+		this.oid = other.oid;
+		this.isHost = other.isHost;
+		this.isIgnored = other.isIgnored;
+		this.user = other.user;
+		this.survey = other.survey;
+		this.concreteAvailability = new HashSet<LgTimePeriod>();
+		for (final LgTimePeriod timePeriod : other.concreteAvailability) {
+			this.concreteAvailability.add(timePeriod);
+		}
 	}
-
-	public LgInvite setHost(boolean isHost) {
-		this.isHost = isHost;
+	
+	public Set<LgTimePeriod> getConcreteAvailability(){
+		return this.concreteAvailability;
+	}
+	
+	public LgInvite setConcreteAvailability(final Set<LgTimePeriod> concreteAvailability){
+		this.concreteAvailability = concreteAvailability;
 		return this;
 	}
 
-	public boolean isIgnored() {
-		return isIgnored;
+	public boolean getIsHost() {
+		return this.isHost;
+	}
+	
+	public LgStatus getIsIgnored() {
+		return this.isIgnored;
 	}
 
-	public LgInvite setIgnored(boolean isIgnored) {
+	public LgInvite setIgnored(final LgStatus isIgnored) {
 		this.isIgnored = isIgnored;
+		return this;
+	}
+
+	public LgInvite setHost(final boolean isHost) {
+		this.isHost = isHost;
 		return this;
 	}
 
 	@JsonIgnore
 	public LgUser getUser() {
-		return user;
+		return this.user;
 	}
-	
-	public LgInvite setUser(LgUser user) {
+
+	public LgInvite setUser(final LgUser user) {
 		this.user = user;
 		return this;
 	}
+	/**
+	 * Persisted invite without user field
+	 */
+	@SuppressWarnings("serial")
+	public static final class EmptyUserInInviteFailure extends multex.Failure {}
 	
+	/**
+	 * Returns PossibleTimePeriod with nulled db-flags
+	 * @return
+	 */
+	@JsonIgnore
 	public LgSurvey getSurvey() {
-		return invite_survey;
+		return this.survey;
 	}
 
-	public LgInvite setSurvey(LgSurvey survey) {
-		this.invite_survey = survey;
+	public LgInvite setSurvey(final LgSurvey survey) {
+		this.survey = survey;
 		return this;
 	}
-
+	
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((invite_survey == null) ? 0 : invite_survey.hashCode());
-		result = prime * result + (isHost ? 1231 : 1237);
-		result = prime * result + (isIgnored ? 1231 : 1237);
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
-		return result;
+	public void delete() {
+		this.user = null;
+		super.delete();
 	}
 
+	/**
+	 * Sets specified LgInvite for LgTimePeriod.
+	 * @param invite The LgInvite to set.
+	 * @return Returns The LgInvite.
+	 */ 
+
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LgInvite other = (LgInvite) obj;
-		if (invite_survey == null) {
-			if (other.invite_survey != null)
-				return false;
-		} else if (!invite_survey.equals(other.invite_survey))
-			return false;
-		if (isHost != other.isHost)
-			return false;
-		if (isIgnored != other.isIgnored)
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		return true;
-	}	
-	
+	public String toString() {
+		return String
+				.format("LgInvite [isHost=%s, isIgnored=%s, user=%s, survey=%s, oid=%s, pool=%s]",
+						isHost, isIgnored, user, survey, oid, pool);
+	}
 }

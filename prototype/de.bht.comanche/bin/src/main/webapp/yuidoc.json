@@ -1,0 +1,9 @@
+{
+    "name": "Plan The Jam",
+    "description": "Plan The Jam - a better way to make an appointment",
+    "version": "0.0.1",
+    "options": {
+        "outdir": "./apidocs",
+        "exclude": "bower_components, node_modules, lib, test"
+    }
+}
