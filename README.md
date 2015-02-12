@@ -1,4 +1,9 @@
-sp1-planthejam
+PLAN THE JAM 
 ==============
+Tool to automatically generate meeting dates. Similiar to doodle, but crafted
+with an unique style.
 
-Client/Server Application with JavaEE (JPA/Hibernate, Jetty) and AngularJS
+Realised with Java Server Stack (JPA/Hibernate, JETTY)
+and AngularJS Frontend.
+
+Made at Beuth University of Applied Sciences
